@@ -15,9 +15,17 @@ build:
     stage: build
     script:
         - "dotnet build Test-Analyzer.sln"
+    only:
+        - master
+        - develop
+        - merge_requests
 
 test:
     stage: test
     script: 
         - "cd $test"
         - "dotnet test"
+    only:
+        - master
+        - develop
+        - merge_requests
