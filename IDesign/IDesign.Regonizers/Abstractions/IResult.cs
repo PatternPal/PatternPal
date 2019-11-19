@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IDesign.Core
+namespace IDesign.Regonizers.Abstractions
 {
     public interface IResult
     {
