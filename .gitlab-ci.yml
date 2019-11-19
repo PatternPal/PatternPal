@@ -9,12 +9,11 @@ variables:
 
 before_script:
     - "dotnet restore"
-    - "dotnet sln Test-Analyzer.sln remove Test-Analyzer/Test_Analyzer.Vsix/Test_Analyzer.Vsix.csproj"
 
 build:
     stage: build
     script:
-        - "dotnet build Test-Analyzer.sln"
+        - "dotnet build"
     only:
         - master
         - develop
@@ -23,7 +22,6 @@ build:
 test:
     stage: test
     script: 
-        - "cd $test"
         - "dotnet test"
     only:
         - master
