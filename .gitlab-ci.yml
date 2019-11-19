@@ -8,6 +8,7 @@ variables:
     test: "Test-Analyzer/Test_Analyzer.Test"
 
 before_script:
+    - "cd IDesign"
     - "dotnet restore"
 
 build:
