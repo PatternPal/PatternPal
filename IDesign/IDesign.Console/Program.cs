@@ -10,7 +10,6 @@ namespace IDesign.Console
     {
         static void Main(string[] args)
         {
-
         }
     }
 }

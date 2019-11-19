@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1EE35EA1-900B-444C-B03A-29825888663F}</ProjectGuid>
+    <ProjectGuid>{83CEFCB8-F33A-4946-882D-62407F1F7D19}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>IDesign.Console</RootNamespace>
     <AssemblyName>IDesign.Console</AssemblyName>
@@ -48,12 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\IDesign.Core\IDesign.Core.csproj">
-      <Project>{39c79d09-34da-496b-936d-4387f5db9104}</Project>
-      <Name>IDesign.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
