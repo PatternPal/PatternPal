@@ -23,8 +23,8 @@ test:
     script: 
         - "cd IDesign"
         - "dotnet Ibuild"
-        - "cd ..\"
-        - 'call .\test_script.bat' 
+        - "cd ..\\"
+        - "call .\test_script.bat" 
     only:
         - master
         - develop
