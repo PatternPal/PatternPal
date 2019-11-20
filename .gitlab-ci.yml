@@ -1,23 +1,29 @@
-image: microsoft/dotnet:latest
-
 stages:
     - build
     - test
 
 variables:
-    test: "Test-Analyzer/Test_Analyzer.Test"
+    test: "IDesign.Regonizers.Tests"
 
 before_script:
+    - "cd IDesign"
     - "dotnet restore"
-    - "dotnet sln Test-Analyzer.sln remove Test-Analyzer/Test_Analyzer.Vsix/Test_Analyzer.Vsix.csproj"
 
 build:
     stage: build
     script:
-        - "dotnet build Test-Analyzer.sln"
+        - "dotnet build"
+    only:
+        - master
+        - develop
+        - merge_requests
 
 test:
     stage: test
     script: 
         - "cd $test"
         - "dotnet test"
+    only:
+        - master
+        - develop
+        - merge_requests
