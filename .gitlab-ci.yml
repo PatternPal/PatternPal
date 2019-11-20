@@ -6,7 +6,9 @@ variables:
     test: "IDesign.Regonizers.Tests"
 
 before_script:
+    - "cd IDesign"
     - "dotnet restore"
+    - "cd ..\\"
 
 build:
     stage: build
@@ -22,9 +24,9 @@ test:
     stage: test
     script: 
         - "cd IDesign"
-        - "dotnet Ibuild"
+        - "dotnet build"
         - "cd ..\\"
-        - "call .\test_script.bat" 
+        - ".\\test_script.bat" 
     only:
         - master
         - develop
