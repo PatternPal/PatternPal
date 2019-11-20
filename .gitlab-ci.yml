@@ -1,4 +1,4 @@
-image: microsoft/dotnet/framework:latest
+image: microsoft/dotnet-framework:latest
 
 stages:
     - build
