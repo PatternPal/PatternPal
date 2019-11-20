@@ -12,7 +12,9 @@ namespace IDesign.Regonizers.Tests
         [Test]
         public void Test1()
         {
-            Assert.Pass();
+            var s = new SingletonRegonizer();
+            
+            Assert.IsNull(s.Regonize());
         }
     }
 }

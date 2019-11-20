@@ -6,12 +6,12 @@ variables:
     test: "IDesign.Regonizers.Tests"
 
 before_script:
-    - "cd IDesign"
     - "dotnet restore"
 
 build:
     stage: build
     script:
+        - "cd IDesign"
         - "dotnet build"
     only:
         - master
@@ -21,9 +21,14 @@ build:
 test:
     stage: test
     script: 
-        - "cd $test"
-        - "dotnet test"
+        - "cd IDesign"
+        - "dotnet Ibuild"
+        - "cd ..\"
+        - 'call .\test_script.bat' 
     only:
         - master
         - develop
         - merge_requests
+    artifacts:
+        paths:
+            - coverage.xml
