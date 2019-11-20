@@ -22,7 +22,7 @@
 
   <!--The Commands section is where commands, menus, and menu groups are defined.
       This section uses a Guid to identify the package that provides the command defined inside it. -->
-  <Commands package="guidAnalyzerPluginPackage">
+  <Commands package="guidExtensionWindowPackage">
     <!-- Inside this section we have different sub-sections: one for the menus, another
     for the menu groups, one for the buttons (the actual commands), one for the combos
     and the last one for the bitmaps used. Each element is identified by a command id that
@@ -42,11 +42,11 @@
               <CommandFlag>DefaultInvisible</CommandFlag>
               <CommandFlag>DynamicVisibility</CommandFlag>
           If you do not want an image next to your command, remove the Icon node /> -->
-      <Button guid="guidAnalyzerPluginPackageCmdSet" id="PluginWindowCommandId" priority="0x0100" type="Button">
+      <Button guid="guidExtensionWindowPackageCmdSet" id="ExtensionWindowCommandId" priority="0x0100" type="Button">
         <Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1"/>
         <Icon guid="guidImages" id="bmpPic1" />
         <Strings>
-          <ButtonText>PluginWindow</ButtonText>
+          <ButtonText>IDesign Extension</ButtonText>
         </Strings>
       </Button>
     </Buttons>
@@ -58,20 +58,20 @@
             bitmap strip containing the bitmaps and then there are the numeric ids of the elements used
             inside a button definition. An important aspect of this declaration is that the element id
             must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
-      <Bitmap guid="guidImages" href="Resources\PluginWindowCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough"/>
+      <Bitmap guid="guidImages" href="Resources\ExtensionWindowCommand.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough"/>
     </Bitmaps>
   </Commands>
 
   <Symbols>
     <!-- This is the package guid. -->
-    <GuidSymbol name="guidAnalyzerPluginPackage" value="{4ae23ffb-c05b-4cfb-998d-0aeaeca78115}" />
+    <GuidSymbol name="guidExtensionWindowPackage" value="{ca375a3b-ff54-4156-937d-cbddc605b23c}" />
 
     <!-- This is the guid used to group the menu commands together -->
-    <GuidSymbol name="guidAnalyzerPluginPackageCmdSet" value="{f6835115-67e9-4d0b-8556-5f1f6da9d8b4}">
-      <IDSymbol name="PluginWindowCommandId" value="0x0100" />
+    <GuidSymbol name="guidExtensionWindowPackageCmdSet" value="{5eb4c6e9-8015-4fa4-8670-f71284492188}">
+      <IDSymbol name="ExtensionWindowCommandId" value="0x0100" />
     </GuidSymbol>
 
-    <GuidSymbol name="guidImages" value="{6e87a157-3acf-4262-a02e-8b6922b3f0c7}" >
+    <GuidSymbol name="guidImages" value="{8d6fb982-5303-493f-aab7-160111f3896b}" >
       <IDSymbol name="bmpPic1" value="1" />
       <IDSymbol name="bmpPic2" value="2" />
       <IDSymbol name="bmpPicSearch" value="3" />

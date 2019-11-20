@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
-using System.ComponentModel.Design;
-using System.Windows.Forms;
-using Microsoft.VisualStudio.Shell.Interop;
 
-namespace AnalyzerPlugin
+namespace IDesign.Extension
 {
     /// <summary>
     /// This class implements the tool window exposed by this package and hosts a user control.
@@ -18,23 +15,20 @@ namespace AnalyzerPlugin
     /// implementation of the IVsUIElementPane interface.
     /// </para>
     /// </remarks>
-    [Guid("194b3eec-0ce6-4bf7-8d09-b435cc7a5330")]
-    public class PluginWindow : ToolWindowPane
+    [Guid("fcbb47e2-1474-417e-84ea-9cc1c6ee0617")]
+    public class ExtensionWindow : ToolWindowPane
     {
-        public PluginWindowControl control;
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="PluginWindow"/> class.
+        /// Initializes a new instance of the <see cref="ExtensionWindow"/> class.
         /// </summary>
-        public PluginWindow() : base(null)
+        public ExtensionWindow() : base(null)
         {
-            this.Caption = "PluginWindow";
+            this.Caption = "ExtensionWindow";
 
             // This is the user control hosted by the tool window; Note that, even if this class implements IDisposable,
             // we are not calling Dispose on this object. This is because ToolWindowPane calls Dispose on
-            // the object returned by the Content property. 
-            control = new PluginWindowControl();
-            base.Content = control;
+            // the object returned by the Content property.
+            this.Content = new ExtensionWindowControl();
         }
     }
 }

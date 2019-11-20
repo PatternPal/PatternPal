@@ -1,4 +1,4 @@
-﻿namespace AnalyzerPlugin
+﻿namespace IDesign.Extension
 {
     using System;
     using System.Collections.Generic;
@@ -10,17 +10,17 @@
     using System.Windows.Controls;
 
     /// <summary>
-    /// Interaction logic for PluginWindowControl.
+    /// Interaction logic for ExtensionWindowControl.
     /// </summary>
-    public partial class PluginWindowControl : UserControl
+    public partial class ExtensionWindowControl : UserControl
     {
         public List<DesignPattern> DesignPatterns { get; set; }
         public bool Loading { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PluginWindowControl"/> class.
+        /// Initializes a new instance of the <see cref="ExtensionWindowControl"/> class.
         /// </summary>
-        public PluginWindowControl()
+        public ExtensionWindowControl()
         {
             this.InitializeComponent();
             AddPatterns();
@@ -73,8 +73,8 @@
 
         private void Settings_Button(object sender, RoutedEventArgs e)
         {
-            SettingsWindow settingsWindow = new SettingsWindow(DesignPatterns);
-            
+            SettingsControl settingsWindow = new SettingsControl(DesignPatterns);
+
             Window window = new Window
             {
                 Title = "Settings",

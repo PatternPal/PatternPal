@@ -13,16 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AnalyzerPlugin
+namespace IDesign.Extension
 {
     /// <summary>
-    /// Interaction logic for SettingsWindow.xaml
+    /// Interaction logic for SettingsControl.xaml
     /// </summary>
-    public partial class SettingsWindow : UserControl
+    public partial class SettingsControl : UserControl
     {
         public List<DesignPattern> DesignPatterns { get; set; }
 
-        public SettingsWindow(List<DesignPattern> designPatterns)
+        public SettingsControl(List<DesignPattern> designPatterns)
         {
             InitializeComponent();
             DesignPatterns = designPatterns;

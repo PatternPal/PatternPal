@@ -5,21 +5,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AnalyzerPlugin
+namespace IDesign.Extension
 {
     public class DesignPattern : INotifyPropertyChanged
     {
-        public string Name { get; set; }
-
-        // Declare the event
+        private bool isChecked;
         public event PropertyChangedEventHandler PropertyChanged;
-        private bool _isChecked;
+        public string Name { get; set; }
         public bool IsChecked
         {
-            get { return _isChecked; }
+            get { return isChecked; }
             set
             {
-                _isChecked = value;
+                isChecked = value;
                 OnPropertyChanged("IsChecked");
             }
         }
@@ -30,12 +28,9 @@ namespace AnalyzerPlugin
             IsChecked = true;
         }
 
-
-        // Create the OnPropertyChanged method to raise the event
         protected void OnPropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
-
 }

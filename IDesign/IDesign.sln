@@ -15,7 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "30 - Tests", "30 - Tests", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDesign.Console", "IDesign.Console\IDesign.Console.csproj", "{83CEFCB8-F33A-4946-882D-62407F1F7D19}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDesign.Regonizers.Tests", "IDesign.Regonizers.Tests\IDesign.Regonizers.Tests.csproj", "{08EB1A6B-D2F4-4E17-8C8F-A645308C3962}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IDesign.Regonizers.Tests", "IDesign.Regonizers.Tests\IDesign.Regonizers.Tests.csproj", "{08EB1A6B-D2F4-4E17-8C8F-A645308C3962}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDesign.Extension", "IDesign.Extension\IDesign.Extension.csproj", "{6D62168E-3F32-47F9-8BC0-514BF633F903}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{08EB1A6B-D2F4-4E17-8C8F-A645308C3962}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08EB1A6B-D2F4-4E17-8C8F-A645308C3962}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08EB1A6B-D2F4-4E17-8C8F-A645308C3962}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D62168E-3F32-47F9-8BC0-514BF633F903}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D62168E-3F32-47F9-8BC0-514BF633F903}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D62168E-3F32-47F9-8BC0-514BF633F903}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D62168E-3F32-47F9-8BC0-514BF633F903}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +54,7 @@ Global
 		{39C79D09-34DA-496B-936D-4387F5DB9104} = {25C2E758-AC65-4A3A-A11A-2D3510C01BB8}
 		{83CEFCB8-F33A-4946-882D-62407F1F7D19} = {D8082781-8981-4B17-9E4A-5C25EF7E3892}
 		{08EB1A6B-D2F4-4E17-8C8F-A645308C3962} = {42465826-0737-421D-9D08-30F8C43D7912}
+		{6D62168E-3F32-47F9-8BC0-514BF633F903} = {D8082781-8981-4B17-9E4A-5C25EF7E3892}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {31FB6D39-7D9F-44BC-AF8B-3AA700C8C087}

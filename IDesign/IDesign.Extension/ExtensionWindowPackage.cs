@@ -1,10 +1,19 @@
 ﻿using System;
+using System.ComponentModel.Design;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.Win32;
 using Task = System.Threading.Tasks.Task;
 
-namespace AnalyzerPlugin
+namespace IDesign.Extension
 {
     /// <summary>
     /// This is the class that implements the package exposed by this assembly.
@@ -24,15 +33,28 @@ namespace AnalyzerPlugin
     /// </para>
     /// </remarks>
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
-    [Guid(AnalyzerPluginPackage.PackageGuidString)]
+    [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [ProvideToolWindow(typeof(PluginWindow))]
-    public sealed class AnalyzerPluginPackage : AsyncPackage
+    [ProvideToolWindow(typeof(ExtensionWindow))]
+    [Guid(ExtensionWindowPackage.PackageGuidString)]
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
+    public sealed class ExtensionWindowPackage : AsyncPackage
     {
         /// <summary>
-        /// AnalyzerPluginPackage GUID string.
+        /// ExtensionWindowPackage GUID string.
         /// </summary>
-        public const string PackageGuidString = "4ae23ffb-c05b-4cfb-998d-0aeaeca78115";
+        public const string PackageGuidString = "ca375a3b-ff54-4156-937d-cbddc605b23c";
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExtensionWindowPackage"/> class.
+        /// </summary>
+        public ExtensionWindowPackage()
+        {
+            // Inside this method you can place any initialization code that does not require
+            // any Visual Studio service because at this point the package object is created but
+            // not sited yet inside Visual Studio environment. The place to do all the other
+            // initialization is the Initialize method.
+        }
 
         #region Package Members
 
@@ -48,7 +70,28 @@ namespace AnalyzerPlugin
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-            await PluginWindowCommand.InitializeAsync(this);
+            await ExtensionWindowCommand.InitializeAsync(this);
+        }
+
+        public override IVsAsyncToolWindowFactory GetAsyncToolWindowFactory(Guid toolWindowType)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (toolWindowType == typeof(ExtensionWindow).GUID)
+            {
+                return this;
+            }
+
+            return base.GetAsyncToolWindowFactory(toolWindowType);
+        }
+
+        protected override string GetToolWindowTitle(Type toolWindowType, int id)
+        {
+            if (toolWindowType == typeof(ExtensionWindow))
+            {
+                return "ExtensionWindow loading";
+            }
+
+            return base.GetToolWindowTitle(toolWindowType, id);
         }
 
         #endregion

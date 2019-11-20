@@ -7,12 +7,12 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Task = System.Threading.Tasks.Task;
 
-namespace AnalyzerPlugin
+namespace IDesign.Extension
 {
     /// <summary>
     /// Command handler
     /// </summary>
-    internal sealed class PluginWindowCommand
+    internal sealed class ExtensionWindowCommand
     {
         /// <summary>
         /// Command ID.
@@ -22,7 +22,7 @@ namespace AnalyzerPlugin
         /// <summary>
         /// Command menu group (command set GUID).
         /// </summary>
-        public static readonly Guid CommandSet = new Guid("f6835115-67e9-4d0b-8556-5f1f6da9d8b4");
+        public static readonly Guid CommandSet = new Guid("5eb4c6e9-8015-4fa4-8670-f71284492188");
 
         /// <summary>
         /// VS Package that provides this command, not null.
@@ -30,12 +30,12 @@ namespace AnalyzerPlugin
         private readonly AsyncPackage package;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PluginWindowCommand"/> class.
+        /// Initializes a new instance of the <see cref="ExtensionWindowCommand"/> class.
         /// Adds our command handlers for menu (commands must exist in the command table file)
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
         /// <param name="commandService">Command service to add command to, not null.</param>
-        private PluginWindowCommand(AsyncPackage package, OleMenuCommandService commandService)
+        private ExtensionWindowCommand(AsyncPackage package, OleMenuCommandService commandService)
         {
             this.package = package ?? throw new ArgumentNullException(nameof(package));
             commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
@@ -48,7 +48,7 @@ namespace AnalyzerPlugin
         /// <summary>
         /// Gets the instance of the command.
         /// </summary>
-        public static PluginWindowCommand Instance
+        public static ExtensionWindowCommand Instance
         {
             get;
             private set;
@@ -71,12 +71,12 @@ namespace AnalyzerPlugin
         /// <param name="package">Owner package, not null.</param>
         public static async Task InitializeAsync(AsyncPackage package)
         {
-            // Switch to the main thread - the call to AddCommand in PluginWindowCommand's constructor requires
+            // Switch to the main thread - the call to AddCommand in ExtensionWindowCommand's constructor requires
             // the UI thread.
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
             OleMenuCommandService commandService = await package.GetServiceAsync((typeof(IMenuCommandService))) as OleMenuCommandService;
-            Instance = new PluginWindowCommand(package, commandService);
+            Instance = new ExtensionWindowCommand(package, commandService);
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace AnalyzerPlugin
         {
             this.package.JoinableTaskFactory.RunAsync(async delegate
             {
-                ToolWindowPane window = await this.package.ShowToolWindowAsync(typeof(PluginWindow), 0, true, this.package.DisposalToken);
+                ToolWindowPane window = await this.package.ShowToolWindowAsync(typeof(ExtensionWindow), 0, true, this.package.DisposalToken);
                 if ((null == window) || (null == window.Frame))
                 {
                     throw new NotSupportedException("Cannot create tool window");
