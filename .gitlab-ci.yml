@@ -5,7 +5,7 @@ stages:
     - test
 
 variables:
-    test: "Test-Analyzer/Test_Analyzer.Test"
+    test: "IDesign.Regonizers.Tests"
 
 before_script:
     - "cd IDesign"
@@ -23,6 +23,7 @@ build:
 test:
     stage: test
     script: 
+        - "cd $test"
         - "dotnet test"
     only:
         - master

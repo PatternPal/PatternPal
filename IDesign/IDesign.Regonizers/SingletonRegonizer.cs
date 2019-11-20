@@ -7,7 +7,7 @@ namespace IDesign.Regonizers
     {
         public IResult Regonize()
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }
