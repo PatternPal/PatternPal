@@ -19,7 +19,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IDesign.Tests", "IDesign.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDesign.Extension", "IDesign.Extension\IDesign.Extension.csproj", "{6D62168E-3F32-47F9-8BC0-514BF633F903}"
 EndProject
+<<<<<<< HEAD
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IDesign.Checks", "IDesign.Check\IDesign.Checks.csproj", "{73F46AB3-0AAA-422F-B23D-C83DC05864BE}"
+=======
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IDesign.Checks", "IDesign.Check\IDesign.Checks.csproj", "{881A3B3F-0FC2-4722-9ED1-2E78B05C371C}"
+>>>>>>> #45 - SingletonRecognizer Recognize function
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,10 +51,17 @@ Global
 		{6D62168E-3F32-47F9-8BC0-514BF633F903}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D62168E-3F32-47F9-8BC0-514BF633F903}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D62168E-3F32-47F9-8BC0-514BF633F903}.Release|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< HEAD
+		{73F46AB3-0AAA-422F-B23D-C83DC05864BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73F46AB3-0AAA-422F-B23D-C83DC05864BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73F46AB3-0AAA-422F-B23D-C83DC05864BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73F46AB3-0AAA-422F-B23D-C83DC05864BE}.Release|Any CPU.Build.0 = Release|Any CPU
+=======
 		{881A3B3F-0FC2-4722-9ED1-2E78B05C371C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{881A3B3F-0FC2-4722-9ED1-2E78B05C371C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{881A3B3F-0FC2-4722-9ED1-2E78B05C371C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{881A3B3F-0FC2-4722-9ED1-2E78B05C371C}.Release|Any CPU.Build.0 = Release|Any CPU
+>>>>>>> #45 - SingletonRecognizer Recognize function
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,7 +71,11 @@ Global
 		{39C79D09-34DA-496B-936D-4387F5DB9104} = {25C2E758-AC65-4A3A-A11A-2D3510C01BB8}
 		{83CEFCB8-F33A-4946-882D-62407F1F7D19} = {D8082781-8981-4B17-9E4A-5C25EF7E3892}
 		{6D62168E-3F32-47F9-8BC0-514BF633F903} = {D8082781-8981-4B17-9E4A-5C25EF7E3892}
+<<<<<<< HEAD
+		{73F46AB3-0AAA-422F-B23D-C83DC05864BE} = {25C2E758-AC65-4A3A-A11A-2D3510C01BB8}
+=======
 		{881A3B3F-0FC2-4722-9ED1-2E78B05C371C} = {25C2E758-AC65-4A3A-A11A-2D3510C01BB8}
+>>>>>>> #45 - SingletonRecognizer Recognize function
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {31FB6D39-7D9F-44BC-AF8B-3AA700C8C087}
