@@ -6,7 +6,7 @@ using IDesign.Checks;
 
 namespace IDesign.Regonizers.Tests
 {
-    public class Tests
+    public class MethodTest
     {
         [SetUp]
         public void Setup()
@@ -32,6 +32,23 @@ namespace IDesign.Regonizers.Tests
                 Assert.Fail();
 
             Assert.AreEqual(method.CheckReturnType(returnType), shouldBeValid);
+        }
+        [TestCase("public", @"public void TestMethod(){}", true)]
+        [TestCase("private", @"private int TestMethod(){}", true)]
+        [TestCase("static", @"public static Class TestMethod(){}", true)]
+        [TestCase("abstract", @"public abstract Class<T> TestMethod(){}", true)]
+        [TestCase("private", @"private static Class<T> TestMethod(){}", true)]
+        [TestCase("private", @"public Class[] TestMethod(){}", false)]
+        [TestCase("public", @"private static void TestMethod(){}", false)]
+        public void ModifierCheck_Returns_CorrectResponse(string modifier, string code, bool shouldBeValid)
+        {
+            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
+            var method = root.Members[0] as MemberDeclarationSyntax;
+            
+            if (method == null)
+                Assert.Fail();
+
+            Assert.AreEqual(method.CheckMemberModifier(modifier), shouldBeValid);
         }
     }
 }
