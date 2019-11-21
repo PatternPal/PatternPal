@@ -11,10 +11,9 @@ namespace IDesign.Checks
         /// <param name="membersyntax">The member witch it should check</param>
         /// <param name="modifier">The expected modifier</param>
         /// <returns></returns>
-        /// 
-        public static bool CheckMemberModifier(this MemberDeclarationSyntax membersyntax, string modifier)
+        public static bool CheckMemberModifier(this MemberDeclarationSyntax memberSyntax, string modifier)
         {
-            return membersyntax.Modifiers.Where(x => x.ToString() == modifier).Count() > 0;
+            return memberSyntax.Modifiers.Where(x => x.ToString() == modifier).Count() > 0;
         }
     }
 }
