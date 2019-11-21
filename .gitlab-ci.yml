@@ -8,6 +8,7 @@ variables:
 before_script:
     - "cd IDesign"
     - "dotnet restore"
+    - "dotnet sln IDesign.sln remove IDesign.Extension/IDesign.Extension.csproj"
     - "cd ..\\"
 
 build:
@@ -24,7 +25,7 @@ test:
     stage: test
     script: 
         - "cd IDesign"
-        - "dotnet build"
+        - "dotnet build IDesign.sln"
         - "cd ..\\"
         - ".\\test_script.bat" 
     only:
