@@ -1,5 +1,7 @@
 ﻿namespace IDesign.Extension
 {
+    using EnvDTE;
+    using Microsoft.VisualStudio.Shell.Interop;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
@@ -15,7 +17,9 @@
     public partial class ExtensionWindowControl : UserControl
     {
         public List<DesignPattern> DesignPatterns { get; set; }
+        public List<string> Paths { get; set; }
         public bool Loading { get; set; }
+        public DTE Dte { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtensionWindowControl"/> class.
@@ -25,6 +29,8 @@
             this.InitializeComponent();
             AddPatterns();
             Loading = false;
+            Dispatcher.VerifyAccess();
+            Dte = Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(SDTE)) as DTE;
         }
 
         /// <summary>
@@ -41,6 +47,40 @@
                 new DesignPattern("Decorator"),
                 new DesignPattern("Adapter")
             };
+        }
+
+        /// <summary>
+        /// Gets current active document path.
+        /// </summary>
+        private void GetCurrentPath()
+        {
+            Paths = new List<string>();
+            Paths.Add(Dte.ActiveDocument.Path);
+        }
+
+        /// <summary>
+        /// Gets all paths in the solution.
+        /// </summary>
+        private void GetPaths()
+        {
+            void GetPathsRecursive(ProjectItems items)
+            {
+                foreach (ProjectItem item in items)
+                {
+                    if (item.ProjectItems.Count > 0)
+                        GetPathsRecursive(item.ProjectItems);
+
+                    if (item.Name.EndsWith(".cs"))
+                        Paths.Add((string)item.Properties.Item("FullPath").Value);
+                }
+            }
+
+            Paths = new List<string>();
+
+            foreach (Project project in Dte.Solution.Projects)
+            {
+                GetPathsRecursive(project.ProjectItems);
+            }
         }
 
         /// <summary>
@@ -64,10 +104,11 @@
                 for (int i = 0; i <= 100; i++)
                 {
                     ((IProgress<int>)progress).Report(i);
-                    Thread.Sleep(100);
+                    System.Threading.Thread.Sleep(100);
                 }
             });
 
+            GetPaths();
             listView.ItemsSource = DesignPatterns.Where(x => x.IsChecked);
 
             statusBar.Value = 0;
@@ -83,7 +124,7 @@
         {
             SettingsControl settingsWindow = new SettingsControl(DesignPatterns);
 
-            Window window = new Window
+            System.Windows.Window window = new System.Windows.Window
             {
                 Title = "Settings",
                 Content = settingsWindow,
