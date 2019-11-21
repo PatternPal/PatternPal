@@ -37,23 +37,6 @@ namespace IDesign.ConsoleApp
 
                     }
                 }
-               
-                //foreach(var member in generateSyntaxTree.EntityNodes)
-                //{
-                //    Console.WriteLine("CLASSNAME");
-                //    Console.WriteLine(member.InterfaceOrClassNode.Identifier);
-                //    Console.WriteLine();
-
-                //    foreach (var k in member.PropertyDeclarationSyntaxList)
-                //    {
-                //        Console.WriteLine(k);
-                //        Console.WriteLine("------");
-                //    }
-                        
-                 
-                   
-
-                //}
             }
         }
     }
