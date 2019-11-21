@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\IDesign.Check\IDesign.Checks.csproj" />
     <ProjectReference Include="..\IDesign.Regonizers\IDesign.Regonizers.csproj" />
   </ItemGroup>
 
