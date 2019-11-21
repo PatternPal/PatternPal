@@ -1,4 +1,4 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
 
 namespace IDesign.Checks
@@ -14,11 +14,7 @@ namespace IDesign.Checks
         /// 
         public static bool CheckMemberModifier(this MemberDeclarationSyntax membersyntax, string modifier)
         {
-            
-
-
             return membersyntax.Modifiers.Where(x => x.ToString() == modifier).Count() > 0;
-
         }
     }
 }
