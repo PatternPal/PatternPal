@@ -27,6 +27,9 @@
             Loading = false;
         }
 
+        /// <summary>
+        /// Adds all the existing designpatterns in a list.
+        /// </summary>
         private void AddPatterns()
         {
             DesignPatterns = new List<DesignPattern>
@@ -41,7 +44,7 @@
         }
 
         /// <summary>
-        /// Handles click on the button by displaying a message box.
+        /// Handles click on the analyse_button by displaying the tool window.
         /// </summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event args.</param>
@@ -71,6 +74,11 @@
             Loading = false;
         }
 
+        /// <summary>
+        /// Handles click on the analyse_button by displaying the settings window.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Settings_Button(object sender, RoutedEventArgs e)
         {
             SettingsControl settingsWindow = new SettingsControl(DesignPatterns);

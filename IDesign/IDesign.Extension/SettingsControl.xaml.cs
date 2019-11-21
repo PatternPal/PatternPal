@@ -22,17 +22,15 @@ namespace IDesign.Extension
     {
         public List<DesignPattern> DesignPatterns { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the SettingsControl class.
+        /// </summary>
+        /// <param name="designPatterns"></param>
         public SettingsControl(List<DesignPattern> designPatterns)
         {
             InitializeComponent();
             DesignPatterns = designPatterns;
             listBox.DataContext = DesignPatterns;
-        }
-
-        private void HandleCheck(object sender, RoutedEventArgs e)
-        {
-            var pattern = sender as DesignPattern;
-            pattern.IsChecked = false;
         }
     }
 }
