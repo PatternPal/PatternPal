@@ -70,7 +70,7 @@
                     if (item.ProjectItems.Count > 0)
                         GetPathsRecursive(item.ProjectItems);
 
-                    if (item.Name.Contains(".cs"))
+                    if (item.Name.EndsWith(".cs"))
                         Paths.Add((string)item.Properties.Item("FullPath").Value);
                 }
             }
@@ -79,14 +79,7 @@
 
             foreach (Project project in Dte.Solution.Projects)
             {
-                foreach (ProjectItem item in project.ProjectItems)
-                {
-                    if (item.ProjectItems.Count > 0 && !item.Name.Contains("Properties"))
-                        GetPathsRecursive(item.ProjectItems);
-
-                    if (item.Name.Contains(".cs"))
-                        Paths.Add((string)item.Properties.Item("FullPath").Value);
-                }
+                GetPathsRecursive(project.ProjectItems);
             }
         }
 
