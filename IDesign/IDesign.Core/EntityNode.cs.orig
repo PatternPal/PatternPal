@@ -12,6 +12,9 @@ namespace IDesign.Core
         public List<ConstructorDeclarationSyntax> ConstructorDeclarationSyntaxList = new List<ConstructorDeclarationSyntax>();
         public List<PropertyDeclarationSyntax> PropertyDeclarationSyntaxList = new List<PropertyDeclarationSyntax>();
         public List<FieldDeclarationSyntax> FieldDeclarationSyntaxList = new List<FieldDeclarationSyntax>();
+<<<<<<< HEAD
+=======
+
         public TypeDeclarationSyntax GetTypeDeclarationSyntax()
         {
             return InterfaceOrClassNode;
@@ -26,6 +29,7 @@ namespace IDesign.Core
         {
             return ConstructorDeclarationSyntaxList;
         }
+
         public IEnumerable<MethodDeclarationSyntax> GetMethods()
         {
             return MethodDeclarationSyntaxList;
@@ -35,5 +39,6 @@ namespace IDesign.Core
         {
             return PropertyDeclarationSyntaxList;
         }
+>>>>>>> #45 - SingletonRecognizer Recognize function
     }
 }

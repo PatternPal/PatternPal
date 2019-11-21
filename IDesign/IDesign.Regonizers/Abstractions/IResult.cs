@@ -7,6 +7,6 @@ namespace IDesign.Regonizers.Abstractions
     public interface IResult
     {
         int GetScore();
-        List<ISuggestion> GetSuggestions();
+        IList<ISuggestion> GetSuggestions();
     }
 }

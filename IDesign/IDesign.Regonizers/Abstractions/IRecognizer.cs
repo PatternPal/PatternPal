@@ -4,8 +4,8 @@ using System.Text;
 
 namespace IDesign.Regonizers.Abstractions
 {
-    interface IRegonizer
+    interface IRecognizer
     {
-        IResult Regonize();
+        IResult Recognize(IEntityNode node);
     }
 }
