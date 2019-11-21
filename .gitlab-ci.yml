@@ -8,10 +8,12 @@ variables:
 before_script:
     - "cd IDesign"
     - "dotnet restore"
+    - "cd ..\\"
 
 build:
     stage: build
     script:
+        - "cd IDesign"
         - "dotnet build"
     only:
         - master
@@ -21,9 +23,14 @@ build:
 test:
     stage: test
     script: 
-        - "cd $test"
-        - "dotnet test"
+        - "cd IDesign"
+        - "dotnet build"
+        - "cd ..\\"
+        - ".\\test_script.bat" 
     only:
         - master
         - develop
         - merge_requests
+    artifacts:
+        paths:
+            - coverage.xml

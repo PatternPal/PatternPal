@@ -1,0 +1,1 @@
+C:\Gitlab-runner\OpenCover\OpenCover.Console.exe -returntargetcode:1000 -register -target:"c:\Program Files\dotnet\dotnet.exe" -targetargs:"test IDesign\IDesign.Regonizers.Tests\IDesign.Regonizers.Tests.csproj" -output:coverage.xml -filter:"+[IDesign*]* -[IDesign*Test*]*" -register -oldStyle
