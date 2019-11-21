@@ -25,7 +25,7 @@ test:
     stage: test
     script: 
         - "cd IDesign"
-        - "dotnet build"
+        - "dotnet build IDesign.sln"
         - "cd ..\\"
         - ".\\test_script.bat" 
     only:
