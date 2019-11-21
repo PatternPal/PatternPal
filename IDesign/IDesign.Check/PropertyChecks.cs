@@ -14,7 +14,6 @@ namespace IDesign.Checks
         /// <param name="propertySyntax">The property witch it should check</param>
         /// <param name="type">The expected type</param>
         /// <returns></returns>
-        /// 
         public static bool CheckPropertyType(this PropertyDeclarationSyntax propertySyntax, string type)
         {
             return propertySyntax.Type.ToString() == type;

@@ -4,12 +4,10 @@ using Microsoft.CodeAnalysis.Text;
 using NUnit.Framework;
 using IDesign.Checks;
 
-
 namespace IDesign.Tests.Checks
 {
    public class FieldChecks
-    {
-
+    { 
         [SetUp]
         public void Setup()
         {
