@@ -22,7 +22,8 @@ namespace IDesign.Regonizers.Tests
         [TestCase("bool", @"public void TestMethod(){}", false)]
         [TestCase("int", @"public bool TestMethod(){}", false)]
         [TestCase("Class", @"public void TestMethod(){}", false)]
-        public void ReturnTypeCheck_Returns_CorrectRepsonse(string returnType, string code, bool shouldBeValid)
+
+        public void ReturnTypeCheck_Should_Return_CorrectRepsonse(string returnType, string code, bool shouldBeValid)
         {
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
 
@@ -31,8 +32,9 @@ namespace IDesign.Regonizers.Tests
             if (method == null)
                 Assert.Fail();
 
-            Assert.AreEqual(method.CheckReturnType(returnType), shouldBeValid);
+            Assert.AreEqual(shouldBeValid, method.CheckReturnType(returnType));
         }
+
         [TestCase("public", @"public void TestMethod(){}", true)]
         [TestCase("private", @"private int TestMethod(){}", true)]
         [TestCase("static", @"public static Class TestMethod(){}", true)]
@@ -48,7 +50,7 @@ namespace IDesign.Regonizers.Tests
             if (method == null)
                 Assert.Fail();
 
-            Assert.AreEqual(method.CheckMemberModifier(modifier), shouldBeValid);
+            Assert.AreEqual(shouldBeValid, method.CheckMemberModifier(modifier));
         }
     }
 }
