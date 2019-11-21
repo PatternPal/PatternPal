@@ -22,7 +22,6 @@ namespace IDesign.Regonizers.Tests
         [TestCase("bool", @"public void TestMethod(){}", false)]
         [TestCase("int", @"public bool TestMethod(){}", false)]
         [TestCase("Class", @"public void TestMethod(){}", false)]
-
         public void ReturnTypeCheck_Should_Return_CorrectRepsonse(string returnType, string code, bool shouldBeValid)
         {
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
