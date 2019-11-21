@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Linq;
 
 namespace IDesign.Checks
 {
@@ -13,6 +15,11 @@ namespace IDesign.Checks
         public static bool CheckReturnType(this MethodDeclarationSyntax methodSyntax, string returnType)
         {
             return methodSyntax.ReturnType.ToString() == returnType;
+        }
+        
+        public static bool CheckCreationalFunction(this MethodDeclarationSyntax methodSyntax)
+        { 
+            return methodSyntax.DescendantNodes().OfType<ObjectCreationExpressionSyntax>().Any();
         }
     }
 }
