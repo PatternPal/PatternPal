@@ -13,9 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IDesign.Core", "IDesign.Cor
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "30 - Tests", "30 - Tests", "{42465826-0737-421D-9D08-30F8C43D7912}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDesign.Console", "IDesign.Console\IDesign.Console.csproj", "{83CEFCB8-F33A-4946-882D-62407F1F7D19}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDesign.ConsoleApp", "IDesign.Console\IDesign.ConsoleApp.csproj", "{83CEFCB8-F33A-4946-882D-62407F1F7D19}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDesign.Regonizers.Tests", "IDesign.Regonizers.Tests\IDesign.Regonizers.Tests.csproj", "{08EB1A6B-D2F4-4E17-8C8F-A645308C3962}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IDesign.Regonizers.Tests", "IDesign.Regonizers.Tests\IDesign.Regonizers.Tests.csproj", "{08EB1A6B-D2F4-4E17-8C8F-A645308C3962}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
