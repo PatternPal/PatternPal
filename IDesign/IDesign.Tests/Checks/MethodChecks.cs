@@ -25,7 +25,6 @@ namespace IDesign.Regonizers.Tests
         public void ReturnTypeCheck_Should_Return_CorrectRepsonse(string returnType, string code, bool shouldBeValid)
         {
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-
             var method = root.Members[0] as MethodDeclarationSyntax;
 
             if (method == null)
@@ -65,7 +64,6 @@ namespace IDesign.Regonizers.Tests
                 Assert.Fail();
 
             Assert.AreEqual(shouldBeVaild, method.CheckCreationalFunction());
-            
         }
     }
 }
