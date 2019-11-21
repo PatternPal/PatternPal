@@ -18,7 +18,7 @@ namespace IDesign.Checks
         /// </returns>
         public static bool CheckPropertyType(this PropertyDeclarationSyntax propertySyntax, string type)
         {
-            return propertySyntax.Type.ToString() == type;
+            return propertySyntax.Type.ToString().IsEqual(type);
         }
     }
 }

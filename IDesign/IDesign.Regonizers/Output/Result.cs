@@ -7,7 +7,7 @@ namespace IDesign.Regonizers.Output
 {
     public class Result : IResult
     {
-        public IList<ISuggestion> Suggestions { get; set; } = new List<ISuggestion>();
+        public List<ISuggestion> Suggestions { get; set; } = new List<ISuggestion>();
         public int Score { get; set; }
 
         public int GetScore()

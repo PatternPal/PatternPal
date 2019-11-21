@@ -16,7 +16,7 @@ namespace IDesign.Checks
         /// </returns>
         public static bool CheckReturnType(this MethodDeclarationSyntax methodSyntax, string returnType)
         {
-            return methodSyntax.ReturnType.ToString() == returnType;
+            return methodSyntax.ReturnType.ToString().IsEqual(returnType);
         }
 
         /// <summary>
