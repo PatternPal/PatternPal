@@ -14,7 +14,6 @@ namespace IDesign.Checks
         /// <param name="fieldSyntax">The field witch it should check</param>
         /// <param name="type">The expected type</param>
         /// <returns></returns>
-        /// 
         public static bool CheckPropertyType(this FieldDeclarationSyntax fieldSyntax, string type)
         {
             return fieldSyntax.Declaration.Type.ToString() == type;
