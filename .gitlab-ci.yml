@@ -4,7 +4,7 @@ stages:
 
 variables:
     test: "IDesign.Regonizers.Tests"
-
+    
 before_script:
     - "cd IDesign"
     - "dotnet restore"

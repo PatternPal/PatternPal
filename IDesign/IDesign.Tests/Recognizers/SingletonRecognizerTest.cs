@@ -55,6 +55,8 @@ namespace IDesign.Regonizers.Tests
 
             var result = singleton.Recognize(entityNode);
 
+            Assert.AreEqual(100, result.GetScore());
+
         }
     }
 }

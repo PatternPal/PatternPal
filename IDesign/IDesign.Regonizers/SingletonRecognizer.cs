@@ -13,79 +13,75 @@ namespace IDesign.Regonizers
         public IResult Recognize(IEntityNode entityNode)
         {
             var result = new Result();
-            var methodScores = new Dictionary<MethodDeclarationSyntax, (int score, IList<string> suggestions)>();
 
-            //Give scores to methods
-            foreach (var method in entityNode.GetMethods())
+
+            var methodChecks = new List<(Predicate<MethodDeclarationSyntax> check, string suggestionMessage)>()
             {
-                var correctReturnType = method.CheckReturnType(entityNode.GetName());
-                var correctModifier = method.CheckMemberModifier("static");
+                (x => x.CheckReturnType(entityNode.GetName()) , "Incorrecte return type"),
+                (x => x.CheckMemberModifier("static") , "Is niet static")
+            };
 
-                var score = correctReturnType ? 1 : 0;
-                score += correctModifier ? 1 : 0;
+            CheckElements(result, entityNode.GetMethods(), x => x.Identifier.ToString(), methodChecks);
 
-                var suggestions = new List<string>();
-
-                if (!correctReturnType) suggestions.Add("Incorrecte return type");
-                if (!correctModifier) suggestions.Add("Is niet static");
-
-                methodScores.Add(method, (score, suggestions));
-            }
-
-            //Add suggestions for best scored method
-            foreach (var methodResult in methodScores)
+            var propertyChecks = new List<(Predicate<PropertyDeclarationSyntax> check, string suggestionMessage)>()
             {
-                if (methodResult.Value.score == methodScores.Values.Select(x => x.score).Max())
-                {
-                    result.Score += methodResult.Value.score;
-                    foreach (var methodSuggestion in methodResult.Value.suggestions)
-                    {
-                        result.Suggestions.Add(new Suggestion(methodResult.Key.Identifier.ToString() + ": " + methodSuggestion));
-                    }
-                    break;
-                }
-            }
-
-            var propertyScores = new Dictionary<PropertyDeclarationSyntax, (int score, IList<string> suggestions)>();
-
-            //Give scores to properies
-            foreach (var property in entityNode.GetProperties())
-            {
-                var correctType = property.CheckPropertyType(entityNode.GetName());
-                var isStatic = property.CheckMemberModifier("static");
-                var isPrivate = property.CheckMemberModifier("private");
-
-                var score = isPrivate ? 1 : 0;
-                score += isStatic ? 1 : 0;
-                score += correctType ? 1 : 0;
-
-                var suggestions = new List<string>();
-
-                if (!correctType) suggestions.Add("Incorrecte return type");
-                if (!isStatic) suggestions.Add("Is niet static");
-                if (!isPrivate) suggestions.Add("Is niet private");
-
-                propertyScores.Add(property, (score, suggestions));
-            }
-
-            //Add suggestions for best scored method
-            foreach (var methodResult in propertyScores)
-            {
-                if (methodResult.Value.score == propertyScores.Values.Select(x => x.score).Max())
-                {
-                    result.Score += methodResult.Value.score;
-                    foreach(var propertySuggestion in methodResult.Value.suggestions)
-                    {
-                        result.Suggestions.Add(new Suggestion(methodResult.Key.Identifier.ToString() + ": " + propertySuggestion));
-                    }
-                    break;
-                }
-            }
+                (x => x.CheckPropertyType(entityNode.GetName()) , "Incorrecte type"),
+                (x => x.CheckMemberModifier("static") , "Is niet static"),
+                (x => x.CheckMemberModifier("private") , "Is niet private")
+            };
+            CheckElements(result, entityNode.GetProperties(), x => x.Identifier.ToString(), propertyChecks);
 
 
             result.Score = (int)(result.Score / 5f * 100f);
 
             return result;
+        }
+
+
+        //@TODO Make the next fucntions accessible to other patterns
+        private void CheckElements<T>(Result result, IEnumerable<T> elements, Func<T, string> elementName, IEnumerable<(Predicate<T> check, string suggestionMessage)> checks)
+        {
+            var checkResult = CheckElements(elements, elementName, checks);
+            result.Score += checkResult.score;
+            result.Suggestions.AddRange(checkResult.suggestions);
+        }
+
+        private (IList<ISuggestion> suggestions, int score) CheckElements<T>(IEnumerable<T> elements, Func<T, string> elementName, IEnumerable<(Predicate<T> check, string suggestionMessage)> checks)
+        {
+            var suggestionList = new List<ISuggestion>();
+
+            var scores = new Dictionary<T, (int score, IList<string> suggestions)>();
+
+            //Give scores to elements
+            foreach (var element in elements)
+            {
+                var score = 0;
+                var suggestions = new List<string>();
+                foreach (var check in checks)
+                {
+                    var isValid = check.check(element);
+                    score += isValid ? 1 : 0;
+                    if (!isValid) suggestions.Add(check.suggestionMessage);
+
+                }
+                scores.Add(element, (score, suggestions));
+            }
+
+            //Add suggestions for best scored element
+            foreach (var elementScore in scores)
+            {
+                //If element has the highest score
+                if (elementScore.Value.score == scores.Values.Select(x => x.score).Max())
+                {
+                    foreach (var propertySuggestion in elementScore.Value.suggestions)
+                    {
+                        suggestionList.Add(new Suggestion(elementName(elementScore.Key) + ": " + propertySuggestion));
+                    }
+                    return (suggestionList, elementScore.Value.score);
+                }
+            }
+
+            return (suggestionList, 0);
         }
     }
 }
