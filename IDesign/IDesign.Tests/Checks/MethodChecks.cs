@@ -64,7 +64,7 @@ namespace IDesign.Recognizers.Tests
             if (method == null)
                 Assert.Fail();
 
-            Assert.AreEqual(shouldBeVaild, method.CheckCreationalFunction());
+            Assert.AreEqual(shouldBeVaild, (new Method(method)).CheckCreationalFunction());
         }
     }
 }
