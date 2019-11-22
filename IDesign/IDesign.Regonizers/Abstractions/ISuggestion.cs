@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IDesign.Regonizers.Abstractions
+namespace IDesign.Recognizers.Abstractions
 {
     public interface ISuggestion
     {

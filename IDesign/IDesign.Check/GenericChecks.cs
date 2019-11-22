@@ -15,7 +15,7 @@ namespace IDesign.Checks
         /// </returns>
         public static bool CheckMemberModifier(this MemberDeclarationSyntax membersyntax, string modifier)
         {
-            return membersyntax.Modifiers.Where(x => x.ToString().IsEqual(modifier)).Count() > 0;
+            return membersyntax.Modifiers.Where(x => x.ToString().IsEqual(modifier)).Any();
         }
     }
 }

@@ -6,7 +6,7 @@ using IDesign.Checks;
 using IDesign.Core;
 using System.Linq;
 
-namespace IDesign.Regonizers.Tests
+namespace IDesign.Recognizers.Tests
 {
     public class SingletonRecognizerTest
     {
@@ -26,7 +26,7 @@ namespace IDesign.Regonizers.Tests
             var testClass = @"public sealed class Singleton
 
     {
-    private static Singleton instance {get;set;} = null;
+    private static Singleton instance = null;
 
     private Singleton()
     {

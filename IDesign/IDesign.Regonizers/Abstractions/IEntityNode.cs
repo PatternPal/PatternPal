@@ -1,9 +1,10 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using IDesign.Models;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IDesign.Regonizers.Abstractions
+namespace IDesign.Recognizers.Abstractions
 {
     public interface IEntityNode
     {
@@ -11,7 +12,8 @@ namespace IDesign.Regonizers.Abstractions
 
         string GetName();
         IEnumerable<ConstructorDeclarationSyntax> GetCostructors();
-        IEnumerable<MethodDeclarationSyntax> GetMethods();
+        IEnumerable<IMethod> GetMethods();
         IEnumerable<PropertyDeclarationSyntax> GetProperties();
+        IEnumerable<IField> GetFields();
     }
 }
