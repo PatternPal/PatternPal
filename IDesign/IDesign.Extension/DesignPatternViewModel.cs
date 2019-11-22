@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace IDesign.Extension
+namespace IDesign.Core
 {
     public class DesignPatternViewModel : INotifyPropertyChanged
     {

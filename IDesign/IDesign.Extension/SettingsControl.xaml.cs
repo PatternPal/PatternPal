@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using IDesign.Core;
+using System.Collections.Generic;
 using System.Windows.Controls;
 
 namespace IDesign.Extension

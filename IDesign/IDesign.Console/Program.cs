@@ -1,4 +1,5 @@
-﻿using NDesk.Options;
+using IDesign.Core;
+using NDesk.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,14 @@ namespace IDesign.ConsoleApp
         /// <param name="args">Takes in commandline options and .cs files</param>
         static void Main(string[] args)
         {
+            const string path = @"C:\Users\Shanna\source\repos\DesignPatternRecognizer\IDesign\IDesign.Core";
+
+            RecognizerRunner recognizerRunner = new RecognizerRunner();
+            ReadFiles readFiles = new ReadFiles();
+
+            readFiles.GetFilesFromDirectory(path);
+            recognizerRunner.Run(readFiles.Files, designPatterns);
+
             if (args.Length <= 0)
             {
                 Console.WriteLine("No arguments or files specified please confront --help");
