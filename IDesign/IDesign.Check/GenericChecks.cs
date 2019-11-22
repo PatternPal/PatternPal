@@ -6,12 +6,13 @@ namespace IDesign.Checks
     public static class GenericChecks
     {
         /// <summary>
-        /// Return a boolean based on if the given member has an expected modifier
+        /// Function that checks the modifier of a member
         /// </summary>
         /// <param name="membersyntax">The member witch it should check</param>
         /// <param name="modifier">The expected modifier</param>
-        /// <returns></returns>
-        /// 
+        /// <returns>
+        /// Return a boolean based on if the given member has an expected modifier
+        /// </returns>
         public static bool CheckMemberModifier(this MemberDeclarationSyntax membersyntax, string modifier)
         {
             return membersyntax.Modifiers.Where(x => x.ToString() == modifier).Count() > 0;

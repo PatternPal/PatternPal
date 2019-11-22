@@ -15,15 +15,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "30 - Tests", "30 - Tests", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDesign.ConsoleApp", "IDesign.Console\IDesign.ConsoleApp.csproj", "{83CEFCB8-F33A-4946-882D-62407F1F7D19}"
 EndProject
-<<<<<<< HEAD
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IDesign.Regonizers.Tests", "IDesign.Regonizers.Tests\IDesign.Regonizers.Tests.csproj", "{08EB1A6B-D2F4-4E17-8C8F-A645308C3962}"
-=======
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IDesign.Tests", "IDesign.Tests\IDesign.Tests.csproj", "{08EB1A6B-D2F4-4E17-8C8F-A645308C3962}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IDesign.Tests", "IDesign.Tests\IDesign.Tests.csproj", "{026711C4-E66B-4553-8EA4-F7FE89A70C85}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDesign.Extension", "IDesign.Extension\IDesign.Extension.csproj", "{6D62168E-3F32-47F9-8BC0-514BF633F903}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IDesign.Checks", "IDesign.Check\IDesign.Checks.csproj", "{03444F9C-B608-481D-927B-1DA97F19724A}"
->>>>>>> develop
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +45,10 @@ Global
 		{08EB1A6B-D2F4-4E17-8C8F-A645308C3962}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08EB1A6B-D2F4-4E17-8C8F-A645308C3962}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08EB1A6B-D2F4-4E17-8C8F-A645308C3962}.Release|Any CPU.Build.0 = Release|Any CPU
+		{026711C4-E66B-4553-8EA4-F7FE89A70C85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{026711C4-E66B-4553-8EA4-F7FE89A70C85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{026711C4-E66B-4553-8EA4-F7FE89A70C85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{026711C4-E66B-4553-8EA4-F7FE89A70C85}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6D62168E-3F32-47F9-8BC0-514BF633F903}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6D62168E-3F32-47F9-8BC0-514BF633F903}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D62168E-3F32-47F9-8BC0-514BF633F903}.Release|Any CPU.ActiveCfg = Release|Any CPU

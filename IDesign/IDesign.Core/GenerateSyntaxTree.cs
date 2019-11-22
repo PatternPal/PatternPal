@@ -14,20 +14,14 @@ namespace IDesign.Core
         private SyntaxTree tree { get; set; }
         public List<EntityNode> EntityNodes = new List<EntityNode>();
 
-        //Soorten classes
+        public List<UsingDirectiveSyntax> UsingDirectiveSyntaxList = new List<UsingDirectiveSyntax>();
         public List<ClassDeclarationSyntax> ClassDeclarationSyntaxList = new List<ClassDeclarationSyntax>();
         public List<InterfaceDeclarationSyntax> InterfaceDeclarationSyntaxList = new List<InterfaceDeclarationSyntax>();
-
-        //Inhoud van classes
         public List<MethodDeclarationSyntax> MethodDeclarationSyntaxList;
         public List<PropertyDeclarationSyntax> PropertyDeclarationSyntaxList;
         public List<ConstructorDeclarationSyntax> ConstructorDeclarationSyntaxList;
         public List<FieldDeclarationSyntax> FieldDeclarationSyntaxList;
 
-        //Inhoud van namespaces
-        public List<UsingDirectiveSyntax> UsingDirectiveSyntaxList = new List<UsingDirectiveSyntax>();
-        public List<EnumDeclarationSyntax> EnumDeclarationSyntaxList = new List<EnumDeclarationSyntax>();
-        public List<DelegateDeclarationSyntax> DelegateDeclarationSyntaxList = new List<DelegateDeclarationSyntax>();
 
         /// <summary>
         /// Constructor of the GenerateSyntaxTree class.
@@ -38,13 +32,21 @@ namespace IDesign.Core
         {
             tree = CSharpSyntaxTree.ParseText(file);
             root = tree.GetCompilationUnitRoot();
+
+            GetUsingsOfFile();
+            GetAllClassesOfFile();
+            GetAllInterfacesOfFile();
+            GetAllConstructorsOfAClass();
+            GetAllMethodsOfAClass();
+            GetAllPropertiesOfAClass();
+            GetAllFieldsOfAClass();
         }
 
         /// <summary>
         /// Adds all usings of the syntaxtree to a list
         /// </summary>
         /// <returns></returns>
-        public List<UsingDirectiveSyntax> GetUsingsOfFile()
+        private List<UsingDirectiveSyntax> GetUsingsOfFile()
         {
             foreach (UsingDirectiveSyntax element in root.Usings)
             {
@@ -54,16 +56,15 @@ namespace IDesign.Core
         }
 
         /// <summary>
-        /// 
+        /// Parent function of the recursive function that adds all ClassNodes of the file to the ClassDeclarationSyntaxList
         /// </summary>
-        /// <returns></returns>
-        public void GetAllClassesOfFile()
+        private void GetAllClassesOfFile()
         {
             if (root.Members != null)
             {
-                foreach (var node in root.Members)
+                foreach (var member in root.Members)
                 {
-                    GetAllClassesOfFile(node);
+                    GetAllClassesOfFile(member);
                 }
             }
         }
@@ -72,38 +73,41 @@ namespace IDesign.Core
         /// Recursive function that adds all ClassNodes of the file to the ClassDeclarationSyntaxList
         /// </summary>
         /// <param name="node"></param>
-        /// <returns></returns>
+        /// <returns>
+        /// Returns a List with ClassDeclarationSyntaxes
+        /// </returns>
         private List<ClassDeclarationSyntax> GetAllClassesOfFile(SyntaxNode node)
         {
 
             if (node.Kind() == SyntaxKind.ClassDeclaration)
             {
-                var classNode = (ClassDeclarationSyntax)node;
+                ClassDeclarationSyntax classNode = (ClassDeclarationSyntax)node;
                 ClassDeclarationSyntaxList.Add(classNode);
-                var entityNode = new EntityNode();
+                EntityNode entityNode = new EntityNode();
                 entityNode.InterfaceOrClassNode = classNode;
+                entityNode.Name = classNode.Identifier.ToString();
                 EntityNodes.Add(entityNode);
             }
             if (node.ChildNodes() != null)
             {
-                foreach (var i in node.ChildNodes())
+                foreach (var childNode in node.ChildNodes())
                 {
-                    GetAllClassesOfFile(i);
+                    GetAllClassesOfFile(childNode);
                 }
             }
             return ClassDeclarationSyntaxList;
         }
 
         /// <summary>
-        /// 
+        /// Parent function of the recursive function that adds all InterfaceNodes of the file to the InterfaceDeclarationSyntaxList
         /// </summary>
-        public void GetAllInterfacesOfFile()
+        private void GetAllInterfacesOfFile()
         {
             if (root.Members != null)
             {
-                foreach (var node in root.Members)
+                foreach (var member in root.Members)
                 {
-                    GetAllInterfacesOfFile(node);
+                    GetAllInterfacesOfFile(member);
                 }
             }
         }
@@ -112,31 +116,35 @@ namespace IDesign.Core
         /// Recursive function that adds all InterfaceNodes of the file to the InterfaceDeclarationSyntaxList
         /// </summary>
         /// <param name="node"></param>
-        /// <returns></returns>
+        /// <returns>
+        /// Returns a List with InterfaceDeclarationSyntaxes
+        /// </returns>
         private List<InterfaceDeclarationSyntax> GetAllInterfacesOfFile(SyntaxNode node)
         {
             if (node.Kind() == SyntaxKind.InterfaceDeclaration)
             {
-                var interfaceNode = (InterfaceDeclarationSyntax)node;
+                EntityNode entityNode = new EntityNode();
+                InterfaceDeclarationSyntax interfaceNode = (InterfaceDeclarationSyntax)node;
                 InterfaceDeclarationSyntaxList.Add(interfaceNode);
-                var entityNode = new EntityNode();
+
                 entityNode.InterfaceOrClassNode = interfaceNode;
+                entityNode.Name = interfaceNode.Identifier.ToString();
                 EntityNodes.Add(entityNode);
             }
             if (node.ChildNodes() != null)
             {
-                foreach (var i in node.ChildNodes())
+                foreach (var childNode in node.ChildNodes())
                 {
-                    GetAllInterfacesOfFile(i);
+                    GetAllInterfacesOfFile(childNode);
                 }
             }
             return InterfaceDeclarationSyntaxList;
         }
 
         /// <summary>
-        /// 
+        /// Parent function of the recursive function that searches for all constructors in a class
         /// </summary>
-        public void GetAllConstructorsOfAClass()
+        private void GetAllConstructorsOfAClass()
         {
             if (EntityNodes != null)
             {
@@ -144,25 +152,26 @@ namespace IDesign.Core
                 {
                     classElement.ConstructorDeclarationSyntaxList = GetAllConstructorsOfAClass(classElement.InterfaceOrClassNode);
                 }
-
             }
         }
 
         /// <summary>
-        /// 
+        ///  Recursive function that searches for all constructors in a class
         /// </summary>
         /// <param name="node"></param>
-        /// <returns></returns>
+        /// <returns>
+        /// Returns a list with ConstructorDeclarationSyntaxes
+        /// </returns>
         private List<ConstructorDeclarationSyntax> GetAllConstructorsOfAClass(SyntaxNode node)
         {
             ConstructorDeclarationSyntaxList = new List<ConstructorDeclarationSyntax>();
             if (node.ChildNodes() != null)
             {
-                foreach (var x in node.ChildNodes())
+                foreach (var childNode in node.ChildNodes())
                 {
-                    if (x.Kind() == SyntaxKind.ConstructorDeclaration)
+                    if (childNode.Kind() == SyntaxKind.ConstructorDeclaration)
                     {
-                        var constructorNode = (ConstructorDeclarationSyntax)x;
+                        ConstructorDeclarationSyntax constructorNode = (ConstructorDeclarationSyntax)childNode;
                         ConstructorDeclarationSyntaxList.Add(constructorNode);
                     }
                 }
@@ -171,9 +180,9 @@ namespace IDesign.Core
         }
 
         /// <summary>
-        /// 
+        /// Parent of recursive function that searches for all methodes of a class
         /// </summary>
-        public void GetAllMethodsOfAClass()
+        private void GetAllMethodsOfAClass()
         {
             if (EntityNodes != null)
             {
@@ -181,25 +190,26 @@ namespace IDesign.Core
                 {
                     classElement.MethodDeclarationSyntaxList = GetAllMethodsOfAClass(classElement.InterfaceOrClassNode);
                 }
-
             }
         }
 
         /// <summary>
-        /// 
+        /// Recursive function that searches for all methodes of a class
         /// </summary>
         /// <param name="node"></param>
-        /// <returns></returns>
+        /// <returns>
+        /// Returns a list with MethodDeclarationSynates
+        /// </returns>
         private List<MethodDeclarationSyntax> GetAllMethodsOfAClass(SyntaxNode node)
         {
             MethodDeclarationSyntaxList = new List<MethodDeclarationSyntax>();
             if (node.ChildNodes() != null)
             {
-                foreach (var x in node.ChildNodes())
+                foreach (var childeNode in node.ChildNodes())
                 {
-                    if (x.Kind() == SyntaxKind.MethodDeclaration)
+                    if (childeNode.Kind() == SyntaxKind.MethodDeclaration)
                     {
-                        var methodNode = (MethodDeclarationSyntax)x;
+                        MethodDeclarationSyntax methodNode = (MethodDeclarationSyntax)childeNode;
                         MethodDeclarationSyntaxList.Add(methodNode);
                     }
                 }
@@ -208,9 +218,9 @@ namespace IDesign.Core
         }
 
         /// <summary>
-        /// 
+        /// Parent of recursive function that searches for all properties of a class
         /// </summary>
-        public void GetAllPropertiesOfAClass()
+        private void GetAllPropertiesOfAClass()
         {
             if (EntityNodes != null)
             {
@@ -218,25 +228,26 @@ namespace IDesign.Core
                 {
                     classElement.PropertyDeclarationSyntaxList = GetAllPropertiesOfAClass(classElement.InterfaceOrClassNode);
                 }
-
             }
         }
 
         /// <summary>
-        /// 
+        /// Recursive function that searches for all properties of a class
         /// </summary>
         /// <param name="node"></param>
-        /// <returns></returns>
+        /// <returns>
+        /// Returns a list with PropertyDeclarationSyntax
+        /// </returns>
         private List<PropertyDeclarationSyntax> GetAllPropertiesOfAClass(SyntaxNode node)
         {
             PropertyDeclarationSyntaxList = new List<PropertyDeclarationSyntax>();
             if (node.ChildNodes() != null)
             {
-                foreach (var x in node.ChildNodes())
+                foreach (var childNode in node.ChildNodes())
                 {
-                    if (x.Kind() == SyntaxKind.PropertyDeclaration)
+                    if (childNode.Kind() == SyntaxKind.PropertyDeclaration)
                     {
-                        var propertyNode = (PropertyDeclarationSyntax)x;
+                        PropertyDeclarationSyntax propertyNode = (PropertyDeclarationSyntax)childNode;
                         PropertyDeclarationSyntaxList.Add(propertyNode);
                     }
                 }
@@ -245,9 +256,9 @@ namespace IDesign.Core
         }
 
         /// <summary>
-        /// 
+        /// Parent of recursive function that searches for all fields of a class
         /// </summary>
-        public void GetAllFieldsOfAClass()
+        private void GetAllFieldsOfAClass()
         {
             if (EntityNodes != null)
             {
@@ -260,31 +271,28 @@ namespace IDesign.Core
         }
 
         /// <summary>
-        /// 
+        /// Recursive function that searches for all fields of a class
         /// </summary>
         /// <param name="node"></param>
-        /// <returns></returns>
+        /// <returns>
+        /// Returns a list with FieldDeclarationSyntax
+        /// </returns>
         private List<FieldDeclarationSyntax> GetAllFieldsOfAClass(SyntaxNode node)
         {
             FieldDeclarationSyntaxList = new List<FieldDeclarationSyntax>();
             if (node.ChildNodes() != null)
             {
-                foreach (var x in node.ChildNodes())
+                foreach (var childNode in node.ChildNodes())
                 {
-                    if (x.Kind() == SyntaxKind.FieldDeclaration)
+                    if (childNode.Kind() == SyntaxKind.FieldDeclaration)
                     {
-                        var propertyNode = (FieldDeclarationSyntax)x;
-                        FieldDeclarationSyntaxList.Add(propertyNode);
+                        FieldDeclarationSyntax fieldNode = (FieldDeclarationSyntax)childNode;
+                        FieldDeclarationSyntaxList.Add(fieldNode);
                     }
                 }
             }
             return FieldDeclarationSyntaxList;
         }
-
-
-
-
-
 
     }
 }

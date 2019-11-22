@@ -9,12 +9,13 @@ namespace IDesign.Checks
    public static class PropertyChecks
     {
         /// <summary>
-        /// Return a boolean based on if the given property is an expected type
+        /// Function thats checks the type of a property
         /// </summary>
         /// <param name="propertySyntax">The property witch it should check</param>
         /// <param name="type">The expected type</param>
-        /// <returns></returns>
-        /// 
+        /// <returns>
+        /// Return a boolean based on if the given property is an expected type
+        /// </returns>
         public static bool CheckPropertyType(this PropertyDeclarationSyntax propertySyntax, string type)
         {
             return propertySyntax.Type.ToString() == type;

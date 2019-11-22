@@ -13,31 +13,17 @@ namespace IDesign.ConsoleApp
     {
         static void Main(string[] args)
         {
+            List<string> patterns = new List<string> { "Singleton", "Factory method"};
             const string path = @"C:\Users\Shanna\source\repos\DesignPatternRecognizer\IDesign\IDesign.Core";
+           
+            RecognizerRunner recognizerRunner = new RecognizerRunner();
             ReadFiles readFiles = new ReadFiles();
+
             readFiles.GetFilesFromDirectory(path);
 
-            for (int i = 3; i < readFiles.Files.Count; i++)
-            {
-                string file = readFiles.MakeStringFromFile(readFiles.Files[i]);
-                GenerateSyntaxTree generateSyntaxTree = new GenerateSyntaxTree(file);
+            recognizerRunner.Run(readFiles.Files, patterns);
 
-                generateSyntaxTree.GetAllClassesOfFile();
-                generateSyntaxTree.GetAllInterfacesOfFile();
-                generateSyntaxTree.GetAllConstructorsOfAClass();
-                generateSyntaxTree.GetAllMethodsOfAClass();
-                generateSyntaxTree.GetAllPropertiesOfAClass();
-                generateSyntaxTree.GetAllFieldsOfAClass();
-                
-                foreach(var z in generateSyntaxTree.EntityNodes)
-                {
-                    foreach(var field in z.FieldDeclarationSyntaxList)
-                    {
-                        Console.WriteLine(field);
-
-                    }
-                }
-            }
+         
         }
     }
 }
