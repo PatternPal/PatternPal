@@ -55,7 +55,7 @@ namespace IDesign.Recognizers.Tests
 
             var result = singleton.Recognize(entityNode);
 
-            Assert.AreEqual(100, result.GetScore());
+            Assert.AreEqual(40, result.GetScore());
 
         }
     }
