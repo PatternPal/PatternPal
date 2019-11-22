@@ -50,6 +50,7 @@ namespace IDesign.Regonizers.Tests
 
             Assert.AreEqual(shouldBeValid, method.CheckMemberModifier(modifier));
         }
+
         [TestCase(@"public void TestMethod(){new class();}", true)]
         [TestCase(@"public void TestMethod(){string i ='this is a new class';}", false)]
         [TestCase(@"public int TestMethod(){return new int();}", true)]
@@ -64,6 +65,22 @@ namespace IDesign.Regonizers.Tests
                 Assert.Fail();
 
             Assert.AreEqual(shouldBeVaild, method.CheckCreationalFunction());
+        }
+
+        [TestCase(@"public void TestMethod(){string i ='this is a new class';}", false)]
+        [TestCase(@"public Class TestMethod(){return new Class();}", true)]
+        [TestCase(@"public int TestMethod(){return new int();}", false)]
+        [TestCase(@"public Class TestMethod(){var x = new Class(); return x;}", true)]
+        [TestCase(@"public int TestMethod(){var x = new Class(); return new int();}", false)]
+        public void ReturnClassCheck_Should_Return_CorrectResponse(string code, bool shouldBeVaild)
+        {
+            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
+            var method = root.Members[0] as MethodDeclarationSyntax;
+
+            if (method == null)
+                Assert.Fail();
+
+            Assert.AreEqual(shouldBeVaild, method.CheckReturnTypeSameAsCreation());
         }
     }
 }
