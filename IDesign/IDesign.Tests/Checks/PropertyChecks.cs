@@ -16,7 +16,7 @@ namespace IDesign.Regonizers.Tests
         [TestCase("public", @"public string TestProperty{get; set;}", true)]
         [TestCase("private", @"private int TestProperty{get; set;}", true)]
         [TestCase("public", @"public static Class TestProperty{get; set;}", true)]
-        [TestCase("private", @"private static Class<T> TestProperty{get; set;}", true)]
+        [TestCase("static", @"private static Class<T> TestProperty{get; set;}", true)]
         [TestCase("private", @"static Class[] TestProperty{get; set;}", false)]
         [TestCase("public", @"private var TestProperty{get; set;}", false)]
         [TestCase("static", @"public bool TestProperty{get; set;}", false)]

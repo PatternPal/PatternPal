@@ -20,12 +20,12 @@ namespace IDesign.Core
             this.Getal = g;
         }
 
-        public int count(int g)
+        public int Count(int g)
         {
             Getal += g;
             return Getal;
         }
-        static class innerClass{
+        static class InnerClass{
 
         }
     }
@@ -51,14 +51,14 @@ namespace IDesign.Core
 
 class OuterClass
 {
-    interface OuterInnerInterface
+    interface IOuterInnerInterface
     {
 
     }
 
 }
 
-interface OuterInterface
+interface IOuterInterface
 {
 
 }

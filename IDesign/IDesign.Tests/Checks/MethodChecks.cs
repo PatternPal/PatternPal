@@ -25,7 +25,6 @@ namespace IDesign.Regonizers.Tests
         public void ReturnTypeCheck_Should_Return_CorrectRepsonse(string returnType, string code, bool shouldBeValid)
         {
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-
             var method = root.Members[0] as MethodDeclarationSyntax;
 
             if (method == null)
@@ -41,7 +40,7 @@ namespace IDesign.Regonizers.Tests
         [TestCase("private", @"private static Class<T> TestMethod(){}", true)]
         [TestCase("private", @"public Class[] TestMethod(){}", false)]
         [TestCase("public", @"private static void TestMethod(){}", false)]
-        public void ModifierCheck_Returns_CorrectResponse(string modifier, string code, bool shouldBeValid)
+        public void ModifierCheck_Should_Return_CorrectResponse(string modifier, string code, bool shouldBeValid)
         {
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
             var method = root.Members[0] as MemberDeclarationSyntax;
@@ -50,6 +49,21 @@ namespace IDesign.Regonizers.Tests
                 Assert.Fail();
 
             Assert.AreEqual(shouldBeValid, method.CheckMemberModifier(modifier));
+        }
+        [TestCase(@"public void TestMethod(){new class();}", true)]
+        [TestCase(@"public void TestMethod(){string i ='this is a new class';}", false)]
+        [TestCase(@"public int TestMethod(){return new int();}", true)]
+        [TestCase(@"public void TestMethod(){this.x = new int();}", true)]
+        [TestCase(@"public void TestMethod(){string x  = new double().parse();}", true)]
+        public void CreationalCheck_Should_Return_CorrectResponse(string code, bool shouldBeVaild)
+        {
+            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
+            var method = root.Members[0] as MethodDeclarationSyntax;
+
+            if (method == null)
+                Assert.Fail();
+
+            Assert.AreEqual(shouldBeVaild, method.CheckCreationalFunction());
         }
     }
 }

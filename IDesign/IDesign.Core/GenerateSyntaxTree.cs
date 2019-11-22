@@ -10,8 +10,8 @@ namespace IDesign.Core
 {
     public class GenerateSyntaxTree
     {
-        public CompilationUnitSyntax root { get; set; }
-        private SyntaxTree tree { get; set; }
+        public CompilationUnitSyntax Root { get; set; }
+        private SyntaxTree Tree { get; set; }
         public List<EntityNode> EntityNodes = new List<EntityNode>();
 
         public List<UsingDirectiveSyntax> UsingDirectiveSyntaxList = new List<UsingDirectiveSyntax>();
@@ -30,8 +30,8 @@ namespace IDesign.Core
         /// <param name="file"></param>
         public GenerateSyntaxTree(string file)
         {
-            tree = CSharpSyntaxTree.ParseText(file);
-            root = tree.GetCompilationUnitRoot();
+            Tree = CSharpSyntaxTree.ParseText(file);
+            Root = Tree.GetCompilationUnitRoot();
 
             GetUsingsOfFile();
             GetAllClassesOfFile();
@@ -48,7 +48,7 @@ namespace IDesign.Core
         /// <returns></returns>
         private List<UsingDirectiveSyntax> GetUsingsOfFile()
         {
-            foreach (UsingDirectiveSyntax element in root.Usings)
+            foreach (UsingDirectiveSyntax element in Root.Usings)
             {
                 UsingDirectiveSyntaxList.Add(element);
             }
@@ -60,9 +60,9 @@ namespace IDesign.Core
         /// </summary>
         private void GetAllClassesOfFile()
         {
-            if (root.Members != null)
+            if (Root.Members != null)
             {
-                foreach (var member in root.Members)
+                foreach (var member in Root.Members)
                 {
                     GetAllClassesOfFile(member);
                 }
@@ -83,9 +83,11 @@ namespace IDesign.Core
             {
                 ClassDeclarationSyntax classNode = (ClassDeclarationSyntax)node;
                 ClassDeclarationSyntaxList.Add(classNode);
-                EntityNode entityNode = new EntityNode();
-                entityNode.InterfaceOrClassNode = classNode;
-                entityNode.Name = classNode.Identifier.ToString();
+                EntityNode entityNode = new EntityNode
+                {
+                    InterfaceOrClassNode = classNode,
+                    Name = classNode.Identifier.ToString()
+                };
                 EntityNodes.Add(entityNode);
             }
             if (node.ChildNodes() != null)
@@ -103,9 +105,9 @@ namespace IDesign.Core
         /// </summary>
         private void GetAllInterfacesOfFile()
         {
-            if (root.Members != null)
+            if (Root.Members != null)
             {
-                foreach (var member in root.Members)
+                foreach (var member in Root.Members)
                 {
                     GetAllInterfacesOfFile(member);
                 }

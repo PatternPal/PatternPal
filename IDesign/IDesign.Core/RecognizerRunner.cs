@@ -7,7 +7,7 @@ namespace IDesign.Core
     public class RecognizerRunner
     {
         private GenerateSyntaxTree generateSyntaxTree;
-        private ReadFiles readFiles = new ReadFiles();
+        private readonly ReadFiles readFiles = new ReadFiles();
 
         /// <summary>
         /// Function that should be called to generate a syntax tree
