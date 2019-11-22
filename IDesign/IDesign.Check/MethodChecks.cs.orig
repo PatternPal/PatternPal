@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+﻿using Microsoft.CodeAnalysis;
+=======
 ﻿using IDesign.Models;
+>>>>>>> Abstract method & fields
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
 
@@ -11,9 +15,15 @@ namespace IDesign.Checks
         /// </summary>
         /// <param name="methodSyntax">The method witch it should check</param>
         /// <param name="returnType">The expected return type</param>
+<<<<<<< HEAD
         /// <returns>
-        public static bool CheckReturnType(this IMethod method, string returnType)
+        /// Return a boolean based on if the given method returns the expected type
         /// </returns>
+        public static bool CheckReturnType(this MethodDeclarationSyntax methodSyntax, string returnType)
+=======
+        /// <returns></returns>
+        public static bool CheckReturnType(this IMethod method, string returnType)
+>>>>>>> Abstract method & fields
         {
             return method.GetReturnType().ToString().IsEqual(returnType);
         }
@@ -26,6 +36,11 @@ namespace IDesign.Checks
         /// <param name="modifier">The expected modifier</param>
         /// <returns></returns>
         /// 
+        public static bool CheckMemberModifier(this IMethod method, string modifier)
+        {
+            return method.GetModifiers().Where(x => x.ToString().IsEqual(modifier)).Any();
+        }
+
         /// <summary>
         /// Return a boolean based on if the given method is creational
         /// </summary>
@@ -34,9 +49,6 @@ namespace IDesign.Checks
         public static bool CheckCreationalFunction(this MethodDeclarationSyntax methodSyntax)
         { 
             return methodSyntax.DescendantNodes().OfType<ObjectCreationExpressionSyntax>().Any();
-        public static bool CheckMemberModifier(this IMethod method, string modifier)
-        {
-            return method.GetModifiers().Where(x => x.ToString().IsEqual(modifier)).Any();
         }
     }
 }

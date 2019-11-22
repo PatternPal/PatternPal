@@ -1,9 +1,9 @@
-﻿using IDesign.Regonizers.Abstractions;
+﻿using IDesign.Recognizers.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IDesign.Regonizers.Output
+namespace IDesign.Recognizers.Output
 {
     public class Result : IResult
     {

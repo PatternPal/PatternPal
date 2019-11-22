@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.Text;
 using NUnit.Framework;
 using IDesign.Checks;
 
-namespace IDesign.Regonizers.Tests
+namespace IDesign.Recognizers.Tests
 {
     public class PropertyTest
     {

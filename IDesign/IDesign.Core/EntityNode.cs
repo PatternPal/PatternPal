@@ -1,6 +1,10 @@
-﻿using IDesign.Regonizers.Abstractions;
+﻿using IDesign.Models;
+using IDesign.Recognizers.Abstractions;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace IDesign.Core
 {
@@ -26,14 +30,39 @@ namespace IDesign.Core
         {
             return ConstructorDeclarationSyntaxList;
         }
-        public IEnumerable<MethodDeclarationSyntax> GetMethods()
+        public IEnumerable<IMethod> GetMethods()
         {
-            return MethodDeclarationSyntaxList;
+            var list = new List<IMethod>();
+            list.AddRange(MethodDeclarationSyntaxList.Select(x => new Method(x)));
+
+            foreach (var property in PropertyDeclarationSyntaxList)
+            {
+                var getters = property.AccessorList.Accessors.Where(x => x.Kind() == SyntaxKind.GetAccessorDeclaration && x.Body != null);
+                list.AddRange(getters.Select(x => new PropertyMethod(property, x)));
+            }
+
+            return list;
         }
 
         public IEnumerable<PropertyDeclarationSyntax> GetProperties()
         {
             return PropertyDeclarationSyntaxList;
+        }
+
+        public IEnumerable<IField> GetFields()
+        {
+            var listGetters = new List<IField>();
+            foreach (var property in PropertyDeclarationSyntaxList)
+            {
+                var getters = property.AccessorList.Accessors.Where(x => x.Kind() == SyntaxKind.GetAccessorDeclaration && x.Body == null);
+                listGetters.AddRange(getters.Select(x => new PropertyField(property, x)));
+            }
+
+            foreach (var field in FieldDeclarationSyntaxList)
+            {
+                listGetters.AddRange(field.Declaration.Variables.Select(x => new Field(field, x)));
+            }
+            return listGetters;
         }
     }
 }

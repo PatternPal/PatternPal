@@ -1,12 +1,13 @@
 ﻿using IDesign.Checks;
-using IDesign.Regonizers.Abstractions;
-using IDesign.Regonizers.Output;
+using IDesign.Models;
+using IDesign.Recognizers.Abstractions;
+using IDesign.Recognizers.Output;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace IDesign.Regonizers
+namespace IDesign.Recognizers
 {
     public class SingletonRecognizer : IRecognizer
     {
@@ -14,14 +15,12 @@ namespace IDesign.Regonizers
         {
             var result = new Result();
 
-
-            var methodChecks = new List<(Predicate<MethodDeclarationSyntax> check, string suggestionMessage)>()
+            var methodChecks = new List<(Predicate<IMethod> check, string suggestionMessage)>()
             {
                 (x => x.CheckReturnType(entityNode.GetName()) , "Incorrecte return type"),
                 (x => x.CheckMemberModifier("static") , "Is niet static")
             };
-
-            CheckElements(result, entityNode.GetMethods(), x => x.Identifier.ToString(), methodChecks);
+            CheckElements(result, entityNode.GetMethods(), x => x.GetName(), methodChecks);
 
             var propertyChecks = new List<(Predicate<PropertyDeclarationSyntax> check, string suggestionMessage)>()
             {
@@ -29,8 +28,8 @@ namespace IDesign.Regonizers
                 (x => x.CheckMemberModifier("static") , "Is niet static"),
                 (x => x.CheckMemberModifier("private") , "Is niet private")
             };
-            CheckElements(result, entityNode.GetProperties(), x => x.Identifier.ToString(), propertyChecks);
 
+            CheckElements(result, entityNode.GetProperties(), x => x.Identifier.ToString(), propertyChecks);
 
             result.Score = (int)(result.Score / 5f * 100f);
 
@@ -57,13 +56,15 @@ namespace IDesign.Regonizers
             {
                 var score = 0;
                 var suggestions = new List<string>();
+
                 foreach (var check in checks)
                 {
                     var isValid = check.check(element);
                     score += isValid ? 1 : 0;
-                    if (!isValid) suggestions.Add(check.suggestionMessage);
 
+                    if (!isValid) suggestions.Add(check.suggestionMessage);
                 }
+
                 scores.Add(element, (score, suggestions));
             }
 
@@ -77,6 +78,7 @@ namespace IDesign.Regonizers
                     {
                         suggestionList.Add(new Suggestion(elementName(elementScore.Key) + ": " + propertySuggestion));
                     }
+
                     return (suggestionList, elementScore.Value.score);
                 }
             }
