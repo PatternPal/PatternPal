@@ -1,6 +1,7 @@
 ﻿namespace IDesign.Extension
 {
     using EnvDTE;
+    using IDesign.Core;
     using Microsoft.VisualStudio.Shell.Interop;
     using System;
     using System.Collections.Generic;

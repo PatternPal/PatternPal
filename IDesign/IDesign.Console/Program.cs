@@ -23,7 +23,6 @@ namespace IDesign.ConsoleApp
         /// <param name="args">Takes in commandline options and .cs files</param>
         static void Main(string[] args)
         {
-            List<string> patterns = new List<string> { "Singleton", "Factory method" };
             const string path = @"C:\Users\Shanna\source\repos\DesignPatternRecognizer\IDesign\IDesign.Core";
 
             RecognizerRunner recognizerRunner = new RecognizerRunner();
@@ -31,7 +30,7 @@ namespace IDesign.ConsoleApp
 
             readFiles.GetFilesFromDirectory(path);
 
-            recognizerRunner.Run(readFiles.Files, patterns);
+            recognizerRunner.Run(readFiles.Files, designPatterns);
 
 
             if (args.Length <= 0)

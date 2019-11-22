@@ -14,7 +14,7 @@ namespace IDesign.Core
         /// </summary>
         /// <param name="files"></param>
         /// <param name="patterns"></param>
-        public void Run(List<string> files, List<string> patterns)
+        public void Run(List<string> files, List<DesignPattern> patterns)
         {
             //loop over all files
             for (int i = 0; i < files.Count; i++)
