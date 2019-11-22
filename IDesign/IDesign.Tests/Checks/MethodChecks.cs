@@ -44,12 +44,12 @@ namespace IDesign.Recognizers.Tests
         public void ModifierCheck_Should_Return_CorrectResponse(string modifier, string code, bool shouldBeValid)
         {
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var method = root.Members[0] as MemberDeclarationSyntax;
+            var method = root.Members[0] as MethodDeclarationSyntax;
             
             if (method == null)
                 Assert.Fail();
 
-            Assert.AreEqual(shouldBeValid, method.CheckMemberModifier(modifier));
+            Assert.AreEqual(shouldBeValid, new Method(method).CheckModifier(modifier));
         }
 
         [TestCase(@"public void TestMethod(){new class();}", true)]
@@ -81,7 +81,7 @@ namespace IDesign.Recognizers.Tests
             if (method == null)
                 Assert.Fail();
 
-            Assert.AreEqual(shouldBeVaild, method.CheckReturnTypeSameAsCreation());
+            Assert.AreEqual(shouldBeVaild, new Method(method).CheckReturnTypeSameAsCreation());
         }
     }
 }

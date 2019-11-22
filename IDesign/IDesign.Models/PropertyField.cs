@@ -5,7 +5,7 @@ namespace IDesign.Models
 {
     public class PropertyField : IField
     {
-        public PropertyField(PropertyDeclarationSyntax property, AccessorDeclarationSyntax accesor)
+        public PropertyField(PropertyDeclarationSyntax property)
         {
             this.property = property;
         }

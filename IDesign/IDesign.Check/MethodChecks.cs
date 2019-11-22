@@ -36,7 +36,7 @@ namespace IDesign.Checks
         /// <param name="membersyntax">The member witch it should check</param>
         /// <param name="modifier">The expected modifier</param>
         /// <returns></returns>
-        public static bool CheckMemberModifier(this IMethod method, string modifier)
+        public static bool CheckModifier(this IMethod method, string modifier)
         {
             return method.GetModifiers().Where(x => x.ToString().IsEqual(modifier)).Any();
         }
@@ -48,13 +48,13 @@ namespace IDesign.Checks
         /// <param name="creationType">The expected creational type</param>
         /// <returns></returns>
         /// 
-        public static bool CheckCreationType(this MethodDeclarationSyntax methodSyntax, string creationType)
+        public static bool CheckCreationType(this IMethod methodSyntax, string creationType)
         {
-            var creations = methodSyntax.DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
+            var creations = methodSyntax.GetBody().DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
             foreach(var creationExpression in creations)
             {
                 var name = creationExpression.Type as IdentifierNameSyntax;
-                if(name != null && name.Identifier.ToString() == creationType)
+                if(name != null && name.Identifier.ToString().IsEqual(creationType))
                 {
                     return true;
                 }
@@ -68,9 +68,9 @@ namespace IDesign.Checks
         /// <param name="methodSyntax">The method witch it should check</param>
         /// <returns></returns>
         /// 
-        public static bool CheckReturnTypeSameAsCreation(this MethodDeclarationSyntax methodSyntax)
+        public static bool CheckReturnTypeSameAsCreation(this IMethod methodSyntax)
         {
-            return methodSyntax.CheckCreationType(methodSyntax.ReturnType.ToString());
+            return methodSyntax.CheckCreationType(methodSyntax.GetReturnType().ToString());
         }
     }
 }

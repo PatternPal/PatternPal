@@ -17,4 +17,10 @@
     <ProjectReference Include="..\IDesign.Regonizers\IDesign.Recognizers.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Checks\MethodChecks.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+
 </Project>

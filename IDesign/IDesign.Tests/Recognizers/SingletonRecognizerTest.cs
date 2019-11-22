@@ -51,11 +51,12 @@ namespace IDesign.Recognizers.Tests
             entityNode.InterfaceOrClassNode = testNode;
 
             entityNode.MethodDeclarationSyntaxList = testNode.DescendantNodes().OfType<MethodDeclarationSyntax>().ToList();
+            entityNode.FieldDeclarationSyntaxList = testNode.DescendantNodes().OfType<FieldDeclarationSyntax>().ToList();
             entityNode.PropertyDeclarationSyntaxList = testNode.DescendantNodes().OfType<PropertyDeclarationSyntax>().ToList();
 
             var result = singleton.Recognize(entityNode);
 
-            Assert.AreEqual(40, result.GetScore());
+            Assert.AreEqual(100, result.GetScore());
 
         }
     }
