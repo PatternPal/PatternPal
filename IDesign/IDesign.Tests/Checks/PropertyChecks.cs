@@ -38,6 +38,7 @@ namespace IDesign.Regonizers.Tests
         [TestCase("var", @"static var TestProperty{get; set;}", true)]
         [TestCase("T", @"private var TestProperty{get; set;}", false)]
         [TestCase("int", @"public bool TestProperty{get; set;}", false)]
+        [TestCase("int", @"public static Singleton Instance { get { if (instance==null) { instance = new Singleton(); } return instance; } } }", false)]
         public void TypeCheck_Should_Return_CorrectResponse(string type, string code, bool shouldBeValid)
         {
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
