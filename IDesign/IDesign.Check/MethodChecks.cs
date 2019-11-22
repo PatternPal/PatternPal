@@ -57,9 +57,7 @@ namespace IDesign.Checks
         /// 
         public static bool CheckReturnTypeSameAsCreation(this MethodDeclarationSyntax methodSyntax)
         {
-            bool y = methodSyntax.CheckCreationType(methodSyntax.ReturnType.ToString());
-        
-        return methodSyntax.CheckCreationType(methodSyntax.ReturnType.ToString());
+            return methodSyntax.CheckCreationType(methodSyntax.ReturnType.ToString());
         }
     }
 }
