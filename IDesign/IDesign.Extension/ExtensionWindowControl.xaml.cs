@@ -16,7 +16,7 @@
     /// </summary>
     public partial class ExtensionWindowControl : UserControl
     {
-        public List<DesignPattern> DesignPatterns { get; set; }
+        public List<DesignPatternViewModel> DesignPatternViewModels { get; set; }
         public List<string> Paths { get; set; }
         public bool Loading { get; set; }
         public DTE Dte { get; private set; }
@@ -38,14 +38,14 @@
         /// </summary>
         private void AddPatterns()
         {
-            DesignPatterns = new List<DesignPattern>
+            DesignPatternViewModels = new List<DesignPatternViewModel>
             {
-                new DesignPattern("Singleton"),
-                new DesignPattern("State"),
-                new DesignPattern("Strategy"),
-                new DesignPattern("Factory"),
-                new DesignPattern("Decorator"),
-                new DesignPattern("Adapter")
+                new DesignPatternViewModel("Singleton"),
+                new DesignPatternViewModel("State"),
+                new DesignPatternViewModel("Strategy"),
+                new DesignPatternViewModel("Factory"),
+                new DesignPatternViewModel("Decorator"),
+                new DesignPatternViewModel("Adapter")
             };
         }
 
@@ -109,7 +109,7 @@
             });
 
             GetPaths();
-            listView.ItemsSource = DesignPatterns.Where(x => x.IsChecked);
+            listView.ItemsSource = DesignPatternViewModels.Where(x => x.IsChecked).Select(x => x.DesignPattern);
 
             statusBar.Value = 0;
             Loading = false;
@@ -122,7 +122,7 @@
         /// <param name="e"></param>
         private void Settings_Button(object sender, RoutedEventArgs e)
         {
-            SettingsControl settingsWindow = new SettingsControl(DesignPatterns);
+            SettingsControl settingsWindow = new SettingsControl(DesignPatternViewModels);
 
             System.Windows.Window window = new System.Windows.Window
             {
@@ -132,7 +132,7 @@
             };
             window.ShowDialog();
 
-            DesignPatterns = settingsWindow.DesignPatterns;
+            DesignPatternViewModels = settingsWindow.DesignPatterns;
         }
     }
 }

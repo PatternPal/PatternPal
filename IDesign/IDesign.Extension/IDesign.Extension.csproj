@@ -51,7 +51,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DesignPattern.cs" />
+    <Compile Include="DesignPatternViewModel.cs" />
     <Compile Include="ExtensionWindow.cs" />
     <Compile Include="ExtensionWindowCommand.cs" />
     <Compile Include="ExtensionWindowControl.xaml.cs">

@@ -2,10 +2,11 @@
 
 namespace IDesign.Extension
 {
-    public class DesignPattern : INotifyPropertyChanged
+    public class DesignPatternViewModel : INotifyPropertyChanged
     {
         private bool isChecked;
         public event PropertyChangedEventHandler PropertyChanged;
+        public string DesignPattern { get; set; }
         public string Name { get; set; }
         public bool IsChecked
         {
@@ -17,7 +18,7 @@ namespace IDesign.Extension
             }
         }
 
-        public DesignPattern(string name)
+        public DesignPatternViewModel(string name)
         {
             Name = name;
             IsChecked = true;
