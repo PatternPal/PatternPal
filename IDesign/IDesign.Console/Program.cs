@@ -29,9 +29,7 @@ namespace IDesign.ConsoleApp
             ReadFiles readFiles = new ReadFiles();
 
             readFiles.GetFilesFromDirectory(path);
-
             recognizerRunner.Run(readFiles.Files, designPatterns);
-
 
             if (args.Length <= 0)
             {

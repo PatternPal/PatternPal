@@ -6,7 +6,6 @@ namespace IDesign.Core
 {
     public class RecognizerRunner
     {
-        private GenerateSyntaxTree generateSyntaxTree;
         private readonly ReadFiles readFiles = new ReadFiles();
 
         /// <summary>
@@ -20,16 +19,14 @@ namespace IDesign.Core
             for (int i = 0; i < files.Count; i++)
             {
                 var tree = readFiles.MakeStringFromFile(files[i]);
-                generateSyntaxTree = new GenerateSyntaxTree(tree);
+                GenerateSyntaxTree generateSyntaxTree = new GenerateSyntaxTree(tree);
 
                 //foreach file loop over all patterns and do stuff
                 for (int j = 0; j < patterns.Count; j++)
                 {
                     //CODE GOES HERE
                 }
-
             }
-
         }
     }
 }

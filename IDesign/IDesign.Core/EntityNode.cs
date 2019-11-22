@@ -11,7 +11,5 @@ namespace IDesign.Core
         public List<ConstructorDeclarationSyntax> ConstructorDeclarationSyntaxList = new List<ConstructorDeclarationSyntax>();
         public List<PropertyDeclarationSyntax> PropertyDeclarationSyntaxList = new List<PropertyDeclarationSyntax>();
         public List<FieldDeclarationSyntax> FieldDeclarationSyntaxList = new List<FieldDeclarationSyntax>();
-
-
     }
 }
