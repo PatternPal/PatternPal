@@ -1,4 +1,8 @@
-﻿namespace IDesign.ConsoleApp
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace IDesign.Core
 {
     public class DesignPattern
     {
@@ -6,7 +10,7 @@
 
         public DesignPattern(string name)
         {
-            Name = name;
+            this.Name = name;
         }
     }
 }
