@@ -28,7 +28,7 @@ namespace IDesign.Recognizers.Tests
         {
             var singleton = new SingletonRecognizer();
             string code = FileUtils.FileToString(filename);
-           
+
 
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
             var NameSpaceNode = root.Members[0] as NamespaceDeclarationSyntax;
@@ -39,6 +39,7 @@ namespace IDesign.Recognizers.Tests
             entityNode.InterfaceOrClassNode = testNode;
 
             entityNode.MethodDeclarationSyntaxList = testNode.DescendantNodes().OfType<MethodDeclarationSyntax>().ToList();
+            entityNode.FieldDeclarationSyntaxList = testNode.DescendantNodes().OfType<FieldDeclarationSyntax>().ToList();
             entityNode.PropertyDeclarationSyntaxList = testNode.DescendantNodes().OfType<PropertyDeclarationSyntax>().ToList();
 
             var result = singleton.Recognize(entityNode);

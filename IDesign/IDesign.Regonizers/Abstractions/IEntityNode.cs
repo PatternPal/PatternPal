@@ -9,7 +9,6 @@ namespace IDesign.Recognizers.Abstractions
     public interface IEntityNode
     {
         TypeDeclarationSyntax GetTypeDeclarationSyntax();
-
         string GetName();
         IEnumerable<ConstructorDeclarationSyntax> GetCostructors();
         IEnumerable<IMethod> GetMethods();

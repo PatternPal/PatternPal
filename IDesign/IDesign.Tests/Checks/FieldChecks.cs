@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using NUnit.Framework;
 using IDesign.Checks;
+using IDesign.Models;
 
 namespace IDesign.Tests.Checks
 {
@@ -23,12 +24,12 @@ namespace IDesign.Tests.Checks
         public void ModifierCheck_Should_Return_CorrectResponse(string modifier, string code, bool shouldBeValid)
         {
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var property = root.Members[0] as MemberDeclarationSyntax;
+            var field = root.Members[0] as FieldDeclarationSyntax;
 
-            if (property == null)
+            if (field == null)
                 Assert.Fail();
 
-            Assert.AreEqual(shouldBeValid, property.CheckMemberModifier(modifier));
+            Assert.AreEqual(shouldBeValid, new Field(field, field.Declaration.Variables.FirstOrDefault()).CheckMemberModifier(modifier));
         }
 
         [TestCase("string", @"public string TestProperty", true)]
@@ -41,12 +42,12 @@ namespace IDesign.Tests.Checks
         public void TypeCheck_Should_Return_CorrectResponse(string type, string code, bool shouldBeValid)
         {
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var property = root.Members[0] as FieldDeclarationSyntax;
+            var field = root.Members[0] as FieldDeclarationSyntax;
 
-            if (property == null)
+            if (field == null)
                 Assert.Fail();
 
-            Assert.AreEqual(shouldBeValid, property.CheckPropertyType(type));
+            Assert.AreEqual(shouldBeValid, new Field(field, field.Declaration.Variables.FirstOrDefault()).CheckFieldType(type));
         }
     }
 }

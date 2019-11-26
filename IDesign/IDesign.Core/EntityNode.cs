@@ -55,7 +55,7 @@ namespace IDesign.Core
             foreach (var property in PropertyDeclarationSyntaxList)
             {
                 var getters = property.AccessorList.Accessors.Where(x => x.Kind() == SyntaxKind.GetAccessorDeclaration && x.Body == null);
-                listGetters.AddRange(getters.Select(x => new PropertyField(property, x)));
+                listGetters.AddRange(getters.Select(x => new PropertyField(property)));
             }
 
             foreach (var field in FieldDeclarationSyntaxList)

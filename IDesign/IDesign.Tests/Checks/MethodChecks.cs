@@ -44,13 +44,14 @@ namespace IDesign.Recognizers.Tests
         public void ModifierCheck_Should_Return_CorrectResponse(string modifier, string code, bool shouldBeValid)
         {
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var method = root.Members[0] as MemberDeclarationSyntax;
-            
+            var method = root.Members[0] as MethodDeclarationSyntax;
+
             if (method == null)
                 Assert.Fail();
 
-            Assert.AreEqual(shouldBeValid, method.CheckMemberModifier(modifier));
+            Assert.AreEqual(shouldBeValid, new Method(method).CheckModifier(modifier));
         }
+
         [TestCase(@"public void TestMethod(){new class();}", true)]
         [TestCase(@"public void TestMethod(){string i ='this is a new class';}", false)]
         [TestCase(@"public int TestMethod(){return new int();}", true)]
@@ -65,6 +66,22 @@ namespace IDesign.Recognizers.Tests
                 Assert.Fail();
 
             Assert.AreEqual(shouldBeVaild, (new Method(method)).CheckCreationalFunction());
+        }
+
+        [TestCase(@"public void TestMethod(){string i ='this is a new class';}", false)]
+        [TestCase(@"public Class TestMethod(){return new Class();}", true)]
+        [TestCase(@"public int TestMethod(){return new int();}", false)]
+        [TestCase(@"public Class TestMethod(){var x = new Class(); return x;}", true)]
+        [TestCase(@"public int TestMethod(){var x = new Class(); return new int();}", false)]
+        public void ReturnClassCheck_Should_Return_CorrectResponse(string code, bool shouldBeVaild)
+        {
+            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
+            var method = root.Members[0] as MethodDeclarationSyntax;
+
+            if (method == null)
+                Assert.Fail();
+
+            Assert.AreEqual(shouldBeVaild, new Method(method).CheckReturnTypeSameAsCreation());
         }
     }
 }

@@ -14,22 +14,24 @@ namespace IDesign.Recognizers
         public IResult Recognize(IEntityNode entityNode)
         {
             var result = new Result();
-
+            var methods = entityNode.GetMethods();
+            var fields = entityNode.GetFields();
             var methodChecks = new List<(Predicate<IMethod> check, string suggestionMessage)>()
             {
                 (x => x.CheckReturnType(entityNode.GetName()) , "Incorrecte return type"),
-                (x => x.CheckMemberModifier("static") , "Is niet static")
+                (x => x.CheckModifier("static") , "Is niet static")
             };
             CheckElements(result, entityNode.GetMethods(), x => x.GetName(), methodChecks);
 
-            var propertyChecks = new List<(Predicate<PropertyDeclarationSyntax> check, string suggestionMessage)>()
+            var propertyChecks = new List<(Predicate<IField> check, string suggestionMessage)>()
             {
-                (x => x.CheckPropertyType(entityNode.GetName()) , "Incorrecte type"),
+                (x => x.CheckFieldType(entityNode.GetName()) , "Incorrecte type"),
                 (x => x.CheckMemberModifier("static") , "Is niet static"),
                 (x => x.CheckMemberModifier("private") , "Is niet private")
             };
 
-            CheckElements(result, entityNode.GetProperties(), x => x.Identifier.ToString(), propertyChecks);
+            CheckElements(result, entityNode.GetFields(), x => x.GetName(), propertyChecks);
+
 
             result.Score = (int)(result.Score / 5f * 100f);
 

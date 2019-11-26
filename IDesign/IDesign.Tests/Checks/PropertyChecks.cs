@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using NUnit.Framework;
 using IDesign.Checks;
+using IDesign.Models;
 
 namespace IDesign.Recognizers.Tests
 {
@@ -23,12 +24,12 @@ namespace IDesign.Recognizers.Tests
         public void ModifierCheck_Should_Return_CorrectResponse(string modifier, string code, bool shouldBeValid)
         {
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var property = root.Members[0] as MemberDeclarationSyntax;
+            var property = root.Members[0] as PropertyDeclarationSyntax;
 
             if (property == null)
                 Assert.Fail();
 
-            Assert.AreEqual(shouldBeValid, property.CheckMemberModifier(modifier));
+            Assert.AreEqual(shouldBeValid, new PropertyField(property).CheckMemberModifier(modifier));
         }
 
         [TestCase("string", @"public string TestProperty{get; set;}", true)]
@@ -38,6 +39,7 @@ namespace IDesign.Recognizers.Tests
         [TestCase("var", @"static var TestProperty{get; set;}", true)]
         [TestCase("T", @"private var TestProperty{get; set;}", false)]
         [TestCase("int", @"public bool TestProperty{get; set;}", false)]
+        [TestCase("int", @"public static Singleton Instance { get { if (instance==null) { instance = new Singleton(); } return instance; } } }", false)]
         public void TypeCheck_Should_Return_CorrectResponse(string type, string code, bool shouldBeValid)
         {
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
@@ -46,7 +48,7 @@ namespace IDesign.Recognizers.Tests
             if (property == null)
                 Assert.Fail();
 
-            Assert.AreEqual(shouldBeValid, property.CheckPropertyType(type));
+            Assert.AreEqual(shouldBeValid, new PropertyField(property).CheckFieldType(type));
         }
     }
 }

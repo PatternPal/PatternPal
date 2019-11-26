@@ -33,7 +33,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="TestClasses\SingleTonTestCase5.cs" />
+    <Compile Update="Checks\MethodChecks.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
 
 </Project>
