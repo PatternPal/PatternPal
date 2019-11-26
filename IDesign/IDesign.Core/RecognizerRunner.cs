@@ -6,7 +6,17 @@ namespace IDesign.Core
 {
     public class RecognizerRunner
     {
-        private readonly ReadFiles readFiles = new ReadFiles();
+        private readonly FileManager readFiles = new FileManager();
+        public static List<DesignPattern> designPatterns = new List<DesignPattern>
+        {
+            new DesignPattern("Adapter"),
+            new DesignPattern("Decorator"),
+            new DesignPattern("Factory"),
+            new DesignPattern("Singleton"),
+            new DesignPattern("State"),
+            new DesignPattern("Strategy"),
+
+        };
 
         /// <summary>
         /// Function that should be called to generate a syntax tree

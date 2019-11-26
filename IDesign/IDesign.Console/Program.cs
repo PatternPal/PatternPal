@@ -26,7 +26,7 @@ namespace IDesign.ConsoleApp
             const string path = @"C:\Users\Shanna\source\repos\DesignPatternRecognizer\IDesign\IDesign.Core";
 
             RecognizerRunner recognizerRunner = new RecognizerRunner();
-            ReadFiles readFiles = new ReadFiles();
+            FileManager readFiles = new FileManager();
 
             readFiles.GetFilesFromDirectory(path);
             recognizerRunner.Run(readFiles.Files, designPatterns);

@@ -11,7 +11,7 @@ namespace IDesign.Tests.Core
     class ReadFilesTest
     {
         public string path = "../../../Core/TestClasses";
-        ReadFiles readFiles = new ReadFiles();
+        FileManager readFiles = new FileManager();
 
         [Test]
         public void TestIfFilesListContainsRightFiles()
