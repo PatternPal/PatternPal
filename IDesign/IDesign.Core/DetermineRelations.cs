@@ -23,6 +23,5 @@ namespace IDesign.Core
         {
             this.EntityNodes = entityNodes;
         }
-
     }
 }
