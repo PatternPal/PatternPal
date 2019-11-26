@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IDesign.Recognizers.Abstractions
 {
-    interface IRecognizer
+    public interface IRecognizer
     {
         IResult Recognize(IEntityNode node);
     }

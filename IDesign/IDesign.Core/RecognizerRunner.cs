@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IDesign.Recognizers;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,13 +10,7 @@ namespace IDesign.Core
         private readonly FileManager readFiles = new FileManager();
         public static List<DesignPattern> designPatterns = new List<DesignPattern>
         {
-            new DesignPattern("Adapter"),
-            new DesignPattern("Decorator"),
-            new DesignPattern("Factory"),
-            new DesignPattern("Singleton"),
-            new DesignPattern("State"),
-            new DesignPattern("Strategy"),
-
+            new DesignPattern("Singleton", new SingletonRecognizer())
         };
 
         /// <summary>
@@ -32,10 +27,8 @@ namespace IDesign.Core
                 GenerateSyntaxTree generateSyntaxTree = new GenerateSyntaxTree(tree);
 
                 //foreach file loop over all patterns and do stuff
-                for (int j = 0; j < patterns.Count; j++)
-                {
-                    //CODE GOES HERE
-                }
+                foreach (var pattern in patterns)
+                    pattern.Recognizer.Recognize();
             }
         }
     }
