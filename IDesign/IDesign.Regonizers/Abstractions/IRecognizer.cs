@@ -1,6 +1,6 @@
 ﻿namespace IDesign.Recognizers.Abstractions
 {
-    internal interface IRecognizer
+    public interface IRecognizer
     {
         /// <summary>
         ///     Analyses the given node for this pattern

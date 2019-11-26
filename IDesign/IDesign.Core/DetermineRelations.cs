@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace IDesign.Core
 {
     /// <summary>
-    ///     Class to determine relations between classes/interfaces
+    ///     Class to determine relations between classes/interfaces.
     /// </summary>
     public class DetermineRelations
     {
@@ -12,7 +12,7 @@ namespace IDesign.Core
             new Dictionary<TypeDeclarationSyntax, EntityNode>();
 
         /// <summary>
-        ///     Constructor of the Determine Relations class
+        ///     Constructor of the Determine Relations class.
         /// </summary>
         /// <param name="entityNodes"></param>
         public DetermineRelations(Dictionary<TypeDeclarationSyntax, EntityNode> entityNodes)

@@ -6,7 +6,7 @@ namespace IDesign.Checks
     {
         /// <summary>
         ///     Function that if two strings are equal.
-        ///     Not case sensitive
+        ///     Not case sensitive.
         /// </summary>
         /// <param name="s1"></param>
         /// <param name="s2"></param>

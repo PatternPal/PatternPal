@@ -22,6 +22,8 @@
                     </HierarchicalDataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
+            <RadioButton Name="radio1" GroupName="path" Content="Active Document" Margin="5"/>
+            <RadioButton Name="radio2" GroupName="path" Content="Whole Solution" Margin="5"/>
         </StackPanel>
     </StackPanel>
 </UserControl>

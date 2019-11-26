@@ -5,9 +5,18 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+<<<<<<< HEAD
+=======
+using EnvDTE;
+using IDesign.Core;
+using IDesign.Recognizers.Abstractions;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
+>>>>>>> develop
 using Task = System.Threading.Tasks.Task;
 using Thread = System.Threading.Thread;
 using Window = System.Windows.Window;
@@ -19,37 +28,36 @@ namespace IDesign.Extension
     /// </summary>
     public partial class ExtensionWindowControl : UserControl
     {
+        public bool IsActiveDoc { get; set; }
+        public List<DesignPatternViewModel> DesignPatternViewModels { get; set; }
+        public List<string> Paths { get; set; }
+        public bool Loading { get; set; }
+        public DTE Dte { get; private set; }
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="ExtensionWindowControl" /> class.
         /// </summary>
         public ExtensionWindowControl()
         {
             InitializeComponent();
-            AddPatterns();
+            AddViewModels();
+            IsActiveDoc = true;
             Loading = false;
             Dispatcher.VerifyAccess();
             Dte = Package.GetGlobalService(typeof(SDTE)) as DTE;
         }
 
-        public List<DesignPattern> DesignPatterns { get; set; }
-        public List<string> Paths { get; set; }
-        public bool Loading { get; set; }
-        public DTE Dte { get; }
-
         /// <summary>
         ///     Adds all the existing designpatterns in a list.
         /// </summary>
-        private void AddPatterns()
+        private void AddViewModels()
         {
-            DesignPatterns = new List<DesignPattern>
+            DesignPatternViewModels = new List<DesignPatternViewModel>();
+
+            foreach (DesignPattern pattern in RecognizerRunner.designPatterns)
             {
-                new DesignPattern("Singleton"),
-                new DesignPattern("State"),
-                new DesignPattern("Strategy"),
-                new DesignPattern("Factory"),
-                new DesignPattern("Decorator"),
-                new DesignPattern("Adapter")
-            };
+                DesignPatternViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern));
+            }
         }
 
         /// <summary>
@@ -58,12 +66,14 @@ namespace IDesign.Extension
         private void GetCurrentPath()
         {
             Paths = new List<string>();
-            Paths.Add(Dte.ActiveDocument.Path);
+            if (Dte.ActiveDocument != null)
+                Paths.Add(Dte.ActiveDocument.FullName);
         }
 
         /// <summary>
         ///     Gets all paths in the solution.
         /// </summary>
+<<<<<<< HEAD
         private void GetPaths()
         {
             void GetPathsRecursive(ProjectItems items)
@@ -78,9 +88,22 @@ namespace IDesign.Extension
                 }
             }
 
+=======
+        private void GetAllPaths()
+        {   
+>>>>>>> develop
             Paths = new List<string>();
+            FileManager manager = new FileManager();
+            if (Dte.Solution.Count > 0)
+                Paths = manager.GetAllCsFilesFromDirectory(Path.GetDirectoryName(Dte.Solution.FullName));
+        }
 
-            foreach (Project project in Dte.Solution.Projects) GetPathsRecursive(project.ProjectItems);
+        private void ChoosePath()
+        {
+            if (IsActiveDoc)
+                GetCurrentPath();
+            else
+                GetAllPaths();
         }
 
         /// <summary>
@@ -93,8 +116,15 @@ namespace IDesign.Extension
             "Default event handler naming pattern")]
         private async void Analyse_Button(object sender, RoutedEventArgs e)
         {
-            if (Loading)
+            ChoosePath();
+
+            if (Loading || DesignPatternViewModels.Count == 0 || Paths.Count == 0)
                 return;
+
+            RecognizerRunner runner = new RecognizerRunner();
+            List<IResult> results = runner.Run(Paths, DesignPatternViewModels.Where(x => x.IsChecked).Select(x => x.Pattern).ToList());
+
+            listView.ItemsSource = results;
 
             Loading = true;
             statusBar.Value = 0;
@@ -109,9 +139,6 @@ namespace IDesign.Extension
                 }
             });
 
-            GetPaths();
-            listView.ItemsSource = DesignPatterns.Where(x => x.IsChecked);
-
             statusBar.Value = 0;
             Loading = false;
         }
@@ -123,7 +150,7 @@ namespace IDesign.Extension
         /// <param name="e"></param>
         private void Settings_Button(object sender, RoutedEventArgs e)
         {
-            var settingsWindow = new SettingsControl(DesignPatterns);
+            var settingsWindow = new SettingsControl(DesignPatternViewModels, IsActiveDoc);
 
             var window = new Window
             {
@@ -133,7 +160,8 @@ namespace IDesign.Extension
             };
             window.ShowDialog();
 
-            DesignPatterns = settingsWindow.DesignPatterns;
+            IsActiveDoc = (bool) settingsWindow.radio1.IsChecked;
+            DesignPatternViewModels = settingsWindow.DesignPatterns;
         }
     }
 }

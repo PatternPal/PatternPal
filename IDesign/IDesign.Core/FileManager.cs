@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace IDesign.Core
 {
-    public class ReadFiles
+    public class FileManager
     {
-        public List<string> Files = new List<string>();
-
         /// <summary>
         ///     Function that makes a string of a file
         /// </summary>
@@ -27,13 +26,9 @@ namespace IDesign.Core
         /// <returns>
         ///     Returns a list of strings with file paths
         /// </returns>
-        public List<string> GetFilesFromDirectory(string directoryPath)
+        public List<string> GetAllCsFilesFromDirectory(string directoryPath)
         {
-            var files = Directory.EnumerateFiles(directoryPath, "*.cs");
-            if (files != null)
-                foreach (var file in files)
-                    Files.Add(file);
-            return Files;
+            return Directory.GetFiles(directoryPath, "*.cs", SearchOption.AllDirectories).ToList();
         }
     }
 }
