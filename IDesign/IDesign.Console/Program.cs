@@ -1,10 +1,10 @@
 using IDesign.Core;
+using IDesign.Recognizers.Abstractions;
 using NDesk.Options;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
-using IDesign.Recognizers.Abstractions;
+using System.Linq;
 
 namespace IDesign.ConsoleApp
 {

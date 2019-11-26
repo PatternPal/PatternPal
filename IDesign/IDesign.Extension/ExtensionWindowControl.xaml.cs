@@ -1,5 +1,6 @@
 ﻿using EnvDTE;
 using IDesign.Core;
+using IDesign.Recognizers.Abstractions;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
@@ -9,14 +10,6 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-<<<<<<< HEAD
-=======
-using EnvDTE;
-using IDesign.Core;
-using IDesign.Recognizers.Abstractions;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
->>>>>>> develop
 using Task = System.Threading.Tasks.Task;
 using Thread = System.Threading.Thread;
 using Window = System.Windows.Window;
@@ -73,25 +66,9 @@ namespace IDesign.Extension
         /// <summary>
         ///     Gets all paths in the solution.
         /// </summary>
-<<<<<<< HEAD
-        private void GetPaths()
-        {
-            void GetPathsRecursive(ProjectItems items)
-            {
-                foreach (ProjectItem item in items)
-                {
-                    if (item.ProjectItems.Count > 0)
-                        GetPathsRecursive(item.ProjectItems);
 
-                    if (item.Name.EndsWith(".cs"))
-                        Paths.Add((string)item.Properties.Item("FullPath").Value);
-                }
-            }
-
-=======
         private void GetAllPaths()
-        {   
->>>>>>> develop
+        {
             Paths = new List<string>();
             FileManager manager = new FileManager();
             if (Dte.Solution.Count > 0)
@@ -160,7 +137,7 @@ namespace IDesign.Extension
             };
             window.ShowDialog();
 
-            IsActiveDoc = (bool) settingsWindow.radio1.IsChecked;
+            IsActiveDoc = (bool)settingsWindow.radio1.IsChecked;
             DesignPatternViewModels = settingsWindow.DesignPatterns;
         }
     }
