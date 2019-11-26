@@ -1,13 +1,13 @@
-﻿using System;
+﻿using EnvDTE;
+using IDesign.Core;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using EnvDTE;
-using IDesign.Core;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 using Task = System.Threading.Tasks.Task;
 using Thread = System.Threading.Thread;
 using Window = System.Windows.Window;
@@ -74,7 +74,7 @@ namespace IDesign.Extension
                         GetPathsRecursive(item.ProjectItems);
 
                     if (item.Name.EndsWith(".cs"))
-                        Paths.Add((string) item.Properties.Item("FullPath").Value);
+                        Paths.Add((string)item.Properties.Item("FullPath").Value);
                 }
             }
 
@@ -104,7 +104,7 @@ namespace IDesign.Extension
             {
                 for (var i = 0; i <= 100; i++)
                 {
-                    ((IProgress<int>) progress).Report(i);
+                    ((IProgress<int>)progress).Report(i);
                     Thread.Sleep(100);
                 }
             });

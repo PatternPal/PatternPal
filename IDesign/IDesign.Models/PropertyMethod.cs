@@ -7,31 +7,31 @@ namespace IDesign.Models
     {
         public PropertyMethod(PropertyDeclarationSyntax property, AccessorDeclarationSyntax accesor)
         {
-            this.property = property;
-            this.accesor = accesor;
+            this.Property = property;
+            this.Accesor = accesor;
         }
 
-        public PropertyDeclarationSyntax property { get; set; }
-        public AccessorDeclarationSyntax accesor { get; set; }
+        public PropertyDeclarationSyntax Property { get; set; }
+        public AccessorDeclarationSyntax Accesor { get; set; }
 
         public BlockSyntax GetBody()
         {
-            return accesor.Body;
+            return Accesor.Body;
         }
 
         public SyntaxTokenList GetModifiers()
         {
-            return property.Modifiers;
+            return Property.Modifiers;
         }
 
         public string GetName()
         {
-            return property.Identifier.ToString();
+            return Property.Identifier.ToString();
         }
 
         public string GetReturnType()
         {
-            return property.Type.ToString();
+            return Property.Type.ToString();
         }
     }
 }

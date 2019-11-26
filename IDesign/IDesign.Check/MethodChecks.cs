@@ -1,13 +1,13 @@
-﻿using System.Linq;
-using IDesign.Models;
+﻿using IDesign.Models;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Linq;
 
 namespace IDesign.Checks
 {
     public static class MethodChecks
     {
         /// <summary>
-        ///     Function thats checks the returntype of a method
+        ///     Function thats checks the returntype of a method.
         /// </summary>
         /// <param name="methodSyntax">The method witch it should check</param>
         /// <param name="returnType">The expected return type</param>
@@ -19,7 +19,7 @@ namespace IDesign.Checks
 
 
         /// <summary>
-        ///     Return a boolean based on if the given method is creational
+        ///     Return a boolean based on if the given method is creational.
         /// </summary>
         /// <param name="methodSyntax">The method witch it should check</param>
         /// <returns></returns>
@@ -29,7 +29,7 @@ namespace IDesign.Checks
         }
 
         /// <summary>
-        ///     Return a boolean based on if the given member has an expected modifier
+        ///     Return a boolean based on if the given member has an expected modifier.
         /// </summary>
         /// <param name="methodSyntax">The method witch it should check</param>
         /// <param name="modifier">The expected modifier</param>
@@ -40,7 +40,7 @@ namespace IDesign.Checks
         }
 
         /// <summary>
-        ///     Return a boolean based on if the given method creates an object with the given type
+        ///     Return a boolean based on if the given method creates an object with the given type.
         /// </summary>
         /// <param name="methodSyntax">The method witch it should check</param>
         /// <param name="creationType">The expected creational type</param>
@@ -50,15 +50,14 @@ namespace IDesign.Checks
             var creations = methodSyntax.GetBody().DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
             foreach (var creationExpression in creations)
             {
-                var name = creationExpression.Type as IdentifierNameSyntax;
-                if (name != null && name.Identifier.ToString().IsEqual(creationType)) return true;
+                if (creationExpression.Type is IdentifierNameSyntax name && name.Identifier.ToString().IsEqual(creationType)) return true;
             }
 
             return false;
         }
 
         /// <summary>
-        ///     Return a boolean based on if the given method returns a object it creates
+        ///     Return a boolean based on if the given method returns a object it creates.
         /// </summary>
         /// <param name="methodSyntax">The method witch it should check</param>
         /// <returns></returns>

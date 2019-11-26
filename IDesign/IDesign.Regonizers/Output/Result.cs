@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using IDesign.Recognizers.Abstractions;
+﻿using IDesign.Recognizers.Abstractions;
+using System.Collections.Generic;
 
 namespace IDesign.Recognizers.Output
 {

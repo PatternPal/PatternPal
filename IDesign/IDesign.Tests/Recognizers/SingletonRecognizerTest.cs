@@ -1,10 +1,8 @@
+using IDesign.Core;
+using IDesign.Tests.Utils;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
 using NUnit.Framework;
-using IDesign.Checks;
-using IDesign.Tests.Utils;
-using IDesign.Core;
 using System.Linq;
 
 namespace IDesign.Recognizers.Tests
@@ -33,18 +31,20 @@ namespace IDesign.Recognizers.Tests
             var NameSpaceNode = root.Members[0] as NamespaceDeclarationSyntax;
             var testNode = NameSpaceNode.Members[0] as ClassDeclarationSyntax;
 
-            var entityNode = new EntityNode();
-            entityNode.Name = testNode.Identifier.ToString();
-            entityNode.InterfaceOrClassNode = testNode;
+            var entityNode = new EntityNode
+            {
+                Name = testNode.Identifier.ToString(),
+                InterfaceOrClassNode = testNode,
 
-            entityNode.MethodDeclarationSyntaxList =
-                testNode.DescendantNodes().OfType<MethodDeclarationSyntax>().ToList();
-            entityNode.FieldDeclarationSyntaxList =
-                testNode.DescendantNodes().OfType<FieldDeclarationSyntax>().ToList();
-            entityNode.PropertyDeclarationSyntaxList =
-                testNode.DescendantNodes().OfType<PropertyDeclarationSyntax>().ToList();
-            entityNode.ConstructorDeclarationSyntaxList =
-                testNode.DescendantNodes().OfType<ConstructorDeclarationSyntax>().ToList();
+                MethodDeclarationSyntaxList =
+                testNode.DescendantNodes().OfType<MethodDeclarationSyntax>().ToList(),
+                FieldDeclarationSyntaxList =
+                testNode.DescendantNodes().OfType<FieldDeclarationSyntax>().ToList(),
+                PropertyDeclarationSyntaxList =
+                testNode.DescendantNodes().OfType<PropertyDeclarationSyntax>().ToList(),
+                ConstructorDeclarationSyntaxList =
+                testNode.DescendantNodes().OfType<ConstructorDeclarationSyntax>().ToList()
+            };
 
             var result = singleton.Recognize(entityNode);
 

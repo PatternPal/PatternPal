@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using IDesign.Core;
+﻿using IDesign.Core;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace IDesign.Tests.Core
 {

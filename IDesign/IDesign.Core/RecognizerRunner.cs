@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.Generic;
 
 namespace IDesign.Core
 {
     public class RecognizerRunner
     {
         private readonly ReadFiles readFiles = new ReadFiles();
-        private DetermineRelations DetermineRelations;
 
         public Dictionary<TypeDeclarationSyntax, EntityNode> EntityNodes =
             new Dictionary<TypeDeclarationSyntax, EntityNode>();
@@ -32,7 +31,7 @@ namespace IDesign.Core
             }
 
             //Make relations
-            DetermineRelations = new DetermineRelations(EntityNodes);
+            var DetermineRelations = new DetermineRelations(EntityNodes);
         }
     }
 }

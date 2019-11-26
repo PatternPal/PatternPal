@@ -1,8 +1,8 @@
+using IDesign.Core;
+using NDesk.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using IDesign.Core;
-using NDesk.Options;
 
 namespace IDesign.ConsoleApp
 {

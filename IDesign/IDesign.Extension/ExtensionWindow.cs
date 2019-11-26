@@ -1,5 +1,5 @@
-﻿using System.Runtime.InteropServices;
-using Microsoft.VisualStudio.Shell;
+﻿using Microsoft.VisualStudio.Shell;
+using System.Runtime.InteropServices;
 
 namespace IDesign.Extension
 {
