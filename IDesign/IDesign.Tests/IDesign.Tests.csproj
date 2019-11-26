@@ -6,6 +6,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="TestClasses\SingleTonTestCase1.cs" />
+    <Compile Remove="TestClasses\SingleTonTestCase2.cs" />
+    <Compile Remove="TestClasses\SingleTonTestCase3.cs" />
+    <Compile Remove="TestClasses\SingleTonTestCase4.cs" />
+    <Compile Remove="TestClasses\SingleTonTestCase5.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="TestClasses\SingleTonTestCase1.cs" />
+    <None Include="TestClasses\SingleTonTestCase2.cs" />
+    <None Include="TestClasses\SingleTonTestCase3.cs" />
+    <None Include="TestClasses\SingleTonTestCase4.cs" />
+    <None Include="TestClasses\SingleTonTestCase5.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="nunit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />

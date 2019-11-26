@@ -32,16 +32,21 @@ namespace IDesign.Core
         }
         public IEnumerable<IMethod> GetMethods()
         {
+            
             var list = new List<IMethod>();
             list.AddRange(MethodDeclarationSyntaxList.Select(x => new Method(x)));
 
             foreach (var property in PropertyDeclarationSyntaxList)
             {
-                var getters = property.AccessorList.Accessors.Where(x => x.Kind() == SyntaxKind.GetAccessorDeclaration && x.Body != null);
-                list.AddRange(getters.Select(x => new PropertyMethod(property, x)));
+                if (property.AccessorList != null)
+                {
+                    var getters = property.AccessorList.Accessors.Where(x => x.Kind() == SyntaxKind.GetAccessorDeclaration && x.Body != null);
+                    list.AddRange(getters.Select(x => new PropertyMethod(property, x)));
+                }
             }
-
+            
             return list;
+
         }
 
         public IEnumerable<PropertyDeclarationSyntax> GetProperties()
@@ -54,8 +59,11 @@ namespace IDesign.Core
             var listGetters = new List<IField>();
             foreach (var property in PropertyDeclarationSyntaxList)
             {
-                var getters = property.AccessorList.Accessors.Where(x => x.Kind() == SyntaxKind.GetAccessorDeclaration && x.Body == null);
-                listGetters.AddRange(getters.Select(x => new PropertyField(property)));
+                if (property.AccessorList != null)
+                {
+                    var getters = property.AccessorList.Accessors.Where(x => x.Kind() == SyntaxKind.GetAccessorDeclaration && x.Body == null);
+                    listGetters.AddRange(getters.Select(x => new PropertyField(property)));
+                }
             }
 
             foreach (var field in FieldDeclarationSyntaxList)
@@ -63,6 +71,13 @@ namespace IDesign.Core
                 listGetters.AddRange(field.Declaration.Variables.Select(x => new Field(field, x)));
             }
             return listGetters;
+        }
+
+        public IEnumerable<IMethod> GetConstructors()
+        {
+            var listConstructors = new List<IMethod>();
+            listConstructors.AddRange(ConstructorDeclarationSyntaxList.Select(x => new Constructor(x)));
+            return listConstructors;
         }
     }
 }

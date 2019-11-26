@@ -10,9 +10,9 @@ namespace IDesign.Recognizers.Abstractions
     {
         TypeDeclarationSyntax GetTypeDeclarationSyntax();
         string GetName();
-        IEnumerable<ConstructorDeclarationSyntax> GetCostructors();
         IEnumerable<IMethod> GetMethods();
-        IEnumerable<PropertyDeclarationSyntax> GetProperties();
         IEnumerable<IField> GetFields();
+
+        IEnumerable<IMethod> GetConstructors();
     }
 }

@@ -15,6 +15,6 @@ namespace IDesign.Models
         public BlockSyntax GetBody() => method.Body;
         public SyntaxTokenList GetModifiers() => method.Modifiers;
         public string GetName() => method.Identifier.ToString();
-        public TypeSyntax GetReturnType() => method.ReturnType;
+        public string GetReturnType() => method.ReturnType.ToString();
     }
 }
