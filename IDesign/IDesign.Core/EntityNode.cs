@@ -16,6 +16,7 @@ namespace IDesign.Core
         public List<ConstructorDeclarationSyntax> ConstructorDeclarationSyntaxList = new List<ConstructorDeclarationSyntax>();
         public List<PropertyDeclarationSyntax> PropertyDeclarationSyntaxList = new List<PropertyDeclarationSyntax>();
         public List<FieldDeclarationSyntax> FieldDeclarationSyntaxList = new List<FieldDeclarationSyntax>();
+        public List<EntityNodeEdges> EntityNodeEdgesList = new List<EntityNodeEdges>();
         public TypeDeclarationSyntax GetTypeDeclarationSyntax()
         {
             return InterfaceOrClassNode;

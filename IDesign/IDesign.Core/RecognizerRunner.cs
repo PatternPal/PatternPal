@@ -1,4 +1,5 @@
 ﻿using IDesign.Recognizers;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,6 +13,8 @@ namespace IDesign.Core
         {
             new DesignPattern("Singleton", new SingletonRecognizer())
         };
+        public Dictionary<TypeDeclarationSyntax, EntityNode> EntityNodes = new Dictionary<TypeDeclarationSyntax, EntityNode>();
+        private DetermineRelations DetermineRelations;
 
         /// <summary>
         /// Function that should be called to generate a syntax tree
@@ -24,12 +27,15 @@ namespace IDesign.Core
             for (int i = 0; i < files.Count; i++)
             {
                 var tree = readFiles.MakeStringFromFile(files[i]);
-                GenerateSyntaxTree generateSyntaxTree = new GenerateSyntaxTree(tree);
+                GenerateSyntaxTree generateSyntaxTree = new GenerateSyntaxTree(tree, EntityNodes);
 
                 //foreach file loop over all patterns and do stuff
-                foreach (var pattern in patterns)
-                    pattern.Recognizer.Recognize();
+                //foreach (var pattern in patterns)
+                    //pattern.Recognizer.Recognize();
             }
+            //Make relations
+            DetermineRelations = new DetermineRelations(EntityNodes);
         }
+
     }
 }
