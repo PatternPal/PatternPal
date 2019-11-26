@@ -31,7 +31,7 @@ namespace IDesign.Recognizers
             {
                  new ElementCheck<IMethod>(x => !x.CheckModifier("public") , "Is public moet private of protected zijn")
             };
-            CheckElements(result, entityNode.GetConstructors(), x => x.GetName(), constructorChecks)
+            CheckElements(result, entityNode.GetConstructors(), x => x.GetName(), constructorChecks);
 
             result.Score = (int)(result.Score / 7f * 100f);
             return result;
