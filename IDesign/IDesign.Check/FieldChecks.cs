@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using IDesign.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -14,9 +16,21 @@ namespace IDesign.Checks
         /// <param name="fieldSyntax">The field witch it should check</param>
         /// <param name="type">The expected type</param>
         /// <returns></returns>
-        public static bool CheckPropertyType(this FieldDeclarationSyntax fieldSyntax, string type)
+        public static bool CheckFieldType(this IField fieldSyntax, string type)
         {
-            return fieldSyntax.Declaration.Type.ToString() == type;
+            return fieldSyntax.GetFieldType().ToString().IsEqual(type);
+        }
+
+
+        /// <summary>
+        /// Return a boolean based on if the given member has an expected modifier
+        /// </summary>
+        /// <param name="membersyntax">The member witch it should check</param>
+        /// <param name="modifier">The expected modifier</param>
+        /// <returns></returns>
+        public static bool CheckMemberModifier(this IField field, string modifier)
+        {
+            return field.GetModifiers().Where(x => x.ToString().IsEqual(modifier)).Any();
         }
     }
 }
