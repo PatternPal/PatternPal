@@ -64,7 +64,7 @@ namespace IDesign.Core
         public IEnumerable<IMethod> GetConstructors()
         {
             var listConstructors = new List<IMethod>();
-            listConstructors.AddRange(ConstructorDeclarationSyntaxList.Select(x => new Constructor(x)));
+            listConstructors.AddRange(ConstructorDeclarationSyntaxList.Select(x => new Constructormethod(x)));
             return listConstructors;
         }
 

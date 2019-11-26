@@ -3,9 +3,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace IDesign.Models
 {
-    public class Constructor : IMethod
+    public class Constructormethod : IMethod
     {
-        public Constructor(ConstructorDeclarationSyntax constructor)
+        public Constructormethod(ConstructorDeclarationSyntax constructor)
         {
             this.constructor = constructor;
         }
