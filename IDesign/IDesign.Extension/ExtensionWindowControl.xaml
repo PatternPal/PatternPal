@@ -29,7 +29,8 @@
             <ListView Margin="5" Name="listView">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Pattern Name" DisplayMemberBinding="{Binding Name}" />
+                        <GridViewColumn Header="Score" DisplayMemberBinding="{Binding Score}" />
+                        <GridViewColumn Header="Suggestion" DisplayMemberBinding="{Binding Suggestion}" />
                     </GridView>
                 </ListView.View>
             </ListView>

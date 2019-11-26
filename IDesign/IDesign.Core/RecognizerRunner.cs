@@ -1,5 +1,6 @@
 ﻿using IDesign.Recognizers;
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using IDesign.Recognizers.Abstractions;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,21 +22,24 @@ namespace IDesign.Core
         /// </summary>
         /// <param name="files"></param>
         /// <param name="patterns"></param>
-        public void Run(List<string> files, List<DesignPattern> patterns)
+        public List<IResult> Run(List<string> files, List<DesignPattern> patterns)
         {
+            List<IResult> results = new List<IResult>();
+
             //loop over all files
             for (int i = 0; i < files.Count; i++)
             {
                 var tree = readFiles.MakeStringFromFile(files[i]);
                 GenerateSyntaxTree generateSyntaxTree = new GenerateSyntaxTree(tree, EntityNodes);
-
-                //foreach file loop over all patterns and do stuff
-                //foreach (var pattern in patterns)
-                    //pattern.Recognizer.Recognize();
             }
             //Make relations
             DetermineRelations = new DetermineRelations(EntityNodes);
-        }
 
+            foreach (var pattern in patterns)
+                foreach (var node in EntityNodes.Values)
+                    results.Add(pattern.Recognizer.Recognize(node));
+
+            return results;
+        }
     }
 }

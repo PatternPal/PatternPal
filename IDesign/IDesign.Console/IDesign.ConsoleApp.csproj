@@ -142,6 +142,10 @@
       <Project>{39c79d09-34da-496b-936d-4387f5db9104}</Project>
       <Name>IDesign.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\IDesign.Regonizers\IDesign.Recognizers.csproj">
+      <Project>{1f20d376-aa08-45be-9589-cfd70932c170}</Project>
+      <Name>IDesign.Recognizers</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.9.4\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using IDesign.Recognizers.Abstractions;
 
 namespace IDesign.ConsoleApp
 {
@@ -87,7 +88,7 @@ namespace IDesign.ConsoleApp
 
             RecognizerRunner recognizerRunner = new RecognizerRunner();
 
-            recognizerRunner.Run(selectedFiles, designPatterns);
+            List<IResult> results = recognizerRunner.Run(selectedFiles, designPatterns);
 
             Console.ReadKey();
         }

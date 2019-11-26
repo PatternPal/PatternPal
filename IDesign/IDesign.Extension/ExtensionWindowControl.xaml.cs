@@ -2,6 +2,7 @@
 {
     using EnvDTE;
     using IDesign.Core;
+    using IDesign.Recognizers.Abstractions;
     using Microsoft.VisualStudio.Shell.Interop;
     using System;
     using System.Collections.Generic;
@@ -56,17 +57,19 @@
         private void GetCurrentPath()
         {
             Paths = new List<string>();
-            Paths.Add(Dte.ActiveDocument.FullName);
+            if (Dte.ActiveDocument != null)
+                Paths.Add(Dte.ActiveDocument.FullName);
         }
 
         /// <summary>
         /// Gets all paths in the solution.
         /// </summary>
         private void GetAllPaths()
-        {
+        {   
             Paths = new List<string>();
             FileManager manager = new FileManager();
-            Paths = manager.GetAllCsFilesFromDirectory(Path.GetDirectoryName(Dte.Solution.FullName));
+            if (Dte.Solution.Count > 0)
+                Paths = manager.GetAllCsFilesFromDirectory(Path.GetDirectoryName(Dte.Solution.FullName));
         }
 
         private void ChoosePath()
@@ -92,9 +95,9 @@
                 return;
 
             RecognizerRunner runner = new RecognizerRunner();
-            runner.Run(Paths, DesignPatternViewModels.Where(x => x.IsChecked).Select(x => x.Pattern).ToList());
+            List<IResult> results = runner.Run(Paths, DesignPatternViewModels.Where(x => x.IsChecked).Select(x => x.Pattern).ToList());
 
-            listView.ItemsSource = DesignPatternViewModels.Where(x => x.IsChecked).Select(x => x.Pattern);
+            listView.ItemsSource = results;
 
             Loading = true;
             statusBar.Value = 0;
