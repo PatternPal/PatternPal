@@ -23,14 +23,17 @@ namespace IDesign.ConsoleApp
         /// <param name="args">Takes in commandline options and .cs files</param>
         static void Main(string[] args)
         {
-            const string path = @"C:\Users\Shanna\source\repos\DesignPatternRecognizer\IDesign\IDesign.Core";
+            // Shannas code
+            const string path = @"C:\Users\Shanna\source\repos\DesignPatternRecognizer\IDesign\IDesign.Core\TestClasses";
 
             RecognizerRunner recognizerRunner = new RecognizerRunner();
             ReadFiles readFiles = new ReadFiles();
 
             readFiles.GetFilesFromDirectory(path);
             recognizerRunner.Run(readFiles.Files, designPatterns);
+            // Einde Shannas code
 
+            //Tristans code
             if (args.Length <= 0)
             {
                 Console.WriteLine("No arguments or files specified please confront --help");
@@ -74,7 +77,7 @@ namespace IDesign.ConsoleApp
             Console.WriteLine("Selected files:");
             foreach (string file in selectedFiles)
             {
-                Console.WriteLine(file);
+               Console.WriteLine(file);
             }
 
             //When no specific pattern is chosen, select all
