@@ -1,28 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 /// <summary>
 /// Testclasses
 /// </summary>
 namespace IDesign.Core.TestClasses
 {
-    class Third
+    internal class Third
     {
-
     }
-    class SecondTestClass :  Third, IFirstTestClass
+
+    internal class SecondTestClass : Third, IFirstTestClass
     {
+        public SecondTestClass(int s)
+        {
+            Som = s;
+        }
 
         public int Som { get; set; }
         public static string Uitslag { get; set; }
-        public string naam { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-
-
-        public SecondTestClass(int s)
+        public string naam
         {
-            this.Som = s;
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
         }
 
         public int Bereken(int x)

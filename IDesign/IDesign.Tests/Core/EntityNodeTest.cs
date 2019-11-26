@@ -1,11 +1,8 @@
-﻿using IDesign.Core;
+﻿using System.Linq;
+using IDesign.Core;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace IDesign.Tests.Core
 {
@@ -25,13 +22,12 @@ namespace IDesign.Tests.Core
             var entityNode = new EntityNode();
             entityNode.Name = testNode.Identifier.ToString();
             entityNode.InterfaceOrClassNode = testNode;
-            entityNode.FieldDeclarationSyntaxList = testNode.DescendantNodes().OfType<FieldDeclarationSyntax>().ToList();
-            entityNode.PropertyDeclarationSyntaxList = testNode.DescendantNodes().OfType<PropertyDeclarationSyntax>().ToList();
+            entityNode.FieldDeclarationSyntaxList =
+                testNode.DescendantNodes().OfType<FieldDeclarationSyntax>().ToList();
+            entityNode.PropertyDeclarationSyntaxList =
+                testNode.DescendantNodes().OfType<PropertyDeclarationSyntax>().ToList();
 
             var fields = string.Join(";", entityNode.GetFields().Select(x => x.GetName()));
-
-            
-
         }
     }
 }

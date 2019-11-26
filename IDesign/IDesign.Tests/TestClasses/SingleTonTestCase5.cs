@@ -19,7 +19,7 @@ namespace IDesign.Tests.TestClasses
             return _instance;
         }
     }
-    
+
     public class SingleTonTestCase6
     {
         private static SingleTonTestCase6 _instance;

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.Core.TestClasses
+﻿namespace IDesign.Tests.Core.TestClasses
 {
-    interface ITest
+    internal interface ITest
     {
         int x { get; set; }
         int y { get; set; }

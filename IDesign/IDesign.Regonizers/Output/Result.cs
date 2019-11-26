@@ -1,7 +1,5 @@
-﻿using IDesign.Recognizers.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using IDesign.Recognizers.Abstractions;
 
 namespace IDesign.Recognizers.Output
 {
@@ -18,22 +16,6 @@ namespace IDesign.Recognizers.Output
         public IList<ISuggestion> GetSuggestions()
         {
             return Suggestions;
-        }
-    }
-
-
-    public class Suggestion : ISuggestion
-    {
-        public Suggestion(string message)
-        {
-            Message = message;
-        }
-
-        public string Message { get; set; }
-
-        public string GetMessage()
-        {
-            return Message;
         }
     }
 }

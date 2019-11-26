@@ -19,7 +19,7 @@ namespace IDesign.Tests.TestClasses
             {
                 if (instance == null)
                 {
-                    instance = new Singleton();
+                    instance = new SingleTonTestCase1();
                 }
                 return instance;
             }

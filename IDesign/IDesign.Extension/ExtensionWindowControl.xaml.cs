@@ -1,41 +1,43 @@
-﻿namespace IDesign.Extension
-{
-    using EnvDTE;
-    using IDesign.Core;
-    using Microsoft.VisualStudio.Shell.Interop;
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using System.Windows;
-    using System.Windows.Controls;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using EnvDTE;
+using IDesign.Core;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
+using Task = System.Threading.Tasks.Task;
+using Thread = System.Threading.Thread;
+using Window = System.Windows.Window;
 
+namespace IDesign.Extension
+{
     /// <summary>
-    /// Interaction logic for ExtensionWindowControl.
+    ///     Interaction logic for ExtensionWindowControl.
     /// </summary>
     public partial class ExtensionWindowControl : UserControl
     {
-        public List<DesignPattern> DesignPatterns { get; set; }
-        public List<string> Paths { get; set; }
-        public bool Loading { get; set; }
-        public DTE Dte { get; private set; }
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExtensionWindowControl"/> class.
+        ///     Initializes a new instance of the <see cref="ExtensionWindowControl" /> class.
         /// </summary>
         public ExtensionWindowControl()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             AddPatterns();
             Loading = false;
             Dispatcher.VerifyAccess();
-            Dte = Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(SDTE)) as DTE;
+            Dte = Package.GetGlobalService(typeof(SDTE)) as DTE;
         }
 
+        public List<DesignPattern> DesignPatterns { get; set; }
+        public List<string> Paths { get; set; }
+        public bool Loading { get; set; }
+        public DTE Dte { get; }
+
         /// <summary>
-        /// Adds all the existing designpatterns in a list.
+        ///     Adds all the existing designpatterns in a list.
         /// </summary>
         private void AddPatterns()
         {
@@ -51,7 +53,7 @@
         }
 
         /// <summary>
-        /// Gets current active document path.
+        ///     Gets current active document path.
         /// </summary>
         private void GetCurrentPath()
         {
@@ -60,7 +62,7 @@
         }
 
         /// <summary>
-        /// Gets all paths in the solution.
+        ///     Gets all paths in the solution.
         /// </summary>
         private void GetPaths()
         {
@@ -72,25 +74,23 @@
                         GetPathsRecursive(item.ProjectItems);
 
                     if (item.Name.EndsWith(".cs"))
-                        Paths.Add((string)item.Properties.Item("FullPath").Value);
+                        Paths.Add((string) item.Properties.Item("FullPath").Value);
                 }
             }
 
             Paths = new List<string>();
 
-            foreach (Project project in Dte.Solution.Projects)
-            {
-                GetPathsRecursive(project.ProjectItems);
-            }
+            foreach (Project project in Dte.Solution.Projects) GetPathsRecursive(project.ProjectItems);
         }
 
         /// <summary>
-        /// Handles click on the analyse_button by displaying the tool window.
+        ///     Handles click on the analyse_button by displaying the tool window.
         /// </summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event args.</param>
         [SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "Sample code")]
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification = "Default event handler naming pattern")]
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification =
+            "Default event handler naming pattern")]
         private async void Analyse_Button(object sender, RoutedEventArgs e)
         {
             if (Loading)
@@ -102,10 +102,10 @@
 
             await Task.Run(() =>
             {
-                for (int i = 0; i <= 100; i++)
+                for (var i = 0; i <= 100; i++)
                 {
-                    ((IProgress<int>)progress).Report(i);
-                    System.Threading.Thread.Sleep(100);
+                    ((IProgress<int>) progress).Report(i);
+                    Thread.Sleep(100);
                 }
             });
 
@@ -117,15 +117,15 @@
         }
 
         /// <summary>
-        /// Handles click on the analyse_button by displaying the settings window.
+        ///     Handles click on the analyse_button by displaying the settings window.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Settings_Button(object sender, RoutedEventArgs e)
         {
-            SettingsControl settingsWindow = new SettingsControl(DesignPatterns);
+            var settingsWindow = new SettingsControl(DesignPatterns);
 
-            System.Windows.Window window = new System.Windows.Window
+            var window = new Window
             {
                 Title = "Settings",
                 Content = settingsWindow,

@@ -5,11 +5,18 @@ namespace IDesign.Core
     public class DesignPattern : INotifyPropertyChanged
     {
         private bool isChecked;
-        public event PropertyChangedEventHandler PropertyChanged;
+
+        public DesignPattern(string name)
+        {
+            Name = name;
+            IsChecked = true;
+        }
+
         public string Name { get; set; }
+
         public bool IsChecked
         {
-            get { return isChecked; }
+            get => isChecked;
             set
             {
                 isChecked = value;
@@ -17,11 +24,7 @@ namespace IDesign.Core
             }
         }
 
-        public DesignPattern(string name)
-        {
-            Name = name;
-            IsChecked = true;
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged(string name)
         {

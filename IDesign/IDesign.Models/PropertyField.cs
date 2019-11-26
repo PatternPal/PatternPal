@@ -9,12 +9,22 @@ namespace IDesign.Models
         {
             this.property = property;
         }
+
         public PropertyDeclarationSyntax property { get; set; }
 
-        public SyntaxTokenList GetModifiers() => property.Modifiers;
-        public string GetName() => property.Identifier.ToString();
-        public TypeSyntax GetFieldType() => property.Type;
+        public SyntaxTokenList GetModifiers()
+        {
+            return property.Modifiers;
+        }
 
+        public string GetName()
+        {
+            return property.Identifier.ToString();
+        }
 
+        public TypeSyntax GetFieldType()
+        {
+            return property.Type;
+        }
     }
 }
