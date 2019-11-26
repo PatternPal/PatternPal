@@ -20,20 +20,4 @@ namespace IDesign.Recognizers.Output
             return Suggestions;
         }
     }
-
-
-    public class Suggestion : ISuggestion
-    {
-        public Suggestion(string message)
-        {
-            Message = message;
-        }
-
-        public string Message { get; set; }
-
-        public string GetMessage()
-        {
-            return Message;
-        }
-    }
 }
