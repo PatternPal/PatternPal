@@ -20,7 +20,7 @@ namespace IDesign.Tests.Core
             expected.Add(@"../../../Core/TestClasses\ITest.cs");
             expected.Add(@"../../../Core/TestClasses\TestClass1.cs");
 
-            List<string> actual = readFiles.GetFilesFromDirectory(path);
+            List<string> actual = readFiles.GetAllCsFilesFromDirectory(path);
             Assert.AreEqual(expected, actual);
         }
     }

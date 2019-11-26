@@ -3,33 +3,19 @@ using NDesk.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 
 namespace IDesign.ConsoleApp
 {
     class Program
     {
-        public static List<DesignPattern> designPatterns = new List<DesignPattern> {
-            new DesignPattern("Singleton"),
-            new DesignPattern("State"),
-            new DesignPattern("Strategy"),
-            new DesignPattern("Factory"),
-            new DesignPattern("Decorator"),
-            new DesignPattern("Adapter"),
-        };
-
         /// <summary>
         /// This is the main function, it takes is options and .files, and prints a list of .cs files and specified design patterns
         /// </summary>
         /// <param name="args">Takes in commandline options and .cs files</param>
         static void Main(string[] args)
         {
-            const string path = @"C:\Users\Shanna\source\repos\DesignPatternRecognizer\IDesign\IDesign.Core";
-
-            RecognizerRunner recognizerRunner = new RecognizerRunner();
-            FileManager readFiles = new FileManager();
-
-            readFiles.GetFilesFromDirectory(path);
-            recognizerRunner.Run(readFiles.Files, designPatterns);
+            List<DesignPattern> designPatterns = RecognizerRunner.designPatterns;
 
             if (args.Length <= 0)
             {
@@ -64,17 +50,19 @@ namespace IDesign.ConsoleApp
 
             selectedFiles = (from a in arguments where a.EndsWith(".cs") && a.Length > 3 select a).ToList();
 
+            FileManager manager = new FileManager();
+
+            foreach (string arg in arguments)
+            {
+                if (Directory.Exists(arg))
+                    selectedFiles.AddRange(manager.GetAllCsFilesFromDirectory(arg));
+            }
+
             if (selectedFiles.Count == 0)
             {
                 Console.WriteLine("No files specified!");
                 Console.ReadKey();
                 return;
-            }
-
-            Console.WriteLine("Selected files:");
-            foreach (string file in selectedFiles)
-            {
-                Console.WriteLine(file);
             }
 
             //When no specific pattern is chosen, select all
@@ -83,11 +71,23 @@ namespace IDesign.ConsoleApp
                 selectedPatterns = designPatterns;
             }
 
+            Console.WriteLine("Selected files:");
+
+            foreach (string file in selectedFiles)
+            {
+                Console.WriteLine(file);
+            }
+
             Console.WriteLine("\nSelected patterns:");
+
             foreach (DesignPattern pattern in selectedPatterns)
             {
                 Console.WriteLine(pattern.Name);
             }
+
+            RecognizerRunner recognizerRunner = new RecognizerRunner();
+
+            recognizerRunner.Run(selectedFiles, designPatterns);
 
             Console.ReadKey();
         }

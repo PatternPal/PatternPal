@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace IDesign.Core
 {
     public class FileManager
     {
-        public List<string> Files = new List<string>();
-
         /// <summary>
         /// Function that makes a string of a file
         /// </summary>
