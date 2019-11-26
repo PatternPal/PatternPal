@@ -1,9 +1,8 @@
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
-using NUnit.Framework;
 using IDesign.Checks;
 using IDesign.Models;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using NUnit.Framework;
 
 namespace IDesign.Recognizers.Tests
 {
@@ -65,7 +64,7 @@ namespace IDesign.Recognizers.Tests
             if (method == null)
                 Assert.Fail();
 
-            Assert.AreEqual(shouldBeVaild, (new Method(method)).CheckCreationalFunction());
+            Assert.AreEqual(shouldBeVaild, new Method(method).CheckCreationalFunction());
         }
 
         [TestCase(@"public void TestMethod(){string i ='this is a new class';}", false)]

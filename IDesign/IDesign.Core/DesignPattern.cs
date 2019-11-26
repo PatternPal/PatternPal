@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Core
+﻿namespace IDesign.Core
 {
     public class DesignPattern
     {
-        public string Name { get; set; }
-
         public DesignPattern(string name)
         {
-            this.Name = name;
+            Name = name;
         }
+
+        public string Name { get; set; }
     }
 }

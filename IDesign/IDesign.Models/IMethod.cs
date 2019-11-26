@@ -10,6 +10,5 @@ namespace IDesign.Models
         BlockSyntax GetBody();
 
         SyntaxTokenList GetModifiers();
-
     }
 }

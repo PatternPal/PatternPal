@@ -37,15 +37,18 @@ namespace IDesign.Recognizers.Tests
             entityNode.Name = testNode.Identifier.ToString();
             entityNode.InterfaceOrClassNode = testNode;
 
-            entityNode.MethodDeclarationSyntaxList = testNode.DescendantNodes().OfType<MethodDeclarationSyntax>().ToList();
-            entityNode.FieldDeclarationSyntaxList = testNode.DescendantNodes().OfType<FieldDeclarationSyntax>().ToList();
-            entityNode.PropertyDeclarationSyntaxList = testNode.DescendantNodes().OfType<PropertyDeclarationSyntax>().ToList();
-            entityNode.ConstructorDeclarationSyntaxList = testNode.DescendantNodes().OfType<ConstructorDeclarationSyntax>().ToList();
+            entityNode.MethodDeclarationSyntaxList =
+                testNode.DescendantNodes().OfType<MethodDeclarationSyntax>().ToList();
+            entityNode.FieldDeclarationSyntaxList =
+                testNode.DescendantNodes().OfType<FieldDeclarationSyntax>().ToList();
+            entityNode.PropertyDeclarationSyntaxList =
+                testNode.DescendantNodes().OfType<PropertyDeclarationSyntax>().ToList();
+            entityNode.ConstructorDeclarationSyntaxList =
+                testNode.DescendantNodes().OfType<ConstructorDeclarationSyntax>().ToList();
 
             var result = singleton.Recognize(entityNode);
 
             Assert.AreEqual(score, result.GetScore());
-
         }
     }
 }

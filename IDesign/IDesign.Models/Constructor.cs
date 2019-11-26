@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace IDesign.Models
 {
     public class Constructor : IMethod
     {
-
         public Constructor(ConstructorDeclarationSyntax constructor)
         {
             this.constructor = constructor;
@@ -17,15 +12,24 @@ namespace IDesign.Models
 
 
         public ConstructorDeclarationSyntax constructor { get; set; }
-        public BlockSyntax GetBody() => constructor.Body;
 
-        public SyntaxTokenList GetModifiers() => constructor.Modifiers;
+        public BlockSyntax GetBody()
+        {
+            return constructor.Body;
+        }
 
-        public string GetName() => constructor.Identifier.ToString();
+        public SyntaxTokenList GetModifiers()
+        {
+            return constructor.Modifiers;
+        }
+
+        public string GetName()
+        {
+            return constructor.Identifier.ToString();
+        }
 
         public string GetReturnType()
         {
-
             return "void";
         }
     }

@@ -6,9 +6,15 @@ namespace IDesign.Recognizers
     {
         public class ElementCheck<T>
         {
-            public Predicate<T> Check { get; set; }
-
             private string suggestionMessage;
+
+            public ElementCheck(Predicate<T> check, string suggestionMessage)
+            {
+                Check = check;
+                this.suggestionMessage = suggestionMessage;
+            }
+
+            public Predicate<T> Check { get; set; }
 
             public string GetSuggestionMessage()
             {
@@ -18,12 +24,6 @@ namespace IDesign.Recognizers
             public void SetSuggestionMessage(string value)
             {
                 suggestionMessage = value;
-            }
-
-            public ElementCheck(Predicate<T> check, string suggestionMessage)
-            {
-                Check = check;
-                this.suggestionMessage = suggestionMessage;
             }
         }
     }

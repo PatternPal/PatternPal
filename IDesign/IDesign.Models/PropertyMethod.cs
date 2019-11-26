@@ -1,10 +1,8 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
 
 namespace IDesign.Models
 {
-
     public class PropertyMethod : IMethod
     {
         public PropertyMethod(PropertyDeclarationSyntax property, AccessorDeclarationSyntax accesor)
@@ -15,9 +13,25 @@ namespace IDesign.Models
 
         public PropertyDeclarationSyntax property { get; set; }
         public AccessorDeclarationSyntax accesor { get; set; }
-        public BlockSyntax GetBody() => accesor.Body;
-        public SyntaxTokenList GetModifiers() => property.Modifiers;
-        public string GetName() => property.Identifier.ToString();
-        public string GetReturnType() => property.Type.ToString();
+
+        public BlockSyntax GetBody()
+        {
+            return accesor.Body;
+        }
+
+        public SyntaxTokenList GetModifiers()
+        {
+            return property.Modifiers;
+        }
+
+        public string GetName()
+        {
+            return property.Identifier.ToString();
+        }
+
+        public string GetReturnType()
+        {
+            return property.Type.ToString();
+        }
     }
 }

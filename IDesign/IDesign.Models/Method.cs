@@ -9,12 +9,28 @@ namespace IDesign.Models
         {
             this.method = method;
         }
-        
+
 
         public MethodDeclarationSyntax method { get; set; }
-        public BlockSyntax GetBody() => method.Body;
-        public SyntaxTokenList GetModifiers() => method.Modifiers;
-        public string GetName() => method.Identifier.ToString();
-        public string GetReturnType() => method.ReturnType.ToString();
+
+        public BlockSyntax GetBody()
+        {
+            return method.Body;
+        }
+
+        public SyntaxTokenList GetModifiers()
+        {
+            return method.Modifiers;
+        }
+
+        public string GetName()
+        {
+            return method.Identifier.ToString();
+        }
+
+        public string GetReturnType()
+        {
+            return method.ReturnType.ToString();
+        }
     }
 }

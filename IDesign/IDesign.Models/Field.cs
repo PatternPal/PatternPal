@@ -11,11 +11,22 @@ namespace IDesign.Models
             this.variable = variable;
         }
 
-        FieldDeclarationSyntax field { get; set; }
-        VariableDeclaratorSyntax variable { get; set; }
-        public SyntaxTokenList GetModifiers() => field.Modifiers;
-        public string GetName() => variable.Identifier.ToString();
+        private FieldDeclarationSyntax field { get; }
+        private VariableDeclaratorSyntax variable { get; }
 
-        public TypeSyntax GetFieldType() => field.Declaration.Type;
+        public SyntaxTokenList GetModifiers()
+        {
+            return field.Modifiers;
+        }
+
+        public string GetName()
+        {
+            return variable.Identifier.ToString();
+        }
+
+        public TypeSyntax GetFieldType()
+        {
+            return field.Declaration.Type;
+        }
     }
 }
