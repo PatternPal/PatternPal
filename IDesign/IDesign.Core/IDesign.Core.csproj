@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IDesign.Regonizers\IDesign.Regonizers.csproj" />
+    <ProjectReference Include="..\IDesign.Regonizers\IDesign.Recognizers.csproj" />
   </ItemGroup>
 
 </Project>

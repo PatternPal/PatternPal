@@ -3,8 +3,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using NUnit.Framework;
 using IDesign.Checks;
+using IDesign.Models;
 
-namespace IDesign.Regonizers.Tests
+namespace IDesign.Recognizers.Tests
 {
     public class PropertyTest
     {
@@ -23,12 +24,12 @@ namespace IDesign.Regonizers.Tests
         public void ModifierCheck_Should_Return_CorrectResponse(string modifier, string code, bool shouldBeValid)
         {
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var property = root.Members[0] as MemberDeclarationSyntax;
+            var property = root.Members[0] as PropertyDeclarationSyntax;
 
             if (property == null)
                 Assert.Fail();
 
-            Assert.AreEqual(shouldBeValid, property.CheckMemberModifier(modifier));
+            Assert.AreEqual(shouldBeValid, new PropertyField(property).CheckMemberModifier(modifier));
         }
 
         [TestCase("string", @"public string TestProperty{get; set;}", true)]
@@ -47,7 +48,7 @@ namespace IDesign.Regonizers.Tests
             if (property == null)
                 Assert.Fail();
 
-            Assert.AreEqual(shouldBeValid, property.CheckPropertyType(type));
+            Assert.AreEqual(shouldBeValid, new PropertyField(property).CheckFieldType(type));
         }
     }
 }
