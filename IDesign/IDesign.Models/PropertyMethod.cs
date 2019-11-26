@@ -18,6 +18,6 @@ namespace IDesign.Models
         public BlockSyntax GetBody() => accesor.Body;
         public SyntaxTokenList GetModifiers() => property.Modifiers;
         public string GetName() => property.Identifier.ToString();
-        public TypeSyntax GetReturnType() => property.Type;
+        public string GetReturnType() => property.Type.ToString();
     }
 }

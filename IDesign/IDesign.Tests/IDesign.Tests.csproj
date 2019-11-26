@@ -18,6 +18,7 @@
     <None Include="TestClasses\SingleTonTestCase2.cs" />
     <None Include="TestClasses\SingleTonTestCase3.cs" />
     <None Include="TestClasses\SingleTonTestCase4.cs" />
+    <None Include="TestClasses\SingleTonTestCase5.cs" />
   </ItemGroup>
 
   <ItemGroup>

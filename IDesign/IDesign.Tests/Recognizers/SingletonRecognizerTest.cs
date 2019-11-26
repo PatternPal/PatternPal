@@ -21,10 +21,12 @@ namespace IDesign.Recognizers.Tests
 
         [Test]
         [TestCase("SingleTonTestCase1.cs", 100)]
-        [TestCase("SingleTonTestCase2.cs", 100)]
-        [TestCase("SingleTonTestCase3.cs", 100)]
+        [TestCase("SingleTonTestCase2.cs", 42)]
+        [TestCase("SingleTonTestCase3.cs", 42)]
         [TestCase("SingleTonTestCase4.cs", 100)]
-        public void TestFunction(string filename, int score)
+        [TestCase("SingleTonTestCase6.cs", 57)]
+        [TestCase("SingleTonTestCase7.cs", 57)]
+        public void SingletonRecognizer_Returns_Correct_Score(string filename, int score)
         {
             var singleton = new SingletonRecognizer();
             string code = FileUtils.FileToString(filename);
@@ -41,6 +43,7 @@ namespace IDesign.Recognizers.Tests
             entityNode.MethodDeclarationSyntaxList = testNode.DescendantNodes().OfType<MethodDeclarationSyntax>().ToList();
             entityNode.FieldDeclarationSyntaxList = testNode.DescendantNodes().OfType<FieldDeclarationSyntax>().ToList();
             entityNode.PropertyDeclarationSyntaxList = testNode.DescendantNodes().OfType<PropertyDeclarationSyntax>().ToList();
+            entityNode.ConstructorDeclarationSyntaxList = testNode.DescendantNodes().OfType<ConstructorDeclarationSyntax>().ToList();
 
             var result = singleton.Recognize(entityNode);
 

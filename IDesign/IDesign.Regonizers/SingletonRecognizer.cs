@@ -16,10 +16,12 @@ namespace IDesign.Recognizers
             var result = new Result();
             var methods = entityNode.GetMethods();
             var fields = entityNode.GetFields();
+            var constructors = entityNode.GetConstructors();
             var methodChecks = new List<(Predicate<IMethod> check, string suggestionMessage)>()
             {
                 (x => x.CheckReturnType(entityNode.GetName()) , "Incorrecte return type"),
-                (x => x.CheckModifier("static") , "Is niet static")
+                (x => x.CheckModifier("static") , "Is niet static"),
+                (x => x.CheckReturnTypeSameAsCreation(), "Return type is niet hetzelfde als wat er gemaakt wordt" )
             };
             CheckElements(result, entityNode.GetMethods(), x => x.GetName(), methodChecks);
 
@@ -29,11 +31,18 @@ namespace IDesign.Recognizers
                 (x => x.CheckMemberModifier("static") , "Is niet static"),
                 (x => x.CheckMemberModifier("private") , "Is niet private")
             };
-
             CheckElements(result, entityNode.GetFields(), x => x.GetName(), propertyChecks);
 
+            var constructorChecks = new List<(Predicate<IMethod> check, string suggestionMessage)>()
+            {
+                (x => !x.CheckModifier("public") , "Is public moet private of protected zijn")
+            };
+            CheckElements(result, entityNode.GetConstructors(), x => x.GetName(), constructorChecks);
 
-            result.Score = (int)(result.Score / 5f * 100f);
+
+
+
+            result.Score = (int)(result.Score / 7f * 100f);
 
             return result;
         }
