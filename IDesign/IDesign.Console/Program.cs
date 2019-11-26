@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
+using IDesign.Recognizers.Abstractions;
 using IDesign.Core;
 using NDesk.Options;
 
@@ -8,16 +10,6 @@ namespace IDesign.ConsoleApp
 {
     internal class Program
     {
-        public static List<DesignPattern> designPatterns = new List<DesignPattern>
-        {
-            new DesignPattern("Singleton"),
-            new DesignPattern("State"),
-            new DesignPattern("Strategy"),
-            new DesignPattern("Factory"),
-            new DesignPattern("Decorator"),
-            new DesignPattern("Adapter")
-        };
-
         /// <summary>
         ///     This is the main function, it takes is options and .files, and prints a list of .cs files and specified design
         ///     patterns
@@ -25,18 +17,8 @@ namespace IDesign.ConsoleApp
         /// <param name="args">Takes in commandline options and .cs files</param>
         private static void Main(string[] args)
         {
-            // Shannas code
-            const string path =
-                @"C:\Users\Shanna\source\repos\DesignPatternRecognizer\IDesign\IDesign.Core\TestClasses";
+            List<DesignPattern> designPatterns = RecognizerRunner.designPatterns;
 
-            var recognizerRunner = new RecognizerRunner();
-            var readFiles = new ReadFiles();
-
-            readFiles.GetFilesFromDirectory(path);
-            recognizerRunner.Run(readFiles.Files, designPatterns);
-            // Einde Shannas code
-
-            //Tristans code
             if (args.Length <= 0)
             {
                 Console.WriteLine("No arguments or files specified please confront --help");
@@ -68,6 +50,14 @@ namespace IDesign.ConsoleApp
 
             selectedFiles = (from a in arguments where a.EndsWith(".cs") && a.Length > 3 select a).ToList();
 
+            FileManager manager = new FileManager();
+
+            foreach (string arg in arguments)
+            {
+                if (Directory.Exists(arg))
+                    selectedFiles.AddRange(manager.GetAllCsFilesFromDirectory(arg));
+            }
+
             if (selectedFiles.Count == 0)
             {
                 Console.WriteLine("No files specified!");
@@ -75,14 +65,20 @@ namespace IDesign.ConsoleApp
                 return;
             }
 
-            Console.WriteLine("Selected files:");
-            foreach (var file in selectedFiles) Console.WriteLine(file);
-
             //When no specific pattern is chosen, select all
             if (selectedPatterns.Count == 0) selectedPatterns = designPatterns;
 
+            Console.WriteLine("Selected files:");
+
+            foreach (var file in selectedFiles) Console.WriteLine(file);
+
             Console.WriteLine("\nSelected patterns:");
+
             foreach (var pattern in selectedPatterns) Console.WriteLine(pattern.Name);
+
+            RecognizerRunner recognizerRunner = new RecognizerRunner();
+
+            List<IResult> results = recognizerRunner.Run(selectedFiles, designPatterns);
 
             Console.ReadKey();
         }

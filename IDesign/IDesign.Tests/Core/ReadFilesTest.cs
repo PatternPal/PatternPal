@@ -7,7 +7,7 @@ namespace IDesign.Tests.Core
     internal class ReadFilesTest
     {
         public string path = "../../../Core/TestClasses";
-        private readonly ReadFiles readFiles = new ReadFiles();
+        FileManager readFiles = new FileManager();
 
         [Test]
         public void TestIfFilesListContainsRightFiles()
@@ -16,7 +16,7 @@ namespace IDesign.Tests.Core
             expected.Add(@"../../../Core/TestClasses\ITest.cs");
             expected.Add(@"../../../Core/TestClasses\TestClass1.cs");
 
-            var actual = readFiles.GetFilesFromDirectory(path);
+            var actual = readFiles.GetAllCsFilesFromDirectory(path);
             Assert.AreEqual(expected, actual);
         }
     }

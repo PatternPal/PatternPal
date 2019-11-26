@@ -1,13 +1,18 @@
-﻿using System.Collections.Generic;
+using IDesign.Recognizers;
+using IDesign.Recognizers.Abstractions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.Generic;
 
 namespace IDesign.Core
 {
     public class RecognizerRunner
     {
-        private readonly ReadFiles readFiles = new ReadFiles();
+        private readonly FileManager readFiles = new FileManager();
+        public static List<DesignPattern> designPatterns = new List<DesignPattern>
+        {
+            new DesignPattern("Singleton", new SingletonRecognizer())
+        };
         private DetermineRelations DetermineRelations;
-
         public Dictionary<TypeDeclarationSyntax, EntityNode> EntityNodes =
             new Dictionary<TypeDeclarationSyntax, EntityNode>();
 
@@ -16,23 +21,25 @@ namespace IDesign.Core
         /// </summary>
         /// <param name="files"></param>
         /// <param name="patterns"></param>
-        public void Run(List<string> files, List<DesignPattern> patterns)
+        public List<IResult> Run(List<string> files, List<DesignPattern> patterns)
         {
+            List<IResult> results = new List<IResult>();
+
             //loop over all files
             for (var i = 0; i < files.Count; i++)
             {
                 var tree = readFiles.MakeStringFromFile(files[i]);
                 var generateSyntaxTree = new GenerateSyntaxTree(tree, EntityNodes);
-
-                //foreach file loop over all patterns and do stuff
-                for (var j = 0; j < patterns.Count; j++)
-                {
-                    //CODE GOES HERE
-                }
             }
 
             //Make relations
             DetermineRelations = new DetermineRelations(EntityNodes);
+
+            foreach (var pattern in patterns)
+                foreach (var node in EntityNodes.Values)
+                    results.Add(pattern.Recognizer.Recognize(node));
+
+            return results;
         }
     }
 }
