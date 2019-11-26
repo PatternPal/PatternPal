@@ -11,21 +11,24 @@
              Name="IDesignExtension">
     <UserControl.Resources>
         <ResourceDictionary>
-            <BitmapImage x:Key="settingImg" UriSource="Resources/settings.png"/>
+            <BitmapImage x:Key="settingImg" UriSource="Resources/settings.png" />
         </ResourceDictionary>
     </UserControl.Resources>
     <DockPanel>
 
         <DockPanel DockPanel.Dock="Top" Margin="5">
-            <Button DockPanel.Dock="Right" Margin="5,0,0,0" Height="20" BorderThickness="0" Background="Transparent" Click="Settings_Button">
+            <Button DockPanel.Dock="Right" Margin="5,0,0,0" Height="20" BorderThickness="0" Background="Transparent"
+                    Click="Settings_Button">
                 <Image Source="{StaticResource settingImg}" />
             </Button>
             <Button DockPanel.Dock="Left" Content="Analyse" Height="20" Click="Analyse_Button" />
         </DockPanel>
 
-        <ProgressBar DockPanel.Dock="Bottom" Height="20" VerticalAlignment="Bottom" Minimum="0" Maximum="100" Name="statusBar" />
+        <ProgressBar DockPanel.Dock="Bottom" Height="20" VerticalAlignment="Bottom" Minimum="0" Maximum="100"
+                     Name="statusBar" />
         <DockPanel>
-            <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Text="Output" VerticalAlignment="Top" FontSize="15" Margin="5,0,0,0" />
+            <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Text="Output" VerticalAlignment="Top" FontSize="15"
+                       Margin="5,0,0,0" />
             <ListView Margin="5" Name="listView">
                 <ListView.View>
                     <GridView>

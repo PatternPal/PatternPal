@@ -7,27 +7,24 @@ namespace IDesign.Core
     public class FileManager
     {
         /// <summary>
-        /// Function that makes a string of a file
+        ///     Function that makes a string of a file
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns>
-        /// Returns a string of the content of a file
+        ///     Returns a string of the content of a file
         /// </returns>
         public string MakeStringFromFile(string filePath)
         {
-            if (!File.Exists(filePath))
-            {
-                return "Path does not contains file!";
-            }
+            if (!File.Exists(filePath)) return "Path does not contains file!";
             return File.ReadAllText(filePath);
         }
 
         /// <summary>
-        /// Function that expects a directory path and returns all files equal to *.cs
+        ///     Function that expects a directory path and adds all files equal to .cs files to a list
         /// </summary>
         /// <param name="directoryPath"></param>
         /// <returns>
-        /// Returns a list of strings with file paths
+        ///     Returns a list of strings with file paths
         /// </returns>
         public List<string> GetAllCsFilesFromDirectory(string directoryPath)
         {

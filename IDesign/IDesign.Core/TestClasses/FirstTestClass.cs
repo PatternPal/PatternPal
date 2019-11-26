@@ -1,32 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
 
 /// <summary>
 /// Testclasses
 /// </summary>
 namespace IDesign.Core.TestClasses
 {
-    interface IFirstTestClass
+    internal interface IFirstTestClass
     {
         string naam { get; set; }
     }
 
-    class FirstTestClass : IFirstTestClass
+    internal class FirstTestClass : IFirstTestClass
     {
-
-        public int Getal { get; set; }
-
-
         public string s = "shanna";
-        public static string Naam { get; set; }
-        public string naam { get; set; }
 
         public FirstTestClass(int g)
         {
-            this.Getal = g;
+            Getal = g;
         }
 
+        public int Getal { get; set; }
+        public static string Naam { get; set; }
+        public string naam { get; set; }
 
 
         public int Count(int g)
@@ -34,8 +29,5 @@ namespace IDesign.Core.TestClasses
             Getal += g;
             return Getal;
         }
-
     }
-
 }
-

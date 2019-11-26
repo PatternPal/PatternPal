@@ -1,21 +1,23 @@
-﻿namespace IDesign.Extension
-{
-    using EnvDTE;
-    using IDesign.Core;
-    using IDesign.Recognizers.Abstractions;
-    using Microsoft.VisualStudio.Shell.Interop;
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.IO;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using System.Windows;
-    using System.Windows.Controls;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using EnvDTE;
+using IDesign.Core;
+using IDesign.Recognizers.Abstractions;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
+using Task = System.Threading.Tasks.Task;
+using Thread = System.Threading.Thread;
+using Window = System.Windows.Window;
 
+namespace IDesign.Extension
+{
     /// <summary>
-    /// Interaction logic for ExtensionWindowControl.
+    ///     Interaction logic for ExtensionWindowControl.
     /// </summary>
     public partial class ExtensionWindowControl : UserControl
     {
@@ -26,20 +28,20 @@
         public DTE Dte { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExtensionWindowControl"/> class.
+        ///     Initializes a new instance of the <see cref="ExtensionWindowControl" /> class.
         /// </summary>
         public ExtensionWindowControl()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             AddViewModels();
             IsActiveDoc = true;
             Loading = false;
             Dispatcher.VerifyAccess();
-            Dte = Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(SDTE)) as DTE;
+            Dte = Package.GetGlobalService(typeof(SDTE)) as DTE;
         }
 
         /// <summary>
-        /// Adds all the existing designpatterns in a list.
+        ///     Adds all the existing designpatterns in a list.
         /// </summary>
         private void AddViewModels()
         {
@@ -52,7 +54,7 @@
         }
 
         /// <summary>
-        /// Gets current active document path.
+        ///     Gets current active document path.
         /// </summary>
         private void GetCurrentPath()
         {
@@ -62,7 +64,7 @@
         }
 
         /// <summary>
-        /// Gets all paths in the solution.
+        ///     Gets all paths in the solution.
         /// </summary>
         private void GetAllPaths()
         {   
@@ -81,12 +83,13 @@
         }
 
         /// <summary>
-        /// Handles click on the analyse_button by displaying the tool window.
+        ///     Handles click on the analyse_button by displaying the tool window.
         /// </summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event args.</param>
         [SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "Sample code")]
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification = "Default event handler naming pattern")]
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification =
+            "Default event handler naming pattern")]
         private async void Analyse_Button(object sender, RoutedEventArgs e)
         {
             ChoosePath();
@@ -105,10 +108,10 @@
 
             await Task.Run(() =>
             {
-                for (int i = 0; i <= 100; i++)
+                for (var i = 0; i <= 100; i++)
                 {
-                    ((IProgress<int>)progress).Report(i);
-                    System.Threading.Thread.Sleep(100);
+                    ((IProgress<int>) progress).Report(i);
+                    Thread.Sleep(100);
                 }
             });
 
@@ -117,15 +120,15 @@
         }
 
         /// <summary>
-        /// Handles click on the analyse_button by displaying the settings window.
+        ///     Handles click on the analyse_button by displaying the settings window.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Settings_Button(object sender, RoutedEventArgs e)
         {
-            SettingsControl settingsWindow = new SettingsControl(DesignPatternViewModels, IsActiveDoc);
+            var settingsWindow = new SettingsControl(DesignPatternViewModels, IsActiveDoc);
 
-            System.Windows.Window window = new System.Windows.Window
+            var window = new Window
             {
                 Title = "Settings",
                 Content = settingsWindow,

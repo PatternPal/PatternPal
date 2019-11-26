@@ -8,10 +8,12 @@ namespace IDesign.Extension
         private bool isChecked;
         public event PropertyChangedEventHandler PropertyChanged;
         public DesignPattern Pattern { get; set; }
+
         public string Name { get; set; }
+
         public bool IsChecked
         {
-            get { return isChecked; }
+            get => isChecked;
             set
             {
                 isChecked = value;

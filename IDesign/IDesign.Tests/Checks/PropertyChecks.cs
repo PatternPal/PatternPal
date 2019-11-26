@@ -1,9 +1,8 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
-using NUnit.Framework;
-using IDesign.Checks;
+﻿using IDesign.Checks;
 using IDesign.Models;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using NUnit.Framework;
 
 namespace IDesign.Recognizers.Tests
 {
@@ -39,7 +38,9 @@ namespace IDesign.Recognizers.Tests
         [TestCase("var", @"static var TestProperty{get; set;}", true)]
         [TestCase("T", @"private var TestProperty{get; set;}", false)]
         [TestCase("int", @"public bool TestProperty{get; set;}", false)]
-        [TestCase("int", @"public static Singleton Instance { get { if (instance==null) { instance = new Singleton(); } return instance; } } }", false)]
+        [TestCase("int",
+            @"public static Singleton Instance { get { if (instance==null) { instance = new Singleton(); } return instance; } } }",
+            false)]
         public void TypeCheck_Should_Return_CorrectResponse(string type, string code, bool shouldBeValid)
         {
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();

@@ -6,10 +6,9 @@ namespace IDesign.Models
     public interface IMethod
     {
         string GetName();
-        TypeSyntax GetReturnType();
+        string GetReturnType();
         BlockSyntax GetBody();
 
         SyntaxTokenList GetModifiers();
-
     }
 }

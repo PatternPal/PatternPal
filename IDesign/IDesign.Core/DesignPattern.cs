@@ -9,7 +9,7 @@ namespace IDesign.Core
 
         public DesignPattern(string name, IRecognizer recognizer)
         {
-            this.Name = name;
+            Name = name;
             Recognizer = recognizer;
         }
     }

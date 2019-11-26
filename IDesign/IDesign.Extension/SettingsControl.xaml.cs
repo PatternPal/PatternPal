@@ -1,18 +1,18 @@
-﻿using IDesign.Core;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Controls;
+using IDesign.Core;
 
 namespace IDesign.Extension
 {
     /// <summary>
-    /// Interaction logic for SettingsControl.xaml
+    ///     Interaction logic for SettingsControl.xaml
     /// </summary>
     public partial class SettingsControl : UserControl
     {
         public List<DesignPatternViewModel> DesignPatterns { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the SettingsControl class.
+        ///     Initializes a new instance of the SettingsControl class.
         /// </summary>
         /// <param name="designPatterns"></param>
         public SettingsControl(List<DesignPatternViewModel> designPatterns, bool isActiveDoc)

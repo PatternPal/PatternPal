@@ -1,14 +1,13 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
-using NUnit.Framework;
-using IDesign.Checks;
+﻿using IDesign.Checks;
 using IDesign.Models;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using NUnit.Framework;
 
 namespace IDesign.Tests.Checks
 {
-   public class FieldChecks
-    { 
+    public class FieldChecks
+    {
         [SetUp]
         public void Setup()
         {
@@ -29,7 +28,8 @@ namespace IDesign.Tests.Checks
             if (field == null)
                 Assert.Fail();
 
-            Assert.AreEqual(shouldBeValid, new Field(field, field.Declaration.Variables.FirstOrDefault()).CheckMemberModifier(modifier));
+            Assert.AreEqual(shouldBeValid,
+                new Field(field, field.Declaration.Variables.FirstOrDefault()).CheckMemberModifier(modifier));
         }
 
         [TestCase("string", @"public string TestProperty", true)]
@@ -47,7 +47,8 @@ namespace IDesign.Tests.Checks
             if (field == null)
                 Assert.Fail();
 
-            Assert.AreEqual(shouldBeValid, new Field(field, field.Declaration.Variables.FirstOrDefault()).CheckFieldType(type));
+            Assert.AreEqual(shouldBeValid,
+                new Field(field, field.Declaration.Variables.FirstOrDefault()).CheckFieldType(type));
         }
     }
 }

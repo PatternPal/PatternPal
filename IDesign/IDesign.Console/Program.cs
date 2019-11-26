@@ -1,20 +1,21 @@
-using IDesign.Core;
-using NDesk.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using IDesign.Recognizers.Abstractions;
+using IDesign.Core;
+using NDesk.Options;
 
 namespace IDesign.ConsoleApp
 {
-    class Program
+    internal class Program
     {
         /// <summary>
-        /// This is the main function, it takes is options and .files, and prints a list of .cs files and specified design patterns
+        ///     This is the main function, it takes is options and .files, and prints a list of .cs files and specified design
+        ///     patterns
         /// </summary>
         /// <param name="args">Takes in commandline options and .cs files</param>
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             List<DesignPattern> designPatterns = RecognizerRunner.designPatterns;
 
@@ -25,23 +26,21 @@ namespace IDesign.ConsoleApp
                 return;
             }
 
-            bool showHelp = false;
-            List<string> selectedFiles = new List<string>();
-            List<DesignPattern> selectedPatterns = new List<DesignPattern>();
+            var showHelp = false;
+            var selectedFiles = new List<string>();
+            var selectedPatterns = new List<DesignPattern>();
 
-            var options = new OptionSet()
+            var options = new OptionSet
             {
-                {"h|help", "shows this message and exit", v => showHelp = v != null },
+                {"h|help", "shows this message and exit", v => showHelp = v != null}
             };
 
             //Add design patterns as specifiable option
-            foreach (DesignPattern pattern in designPatterns)
-            {
+            foreach (var pattern in designPatterns)
                 options.Add(pattern.Name, "includes " + pattern.Name, v => selectedPatterns.Add(pattern));
-            }
 
-            List<string> arguments = options.Parse(args);
-            
+            var arguments = options.Parse(args);
+
             if (showHelp)
             {
                 ShowHelp(options);
@@ -67,24 +66,15 @@ namespace IDesign.ConsoleApp
             }
 
             //When no specific pattern is chosen, select all
-            if (selectedPatterns.Count == 0)
-            {
-                selectedPatterns = designPatterns;
-            }
+            if (selectedPatterns.Count == 0) selectedPatterns = designPatterns;
 
             Console.WriteLine("Selected files:");
 
-            foreach (string file in selectedFiles)
-            {
-                Console.WriteLine(file);
-            }
+            foreach (var file in selectedFiles) Console.WriteLine(file);
 
             Console.WriteLine("\nSelected patterns:");
 
-            foreach (DesignPattern pattern in selectedPatterns)
-            {
-                Console.WriteLine(pattern.Name);
-            }
+            foreach (var pattern in selectedPatterns) Console.WriteLine(pattern.Name);
 
             RecognizerRunner recognizerRunner = new RecognizerRunner();
 
@@ -94,10 +84,10 @@ namespace IDesign.ConsoleApp
         }
 
         /// <summary>
-        /// Prints a message on how to use this program and all possible options
+        ///     Prints a message on how to use this program and all possible options
         /// </summary>
         /// <param name="options">All commandline options</param>
-        static void ShowHelp(OptionSet options)
+        private static void ShowHelp(OptionSet options)
         {
             Console.WriteLine("Usage: idesign [INPUT] [OPTIONS]");
             Console.WriteLine("Options:");
