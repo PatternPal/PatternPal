@@ -12,7 +12,6 @@ namespace IDesign.Core
         {
             new DesignPattern("Singleton", new SingletonRecognizer())
         };
-        private DetermineRelations DetermineRelations;
         public Dictionary<TypeDeclarationSyntax, EntityNode> EntityNodes =
             new Dictionary<TypeDeclarationSyntax, EntityNode>();
 
@@ -21,6 +20,7 @@ namespace IDesign.Core
         /// </summary>
         /// <param name="files"></param>
         /// <param name="patterns"></param>
+        /// <returns></returns>
         public List<IResult> Run(List<string> files, List<DesignPattern> patterns)
         {
             List<IResult> results = new List<IResult>();
@@ -33,7 +33,7 @@ namespace IDesign.Core
             }
 
             //Make relations
-            DetermineRelations = new DetermineRelations(EntityNodes);
+            var determineRelations = new DetermineRelations(EntityNodes);
 
             foreach (var pattern in patterns)
                 foreach (var node in EntityNodes.Values)

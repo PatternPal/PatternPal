@@ -1,15 +1,15 @@
-﻿using System;
+﻿using EnvDTE;
+using IDesign.Core;
+using IDesign.Recognizers.Abstractions;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using EnvDTE;
-using IDesign.Core;
-using IDesign.Recognizers.Abstractions;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 using Task = System.Threading.Tasks.Task;
 using Thread = System.Threading.Thread;
 using Window = System.Windows.Window;
@@ -66,8 +66,9 @@ namespace IDesign.Extension
         /// <summary>
         ///     Gets all paths in the solution.
         /// </summary>
+
         private void GetAllPaths()
-        {   
+        {
             Paths = new List<string>();
             FileManager manager = new FileManager();
             if (Dte.Solution.Count > 0)
@@ -110,7 +111,7 @@ namespace IDesign.Extension
             {
                 for (var i = 0; i <= 100; i++)
                 {
-                    ((IProgress<int>) progress).Report(i);
+                    ((IProgress<int>)progress).Report(i);
                     Thread.Sleep(100);
                 }
             });
@@ -136,7 +137,7 @@ namespace IDesign.Extension
             };
             window.ShowDialog();
 
-            IsActiveDoc = (bool) settingsWindow.radio1.IsChecked;
+            IsActiveDoc = (bool)settingsWindow.radio1.IsChecked;
             DesignPatternViewModels = settingsWindow.DesignPatterns;
         }
     }

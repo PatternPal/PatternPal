@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Controls;
-using IDesign.Core;
 
 namespace IDesign.Extension
 {

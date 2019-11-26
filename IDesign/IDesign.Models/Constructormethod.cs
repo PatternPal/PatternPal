@@ -7,25 +7,25 @@ namespace IDesign.Models
     {
         public Constructormethod(ConstructorDeclarationSyntax constructor)
         {
-            this.constructor = constructor;
+            this.Constructor = constructor;
         }
 
 
-        public ConstructorDeclarationSyntax constructor { get; set; }
+        public ConstructorDeclarationSyntax Constructor { get; set; }
 
         public BlockSyntax GetBody()
         {
-            return constructor.Body;
+            return Constructor.Body;
         }
 
         public SyntaxTokenList GetModifiers()
         {
-            return constructor.Modifiers;
+            return Constructor.Modifiers;
         }
 
         public string GetName()
         {
-            return constructor.Identifier.ToString();
+            return Constructor.Identifier.ToString();
         }
 
         public string GetReturnType()

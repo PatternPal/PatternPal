@@ -7,26 +7,26 @@ namespace IDesign.Models
     {
         public Field(FieldDeclarationSyntax field, VariableDeclaratorSyntax variable)
         {
-            this.field = field;
-            this.variable = variable;
+            this.FieldDeclaration = field;
+            this.Variable = variable;
         }
 
-        private FieldDeclarationSyntax field { get; }
-        private VariableDeclaratorSyntax variable { get; }
+        private FieldDeclarationSyntax FieldDeclaration { get; }
+        private VariableDeclaratorSyntax Variable { get; }
 
         public SyntaxTokenList GetModifiers()
         {
-            return field.Modifiers;
+            return FieldDeclaration.Modifiers;
         }
 
         public string GetName()
         {
-            return variable.Identifier.ToString();
+            return Variable.Identifier.ToString();
         }
 
         public TypeSyntax GetFieldType()
         {
-            return field.Declaration.Type;
+            return FieldDeclaration.Declaration.Type;
         }
     }
 }
