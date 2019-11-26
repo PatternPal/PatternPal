@@ -10,6 +10,8 @@ namespace IDesign.Tests.Core
 {
     class GenerateSyntaxTreeTest
     {
+        Dictionary<TypeDeclarationSyntax, EntityNode> entityNodes = new Dictionary<TypeDeclarationSyntax, EntityNode>();
+
         [TestCase(@"namespace TestNamespace{ class TestClass{ public string Name {get; set;} public TestClass(string name){this.Name = name;}}}", 1)]
         [TestCase(@"namespace TestNamespace{ class TestClass{ public string Name {get; set;} public TestClass(string name){this.Name = name;} class InnerClass{}}", 2)]
         [TestCase(@"namespace TestNamespace{ class TestClass{ public string Name {get; set;} public TestClass(string name){this.Name = name;} class InnerClass{}}}", 2)]
@@ -21,7 +23,7 @@ namespace IDesign.Tests.Core
         [TestCase(@"namespace TestNamespace{ class TestClass{ public string Name {get; set;} public TestClass(string name){this.Name = name;}}} interface ITestClass{}", 1)]
         public void TestAmountOfClasses(string file, int expectedAmountOfClasses)
         {
-            GenerateSyntaxTree generateSyntaxTree = new GenerateSyntaxTree(file);
+            GenerateSyntaxTree generateSyntaxTree = new GenerateSyntaxTree(file, entityNodes);
             var result = generateSyntaxTree.ClassDeclarationSyntaxList.Count;
             Assert.AreEqual(expectedAmountOfClasses, result);
         }
@@ -37,7 +39,7 @@ namespace IDesign.Tests.Core
         [TestCase(@"namespace TestNamespace{ class TestClass{ public string Name {get; set;} public TestClass(string name){this.Name = name;}}} interface ITestClass{interface ITest{}}", 2)]
         public void TestAmountOfInterfaces(string file, int expectedAmountOfInterfaces)
         {
-            GenerateSyntaxTree generateSyntaxTree = new GenerateSyntaxTree(file);
+            GenerateSyntaxTree generateSyntaxTree = new GenerateSyntaxTree(file, entityNodes);
             var result = generateSyntaxTree.InterfaceDeclarationSyntaxList.Count;
             Assert.AreEqual(expectedAmountOfInterfaces, result);
         }
@@ -71,7 +73,7 @@ namespace IDesign.Tests.Core
                     namespace TestNamespace{ class TestClass{ public string Name {get; set;} public TestClass(string name){this.Name = name;}}}", 6)]
         public void TestIfAmountOfUsingsIsRight(string file, int amountOfUsings)
         {
-            GenerateSyntaxTree generateSyntaxTree = new GenerateSyntaxTree(file);
+            GenerateSyntaxTree generateSyntaxTree = new GenerateSyntaxTree(file, entityNodes);
             var result = generateSyntaxTree.UsingDirectiveSyntaxList;
             int count = 0;
 
