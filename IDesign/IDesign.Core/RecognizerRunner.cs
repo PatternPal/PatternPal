@@ -12,7 +12,6 @@ namespace IDesign.Core
         {
             new DesignPattern("Singleton", new SingletonRecognizer())
         };
-        private DetermineRelations DetermineRelations;
         public Dictionary<TypeDeclarationSyntax, EntityNode> EntityNodes =
             new Dictionary<TypeDeclarationSyntax, EntityNode>();
 
