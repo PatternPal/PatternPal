@@ -4,9 +4,8 @@ using System.Text;
 
 namespace IDesign.Recognizers.Abstractions
 {
-    public interface IResult
+    interface IRecognizer
     {
-        int GetScore();
-        IList<ISuggestion> GetSuggestions();
+        IResult Recognize(IEntityNode node);
     }
 }

@@ -1,4 +1,4 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using IDesign.Models;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections;
 using System.Linq;
@@ -12,22 +12,33 @@ namespace IDesign.Checks
         /// </summary>
         /// <param name="methodSyntax">The method witch it should check</param>
         /// <param name="returnType">The expected return type</param>
-        /// <returns>
-        /// Return a boolean based on if the given method returns the expected type
-        /// </returns>
-        public static bool CheckReturnType(this MethodDeclarationSyntax methodSyntax, string returnType)
+        /// <returns></returns>
+        public static bool CheckReturnType(this IMethod method, string returnType)
         {
-            return methodSyntax.ReturnType.ToString() == returnType;
+            return method.GetReturnType().ToString().IsEqual(returnType);
         }
 
+
+        ///
         /// <summary>
         /// Return a boolean based on if the given method is creational
         /// </summary>
         /// <param name="methodSyntax">The method witch it should check</param>
         /// <returns></returns>
-        public static bool CheckCreationalFunction(this MethodDeclarationSyntax methodSyntax)
-        { 
-            return methodSyntax.DescendantNodes().OfType<ObjectCreationExpressionSyntax>().Any();
+        public static bool CheckCreationalFunction(this IMethod methodSyntax)
+        {
+            return methodSyntax.GetBody().DescendantNodes().OfType<ObjectCreationExpressionSyntax>().Any();
+        }
+
+        /// <summary>
+        /// Return a boolean based on if the given member has an expected modifier
+        /// </summary>
+        /// <param name="membersyntax">The member witch it should check</param>
+        /// <param name="modifier">The expected modifier</param>
+        /// <returns></returns>
+        public static bool CheckModifier(this IMethod method, string modifier)
+        {
+            return method.GetModifiers().Where(x => x.ToString().IsEqual(modifier)).Any();
         }
 
         /// <summary>
@@ -36,14 +47,14 @@ namespace IDesign.Checks
         /// <param name="methodSyntax">The method witch it should check</param>
         /// <param name="creationType">The expected creational type</param>
         /// <returns></returns>
-        /// 
-        public static bool CheckCreationType(this MethodDeclarationSyntax methodSyntax, string creationType)
+        ///
+        public static bool CheckCreationType(this IMethod methodSyntax, string creationType)
         {
-            var creations = methodSyntax.DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
+            var creations = methodSyntax.GetBody().DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
             foreach(var creationExpression in creations)
             {
                 var name = creationExpression.Type as IdentifierNameSyntax;
-                if(name != null && name.Identifier.ToString() == creationType)
+                if(name != null && name.Identifier.ToString().IsEqual(creationType))
                 {
                     return true;
                 }
@@ -56,11 +67,10 @@ namespace IDesign.Checks
         /// </summary>
         /// <param name="methodSyntax">The method witch it should check</param>
         /// <returns></returns>
-        /// 
-        public static bool CheckReturnTypeSameAsCreation(this MethodDeclarationSyntax methodSyntax)
+        ///
+        public static bool CheckReturnTypeSameAsCreation(this IMethod methodSyntax)
         {
-            return methodSyntax.CheckCreationType(methodSyntax.ReturnType.ToString());
+            return methodSyntax.CheckCreationType(methodSyntax.GetReturnType().ToString());
         }
     }
 }
-
