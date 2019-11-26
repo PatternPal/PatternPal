@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using NUnit.Framework;
 using IDesign.Checks;
+using IDesign.Tests.Utils;
 using IDesign.Core;
 using System.Linq;
 
@@ -19,32 +20,19 @@ namespace IDesign.Recognizers.Tests
 
 
         [Test]
-        public void TestFunction()
+        [TestCase("SingleTonTestCase1.cs", 100)]
+        [TestCase("SingleTonTestCase2.cs", 100)]
+        [TestCase("SingleTonTestCase3.cs", 100)]
+        [TestCase("SingleTonTestCase4.cs", 100)]
+        public void TestFunction(string filename, int score)
         {
             var singleton = new SingletonRecognizer();
+            string code = FileUtils.FileToString(filename);
+           
 
-            var testClass = @"public sealed class Singleton
-
-    {
-    private static Singleton instance = null;
-
-    private Singleton()
-    {
-    }
-
-    public static Singleton GetInstance()
-    {
-    if (instance==null)
-    {
-    instance = new Singleton();
-    }
-    return instance;
-    }
-    }
-        
-";
-            var root = CSharpSyntaxTree.ParseText(testClass).GetCompilationUnitRoot();
-            var testNode = root.Members[0] as ClassDeclarationSyntax;
+            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
+            var NameSpaceNode = root.Members[0] as NamespaceDeclarationSyntax;
+            var testNode = NameSpaceNode.Members[0] as ClassDeclarationSyntax;
 
             var entityNode = new EntityNode();
             entityNode.Name = testNode.Identifier.ToString();
@@ -55,7 +43,7 @@ namespace IDesign.Recognizers.Tests
 
             var result = singleton.Recognize(entityNode);
 
-            Assert.AreEqual(40, result.GetScore());
+            Assert.AreEqual(score, result.GetScore());
 
         }
     }
