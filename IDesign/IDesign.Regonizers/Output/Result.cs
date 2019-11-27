@@ -25,8 +25,7 @@ namespace IDesign.Recognizers.Output
             res += Score;
             
             foreach(var suggestie in Suggestions)
-                res += ", " +suggestie.GetMessage();
-            
+                res += ", " + suggestie.GetMessage();
             
             return res;
         }
