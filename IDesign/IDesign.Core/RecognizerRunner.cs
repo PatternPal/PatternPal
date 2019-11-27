@@ -34,6 +34,7 @@ namespace IDesign.Core
 
             //Make relations
             var determineRelations = new DetermineRelations(EntityNodes);
+            determineRelations.GetEdgesOfEntityNode();
 
             foreach (var pattern in patterns)
                 foreach (var node in EntityNodes.Values)

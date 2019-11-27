@@ -20,6 +20,28 @@ namespace IDesign.Core
             EntityNodes = entityNodes;
         }
 
+        public void GetEdgesOfEntityNode()
+        {
+            foreach (var entityNode in EntityNodes)
+            {
+                if (entityNode.Key.BaseList != null)
+                {
+                    foreach (var child in entityNode.Key.BaseList.ChildNodes())
+                    {
+                        var stringname = child.ToString();
+                        foreach (var node in EntityNodes)
+                        {
+                            if (node.Key.Identifier.ToString() == stringname)
+                            {
+                                Edge = new EntityNodeEdges(node.Value);
+                                entityNode.Value.EntityNodeEdgesList.Add(Edge);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         public EntityNode EntityNode { get; set; }
         public EntityNodeEdges Edge { get; set; }
     }

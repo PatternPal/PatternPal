@@ -5,11 +5,11 @@
 /// </summary>
 namespace IDesign.Core.TestClasses
 {
-    internal class Third
+    internal class ThirdClass
     {
     }
 
-    internal class SecondTestClass : Third, IFirstTestClass
+    internal class SecondTestClass : ThirdClass, IFirstTestClass
     {
         public SecondTestClass(int s)
         {
