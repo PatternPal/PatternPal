@@ -29,14 +29,9 @@
         <DockPanel>
             <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Text="Output" VerticalAlignment="Top" FontSize="15"
                        Margin="5,0,0,0" />
-            <ListView Margin="5" Name="listView">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Score" DisplayMemberBinding="{Binding Score}" />
-                        <GridViewColumn Header="Suggestion" DisplayMemberBinding="{Binding Suggestion}" />
-                    </GridView>
-                </ListView.View>
-            </ListView>
+            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            <TreeView x:Name="treeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5" />
+
         </DockPanel>
     </DockPanel>
 </UserControl>
