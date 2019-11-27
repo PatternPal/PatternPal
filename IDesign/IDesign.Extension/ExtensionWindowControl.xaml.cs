@@ -100,8 +100,6 @@ namespace IDesign.Extension
             RecognizerRunner runner = new RecognizerRunner();
             List<IResult> results = runner.Run(Paths, DesignPatternViewModels.Where(x => x.IsChecked).Select(x => x.Pattern).ToList());
 
-            listView.ItemsSource = results;
-
             Loading = true;
             statusBar.Value = 0;
             var progress = new Progress<int>(value => statusBar.Value = value);
