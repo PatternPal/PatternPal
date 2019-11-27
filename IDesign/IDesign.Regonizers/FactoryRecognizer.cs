@@ -15,7 +15,7 @@ namespace IDesign.Recognizers
             var result = new Result();
             var methodChecks = new List<ElementCheck<IMethod>>()
             {
-                new ElementCheck<IMethod>(x => x.CheckModifier("private") , "Is niet private"),
+                new ElementCheck<IMethod>(x => x.CheckModifier("public") , "Is niet public"),
                 new ElementCheck<IMethod>(x => x.CheckReturnTypeSameAsCreation(), "Return type is niet hetzelfde als wat er gemaakt wordt" )
             };
             CheckElements(result, entityNode.GetMethods(), x => x.GetName(), methodChecks);
