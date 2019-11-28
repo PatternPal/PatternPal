@@ -10,7 +10,6 @@
     <Compile Remove="TestClasses\SingleTonTestCase2.cs" />
     <Compile Remove="TestClasses\SingleTonTestCase3.cs" />
     <Compile Remove="TestClasses\SingleTonTestCase4.cs" />
-    <Compile Remove="TestClasses\SingleTonTestCase5.cs" />
     <Compile Remove="TestClasses\SingleTonTestCase6.cs" />
     <Compile Remove="TestClasses\SingleTonTestCase7.cs" />
   </ItemGroup>
@@ -26,9 +25,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TestClasses\SingletonTestClasses\SingleTonTestCase4.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestClasses\SingleTonTestCase5.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TestClasses\SingletonTestClasses\SingleTonTestCase6.cs">
