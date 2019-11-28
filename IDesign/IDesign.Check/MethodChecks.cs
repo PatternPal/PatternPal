@@ -46,12 +46,14 @@ namespace IDesign.Checks
         /// <returns></returns>
         public static bool CheckCreationType(this IMethod methodSyntax, string creationType)
         {
-            var creations = methodSyntax.GetBody().DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
-            foreach (var creationExpression in creations)
+            if (methodSyntax.GetBody() != null)
             {
-                if (creationExpression.Type is IdentifierNameSyntax name && name.Identifier.ToString().IsEqual(creationType)) return true;
+                var creations = methodSyntax.GetBody().DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
+                foreach (var creationExpression in creations)
+                {
+                    if (creationExpression.Type is IdentifierNameSyntax name && name.Identifier.ToString().IsEqual(creationType)) return true;
+                }
             }
-
             return false;
         }
 
