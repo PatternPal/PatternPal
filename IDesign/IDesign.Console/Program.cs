@@ -78,7 +78,9 @@ namespace IDesign.ConsoleApp
 
             RecognizerRunner recognizerRunner = new RecognizerRunner();
 
-            List<IResult> results = recognizerRunner.Run(selectedFiles, designPatterns);
+            var results = recognizerRunner.Run(selectedFiles, designPatterns);
+
+            
             
             foreach (var res in results) Console.WriteLine('\n' + res.ToString());
             

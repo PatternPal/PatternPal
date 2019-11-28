@@ -1,5 +1,4 @@
 using IDesign.Recognizers;
-using IDesign.Recognizers.Abstractions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 
@@ -21,9 +20,9 @@ namespace IDesign.Core
         /// <param name="files"></param>
         /// <param name="patterns"></param>
         /// <returns></returns>
-        public List<IResult> Run(List<string> files, List<DesignPattern> patterns)
+        public List<RecognitionResult> Run(List<string> files, List<DesignPattern> patterns)
         {
-            List<IResult> results = new List<IResult>();
+            var results = new List<RecognitionResult>();
 
             //loop over all files
             for (var i = 0; i < files.Count; i++)
@@ -37,7 +36,12 @@ namespace IDesign.Core
 
             foreach (var pattern in patterns)
                 foreach (var node in EntityNodes.Values)
-                    results.Add(pattern.Recognizer.Recognize(node));
+                    results.Add(new RecognitionResult()
+                    {
+                        Result = pattern.Recognizer.Recognize(node),
+                        EntityNode = node,
+                        Pattern = pattern,
+                    });
 
             return results;
         }
