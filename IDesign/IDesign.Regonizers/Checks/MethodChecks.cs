@@ -1,5 +1,5 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace IDesign.Recognizers
@@ -67,7 +67,7 @@ namespace IDesign.Recognizers
         }
 
         //helper functions
-        public static string GetCreationType(this IMethod methodSyntax)
+        public static IEnumerable<string> GetCreatedTypes(this IMethod methodSyntax)
         {
             var creations = methodSyntax.GetBody().DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
             return creations.OfType<IdentifierNameSyntax>().Select(x => x.Identifier.ToString());

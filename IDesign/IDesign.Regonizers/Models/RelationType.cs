@@ -10,6 +10,7 @@ namespace IDesign.Recognizers.Models
         Implemented,
         Extends,
         Extended,
-        Uses
+        Uses,
+        Creates
     }
 }

@@ -9,7 +9,7 @@ namespace IDesign.Recognizers.Checks
 {
     public static class ClassChecks
     {
-        public static bool ImplementsInterface(IEntityNode node, string name)
+        public static bool ImplementsInterface(this IEntityNode node, string name)
         {
             if(HasInterface(node, name))
                 {
@@ -24,7 +24,7 @@ namespace IDesign.Recognizers.Checks
                 return false;
             }
         }
-        public static bool ExtendsClass(IEntityNode node, string name)
+        public static bool ExtendsClass(this IEntityNode node, string name)
         {
             if (Extends(node))
             {
@@ -38,19 +38,22 @@ namespace IDesign.Recognizers.Checks
         }
 
         //helper functions
-        public static bool HasInterface(IEntityNode node, string name)
+        public static bool HasInterface(this IEntityNode node, string name)
         {
             return node.GetRelations()
-                .Where(x => x.GetType() == RelationType.Implemented && x.GetDestination().GetName() == name)
-                .Any();
+                .Any(x => x.GetType() == RelationType.Implemented && x.GetDestination().GetName() == name);
         }
-        public static IEntityNode GetExtends(IEntityNode node)
+        public static IEntityNode GetExtends(this IEntityNode node)
         {
-            return node.GetRelations().Where(x => x.GetType() == RelationType.Extends).First().GetDestination();
+            return node.GetRelations().Where(x => x.GetType() == RelationType.Extends).FirstOrDefault().GetDestination();
         }
-        public static bool Extends(IEntityNode node)
+        public static bool Extends(this IEntityNode node)
         {
-            return node.GetRelations().Where(x => x.GetType() == RelationType.Extends).Any();
+            return node.GetRelations().Any(x => x.GetType() == RelationType.Extends);
+        }
+        public static IEntityNode GetEdgeNode(this IEntityNode node, string name)
+        {
+            return node.GetRelations().Where(x => x.GetDestination().GetName() == name).FirstOrDefault().GetDestination();
         }
     }
 }
