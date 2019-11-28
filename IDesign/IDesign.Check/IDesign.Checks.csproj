@@ -11,8 +11,4 @@
     <PackageReference Include="Microsoft.CodeAnalysis" Version="3.3.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\IDesign.Models\IDesign.Models.csproj" />
-  </ItemGroup>
-
 </Project>

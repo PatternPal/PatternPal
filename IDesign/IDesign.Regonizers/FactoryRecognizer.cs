@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using IDesign.Checks;
-using IDesign.Models;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Output;
 

@@ -1,7 +1,8 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using IDesign.Checks;
 
-namespace IDesign.Models
+namespace IDesign.Recognizers
 {
     public class PropertyField : IField
     {
