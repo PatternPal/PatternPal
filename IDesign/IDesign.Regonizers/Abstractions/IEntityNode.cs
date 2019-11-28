@@ -1,5 +1,4 @@
-﻿using IDesign.Checks;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 
 namespace IDesign.Recognizers.Abstractions
@@ -10,7 +9,7 @@ namespace IDesign.Recognizers.Abstractions
         string GetName();
         IEnumerable<IMethod> GetMethods();
         IEnumerable<IField> GetFields();
-
         IEnumerable<IMethod> GetConstructors();
+        IEnumerable<IRelation> GetRelations();
     }
 }

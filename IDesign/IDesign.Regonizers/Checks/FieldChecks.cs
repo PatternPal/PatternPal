@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace IDesign.Checks
+namespace IDesign.Recognizers
 {
     public static class FieldChecks
     {

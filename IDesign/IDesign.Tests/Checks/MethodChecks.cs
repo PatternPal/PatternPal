@@ -1,7 +1,7 @@
-using IDesign.Checks;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
+using IDesign.Recognizers;
 
 namespace IDesign.Recognizers.Tests
 {
