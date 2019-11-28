@@ -105,7 +105,7 @@ namespace IDesign.Extension
 
         private void ChoosePath()
         {
-            if (IsActiveDoc)
+            if (SettingsControl.radio1.IsChecked != null && SettingsControl.radio1.IsChecked.Value)
                 GetCurrentPath();
             else
                 GetAllPaths();
