@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
+             xmlns:extension="clr-namespace:IDesign.Extension"
+             xmlns:models="clr-namespace:IDesign.Extension.ViewModels"
              Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
              Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
              mc:Ignorable="d"
@@ -11,27 +13,57 @@
              Name="IDesignExtension">
     <UserControl.Resources>
         <ResourceDictionary>
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+            </Style>
+            <Style TargetType="CheckBox">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+            </Style>
+            <Style TargetType="ListBox">
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowTabMouseOverBackgroundBeginKey}}"/>
+                <Setter Property="Background" Value="{DynamicResource {x:Static vsshell:VsColors.BrandedUITextKey}}"/>
+            </Style>
+            <Style TargetType="TreeView">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+                <Setter Property="Background" Value="{DynamicResource {x:Static vsshell:VsColors.BrandedUITextKey}}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowTabMouseOverBackgroundBeginKey}}"/>
+            </Style>
+            <Style TargetType="RadioButton">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+            </Style>
+            <Style TargetType="Button">
+                <Setter Property="Background" Value="{DynamicResource {x:Static vsshell:VsColors.BrandedUITextKey}}"/>
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowTabMouseOverBackgroundBeginKey}}" BorderThickness="1">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowTabMouseOverBackgroundBeginKey}}"/>
+                        <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowTabTextKey}}"/>
+
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
             <BitmapImage x:Key="settingImg" UriSource="Resources/settings.png" />
         </ResourceDictionary>
     </UserControl.Resources>
-    <DockPanel>
-
-        <DockPanel DockPanel.Dock="Top" Margin="5">
-            <Button DockPanel.Dock="Right" Margin="5,0,0,0" Height="20" BorderThickness="0" Background="Transparent"
-                    Click="Settings_Button">
-                <Image Source="{StaticResource settingImg}" />
-            </Button>
-            <Button DockPanel.Dock="Left" Content="Analyse" Height="20" Click="Analyse_Button" />
-        </DockPanel>
-
-        <ProgressBar DockPanel.Dock="Bottom" Height="20" VerticalAlignment="Bottom" Minimum="0" Maximum="100"
-                     Name="statusBar" />
-        <DockPanel>
-            <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Text="Output" VerticalAlignment="Top" FontSize="15"
-                       Margin="5,0,0,0" />
-            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-            <TreeView x:Name="treeView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5" />
-
-        </DockPanel>
-    </DockPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="200" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="20" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
+            <extension:SettingsControl x:Name="SettingsControl" HorizontalAlignment="Stretch"></extension:SettingsControl>
+            <Button Content="Analyse" Height="20" Click="Analyse_Button" />
+        </StackPanel>
+        <ProgressBar Grid.Row="2" DockPanel.Dock="Bottom" Height="20" VerticalAlignment="Bottom" Minimum="0" Maximum="100" Name="statusBar" />
+    </Grid>
 </UserControl>

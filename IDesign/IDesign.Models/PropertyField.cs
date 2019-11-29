@@ -7,24 +7,24 @@ namespace IDesign.Models
     {
         public PropertyField(PropertyDeclarationSyntax property)
         {
-            this.property = property;
+            this.Property = property;
         }
 
-        public PropertyDeclarationSyntax property { get; set; }
+        public PropertyDeclarationSyntax Property { get; set; }
 
         public SyntaxTokenList GetModifiers()
         {
-            return property.Modifiers;
+            return Property.Modifiers;
         }
 
         public string GetName()
         {
-            return property.Identifier.ToString();
+            return Property.Identifier.ToString();
         }
 
         public TypeSyntax GetFieldType()
         {
-            return property.Type;
+            return Property.Type;
         }
     }
 }

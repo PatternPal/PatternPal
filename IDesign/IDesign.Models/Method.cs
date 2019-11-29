@@ -7,30 +7,30 @@ namespace IDesign.Models
     {
         public Method(MethodDeclarationSyntax method)
         {
-            this.method = method;
+            this.MethodDeclaration = method;
         }
 
 
-        public MethodDeclarationSyntax method { get; set; }
+        public MethodDeclarationSyntax MethodDeclaration { get; set; }
 
         public BlockSyntax GetBody()
         {
-            return method.Body;
+            return MethodDeclaration.Body;
         }
 
         public SyntaxTokenList GetModifiers()
         {
-            return method.Modifiers;
+            return MethodDeclaration.Modifiers;
         }
 
         public string GetName()
         {
-            return method.Identifier.ToString();
+            return MethodDeclaration.Identifier.ToString();
         }
 
         public string GetReturnType()
         {
-            return method.ReturnType.ToString();
+            return MethodDeclaration.ReturnType.ToString();
         }
     }
 }

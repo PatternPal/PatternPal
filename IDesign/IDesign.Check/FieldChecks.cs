@@ -1,12 +1,12 @@
-﻿using System.Linq;
-using IDesign.Models;
+﻿using IDesign.Models;
+using System.Linq;
 
 namespace IDesign.Checks
 {
     public static class FieldChecks
     {
         /// <summary>
-        ///     Return a boolean based on if the given field is an expected type
+        ///     Return a boolean based on if the given field is an expected type.
         /// </summary>
         /// <param name="fieldSyntax">The field witch it should check</param>
         /// <param name="type">The expected type</param>
@@ -18,7 +18,7 @@ namespace IDesign.Checks
 
 
         /// <summary>
-        ///     Return a boolean based on if the given field has an expected modifier
+        ///     Return a boolean based on if the given field has an expected modifier.
         /// </summary>
         /// <param name="field">The field witch it should check</param>
         /// <param name="modifier">The expected modifier</param>

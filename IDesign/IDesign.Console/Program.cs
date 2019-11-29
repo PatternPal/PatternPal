@@ -1,10 +1,10 @@
+using IDesign.Core;
+using IDesign.Recognizers.Abstractions;
+using NDesk.Options;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
-using IDesign.Recognizers.Abstractions;
-using IDesign.Core;
-using NDesk.Options;
+using System.Linq;
 
 namespace IDesign.ConsoleApp
 {
@@ -78,8 +78,12 @@ namespace IDesign.ConsoleApp
 
             RecognizerRunner recognizerRunner = new RecognizerRunner();
 
-            List<IResult> results = recognizerRunner.Run(selectedFiles, designPatterns);
+            var results = recognizerRunner.Run(selectedFiles, designPatterns);
 
+            
+            
+            foreach (var res in results) Console.WriteLine('\n' + res.ToString());
+            
             Console.ReadKey();
         }
 

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using IDesign.Recognizers.Abstractions;
+﻿using IDesign.Recognizers.Abstractions;
+using System.Collections.Generic;
 
 namespace IDesign.Recognizers.Output
 {
@@ -16,6 +16,18 @@ namespace IDesign.Recognizers.Output
         public IList<ISuggestion> GetSuggestions()
         {
             return Suggestions;
+        }
+
+        public override string ToString()
+        {
+            string res = "";
+            
+            res += Score;
+            
+            foreach(var suggestie in Suggestions)
+                res += ", " + suggestie.GetMessage();
+            
+            return res;
         }
     }
 }

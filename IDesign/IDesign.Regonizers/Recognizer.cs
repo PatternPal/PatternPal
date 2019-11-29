@@ -1,8 +1,8 @@
-﻿using System;
+﻿using IDesign.Recognizers.Abstractions;
+using IDesign.Recognizers.Output;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using IDesign.Recognizers.Abstractions;
-using IDesign.Recognizers.Output;
 
 namespace IDesign.Recognizers
 {

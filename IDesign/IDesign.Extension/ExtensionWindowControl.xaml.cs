@@ -1,18 +1,20 @@
-﻿using System;
+﻿using EnvDTE;
+using IDesign.Core;
+using IDesign.Recognizers.Abstractions;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using EnvDTE;
-using IDesign.Core;
-using IDesign.Recognizers.Abstractions;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
+using IDesign.Extension.ViewModels;
 using Task = System.Threading.Tasks.Task;
 using Thread = System.Threading.Thread;
 using Window = System.Windows.Window;
+using Microsoft.VisualStudio.ProjectSystem;
 
 namespace IDesign.Extension
 {
@@ -22,7 +24,6 @@ namespace IDesign.Extension
     public partial class ExtensionWindowControl : UserControl
     {
         public bool IsActiveDoc { get; set; }
-        public List<DesignPatternViewModel> DesignPatternViewModels { get; set; }
         public List<string> Paths { get; set; }
         public bool Loading { get; set; }
         public DTE Dte { get; private set; }
@@ -45,12 +46,40 @@ namespace IDesign.Extension
         /// </summary>
         private void AddViewModels()
         {
-            DesignPatternViewModels = new List<DesignPatternViewModel>();
+            var viewModels = new List<DesignPatternViewModel>();
 
-            foreach (DesignPattern pattern in RecognizerRunner.designPatterns)
+            foreach (var pattern in RecognizerRunner.designPatterns)
             {
-                DesignPatternViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern));
+                viewModels.Add(new DesignPatternViewModel(pattern.Name, pattern));
             }
+
+            SettingsControl.DesignPatterns = viewModels;
+        }
+
+        private void CreateResultViewModels(IEnumerable<RecognitionResult> results)
+        {
+            var viewModels = new List<ClassViewModel>();
+
+            foreach (var result in results)
+            {
+                var classViewModel = viewModels.FirstOrDefault(x => x.EntityNode == result.EntityNode);
+                if (classViewModel == null)
+                {
+                    classViewModel = new ClassViewModel(result.EntityNode);
+                    viewModels.Add(classViewModel);
+                }
+
+
+                var resultViewModel = new ResultViewModel(result);
+                classViewModel.Results.Add(resultViewModel);
+
+                foreach (var suggestion in result.Result.GetSuggestions())
+                {
+                    resultViewModel.Suggestions.Add(new SuggestionViewModel(suggestion));
+                }
+            }
+
+            ResultsView.ItemsSource = viewModels;
         }
 
         /// <summary>
@@ -66,8 +95,9 @@ namespace IDesign.Extension
         /// <summary>
         ///     Gets all paths in the solution.
         /// </summary>
+
         private void GetAllPaths()
-        {   
+        {
             Paths = new List<string>();
             FileManager manager = new FileManager();
             if (Dte.Solution.Count > 0)
@@ -76,7 +106,7 @@ namespace IDesign.Extension
 
         private void ChoosePath()
         {
-            if (IsActiveDoc)
+            if (SettingsControl.radio1.IsChecked != null && SettingsControl.radio1.IsChecked.Value)
                 GetCurrentPath();
             else
                 GetAllPaths();
@@ -94,11 +124,12 @@ namespace IDesign.Extension
         {
             ChoosePath();
 
-            if (Loading || DesignPatternViewModels.Count == 0 || Paths.Count == 0)
+            if (Loading || SettingsControl.DesignPatterns.Count == 0 || Paths.Count == 0)
                 return;
 
-            RecognizerRunner runner = new RecognizerRunner();
-            List<IResult> results = runner.Run(Paths, DesignPatternViewModels.Where(x => x.IsChecked).Select(x => x.Pattern).ToList());
+            var runner = new RecognizerRunner();
+            var results = runner.Run(Paths, SettingsControl.DesignPatterns.Where(x => x.IsChecked).Select(x => x.Pattern).ToList());
+            CreateResultViewModels(results);
 
             Loading = true;
             statusBar.Value = 0;
@@ -108,7 +139,7 @@ namespace IDesign.Extension
             {
                 for (var i = 0; i <= 100; i++)
                 {
-                    ((IProgress<int>) progress).Report(i);
+                    ((IProgress<int>)progress).Report(i);
                     Thread.Sleep(100);
                 }
             });
@@ -117,25 +148,5 @@ namespace IDesign.Extension
             Loading = false;
         }
 
-        /// <summary>
-        ///     Handles click on the analyse_button by displaying the settings window.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Settings_Button(object sender, RoutedEventArgs e)
-        {
-            var settingsWindow = new SettingsControl(DesignPatternViewModels, IsActiveDoc);
-
-            var window = new Window
-            {
-                Title = "Settings",
-                Content = settingsWindow,
-                SizeToContent = SizeToContent.WidthAndHeight
-            };
-            window.ShowDialog();
-
-            IsActiveDoc = (bool) settingsWindow.radio1.IsChecked;
-            DesignPatternViewModels = settingsWindow.DesignPatterns;
-        }
     }
 }
