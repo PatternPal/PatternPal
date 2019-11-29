@@ -9,7 +9,7 @@
              Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
              Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300"
+             d:DesignHeight="600" d:DesignWidth="300"
              Name="IDesignExtension">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -54,16 +54,55 @@
             <BitmapImage x:Key="settingImg" UriSource="Resources/settings.png" />
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
+    <Grid x:Name="Grid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="200" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="80" />
             <RowDefinition Height="1*" />
             <RowDefinition Height="20" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0">
-            <extension:SettingsControl x:Name="SettingsControl" HorizontalAlignment="Stretch"></extension:SettingsControl>
+        <ListBox Grid.Row="0" ItemsSource="{Binding}" Name="listBox">
+            <ListBox.ItemTemplate>
+                <HierarchicalDataTemplate>
+                    <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked, Mode=TwoWay}"/>
+                </HierarchicalDataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <StackPanel Grid.Row="1">
+            <RadioButton Name="radio1" GroupName="path" Content="Active Document" VerticalContentAlignment="Center" Height="20" />
+            <RadioButton Name="radio2" GroupName="path" Content="Whole Solution" VerticalContentAlignment="Center" Height="20" />
             <Button Content="Analyse" Height="20" Click="Analyse_Button" />
+            <TextBlock TextWrapping="Wrap" Text="Output" VerticalAlignment="Top" FontSize="15"></TextBlock>
         </StackPanel>
-        <ProgressBar Grid.Row="2" DockPanel.Dock="Bottom" Height="20" VerticalAlignment="Bottom" Minimum="0" Maximum="100" Name="statusBar" />
+        <TreeView Grid.Row="2" x:Name="ResultsView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <TreeView.Resources>
+                <HierarchicalDataTemplate DataType="{x:Type models:ClassViewModel}" ItemsSource="{Binding Results}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding ClassName}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+                        <TextBlock Text=" [" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
+                        <TextBlock Text="{Binding BestMatch.PatternName}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
+                        <TextBlock Text=" | " Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
+                        <TextBlock Text="{Binding BestMatch.Score}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
+                        <TextBlock Text="%" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
+                        <TextBlock Text="]" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type models:ResultViewModel}" ItemsSource="{Binding Suggestions}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding PatternName}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+                        <TextBlock Text=" (" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
+                        <TextBlock Text="{Binding Score}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
+                        <TextBlock Text="%)" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+                <DataTemplate DataType="{x:Type models:SuggestionViewModel}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding SuggestionText}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </TreeView.Resources>
+        </TreeView>
+        <ProgressBar Grid.Row="3" Height="20" VerticalAlignment="Bottom" Minimum="0" Maximum="100" Name="statusBar" />
+        <TextBlock Grid.Row="3" x:Name="ProgressStatusBlock" Height="20" HorizontalAlignment="Center" />
     </Grid>
 </UserControl>

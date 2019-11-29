@@ -24,6 +24,7 @@ namespace IDesign.Extension
     public partial class ExtensionWindowControl : UserControl
     {
         public bool IsActiveDoc { get; set; }
+        public List<DesignPatternViewModel> ViewModels { get; set; }
         public List<string> Paths { get; set; }
         public bool Loading { get; set; }
         public DTE Dte { get; private set; }
@@ -46,14 +47,15 @@ namespace IDesign.Extension
         /// </summary>
         private void AddViewModels()
         {
-            var viewModels = new List<DesignPatternViewModel>();
+            ViewModels = new List<DesignPatternViewModel>();
 
             foreach (var pattern in RecognizerRunner.designPatterns)
             {
-                viewModels.Add(new DesignPatternViewModel(pattern.Name, pattern));
+                ViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern));
             }
 
-            SettingsControl.DesignPatterns = viewModels;
+            listBox.DataContext = ViewModels;
+            Grid.RowDefinitions[0].Height = new GridLength(ViewModels.Count * 20);
         }
 
         private void CreateResultViewModels(IEnumerable<RecognitionResult> results)
@@ -78,8 +80,13 @@ namespace IDesign.Extension
                     resultViewModel.Suggestions.Add(new SuggestionViewModel(suggestion));
                 }
             }
+            //Here you signal the UI thread to execute the action:
+            this.Dispatcher?.BeginInvoke(new Action(() =>
+            {
+                // - Change your UI information here
+                ResultsView.ItemsSource = viewModels;
 
-            ResultsView.ItemsSource = viewModels;
+            }), null);
         }
 
         /// <summary>
@@ -106,7 +113,7 @@ namespace IDesign.Extension
 
         private void ChoosePath()
         {
-            if (SettingsControl.radio1.IsChecked != null && SettingsControl.radio1.IsChecked.Value)
+            if (radio1.IsChecked != null)
                 GetCurrentPath();
             else
                 GetAllPaths();
@@ -123,25 +130,26 @@ namespace IDesign.Extension
         private async void Analyse_Button(object sender, RoutedEventArgs e)
         {
             ChoosePath();
+            List<DesignPattern> SelectedPatterns = ViewModels.Where(x => x.IsChecked).Select(x => x.Pattern).ToList();
 
-            if (Loading || SettingsControl.DesignPatterns.Count == 0 || Paths.Count == 0)
+            if (Loading || Paths.Count == 0 || SelectedPatterns.Count == 0)
                 return;
 
             var runner = new RecognizerRunner();
-            var results = runner.Run(Paths, SettingsControl.DesignPatterns.Where(x => x.IsChecked).Select(x => x.Pattern).ToList());
-            CreateResultViewModels(results);
 
             Loading = true;
             statusBar.Value = 0;
-            var progress = new Progress<int>(value => statusBar.Value = value);
-
+            var progress = new Progress<RecognizerProgress>(value =>
+            {
+                statusBar.Value = value.CurrentPercentage;
+                ProgressStatusBlock.Text = value.Status;
+            });
+            IProgress<RecognizerProgress> iprogress = progress;
+            runner.OnProgressUpdate += (o, recognizerProgress) => iprogress.Report(recognizerProgress);
             await Task.Run(() =>
             {
-                for (var i = 0; i <= 100; i++)
-                {
-                    ((IProgress<int>)progress).Report(i);
-                    Thread.Sleep(100);
-                }
+                var results = runner.Run(Paths, SelectedPatterns);
+                CreateResultViewModels(results);
             });
 
             statusBar.Value = 0;
