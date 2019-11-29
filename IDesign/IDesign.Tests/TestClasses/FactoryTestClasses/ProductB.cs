@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IDesign.Tests.TestClasses.FactoryTestClasses
 {
-    class ProductB
+    public class ProductB :ProductA, IProduct
     {
     }
 }
