@@ -52,8 +52,4 @@
     </Compile>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="TestClasses\FactoryTestClasses\" />
-  </ItemGroup>
-
 </Project>
