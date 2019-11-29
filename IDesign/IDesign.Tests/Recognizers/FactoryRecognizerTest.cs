@@ -1,30 +1,33 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using IDesign.Core;
+using IDesign.Recognizers;
 using IDesign.Tests.Utils;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
-using System.Linq;
 
-namespace IDesign.Recognizers.Tests
+namespace IDesign.Tests.Recognizers
 {
-    public class SingletonRecognizerTest
+    public class FactoryRecognizerTest
     {
         [SetUp]
         public void Setup()
         {
         }
-
+        
         [Test]
-        [TestCase("SingleTonTestCase1.cs", 100)]
-        [TestCase("SingleTonTestCase2.cs", 42)]
-        [TestCase("SingleTonTestCase3.cs", 42)]
-        [TestCase("SingleTonTestCase4.cs", 100)]
-        [TestCase("SingleTonTestCase6.cs", 57)]
-        [TestCase("SingleTonTestCase7.cs", 57)]
-        public void SingletonRecognizer_Returns_Correct_Score(string filename, int score)
+        [TestCase("FactoryTestCase1.cs", 00)]
+        [TestCase("FactoryTestCase2.cs", 0)]
+        [TestCase("FactoryTestCase3.cs", 0)]
+        [TestCase("FactoryTestCase4.cs", 00)]
+        [TestCase("FactoryTestCase5.cs", 0)]
+        public void FactoryRecognizer_Returns_Correct_Score(string filename, int score)
         {
-            var singleton = new SingletonRecognizer();
-            string code = FileUtils.FileToString("SingletonTestClasses\\" + filename);
+            var factory = new FactoryRecognizer();
+            string code = FileUtils.FileToString("FactoryTestClasses\\" + filename);
 
 
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
@@ -46,7 +49,7 @@ namespace IDesign.Recognizers.Tests
                 testNode.DescendantNodes().OfType<ConstructorDeclarationSyntax>().ToList()
             };
 
-            var result = singleton.Recognize(entityNode);
+            var result = factory.Recognize(entityNode);
 
             Assert.AreEqual(score, result.GetScore());
         }

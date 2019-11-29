@@ -1,12 +1,14 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace IDesign.Models
+namespace IDesign.Recognizers
 {
-    public interface IField
+    public interface IMethod
     {
         string GetName();
-        TypeSyntax GetFieldType();
+        string GetReturnType();
+        BlockSyntax GetBody();
+
         SyntaxTokenList GetModifiers();
     }
 }

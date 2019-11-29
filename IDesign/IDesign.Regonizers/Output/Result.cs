@@ -17,5 +17,17 @@ namespace IDesign.Recognizers.Output
         {
             return Suggestions;
         }
+
+        public override string ToString()
+        {
+            string res = "";
+            
+            res += Score;
+            
+            foreach(var suggestie in Suggestions)
+                res += ", " + suggestie.GetMessage();
+            
+            return res;
+        }
     }
 }

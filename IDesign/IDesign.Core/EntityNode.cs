@@ -1,4 +1,4 @@
-﻿using IDesign.Models;
+﻿using IDesign.Recognizers;
 using IDesign.Recognizers.Abstractions;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -76,6 +76,11 @@ namespace IDesign.Core
         public IEnumerable<PropertyDeclarationSyntax> GetProperties()
         {
             return PropertyDeclarationSyntaxList;
+        }
+
+        public IEnumerable<IRelation> GetRelations()
+        {
+            return EntityNodeEdgesList;
         }
     }
 }

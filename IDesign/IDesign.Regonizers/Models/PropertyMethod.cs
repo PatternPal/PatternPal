@@ -1,16 +1,23 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace IDesign.Models
+namespace IDesign.Recognizers
 {
-    public class PropertyField : IField
+    public class PropertyMethod : IMethod
     {
-        public PropertyField(PropertyDeclarationSyntax property)
+        public PropertyMethod(PropertyDeclarationSyntax property, AccessorDeclarationSyntax accesor)
         {
             this.Property = property;
+            this.Accesor = accesor;
         }
 
         public PropertyDeclarationSyntax Property { get; set; }
+        public AccessorDeclarationSyntax Accesor { get; set; }
+
+        public BlockSyntax GetBody()
+        {
+            return Accesor.Body;
+        }
 
         public SyntaxTokenList GetModifiers()
         {
@@ -22,9 +29,9 @@ namespace IDesign.Models
             return Property.Identifier.ToString();
         }
 
-        public TypeSyntax GetFieldType()
+        public string GetReturnType()
         {
-            return Property.Type;
+            return Property.Type.ToString();
         }
     }
 }

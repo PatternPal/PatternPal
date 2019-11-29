@@ -1,8 +1,8 @@
-﻿using IDesign.Models;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace IDesign.Checks
+namespace IDesign.Recognizers
 {
     public static class MethodChecks
     {
@@ -64,6 +64,13 @@ namespace IDesign.Checks
         public static bool CheckReturnTypeSameAsCreation(this IMethod methodSyntax)
         {
             return methodSyntax.CheckCreationType(methodSyntax.GetReturnType());
+        }
+
+        //helper functions
+        public static IEnumerable<string> GetCreatedTypes(this IMethod methodSyntax)
+        {
+            var creations = methodSyntax.GetBody().DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
+            return creations.OfType<IdentifierNameSyntax>().Select(x => x.Identifier.ToString());
         }
     }
 }

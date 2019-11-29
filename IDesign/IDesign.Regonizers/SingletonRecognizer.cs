@@ -1,6 +1,4 @@
-﻿using IDesign.Checks;
-using IDesign.Models;
-using IDesign.Recognizers.Abstractions;
+﻿using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Output;
 using System.Collections.Generic;
 

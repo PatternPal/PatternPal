@@ -1,7 +1,6 @@
-﻿using IDesign.Models;
-using System.Linq;
+﻿using System.Linq;
 
-namespace IDesign.Checks
+namespace IDesign.Recognizers
 {
     public static class FieldChecks
     {
