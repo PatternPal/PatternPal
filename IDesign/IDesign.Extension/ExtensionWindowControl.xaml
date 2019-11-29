@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
+             xmlns:extension="clr-namespace:IDesign.Extension"
+             xmlns:models="clr-namespace:IDesign.Extension.ViewModels"
              Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
              Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
              mc:Ignorable="d"
@@ -11,32 +13,100 @@
              Name="IDesignExtension">
     <UserControl.Resources>
         <ResourceDictionary>
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+            </Style>
+            <Style TargetType="CheckBox">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+            </Style>
+            <Style TargetType="ListBox">
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowTabMouseOverBackgroundBeginKey}}"/>
+                <Setter Property="Background" Value="{DynamicResource {x:Static vsshell:VsColors.BrandedUITextKey}}"/>
+            </Style>
+            <Style TargetType="TreeView">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+                <Setter Property="Background" Value="{DynamicResource {x:Static vsshell:VsColors.BrandedUITextKey}}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowTabMouseOverBackgroundBeginKey}}"/>
+            </Style>
+            <Style TargetType="RadioButton">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+            </Style>
+            <Style TargetType="Button">
+                <Setter Property="Background" Value="{DynamicResource {x:Static vsshell:VsColors.BrandedUITextKey}}"/>
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowTabMouseOverBackgroundBeginKey}}" BorderThickness="1">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowTabMouseOverBackgroundBeginKey}}"/>
+                        <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowTabTextKey}}"/>
+
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
             <BitmapImage x:Key="settingImg" UriSource="Resources/settings.png" />
         </ResourceDictionary>
     </UserControl.Resources>
     <DockPanel>
 
         <DockPanel DockPanel.Dock="Top" Margin="5">
-            <Button DockPanel.Dock="Right" Margin="5,0,0,0" Height="20" BorderThickness="0" Background="Transparent"
-                    Click="Settings_Button">
-                <Image Source="{StaticResource settingImg}" />
-            </Button>
-            <Button DockPanel.Dock="Left" Content="Analyse" Height="20" Click="Analyse_Button" />
+            <extension:SettingsControl DockPanel.Dock="Top" x:Name="SettingsControl" HorizontalAlignment="Stretch"></extension:SettingsControl>
         </DockPanel>
 
-        <ProgressBar DockPanel.Dock="Bottom" Height="20" VerticalAlignment="Bottom" Minimum="0" Maximum="100"
+        <StackPanel Orientation="Vertical" DockPanel.Dock="Bottom">
+            <ProgressBar Height="8" VerticalAlignment="Bottom" Minimum="0" Maximum="100"
                      Name="statusBar" />
+            <TextBlock x:Name="ProgressStatusBlock" Padding="8" FontSize="9" Height="25" Grid.Row="1" Text="-"/>
+
+        </StackPanel>
         <DockPanel>
-            <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Text="Output" VerticalAlignment="Top" FontSize="15"
+            <Button DockPanel.Dock="Top" Content="Analyse" Height="20" Click="Analyse_Button" />
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Text="Output" VerticalAlignment="Top" FontSize="15"
                        Margin="5,0,0,0" />
-            <ListView Margin="5" Name="listView">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Score" DisplayMemberBinding="{Binding Score}" />
-                        <GridViewColumn Header="Suggestion" DisplayMemberBinding="{Binding Suggestion}" />
-                    </GridView>
-                </ListView.View>
-            </ListView>
+                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                <TreeView x:Name="ResultsView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5">
+                    <TreeView.ItemContainerStyle>
+                        <Style TargetType="{x:Type TreeViewItem}">
+                            <EventSetter Event="MouseDoubleClick"
+                                         Handler="EventSetter_OnHandler"/>
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+                    <TreeView.Resources>
+                        <HierarchicalDataTemplate DataType="{x:Type models:ClassViewModel}" ItemsSource="{Binding Results}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding ClassName}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+                                <TextBlock Text=" [" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
+                                <TextBlock Text="{Binding BestMatch.PatternName}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
+                                <TextBlock Text=" | " Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
+                                <TextBlock Text="{Binding BestMatch.Score}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
+                                <TextBlock Text="%" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
+                                <TextBlock Text="]" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type models:ResultViewModel}" ItemsSource="{Binding Suggestions}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding PatternName}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+                                <TextBlock Text=" (" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
+                                <TextBlock Text="{Binding Score}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
+                                <TextBlock Text="%)" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                        <DataTemplate DataType="{x:Type models:SuggestionViewModel}">
+                            <StackPanel Orientation="Horizontal" >
+                                <TextBlock Text="{Binding SuggestionText}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </TreeView.Resources>
+                </TreeView>
+            </DockPanel>
         </DockPanel>
     </DockPanel>
 </UserControl>

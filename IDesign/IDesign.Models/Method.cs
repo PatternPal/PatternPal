@@ -32,5 +32,15 @@ namespace IDesign.Models
         {
             return MethodDeclaration.ReturnType.ToString();
         }
+
+        public string GetSuggestionName()
+        {
+            return GetName() + "()";
+        }
+
+        public SyntaxNode GetSuggestionNode()
+        {
+            return MethodDeclaration;
+        }
     }
 }
