@@ -8,7 +8,7 @@ using IDesign.Recognizers.Output;
 
 namespace IDesign.Recognizers
 {
-    class FactoryRecognizer : Recognizer, IRecognizer
+   public class FactoryRecognizer : Recognizer, IRecognizer
     {
         public IResult Recognize(IEntityNode entityNode)
         {
