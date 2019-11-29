@@ -23,11 +23,10 @@ namespace IDesign.Core
         ///     Genarates a syntaxtree from a string
         /// </summary>
         /// <param name="file"></param>
-        public GenerateSyntaxTree(string file, Dictionary<TypeDeclarationSyntax, EntityNode> entityNodes)
+        public GenerateSyntaxTree(string content, string source, Dictionary<TypeDeclarationSyntax, EntityNode> entityNodes)
         {
-            File = file;
-            var tree = FileManager.MakeStringFromFile(file);
-            Tree = CSharpSyntaxTree.ParseText(tree);
+            File = source;
+            Tree = CSharpSyntaxTree.ParseText(content);
             Root = Tree.GetCompilationUnitRoot();
             GetUsingsOfFile();
             GetAllClassesOfFile(entityNodes);
