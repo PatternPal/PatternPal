@@ -14,7 +14,7 @@ namespace IDesign.Core
         public List<InterfaceDeclarationSyntax> InterfaceDeclarationSyntaxList = new List<InterfaceDeclarationSyntax>();
         public List<MethodDeclarationSyntax> MethodDeclarationSyntaxList;
         public List<PropertyDeclarationSyntax> PropertyDeclarationSyntaxList;
-        public string File;
+        public string File { get; set; }
 
         public List<UsingDirectiveSyntax> UsingDirectiveSyntaxList = new List<UsingDirectiveSyntax>();
 

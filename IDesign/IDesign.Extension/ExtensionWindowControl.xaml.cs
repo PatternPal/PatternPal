@@ -175,12 +175,7 @@ namespace IDesign.Extension
             statusBar.Value = 0;
             Loading = false;
         }
-
-        private void ResultsView_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            var s = sender;
-        }
-
+        
         private void EventSetter_OnHandler(object sender, MouseButtonEventArgs e)
         {
             var viewItem = sender as TreeViewItem;
