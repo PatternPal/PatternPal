@@ -1,5 +1,4 @@
 using IDesign.Core;
-using IDesign.Recognizers.Abstractions;
 using NDesk.Options;
 using System;
 using System.Collections.Generic;
@@ -76,14 +75,12 @@ namespace IDesign.ConsoleApp
 
             foreach (var pattern in selectedPatterns) Console.WriteLine(pattern.Name);
 
-            RecognizerRunner recognizerRunner = new RecognizerRunner();
+            var runner = new RecognizerRunner();
 
-            var results = recognizerRunner.Run(selectedFiles, designPatterns);
+            var results = runner.Run(selectedFiles, selectedPatterns);
 
-            
-            
-            foreach (var res in results) Console.WriteLine('\n' + res.ToString());
-            
+            PrintResults(results);
+
             Console.ReadKey();
         }
 
@@ -96,6 +93,46 @@ namespace IDesign.ConsoleApp
             Console.WriteLine("Usage: idesign [INPUT] [OPTIONS]");
             Console.WriteLine("Options:");
             options.WriteOptionDescriptions(Console.Out);
+        }
+
+
+        /// <summary>
+        /// Prints results of RecognizerRunner.Run
+        /// </summary>
+        /// <param name="results">A List of RecognitionResult</param>
+        private static void PrintResults(List<RecognitionResult> results)
+        {
+            for (int i = 0; i < results.Count; i++)
+            {
+                Console.Write($"\n{i}) {results[i].EntityNode.GetName()} | {results[i].Pattern.Name}: ");
+
+                PrintScore(results[i].Result.GetScore());
+
+                Console.ForegroundColor = ConsoleColor.Red;
+
+                foreach (var suggestion in results[i].Result.GetSuggestions())
+                    Console.WriteLine($"\t- {suggestion.GetMessage()}");
+
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+        }
+
+        /// <summary>
+        /// Prints the score with a color depending on the score
+        /// </summary>
+        /// <param name="score"></param>
+        private static void PrintScore(int score)
+        {
+            if (score <= 33)
+                Console.ForegroundColor = ConsoleColor.Red;
+            else if (score <= 66)
+                Console.ForegroundColor = ConsoleColor.Yellow;
+            else
+                Console.ForegroundColor = ConsoleColor.Green;
+
+            Console.WriteLine(score);
+
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 }
