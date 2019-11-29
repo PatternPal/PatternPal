@@ -60,8 +60,12 @@
             <extension:SettingsControl DockPanel.Dock="Top" x:Name="SettingsControl" HorizontalAlignment="Stretch"></extension:SettingsControl>
         </DockPanel>
 
-        <ProgressBar DockPanel.Dock="Bottom" Height="20" VerticalAlignment="Bottom" Minimum="0" Maximum="100"
+        <StackPanel Orientation="Vertical" DockPanel.Dock="Bottom">
+            <ProgressBar Height="8" VerticalAlignment="Bottom" Minimum="0" Maximum="100"
                      Name="statusBar" />
+            <TextBlock x:Name="ProgressStatusBlock" Padding="8" FontSize="9" Height="25" Grid.Row="1" Text="-"/>
+
+        </StackPanel>
         <DockPanel>
             <Button DockPanel.Dock="Top" Content="Analyse" Height="20" Click="Analyse_Button" />
             <DockPanel>

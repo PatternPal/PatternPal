@@ -77,8 +77,13 @@ namespace IDesign.Extension
                     resultViewModel.Suggestions.Add(new SuggestionViewModel(suggestion));
                 }
             }
+            //Here you signal the UI thread to execute the action:
+            this.Dispatcher?.BeginInvoke(new Action(() =>
+            {
+                // - Change your UI information here
+                ResultsView.ItemsSource = viewModels;
 
-            ResultsView.ItemsSource = viewModels;
+            }), null);
         }
 
         /// <summary>
@@ -127,19 +132,19 @@ namespace IDesign.Extension
                 return;
 
             var runner = new RecognizerRunner();
-            var results = runner.Run(Paths, SettingsControl.DesignPatterns.Where(x => x.IsChecked).Select(x => x.Pattern).ToList());
-            CreateResultViewModels(results);
             Loading = true;
             statusBar.Value = 0;
-            var progress = new Progress<int>(value => statusBar.Value = value);
-
+            var progress = new Progress<RecognizerProgress>(value =>
+            {
+                statusBar.Value = value.CurrentPercentage;
+                ProgressStatusBlock.Text = value.Status;
+            });
+            IProgress<RecognizerProgress> iprogress = progress;
+            runner.OnProgressUpdate += (o, recognizerProgress) => iprogress.Report(recognizerProgress);
             await Task.Run(() =>
             {
-                for (var i = 0; i <= 100; i++)
-                {
-                    ((IProgress<int>)progress).Report(i);
-                    Thread.Sleep(100);
-                }
+                var results = runner.Run(Paths, SettingsControl.DesignPatterns.Where(x => x.IsChecked).Select(x => x.Pattern).ToList());
+                CreateResultViewModels(results);
             });
 
             statusBar.Value = 0;
