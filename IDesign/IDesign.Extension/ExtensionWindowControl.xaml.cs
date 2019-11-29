@@ -10,7 +10,12 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using IDesign.Extension.ViewModels;
+using Microsoft.CodeAnalysis;
+using Microsoft.VisualStudio.ComponentModelHost;
+using Microsoft.VisualStudio.LanguageServices;
+using Microsoft.VisualStudio.TextManager.Interop;
 using Task = System.Threading.Tasks.Task;
 using Thread = System.Threading.Thread;
 using Window = System.Windows.Window;
@@ -74,7 +79,7 @@ namespace IDesign.Extension
 
                 foreach (var suggestion in result.Result.GetSuggestions())
                 {
-                    resultViewModel.Suggestions.Add(new SuggestionViewModel(suggestion));
+                    resultViewModel.Suggestions.Add(new SuggestionViewModel(suggestion, result.EntityNode));
                 }
             }
             //Here you signal the UI thread to execute the action:
@@ -116,6 +121,26 @@ namespace IDesign.Extension
                 GetAllPaths();
         }
 
+        private void selectNodeInEditor(SyntaxNode n, string file)
+        {
+            try
+            {
+                var cm = (IComponentModel) Package.GetGlobalService(typeof(SComponentModel));
+                var tm = (IVsTextManager) Package.GetGlobalService(typeof(SVsTextManager));
+                var ws = (Workspace) cm.GetService<VisualStudioWorkspace>();
+                var did = ws.CurrentSolution.GetDocumentIdsWithFilePath(file);
+                ws.OpenDocument(did.FirstOrDefault());
+                tm.GetActiveView(1, null, out var av);
+                var sp = n.GetLocation().GetMappedLineSpan().StartLinePosition;
+                var ep = n.GetLocation().GetMappedLineSpan().EndLinePosition;
+                av.SetSelection(sp.Line, sp.Character, ep.Line, ep.Character);
+            }
+            catch
+            {
+                return;
+            }
+        }
+
         /// <summary>
         ///     Handles click on the analyse_button by displaying the tool window.
         /// </summary>
@@ -151,5 +176,19 @@ namespace IDesign.Extension
             Loading = false;
         }
 
+        private void ResultsView_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var s = sender;
+        }
+
+        private void EventSetter_OnHandler(object sender, MouseButtonEventArgs e)
+        {
+            var viewItem = sender as TreeViewItem;
+            if (viewItem == null) return;
+            var viewModel = viewItem.DataContext as SuggestionViewModel;
+            if (viewModel == null) return;
+
+            selectNodeInEditor(viewModel.Suggestion.GetSyntaxNode(), viewModel.Node.GetSourceFile());
+        }
     }
 }

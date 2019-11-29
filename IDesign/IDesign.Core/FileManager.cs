@@ -13,7 +13,7 @@ namespace IDesign.Core
         /// <returns>
         ///     Returns a string of the content of a file
         /// </returns>
-        public string MakeStringFromFile(string filePath)
+        public static string MakeStringFromFile(string filePath)
         {
             if (!File.Exists(filePath)) return "Path does not contains file!";
             return File.ReadAllText(filePath);

@@ -72,7 +72,13 @@
                 <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Text="Output" VerticalAlignment="Top" FontSize="15"
                        Margin="5,0,0,0" />
                 <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-                <TreeView x:Name="ResultsView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5">
+                <TreeView x:Name="ResultsView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5" MouseDoubleClick="ResultsView_OnMouseDoubleClick">
+                    <TreeView.ItemContainerStyle>
+                        <Style TargetType="{x:Type TreeViewItem}">
+                            <EventSetter Event="MouseDoubleClick"
+                                         Handler="EventSetter_OnHandler"/>
+                        </Style>
+                    </TreeView.ItemContainerStyle>
                     <TreeView.Resources>
                         <HierarchicalDataTemplate DataType="{x:Type models:ClassViewModel}" ItemsSource="{Binding Results}">
                             <StackPanel Orientation="Horizontal">
@@ -94,7 +100,7 @@
                             </StackPanel>
                         </HierarchicalDataTemplate>
                         <DataTemplate DataType="{x:Type models:SuggestionViewModel}">
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal" >
                                 <TextBlock Text="{Binding SuggestionText}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
                             </StackPanel>
                         </DataTemplate>
