@@ -54,7 +54,7 @@
                                     <Setter TargetName="CheckMark" Property="Visibility" Value="Collapsed" />
                                 </Trigger>
                                 <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter TargetName="Border" Property="BorderBrush" Value="AliceBlue" />
+                                    <Setter TargetName="Border" Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -79,9 +79,13 @@
                                              Height="16"
                                              Margin=" 4 4 0 0"
                                              Stroke="{TemplateBinding BorderBrush}"
-                                             StrokeThickness="1" Grid.RowSpan="2"/>
+                                             StrokeThickness="1" Grid.RowSpan="2">
+                                            <Ellipse.Effect>
+                                                <DropShadowEffect BlurRadius="5" ShadowDepth="2" />
+                                            </Ellipse.Effect>
+                                        </Ellipse>
                                         <Ellipse x:Name="CheckMark"
-                                            Margin="7 8 3 3"
+                                            Margin="7 7 3 3"
                                             Width="8"
                                             Height="8"
                                             Fill="{TemplateBinding BorderBrush}"
@@ -96,6 +100,9 @@
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsChecked" Value="false">
                                     <Setter TargetName="CheckMark" Property="Visibility" Value="Collapsed" />
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter TargetName="Border" Property="Stroke" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -158,55 +165,97 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     Margin="1,1,1,1"
-                                    Data="M 0 4 L 8 4 L 4 8 Z"
-                                    Visibility="Hidden" Fill="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+                                    Data="M 4 0 L 8 4 L 4 8 Z"
+                                    Visibility="Hidden" Fill="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}">
+                                    <Path.LayoutTransform>
+                                        <RotateTransform Angle="45"></RotateTransform>
+                                    </Path.LayoutTransform>
+                                </Path>
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
             </Style>
+            <Style x:Key="TreeViewItemFocusVisual">
+                <Setter Property="Control.Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Border>
+                                <Rectangle Margin="0,0,0,0"
+                 StrokeThickness="5"
+                 Stroke="Black"
+                 StrokeDashArray="1 2"
+                 Opacity="0"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
             <Style TargetType="TreeViewItem">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="HorizontalContentAlignment"  Value="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="VerticalContentAlignment" Value="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="Padding"  Value="1,0,0,0"/>
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+                <Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type TreeViewItem}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition MinWidth="19" Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <!-- created ItemRowGrid to contain both togglebutton and border -->
-                                <Grid x:Name="ItemRowGrid" Grid.ColumnSpan="3" Margin="1.5,0,0,0">
-                                    <ToggleButton x:Name="Expander" ClickMode="Press" IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" Style="{StaticResource ExpandCollapseToggleStyle}" HorizontalAlignment="Left" d:LayoutOverrides="Width, LeftMargin, RightMargin"/>
-                                    <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.Column="0" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true" Margin="17.5,0,-17.5,0">
-                                        <ContentPresenter x:Name="PART_Header" ContentSource="Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                                    </Border>
-                                </Grid>
-                                <ItemsPresenter x:Name="ItemsHost" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="1"/>
-                            </Grid>
+                            <ControlTemplate.Resources>
+                                <extension:LeftMarginMultiplierConverter Length="19" x:Key="lengthConverter" />
+                            </ControlTemplate.Resources>
+                            <StackPanel>
+                                <Border Name="Bd"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        Padding="{TemplateBinding Padding}">
+                                    <Grid Margin="{Binding Converter={StaticResource lengthConverter}, RelativeSource={RelativeSource TemplatedParent}}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="19" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <ToggleButton x:Name="Expander"
+                                                    Style="{StaticResource ExpandCollapseToggleStyle}"
+                                                    IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
+                                                    ClickMode="Press"/>
+                                        <ContentPresenter x:Name="PART_Header" Grid.Column="1" ContentSource="Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                                    </Grid>
+                                </Border>
+                                <ItemsPresenter x:Name="ItemsHost" />
+                            </StackPanel>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsExpanded" Value="false">
-                                    <Setter Property="Visibility" TargetName="ItemsHost" Value="Collapsed"/>
+                                    <Setter TargetName="ItemsHost" Property="Visibility" Value="Collapsed"/>
                                 </Trigger>
                                 <Trigger Property="HasItems" Value="false">
-                                    <Setter Property="Visibility" TargetName="Expander" Value="Hidden"/>
+                                    <Setter TargetName="Expander" Property="Visibility" Value="Hidden"/>
                                 </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="HasHeader" Value="false"/>
+                                        <Condition Property="Width" Value="Auto"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter TargetName="PART_Header" Property="MinWidth" Value="75"/>
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="HasHeader" Value="false"/>
+                                        <Condition Property="Height" Value="Auto"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter TargetName="PART_Header" Property="MinHeight" Value="19"/>
+                                </MultiTrigger>
                                 <Trigger Property="IsSelected" Value="true">
+                                    <Setter TargetName="Bd"  Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
                                     <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
-                                    <!-- setting highlight target to created ItemRowGrid instead of border -->
-                                    <Setter Property="Background" TargetName="ItemRowGrid" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
                                 </Trigger>
                                 <MultiTrigger>
                                     <MultiTrigger.Conditions>
                                         <Condition Property="IsSelected" Value="true"/>
                                         <Condition Property="IsSelectionActive" Value="false"/>
                                     </MultiTrigger.Conditions>
-                                    <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
-                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}}"/>
+                                    <Setter TargetName="Bd" Property="Background" Value="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowBorderKey}}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
                                 </MultiTrigger>
                                 <Trigger Property="IsEnabled" Value="false">
                                     <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
@@ -271,7 +320,6 @@
             <RadioButton Name="radio1" GroupName="path" Content="Active Document" VerticalContentAlignment="Center" Height="25" IsChecked="True" />
             <RadioButton Name="radio2" GroupName="path" Content="Whole Project" VerticalContentAlignment="Center" Height="25" />
         </StackPanel>
-<<<<<<< HEAD
         <Border x:Name="ButtonBorder" Grid.Row="3" Background="Transparent" BorderThickness="0 1" Style="{StaticResource ButtonBorder}">
             <Grid>
                 <Button Content="Analyse" Height="30" Click="Analyse_Button" Margin="5 0" />
@@ -283,28 +331,31 @@
                 <HierarchicalDataTemplate DataType="{x:Type models:ClassViewModel}" ItemsSource="{Binding Results}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="Resources/clogo.png" Width="20" Height="20"/>
-                        <TextBlock Text="{Binding ClassName}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
-                        <TextBlock Text=" [" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
-                        <TextBlock Text="{Binding BestMatch.PatternName}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
-                        <TextBlock Text=" | " Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
-                        <TextBlock Text="{Binding BestMatch.Score}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
-                        <TextBlock Text="%" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
-                        <TextBlock Text="]" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
+                        <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
+                            <TextBlock Text="{Binding ClassName}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+                            <TextBlock Text=" [" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
+                            <TextBlock Text="{Binding BestMatch.PatternName}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
+                            <TextBlock Text=" | " Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
+                            <TextBlock Text="{Binding BestMatch.Score}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
+                            <TextBlock Text="%]" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
+                        </StackPanel>
                     </StackPanel>
                 </HierarchicalDataTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type models:ResultViewModel}" ItemsSource="{Binding Suggestions}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="Resources/logo.png" Width="20" Height="20"/>
-                        <TextBlock Text="{Binding PatternName}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
-                        <TextBlock Text=" (" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
-                        <TextBlock Text="{Binding Score}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
-                        <TextBlock Text="%)" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
+                        <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
+                            <TextBlock Text="{Binding PatternName}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+                            <TextBlock Text=" (" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
+                            <TextBlock Text="{Binding Score}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
+                            <TextBlock Text="%)" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
+                        </StackPanel>
                     </StackPanel>
                 </HierarchicalDataTemplate>
                 <DataTemplate DataType="{x:Type models:SuggestionViewModel}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="Resources/idealogo.png" Width="20" Height="20"/>
-                        <TextBlock Text="{Binding SuggestionText}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+                        <TextBlock Margin="0 2 0 0" Text="{Binding SuggestionText}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
                     </StackPanel>
                 </DataTemplate>
             </TreeView.Resources>
@@ -312,49 +363,4 @@
         <ProgressBar Grid.Row="6" Height="20" VerticalAlignment="Bottom" Minimum="0" Maximum="100" Name="statusBar" />
         <TextBlock Grid.Row="6" x:Name="ProgressStatusBlock" Height="20" HorizontalAlignment="Center" FontWeight="Bold" />
     </Grid>
-=======
-        <DockPanel>
-            <Button DockPanel.Dock="Top" Content="Analyse" Height="20" Click="Analyse_Button" />
-            <DockPanel>
-                <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Text="Output" VerticalAlignment="Top" FontSize="15"
-                       Margin="5,0,0,0" />
-                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-                <TreeView x:Name="ResultsView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5">
-                    <TreeView.ItemContainerStyle>
-                        <Style TargetType="{x:Type TreeViewItem}">
-                            <EventSetter Event="MouseDoubleClick"
-                                         Handler="EventSetter_OnHandler"/>
-                        </Style>
-                    </TreeView.ItemContainerStyle>
-                    <TreeView.Resources>
-                        <HierarchicalDataTemplate DataType="{x:Type models:ClassViewModel}" ItemsSource="{Binding Results}">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding ClassName}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
-                                <TextBlock Text=" [" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
-                                <TextBlock Text="{Binding BestMatch.PatternName}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
-                                <TextBlock Text=" | " Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
-                                <TextBlock Text="{Binding BestMatch.Score}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
-                                <TextBlock Text="%" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
-                                <TextBlock Text="]" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
-                            </StackPanel>
-                        </HierarchicalDataTemplate>
-                        <HierarchicalDataTemplate DataType="{x:Type models:ResultViewModel}" ItemsSource="{Binding Suggestions}">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding PatternName}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
-                                <TextBlock Text=" (" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
-                                <TextBlock Text="{Binding Score}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
-                                <TextBlock Text="%)" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
-                            </StackPanel>
-                        </HierarchicalDataTemplate>
-                        <DataTemplate DataType="{x:Type models:SuggestionViewModel}">
-                            <StackPanel Orientation="Horizontal" >
-                                <TextBlock Text="{Binding SuggestionText}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </TreeView.Resources>
-                </TreeView>
-            </DockPanel>
-        </DockPanel>
-    </DockPanel>
->>>>>>> 254f9c1c15d714fa2332752bb1f2f0e211d183cf
 </UserControl>

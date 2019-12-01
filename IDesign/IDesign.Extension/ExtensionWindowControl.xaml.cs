@@ -57,21 +57,6 @@ namespace IDesign.Extension
             foreach (var pattern in RecognizerRunner.designPatterns)
                 ViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern));
 
-            foreach(var pattern in RecognizerRunner.designPatterns)
-                ViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern));
-
-            foreach (var pattern in RecognizerRunner.designPatterns)
-                ViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern));
-
-            foreach (var pattern in RecognizerRunner.designPatterns)
-                ViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern));
-
-            foreach (var pattern in RecognizerRunner.designPatterns)
-                ViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern));
-
-            foreach (var pattern in RecognizerRunner.designPatterns)
-                ViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern));
-
             listBox.DataContext = ViewModels;
 
             var height = ViewModels.Count * 30;
@@ -99,13 +84,7 @@ namespace IDesign.Extension
                 classViewModel.Results.Add(resultViewModel);
 
                 foreach (var suggestion in result.Result.GetSuggestions())
-<<<<<<< HEAD
-                    resultViewModel.Suggestions.Add(new SuggestionViewModel(suggestion));
-=======
-                {
                     resultViewModel.Suggestions.Add(new SuggestionViewModel(suggestion, result.EntityNode));
-                }
->>>>>>> 254f9c1c15d714fa2332752bb1f2f0e211d183cf
             }
             //Here you signal the UI thread to execute the action:
             this.Dispatcher?.BeginInvoke(new Action(() =>
@@ -140,7 +119,7 @@ namespace IDesign.Extension
 
         private void ChoosePath()
         {
-            if (radio1.IsChecked != null)
+            if ((bool) radio1.IsChecked)
                 GetCurrentPath();
             else
                 GetAllPaths();
@@ -183,7 +162,6 @@ namespace IDesign.Extension
                 return;
 
             var runner = new RecognizerRunner();
-
             Loading = true;
             statusBar.Value = 0;
             var progress = new Progress<RecognizerProgress>(value =>
@@ -191,6 +169,7 @@ namespace IDesign.Extension
                 statusBar.Value = value.CurrentPercentage;
                 ProgressStatusBlock.Text = value.Status;
             });
+
             IProgress<RecognizerProgress> iprogress = progress;
             runner.OnProgressUpdate += (o, recognizerProgress) => iprogress.Report(recognizerProgress);
             await Task.Run(() =>
@@ -202,18 +181,16 @@ namespace IDesign.Extension
             statusBar.Value = 0;
             Loading = false;
         }
-<<<<<<< HEAD
-=======
         
         private void EventSetter_OnHandler(object sender, MouseButtonEventArgs e)
         {
             var viewItem = sender as TreeViewItem;
             if (viewItem == null) return;
+
             var viewModel = viewItem.DataContext as SuggestionViewModel;
             if (viewModel == null) return;
 
             selectNodeInEditor(viewModel.Suggestion.GetSyntaxNode(), viewModel.Node.GetSourceFile());
         }
->>>>>>> 254f9c1c15d714fa2332752bb1f2f0e211d183cf
     }
 }
