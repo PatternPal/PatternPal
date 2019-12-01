@@ -36,12 +36,14 @@ namespace IDesign.Extension.ViewModels
 
     public class SuggestionViewModel
     {
-        public SuggestionViewModel(ISuggestion suggestion)
+        public SuggestionViewModel(ISuggestion suggestion, IEntityNode node)
         {
             Suggestion = suggestion;
+            Node = node;
         }
 
         public ISuggestion Suggestion { get; set; }
+        public IEntityNode Node { get; set; }
         public string SuggestionText => Suggestion.GetMessage();
     }
 }

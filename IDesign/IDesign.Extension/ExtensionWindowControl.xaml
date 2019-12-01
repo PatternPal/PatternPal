@@ -271,6 +271,7 @@
             <RadioButton Name="radio1" GroupName="path" Content="Active Document" VerticalContentAlignment="Center" Height="25" IsChecked="True" />
             <RadioButton Name="radio2" GroupName="path" Content="Whole Project" VerticalContentAlignment="Center" Height="25" />
         </StackPanel>
+<<<<<<< HEAD
         <Border x:Name="ButtonBorder" Grid.Row="3" Background="Transparent" BorderThickness="0 1" Style="{StaticResource ButtonBorder}">
             <Grid>
                 <Button Content="Analyse" Height="30" Click="Analyse_Button" Margin="5 0" />
@@ -311,4 +312,49 @@
         <ProgressBar Grid.Row="6" Height="20" VerticalAlignment="Bottom" Minimum="0" Maximum="100" Name="statusBar" />
         <TextBlock Grid.Row="6" x:Name="ProgressStatusBlock" Height="20" HorizontalAlignment="Center" FontWeight="Bold" />
     </Grid>
+=======
+        <DockPanel>
+            <Button DockPanel.Dock="Top" Content="Analyse" Height="20" Click="Analyse_Button" />
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Text="Output" VerticalAlignment="Top" FontSize="15"
+                       Margin="5,0,0,0" />
+                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                <TreeView x:Name="ResultsView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5">
+                    <TreeView.ItemContainerStyle>
+                        <Style TargetType="{x:Type TreeViewItem}">
+                            <EventSetter Event="MouseDoubleClick"
+                                         Handler="EventSetter_OnHandler"/>
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+                    <TreeView.Resources>
+                        <HierarchicalDataTemplate DataType="{x:Type models:ClassViewModel}" ItemsSource="{Binding Results}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding ClassName}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+                                <TextBlock Text=" [" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
+                                <TextBlock Text="{Binding BestMatch.PatternName}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
+                                <TextBlock Text=" | " Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
+                                <TextBlock Text="{Binding BestMatch.Score}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
+                                <TextBlock Text="%" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
+                                <TextBlock Text="]" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type models:ResultViewModel}" ItemsSource="{Binding Suggestions}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding PatternName}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+                                <TextBlock Text=" (" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
+                                <TextBlock Text="{Binding Score}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
+                                <TextBlock Text="%)" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                        <DataTemplate DataType="{x:Type models:SuggestionViewModel}">
+                            <StackPanel Orientation="Horizontal" >
+                                <TextBlock Text="{Binding SuggestionText}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </TreeView.Resources>
+                </TreeView>
+            </DockPanel>
+        </DockPanel>
+    </DockPanel>
+>>>>>>> 254f9c1c15d714fa2332752bb1f2f0e211d183cf
 </UserControl>

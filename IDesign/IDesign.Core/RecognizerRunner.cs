@@ -8,7 +8,6 @@ namespace IDesign.Core
     public class RecognizerRunner
     {
         public event EventHandler<RecognizerProgress> OnProgressUpdate;
-        private readonly FileManager readFiles = new FileManager();
         public static List<DesignPattern> designPatterns = new List<DesignPattern>
         {
             new DesignPattern("Singleton", new SingletonRecognizer())
@@ -30,8 +29,8 @@ namespace IDesign.Core
             //loop over all files
             for (var i = 0; i < files.Count; i++)
             {
-                var tree = readFiles.MakeStringFromFile(files[i]);
-                var generateSyntaxTree = new GenerateSyntaxTree(tree, EntityNodes);
+                var tree = FileManager.MakeStringFromFile(files[i]);
+                var generateSyntaxTree = new GenerateSyntaxTree(tree, files[i], EntityNodes);
 
                 ProgressUpdate((int)(i / (float)files.Count * 50f), "Reading file: " + files[i]);
             }
