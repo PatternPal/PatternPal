@@ -17,19 +17,207 @@
                 <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
             </Style>
             <Style TargetType="CheckBox">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="CheckBox">
+                            <BulletDecorator Background="Transparent">
+                                <BulletDecorator.Bullet>
+                                    <Border x:Name="Border"
+                                            Width="16"
+                                            Height="16"
+                                            Background="Transparent"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="1">
+                                        <Border.Effect>
+                                            <DropShadowEffect BlurRadius="5" ShadowDepth="2" />
+                                        </Border.Effect>
+                                        <Path x:Name="CheckMark"
+                                            Width="10"
+                                            Height="10"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Data="M 30,100 L 80,140 L 160,60"
+                                            Stretch="Fill"
+                                            Stroke="{TemplateBinding BorderBrush}"
+                                            StrokeThickness="2" />
+                                    </Border>
+                                </BulletDecorator.Bullet>
+                                <ContentPresenter Margin="5 0"
+                                                  HorizontalAlignment="Left"
+                                                  VerticalAlignment="Center"
+                                                  RecognizesAccessKey="True" />
+                            </BulletDecorator>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="false">
+                                    <Setter TargetName="CheckMark" Property="Visibility" Value="Collapsed" />
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter TargetName="Border" Property="BorderBrush" Value="AliceBlue" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="RadioButton">
                 <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="RadioButton">
+                            <BulletDecorator Background="Transparent">
+                                <BulletDecorator.Bullet>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="13*"/>
+                                            <RowDefinition Height="11*"/>
+                                        </Grid.RowDefinitions>
+                                        <Ellipse x:Name="Border"
+                                             Width="16"
+                                             Height="16"
+                                             Margin=" 4 4 0 0"
+                                             Stroke="{TemplateBinding BorderBrush}"
+                                             StrokeThickness="1" Grid.RowSpan="2"/>
+                                        <Ellipse x:Name="CheckMark"
+                                            Margin="7 8 3 3"
+                                            Width="8"
+                                            Height="8"
+                                            Fill="{TemplateBinding BorderBrush}"
+                                            StrokeThickness="2" Grid.RowSpan="2" />
+                                    </Grid>
+                                </BulletDecorator.Bullet>
+                                <ContentPresenter Margin="5 0"
+                                                  HorizontalAlignment="Left"
+                                                  VerticalAlignment="Center"
+                                                  RecognizesAccessKey="True" />
+                            </BulletDecorator>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="false">
+                                    <Setter TargetName="CheckMark" Property="Visibility" Value="Collapsed" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
             <Style TargetType="ListBox">
                 <Setter Property="BorderBrush" Value="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowTabMouseOverBackgroundBeginKey}}"/>
                 <Setter Property="Background" Value="{DynamicResource {x:Static vsshell:VsColors.BrandedUITextKey}}"/>
+            </Style>
+            <Style TargetType="ListBoxItem">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListBoxItem">
+                            <ContentPresenter />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
             <Style TargetType="TreeView">
                 <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
                 <Setter Property="Background" Value="{DynamicResource {x:Static vsshell:VsColors.BrandedUITextKey}}"/>
                 <Setter Property="BorderBrush" Value="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowTabMouseOverBackgroundBeginKey}}"/>
             </Style>
-            <Style TargetType="RadioButton">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+            <Style x:Key="ExpandCollapseToggleStyle" TargetType="ToggleButton">
+                <Setter Property="Focusable" Value="False" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ToggleButton">
+                            <Grid Width="15" Height="13" Background="Transparent">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CheckStates">
+                                        <VisualState x:Name="Checked">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
+                                                 Storyboard.TargetName="Collapsed">
+                                                    <DiscreteObjectKeyFrame KeyTime="0"
+                                            Value="{x:Static Visibility.Hidden}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
+                                                 Storyboard.TargetName="Expanded">
+                                                    <DiscreteObjectKeyFrame KeyTime="0"
+                                            Value="{x:Static Visibility.Visible}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Unchecked" />
+                                        <VisualState x:Name="Indeterminate" />
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <Path x:Name="Collapsed"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Margin="1,1,1,1"
+                                    Data="M 4 0 L 8 4 L 4 8 Z" 
+                                    StrokeThickness="1" 
+                                    Stroke="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+                                <Path x:Name="Expanded"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Margin="1,1,1,1"
+                                    Data="M 0 4 L 8 4 L 4 8 Z"
+                                    Visibility="Hidden" Fill="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="TreeViewItem">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition MinWidth="19" Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <!-- created ItemRowGrid to contain both togglebutton and border -->
+                                <Grid x:Name="ItemRowGrid" Grid.ColumnSpan="3" Margin="1.5,0,0,0">
+                                    <ToggleButton x:Name="Expander" ClickMode="Press" IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" Style="{StaticResource ExpandCollapseToggleStyle}" HorizontalAlignment="Left" d:LayoutOverrides="Width, LeftMargin, RightMargin"/>
+                                    <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.Column="0" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true" Margin="17.5,0,-17.5,0">
+                                        <ContentPresenter x:Name="PART_Header" ContentSource="Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                    </Border>
+                                </Grid>
+                                <ItemsPresenter x:Name="ItemsHost" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="1"/>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsExpanded" Value="false">
+                                    <Setter Property="Visibility" TargetName="ItemsHost" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="HasItems" Value="false">
+                                    <Setter Property="Visibility" TargetName="Expander" Value="Hidden"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="true">
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                                    <!-- setting highlight target to created ItemRowGrid instead of border -->
+                                    <Setter Property="Background" TargetName="ItemRowGrid" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="true"/>
+                                        <Condition Property="IsSelectionActive" Value="false"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}}"/>
+                                </MultiTrigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="ButtonBorder" TargetType="Border">
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowBorderKey}}"/>
             </Style>
             <Style TargetType="Button">
                 <Setter Property="Background" Value="{DynamicResource {x:Static vsshell:VsColors.BrandedUITextKey}}"/>
@@ -47,37 +235,53 @@
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Background" Value="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowTabMouseOverBackgroundBeginKey}}"/>
                         <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowTabTextKey}}"/>
-
                     </Trigger>
                 </Style.Triggers>
+            </Style>
+            <Style TargetType="ProgressBar">
+                <Setter Property="Background" Value="{DynamicResource {x:Static vsshell:VsColors.BrandedUITextKey}}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowBorderKey}}"/>
+                <Setter Property="BorderThickness" Value="0"/>
             </Style>
             <BitmapImage x:Key="settingImg" UriSource="Resources/settings.png" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid x:Name="Grid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="20" />
             <RowDefinition Height="80" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="30" />
             <RowDefinition Height="1*" />
             <RowDefinition Height="20" />
         </Grid.RowDefinitions>
-        <ListBox Grid.Row="0" ItemsSource="{Binding}" Name="listBox">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Image Source="Resources/logo.png" HorizontalAlignment="Center" Height="80" Grid.Row="0" VerticalAlignment="Top" />
+            <TextBlock Text="IDesign" VerticalAlignment="Center" FontSize="50"></TextBlock>
+        </StackPanel>
+        <ListBox Grid.Row="1" ItemsSource="{Binding}" Name="listBox" BorderThickness="0 1">
             <ListBox.ItemTemplate>
                 <HierarchicalDataTemplate>
-                    <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked, Mode=TwoWay}"/>
+                    <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked, Mode=TwoWay}" Width="Auto" Margin="3" />
                 </HierarchicalDataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <StackPanel Grid.Row="1">
-            <RadioButton Name="radio1" GroupName="path" Content="Active Document" VerticalContentAlignment="Center" Height="20" />
-            <RadioButton Name="radio2" GroupName="path" Content="Whole Solution" VerticalContentAlignment="Center" Height="20" />
-            <Button Content="Analyse" Height="20" Click="Analyse_Button" />
-            <TextBlock TextWrapping="Wrap" Text="Output" VerticalAlignment="Top" FontSize="15"></TextBlock>
+        <StackPanel Grid.Row="2">
+            <RadioButton Name="radio1" GroupName="path" Content="Active Document" VerticalContentAlignment="Center" Height="25" IsChecked="True" />
+            <RadioButton Name="radio2" GroupName="path" Content="Whole Project" VerticalContentAlignment="Center" Height="25" />
         </StackPanel>
-        <TreeView Grid.Row="2" x:Name="ResultsView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Border x:Name="ButtonBorder" Grid.Row="3" Background="Transparent" BorderThickness="0 1" Style="{StaticResource ButtonBorder}">
+            <Grid>
+                <Button Content="Analyse" Height="30" Click="Analyse_Button" Margin="5 0" />
+            </Grid>
+        </Border>
+        <TextBlock Grid.Row="4" Text="Output" VerticalAlignment="Top" FontSize="15" FontWeight="Bold" Margin="5" />
+        <TreeView Grid.Row="5" x:Name="ResultsView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0 1">
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type models:ClassViewModel}" ItemsSource="{Binding Results}">
                     <StackPanel Orientation="Horizontal">
+                        <Image Source="Resources/clogo.png" Width="20" Height="20"/>
                         <TextBlock Text="{Binding ClassName}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
                         <TextBlock Text=" [" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
                         <TextBlock Text="{Binding BestMatch.PatternName}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
@@ -89,6 +293,7 @@
                 </HierarchicalDataTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type models:ResultViewModel}" ItemsSource="{Binding Suggestions}">
                     <StackPanel Orientation="Horizontal">
+                        <Image Source="Resources/logo.png" Width="20" Height="20"/>
                         <TextBlock Text="{Binding PatternName}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
                         <TextBlock Text=" (" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
                         <TextBlock Text="{Binding Score}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}"/>
@@ -97,12 +302,13 @@
                 </HierarchicalDataTemplate>
                 <DataTemplate DataType="{x:Type models:SuggestionViewModel}">
                     <StackPanel Orientation="Horizontal">
+                        <Image Source="Resources/idealogo.png" Width="20" Height="20"/>
                         <TextBlock Text="{Binding SuggestionText}" Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
                     </StackPanel>
                 </DataTemplate>
             </TreeView.Resources>
         </TreeView>
-        <ProgressBar Grid.Row="3" Height="20" VerticalAlignment="Bottom" Minimum="0" Maximum="100" Name="statusBar" />
-        <TextBlock Grid.Row="3" x:Name="ProgressStatusBlock" Height="20" HorizontalAlignment="Center" />
+        <ProgressBar Grid.Row="6" Height="20" VerticalAlignment="Bottom" Minimum="0" Maximum="100" Name="statusBar" />
+        <TextBlock Grid.Row="6" x:Name="ProgressStatusBlock" Height="20" HorizontalAlignment="Center" FontWeight="Bold" />
     </Grid>
 </UserControl>

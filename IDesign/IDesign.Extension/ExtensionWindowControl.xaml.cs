@@ -50,12 +50,31 @@ namespace IDesign.Extension
             ViewModels = new List<DesignPatternViewModel>();
 
             foreach (var pattern in RecognizerRunner.designPatterns)
-            {
                 ViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern));
-            }
+
+            foreach(var pattern in RecognizerRunner.designPatterns)
+                ViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern));
+
+            foreach (var pattern in RecognizerRunner.designPatterns)
+                ViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern));
+
+            foreach (var pattern in RecognizerRunner.designPatterns)
+                ViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern));
+
+            foreach (var pattern in RecognizerRunner.designPatterns)
+                ViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern));
+
+            foreach (var pattern in RecognizerRunner.designPatterns)
+                ViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern));
 
             listBox.DataContext = ViewModels;
-            Grid.RowDefinitions[0].Height = new GridLength(ViewModels.Count * 20);
+
+            var height = ViewModels.Count * 30;
+
+            if (height > 3 * 30)
+                height = 3 * 30;
+
+            Grid.RowDefinitions[1].Height = new GridLength(height);
         }
 
         private void CreateResultViewModels(IEnumerable<RecognitionResult> results)
@@ -71,14 +90,11 @@ namespace IDesign.Extension
                     viewModels.Add(classViewModel);
                 }
 
-
                 var resultViewModel = new ResultViewModel(result);
                 classViewModel.Results.Add(resultViewModel);
 
                 foreach (var suggestion in result.Result.GetSuggestions())
-                {
                     resultViewModel.Suggestions.Add(new SuggestionViewModel(suggestion));
-                }
             }
             //Here you signal the UI thread to execute the action:
             this.Dispatcher?.BeginInvoke(new Action(() =>
@@ -155,6 +171,5 @@ namespace IDesign.Extension
             statusBar.Value = 0;
             Loading = false;
         }
-
     }
 }
