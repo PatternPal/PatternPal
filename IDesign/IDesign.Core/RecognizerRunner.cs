@@ -13,6 +13,7 @@ namespace IDesign.Core
             new DesignPattern("Singleton", new SingletonRecognizer()),
             new DesignPattern("Factory Method", new FactoryRecognizer())
         };
+
         public Dictionary<TypeDeclarationSyntax, EntityNode> EntityNodes =
             new Dictionary<TypeDeclarationSyntax, EntityNode>();
 

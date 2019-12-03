@@ -51,6 +51,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="LeftMarginMultiplierConverter.cs" />
+    <Compile Include="TreeViewItemExtensions.cs" />
     <Compile Include="ViewModels\DesignPatternViewModel.cs" />
     <Compile Include="ExtensionWindow.cs" />
     <Compile Include="ExtensionWindowCommand.cs" />
@@ -60,9 +62,6 @@
     <Compile Include="ExtensionWindowPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IDesign.ExtensionPackage.cs" />
-    <Compile Include="SettingsControl.xaml.cs">
-      <DependentUpon>SettingsControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\ResultViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -96,18 +95,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SettingsControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\settings.png">
+    <Resource Include="Resources\idealogo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\logo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <VSCTCompile Include="ExtensionWindowPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>
+    <Resource Include="Resources\c#logo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\clogo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Resources\ExtensionWindowCommand.png" />
     <Content Include="Resources\ExtensionWindowPackage.ico" />
   </ItemGroup>

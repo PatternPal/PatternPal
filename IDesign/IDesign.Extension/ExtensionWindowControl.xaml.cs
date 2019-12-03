@@ -21,6 +21,7 @@ using Solution = Microsoft.CodeAnalysis.Solution;
 using Task = System.Threading.Tasks.Task;
 using Thread = System.Threading.Thread;
 using Window = System.Windows.Window;
+using Microsoft.VisualStudio.ProjectSystem;
 
 namespace IDesign.Extension
 {
@@ -29,7 +30,7 @@ namespace IDesign.Extension
     /// </summary>
     public partial class ExtensionWindowControl : UserControl
     {
-        public bool IsActiveDoc { get; set; }
+        public List<DesignPatternViewModel> ViewModels { get; set; }
         public List<string> Paths { get; set; }
         public bool Loading { get; set; }
         public DTE Dte { get; private set; }
@@ -41,7 +42,6 @@ namespace IDesign.Extension
         {
             InitializeComponent();
             AddViewModels();
-            IsActiveDoc = true;
             Loading = false;
             Dispatcher.VerifyAccess();
             Dte = Package.GetGlobalService(typeof(SDTE)) as DTE;
@@ -52,14 +52,19 @@ namespace IDesign.Extension
         /// </summary>
         private void AddViewModels()
         {
-            var viewModels = new List<DesignPatternViewModel>();
+            ViewModels = new List<DesignPatternViewModel>();
 
             foreach (var pattern in RecognizerRunner.designPatterns)
-            {
-                viewModels.Add(new DesignPatternViewModel(pattern.Name, pattern));
-            }
+                ViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern));
 
-            SettingsControl.DesignPatterns = viewModels;
+            listBox.DataContext = ViewModels;
+
+            var height = ViewModels.Count * 30;
+
+            if (height > 3 * 30)
+                height = 3 * 30;
+
+            Grid.RowDefinitions[1].Height = new GridLength(height);
         }
 
         private void CreateResultViewModels(IEnumerable<RecognitionResult> results)
@@ -75,14 +80,11 @@ namespace IDesign.Extension
                     viewModels.Add(classViewModel);
                 }
 
-
                 var resultViewModel = new ResultViewModel(result);
                 classViewModel.Results.Add(resultViewModel);
 
                 foreach (var suggestion in result.Result.GetSuggestions())
-                {
                     resultViewModel.Suggestions.Add(new SuggestionViewModel(suggestion, result.EntityNode));
-                }
             }
             //Here you signal the UI thread to execute the action:
             this.Dispatcher?.BeginInvoke(new Action(() =>
@@ -118,7 +120,7 @@ namespace IDesign.Extension
 
         private void ChoosePath()
         {
-            if (SettingsControl.radio1.IsChecked != null && SettingsControl.radio1.IsChecked.Value)
+            if ((bool) radio1.IsChecked)
                 GetCurrentPath();
             else
                 GetAllPaths();
@@ -156,8 +158,9 @@ namespace IDesign.Extension
         private async void Analyse_Button(object sender, RoutedEventArgs e)
         {
             ChoosePath();
+            List<DesignPattern> SelectedPatterns = ViewModels.Where(x => x.IsChecked).Select(x => x.Pattern).ToList();
 
-            if (Loading || SettingsControl.DesignPatterns.Count == 0 || Paths.Count == 0)
+            if (Loading || Paths.Count == 0 || SelectedPatterns.Count == 0)
                 return;
 
             var runner = new RecognizerRunner();
@@ -168,11 +171,12 @@ namespace IDesign.Extension
                 statusBar.Value = value.CurrentPercentage;
                 ProgressStatusBlock.Text = value.Status;
             });
+
             IProgress<RecognizerProgress> iprogress = progress;
             runner.OnProgressUpdate += (o, recognizerProgress) => iprogress.Report(recognizerProgress);
             await Task.Run(() =>
             {
-                var results = runner.Run(Paths, SettingsControl.DesignPatterns.Where(x => x.IsChecked).Select(x => x.Pattern).ToList());
+                var results = runner.Run(Paths, SelectedPatterns);
                 CreateResultViewModels(results);
             });
 
@@ -184,6 +188,7 @@ namespace IDesign.Extension
         {
             var viewItem = sender as TreeViewItem;
             if (viewItem == null) return;
+
             var viewModel = viewItem.DataContext as SuggestionViewModel;
             if (viewModel == null) return;
 
