@@ -10,7 +10,8 @@ namespace IDesign.Core
         public event EventHandler<RecognizerProgress> OnProgressUpdate;
         public static List<DesignPattern> designPatterns = new List<DesignPattern>
         {
-            new DesignPattern("Singleton", new SingletonRecognizer())
+            new DesignPattern("Singleton", new SingletonRecognizer()),
+            new DesignPattern("Factory Method", new FactoryRecognizer())
         };
         public Dictionary<TypeDeclarationSyntax, EntityNode> EntityNodes =
             new Dictionary<TypeDeclarationSyntax, EntityNode>();

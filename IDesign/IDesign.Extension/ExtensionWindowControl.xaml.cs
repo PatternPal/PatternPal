@@ -16,6 +16,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.TextManager.Interop;
+using Project = Microsoft.CodeAnalysis.Project;
+using Solution = Microsoft.CodeAnalysis.Solution;
 using Task = System.Threading.Tasks.Task;
 using Thread = System.Threading.Thread;
 using Window = System.Windows.Window;
@@ -108,9 +110,10 @@ namespace IDesign.Extension
         private void GetAllPaths()
         {
             Paths = new List<string>();
-            FileManager manager = new FileManager();
-            if (Dte.Solution.Count > 0)
-                Paths = manager.GetAllCsFilesFromDirectory(Path.GetDirectoryName(Dte.Solution.FullName));
+            var cm = (IComponentModel)Package.GetGlobalService(typeof(SComponentModel));
+            var ws = (Workspace)cm.GetService<VisualStudioWorkspace>();
+            foreach (var project in ws.CurrentSolution.Projects)
+                Paths.AddRange(project.Documents.Select(x => x.FilePath));
         }
 
         private void ChoosePath()
@@ -120,6 +123,7 @@ namespace IDesign.Extension
             else
                 GetAllPaths();
         }
+
 
         private void selectNodeInEditor(SyntaxNode n, string file)
         {
