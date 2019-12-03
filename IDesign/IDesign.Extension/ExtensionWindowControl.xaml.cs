@@ -28,7 +28,6 @@ namespace IDesign.Extension
     /// </summary>
     public partial class ExtensionWindowControl : UserControl
     {
-        public bool IsActiveDoc { get; set; }
         public List<DesignPatternViewModel> ViewModels { get; set; }
         public List<string> Paths { get; set; }
         public bool Loading { get; set; }
@@ -41,7 +40,6 @@ namespace IDesign.Extension
         {
             InitializeComponent();
             AddViewModels();
-            IsActiveDoc = true;
             Loading = false;
             Dispatcher.VerifyAccess();
             Dte = Package.GetGlobalService(typeof(SDTE)) as DTE;
