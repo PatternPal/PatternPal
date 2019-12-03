@@ -95,16 +95,17 @@ namespace IDesign.ConsoleApp
             options.WriteOptionDescriptions(Console.Out);
         }
 
-
         /// <summary>
         /// Prints results of RecognizerRunner.Run
         /// </summary>
         /// <param name="results">A List of RecognitionResult</param>
         private static void PrintResults(List<RecognitionResult> results)
         {
+            Console.WriteLine("\nResults:");
+
             for (int i = 0; i < results.Count; i++)
             {
-                Console.Write($"\n{i}) {results[i].EntityNode.GetName()} | {results[i].Pattern.Name}: ");
+                Console.Write($"{i}) {results[i].EntityNode.GetName()} | {results[i].Pattern.Name}: ");
 
                 PrintScore(results[i].Result.GetScore());
 

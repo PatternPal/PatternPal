@@ -18,7 +18,7 @@ namespace IDesign.Recognizers
                 new ElementCheck<IMethod>(x => x.CheckModifier("public") , "Is niet public"),
                 new ElementCheck<IMethod>(x => x.CheckReturnTypeSameAsCreation(), "Return type is niet hetzelfde als wat er gemaakt wordt" )
             };
-            CheckElements(result, entityNode.GetMethods(), x => x.GetName(), methodChecks);
+            CheckElements(result, entityNode.GetMethods(), methodChecks);
 
            
 
