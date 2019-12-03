@@ -11,11 +11,7 @@ namespace IDesign.Core
         public static List<DesignPattern> designPatterns = new List<DesignPattern>
         {
             new DesignPattern("Singleton", new SingletonRecognizer()),
-<<<<<<< HEAD
-            new DesignPattern("Factory", new FactoryRecognizer())
-=======
-            new DesignPattern("Factory", new FactoryRecognizer()),
->>>>>>> 23b5a36c80caed56d465a90add0ffddb56cd1feb
+            new DesignPattern("Factory Method", new FactoryRecognizer())
         };
 
         public Dictionary<TypeDeclarationSyntax, EntityNode> EntityNodes =

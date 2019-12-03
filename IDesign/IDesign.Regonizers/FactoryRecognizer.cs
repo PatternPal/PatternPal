@@ -20,8 +20,6 @@ namespace IDesign.Recognizers
             };
             CheckElements(result, entityNode.GetMethods(), methodChecks);
 
-           
-
             result.Score = (int)(result.Score / 2f * 100f);
             return result;
         }
