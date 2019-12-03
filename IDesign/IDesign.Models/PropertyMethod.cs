@@ -33,5 +33,15 @@ namespace IDesign.Models
         {
             return Property.Type.ToString();
         }
+
+        public string GetSuggestionName()
+        {
+            return GetName() + "_get";
+        }
+
+        public SyntaxNode GetSuggestionNode()
+        {
+            return Property;
+        }
     }
 }

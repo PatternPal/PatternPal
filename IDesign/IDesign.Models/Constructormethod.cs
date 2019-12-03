@@ -32,5 +32,15 @@ namespace IDesign.Models
         {
             return "void";
         }
+
+        public string GetSuggestionName()
+        {
+            return GetName() + "()";
+        }
+
+        public SyntaxNode GetSuggestionNode()
+        {
+            return Constructor;
+        }
     }
 }

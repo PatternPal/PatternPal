@@ -14,6 +14,7 @@ namespace IDesign.Core
         public List<InterfaceDeclarationSyntax> InterfaceDeclarationSyntaxList = new List<InterfaceDeclarationSyntax>();
         public List<MethodDeclarationSyntax> MethodDeclarationSyntaxList;
         public List<PropertyDeclarationSyntax> PropertyDeclarationSyntaxList;
+        public string File { get; set; }
 
         public List<UsingDirectiveSyntax> UsingDirectiveSyntaxList = new List<UsingDirectiveSyntax>();
 
@@ -22,11 +23,11 @@ namespace IDesign.Core
         ///     Genarates a syntaxtree from a string
         /// </summary>
         /// <param name="file"></param>
-        public GenerateSyntaxTree(string file, Dictionary<TypeDeclarationSyntax, EntityNode> entityNodes)
+        public GenerateSyntaxTree(string content, string source, Dictionary<TypeDeclarationSyntax, EntityNode> entityNodes)
         {
-            Tree = CSharpSyntaxTree.ParseText(file);
+            File = source;
+            Tree = CSharpSyntaxTree.ParseText(content);
             Root = Tree.GetCompilationUnitRoot();
-
             GetUsingsOfFile();
             GetAllClassesOfFile(entityNodes);
             GetAllInterfacesOfFile(entityNodes);
@@ -79,7 +80,8 @@ namespace IDesign.Core
                     var entityNode = new EntityNode
                     {
                         InterfaceOrClassNode = classNode,
-                        Name = classNode.Identifier.ToString()
+                        Name = classNode.Identifier.ToString(),
+                        SourceFile = File
                     };
                     entityNodes.Add(classNode, entityNode);
                 }
@@ -123,7 +125,8 @@ namespace IDesign.Core
                     var entityNode = new EntityNode
                     {
                         InterfaceOrClassNode = interfaceNode,
-                        Name = interfaceNode.Identifier.ToString()
+                        Name = interfaceNode.Identifier.ToString(),
+                        SourceFile = File
                     };
                     entityNodes.Add(interfaceNode, entityNode);
                 }

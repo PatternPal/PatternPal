@@ -8,6 +8,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "10 - Back-end", "10 - Back-end", "{25C2E758-AC65-4A3A-A11A-2D3510C01BB8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "20 - Front-end", "20 - Front-end", "{D8082781-8981-4B17-9E4A-5C25EF7E3892}"
+	ProjectSection(SolutionItems) = preProject
+		IDesign.Regonizers\Abstractions\IResult.cs = IDesign.Regonizers\Abstractions\IResult.cs
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IDesign.Core", "IDesign.Core\IDesign.Core.csproj", "{39C79D09-34DA-496B-936D-4387F5DB9104}"
 EndProject
@@ -21,7 +24,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDesign.Extension", "IDesig
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IDesign.Checks", "IDesign.Check\IDesign.Checks.csproj", "{881A3B3F-0FC2-4722-9ED1-2E78B05C371C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDesign.Models", "IDesign.Models\IDesign.Models.csproj", "{375FFFF7-8B86-4298-A01D-8D8021B93908}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IDesign.Models", "IDesign.Models\IDesign.Models.csproj", "{375FFFF7-8B86-4298-A01D-8D8021B93908}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

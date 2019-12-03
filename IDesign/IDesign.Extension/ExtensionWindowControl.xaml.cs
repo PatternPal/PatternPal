@@ -10,7 +10,12 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using IDesign.Extension.ViewModels;
+using Microsoft.CodeAnalysis;
+using Microsoft.VisualStudio.ComponentModelHost;
+using Microsoft.VisualStudio.LanguageServices;
+using Microsoft.VisualStudio.TextManager.Interop;
 using Task = System.Threading.Tasks.Task;
 using Thread = System.Threading.Thread;
 using Window = System.Windows.Window;
@@ -50,12 +55,16 @@ namespace IDesign.Extension
             ViewModels = new List<DesignPatternViewModel>();
 
             foreach (var pattern in RecognizerRunner.designPatterns)
-            {
                 ViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern));
-            }
 
             listBox.DataContext = ViewModels;
-            Grid.RowDefinitions[0].Height = new GridLength(ViewModels.Count * 20);
+
+            var height = ViewModels.Count * 30;
+
+            if (height > 3 * 30)
+                height = 3 * 30;
+
+            Grid.RowDefinitions[1].Height = new GridLength(height);
         }
 
         private void CreateResultViewModels(IEnumerable<RecognitionResult> results)
@@ -71,14 +80,11 @@ namespace IDesign.Extension
                     viewModels.Add(classViewModel);
                 }
 
-
                 var resultViewModel = new ResultViewModel(result);
                 classViewModel.Results.Add(resultViewModel);
 
                 foreach (var suggestion in result.Result.GetSuggestions())
-                {
-                    resultViewModel.Suggestions.Add(new SuggestionViewModel(suggestion));
-                }
+                    resultViewModel.Suggestions.Add(new SuggestionViewModel(suggestion, result.EntityNode));
             }
             //Here you signal the UI thread to execute the action:
             this.Dispatcher?.BeginInvoke(new Action(() =>
@@ -113,10 +119,30 @@ namespace IDesign.Extension
 
         private void ChoosePath()
         {
-            if (radio1.IsChecked != null)
+            if ((bool) radio1.IsChecked)
                 GetCurrentPath();
             else
                 GetAllPaths();
+        }
+
+        private void selectNodeInEditor(SyntaxNode n, string file)
+        {
+            try
+            {
+                var cm = (IComponentModel) Package.GetGlobalService(typeof(SComponentModel));
+                var tm = (IVsTextManager) Package.GetGlobalService(typeof(SVsTextManager));
+                var ws = (Workspace) cm.GetService<VisualStudioWorkspace>();
+                var did = ws.CurrentSolution.GetDocumentIdsWithFilePath(file);
+                ws.OpenDocument(did.FirstOrDefault());
+                tm.GetActiveView(1, null, out var av);
+                var sp = n.GetLocation().GetMappedLineSpan().StartLinePosition;
+                var ep = n.GetLocation().GetMappedLineSpan().EndLinePosition;
+                av.SetSelection(sp.Line, sp.Character, ep.Line, ep.Character);
+            }
+            catch
+            {
+                return;
+            }
         }
 
         /// <summary>
@@ -136,7 +162,6 @@ namespace IDesign.Extension
                 return;
 
             var runner = new RecognizerRunner();
-
             Loading = true;
             statusBar.Value = 0;
             var progress = new Progress<RecognizerProgress>(value =>
@@ -144,6 +169,7 @@ namespace IDesign.Extension
                 statusBar.Value = value.CurrentPercentage;
                 ProgressStatusBlock.Text = value.Status;
             });
+
             IProgress<RecognizerProgress> iprogress = progress;
             runner.OnProgressUpdate += (o, recognizerProgress) => iprogress.Report(recognizerProgress);
             await Task.Run(() =>
@@ -155,6 +181,16 @@ namespace IDesign.Extension
             statusBar.Value = 0;
             Loading = false;
         }
+        
+        private void EventSetter_OnHandler(object sender, MouseButtonEventArgs e)
+        {
+            var viewItem = sender as TreeViewItem;
+            if (viewItem == null) return;
 
+            var viewModel = viewItem.DataContext as SuggestionViewModel;
+            if (viewModel == null) return;
+
+            selectNodeInEditor(viewModel.Suggestion.GetSyntaxNode(), viewModel.Node.GetSourceFile());
+        }
     }
 }
