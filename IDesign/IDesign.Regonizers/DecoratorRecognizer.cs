@@ -1,8 +1,7 @@
-﻿using IDesign.Checks;
-using IDesign.Models;
-using IDesign.Recognizers.Abstractions;
+﻿using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Output;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace IDesign.Recognizers
 {
@@ -11,8 +10,9 @@ namespace IDesign.Recognizers
         public IResult Recognize(IEntityNode entityNode)
         {
             var result = new Result();
+
             var constructorChecks = new List<ElementCheck<IMethod>>()
-            {
+            {   
                  new ElementCheck<IMethod>(x => x.CheckModifier("public") || x.CheckModifier("protected") , "Constructor moet public of protected zijn"),
                  new ElementCheck<IMethod>(x => x.CheckParameters(new List<string>(){ "string", "int" }), "Jeanrisotto")
             };

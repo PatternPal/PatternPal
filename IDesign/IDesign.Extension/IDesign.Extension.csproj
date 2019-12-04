@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <MinimumVisualStudioVersion>16.0</MinimumVisualStudioVersion>
@@ -10,7 +11,8 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props"
+          Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -122,17 +124,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IDesign.Check\IDesign.Checks.csproj">
-      <Project>{881a3b3f-0fc2-4722-9ed1-2e78b05c371c}</Project>
-      <Name>IDesign.Checks</Name>
-    </ProjectReference>
     <ProjectReference Include="..\IDesign.Core\IDesign.Core.csproj">
       <Project>{39C79D09-34DA-496B-936D-4387F5DB9104}</Project>
       <Name>IDesign.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IDesign.Models\IDesign.Models.csproj">
-      <Project>{375ffff7-8b86-4298-a01d-8d8021b93908}</Project>
-      <Name>IDesign.Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\IDesign.Regonizers\IDesign.Recognizers.csproj">
       <Project>{1f20d376-aa08-45be-9589-cfd70932c170}</Project>

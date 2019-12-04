@@ -1,15 +1,15 @@
-﻿using IDesign.Core;
+﻿using System.Collections.Generic;
+using IDesign.Core;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
-using System.Collections.Generic;
 
 namespace IDesign.Tests.Core
 {
     internal class GenerateSyntaxTreeTest
     {
-        private readonly Dictionary<TypeDeclarationSyntax, EntityNode> entityNodes =
-            new Dictionary<TypeDeclarationSyntax, EntityNode>();
+        private readonly Dictionary<string, EntityNode> entityNodes =
+            new Dictionary<string, EntityNode>();
 
         [TestCase(
             @"namespace TestNamespace{ class TestClass{ public string Name {get; set;} public TestClass(string name){this.Name = name;}}}",
