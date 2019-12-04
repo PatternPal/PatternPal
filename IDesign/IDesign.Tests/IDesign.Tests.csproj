@@ -1,0 +1,80 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase1.cs" />
+    <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase2.cs" />
+    <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase3.cs" />
+    <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase4.cs" />
+    <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase5.cs" />
+    <Compile Remove="TestClasses\SingleTonTestCase1.cs" />
+    <Compile Remove="TestClasses\SingleTonTestCase2.cs" />
+    <Compile Remove="TestClasses\SingleTonTestCase3.cs" />
+    <Compile Remove="TestClasses\SingleTonTestCase4.cs" />
+    <Compile Remove="TestClasses\SingleTonTestCase5.cs" />
+    <Compile Remove="TestClasses\SingleTonTestCase6.cs" />
+    <Compile Remove="TestClasses\SingleTonTestCase7.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="TestClasses\FactorySimple\FactorySimpleTestCase1.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\FactorySimple\FactorySimpleTestCase2.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\FactorySimple\FactorySimpleTestCase3.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\FactorySimple\FactorySimpleTestCase4.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\FactorySimple\FactorySimpleTestCase5.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\SingleTonTestCase1.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\SingleTonTestCase2.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\SingleTonTestCase3.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\SingleTonTestCase4.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\SingleTonTestCase5.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\SingleTonTestCase6.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\SingleTonTestCase7.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="nunit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IDesign.Check\IDesign.Checks.csproj" />
+    <ProjectReference Include="..\IDesign.Core\IDesign.Core.csproj" />
+    <ProjectReference Include="..\IDesign.Regonizers\IDesign.Recognizers.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Checks\MethodChecks.cs">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+
+</Project>
