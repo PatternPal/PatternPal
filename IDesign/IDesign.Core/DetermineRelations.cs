@@ -1,6 +1,7 @@
 ﻿using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,6 +24,10 @@ namespace IDesign.Core
             EntityNodes = entityNodes;
         }
 
+        /// <summary>
+        ///     Function to determine relations between Entitynodes.
+        ///     Extense and Implements based.
+        /// </summary>
         public void GetEdgesOfEntityNode()
         {
             foreach (var entityNode in EntityNodes.Values)
@@ -48,8 +53,8 @@ namespace IDesign.Core
                                 default:
                                     break;
                             }
-                           
-                            
+
+
 
                            var edge = new EntityNodeEdges(EntityNodes[stringname], relationType.Value);
                             entityNode.GetRelations().Add(edge);
@@ -65,8 +70,8 @@ namespace IDesign.Core
                   //  creation.Iden
                       //  var identifiers = creation.DescendantNodes().OfType<IdentifierNameSyntax>();
 
-                   // foreach 
-                    
+                   // foreach
+
                 }
 
             }
