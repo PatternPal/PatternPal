@@ -1,8 +1,8 @@
-﻿using IDesign.Core;
+﻿using System.Linq;
+using IDesign.Core;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
-using System.Linq;
 
 namespace IDesign.Tests.Core
 {

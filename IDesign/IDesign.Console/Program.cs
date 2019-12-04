@@ -1,9 +1,9 @@
-using IDesign.Core;
-using NDesk.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using IDesign.Core;
+using NDesk.Options;
 
 namespace IDesign.ConsoleApp
 {
@@ -50,11 +50,9 @@ namespace IDesign.ConsoleApp
 
             selectedFiles = (from a in arguments where a.EndsWith(".cs") && a.Length > 3 select a).ToList();
 
-            foreach (string arg in arguments)
-            {
+            foreach (var arg in arguments)
                 if (Directory.Exists(arg))
                     selectedFiles.AddRange(fileManager.GetAllCsFilesFromDirectory(arg));
-            }
 
             if (selectedFiles.Count == 0)
             {
@@ -93,14 +91,14 @@ namespace IDesign.ConsoleApp
         }
 
         /// <summary>
-        /// Prints results of RecognizerRunner.Run
+        ///     Prints results of RecognizerRunner.Run
         /// </summary>
         /// <param name="results">A List of RecognitionResult</param>
         private static void PrintResults(List<RecognitionResult> results)
         {
             Console.WriteLine("\nResults:");
 
-            for (int i = 0; i < results.Count; i++)
+            for (var i = 0; i < results.Count; i++)
             {
                 Console.Write($"{i}) {results[i].EntityNode.GetName()} | {results[i].Pattern.Name}: ");
 
@@ -116,7 +114,7 @@ namespace IDesign.ConsoleApp
         }
 
         /// <summary>
-        /// Prints the score with a color depending on the score
+        ///     Prints the score with a color depending on the score
         /// </summary>
         /// <param name="score"></param>
         private static void PrintScore(int score)

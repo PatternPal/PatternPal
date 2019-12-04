@@ -1,8 +1,7 @@
-﻿
-
-/// <summary>
+﻿/// <summary>
 /// Testclasses
 /// </summary>
+
 namespace IDesign.Core.TestClasses
 {
     internal interface IFirstTestClass

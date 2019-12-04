@@ -1,27 +1,20 @@
-﻿using EnvDTE;
-using IDesign.Core;
-using IDesign.Recognizers.Abstractions;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using EnvDTE;
+using IDesign.Core;
 using IDesign.Extension.ViewModels;
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.LanguageServices;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
-using Project = Microsoft.CodeAnalysis.Project;
-using Solution = Microsoft.CodeAnalysis.Solution;
 using Task = System.Threading.Tasks.Task;
-using Thread = System.Threading.Thread;
-using Window = System.Windows.Window;
-using Microsoft.VisualStudio.ProjectSystem;
 
 namespace IDesign.Extension
 {
@@ -30,11 +23,6 @@ namespace IDesign.Extension
     /// </summary>
     public partial class ExtensionWindowControl : UserControl
     {
-        public List<DesignPatternViewModel> ViewModels { get; set; }
-        public List<string> Paths { get; set; }
-        public bool Loading { get; set; }
-        public DTE Dte { get; private set; }
-
         /// <summary>
         ///     Initializes a new instance of the <see cref="ExtensionWindowControl" /> class.
         /// </summary>
@@ -46,6 +34,11 @@ namespace IDesign.Extension
             Dispatcher.VerifyAccess();
             Dte = Package.GetGlobalService(typeof(SDTE)) as DTE;
         }
+
+        public List<DesignPatternViewModel> ViewModels { get; set; }
+        public List<string> Paths { get; set; }
+        public bool Loading { get; set; }
+        public DTE Dte { get; }
 
         /// <summary>
         ///     Adds all the existing designpatterns in a list.
@@ -86,12 +79,12 @@ namespace IDesign.Extension
                 foreach (var suggestion in result.Result.GetSuggestions())
                     resultViewModel.Suggestions.Add(new SuggestionViewModel(suggestion, result.EntityNode));
             }
+
             //Here you signal the UI thread to execute the action:
-            this.Dispatcher?.BeginInvoke(new Action(() =>
+            Dispatcher?.BeginInvoke(new Action(() =>
             {
                 // - Change your UI information here
                 ResultsView.ItemsSource = viewModels;
-
             }), null);
         }
 
@@ -108,12 +101,11 @@ namespace IDesign.Extension
         /// <summary>
         ///     Gets all paths in the solution.
         /// </summary>
-
         private void GetAllPaths()
         {
             Paths = new List<string>();
-            var cm = (IComponentModel)Package.GetGlobalService(typeof(SComponentModel));
-            var ws = (Workspace)cm.GetService<VisualStudioWorkspace>();
+            var cm = (IComponentModel) Package.GetGlobalService(typeof(SComponentModel));
+            var ws = (Workspace) cm.GetService<VisualStudioWorkspace>();
             foreach (var project in ws.CurrentSolution.Projects)
                 Paths.AddRange(project.Documents.Select(x => x.FilePath));
         }
@@ -143,7 +135,6 @@ namespace IDesign.Extension
             }
             catch
             {
-                return;
             }
         }
 
@@ -158,7 +149,7 @@ namespace IDesign.Extension
         private async void Analyse_Button(object sender, RoutedEventArgs e)
         {
             ChoosePath();
-            List<DesignPattern> SelectedPatterns = ViewModels.Where(x => x.IsChecked).Select(x => x.Pattern).ToList();
+            var SelectedPatterns = ViewModels.Where(x => x.IsChecked).Select(x => x.Pattern).ToList();
 
             if (Loading || Paths.Count == 0 || SelectedPatterns.Count == 0)
                 return;
@@ -183,7 +174,7 @@ namespace IDesign.Extension
             statusBar.Value = 0;
             Loading = false;
         }
-        
+
         private void EventSetter_OnHandler(object sender, MouseButtonEventArgs e)
         {
             var viewItem = sender as TreeViewItem;

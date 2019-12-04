@@ -7,7 +7,7 @@ namespace IDesign.Models
     {
         public Method(MethodDeclarationSyntax method)
         {
-            this.MethodDeclaration = method;
+            MethodDeclaration = method;
         }
 
 

@@ -1,6 +1,6 @@
-﻿using IDesign.Models;
+﻿using System.Linq;
+using IDesign.Models;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Linq;
 
 namespace IDesign.Checks
 {
@@ -51,10 +51,11 @@ namespace IDesign.Checks
             {
                 var creations = methodSyntax.GetBody().DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
                 foreach (var creationExpression in creations)
-                {
-                    if (creationExpression.Type is IdentifierNameSyntax name && name.Identifier.ToString().IsEqual(creationType)) return true;
-                }
+                    if (creationExpression.Type is IdentifierNameSyntax name &&
+                        name.Identifier.ToString().IsEqual(creationType))
+                        return true;
             }
+
             return false;
         }
 

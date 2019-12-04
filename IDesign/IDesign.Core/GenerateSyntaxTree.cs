@@ -1,7 +1,7 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Collections.Generic;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections.Generic;
 
 namespace IDesign.Core
 {
@@ -14,7 +14,6 @@ namespace IDesign.Core
         public List<InterfaceDeclarationSyntax> InterfaceDeclarationSyntaxList = new List<InterfaceDeclarationSyntax>();
         public List<MethodDeclarationSyntax> MethodDeclarationSyntaxList;
         public List<PropertyDeclarationSyntax> PropertyDeclarationSyntaxList;
-        public string File { get; set; }
 
         public List<UsingDirectiveSyntax> UsingDirectiveSyntaxList = new List<UsingDirectiveSyntax>();
 
@@ -23,7 +22,8 @@ namespace IDesign.Core
         ///     Genarates a syntaxtree from a string
         /// </summary>
         /// <param name="file"></param>
-        public GenerateSyntaxTree(string content, string source, Dictionary<TypeDeclarationSyntax, EntityNode> entityNodes)
+        public GenerateSyntaxTree(string content, string source,
+            Dictionary<TypeDeclarationSyntax, EntityNode> entityNodes)
         {
             File = source;
             Tree = CSharpSyntaxTree.ParseText(content);
@@ -36,6 +36,8 @@ namespace IDesign.Core
             GetAllPropertiesOfAClass(entityNodes);
             GetAllFieldsOfAClass(entityNodes);
         }
+
+        public string File { get; set; }
 
         public CompilationUnitSyntax Root { get; set; }
         private SyntaxTree Tree { get; }
@@ -72,7 +74,7 @@ namespace IDesign.Core
         {
             if (node.Kind() == SyntaxKind.ClassDeclaration)
             {
-                var classNode = (ClassDeclarationSyntax)node;
+                var classNode = (ClassDeclarationSyntax) node;
                 ClassDeclarationSyntaxList.Add(classNode);
 
                 if (!entityNodes.ContainsKey(classNode))
@@ -117,7 +119,7 @@ namespace IDesign.Core
         {
             if (node.Kind() == SyntaxKind.InterfaceDeclaration)
             {
-                var interfaceNode = (InterfaceDeclarationSyntax)node;
+                var interfaceNode = (InterfaceDeclarationSyntax) node;
                 InterfaceDeclarationSyntaxList.Add(interfaceNode);
 
                 if (!entityNodes.ContainsKey(interfaceNode))
@@ -163,7 +165,7 @@ namespace IDesign.Core
                 foreach (var childNode in node.ChildNodes())
                     if (childNode.Kind() == SyntaxKind.ConstructorDeclaration)
                     {
-                        var constructorNode = (ConstructorDeclarationSyntax)childNode;
+                        var constructorNode = (ConstructorDeclarationSyntax) childNode;
                         ConstructorDeclarationSyntaxList.Add(constructorNode);
                     }
 
@@ -195,7 +197,7 @@ namespace IDesign.Core
                 foreach (var childeNode in node.ChildNodes())
                     if (childeNode.Kind() == SyntaxKind.MethodDeclaration)
                     {
-                        var methodNode = (MethodDeclarationSyntax)childeNode;
+                        var methodNode = (MethodDeclarationSyntax) childeNode;
                         MethodDeclarationSyntaxList.Add(methodNode);
                     }
 
@@ -227,7 +229,7 @@ namespace IDesign.Core
                 foreach (var childNode in node.ChildNodes())
                     if (childNode.Kind() == SyntaxKind.PropertyDeclaration)
                     {
-                        var propertyNode = (PropertyDeclarationSyntax)childNode;
+                        var propertyNode = (PropertyDeclarationSyntax) childNode;
                         PropertyDeclarationSyntaxList.Add(propertyNode);
                     }
 
@@ -259,7 +261,7 @@ namespace IDesign.Core
                 foreach (var childNode in node.ChildNodes())
                     if (childNode.Kind() == SyntaxKind.FieldDeclaration)
                     {
-                        var fieldNode = (FieldDeclarationSyntax)childNode;
+                        var fieldNode = (FieldDeclarationSyntax) childNode;
                         FieldDeclarationSyntaxList.Add(fieldNode);
                     }
 

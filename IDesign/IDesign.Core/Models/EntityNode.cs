@@ -1,9 +1,9 @@
-﻿using IDesign.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using IDesign.Models;
 using IDesign.Recognizers.Abstractions;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace IDesign.Core
 {
@@ -26,7 +26,7 @@ namespace IDesign.Core
         }
 
         /// <summary>
-        /// Get name of entitynode 
+        ///     Get name of entitynode
         /// </summary>
         /// <returns></returns>
         public string GetName()
@@ -35,7 +35,7 @@ namespace IDesign.Core
         }
 
         /// <summary>
-        /// Get source file of an entitynode
+        ///     Get source file of an entitynode
         /// </summary>
         /// <returns></returns>
         public string GetSourceFile()
@@ -44,7 +44,7 @@ namespace IDesign.Core
         }
 
         /// <summary>
-        /// Get all methods and properties of a class
+        ///     Get all methods and properties of a class
         /// </summary>
         /// <returns></returns>
         public IEnumerable<IMethod> GetMethods()
