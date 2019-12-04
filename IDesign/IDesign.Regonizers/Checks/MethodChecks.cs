@@ -66,6 +66,11 @@ namespace IDesign.Recognizers
         }
 
         //helper functions
+        /// <summary>
+        ///     Return al list of all  types that this function makes as strings.
+        /// </summary>
+        /// <param name="methodSyntax">The method witch it should check</param>
+        /// <returns>all types that are created</returns>
         public static IEnumerable<string> GetCreatedTypes(this IMethod methodSyntax)
         {
             var result = new List<string>();

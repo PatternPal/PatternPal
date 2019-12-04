@@ -94,6 +94,7 @@ namespace IDesign.Core
        public EntityNodeType GetEntityNodeType()
         {
             var declarationnode = this.GetTypeDeclarationSyntax();
+
             if (declarationnode.GetType() == typeof(ClassDeclarationSyntax))
             {
                 return EntityNodeType.Class;
