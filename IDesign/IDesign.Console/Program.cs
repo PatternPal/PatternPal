@@ -10,8 +10,7 @@ namespace IDesign.ConsoleApp
     internal class Program
     {
         /// <summary>
-        ///     This is the main function, it takes is options and .files, and prints a list of .cs files and specified design
-        ///     patterns
+        ///     Prints the parses commandline input and starts the runner
         /// </summary>
         /// <param name="args">Takes in commandline options and .cs files</param>
         private static void Main(string[] args)
