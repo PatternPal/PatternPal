@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System;
 using System.Collections.Generic;
 
 namespace IDesign.Core
@@ -20,6 +21,10 @@ namespace IDesign.Core
             EntityNodes = entityNodes;
         }
 
+        /// <summary>
+        ///     Function to determine relations between Entitynodes.
+        ///     Extense and Implements based.
+        /// </summary>
         public void GetEdgesOfEntityNode()
         {
             foreach (var entityNode in EntityNodes)

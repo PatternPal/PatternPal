@@ -5,11 +5,12 @@
 /// </summary>
 namespace IDesign.Core.TestClasses
 {
-    internal class ThirdClass
+    class ThirdClass
     {
+        public SecondTestClass second { get; set; }
     }
 
-    internal class SecondTestClass : ThirdClass, IFirstTestClass
+    class SecondTestClass : IFirstTestClass
     {
         public SecondTestClass(int s)
         {
@@ -19,11 +20,7 @@ namespace IDesign.Core.TestClasses
         public int Som { get; set; }
         public static string Uitslag { get; set; }
 
-        public string naam
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
-        }
+        public string naam { get; set; }
 
         public int Bereken(int x)
         {

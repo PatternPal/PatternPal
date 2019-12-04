@@ -5,12 +5,12 @@
 /// </summary>
 namespace IDesign.Core.TestClasses
 {
-    internal interface IFirstTestClass
+    interface IFirstTestClass
     {
         string naam { get; set; }
     }
 
-    internal class FirstTestClass : IFirstTestClass
+    class FirstTestClass : IFirstTestClass
     {
         public string s = "shanna";
 
