@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IDesign.Tests.TestClasses.ClassChecksTestClasses
 {
-  public  class Class1
+  public  class Class1 : EClass1, IClass1
     {
 
     }
@@ -14,7 +14,7 @@ namespace IDesign.Tests.TestClasses.ClassChecksTestClasses
 
     }
 
-    public class EClass1
+    public class EClass1 
     {
 
     }

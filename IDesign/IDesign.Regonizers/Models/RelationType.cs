@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IDesign.Recognizers.Models
+namespace IDesign.Recognizers
 {
    public enum RelationType
     {

@@ -12,9 +12,10 @@ namespace IDesign.Core
     {
         public List<ConstructorDeclarationSyntax> ConstructorDeclarationSyntaxList =
             new List<ConstructorDeclarationSyntax>();
-
-        public IList<IRelation> EntityNodeEdgesList = new List<IRelation>();
+        public string NameSpace { get; set; }
+        public List<IRelation> EntityNodeEdgesList = new List<IRelation>();
         public List<FieldDeclarationSyntax> FieldDeclarationSyntaxList = new List<FieldDeclarationSyntax>();
+        public List<UsingDirectiveSyntax> UsingDeclarationSyntaxList = new List<UsingDirectiveSyntax>();
         public List<MethodDeclarationSyntax> MethodDeclarationSyntaxList = new List<MethodDeclarationSyntax>();
         public List<PropertyDeclarationSyntax> PropertyDeclarationSyntaxList = new List<PropertyDeclarationSyntax>();
         public string Name { get; set; }
@@ -103,6 +104,11 @@ namespace IDesign.Core
             }
             return EntityNodeType.Class;
             
+        }
+
+        public List<UsingDirectiveSyntax> GetUsings()
+        {
+            return UsingDeclarationSyntaxList;
         }
     }
 }

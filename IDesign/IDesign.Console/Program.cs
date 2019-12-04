@@ -15,10 +15,6 @@ namespace IDesign.ConsoleApp
         /// <param name="args">Takes in commandline options and .cs files</param>
         private static void Main(string[] args)
         {
-
-         
-
-
             if (args.Length <= 0)
             {
                 Console.WriteLine("No arguments or files specified please confront --help");

@@ -1,11 +1,12 @@
-﻿using IDesign.Recognizers.Abstractions;
+﻿using IDesign.Recognizers;
+using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models;
 
 namespace IDesign.Core
 {
-    public class EntityNodeEdges : IRelation
+    public class Relation : IRelation
     {
-        public EntityNodeEdges(IEntityNode entityNode,RelationType type)
+        public Relation(IEntityNode entityNode,RelationType type)
         {
             EntityNode = entityNode;
             Type = type;
@@ -16,10 +17,10 @@ namespace IDesign.Core
 
         public IEntityNode GetDestination()
         {
-            throw new System.NotImplementedException();
+            return EntityNode;
         }
 
-        RelationType IRelation.GetType()
+      public  RelationType GetRelationType()
         {
             return Type;
         }

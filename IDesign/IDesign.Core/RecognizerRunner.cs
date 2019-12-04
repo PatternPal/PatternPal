@@ -37,8 +37,8 @@ namespace IDesign.Core
             }
 
             //Make relations
-            //var determineRelations = new DetermineRelations(EntityNodes);
-           // determineRelations.GetEdgesOfEntityNode();
+            var determineRelations = new DetermineRelations(EntityNodes);
+            determineRelations.GetEdgesOfEntityNode();
 
             var j = 0;
             foreach(var node in EntityNodes.Values)

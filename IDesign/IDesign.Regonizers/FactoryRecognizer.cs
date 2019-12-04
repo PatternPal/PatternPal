@@ -15,30 +15,13 @@ namespace IDesign.Recognizers
             var result = new Result();
             var methodChecks = new List<ElementCheck<IMethod>>()
             {
-                new ElementCheck<IMethod>(x => CreatedClassImplementsReturnTypeInterface(entityNode, x) ,
-                "Return type is niet hetzelfde als wat er gemaakt wordt" ),
-                new ElementCheck<IMethod>(x => CreatedClassExtendsReturnTypeInterface(entityNode, x) ,
-                "Return type is niet hetzelfde als wat er gemaakt wordt" )
+                new ElementCheck<IMethod>(x => x.CheckModifier("public") , "Is niet public"),
+                new ElementCheck<IMethod>(x => x.CheckReturnTypeSameAsCreation(), "Return type is niet hetzelfde als wat er gemaakt wordt" )
             };
             CheckElements(result, entityNode.GetMethods(), methodChecks);
 
             result.Score = (int)(result.Score / 2f * 100f);
             return result;
-        }
-
-        private bool CreatedClassImplementsReturnTypeInterface(IEntityNode node, IMethod method)
-        {
-            return true;
-
-           // return method.GetCreatedTypes()
-                // .Where(name => node.GetEdgeNode(name).ImplementsInterface(method.GetReturnType())).Any();
-        }
-
-        private bool CreatedClassExtendsReturnTypeInterface(IEntityNode node, IMethod method)
-        {
-            return true;
-           // return method.GetCreatedTypes()
-               // .Where(name => node.GetEdgeNode(name).ExtendsClass(method.GetReturnType())).Any();
         }
     }
 }

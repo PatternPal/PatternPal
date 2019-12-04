@@ -74,16 +74,25 @@ namespace IDesign.Core
             {
                 var classNode = (ClassDeclarationSyntax)node;
                 ClassDeclarationSyntaxList.Add(classNode);
-
-                if (!entityNodes.ContainsKey(classNode.Identifier.ToString()))
+                var nameSpaceKey = "";
+                var nameSpace = classNode.Parent as NamespaceDeclarationSyntax;
+                if (nameSpace != null)
+                {
+                    nameSpaceKey += nameSpace.Name.ToString();
+                }
+                
+                var keybinding = nameSpaceKey + "." + classNode.Identifier.ToString();
+                if (!entityNodes.ContainsKey(keybinding))
                 {
                     var entityNode = new EntityNode
                     {
                         InterfaceOrClassNode = classNode,
                         Name = classNode.Identifier.ToString(),
-                        SourceFile = File
+                        UsingDeclarationSyntaxList = new List<UsingDirectiveSyntax>(UsingDirectiveSyntaxList),
+                        SourceFile = File,
+                        NameSpace = nameSpaceKey
                     };
-                    entityNodes.Add(classNode.Identifier.ToString(), entityNode);
+                    entityNodes.Add(keybinding, entityNode);
                 }
             }
 
@@ -119,16 +128,25 @@ namespace IDesign.Core
             {
                 var interfaceNode = (InterfaceDeclarationSyntax)node;
                 InterfaceDeclarationSyntaxList.Add(interfaceNode);
-
-                if (!entityNodes.ContainsKey(interfaceNode.Identifier.ToString()))
+                var nameSpaceKey = "";
+                var nameSpace = interfaceNode.Parent as NamespaceDeclarationSyntax;
+                if (nameSpace != null)
+                {
+                    nameSpaceKey += nameSpace.Name.ToString();
+                }
+                
+                var keybinding = nameSpaceKey + "." + interfaceNode.Identifier.ToString();
+                if (!entityNodes.ContainsKey(keybinding))
                 {
                     var entityNode = new EntityNode
                     {
                         InterfaceOrClassNode = interfaceNode,
                         Name = interfaceNode.Identifier.ToString(),
-                        SourceFile = File
+                        UsingDeclarationSyntaxList = new List<UsingDirectiveSyntax>(UsingDirectiveSyntaxList),
+                        SourceFile = File,
+                        NameSpace = nameSpaceKey
                     };
-                    entityNodes.Add(interfaceNode.Identifier.ToString(), entityNode);
+                    entityNodes.Add(keybinding, entityNode);
                 }
             }
 
