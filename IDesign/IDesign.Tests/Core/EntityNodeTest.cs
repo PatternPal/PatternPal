@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using IDesign.Core;
+using IDesign.Tests.Utils;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
@@ -23,6 +25,41 @@ namespace IDesign.Tests.Core
                 testNode.DescendantNodes().OfType<PropertyDeclarationSyntax>().ToList();
 
             var fields = string.Join(";", entityNode.GetFields().Select(x => x.GetName()));
+        }
+
+      
+
+        [TestCase("TestClass1.cs","TestClass1")]
+        [TestCase("TestClass2.cs","FirstTestClass")]
+        [TestCase("TestClass2.cs","IFirstTestClass")]
+        public void Should_Return_Name(string filename, string expected)
+        {
+            EntityNode entityNode = new EntityNode();
+            var content = FileUtils.FileToString(filename);
+
+            var Tree = CSharpSyntaxTree.ParseText(content);
+            var Root = Tree.GetCompilationUnitRoot();
+
+            var members = Root.Members;
+
+            string result = "";
+            if(members != null)
+            {
+                foreach(var member in members)
+                {
+                    if(member.Kind() == SyntaxKind.ClassDeclaration)
+                    {
+                        var className = (ClassDeclarationSyntax)member;
+                        result = className.Identifier.ToString();
+                        Assert.AreEqual(expected, result);
+
+                    }
+                }
+            }
+
+
+
+
         }
     }
 }

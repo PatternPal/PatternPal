@@ -21,8 +21,9 @@ namespace IDesign.Core
         ///     Constructor of the GenerateSyntaxTree class.
         ///     Genarates a syntaxtree from a string
         /// </summary>
-        /// <param name="file"></param>
+        /// <param name="content"></param>
         public GenerateSyntaxTree(string content, string source, Dictionary<string,  EntityNode> entityNodes)
+        /// <param name="entityNodes"></param>
         {
             File = source;
             Tree = CSharpSyntaxTree.ParseText(content);
@@ -53,7 +54,7 @@ namespace IDesign.Core
         /// <summary>
         ///     Parent function of the recursive function that adds all ClassNodes of the file to the ClassDeclarationSyntaxList
         /// </summary>
-        private void GetAllClassesOfFile(Dictionary<string, EntityNode> entityNodes)
+        /// <param name="entityNodes"></param>
         {
             if (Root.Members != null)
                 foreach (var member in Root.Members)
@@ -64,9 +65,8 @@ namespace IDesign.Core
         ///     Recursive function that adds all ClassNodes of the file to the ClassDeclarationSyntaxList
         /// </summary>
         /// <param name="node"></param>
-        /// <returns>
-        ///     Returns a List with ClassDeclarationSyntaxes
-        /// </returns>
+        /// <param name="entityNodes"></param>
+        /// <returns>Returns a List with ClassDeclarationSyntaxes</returns>
         private List<ClassDeclarationSyntax> GetAllClassesOfFile(SyntaxNode node,
             Dictionary<string, EntityNode> entityNodes)
         {
@@ -104,7 +104,6 @@ namespace IDesign.Core
 
         /// <summary>
         ///     Parent function of the recursive function that adds all InterfaceNodes of the file to the
-        ///     InterfaceDeclarationSyntaxList
         /// </summary>
         /// <param name="entityNodes"></param>
         private void GetAllInterfacesOfFile(Dictionary<string, EntityNode> entityNodes)
@@ -121,6 +120,7 @@ namespace IDesign.Core
         /// <returns>
         ///     Returns a List with InterfaceDeclarationSyntaxes
         /// </returns>
+        /// 
         private List<InterfaceDeclarationSyntax> GetAllInterfacesOfFile(SyntaxNode node,
             Dictionary<string, EntityNode> entityNodes)
         {
@@ -157,9 +157,9 @@ namespace IDesign.Core
         }
 
         /// <summary>
-        ///     Parent function of the recursive function that searches for all constructors in a class
+        /// Parent function of the recursive function that searches for all constructors in a class
         /// </summary>
-        private void GetAllConstructorsOfAClass(Dictionary<string, EntityNode> entityNodes)
+        /// <param name="entityNodes"></param>
         {
             if (EntityNodes != null)
                 foreach (var classElement in entityNodes)
@@ -189,7 +189,7 @@ namespace IDesign.Core
         }
 
         /// <summary>
-        ///     Parent of recursive function that searches for all methodes of a class
+        /// Parent of recursive function that searches for all methodes of a class
         /// </summary>
         private void GetAllMethodsOfAClass(Dictionary<string, EntityNode> entityNodes)
         {
@@ -216,14 +216,13 @@ namespace IDesign.Core
                         var methodNode = (MethodDeclarationSyntax)childeNode;
                         MethodDeclarationSyntaxList.Add(methodNode);
                     }
-
             return MethodDeclarationSyntaxList;
         }
 
         /// <summary>
-        ///     Parent of recursive function that searches for all properties of a class
+        /// Parent of recursive function that searches for all properties of a class
         /// </summary>
-        private void GetAllPropertiesOfAClass(Dictionary<string, EntityNode> entityNodes)
+        /// <param name="entityNodes"></param>
         {
             if (EntityNodes != null)
                 foreach (var classElement in entityNodes)
@@ -280,7 +279,6 @@ namespace IDesign.Core
                         var fieldNode = (FieldDeclarationSyntax)childNode;
                         FieldDeclarationSyntaxList.Add(fieldNode);
                     }
-
             return FieldDeclarationSyntaxList;
         }
     }
