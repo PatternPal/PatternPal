@@ -4,6 +4,5 @@ namespace IDesign.Core
     {
         public int CurrentPercentage { get; set; }
         public string Status { get; set; }
-
     }
 }

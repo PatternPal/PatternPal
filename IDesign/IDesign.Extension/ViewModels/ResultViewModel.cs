@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IDesign.Core;
 using IDesign.Recognizers.Abstractions;
 
@@ -21,6 +18,7 @@ namespace IDesign.Extension.ViewModels
         public ResultViewModel BestMatch => Results.OrderByDescending(x => x.Score).FirstOrDefault();
         public List<ResultViewModel> Results { get; set; } = new List<ResultViewModel>();
     }
+
     public class ResultViewModel
     {
         public ResultViewModel(RecognitionResult result)

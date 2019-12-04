@@ -1,7 +1,7 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Collections.Generic;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections.Generic;
 
 namespace IDesign.Core
 {
@@ -14,7 +14,6 @@ namespace IDesign.Core
         public List<InterfaceDeclarationSyntax> InterfaceDeclarationSyntaxList = new List<InterfaceDeclarationSyntax>();
         public List<MethodDeclarationSyntax> MethodDeclarationSyntaxList;
         public List<PropertyDeclarationSyntax> PropertyDeclarationSyntaxList;
-        public string File { get; set; }
 
         public List<UsingDirectiveSyntax> UsingDirectiveSyntaxList = new List<UsingDirectiveSyntax>();
 
@@ -23,7 +22,8 @@ namespace IDesign.Core
         ///     Genarates a syntaxtree from a string
         /// </summary>
         /// <param name="file"></param>
-        public GenerateSyntaxTree(string content, string source, Dictionary<TypeDeclarationSyntax, EntityNode> entityNodes)
+        public GenerateSyntaxTree(string content, string source,
+            Dictionary<TypeDeclarationSyntax, EntityNode> entityNodes)
         {
             File = source;
             Tree = CSharpSyntaxTree.ParseText(content);
@@ -37,6 +37,7 @@ namespace IDesign.Core
             GetAllFieldsOfAClass(entityNodes);
         }
 
+        public string File { get; set; }
         public CompilationUnitSyntax Root { get; set; }
         private SyntaxTree Tree { get; }
 

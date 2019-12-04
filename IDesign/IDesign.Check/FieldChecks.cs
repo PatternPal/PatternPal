@@ -1,5 +1,5 @@
-﻿using IDesign.Models;
-using System.Linq;
+﻿using System.Linq;
+using IDesign.Models;
 
 namespace IDesign.Checks
 {

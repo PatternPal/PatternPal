@@ -1,13 +1,13 @@
-﻿using IDesign.Core;
+﻿using System.Collections.Generic;
+using IDesign.Core;
 using NUnit.Framework;
-using System.Collections.Generic;
 
 namespace IDesign.Tests.Core
 {
-    internal class ReadFilesTest
+    internal class FileManagerTest
     {
         public string path = "../../../Core/TestClasses";
-        FileManager readFiles = new FileManager();
+        private readonly FileManager readFiles = new FileManager();
 
         [Test]
         public void TestIfFilesListContainsRightFiles()

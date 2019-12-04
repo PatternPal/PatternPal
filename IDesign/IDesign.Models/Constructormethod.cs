@@ -7,7 +7,7 @@ namespace IDesign.Models
     {
         public Constructormethod(ConstructorDeclarationSyntax constructor)
         {
-            this.Constructor = constructor;
+            Constructor = constructor;
         }
 
 

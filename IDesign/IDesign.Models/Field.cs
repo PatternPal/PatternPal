@@ -7,8 +7,8 @@ namespace IDesign.Models
     {
         public Field(FieldDeclarationSyntax field, VariableDeclaratorSyntax variable)
         {
-            this.FieldDeclaration = field;
-            this.Variable = variable;
+            FieldDeclaration = field;
+            Variable = variable;
         }
 
         private FieldDeclarationSyntax FieldDeclaration { get; }

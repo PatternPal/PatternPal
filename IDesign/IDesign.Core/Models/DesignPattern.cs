@@ -4,12 +4,13 @@ namespace IDesign.Core
 {
     public class DesignPattern
     {
-        public IRecognizer Recognizer { get; set; }
         public DesignPattern(string name, IRecognizer recognizer)
         {
             Name = name;
             Recognizer = recognizer;
         }
+
+        public IRecognizer Recognizer { get; set; }
         public string Name { get; set; }
     }
 }

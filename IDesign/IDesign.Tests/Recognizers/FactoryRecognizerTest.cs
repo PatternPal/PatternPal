@@ -1,24 +1,15 @@
-﻿using IDesign.Core;
+﻿using System.Linq;
+using IDesign.Core;
 using IDesign.Recognizers;
 using IDesign.Tests.Utils;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace IDesign.Tests.Recognizers
 {
     public class FactoryRecognizerTest
     {
-
-        [SetUp]
-        public void Setup()
-        {
-        }
-
         [Test]
         [TestCase("FactorySimpleTestCase1.cs", 100)]
         [TestCase("FactorySimpleTestCase2.cs", 50)]
@@ -28,8 +19,7 @@ namespace IDesign.Tests.Recognizers
         public void FactoryRecognizer_Returns_Correct_Score(string filename, int score)
         {
             var factory = new FactoryRecognizer();
-            string code = FileUtils.FileToString("FactorySimple\\" + filename);
-
+            var code = FileUtils.FileToString("FactorySimple\\" + filename);
 
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
             var NameSpaceNode = root.Members[0] as NamespaceDeclarationSyntax;
@@ -41,13 +31,13 @@ namespace IDesign.Tests.Recognizers
                 InterfaceOrClassNode = testNode,
 
                 MethodDeclarationSyntaxList =
-                testNode.DescendantNodes().OfType<MethodDeclarationSyntax>().ToList(),
+                    testNode.DescendantNodes().OfType<MethodDeclarationSyntax>().ToList(),
                 FieldDeclarationSyntaxList =
-                testNode.DescendantNodes().OfType<FieldDeclarationSyntax>().ToList(),
+                    testNode.DescendantNodes().OfType<FieldDeclarationSyntax>().ToList(),
                 PropertyDeclarationSyntaxList =
-                testNode.DescendantNodes().OfType<PropertyDeclarationSyntax>().ToList(),
+                    testNode.DescendantNodes().OfType<PropertyDeclarationSyntax>().ToList(),
                 ConstructorDeclarationSyntaxList =
-                testNode.DescendantNodes().OfType<ConstructorDeclarationSyntax>().ToList()
+                    testNode.DescendantNodes().OfType<ConstructorDeclarationSyntax>().ToList()
             };
 
             var result = factory.Recognize(entityNode);
