@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace IDesign.Recognizers
 {
-    public interface IField
+    public interface IField : ICheckable
     {
         string GetName();
         TypeSyntax GetFieldType();

@@ -20,9 +20,9 @@ namespace IDesign.Recognizers
                 new ElementCheck<IMethod>(x => CreatedClassExtendsReturnTypeInterface(entityNode, x) ,
                 "Return type is niet hetzelfde als wat er gemaakt wordt" )
             };
-            CheckElements(result, entityNode.GetMethods(), x => x.GetName(), methodChecks);
+            CheckElements(result, entityNode.GetMethods(), methodChecks);
 
-            result.Score = (int)(result.Score / 1f * 100f);
+            result.Score = (int)(result.Score / 2f * 100f);
             return result;
         }
 
@@ -33,7 +33,7 @@ namespace IDesign.Recognizers
            // return method.GetCreatedTypes()
                 // .Where(name => node.GetEdgeNode(name).ImplementsInterface(method.GetReturnType())).Any();
         }
-        
+
         private bool CreatedClassExtendsReturnTypeInterface(IEntityNode node, IMethod method)
         {
             return true;

@@ -10,9 +10,18 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using IDesign.Extension.ViewModels;
+using Microsoft.CodeAnalysis;
+using Microsoft.VisualStudio.ComponentModelHost;
+using Microsoft.VisualStudio.LanguageServices;
+using Microsoft.VisualStudio.TextManager.Interop;
+using Project = Microsoft.CodeAnalysis.Project;
+using Solution = Microsoft.CodeAnalysis.Solution;
 using Task = System.Threading.Tasks.Task;
 using Thread = System.Threading.Thread;
 using Window = System.Windows.Window;
+using Microsoft.VisualStudio.ProjectSystem;
 
 namespace IDesign.Extension
 {
@@ -21,8 +30,7 @@ namespace IDesign.Extension
     /// </summary>
     public partial class ExtensionWindowControl : UserControl
     {
-        public bool IsActiveDoc { get; set; }
-        public List<DesignPatternViewModel> DesignPatternViewModels { get; set; }
+        public List<DesignPatternViewModel> ViewModels { get; set; }
         public List<string> Paths { get; set; }
         public bool Loading { get; set; }
         public DTE Dte { get; private set; }
@@ -34,7 +42,6 @@ namespace IDesign.Extension
         {
             InitializeComponent();
             AddViewModels();
-            IsActiveDoc = true;
             Loading = false;
             Dispatcher.VerifyAccess();
             Dte = Package.GetGlobalService(typeof(SDTE)) as DTE;
@@ -45,12 +52,47 @@ namespace IDesign.Extension
         /// </summary>
         private void AddViewModels()
         {
-            DesignPatternViewModels = new List<DesignPatternViewModel>();
+            ViewModels = new List<DesignPatternViewModel>();
 
-            foreach (DesignPattern pattern in RecognizerRunner.designPatterns)
+            foreach (var pattern in RecognizerRunner.designPatterns)
+                ViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern));
+
+            listBox.DataContext = ViewModels;
+
+            var height = ViewModels.Count * 30;
+
+            if (height > 3 * 30)
+                height = 3 * 30;
+
+            Grid.RowDefinitions[1].Height = new GridLength(height);
+        }
+
+        private void CreateResultViewModels(IEnumerable<RecognitionResult> results)
+        {
+            var viewModels = new List<ClassViewModel>();
+
+            foreach (var result in results)
             {
-                DesignPatternViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern));
+                var classViewModel = viewModels.FirstOrDefault(x => x.EntityNode == result.EntityNode);
+                if (classViewModel == null)
+                {
+                    classViewModel = new ClassViewModel(result.EntityNode);
+                    viewModels.Add(classViewModel);
+                }
+
+                var resultViewModel = new ResultViewModel(result);
+                classViewModel.Results.Add(resultViewModel);
+
+                foreach (var suggestion in result.Result.GetSuggestions())
+                    resultViewModel.Suggestions.Add(new SuggestionViewModel(suggestion, result.EntityNode));
             }
+            //Here you signal the UI thread to execute the action:
+            this.Dispatcher?.BeginInvoke(new Action(() =>
+            {
+                // - Change your UI information here
+                ResultsView.ItemsSource = viewModels;
+
+            }), null);
         }
 
         /// <summary>
@@ -70,17 +112,39 @@ namespace IDesign.Extension
         private void GetAllPaths()
         {
             Paths = new List<string>();
-            FileManager manager = new FileManager();
-            if (Dte.Solution.Count > 0)
-                Paths = manager.GetAllCsFilesFromDirectory(Path.GetDirectoryName(Dte.Solution.FullName));
+            var cm = (IComponentModel)Package.GetGlobalService(typeof(SComponentModel));
+            var ws = (Workspace)cm.GetService<VisualStudioWorkspace>();
+            foreach (var project in ws.CurrentSolution.Projects)
+                Paths.AddRange(project.Documents.Select(x => x.FilePath));
         }
 
         private void ChoosePath()
         {
-            if (IsActiveDoc)
+            if ((bool) radio1.IsChecked)
                 GetCurrentPath();
             else
                 GetAllPaths();
+        }
+
+
+        private void selectNodeInEditor(SyntaxNode n, string file)
+        {
+            try
+            {
+                var cm = (IComponentModel) Package.GetGlobalService(typeof(SComponentModel));
+                var tm = (IVsTextManager) Package.GetGlobalService(typeof(SVsTextManager));
+                var ws = (Workspace) cm.GetService<VisualStudioWorkspace>();
+                var did = ws.CurrentSolution.GetDocumentIdsWithFilePath(file);
+                ws.OpenDocument(did.FirstOrDefault());
+                tm.GetActiveView(1, null, out var av);
+                var sp = n.GetLocation().GetMappedLineSpan().StartLinePosition;
+                var ep = n.GetLocation().GetMappedLineSpan().EndLinePosition;
+                av.SetSelection(sp.Line, sp.Character, ep.Line, ep.Character);
+            }
+            catch
+            {
+                return;
+            }
         }
 
         /// <summary>
@@ -94,51 +158,41 @@ namespace IDesign.Extension
         private async void Analyse_Button(object sender, RoutedEventArgs e)
         {
             ChoosePath();
+            List<DesignPattern> SelectedPatterns = ViewModels.Where(x => x.IsChecked).Select(x => x.Pattern).ToList();
 
-            if (Loading || DesignPatternViewModels.Count == 0 || Paths.Count == 0)
+            if (Loading || Paths.Count == 0 || SelectedPatterns.Count == 0)
                 return;
 
-            RecognizerRunner runner = new RecognizerRunner();
-            List<IResult> results = runner.Run(Paths, DesignPatternViewModels.Where(x => x.IsChecked).Select(x => x.Pattern).ToList());
-
-            listView.ItemsSource = results;
-
+            var runner = new RecognizerRunner();
             Loading = true;
             statusBar.Value = 0;
-            var progress = new Progress<int>(value => statusBar.Value = value);
+            var progress = new Progress<RecognizerProgress>(value =>
+            {
+                statusBar.Value = value.CurrentPercentage;
+                ProgressStatusBlock.Text = value.Status;
+            });
 
+            IProgress<RecognizerProgress> iprogress = progress;
+            runner.OnProgressUpdate += (o, recognizerProgress) => iprogress.Report(recognizerProgress);
             await Task.Run(() =>
             {
-                for (var i = 0; i <= 100; i++)
-                {
-                    ((IProgress<int>)progress).Report(i);
-                    Thread.Sleep(100);
-                }
+                var results = runner.Run(Paths, SelectedPatterns);
+                CreateResultViewModels(results);
             });
 
             statusBar.Value = 0;
             Loading = false;
         }
-
-        /// <summary>
-        ///     Handles click on the analyse_button by displaying the settings window.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Settings_Button(object sender, RoutedEventArgs e)
+        
+        private void EventSetter_OnHandler(object sender, MouseButtonEventArgs e)
         {
-            var settingsWindow = new SettingsControl(DesignPatternViewModels, IsActiveDoc);
+            var viewItem = sender as TreeViewItem;
+            if (viewItem == null) return;
 
-            var window = new Window
-            {
-                Title = "Settings",
-                Content = settingsWindow,
-                SizeToContent = SizeToContent.WidthAndHeight
-            };
-            window.ShowDialog();
+            var viewModel = viewItem.DataContext as SuggestionViewModel;
+            if (viewModel == null) return;
 
-            IsActiveDoc = (bool)settingsWindow.radio1.IsChecked;
-            DesignPatternViewModels = settingsWindow.DesignPatterns;
+            selectNodeInEditor(viewModel.Suggestion.GetSyntaxNode(), viewModel.Node.GetSourceFile());
         }
     }
 }

@@ -28,5 +28,15 @@ namespace IDesign.Recognizers
         {
             return FieldDeclaration.Declaration.Type;
         }
+
+        public string GetSuggestionName()
+        {
+            return GetName();
+        }
+
+        public SyntaxNode GetSuggestionNode()
+        {
+            return FieldDeclaration;
+        }
     }
 }

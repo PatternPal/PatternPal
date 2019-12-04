@@ -17,17 +17,17 @@ namespace IDesign.Tests.Recognizers
         public void Setup()
         {
         }
-        
+
         [Test]
-        [TestCase("FactoryTestCase1.cs", 00)]
-        [TestCase("FactoryTestCase2.cs", 0)]
-        [TestCase("FactoryTestCase3.cs", 0)]
-        [TestCase("FactoryTestCase4.cs", 00)]
-        [TestCase("FactoryTestCase5.cs", 0)]
+        [TestCase("FactorySimpleTestCase1.cs", 100)]
+        [TestCase("FactorySimpleTestCase2.cs", 50)]
+        [TestCase("FactorySimpleTestCase3.cs", 50)]
+        [TestCase("FactorySimpleTestCase4.cs", 100)]
+        [TestCase("FactorySimpleTestCase5.cs", 50)]
         public void FactoryRecognizer_Returns_Correct_Score(string filename, int score)
         {
             var factory = new FactoryRecognizer();
-            string code = FileUtils.FileToString("FactoryTestClasses\\" + filename);
+            string code = FileUtils.FileToString("FactorySimple\\" + filename);
 
 
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();

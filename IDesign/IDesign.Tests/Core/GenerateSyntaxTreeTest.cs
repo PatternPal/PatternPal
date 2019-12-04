@@ -40,7 +40,7 @@ namespace IDesign.Tests.Core
             1)]
         public void TestAmountOfClasses(string file, int expectedAmountOfClasses)
         {
-            var generateSyntaxTree = new GenerateSyntaxTree(file, entityNodes);
+            var generateSyntaxTree = new GenerateSyntaxTree(file, "", entityNodes);
             var result = generateSyntaxTree.ClassDeclarationSyntaxList.Count;
             Assert.AreEqual(expectedAmountOfClasses, result);
         }
@@ -74,7 +74,7 @@ namespace IDesign.Tests.Core
             2)]
         public void TestAmountOfInterfaces(string file, int expectedAmountOfInterfaces)
         {
-            var generateSyntaxTree = new GenerateSyntaxTree(file, entityNodes);
+            var generateSyntaxTree = new GenerateSyntaxTree(file, "", entityNodes);
             var result = generateSyntaxTree.InterfaceDeclarationSyntaxList.Count;
             Assert.AreEqual(expectedAmountOfInterfaces, result);
         }
@@ -111,7 +111,7 @@ namespace IDesign.Tests.Core
             6)]
         public void TestIfAmountOfUsingsIsRight(string file, int amountOfUsings)
         {
-            var generateSyntaxTree = new GenerateSyntaxTree(file, entityNodes);
+            var generateSyntaxTree = new GenerateSyntaxTree(file, "", entityNodes);
             var result = generateSyntaxTree.UsingDirectiveSyntaxList;
             var count = 0;
 

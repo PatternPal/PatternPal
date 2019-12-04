@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace IDesign.Recognizers
 {
-    public interface IMethod
+    public interface IMethod : ICheckable
     {
         string GetName();
         string GetReturnType();

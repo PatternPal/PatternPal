@@ -18,6 +18,7 @@ namespace IDesign.Core
         public List<MethodDeclarationSyntax> MethodDeclarationSyntaxList = new List<MethodDeclarationSyntax>();
         public List<PropertyDeclarationSyntax> PropertyDeclarationSyntaxList = new List<PropertyDeclarationSyntax>();
         public string Name { get; set; }
+        public string SourceFile { get; set; }
         public TypeDeclarationSyntax InterfaceOrClassNode { get; set; }
 
         public TypeDeclarationSyntax GetTypeDeclarationSyntax()
@@ -28,6 +29,11 @@ namespace IDesign.Core
         public string GetName()
         {
             return Name;
+        }
+
+        public string GetSourceFile()
+        {
+            return SourceFile;
         }
 
         public IEnumerable<IMethod> GetMethods()

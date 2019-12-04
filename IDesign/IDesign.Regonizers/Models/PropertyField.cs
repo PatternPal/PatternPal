@@ -26,5 +26,15 @@ namespace IDesign.Recognizers
         {
             return Property.Type;
         }
+
+        public string GetSuggestionName()
+        {
+            return GetName() + "()";
+        }
+
+        public SyntaxNode GetSuggestionNode()
+        {
+            return Property;
+        }
     }
 }

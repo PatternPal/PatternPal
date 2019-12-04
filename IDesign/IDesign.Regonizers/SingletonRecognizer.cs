@@ -15,7 +15,7 @@ namespace IDesign.Recognizers
                 new ElementCheck<IMethod>(x => x.CheckModifier("static") , "Is niet static"),
                 new ElementCheck<IMethod>(x => x.CheckReturnTypeSameAsCreation(), "Return type is niet hetzelfde als wat er gemaakt wordt" )
             };
-            CheckElements(result, entityNode.GetMethods(), x => x.GetName(), methodChecks);
+            CheckElements(result, entityNode.GetMethods(), methodChecks);
 
             var propertyChecks = new List<ElementCheck<IField>>()
             {
@@ -23,13 +23,13 @@ namespace IDesign.Recognizers
                new ElementCheck<IField>(x => x.CheckMemberModifier("static") , "Is niet static"),
                new ElementCheck<IField>(x => x.CheckMemberModifier("private") , "Is niet private")
             };
-            CheckElements(result, entityNode.GetFields(), x => x.GetName(), propertyChecks);
+            CheckElements(result, entityNode.GetFields(), propertyChecks);
 
             var constructorChecks = new List<ElementCheck<IMethod>>()
             {
                  new ElementCheck<IMethod>(x => !x.CheckModifier("public") , "Is public moet private of protected zijn")
             };
-            CheckElements(result, entityNode.GetConstructors(), x => x.GetName(), constructorChecks);
+            CheckElements(result, entityNode.GetConstructors(), constructorChecks);
 
             result.Score = (int)(result.Score / 7f * 100f);
             return result;

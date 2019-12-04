@@ -1,16 +1,17 @@
-using IDesign.Recognizers;
-using IDesign.Recognizers.Abstractions;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System;
 using System.Collections.Generic;
+using IDesign.Recognizers;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace IDesign.Core
 {
     public class RecognizerRunner
     {
-        private readonly FileManager readFiles = new FileManager();
+        public event EventHandler<RecognizerProgress> OnProgressUpdate;
         public static List<DesignPattern> designPatterns = new List<DesignPattern>
         {
-            new DesignPattern("Singleton", new SingletonRecognizer())
+            new DesignPattern("Singleton", new SingletonRecognizer()),
+            new DesignPattern("Factory Method", new FactoryRecognizer())
         };
         public Dictionary<string, EntityNode> EntityNodes =
             new Dictionary<string, EntityNode>();
@@ -21,26 +22,48 @@ namespace IDesign.Core
         /// <param name="files"></param>
         /// <param name="patterns"></param>
         /// <returns></returns>
-        public List<IResult> Run(List<string> files, List<DesignPattern> patterns)
+        public List<RecognitionResult> Run(List<string> files, List<DesignPattern> patterns)
         {
-            List<IResult> results = new List<IResult>();
+            var results = new List<RecognitionResult>();
+
 
             //loop over all files
             for (var i = 0; i < files.Count; i++)
             {
-                var tree = readFiles.MakeStringFromFile(files[i]);
-                var generateSyntaxTree = new GenerateSyntaxTree(tree, EntityNodes);
+                var tree = FileManager.MakeStringFromFile(files[i]);
+                var generateSyntaxTree = new GenerateSyntaxTree(tree, files[i], EntityNodes);
+
+                ProgressUpdate((int)(i / (float)files.Count * 50f), "Reading file: " + files[i]);
             }
 
             //Make relations
             //var determineRelations = new DetermineRelations(EntityNodes);
            // determineRelations.GetEdgesOfEntityNode();
 
-            foreach (var pattern in patterns)
-                foreach (var node in EntityNodes.Values)
-                    results.Add(pattern.Recognizer.Recognize(node));
+            var j = 0;
+            foreach(var node in EntityNodes.Values)
+            {
+                j++;
+                ProgressUpdate((int)(j / (float)files.Count * 50f + 50), "Scanning class: " + node.GetName());
+                foreach (var pattern in patterns)
+                    results.Add(new RecognitionResult
+                    {
+                        Result = pattern.Recognizer.Recognize(node),
+                        EntityNode = node,
+                        Pattern = pattern
+                    });
+            }
 
             return results;
+        }
+
+        private void ProgressUpdate(int percentage, string status)
+        {
+            OnProgressUpdate?.Invoke(this, new RecognizerProgress
+            {
+                CurrentPercentage = percentage,
+                Status = status
+            });
         }
     }
 }

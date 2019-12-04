@@ -1,5 +1,4 @@
 using IDesign.Core;
-using IDesign.Recognizers.Abstractions;
 using NDesk.Options;
 using System;
 using System.Collections.Generic;
@@ -11,13 +10,11 @@ namespace IDesign.ConsoleApp
     internal class Program
     {
         /// <summary>
-        ///     This is the main function, it takes is options and .files, and prints a list of .cs files and specified design
-        ///     patterns
+        ///     Prints the parses commandline input and starts the runner
         /// </summary>
         /// <param name="args">Takes in commandline options and .cs files</param>
         private static void Main(string[] args)
         {
-            List<DesignPattern> designPatterns = RecognizerRunner.designPatterns;
 
             RecognizerRunner recognizer = new RecognizerRunner();
             List<string> filesList = new List<string>();
@@ -36,6 +33,9 @@ namespace IDesign.ConsoleApp
             var showHelp = false;
             var selectedFiles = new List<string>();
             var selectedPatterns = new List<DesignPattern>();
+            var runner = new RecognizerRunner();
+            var manager = new FileManager();
+            var designPatterns = RecognizerRunner.designPatterns;
 
             var options = new OptionSet
             {
@@ -56,9 +56,7 @@ namespace IDesign.ConsoleApp
             }
 
             selectedFiles = (from a in arguments where a.EndsWith(".cs") && a.Length > 3 select a).ToList();
-
-            FileManager manager = new FileManager();
-
+            
             foreach (string arg in arguments)
             {
                 if (Directory.Exists(arg))
@@ -83,12 +81,8 @@ namespace IDesign.ConsoleApp
 
             foreach (var pattern in selectedPatterns) Console.WriteLine(pattern.Name);
 
-            RecognizerRunner recognizerRunner = new RecognizerRunner();
+            PrintResults(runner.Run(selectedFiles, selectedPatterns));
 
-            List<IResult> results = recognizerRunner.Run(selectedFiles, designPatterns);
-            
-            foreach (var res in results) Console.WriteLine('\n' + res.ToString());
-            
             Console.ReadKey();
         }
 
@@ -101,6 +95,47 @@ namespace IDesign.ConsoleApp
             Console.WriteLine("Usage: idesign [INPUT] [OPTIONS]");
             Console.WriteLine("Options:");
             options.WriteOptionDescriptions(Console.Out);
+        }
+
+        /// <summary>
+        /// Prints results of RecognizerRunner.Run
+        /// </summary>
+        /// <param name="results">A List of RecognitionResult</param>
+        private static void PrintResults(List<RecognitionResult> results)
+        {
+            Console.WriteLine("\nResults:");
+
+            for (int i = 0; i < results.Count; i++)
+            {
+                Console.Write($"{i}) {results[i].EntityNode.GetName()} | {results[i].Pattern.Name}: ");
+
+                PrintScore(results[i].Result.GetScore());
+
+                Console.ForegroundColor = ConsoleColor.Red;
+
+                foreach (var suggestion in results[i].Result.GetSuggestions())
+                    Console.WriteLine($"\t- {suggestion.GetMessage()}");
+
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+        }
+
+        /// <summary>
+        /// Prints the score with a color depending on the score
+        /// </summary>
+        /// <param name="score"></param>
+        private static void PrintScore(int score)
+        {
+            if (score <= 33)
+                Console.ForegroundColor = ConsoleColor.Red;
+            else if (score <= 66)
+                Console.ForegroundColor = ConsoleColor.Yellow;
+            else
+                Console.ForegroundColor = ConsoleColor.Green;
+
+            Console.WriteLine(score);
+
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 }

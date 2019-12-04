@@ -1,27 +1,12 @@
-﻿using IDesign.Recognizers.Abstractions;
-using IDesign.Recognizers.Models;
-
-namespace IDesign.Core
+﻿namespace IDesign.Core
 {
-    public class EntityNodeEdges : IRelation
+    public class EntityNodeEdges
     {
-        public EntityNodeEdges(IEntityNode entityNode, RelationType type) 
+        public EntityNodeEdges(EntityNode entityNode)
         {
             EntityNode = entityNode;
-            Type = type;
         }
 
-        public IEntityNode EntityNode { get; set; }
-        public RelationType Type { get; set; }
-
-        public IEntityNode GetDestination()
-        {
-            return EntityNode;
-        }
-
-        RelationType IRelation.GetType()
-        {
-            return Type;
-        }
+        public EntityNode EntityNode { get; set; }
     }
 }
