@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using IDesign.Core;
+using IDesign.Recognizers;
 using IDesign.Tests.Utils;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -27,39 +28,57 @@ namespace IDesign.Tests.Core
             var fields = string.Join(";", entityNode.GetFields().Select(x => x.GetName()));
         }
 
-      
 
-        [TestCase("TestClass1.cs","TestClass1")]
-        [TestCase("TestClass2.cs","FirstTestClass")]
-        [TestCase("TestClass2.cs","IFirstTestClass")]
-        public void Should_Return_Name(string filename, string expected)
+        RecognizerRunner recognizerRunner = new RecognizerRunner();
+        List<DesignPattern> designPatterns = new List<DesignPattern> { new DesignPattern("Singleton", new SingletonRecognizer()),
+            new DesignPattern("Factory Method", new FactoryRecognizer())};
+
+        private readonly Dictionary<TypeDeclarationSyntax, EntityNode> entityNodes =
+            new Dictionary<TypeDeclarationSyntax, EntityNode>();
+
+        [TestCase(@"using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace IDesign.Tests.TestClasses
+{
+    class TestClass1
+    {
+        public TestClass1(int x, int y)
         {
-            EntityNode entityNode = new EntityNode();
-            var content = FileUtils.FileToString(filename);
+            this.x = x;
+            this.y = y;
+        }
 
-            var Tree = CSharpSyntaxTree.ParseText(content);
-            var Root = Tree.GetCompilationUnitRoot();
+        public int x { get; set; }
+        public int y { get; set; }
 
-            var members = Root.Members;
+        public int Sum()
+        {
+            return x + y;
+        }
+    }
+}", new string[] { "TestClass1" })]
+        [TestCase("TestClass2.cs", new string[] { "FirstTestClass", "IFirstTestClass" })]
+        public void Should_Return_Name(string file, string[] expected)
+        {
 
-            string result = "";
-            if(members != null)
-            {
-                foreach(var member in members)
-                {
-                    if(member.Kind() == SyntaxKind.ClassDeclaration)
-                    {
-                        var className = (ClassDeclarationSyntax)member;
-                        result = className.Identifier.ToString();
-                        Assert.AreEqual(expected, result);
-
-                    }
-                }
-            }
-
-
-
+            GenerateSyntaxTree generateSyntaxTree = new GenerateSyntaxTree(file, "", entityNodes);
+            string[] results = new string[256];
+            //for (int i = 0; i < entityNodes.Count; i++)
+            //{
+            //    for(int j = 0; j < entityNodes.Count; j++)
+            //    {
+            //        var name = entityNodes[];
+            //    }
+            //    results[i] = name;
+            //    System.Console.WriteLine(result);
+            //    Assert.AreEqual(expected, result);
+            //}
 
         }
+
+   
+
     }
 }
