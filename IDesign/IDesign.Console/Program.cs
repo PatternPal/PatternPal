@@ -16,7 +16,6 @@ namespace IDesign.ConsoleApp
         /// <param name="args">Takes in commandline options and .cs files</param>
         private static void Main(string[] args)
         {
-            List<DesignPattern> designPatterns = RecognizerRunner.designPatterns;
 
             if (args.Length <= 0)
             {
@@ -28,6 +27,9 @@ namespace IDesign.ConsoleApp
             var showHelp = false;
             var selectedFiles = new List<string>();
             var selectedPatterns = new List<DesignPattern>();
+            var runner = new RecognizerRunner();
+            var manager = new FileManager();
+            var designPatterns = RecognizerRunner.designPatterns;
 
             var options = new OptionSet
             {
@@ -48,9 +50,7 @@ namespace IDesign.ConsoleApp
             }
 
             selectedFiles = (from a in arguments where a.EndsWith(".cs") && a.Length > 3 select a).ToList();
-
-            FileManager manager = new FileManager();
-
+            
             foreach (string arg in arguments)
             {
                 if (Directory.Exists(arg))
@@ -75,11 +75,7 @@ namespace IDesign.ConsoleApp
 
             foreach (var pattern in selectedPatterns) Console.WriteLine(pattern.Name);
 
-            var runner = new RecognizerRunner();
-
-            var results = runner.Run(selectedFiles, selectedPatterns);
-
-            PrintResults(results);
+            PrintResults(runner.Run(selectedFiles, selectedPatterns));
 
             Console.ReadKey();
         }
