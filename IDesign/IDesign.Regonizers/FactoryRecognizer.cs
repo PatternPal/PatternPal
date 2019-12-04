@@ -28,14 +28,17 @@ namespace IDesign.Recognizers
 
         private bool CreatedClassImplementsReturnTypeInterface(IEntityNode node, IMethod method)
         {
-            return method.GetCreatedTypes()
-                 .Where(name => node.GetEdgeNode(name).ImplementsInterface(method.GetReturnType())).Any();
+            return true;
+
+           // return method.GetCreatedTypes()
+                // .Where(name => node.GetEdgeNode(name).ImplementsInterface(method.GetReturnType())).Any();
         }
         
         private bool CreatedClassExtendsReturnTypeInterface(IEntityNode node, IMethod method)
         {
-            return method.GetCreatedTypes()
-                .Where(name => node.GetEdgeNode(name).ExtendsClass(method.GetReturnType())).Any();
+            return true;
+           // return method.GetCreatedTypes()
+               // .Where(name => node.GetEdgeNode(name).ExtendsClass(method.GetReturnType())).Any();
         }
     }
 }
