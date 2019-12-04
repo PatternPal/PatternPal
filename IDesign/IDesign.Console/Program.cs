@@ -16,11 +16,7 @@ namespace IDesign.ConsoleApp
         private static void Main(string[] args)
         {
 
-            RecognizerRunner recognizer = new RecognizerRunner();
-            List<string> filesList = new List<string>();
-            FileManager fileManager = new FileManager();
-            var x= fileManager.GetAllCsFilesFromDirectory(@"C:\Users\Shanna\source\repos\DesignPatternRecognizer\IDesign\IDesign.Core\TestClasses");
-            recognizer.Run(x ,designPatterns);
+         
 
 
             if (args.Length <= 0)
