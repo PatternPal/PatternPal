@@ -32,7 +32,6 @@ namespace IDesign.Core
             EntityNodes = entityNodes;
         }
 
-
         /// <summary>
         ///     Makes Edges for every node in the dictionary
         /// </summary>
