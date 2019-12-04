@@ -1,7 +1,6 @@
 ﻿/// <summary>
 /// Testclasses
 /// </summary>
-
 namespace IDesign.Core.TestClasses
 {
     internal interface IFirstTestClass
@@ -11,8 +10,6 @@ namespace IDesign.Core.TestClasses
 
     internal class FirstTestClass : IFirstTestClass
     {
-        public string s = "shanna";
-
         public FirstTestClass(int g)
         {
             Getal = g;
@@ -21,7 +18,6 @@ namespace IDesign.Core.TestClasses
         public int Getal { get; set; }
         public static string Naam { get; set; }
         public string naam { get; set; }
-
 
         public int Count(int g)
         {

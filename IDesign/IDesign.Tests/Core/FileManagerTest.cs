@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace IDesign.Tests.Core
 {
-    internal class ReadFilesTest
+    internal class FileManagerTest
     {
         public string path = "../../../Core/TestClasses";
         private readonly FileManager readFiles = new FileManager();

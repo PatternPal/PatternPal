@@ -6,11 +6,11 @@ namespace IDesign.Tests.TestClasses
 {
     public class SingleTonTestCase6
     {
-        public static SingleTonTestCase6 _instance;
+        private static SingleTonTestCase6 _instance;
 
-        public SingleTonTestCase6() { }
+        private SingleTonTestCase6() { }
 
-        public  SingleTonTestCase6 Instance()
+        public static SingleTonTestCase6 GetInstance()
         {
             if (_instance == null)
             {
@@ -20,3 +20,5 @@ namespace IDesign.Tests.TestClasses
         }
     }
 }
+
+

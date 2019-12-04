@@ -9,23 +9,17 @@ namespace IDesign.Recognizers.Tests
 {
     public class SingletonRecognizerTest
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
-
         [Test]
         [TestCase("SingleTonTestCase1.cs", 100)]
         [TestCase("SingleTonTestCase2.cs", 42)]
         [TestCase("SingleTonTestCase3.cs", 42)]
         [TestCase("SingleTonTestCase4.cs", 100)]
-        [TestCase("SingleTonTestCase6.cs", 57)]
+        [TestCase("SingleTonTestCase6.cs", 100)]
         [TestCase("SingleTonTestCase7.cs", 57)]
         public void SingletonRecognizer_Returns_Correct_Score(string filename, int score)
         {
             var singleton = new SingletonRecognizer();
             var code = FileUtils.FileToString(filename);
-
 
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
             var NameSpaceNode = root.Members[0] as NamespaceDeclarationSyntax;

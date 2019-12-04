@@ -17,7 +17,6 @@ namespace IDesign.Checks
             return methodSyntax.GetReturnType().IsEqual(returnType);
         }
 
-
         /// <summary>
         ///     Return a boolean based on if the given method is creational.
         /// </summary>
@@ -55,7 +54,6 @@ namespace IDesign.Checks
                         name.Identifier.ToString().IsEqual(creationType))
                         return true;
             }
-
             return false;
         }
 

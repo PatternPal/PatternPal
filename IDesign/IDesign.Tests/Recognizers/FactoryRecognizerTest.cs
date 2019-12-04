@@ -10,11 +10,6 @@ namespace IDesign.Tests.Recognizers
 {
     public class FactoryRecognizerTest
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
-
         [Test]
         [TestCase("FactorySimpleTestCase1.cs", 100)]
         [TestCase("FactorySimpleTestCase2.cs", 50)]
@@ -25,7 +20,6 @@ namespace IDesign.Tests.Recognizers
         {
             var factory = new FactoryRecognizer();
             var code = FileUtils.FileToString("FactorySimple\\" + filename);
-
 
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
             var NameSpaceNode = root.Members[0] as NamespaceDeclarationSyntax;

@@ -8,11 +8,6 @@ namespace IDesign.Tests.Core
 {
     public class EntityNodeTest
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
-
         public void Should_Create_Fields()
         {
             var testClass = @"";

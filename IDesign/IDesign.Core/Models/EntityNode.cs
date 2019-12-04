@@ -59,7 +59,6 @@ namespace IDesign.Core
                         x.Kind() == SyntaxKind.GetAccessorDeclaration && x.Body != null);
                     list.AddRange(getters.Select(x => new PropertyMethod(property, x)));
                 }
-
             return list;
         }
 

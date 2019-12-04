@@ -38,7 +38,6 @@ namespace IDesign.Core
         }
 
         public string File { get; set; }
-
         public CompilationUnitSyntax Root { get; set; }
         private SyntaxTree Tree { get; }
 
@@ -74,7 +73,7 @@ namespace IDesign.Core
         {
             if (node.Kind() == SyntaxKind.ClassDeclaration)
             {
-                var classNode = (ClassDeclarationSyntax) node;
+                var classNode = (ClassDeclarationSyntax)node;
                 ClassDeclarationSyntaxList.Add(classNode);
 
                 if (!entityNodes.ContainsKey(classNode))
@@ -119,7 +118,7 @@ namespace IDesign.Core
         {
             if (node.Kind() == SyntaxKind.InterfaceDeclaration)
             {
-                var interfaceNode = (InterfaceDeclarationSyntax) node;
+                var interfaceNode = (InterfaceDeclarationSyntax)node;
                 InterfaceDeclarationSyntaxList.Add(interfaceNode);
 
                 if (!entityNodes.ContainsKey(interfaceNode))
@@ -165,7 +164,7 @@ namespace IDesign.Core
                 foreach (var childNode in node.ChildNodes())
                     if (childNode.Kind() == SyntaxKind.ConstructorDeclaration)
                     {
-                        var constructorNode = (ConstructorDeclarationSyntax) childNode;
+                        var constructorNode = (ConstructorDeclarationSyntax)childNode;
                         ConstructorDeclarationSyntaxList.Add(constructorNode);
                     }
 
@@ -197,7 +196,7 @@ namespace IDesign.Core
                 foreach (var childeNode in node.ChildNodes())
                     if (childeNode.Kind() == SyntaxKind.MethodDeclaration)
                     {
-                        var methodNode = (MethodDeclarationSyntax) childeNode;
+                        var methodNode = (MethodDeclarationSyntax)childeNode;
                         MethodDeclarationSyntaxList.Add(methodNode);
                     }
 
@@ -229,7 +228,7 @@ namespace IDesign.Core
                 foreach (var childNode in node.ChildNodes())
                     if (childNode.Kind() == SyntaxKind.PropertyDeclaration)
                     {
-                        var propertyNode = (PropertyDeclarationSyntax) childNode;
+                        var propertyNode = (PropertyDeclarationSyntax)childNode;
                         PropertyDeclarationSyntaxList.Add(propertyNode);
                     }
 
@@ -261,7 +260,7 @@ namespace IDesign.Core
                 foreach (var childNode in node.ChildNodes())
                     if (childNode.Kind() == SyntaxKind.FieldDeclaration)
                     {
-                        var fieldNode = (FieldDeclarationSyntax) childNode;
+                        var fieldNode = (FieldDeclarationSyntax)childNode;
                         FieldDeclarationSyntaxList.Add(fieldNode);
                     }
 
