@@ -1,21 +1,25 @@
-﻿using IDesign.Recognizers.Abstractions;
-using IDesign.Recognizers.Output;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using IDesign.Recognizers.Abstractions;
+using IDesign.Recognizers.Output;
 
 namespace IDesign.Recognizers
 {
+    /// <summary>
+    ///     A base class for our recognizer, so we have some base functionality for our recognizers
+    /// </summary>
     public partial class Recognizer
     {
-        internal void CheckElements<T>(Result result, IEnumerable<T> elements, IEnumerable<ElementCheck<T>> checks) where T : ICheckable
+        internal void CheckElements<T>(Result result, IEnumerable<T> elements, IEnumerable<ElementCheck<T>> checks)
+            where T : ICheckable
         {
             var checkResult = CheckElements(elements, checks);
             result.Score += checkResult.score;
             result.Suggestions.AddRange(checkResult.suggestions);
         }
 
-        internal (IList<ISuggestion> suggestions, int score) CheckElements<T>(IEnumerable<T> elements, IEnumerable<ElementCheck<T>> checks) where T : ICheckable
+        internal (IList<ISuggestion> suggestions, int score) CheckElements<T>(IEnumerable<T> elements,
+            IEnumerable<ElementCheck<T>> checks) where T : ICheckable
         {
             var suggestionList = new List<ISuggestion>();
 
@@ -44,7 +48,9 @@ namespace IDesign.Recognizers
                 if (elementScore.Value.score == scores.Values.Select(x => x.score).Max())
                 {
                     foreach (var propertySuggestion in elementScore.Value.suggestions)
-                        suggestionList.Add(new Suggestion(elementScore.Key.GetSuggestionName() + ": " + propertySuggestion, elementScore.Key.GetSuggestionNode()));
+                        suggestionList.Add(new Suggestion(
+                            elementScore.Key.GetSuggestionName() + ": " + propertySuggestion,
+                            elementScore.Key.GetSuggestionNode()));
 
                     return (suggestionList, elementScore.Value.score);
                 }

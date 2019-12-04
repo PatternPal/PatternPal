@@ -5,10 +5,7 @@
 /// </summary>
 namespace IDesign.Core.TestClasses
 {
-    class ThirdClass
-    {
-        public SecondTestClass second { get; set; }
-    }
+    internal class Third { }
 
     class SecondTestClass : IFirstTestClass
     {
@@ -19,7 +16,6 @@ namespace IDesign.Core.TestClasses
 
         public int Som { get; set; }
         public static string Uitslag { get; set; }
-
         public string naam { get; set; }
 
         public int Bereken(int x)

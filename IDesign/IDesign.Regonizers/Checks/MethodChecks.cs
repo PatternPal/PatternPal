@@ -17,7 +17,6 @@ namespace IDesign.Recognizers
             return methodSyntax.GetReturnType().IsEqual(returnType);
         }
 
-
         /// <summary>
         ///     Return a boolean based on if the given method is creational.
         /// </summary>

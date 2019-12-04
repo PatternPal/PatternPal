@@ -7,7 +7,7 @@ namespace IDesign.Recognizers
     {
         public Method(MethodDeclarationSyntax method)
         {
-            this.MethodDeclaration = method;
+            MethodDeclaration = method;
         }
 
 

@@ -1,6 +1,6 @@
+
 ﻿using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Output;
-using System.Collections.Generic;
 
 namespace IDesign.Recognizers
 {
@@ -9,7 +9,7 @@ namespace IDesign.Recognizers
         public IResult Recognize(IEntityNode entityNode)
         {
             var result = new Result();
-            var methodChecks = new List<ElementCheck<IMethod>>()
+            var methodChecks = new List<ElementCheck<IMethod>>
             {
                 new ElementCheck<IMethod>(x => x.CheckReturnType(entityNode.GetName()) , "Incorrect return type"),
                 new ElementCheck<IMethod>(x => x.CheckModifier("static") , "Is not static"),
@@ -17,7 +17,7 @@ namespace IDesign.Recognizers
             };
             CheckElements(result, entityNode.GetMethods(), methodChecks);
 
-            var propertyChecks = new List<ElementCheck<IField>>()
+            var propertyChecks = new List<ElementCheck<IField>>
             {
                new ElementCheck<IField>(x => x.CheckFieldType(entityNode.GetName()) , "Incorrect type"),
                new ElementCheck<IField>(x => x.CheckMemberModifier("static") , "Is not static"),
@@ -25,13 +25,13 @@ namespace IDesign.Recognizers
             };
             CheckElements(result, entityNode.GetFields(), propertyChecks);
 
-            var constructorChecks = new List<ElementCheck<IMethod>>()
+            var constructorChecks = new List<ElementCheck<IMethod>>
             {
                  new ElementCheck<IMethod>(x => !x.CheckModifier("public") , "Is public msut be private or protected")
             };
             CheckElements(result, entityNode.GetConstructors(), constructorChecks);
 
-            result.Score = (int)(result.Score / 7f * 100f);
+            result.Score = (int) (result.Score / 7f * 100f);
             return result;
         }
     }

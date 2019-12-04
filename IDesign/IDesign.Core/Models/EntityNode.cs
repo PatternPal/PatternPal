@@ -1,10 +1,10 @@
 ﻿using IDesign.Recognizers;
+﻿using System.Collections.Generic;
+using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace IDesign.Core
 {
@@ -27,16 +27,28 @@ namespace IDesign.Core
             return InterfaceOrClassNode;
         }
 
+        /// <summary>
+        ///     Get name of entitynode
+        /// </summary>
+        /// <returns></returns>
         public string GetName()
         {
             return Name;
         }
 
+        /// <summary>
+        ///     Get source file of an entitynode
+        /// </summary>
+        /// <returns></returns>
         public string GetSourceFile()
         {
             return SourceFile;
         }
 
+        /// <summary>
+        ///     Get all methods and properties of a class
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<IMethod> GetMethods()
         {
             var list = new List<IMethod>();
@@ -49,7 +61,6 @@ namespace IDesign.Core
                         x.Kind() == SyntaxKind.GetAccessorDeclaration && x.Body != null);
                     list.AddRange(getters.Select(x => new PropertyMethod(property, x)));
                 }
-
             return list;
         }
 
@@ -104,7 +115,7 @@ namespace IDesign.Core
                 return EntityNodeType.Interface;
             }
             return EntityNodeType.Class;
-            
+
         }
 
         public List<UsingDirectiveSyntax> GetUsings()

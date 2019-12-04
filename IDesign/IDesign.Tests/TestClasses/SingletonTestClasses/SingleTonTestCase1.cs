@@ -8,10 +8,7 @@ namespace IDesign.Tests.TestClasses
     {
         private static SingleTonTestCase1 instance = null;
 
-        private SingleTonTestCase1()
-        {
-
-        }
+        private SingleTonTestCase1() { }
 
         public static SingleTonTestCase1 Instance
         {

@@ -7,7 +7,7 @@ namespace IDesign.Recognizers
     {
         public Constructormethod(ConstructorDeclarationSyntax constructor)
         {
-            this.Constructor = constructor;
+            Constructor = constructor;
         }
 
 

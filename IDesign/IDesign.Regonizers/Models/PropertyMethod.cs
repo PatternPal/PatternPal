@@ -7,8 +7,8 @@ namespace IDesign.Recognizers
     {
         public PropertyMethod(PropertyDeclarationSyntax property, AccessorDeclarationSyntax accesor)
         {
-            this.Property = property;
-            this.Accesor = accesor;
+            Property = property;
+            Accesor = accesor;
         }
 
         public PropertyDeclarationSyntax Property { get; set; }

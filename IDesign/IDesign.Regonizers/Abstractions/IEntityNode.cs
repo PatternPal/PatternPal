@@ -1,39 +1,46 @@
 ﻿using IDesign.Recognizers.Models;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections.Generic;
 
 namespace IDesign.Recognizers.Abstractions
 {
     public interface IEntityNode
     {
         /// <summary>
-        ///     Gets the TypeDeclarationSyntax of this class
+        ///     Get the declaration syntax of the node.
+        ///     Possible syntax types: ClassDeclarationSyntax, InterfaceDeclarationSyntax.
         /// </summary>
+        /// <returns>The declaration syntax of the node</returns>
         TypeDeclarationSyntax GetTypeDeclarationSyntax();
 
         /// <summary>
-        ///     Gets the name of this class
+        ///     Get the name of the node.
+        ///     Could be the name of a class or a interface.
         /// </summary>
+        /// <returns>The name of the node</returns>
         string GetName();
 
         /// <summary>
-        ///     Gets the sourcefile of this class
+        ///     Get the filepath of the source file where this node is found in
         /// </summary>
+        /// <returns>Filepath of the source</returns>
         string GetSourceFile();
 
         /// <summary>
-        ///     Gets the methods of this class
+        ///     Get a list of methods declared in this node
         /// </summary>
+        /// <returns>A list of methods</returns>
         IEnumerable<IMethod> GetMethods();
 
         /// <summary>
-        ///     Gets the fields of this class
+        ///     Get a list of fields declared in this node
         /// </summary>
+        /// <returns>A list of fields</returns>
         IEnumerable<IField> GetFields();
 
         /// <summary>
-        ///     Gets the constructors of this class
+        ///     Get a list of constructors declared in this node
         /// </summary>
+        /// <returns>A list of constructors</returns>
         IEnumerable<IMethod> GetConstructors();
 
         /// <summary>

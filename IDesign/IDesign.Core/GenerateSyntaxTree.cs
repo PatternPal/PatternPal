@@ -1,7 +1,7 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Collections.Generic;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections.Generic;
 
 namespace IDesign.Core
 {
@@ -14,7 +14,6 @@ namespace IDesign.Core
         public List<InterfaceDeclarationSyntax> InterfaceDeclarationSyntaxList = new List<InterfaceDeclarationSyntax>();
         public List<MethodDeclarationSyntax> MethodDeclarationSyntaxList;
         public List<PropertyDeclarationSyntax> PropertyDeclarationSyntaxList;
-        public string File { get; set; }
 
         public List<UsingDirectiveSyntax> UsingDirectiveSyntaxList = new List<UsingDirectiveSyntax>();
 
@@ -37,6 +36,7 @@ namespace IDesign.Core
             GetAllFieldsOfAClass(entityNodes);
         }
 
+        public string File { get; set; }
         public CompilationUnitSyntax Root { get; set; }
         private SyntaxTree Tree { get; }
 
@@ -80,7 +80,7 @@ namespace IDesign.Core
                 {
                     nameSpaceKey += nameSpace.Name.ToString();
                 }
-                
+
                 var keybinding = nameSpaceKey + "." + classNode.Identifier.ToString();
                 if (!entityNodes.ContainsKey(keybinding))
                 {
@@ -134,7 +134,7 @@ namespace IDesign.Core
                 {
                     nameSpaceKey += nameSpace.Name.ToString();
                 }
-                
+
                 var keybinding = nameSpaceKey + "." + interfaceNode.Identifier.ToString();
                 if (!entityNodes.ContainsKey(keybinding))
                 {

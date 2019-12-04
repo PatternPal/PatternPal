@@ -7,7 +7,7 @@ namespace IDesign.Recognizers
     {
         public PropertyField(PropertyDeclarationSyntax property)
         {
-            this.Property = property;
+            Property = property;
         }
 
         public PropertyDeclarationSyntax Property { get; set; }

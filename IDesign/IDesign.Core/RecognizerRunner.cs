@@ -7,7 +7,6 @@ namespace IDesign.Core
 {
     public class RecognizerRunner
     {
-        public event EventHandler<RecognizerProgress> OnProgressUpdate;
         public static List<DesignPattern> designPatterns = new List<DesignPattern>
         {
             new DesignPattern("Singleton", new SingletonRecognizer()),
@@ -15,6 +14,8 @@ namespace IDesign.Core
         };
         public Dictionary<string, EntityNode> EntityNodes =
             new Dictionary<string, EntityNode>();
+
+        public event EventHandler<RecognizerProgress> OnProgressUpdate;
 
         /// <summary>
         ///     Function that should be called to generate a syntax tree
@@ -33,7 +34,7 @@ namespace IDesign.Core
                 var tree = FileManager.MakeStringFromFile(files[i]);
                 var generateSyntaxTree = new GenerateSyntaxTree(tree, files[i], EntityNodes);
 
-                ProgressUpdate((int)(i / (float)files.Count * 50f), "Reading file: " + files[i]);
+                ProgressUpdate((int) (i / (float) files.Count * 50f), "Reading file: " + files[i]);
             }
 
             //Make relations
@@ -41,10 +42,10 @@ namespace IDesign.Core
             determineRelations.GetEdgesOfEntityNode();
 
             var j = 0;
-            foreach(var node in EntityNodes.Values)
+            foreach (var node in EntityNodes.Values)
             {
                 j++;
-                ProgressUpdate((int)(j / (float)files.Count * 50f + 50), "Scanning class: " + node.GetName());
+                ProgressUpdate((int) (j / (float) files.Count * 50f + 50), "Scanning class: " + node.GetName());
                 foreach (var pattern in patterns)
                     results.Add(new RecognitionResult
                     {
