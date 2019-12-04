@@ -12,8 +12,8 @@ namespace IDesign.Core
         {
             new DesignPattern("Singleton", new SingletonRecognizer())
         };
-        public Dictionary<TypeDeclarationSyntax, EntityNode> EntityNodes =
-            new Dictionary<TypeDeclarationSyntax, EntityNode>();
+        public Dictionary<string, EntityNode> EntityNodes =
+            new Dictionary<string, EntityNode>();
 
         /// <summary>
         ///     Function that should be called to generate a syntax tree

@@ -69,8 +69,14 @@ namespace IDesign.Recognizers
         //helper functions
         public static IEnumerable<string> GetCreatedTypes(this IMethod methodSyntax)
         {
+            var result = new List<string>();
             var creations = methodSyntax.GetBody().DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
-            return creations.OfType<IdentifierNameSyntax>().Select(x => x.Identifier.ToString());
+            foreach (var creation in creations)
+            {
+                var identifiers = creation.DescendantNodes().OfType<IdentifierNameSyntax>();
+                result.AddRange(identifiers.Select(y => y.Identifier.ToString()));
+            }
+            return result;
         }
     }
 }

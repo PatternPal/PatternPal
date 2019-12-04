@@ -1,5 +1,6 @@
 ﻿using IDesign.Recognizers;
 using IDesign.Recognizers.Abstractions;
+using IDesign.Recognizers.Models;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace IDesign.Core
         public List<ConstructorDeclarationSyntax> ConstructorDeclarationSyntaxList =
             new List<ConstructorDeclarationSyntax>();
 
-        public List<EntityNodeEdges> EntityNodeEdgesList = new List<EntityNodeEdges>();
+        public IList<IRelation> EntityNodeEdgesList = new List<IRelation>();
         public List<FieldDeclarationSyntax> FieldDeclarationSyntaxList = new List<FieldDeclarationSyntax>();
         public List<MethodDeclarationSyntax> MethodDeclarationSyntaxList = new List<MethodDeclarationSyntax>();
         public List<PropertyDeclarationSyntax> PropertyDeclarationSyntaxList = new List<PropertyDeclarationSyntax>();
@@ -78,9 +79,24 @@ namespace IDesign.Core
             return PropertyDeclarationSyntaxList;
         }
 
-        public IEnumerable<IRelation> GetRelations()
+        public IList<IRelation> GetRelations()
         {
             return EntityNodeEdgesList;
+        }
+
+       public EntityNodeType GetEntityNodeType()
+        {
+            var declarationnode = this.GetTypeDeclarationSyntax();
+            if (declarationnode.GetType() == typeof(ClassDeclarationSyntax))
+            {
+                return EntityNodeType.Class;
+            }
+            else if(declarationnode.GetType() == typeof(InterfaceDeclarationSyntax))
+            {
+                return EntityNodeType.Interface;
+            }
+            return EntityNodeType.Class;
+            
         }
     }
 }

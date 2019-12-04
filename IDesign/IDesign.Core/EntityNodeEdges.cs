@@ -5,12 +5,14 @@ namespace IDesign.Core
 {
     public class EntityNodeEdges : IRelation
     {
-        public EntityNodeEdges(EntityNode entityNode) 
+        public EntityNodeEdges(IEntityNode entityNode, RelationType type) 
         {
             EntityNode = entityNode;
+            Type = type;
         }
 
-        public EntityNode EntityNode { get; set; }
+        public IEntityNode EntityNode { get; set; }
+        public RelationType Type { get; set; }
 
         public IEntityNode GetDestination()
         {
@@ -19,7 +21,7 @@ namespace IDesign.Core
 
         RelationType IRelation.GetType()
         {
-            throw new System.NotImplementedException();
+            return Type;
         }
     }
 }
