@@ -1,7 +1,6 @@
 ﻿using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,10 +23,6 @@ namespace IDesign.Core
             EntityNodes = entityNodes;
         }
 
-        /// <summary>
-        ///     Function to determine relations between Entitynodes.
-        ///     Extense and Implements based.
-        /// </summary>
         public void GetEdgesOfEntityNode()
         {
             foreach (var entityNode in EntityNodes.Values)
@@ -44,22 +39,22 @@ namespace IDesign.Core
                             {
                                 case EntityNodeType.Class:
                                     relationType = RelationType.Extends;
-                                    relationTypeInverse = RelationType.Extended;
+                                    relationTypeInverse = RelationType.ExtendedBy;
                                     break;
                                 case EntityNodeType.Interface:
                                     relationType = RelationType.Implements;
-                                    relationType = RelationType.Implemented;
+                                    relationType = RelationType.ImplementedBy;
                                     break;
                                 default:
                                     break;
                             }
-
-
+                           
+                            
 
                            var edge = new EntityNodeEdges(EntityNodes[stringname], relationType.Value);
                             entityNode.GetRelations().Add(edge);
-                            edge = new EntityNodeEdges(EntityNodes[stringname], relationTypeInverse.Value);
-                            entityNode.GetRelations().Add(edge);
+                            edge = new EntityNodeEdges(entityNode, relationTypeInverse.Value);
+                            EntityNodes[stringname].GetRelations().Add(edge);
                         }
                     }
                 }
@@ -67,11 +62,14 @@ namespace IDesign.Core
                 var childNodes = entityNode.GetTypeDeclarationSyntax().DescendantNodes();
                 foreach (var creation in childNodes.OfType<ObjectCreationExpressionSyntax>())
                 {
-                  //  creation.Iden
-                      //  var identifiers = creation.DescendantNodes().OfType<IdentifierNameSyntax>();
-
-                   // foreach
-
+                    if (creation.Type is IdentifierNameSyntax name)
+                    {
+                        var edge = new EntityNodeEdges(EntityNodes[name.Identifier.ToString()], RelationType.Creates);
+                        entityNode.GetRelations().Add(edge);
+                        edge = new EntityNodeEdges(entityNode, RelationType.CreatedBy);
+                        EntityNodes[name.Identifier.ToString()].GetRelations().Add(edge);
+                    }
+                    
                 }
 
             }

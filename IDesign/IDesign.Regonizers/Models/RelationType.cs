@@ -7,10 +7,12 @@ namespace IDesign.Recognizers.Models
    public enum RelationType
     {
         Implements,
-        Implemented,
+        ImplementedBy,
         Extends,
-        Extended,
+        ExtendedBy,
         Uses,
-        Creates
+        UsedBy,
+        Creates,
+        CreatedBy
     }
 }

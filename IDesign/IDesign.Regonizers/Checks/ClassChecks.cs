@@ -41,7 +41,7 @@ namespace IDesign.Recognizers.Checks
         public static bool HasInterface(this IEntityNode node, string name)
         {
             return node.GetRelations()
-                .Any(x => x.GetType() == RelationType.Implemented && x.GetDestination().GetName() == name);
+                .Any(x => x.GetType() == RelationType.ImplementedBy && x.GetDestination().GetName() == name);
         }
         public static IEntityNode GetExtends(this IEntityNode node)
         {
