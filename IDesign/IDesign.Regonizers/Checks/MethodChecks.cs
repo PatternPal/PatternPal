@@ -1,8 +1,8 @@
-﻿using System.Linq;
-using IDesign.Models;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace IDesign.Checks
+namespace IDesign.Recognizers
 {
     public static class MethodChecks
     {
@@ -46,14 +46,11 @@ namespace IDesign.Checks
         /// <returns></returns>
         public static bool CheckCreationType(this IMethod methodSyntax, string creationType)
         {
-            if (methodSyntax.GetBody() != null)
-            {
-                var creations = methodSyntax.GetBody().DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
-                foreach (var creationExpression in creations)
-                    if (creationExpression.Type is IdentifierNameSyntax name &&
-                        name.Identifier.ToString().IsEqual(creationType))
-                        return true;
-            }
+            var creations = methodSyntax.GetBody().DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
+            foreach (var creationExpression in creations)
+                if (creationExpression.Type is IdentifierNameSyntax name && name.Identifier.ToString().IsEqual(creationType))
+                    return true;
+
             return false;
         }
 
@@ -65,6 +62,24 @@ namespace IDesign.Checks
         public static bool CheckReturnTypeSameAsCreation(this IMethod methodSyntax)
         {
             return methodSyntax.CheckCreationType(methodSyntax.GetReturnType());
+        }
+
+        //helper functions
+        /// <summary>
+        ///     Return al list of all  types that this function makes as strings.
+        /// </summary>
+        /// <param name="methodSyntax">The method witch it should check</param>
+        /// <returns>all types that are created</returns>
+        public static IEnumerable<string> GetCreatedTypes(this IMethod methodSyntax)
+        {
+            var result = new List<string>();
+            var creations = methodSyntax.GetBody().DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
+            foreach (var creation in creations)
+            {
+                var identifiers = creation.DescendantNodes().OfType<IdentifierNameSyntax>();
+                result.AddRange(identifiers.Select(y => y.Identifier.ToString()));
+            }
+            return result;
         }
     }
 }

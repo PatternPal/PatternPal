@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
-using IDesign.Checks;
-using IDesign.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Output;
+using IDesign.Recognizers.Checks;
 
 namespace IDesign.Recognizers
 {
@@ -13,9 +15,8 @@ namespace IDesign.Recognizers
             var result = new Result();
             var methodChecks = new List<ElementCheck<IMethod>>
             {
-                new ElementCheck<IMethod>(x => x.CheckModifier("public"), "Is niet public"),
-                new ElementCheck<IMethod>(x => x.CheckReturnTypeSameAsCreation(),
-                    "Return type is niet hetzelfde als wat er gemaakt wordt")
+                new ElementCheck<IMethod>(x => x.CheckModifier("public") , "Is not public"),
+                new ElementCheck<IMethod>(x => x.CheckReturnTypeSameAsCreation(), "Return type isnt the same as created" )
             };
             CheckElements(result, entityNode.GetMethods(), methodChecks);
 

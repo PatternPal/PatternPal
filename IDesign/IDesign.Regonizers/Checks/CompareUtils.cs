@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IDesign.Checks
+namespace IDesign.Recognizers
 {
     public static class CompareUtils
     {

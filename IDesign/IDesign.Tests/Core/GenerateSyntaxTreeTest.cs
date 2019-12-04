@@ -8,8 +8,8 @@ namespace IDesign.Tests.Core
 {
     internal class GenerateSyntaxTreeTest
     {
-        private readonly Dictionary<TypeDeclarationSyntax, EntityNode> entityNodes =
-            new Dictionary<TypeDeclarationSyntax, EntityNode>();
+        private readonly Dictionary<string, EntityNode> entityNodes =
+            new Dictionary<string, EntityNode>();
 
         [TestCase(
             @"namespace TestNamespace{ class TestClass{ public string Name {get; set;} public TestClass(string name){this.Name = name;}}}",

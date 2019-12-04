@@ -7,7 +7,7 @@ namespace IDesign.Core.TestClasses
 {
     internal class Third { }
 
-    internal class SecondTestClass : Third, IFirstTestClass
+    class SecondTestClass : IFirstTestClass
     {
         public SecondTestClass(int s)
         {

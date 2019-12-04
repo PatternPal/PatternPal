@@ -1,36 +1,36 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace IDesign.Models
+namespace IDesign.Recognizers
 {
-    public class Method : IMethod
+    public class Constructormethod : IMethod
     {
-        public Method(MethodDeclarationSyntax method)
+        public Constructormethod(ConstructorDeclarationSyntax constructor)
         {
-            MethodDeclaration = method;
+            Constructor = constructor;
         }
 
 
-        public MethodDeclarationSyntax MethodDeclaration { get; set; }
+        public ConstructorDeclarationSyntax Constructor { get; set; }
 
         public BlockSyntax GetBody()
         {
-            return MethodDeclaration.Body;
+            return Constructor.Body;
         }
 
         public SyntaxTokenList GetModifiers()
         {
-            return MethodDeclaration.Modifiers;
+            return Constructor.Modifiers;
         }
 
         public string GetName()
         {
-            return MethodDeclaration.Identifier.ToString();
+            return Constructor.Identifier.ToString();
         }
 
         public string GetReturnType()
         {
-            return MethodDeclaration.ReturnType.ToString();
+            return "void";
         }
 
         public string GetSuggestionName()
@@ -40,7 +40,7 @@ namespace IDesign.Models
 
         public SyntaxNode GetSuggestionNode()
         {
-            return MethodDeclaration;
+            return Constructor;
         }
     }
 }

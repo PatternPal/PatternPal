@@ -1,7 +1,8 @@
+﻿using IDesign.Recognizers;
 ﻿using System.Collections.Generic;
 using System.Linq;
-using IDesign.Models;
 using IDesign.Recognizers.Abstractions;
+using IDesign.Recognizers.Models;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -11,9 +12,10 @@ namespace IDesign.Core
     {
         public List<ConstructorDeclarationSyntax> ConstructorDeclarationSyntaxList =
             new List<ConstructorDeclarationSyntax>();
-
-        public List<EntityNodeEdges> EntityNodeEdgesList = new List<EntityNodeEdges>();
+        public string NameSpace { get; set; }
+        public List<IRelation> EntityNodeEdgesList = new List<IRelation>();
         public List<FieldDeclarationSyntax> FieldDeclarationSyntaxList = new List<FieldDeclarationSyntax>();
+        public List<UsingDirectiveSyntax> UsingDeclarationSyntaxList = new List<UsingDirectiveSyntax>();
         public List<MethodDeclarationSyntax> MethodDeclarationSyntaxList = new List<MethodDeclarationSyntax>();
         public List<PropertyDeclarationSyntax> PropertyDeclarationSyntaxList = new List<PropertyDeclarationSyntax>();
         public string Name { get; set; }
@@ -93,6 +95,32 @@ namespace IDesign.Core
         public IEnumerable<PropertyDeclarationSyntax> GetProperties()
         {
             return PropertyDeclarationSyntaxList;
+        }
+
+        public IList<IRelation> GetRelations()
+        {
+            return EntityNodeEdgesList;
+        }
+
+       public EntityNodeType GetEntityNodeType()
+        {
+            var declarationnode = this.GetTypeDeclarationSyntax();
+
+            if (declarationnode.GetType() == typeof(ClassDeclarationSyntax))
+            {
+                return EntityNodeType.Class;
+            }
+            else if(declarationnode.GetType() == typeof(InterfaceDeclarationSyntax))
+            {
+                return EntityNodeType.Interface;
+            }
+            return EntityNodeType.Class;
+
+        }
+
+        public List<UsingDirectiveSyntax> GetUsings()
+        {
+            return UsingDeclarationSyntaxList;
         }
     }
 }

@@ -11,11 +11,19 @@
     <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase3.cs" />
     <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase4.cs" />
     <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase5.cs" />
+    <Compile Remove="TestClasses\FactorySimple\ProductA.cs" />
+    <Compile Remove="TestClasses\FactoryTestClasses\FactoryTestCase1.cs" />
+    <Compile Remove="TestClasses\FactoryTestClasses\FactoryTestCase2.cs" />
+    <Compile Remove="TestClasses\FactoryTestClasses\FactoryTestCase3.cs" />
+    <Compile Remove="TestClasses\FactoryTestClasses\FactoryTestCase4.cs" />
+    <Compile Remove="TestClasses\FactoryTestClasses\FactoryTestCase5.cs" />
+    <Compile Remove="TestClasses\FactoryTestClasses\IProduct.cs" />
+    <Compile Remove="TestClasses\FactoryTestClasses\ProductA.cs" />
+    <Compile Remove="TestClasses\FactoryTestClasses\ProductB.cs" />
     <Compile Remove="TestClasses\SingleTonTestCase1.cs" />
     <Compile Remove="TestClasses\SingleTonTestCase2.cs" />
     <Compile Remove="TestClasses\SingleTonTestCase3.cs" />
     <Compile Remove="TestClasses\SingleTonTestCase4.cs" />
-    <Compile Remove="TestClasses\SingleTonTestCase5.cs" />
     <Compile Remove="TestClasses\SingleTonTestCase6.cs" />
     <Compile Remove="TestClasses\SingleTonTestCase7.cs" />
   </ItemGroup>
@@ -36,25 +44,49 @@
     <None Include="TestClasses\FactorySimple\FactorySimpleTestCase5.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="TestClasses\SingleTonTestCase1.cs">
+    <None Include="TestClasses\FactorySimple\ProductA.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="TestClasses\SingleTonTestCase2.cs">
+    <None Include="TestClasses\FactoryTestClasses\FactoryTestCase1.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="TestClasses\SingleTonTestCase3.cs">
+    <None Include="TestClasses\FactoryTestClasses\FactoryTestCase2.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="TestClasses\SingleTonTestCase4.cs">
+    <None Include="TestClasses\FactoryTestClasses\FactoryTestCase3.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="TestClasses\SingleTonTestCase5.cs">
+    <None Include="TestClasses\FactoryTestClasses\FactoryTestCase4.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="TestClasses\SingleTonTestCase6.cs">
+    <None Include="TestClasses\FactoryTestClasses\FactoryTestCase5.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="TestClasses\SingleTonTestCase7.cs">
+    <None Include="TestClasses\FactoryTestClasses\IProduct.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\FactoryTestClasses\ProductA.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\FactoryTestClasses\ProductB.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\SingletonTestClasses\SingleTonTestCase1.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\SingletonTestClasses\SingleTonTestCase2.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\SingletonTestClasses\SingleTonTestCase3.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\SingletonTestClasses\SingleTonTestCase4.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\SingletonTestClasses\SingleTonTestCase6.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\SingletonTestClasses\SingleTonTestCase7.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -63,10 +95,10 @@
     <PackageReference Include="nunit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
+    <PackageReference Include="System.Collections" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IDesign.Check\IDesign.Checks.csproj" />
     <ProjectReference Include="..\IDesign.Core\IDesign.Core.csproj" />
     <ProjectReference Include="..\IDesign.Regonizers\IDesign.Recognizers.csproj" />
   </ItemGroup>

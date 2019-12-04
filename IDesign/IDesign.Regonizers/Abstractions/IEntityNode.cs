@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using IDesign.Models;
+﻿using IDesign.Recognizers.Models;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.Generic;
 
 namespace IDesign.Recognizers.Abstractions
 {
@@ -43,5 +43,16 @@ namespace IDesign.Recognizers.Abstractions
         /// </summary>
         /// <returns>A list of constructors</returns>
         IEnumerable<IMethod> GetConstructors();
+
+        /// <summary>
+        ///     Gets the relations of this class
+        /// </summary>
+        IList<IRelation> GetRelations();
+
+        /// <summary>
+        ///     Gets the type of this class
+        /// </summary>
+        EntityNodeType GetEntityNodeType();
+
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace IDesign.Models
+namespace IDesign.Recognizers
 {
     public class PropertyMethod : IMethod
     {
