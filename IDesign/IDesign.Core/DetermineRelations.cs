@@ -12,9 +12,17 @@ namespace IDesign.Core
     /// </summary>
     public class DetermineRelations
     {
-        private Dictionary<string, EntityNode> EntityNodes =
-            new Dictionary<string, EntityNode>();
+        private Dictionary<string, EntityNode> EntityNodes;
 
+        private Dictionary<RelationType, RelationType> reverserdTypes =
+            new Dictionary<RelationType, RelationType>()
+            {
+                {RelationType.Implements, RelationType.ImplementedBy},
+                {RelationType.Creates, RelationType.CreatedBy},
+                {RelationType.Uses, RelationType.UsedBy},
+                {RelationType.Extends, RelationType.ExtendedBy}
+            };
+        
         /// <summary>
         ///     Constructor of the Determine Relations class.
         /// </summary>
@@ -23,6 +31,7 @@ namespace IDesign.Core
         {
             EntityNodes = entityNodes;
         }
+
 
         /// <summary>
         ///     Makes Edges for every node in the dictionary
@@ -33,13 +42,21 @@ namespace IDesign.Core
             {
                 CreateParentClasses(entityNode);
                 CreateCreationalEdges(entityNode);
+                CreateUsingEdges(entityNode);
             }
         }
 
-        /// <summary>
-        ///     Makes edges if a node creates another class
-        /// </summary>
-        /// <param name="entityNode"></param>
+        private void AddRelation(EntityNode node, RelationType type, string destination)
+        {
+            AddRelation(node,type, GetNodeByName(node, destination));
+        }
+
+        private void AddRelation(EntityNode node, RelationType type, EntityNode edgeNode)
+        {
+            node.Relations.Add(new Relation(edgeNode, type));
+            edgeNode.Relations.Add(new Relation(node, reverserdTypes[type]));
+        }
+
         private void CreateCreationalEdges(EntityNode entityNode)
         {
             var childNodes = entityNode.GetTypeDeclarationSyntax().DescendantNodes();
@@ -47,22 +64,24 @@ namespace IDesign.Core
             {
                 if (creation.Type is IdentifierNameSyntax name)
                 {
-                    var edgeNode = GetNodeByName(entityNode, name.ToString());
-                    var edge = new Relation(edgeNode, RelationType.Creates);
-                    entityNode.GetRelations().Add(edge);
-
-                    edge = new Relation(entityNode, RelationType.CreatedBy);
-                    edgeNode.GetRelations().Add(edge);
+                    AddRelation(entityNode, RelationType.Creates, name.ToString());
                 }
             }
         }
-        /// <summary>
-        /// Returns an entitynode with this name
-        /// </summary>
-        /// <param name="node"></param>
-        /// <param name="name"></param>
-        /// <returns>entitynode with the given name</returns>
-        private IEntityNode GetNodeByName(EntityNode node, string name)
+
+        private void CreateUsingEdges(EntityNode entityNode)
+        {
+            var childNodes = entityNode.GetTypeDeclarationSyntax().DescendantNodes();
+            foreach (var identifier in childNodes.OfType<IdentifierNameSyntax>())
+            {
+                if (identifier is IdentifierNameSyntax name)
+                {
+                    AddRelation(entityNode, RelationType.Uses, name.ToString());
+                }
+            }
+        }
+
+        private EntityNode GetNodeByName(EntityNode node, string name)
         {
             var namespaces = new List<string>();
             namespaces.Add(node.NameSpace + ".");
@@ -79,10 +98,6 @@ namespace IDesign.Core
             return null;
         }
 
-        /// <summary>
-        ///     Makes edges if a node implements or extends another class
-        /// </summary>
-        /// <param name="entityNode"></param>
         private void CreateParentClasses(EntityNode entityNode)
         {
             if (entityNode.GetTypeDeclarationSyntax().BaseList != null)
@@ -96,26 +111,20 @@ namespace IDesign.Core
                         {
                             continue;
                         }
+
                         RelationType? relationType = null;
-                        RelationType? relationTypeInverse = null;
+
                         switch (edgeNode.GetEntityNodeType())
                         {
                             case EntityNodeType.Class:
                                 relationType = RelationType.Extends;
-                                relationTypeInverse = RelationType.ExtendedBy;
                                 break;
                             case EntityNodeType.Interface:
                                 relationType = RelationType.Implements;
-                                relationTypeInverse = RelationType.ImplementedBy;
-                                break;
-                            default:
                                 break;
                         }
-                        var edge = new Relation(edgeNode, relationType.Value);
-                        entityNode.GetRelations().Add(edge);
 
-                        edge = new Relation(entityNode, relationTypeInverse.Value);
-                        edgeNode.GetRelations().Add(edge);
+                        AddRelation(entityNode, relationType.Value, edgeNode);
                     }
                 }
             }
