@@ -20,10 +20,10 @@ namespace IDesign.Tests.Recognizers
 
         [Test]
         [TestCase("FactorySimpleTestCase1.cs", 100)]
-        [TestCase("FactorySimpleTestCase2.cs", 50)]
-        [TestCase("FactorySimpleTestCase3.cs", 50)]
+        [TestCase("FactorySimpleTestCase2.cs", 100)]
+        [TestCase("FactorySimpleTestCase3.cs", 100)]
         [TestCase("FactorySimpleTestCase4.cs", 100)]
-        [TestCase("FactorySimpleTestCase5.cs", 50)]
+        [TestCase("FactorySimpleTestCase5.cs", 100)]
         public void FactoryRecognizer_Returns_Correct_Score(string filename, int score)
         {
             var factory = new FactoryRecognizer();

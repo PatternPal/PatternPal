@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase1.cs" />
+    <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase2.cs" />
+    <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase3.cs" />
+    <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase4.cs" />
+    <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase5.cs" />
+    <Compile Remove="TestClasses\FactorySimple\ProductA.cs" />
     <Compile Remove="TestClasses\FactoryTestClasses\FactoryTestCase1.cs" />
     <Compile Remove="TestClasses\FactoryTestClasses\FactoryTestCase2.cs" />
     <Compile Remove="TestClasses\FactoryTestClasses\FactoryTestCase3.cs" />
@@ -23,6 +29,24 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="TestClasses\FactorySimple\FactorySimpleTestCase1.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\FactorySimple\FactorySimpleTestCase2.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\FactorySimple\FactorySimpleTestCase3.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\FactorySimple\FactorySimpleTestCase4.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\FactorySimple\FactorySimpleTestCase5.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\FactorySimple\ProductA.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="TestClasses\FactoryTestClasses\FactoryTestCase1.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

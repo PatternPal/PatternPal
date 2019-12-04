@@ -75,7 +75,7 @@ namespace IDesign.Core
                 var classNode = (ClassDeclarationSyntax)node;
                 ClassDeclarationSyntaxList.Add(classNode);
 
-                if (entityNodes[classNode.Identifier.ToString()] != null)
+                if (!entityNodes.ContainsKey(classNode.Identifier.ToString()))
                 {
                     var entityNode = new EntityNode
                     {
@@ -120,7 +120,7 @@ namespace IDesign.Core
                 var interfaceNode = (InterfaceDeclarationSyntax)node;
                 InterfaceDeclarationSyntaxList.Add(interfaceNode);
 
-                if (entityNodes[interfaceNode.Identifier.ToString()] != null)
+                if (!entityNodes.ContainsKey(interfaceNode.Identifier.ToString()))
                 {
                     var entityNode = new EntityNode
                     {

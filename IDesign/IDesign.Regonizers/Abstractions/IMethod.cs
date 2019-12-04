@@ -1,5 +1,4 @@
-﻿
-using IDesign.Models;
+﻿using IDesign.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
