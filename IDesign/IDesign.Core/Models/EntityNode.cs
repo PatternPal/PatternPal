@@ -25,16 +25,28 @@ namespace IDesign.Core
             return InterfaceOrClassNode;
         }
 
+        /// <summary>
+        /// Get name of entitynode 
+        /// </summary>
+        /// <returns></returns>
         public string GetName()
         {
             return Name;
         }
 
+        /// <summary>
+        /// Get source file of an entitynode
+        /// </summary>
+        /// <returns></returns>
         public string GetSourceFile()
         {
             return SourceFile;
         }
 
+        /// <summary>
+        /// Get all methods and properties of a class
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<IMethod> GetMethods()
         {
             var list = new List<IMethod>();
