@@ -1,5 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace IDesign.Models
 {
@@ -41,6 +43,11 @@ namespace IDesign.Models
         public SyntaxNode GetSuggestionNode()
         {
             return MethodDeclaration;
+        }
+
+        public List<string> GetParameters()
+        {
+            return MethodDeclaration.ParameterList.Parameters.Select(x => (x.Type is TypeSyntax id ? id.ToString() : "")).ToList();
         }
     }
 }

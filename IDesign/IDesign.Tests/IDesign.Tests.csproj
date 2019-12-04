@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase1.cs" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase2.cs" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase3.cs" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase4.cs" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase5.cs" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase6.cs" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase7.cs" />
     <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase1.cs" />
     <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase2.cs" />
     <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase3.cs" />
@@ -21,6 +28,27 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="TestClasses\Decorator\DecoratorTestCase7.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\Decorator\DecoratorTestCase6.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\Decorator\DecoratorTestCase5.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\Decorator\DecoratorTestCase4.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\Decorator\DecoratorTestCase3.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\Decorator\DecoratorTestCase2.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\Decorator\DecoratorTestCase1.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="TestClasses\FactorySimple\FactorySimpleTestCase1.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

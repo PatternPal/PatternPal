@@ -1,5 +1,6 @@
 ﻿using IDesign.Models;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace IDesign.Checks
@@ -66,6 +67,11 @@ namespace IDesign.Checks
         public static bool CheckReturnTypeSameAsCreation(this IMethod methodSyntax)
         {
             return methodSyntax.CheckCreationType(methodSyntax.GetReturnType());
+        }
+
+        public static bool CheckParameters(this IMethod methodSyntax, List<string> parameters)
+        {
+            return parameters.All(x => methodSyntax.GetParameters().Any(y => x.Equals(y)));
         }
     }
 }

@@ -11,6 +11,13 @@ namespace IDesign.Recognizers
         public IResult Recognize(IEntityNode entityNode)
         {
             var result = new Result();
+
+            var constructorChecks = new List<ElementCheck<IMethod>>()
+            {
+                 new ElementCheck<IMethod>(x => !x.CheckModifier("public") , "Is public moet private of protected zijn")
+            };
+            CheckElements(result, entityNode.GetConstructors(), constructorChecks);
+
             var methodChecks = new List<ElementCheck<IMethod>>()
             {
                 new ElementCheck<IMethod>(x => x.CheckReturnType(entityNode.GetName()) , "Incorrecte return type"),
@@ -26,12 +33,6 @@ namespace IDesign.Recognizers
                new ElementCheck<IField>(x => x.CheckMemberModifier("private") , "Is niet private")
             };
             CheckElements(result, entityNode.GetFields(), propertyChecks);
-
-            var constructorChecks = new List<ElementCheck<IMethod>>()
-            {
-                 new ElementCheck<IMethod>(x => !x.CheckModifier("public") , "Is public moet private of protected zijn")
-            };
-            CheckElements(result, entityNode.GetConstructors(), constructorChecks);
 
             result.Score = (int)(result.Score / 7f * 100f);
             return result;

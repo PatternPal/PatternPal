@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Collections.Generic;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace IDesign.Models
@@ -27,6 +28,11 @@ namespace IDesign.Models
         public string GetName()
         {
             return Property.Identifier.ToString();
+        }
+
+        public List<string> GetParameters()
+        {
+            return new List<string>();
         }
 
         public string GetReturnType()
