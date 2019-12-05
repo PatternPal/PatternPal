@@ -99,13 +99,11 @@ namespace IDesign.Core
         /// <param name="entityNode">the node which makes use of the other nodes</param>
         private void CreateUsingEdges(EntityNode entityNode)
         {
-            var childNodes = entityNode.GetTypeDeclarationSyntax().DescendantNodes();
+            var childNodes = entityNode.GetTypeDeclarationSyntax().Members.SelectMany(x => x.DescendantNodes());
             foreach (var identifier in childNodes.OfType<IdentifierNameSyntax>())
             {
-                var isBeingCreated = identifier.Parent.GetType() == typeof(ObjectCreationExpressionSyntax);
-                if (identifier is IdentifierNameSyntax name && !isBeingCreated)
+                if (identifier is IdentifierNameSyntax name)
                 {
-                    //Make sure creation relation doesn't already exists
                     AddRelation(entityNode, RelationType.Uses, name.ToString());
                 }
             }
