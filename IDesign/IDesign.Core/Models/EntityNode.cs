@@ -14,7 +14,7 @@ namespace IDesign.Core
         public List<ConstructorDeclarationSyntax> ConstructorDeclarationSyntaxList =
             new List<ConstructorDeclarationSyntax>();
         public string NameSpace { get; set; }
-        public List<IRelation> EntityNodeEdgesList = new List<IRelation>();
+        public List<IRelation> Relations = new List<IRelation>();
         public List<FieldDeclarationSyntax> FieldDeclarationSyntaxList = new List<FieldDeclarationSyntax>();
         public List<UsingDirectiveSyntax> UsingDeclarationSyntaxList = new List<UsingDirectiveSyntax>();
         public List<MethodDeclarationSyntax> MethodDeclarationSyntaxList = new List<MethodDeclarationSyntax>();
@@ -98,9 +98,9 @@ namespace IDesign.Core
             return PropertyDeclarationSyntaxList;
         }
 
-        public IList<IRelation> GetRelations()
+        public IEnumerable<IRelation> GetRelations()
         {
-            return EntityNodeEdgesList;
+            return Relations;
         }
 
        public EntityNodeType GetEntityNodeType()
