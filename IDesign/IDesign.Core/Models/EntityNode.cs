@@ -1,9 +1,11 @@
-﻿using IDesign.Models;
-using IDesign.Recognizers.Abstractions;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using IDesign.Recognizers;
 using System.Collections.Generic;
 using System.Linq;
+using IDesign.Recognizers.Abstractions;
+using IDesign.Recognizers.Models;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis;
 
 namespace IDesign.Core
 {
@@ -11,9 +13,10 @@ namespace IDesign.Core
     {
         public List<ConstructorDeclarationSyntax> ConstructorDeclarationSyntaxList =
             new List<ConstructorDeclarationSyntax>();
-
-        public List<EntityNodeEdges> EntityNodeEdgesList = new List<EntityNodeEdges>();
+        public string NameSpace { get; set; }
+        public List<IRelation> EntityNodeEdgesList = new List<IRelation>();
         public List<FieldDeclarationSyntax> FieldDeclarationSyntaxList = new List<FieldDeclarationSyntax>();
+        public List<UsingDirectiveSyntax> UsingDeclarationSyntaxList = new List<UsingDirectiveSyntax>();
         public List<MethodDeclarationSyntax> MethodDeclarationSyntaxList = new List<MethodDeclarationSyntax>();
         public List<PropertyDeclarationSyntax> PropertyDeclarationSyntaxList = new List<PropertyDeclarationSyntax>();
         public string Name { get; set; }
@@ -25,16 +28,28 @@ namespace IDesign.Core
             return InterfaceOrClassNode;
         }
 
+        /// <summary>
+        ///     Get name of entitynode
+        /// </summary>
+        /// <returns></returns>
         public string GetName()
         {
             return Name;
         }
 
+        /// <summary>
+        ///     Get source file of an entitynode
+        /// </summary>
+        /// <returns></returns>
         public string GetSourceFile()
         {
             return SourceFile;
         }
 
+        /// <summary>
+        ///     Get all methods and properties of a class
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<IMethod> GetMethods()
         {
             var list = new List<IMethod>();
@@ -47,7 +62,6 @@ namespace IDesign.Core
                         x.Kind() == SyntaxKind.GetAccessorDeclaration && x.Body != null);
                     list.AddRange(getters.Select(x => new PropertyMethod(property, x)));
                 }
-
             return list;
         }
 
@@ -82,6 +96,39 @@ namespace IDesign.Core
         public IEnumerable<PropertyDeclarationSyntax> GetProperties()
         {
             return PropertyDeclarationSyntaxList;
+        }
+
+        public IList<IRelation> GetRelations()
+        {
+            return EntityNodeEdgesList;
+        }
+
+       public EntityNodeType GetEntityNodeType()
+        {
+            var declarationnode = this.GetTypeDeclarationSyntax();
+
+            if (declarationnode.GetType() == typeof(ClassDeclarationSyntax))
+            {
+                return EntityNodeType.Class;
+            }
+            else if(declarationnode.GetType() == typeof(InterfaceDeclarationSyntax))
+            {
+                return EntityNodeType.Interface;
+            }
+            return EntityNodeType.Class;
+
+        }
+
+        public List<UsingDirectiveSyntax> GetUsings()
+        {
+            return UsingDeclarationSyntaxList;
+        }
+
+        TypeDeclarationSyntax Type { get; set; }
+
+        public SyntaxTokenList GetModifiers()
+        {
+            return Type.Modifiers;
         }
     }
 }

@@ -7,15 +7,16 @@ namespace IDesign.Core
 {
     public class RecognizerRunner
     {
-        public event EventHandler<RecognizerProgress> OnProgressUpdate;
         public static List<DesignPattern> designPatterns = new List<DesignPattern>
         {
             new DesignPattern("Singleton", new SingletonRecognizer()),
-            new DesignPattern("Factory Method", new FactoryRecognizer())
+            new DesignPattern("Factory Method", new FactoryRecognizer()),
+            new DesignPattern("State", new StateRecognizer())
         };
+        public Dictionary<string, EntityNode> EntityNodes =
+            new Dictionary<string, EntityNode>();
 
-        public Dictionary<TypeDeclarationSyntax, EntityNode> EntityNodes =
-            new Dictionary<TypeDeclarationSyntax, EntityNode>();
+        public event EventHandler<RecognizerProgress> OnProgressUpdate;
 
         /// <summary>
         ///     Function that should be called to generate a syntax tree
@@ -39,9 +40,10 @@ namespace IDesign.Core
 
             //Make relations
             var determineRelations = new DetermineRelations(EntityNodes);
+            determineRelations.GetEdgesOfEntityNode();
 
             var j = 0;
-            foreach(var node in EntityNodes.Values)
+            foreach (var node in EntityNodes.Values)
             {
                 j++;
                 ProgressUpdate((int)(j / (float)files.Count * 50f + 50), "Scanning class: " + node.GetName());
@@ -53,7 +55,6 @@ namespace IDesign.Core
                         Pattern = pattern
                     });
             }
-
             return results;
         }
 

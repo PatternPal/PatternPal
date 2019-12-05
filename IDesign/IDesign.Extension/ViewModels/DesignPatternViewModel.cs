@@ -1,12 +1,19 @@
-﻿using IDesign.Core;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using IDesign.Core;
 
 namespace IDesign.Extension
 {
     public class DesignPatternViewModel : INotifyPropertyChanged
     {
         private bool isChecked;
-        public event PropertyChangedEventHandler PropertyChanged;
+
+        public DesignPatternViewModel(string name, DesignPattern pattern)
+        {
+            Name = name;
+            Pattern = pattern;
+            IsChecked = true;
+        }
+
         public DesignPattern Pattern { get; set; }
 
         public string Name { get; set; }
@@ -21,12 +28,7 @@ namespace IDesign.Extension
             }
         }
 
-        public DesignPatternViewModel(string name, DesignPattern pattern)
-        {
-            Name = name;
-            Pattern = pattern;
-            IsChecked = true;
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged(string name)
         {
