@@ -21,9 +21,16 @@ namespace IDesign.Core
         ///     Constructor of the GenerateSyntaxTree class.
         ///     Genarates a syntaxtree from a string
         /// </summary>
-        /// <param name="content"></param>
+<<<<<<< HEAD
+        /// <param name="file"></param>
         public GenerateSyntaxTree(string content, string source, Dictionary<string,  EntityNode> entityNodes)
+=======
+        /// <param name="content"></param>
+        /// <param name="source"></param>
         /// <param name="entityNodes"></param>
+        public GenerateSyntaxTree(string content, string source,
+            Dictionary<TypeDeclarationSyntax, EntityNode> entityNodes)
+>>>>>>> entitynodes testen
         {
             File = source;
             Tree = CSharpSyntaxTree.ParseText(content);
@@ -54,8 +61,12 @@ namespace IDesign.Core
         /// <summary>
         ///     Parent function of the recursive function that adds all ClassNodes of the file to the ClassDeclarationSyntaxList
         /// </summary>
-        /// <param name="entityNodes"></param>
+<<<<<<< HEAD
         private void GetAllClassesOfFile(Dictionary<string, EntityNode> entityNodes)
+=======
+        /// <param name="entityNodes"></param>
+        private void GetAllClassesOfFile(Dictionary<TypeDeclarationSyntax, EntityNode> entityNodes)
+>>>>>>> entitynodes testen
         {
             if (Root.Members != null)
                 foreach (var member in Root.Members)
@@ -160,8 +171,12 @@ namespace IDesign.Core
         /// <summary>
         /// Parent function of the recursive function that searches for all constructors in a class
         /// </summary>
-        /// <param name="entityNodes"></param> 
+<<<<<<< HEAD
         private void GetAllConstructorsOfAClass(Dictionary<string, EntityNode> entityNodes)
+=======
+        /// <param name="entityNodes"></param>
+        private void GetAllConstructorsOfAClass(Dictionary<TypeDeclarationSyntax, EntityNode> entityNodes)
+>>>>>>> entitynodes testen
         {
             if (EntityNodes != null)
                 foreach (var classElement in entityNodes)
@@ -193,7 +208,12 @@ namespace IDesign.Core
         /// <summary>
         /// Parent of recursive function that searches for all methodes of a class
         /// </summary>
+<<<<<<< HEAD
         private void GetAllMethodsOfAClass(Dictionary<string, EntityNode> entityNodes)
+=======
+        /// <param name="entityNodes"></param>
+        private void GetAllMethodsOfAClass(Dictionary<TypeDeclarationSyntax, EntityNode> entityNodes)
+>>>>>>> entitynodes testen
         {
             if (EntityNodes != null)
                 foreach (var classElement in entityNodes)
@@ -224,8 +244,12 @@ namespace IDesign.Core
         /// <summary>
         /// Parent of recursive function that searches for all properties of a class
         /// </summary>
-        /// <param name="entityNodes"></param> 
+<<<<<<< HEAD
         private void GetAllPropertiesOfAClass(Dictionary<string, EntityNode> entityNodes)
+=======
+        /// <param name="entityNodes"></param>
+        private void GetAllPropertiesOfAClass(Dictionary<TypeDeclarationSyntax, EntityNode> entityNodes)
+>>>>>>> entitynodes testen
         {
             if (EntityNodes != null)
                 foreach (var classElement in entityNodes)
@@ -257,7 +281,12 @@ namespace IDesign.Core
         /// <summary>
         ///     Parent of recursive function that searches for all fields of a class
         /// </summary>
+<<<<<<< HEAD
         private void GetAllFieldsOfAClass(Dictionary<string, EntityNode> entityNodes)
+=======
+        /// <param name="entityNodes"></param>
+        private void GetAllFieldsOfAClass(Dictionary<TypeDeclarationSyntax, EntityNode> entityNodes)
+>>>>>>> entitynodes testen
         {
             if (EntityNodes != null)
                 foreach (var classElement in entityNodes)

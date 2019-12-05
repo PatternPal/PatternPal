@@ -19,7 +19,7 @@ namespace IDesign.Recognizers.Tests
         public void SingletonRecognizer_Returns_Correct_Score(string filename, int score)
         {
             var singleton = new SingletonRecognizer();
-            string code = FileUtils.FileToString("SingletonTestClasses\\" + filename);
+            string code = FileUtils.FileToString("Singleton\\" + filename);
 
 
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();

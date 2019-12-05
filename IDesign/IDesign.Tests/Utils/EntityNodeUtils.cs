@@ -1,34 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.IO;
 using System.Linq;
-using System.Text;
 using IDesign.Core;
-using IDesign.Recognizers;
-using IDesign.Tests.Utils;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using NUnit.Framework;
 
-namespace IDesign.Tests.Recognizers
+namespace IDesign.Tests.Utils
 {
-    public class FactoryRecognizerTest
+    public static class EntityNodeUtils
     {
-        [Test]
-        [TestCase("FactorySimpleTestCase1.cs", 100)]
-        [TestCase("FactorySimpleTestCase2.cs", 50)]
-        [TestCase("FactorySimpleTestCase3.cs", 50)]
-        [TestCase("FactorySimpleTestCase4.cs", 100)]
-        [TestCase("FactorySimpleTestCase5.cs", 50)]
-        public void FactoryRecognizer_Returns_Correct_Score(string filename, int score)
+        public static EntityNode CreateTestEntityNode(string code)
         {
-            var factory = new FactoryRecognizer();
-            var code = FileUtils.FileToString("FactorySimple\\" + filename);
 
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
             var nameSpaceNode = root.Members[0] as NamespaceDeclarationSyntax;
             foreach (var testNode in nameSpaceNode.Members.OfType<TypeDeclarationSyntax>())
             {
-
                 var entityNode = new EntityNode
                 {
                     Name = testNode.Identifier.ToString(),
@@ -43,8 +29,10 @@ namespace IDesign.Tests.Recognizers
                     ConstructorDeclarationSyntaxList =
                         testNode.DescendantNodes().OfType<ConstructorDeclarationSyntax>().ToList()
                 };
-
+                return entityNode;
             }
+
+            return null;
         }
     }
 }

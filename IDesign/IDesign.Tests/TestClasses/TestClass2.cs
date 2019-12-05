@@ -4,22 +4,33 @@ using System.Text;
 
 namespace IDesign.Tests.TestClasses
 {
-    internal interface IFirstTestClass
+    internal class TestClass2 
     {
-        string naam { get; set; }
-    }
+        //Should be a field
+        private int _privateField;
 
-    internal class FirstTestClass : IFirstTestClass
-    {
-        public FirstTestClass(int g)
+        //Should be a constructor
+        public TestClass2(int g)
         {
             Getal = g;
         }
 
+        //Should be a field 
         public int Getal { get; set; }
+
+        //Should be a field
         public static string Naam { get; set; }
+
+        //Shoud be a field
         public string naam { get; set; }
 
+        //Should be a method and field
+        public int PublicProperty
+        {
+            get => _privateField;
+            set => _privateField = value;
+        }
+        //Should be method
         public int Count(int g)
         {
             Getal += g;

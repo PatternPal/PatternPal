@@ -11,74 +11,36 @@ namespace IDesign.Tests.Core
 {
     public class EntityNodeTest
     {
-        public void Should_Create_Fields()
+        [TestCase("TestClass1.cs", "x;y")]
+        [TestCase("TestClass2.cs", "Getal;Naam;naam;PublicProperty;_privateField")]
+        public void Should_Returns_Correct_Fields(string filename, string expected)
         {
-            var testClass = @"";
-            var root = CSharpSyntaxTree.ParseText(testClass).GetCompilationUnitRoot();
-            var testNode = root.Members[0] as ClassDeclarationSyntax;
+            var code = FileUtils.FileToString(filename);
+            var testNode = EntityNodeUtils.CreateTestEntityNode(code);
 
-            var entityNode = new EntityNode();
-            entityNode.Name = testNode.Identifier.ToString();
-            entityNode.InterfaceOrClassNode = testNode;
-            entityNode.FieldDeclarationSyntaxList =
-                testNode.DescendantNodes().OfType<FieldDeclarationSyntax>().ToList();
-            entityNode.PropertyDeclarationSyntaxList =
-                testNode.DescendantNodes().OfType<PropertyDeclarationSyntax>().ToList();
+            var fields = string.Join(";", testNode.GetFields().Select(x => x.GetName()));
+            Assert.AreEqual(expected, fields);
+        }
 
-            var fields = string.Join(";", entityNode.GetFields().Select(x => x.GetName()));
+        [TestCase("TestClass1.cs", "Sum")]
+        [TestCase("TestClass2.cs", "Count;PublicProperty")]
+        public void Should_Returns_Correct_Methods(string filename, string expected)
+        {
+            var code = FileUtils.FileToString(filename);
+            var testNode = EntityNodeUtils.CreateTestEntityNode(code);
+
+            var fields = string.Join(";", testNode.GetMethods().Select(x => x.GetName()));
+            Assert.AreEqual(expected, fields);
         }
 
 
-        RecognizerRunner recognizerRunner = new RecognizerRunner();
-        List<DesignPattern> designPatterns = new List<DesignPattern> { new DesignPattern("Singleton", new SingletonRecognizer()),
-            new DesignPattern("Factory Method", new FactoryRecognizer())};
-
-        private readonly Dictionary<TypeDeclarationSyntax, EntityNode> entityNodes =
-            new Dictionary<TypeDeclarationSyntax, EntityNode>();
-
-        [TestCase(@"using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses
-{
-    class TestClass1
-    {
-        public TestClass1(int x, int y)
+        [TestCase("TestClass1.cs", 1)]
+        [TestCase("TestClass2.cs", 1)]
+        public void Should_Returns_Correct_Constructors(string filename, int expected)
         {
-            this.x = x;
-            this.y = y;
+            var code = FileUtils.FileToString(filename);
+            var testNode = EntityNodeUtils.CreateTestEntityNode(code);
+            Assert.AreEqual(expected, testNode.GetConstructors().Count());
         }
-
-        public int x { get; set; }
-        public int y { get; set; }
-
-        public int Sum()
-        {
-            return x + y;
-        }
-    }
-}", new string[] { "TestClass1" })]
-        [TestCase("TestClass2.cs", new string[] { "FirstTestClass", "IFirstTestClass" })]
-        public void Should_Return_Name(string file, string[] expected)
-        {
-
-            GenerateSyntaxTree generateSyntaxTree = new GenerateSyntaxTree(file, "", entityNodes);
-            string[] results = new string[256];
-            //for (int i = 0; i < entityNodes.Count; i++)
-            //{
-            //    for(int j = 0; j < entityNodes.Count; j++)
-            //    {
-            //        var name = entityNodes[];
-            //    }
-            //    results[i] = name;
-            //    System.Console.WriteLine(result);
-            //    Assert.AreEqual(expected, result);
-            //}
-
-        }
-
-   
-
     }
 }
