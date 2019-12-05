@@ -47,7 +47,7 @@ namespace IDesign.Recognizers.Abstractions
         /// <summary>
         ///     Gets the relations of this class
         /// </summary>
-        IList<IRelation> GetRelations();
+        IEnumerable<IRelation> GetRelations();
 
         /// <summary>
         ///     Gets the type of this class
