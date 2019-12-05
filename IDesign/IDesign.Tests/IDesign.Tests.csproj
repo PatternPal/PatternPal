@@ -20,6 +20,12 @@
     <Compile Remove="TestClasses\FactoryTestClasses\IProduct.cs" />
     <Compile Remove="TestClasses\FactoryTestClasses\ProductA.cs" />
     <Compile Remove="TestClasses\FactoryTestClasses\ProductB.cs" />
+    <Compile Remove="TestClasses\RelationTestClasses\RelationTestCase1.cs" />
+    <Compile Remove="TestClasses\RelationTestClasses\RelationTestCase2.cs" />
+    <Compile Remove="TestClasses\RelationTestClasses\RelationTestCase3.cs" />
+    <Compile Remove="TestClasses\RelationTestClasses\RelationTestCase4.cs" />
+    <Compile Remove="TestClasses\RelationTestClasses\RelationTestCase5.cs" />
+    <Compile Remove="TestClasses\RelationTestClasses\RelationTestCase6.cs" />
     <Compile Remove="TestClasses\SingleTonTestCase1.cs" />
     <Compile Remove="TestClasses\SingleTonTestCase2.cs" />
     <Compile Remove="TestClasses\SingleTonTestCase3.cs" />
@@ -69,6 +75,24 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TestClasses\FactoryTestClasses\ProductB.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\RelationTestClasses\RelationTestCase1.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\RelationTestClasses\RelationTestCase2.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\RelationTestClasses\RelationTestCase3.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\RelationTestClasses\RelationTestCase4.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\RelationTestClasses\RelationTestCase5.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\RelationTestClasses\RelationTestCase6.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TestClasses\SingletonTestClasses\SingleTonTestCase1.cs">

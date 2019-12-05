@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace IDesign.Tests.Utils
 {
@@ -6,8 +7,16 @@ namespace IDesign.Tests.Utils
     {
         public static string FileToString(string fileName)
         {
-            var streamReader = new StreamReader("TestClasses\\" + fileName);
-            return streamReader.ReadToEnd();
+            try
+            {
+                var streamReader = new StreamReader("TestClasses\\" + fileName);
+                return streamReader.ReadToEnd();
+            }
+            catch (IOException)
+            {
+                throw new Exception("File not found. Make sure testfiles have 'Copy always' on");
+            }
+
         }
     }
 }
