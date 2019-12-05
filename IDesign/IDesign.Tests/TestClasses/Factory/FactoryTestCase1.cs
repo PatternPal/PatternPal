@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IDesign.Tests.TestClasses.FactoryTestClasses
+namespace IDesign.Tests.TestClasses.Factory
 {
-    public class FactoryTestCase2
+    public class FactoryTestCase1
     {
-        public FactoryTestCase2() { }
-
-        public ProductA CreateProductA()
+        public FactoryTestCase1() { }
+        public IProduct CreateProductA()
         {
             var product = new ProductA();
             return product;

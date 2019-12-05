@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IDesign.Tests.TestClasses.FactoryTestClasses
+namespace IDesign.Tests.TestClasses.Factory
 {
-   public  interface IProduct
+   public class ProductA : IProduct
     {
     }
 }

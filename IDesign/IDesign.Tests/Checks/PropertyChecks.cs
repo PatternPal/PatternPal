@@ -3,15 +3,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 using IDesign.Recognizers;
 
-namespace IDesign.Recognizers.Tests
+namespace IDesign.Tests.Checks
 {
     public class PropertyTest
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
-
+        [Test]
         [TestCase("public", @"public string TestProperty{get; set;}", true)]
         [TestCase("private", @"private int TestProperty{get; set;}", true)]
         [TestCase("public", @"public static Class TestProperty{get; set;}", true)]
@@ -30,6 +26,7 @@ namespace IDesign.Recognizers.Tests
             Assert.AreEqual(shouldBeValid, new PropertyField(property).CheckMemberModifier(modifier));
         }
 
+        [Test]
         [TestCase("string", @"public string TestProperty{get; set;}", true)]
         [TestCase("int", @"private int TestProperty{get; set;}", true)]
         [TestCase("Class", @"public static Class TestProperty{get; set;}", true)]
