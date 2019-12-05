@@ -19,7 +19,7 @@ namespace IDesign.Tests.Core
         [TestCase("RelationTestCase4.cs", "RelationTestCase4", "IRelationTestCase4", false)]
         [TestCase("RelationTestCase5.cs", "RelationTestCase5", "IRelationTestCase5", false)]
         [TestCase("RelationTestCase6.cs", "RelationTestCase6", "IRelationTestCase6", false)]
-        public void CheckImplements(string filename, string baseClass, string relatedClass, bool shouldBeValid)
+        public void BaseClass_Should_Implement_RelatedClass(string filename, string baseClass, string relatedClass, bool shouldBeValid)
         {
             
             string code = FileUtils.FileToString("RelationTestClasses\\" + filename);
@@ -58,7 +58,7 @@ namespace IDesign.Tests.Core
         [TestCase("RelationTestCase4.cs", "RelationTestCase4", "ERelationTestCase4", true)]
         [TestCase("RelationTestCase5.cs", "RelationTestCase5", "ERelationTestCase5", false)]
         [TestCase("RelationTestCase6.cs", "RelationTestCase6", "ERelationTestCase6", true)]
-        public void CheckExtends(string filename, string baseClass, string relatedClass, bool shouldBeValid)
+        public void BaseClass_Should_Extend_RelatedClass(string filename, string baseClass, string relatedClass, bool shouldBeValid)
         {
             string code = FileUtils.FileToString("RelationTestClasses\\" + filename);
             var entityNodes = new Dictionary<string, EntityNode>();
@@ -96,7 +96,7 @@ namespace IDesign.Tests.Core
         [TestCase("RelationTestCase4.cs", "RelationTestCase4", "CRelationTestCase4", false)]
         [TestCase("RelationTestCase5.cs", "RelationTestCase5", "CRelationTestCase5", false)]
         [TestCase("RelationTestCase6.cs", "RelationTestCase6", "ERelationTestCase6", true)]
-        public void CheckCreated(string filename, string baseClass, string relatedClass, bool shouldBeValid)
+        public void BaseClass_Should_Create_RelatedClass(string filename, string baseClass, string relatedClass, bool shouldBeValid)
         {
             string code = FileUtils.FileToString("RelationTestClasses\\" + filename);
             var entityNodes = new Dictionary<string, EntityNode>();
@@ -135,7 +135,8 @@ namespace IDesign.Tests.Core
         [TestCase("RelationTestCase4.cs", "RelationTestCase4", "CRelationTestCase4", false)]
         [TestCase("RelationTestCase5.cs", "RelationTestCase5", "CRelationTestCase5", false)]
         [TestCase("RelationTestCase6.cs", "RelationTestCase6", "ERelationTestCase6", true)]
-        public void CheckUsings(string filename, string baseClass, string relatedClass, bool shouldBeValid)
+        [TestCase("RelationTestCase7.cs", "RelationTestCase7", "U1RelationTestCase7", true)]
+        public void BaseClass_Should_Use_RelatedClass(string filename, string baseClass, string relatedClass, bool shouldBeValid)
         {
             string code = FileUtils.FileToString("RelationTestClasses\\" + filename);
             var entityNodes = new Dictionary<string, EntityNode>();
