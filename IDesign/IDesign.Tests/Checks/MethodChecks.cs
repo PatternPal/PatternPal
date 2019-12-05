@@ -3,15 +3,10 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 using IDesign.Recognizers;
 
-namespace IDesign.Recognizers.Tests
+namespace IDesign.Tests.Checks
 {
     public class MethodTest
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
-
         [TestCase("void", @"public void TestMethod(){}", true)]
         [TestCase("int", @"public int TestMethod(){}", true)]
         [TestCase("Class", @"public Class TestMethod(){}", true)]

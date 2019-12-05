@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 using IDesign.Recognizers;
 
-namespace IDesign.Recognizers.Tests
+namespace IDesign.Tests.Checks
 {
     public class PropertyTest
     {

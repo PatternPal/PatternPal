@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IDesign.Tests.TestClasses
+namespace IDesign.Tests.TestClasses.Relation
 {
   public class RelationTestCase1 : EReatlionTestCase1, IRelationTestCase1
     {

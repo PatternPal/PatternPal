@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IDesign.Tests.TestClasses.RelationTestClasses
-{
+namespace IDesign.Tests.TestClasses.Relation 
+{ 
    public  class RelationTestCase2
     {
         public void Create()

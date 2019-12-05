@@ -12,7 +12,7 @@ namespace IDesign.Tests.Core
 {
     public class RelationTest
     {
-
+        [Test]
         [TestCase("RelationTestCase1.cs", "RelationTestCase1", "IRelationTestCase1", true)]
         [TestCase("RelationTestCase2.cs", "RelationTestCase2", "IRelationTestCase2", false)]
         [TestCase("RelationTestCase3.cs", "RelationTestCase3", "IRelationTestCase3", true)]
@@ -22,36 +22,17 @@ namespace IDesign.Tests.Core
         public void BaseClass_Should_Implement_RelatedClass(string filename, string baseClass, string relatedClass, bool shouldBeValid)
         {
             
-            string code = FileUtils.FileToString("RelationTestClasses\\" + filename);
-            var entityNodes = new Dictionary<string, EntityNode>();
-            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var NameSpaceNode = root.Members[0] as NamespaceDeclarationSyntax;
-            var nodes = NameSpaceNode.DescendantNodes().OfType<TypeDeclarationSyntax>();
-            foreach(var node in nodes)
-            {
-                var tempnode = new EntityNode
-                {
-                    Name = node.Identifier.ToString(),
-                    InterfaceOrClassNode = node,
-                    NameSpace = NameSpaceNode.Name.ToString(),
-                    MethodDeclarationSyntaxList =
-               node.DescendantNodes().OfType<MethodDeclarationSyntax>().ToList(),
-                    FieldDeclarationSyntaxList =
-               node.DescendantNodes().OfType<FieldDeclarationSyntax>().ToList(),
-                    PropertyDeclarationSyntaxList =
-               node.DescendantNodes().OfType<PropertyDeclarationSyntax>().ToList(),
-                    ConstructorDeclarationSyntaxList =
-               node.DescendantNodes().OfType<ConstructorDeclarationSyntax>().ToList()
-                };
-                entityNodes.Add(NameSpaceNode.Name.ToString() + "." + node.Identifier.ToString(), tempnode);
-            }
+            string code = FileUtils.FileToString("Relation\\" + filename);
+            var entityNodes = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
+            var NameSpaceNode = "IDesign.Tests.TestClasses.Relation";
             var createRelation = new DetermineRelations(entityNodes);
             createRelation.GetEdgesOfEntityNode();
-           var interfaceCheck = entityNodes[NameSpaceNode.Name.ToString() + "." + baseClass].GetRelations()
+            var interfaceCheck = entityNodes[NameSpaceNode + "." + baseClass].GetRelations()
                 .Any(x => x.GetRelationType() == RelationType.Implements && x.GetDestination().GetName() == relatedClass);
             Assert.AreEqual(shouldBeValid, interfaceCheck);
         }
 
+        [Test]
         [TestCase("RelationTestCase1.cs", "RelationTestCase1", "EReatlionTestCase1", true)]
         [TestCase("RelationTestCase2.cs", "RelationTestCase2", "ERelationTestCase2", false)]
         [TestCase("RelationTestCase3.cs", "RelationTestCase3", "IRelationTestCase3", false)]
@@ -60,36 +41,17 @@ namespace IDesign.Tests.Core
         [TestCase("RelationTestCase6.cs", "RelationTestCase6", "ERelationTestCase6", true)]
         public void BaseClass_Should_Extend_RelatedClass(string filename, string baseClass, string relatedClass, bool shouldBeValid)
         {
-            string code = FileUtils.FileToString("RelationTestClasses\\" + filename);
-            var entityNodes = new Dictionary<string, EntityNode>();
-            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var NameSpaceNode = root.Members[0] as NamespaceDeclarationSyntax;
-            var nodes = NameSpaceNode.DescendantNodes().OfType<TypeDeclarationSyntax>();
-            foreach (var node in nodes)
-            {
-                var tempnode = new EntityNode
-                {
-                    Name = node.Identifier.ToString(),
-                    InterfaceOrClassNode = node,
-                    NameSpace = NameSpaceNode.Name.ToString(),
-                    MethodDeclarationSyntaxList =
-               node.DescendantNodes().OfType<MethodDeclarationSyntax>().ToList(),
-                    FieldDeclarationSyntaxList =
-               node.DescendantNodes().OfType<FieldDeclarationSyntax>().ToList(),
-                    PropertyDeclarationSyntaxList =
-               node.DescendantNodes().OfType<PropertyDeclarationSyntax>().ToList(),
-                    ConstructorDeclarationSyntaxList =
-               node.DescendantNodes().OfType<ConstructorDeclarationSyntax>().ToList()
-                };
-                entityNodes.Add(NameSpaceNode.Name.ToString() + "." + node.Identifier.ToString(), tempnode);
-            }
+            string code = FileUtils.FileToString("Relation\\" + filename);
+            var entityNodes = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
+            var NameSpaceNode = "IDesign.Tests.TestClasses.Relation";
             var createRelation = new DetermineRelations(entityNodes);
             createRelation.GetEdgesOfEntityNode();
-            var extendsCheck = entityNodes[NameSpaceNode.Name.ToString() + "." + baseClass].GetRelations()
+            var extendsCheck = entityNodes[NameSpaceNode + "." + baseClass].GetRelations()
                 .Any(x => x.GetRelationType() == RelationType.Extends && x.GetDestination().GetName() == relatedClass);
             Assert.AreEqual(shouldBeValid, extendsCheck);
         }
 
+        [Test]
         [TestCase("RelationTestCase1.cs", "RelationTestCase1", "CRelationTestCase1", true)]
         [TestCase("RelationTestCase2.cs", "RelationTestCase2", "CRelationTestCase2", true)]
         [TestCase("RelationTestCase3.cs", "RelationTestCase3", "CRelationTestCase2", false)]
@@ -98,37 +60,17 @@ namespace IDesign.Tests.Core
         [TestCase("RelationTestCase6.cs", "RelationTestCase6", "ERelationTestCase6", true)]
         public void BaseClass_Should_Create_RelatedClass(string filename, string baseClass, string relatedClass, bool shouldBeValid)
         {
-            string code = FileUtils.FileToString("RelationTestClasses\\" + filename);
-            var entityNodes = new Dictionary<string, EntityNode>();
-            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var NameSpaceNode = root.Members[0] as NamespaceDeclarationSyntax;
-            var nodes = NameSpaceNode.DescendantNodes().OfType<TypeDeclarationSyntax>();
-            foreach (var node in nodes)
-            {
-                var tempnode = new EntityNode
-                {
-                    Name = node.Identifier.ToString(),
-                    InterfaceOrClassNode = node,
-                    NameSpace = NameSpaceNode.Name.ToString(),
-                    MethodDeclarationSyntaxList =
-               node.DescendantNodes().OfType<MethodDeclarationSyntax>().ToList(),
-                    FieldDeclarationSyntaxList =
-               node.DescendantNodes().OfType<FieldDeclarationSyntax>().ToList(),
-                    PropertyDeclarationSyntaxList =
-               node.DescendantNodes().OfType<PropertyDeclarationSyntax>().ToList(),
-                    ConstructorDeclarationSyntaxList =
-               node.DescendantNodes().OfType<ConstructorDeclarationSyntax>().ToList()
-                };
-                entityNodes.Add(NameSpaceNode.Name.ToString() + "." + node.Identifier.ToString(), tempnode);
-            }
+            string code = FileUtils.FileToString("Relation\\" + filename);
+            var entityNodes = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
+            var NameSpaceNode = "IDesign.Tests.TestClasses.Relation";
             var createRelation = new DetermineRelations(entityNodes);
             createRelation.GetEdgesOfEntityNode();
-            var createCheck = entityNodes[NameSpaceNode.Name.ToString() + "." + baseClass].GetRelations()
+            var createCheck = entityNodes[NameSpaceNode + "." + baseClass].GetRelations()
                 .Any(x => x.GetRelationType() == RelationType.Creates && x.GetDestination().GetName() == relatedClass);
             Assert.AreEqual(shouldBeValid, createCheck);
         }
 
-
+        [Test]
         [TestCase("RelationTestCase1.cs", "RelationTestCase1", "CRelationTestCase1", true)]
         [TestCase("RelationTestCase2.cs", "RelationTestCase2", "CRelationTestCase2", true)]
         [TestCase("RelationTestCase3.cs", "RelationTestCase3", "CRelationTestCase2", false)]
@@ -138,32 +80,12 @@ namespace IDesign.Tests.Core
         [TestCase("RelationTestCase7.cs", "RelationTestCase7", "U1RelationTestCase7", true)]
         public void BaseClass_Should_Use_RelatedClass(string filename, string baseClass, string relatedClass, bool shouldBeValid)
         {
-            string code = FileUtils.FileToString("RelationTestClasses\\" + filename);
-            var entityNodes = new Dictionary<string, EntityNode>();
-            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var NameSpaceNode = root.Members[0] as NamespaceDeclarationSyntax;
-            var nodes = NameSpaceNode.DescendantNodes().OfType<TypeDeclarationSyntax>();
-            foreach (var node in nodes)
-            {
-                var tempnode = new EntityNode
-                {
-                    Name = node.Identifier.ToString(),
-                    InterfaceOrClassNode = node,
-                    NameSpace = NameSpaceNode.Name.ToString(),
-                    MethodDeclarationSyntaxList =
-               node.DescendantNodes().OfType<MethodDeclarationSyntax>().ToList(),
-                    FieldDeclarationSyntaxList =
-               node.DescendantNodes().OfType<FieldDeclarationSyntax>().ToList(),
-                    PropertyDeclarationSyntaxList =
-               node.DescendantNodes().OfType<PropertyDeclarationSyntax>().ToList(),
-                    ConstructorDeclarationSyntaxList =
-               node.DescendantNodes().OfType<ConstructorDeclarationSyntax>().ToList()
-                };
-                entityNodes.Add(NameSpaceNode.Name.ToString() + "." + node.Identifier.ToString(), tempnode);
-            }
+            string code = FileUtils.FileToString("Relation\\" + filename);
+            var entityNodes = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
+            var NameSpaceNode = "IDesign.Tests.TestClasses.Relation";
             var createRelation = new DetermineRelations(entityNodes);
             createRelation.GetEdgesOfEntityNode();
-            var usingCheck = entityNodes[NameSpaceNode.Name.ToString() + "." + baseClass].GetRelations()
+            var usingCheck = entityNodes[NameSpaceNode + "." + baseClass].GetRelations()
                 .Any(x => x.GetRelationType() == RelationType.Uses && x.GetDestination().GetName() == relatedClass);
             Assert.AreEqual(shouldBeValid, usingCheck);
         }

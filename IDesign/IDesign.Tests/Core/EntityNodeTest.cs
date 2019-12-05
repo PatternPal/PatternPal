@@ -16,8 +16,8 @@ namespace IDesign.Tests.Core
         public void Should_Returns_Correct_Fields(string filename, string expected)
         {
             var code = FileUtils.FileToString(filename);
-            var testNode = EntityNodeUtils.CreateTestEntityNode(code);
-
+            var testGraph = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
+            var testNode = testGraph.Values.First();
             var fields = string.Join(";", testNode.GetFields().Select(x => x.GetName()));
             Assert.AreEqual(expected, fields);
         }
@@ -27,8 +27,8 @@ namespace IDesign.Tests.Core
         public void Should_Returns_Correct_Methods(string filename, string expected)
         {
             var code = FileUtils.FileToString(filename);
-            var testNode = EntityNodeUtils.CreateTestEntityNode(code);
-
+            var testGraph = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
+            var testNode = testGraph.Values.First();
             var fields = string.Join(";", testNode.GetMethods().Select(x => x.GetName()));
             Assert.AreEqual(expected, fields);
         }
@@ -39,7 +39,8 @@ namespace IDesign.Tests.Core
         public void Should_Returns_Correct_Constructors(string filename, int expected)
         {
             var code = FileUtils.FileToString(filename);
-            var testNode = EntityNodeUtils.CreateTestEntityNode(code);
+            var testGraph = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
+            var testNode = testGraph.Values.First();
             Assert.AreEqual(expected, testNode.GetConstructors().Count());
         }
     }
