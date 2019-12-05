@@ -1,7 +1,4 @@
-﻿
-using IDesign.Checks;
-using IDesign.Models;
-using IDesign.Recognizers.Abstractions;
+﻿using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Output;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +20,7 @@ namespace IDesign.Recognizers
             // All functions uses the adapter
 
             //result.Score = (int)(result.Score / 7f * 100f);
-            entityNode.GetTy
+            //entityNode.GetTy
 
 
             return result;
