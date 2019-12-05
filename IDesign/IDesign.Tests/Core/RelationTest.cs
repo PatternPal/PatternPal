@@ -71,8 +71,8 @@ namespace IDesign.Tests.Core
         }
 
         [Test]
-        [TestCase("RelationTestCase1.cs", "RelationTestCase1", "CRelationTestCase1", true)]
-        [TestCase("RelationTestCase2.cs", "RelationTestCase2", "CRelationTestCase2", true)]
+        [TestCase("RelationTestCase1.cs", "RelationTestCase1", "CRelationTestCase1", false)]
+        [TestCase("RelationTestCase2.cs", "RelationTestCase2", "CRelationTestCase2", false)]
         [TestCase("RelationTestCase3.cs", "RelationTestCase3", "CRelationTestCase2", false)]
         [TestCase("RelationTestCase4.cs", "RelationTestCase4", "CRelationTestCase4", false)]
         [TestCase("RelationTestCase5.cs", "RelationTestCase5", "CRelationTestCase5", false)]
