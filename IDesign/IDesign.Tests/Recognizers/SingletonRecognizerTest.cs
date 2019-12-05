@@ -1,11 +1,12 @@
 using System.Linq;
 using IDesign.Core;
+using IDesign.Recognizers;
 using IDesign.Tests.Utils;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 
-namespace IDesign.Recognizers.Tests
+namespace IDesign.Tests.Recognizers
 {
     public class SingletonRecognizerTest
     {
@@ -19,29 +20,11 @@ namespace IDesign.Recognizers.Tests
         public void SingletonRecognizer_Returns_Correct_Score(string filename, int score)
         {
             var singleton = new SingletonRecognizer();
-            string code = FileUtils.FileToString("SingletonTestClasses\\" + filename);
+            var code = FileUtils.FileToString("Singleton\\" +filename);
+            var testGraph = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
+            var testNode = testGraph.Values.First();
 
-
-            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var NameSpaceNode = root.Members[0] as NamespaceDeclarationSyntax;
-            var testNode = NameSpaceNode.Members[0] as ClassDeclarationSyntax;
-
-            var entityNode = new EntityNode
-            {
-                Name = testNode.Identifier.ToString(),
-                InterfaceOrClassNode = testNode,
-
-                MethodDeclarationSyntaxList =
-                    testNode.DescendantNodes().OfType<MethodDeclarationSyntax>().ToList(),
-                FieldDeclarationSyntaxList =
-                    testNode.DescendantNodes().OfType<FieldDeclarationSyntax>().ToList(),
-                PropertyDeclarationSyntaxList =
-                    testNode.DescendantNodes().OfType<PropertyDeclarationSyntax>().ToList(),
-                ConstructorDeclarationSyntaxList =
-                    testNode.DescendantNodes().OfType<ConstructorDeclarationSyntax>().ToList()
-            };
-
-            var result = singleton.Recognize(entityNode);
+            var result = singleton.Recognize(testNode);
 
             Assert.AreEqual(score, result.GetScore());
         }
