@@ -7,6 +7,7 @@ namespace IDesign.Tests.Checks
 {
     public class MethodTest
     {
+        [Test]
         [TestCase("void", @"public void TestMethod(){}", true)]
         [TestCase("int", @"public int TestMethod(){}", true)]
         [TestCase("Class", @"public Class TestMethod(){}", true)]
@@ -27,6 +28,7 @@ namespace IDesign.Tests.Checks
             Assert.AreEqual(shouldBeValid, method.CheckReturnType(returnType));
         }
 
+        [Test]
         [TestCase("public", @"public void TestMethod(){}", true)]
         [TestCase("private", @"private int TestMethod(){}", true)]
         [TestCase("static", @"public static Class TestMethod(){}", true)]
@@ -45,6 +47,7 @@ namespace IDesign.Tests.Checks
             Assert.AreEqual(shouldBeValid, new Method(method).CheckModifier(modifier));
         }
 
+        [Test]
         [TestCase(@"public void TestMethod(){new class();}", true)]
         [TestCase(@"public void TestMethod(){string i ='this is a new class';}", false)]
         [TestCase(@"public int TestMethod(){return new int();}", true)]
@@ -61,6 +64,7 @@ namespace IDesign.Tests.Checks
             Assert.AreEqual(shouldBeVaild, new Method(method).CheckCreationalFunction());
         }
 
+        [Test]
         [TestCase(@"public void TestMethod(){string i ='this is a new class';}", false)]
         [TestCase(@"public Class TestMethod(){return new Class();}", true)]
         [TestCase(@"public int TestMethod(){return new int();}", false)]

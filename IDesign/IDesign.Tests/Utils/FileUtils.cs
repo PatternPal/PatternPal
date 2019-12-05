@@ -6,6 +6,7 @@ namespace IDesign.Tests.Utils
 {
     public static class FileUtils
     {
+
         public static string FileToString(string fileName)
         {
             try
@@ -15,9 +16,8 @@ namespace IDesign.Tests.Utils
             }
             catch (IOException)
             {
-                throw new Exception("File not found. Make sure testfiles have 'Copy always' on");
+                throw new Exception("File not found. Make sure test files have 'Copy always' on");
             }
-
         }
 
         public static List<string> FilesToString(string folderPath)

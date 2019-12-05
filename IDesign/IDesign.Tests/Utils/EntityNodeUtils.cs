@@ -9,6 +9,12 @@ namespace IDesign.Tests.Utils
 {
     public static class EntityNodeUtils
     {
+
+        /// <summary>
+        /// Return an entitynode based on a TypeDeclarationSyntax.
+        /// </summary>
+        /// <param name="testNode">TypeDeclarationSyntax that needs to be converted</param>
+        /// <returns>The node from the given TypeDeclarationsSyntax</returns>
         public static EntityNode CreateTestEntityNode(TypeDeclarationSyntax testNode)
         {
             var nameSpaceKey = "";
@@ -34,6 +40,11 @@ namespace IDesign.Tests.Utils
             return entityNode;
         }
 
+        /// <summary>
+        /// Makes a dictionary of entityNodes based on filecontents
+        /// </summary>
+        /// <param name="code">contents of the file that needs to be converted</param>
+        /// <returns>Dictionary of one file</returns>
         public static Dictionary<string, EntityNode> CreateEntityNodeGraphFromOneFile(string code)
         {
             var graph = new Dictionary<string, EntityNode>();
@@ -50,7 +61,11 @@ namespace IDesign.Tests.Utils
             }
             return graph;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="projectCode">contents of the folder/project that needs to be converted</param>
+        /// <returns>Dictionary of the whole folder/project</returns>
         public static Dictionary<string, EntityNode> CreateEntityNodeGraph(List<string> projectCode)
         {
             var graph = new Dictionary<string, EntityNode>();

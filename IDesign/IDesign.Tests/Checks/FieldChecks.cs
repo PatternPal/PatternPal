@@ -7,11 +7,7 @@ namespace IDesign.Tests.Checks
 {
     public class FieldChecks
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
-
+        [Test]
         [TestCase("public", @"public string TestProperty", true)]
         [TestCase("private", @"private int TestProperty", true)]
         [TestCase("public", @"public static Class TestProperty", true)]
@@ -31,6 +27,7 @@ namespace IDesign.Tests.Checks
                 new Field(field, field.Declaration.Variables.FirstOrDefault()).CheckMemberModifier(modifier));
         }
 
+        [Test]
         [TestCase("string", @"public string TestProperty", true)]
         [TestCase("int", @"private int TestProperty", true)]
         [TestCase("Class", @"public static Class TestProperty", true)]
