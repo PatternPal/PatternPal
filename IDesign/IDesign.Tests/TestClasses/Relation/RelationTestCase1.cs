@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IDesign.Tests.TestClasses.Relation
 {
-  public class RelationTestCase1 : EReatlionTestCase1, IRelationTestCase1
+  public class RelationTestCase1 : ERelationTestCase1, IRelationTestCase1
     {
         public void Create()
         {
@@ -15,6 +15,6 @@ namespace IDesign.Tests.TestClasses.Relation
     {
 
     }
-    public class EReatlionTestCase1 { }
+    public class ERelationTestCase1 { }
     public class CRelationTestCase1 { }
 }

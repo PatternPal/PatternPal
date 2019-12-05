@@ -19,7 +19,7 @@ namespace IDesign.Tests.Core
         [TestCase("RelationTestCase4.cs", "RelationTestCase4", "IRelationTestCase4", false)]
         [TestCase("RelationTestCase5.cs", "RelationTestCase5", "IRelationTestCase5", false)]
         [TestCase("RelationTestCase6.cs", "RelationTestCase6", "IRelationTestCase6", false)]
-        public void BaseClass_Should_Implement_RelatedClass(string filename, string baseClass, string relatedClass, bool shouldBeValid)
+        public void BaseClass_Should_Implement_RelatedInterface(string filename, string baseClass, string relatedClass, bool shouldBeValid)
         {
             
             string code = FileUtils.FileToString("Relation\\" + filename);
@@ -33,7 +33,7 @@ namespace IDesign.Tests.Core
         }
 
         [Test]
-        [TestCase("RelationTestCase1.cs", "RelationTestCase1", "EReatlionTestCase1", true)]
+        [TestCase("RelationTestCase1.cs", "RelationTestCase1", "ERelationTestCase1", true)]
         [TestCase("RelationTestCase2.cs", "RelationTestCase2", "ERelationTestCase2", false)]
         [TestCase("RelationTestCase3.cs", "RelationTestCase3", "IRelationTestCase3", false)]
         [TestCase("RelationTestCase4.cs", "RelationTestCase4", "ERelationTestCase4", true)]
