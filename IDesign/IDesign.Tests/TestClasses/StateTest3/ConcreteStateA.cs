@@ -7,7 +7,7 @@ namespace IDesign.Tests.TestClasses.StateTest3
     /// <summary>
     /// A 'ConcreteState' class
     /// </summary>
-     class ConcreteStateA : State
+    class ConcreteStateA : State
     {
         public override void Handle(Context context)
         {

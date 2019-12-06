@@ -22,7 +22,7 @@ namespace IDesign.Core
                 {RelationType.Uses, RelationType.UsedBy},
                 {RelationType.Extends, RelationType.ExtendedBy}
             };
-        
+
         /// <summary>
         ///     Constructor of the Determine Relations class.
         /// </summary>
@@ -47,11 +47,16 @@ namespace IDesign.Core
 
         private void AddRelation(EntityNode node, RelationType type, string destination)
         {
-            AddRelation(node,type, GetNodeByName(node, destination));
+            AddRelation(node, type, GetNodeByName(node, destination));
         }
 
         private void AddRelation(EntityNode node, RelationType type, EntityNode edgeNode)
         {
+            if (node == null || edgeNode == null)
+            {
+                return;
+            }
+
             node.Relations.Add(new Relation(edgeNode, type));
             edgeNode.Relations.Add(new Relation(node, reverserdTypes[type]));
         }

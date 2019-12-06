@@ -124,11 +124,19 @@ namespace IDesign.Core
             return UsingDeclarationSyntaxList;
         }
 
-        TypeDeclarationSyntax Type { get; set; }
-
         public SyntaxTokenList GetModifiers()
         {
-            return Type.Modifiers;
+            return InterfaceOrClassNode.Modifiers;
+        }
+
+        public string GetSuggestionName()
+        {
+            return GetName() + "()";
+        }
+
+        public SyntaxNode GetSuggestionNode()
+        {
+            return InterfaceOrClassNode;
         }
     }
 }

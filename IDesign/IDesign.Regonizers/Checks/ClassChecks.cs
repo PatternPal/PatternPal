@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using IDesign.Recognizers.Abstractions;
 using System.Linq;
- using IDesign.Recognizers.Models;
+using IDesign.Recognizers.Models;
 
 namespace IDesign.Recognizers.Checks
 {
@@ -17,8 +17,8 @@ namespace IDesign.Recognizers.Checks
         /// <returns>The field is the type that is given in the function</returns>
         public static bool ImplementsInterface(this IEntityNode node, string name)
         {
-            if(HasInterface(node, name))
-                {
+            if (HasInterface(node, name))
+            {
                 return true;
             }
             if (Extends(node))
@@ -41,7 +41,7 @@ namespace IDesign.Recognizers.Checks
         {
             if (Extends(node))
             {
-                if(GetExtends(node).GetName() == name)
+                if (GetExtends(node).GetName() == name)
                 {
                     return true;
                 }
