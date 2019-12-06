@@ -64,10 +64,15 @@ namespace IDesign.Core
         /// <param name="edgeNode">the given destination node</param>
         private void AddRelation(EntityNode node, RelationType type, EntityNode edgeNode)
         {
-            if(edgeNode == null) 
+            if (edgeNode == null)
             {
                 return;
             }
+
+            //Make sure relation doesn't already exists
+            if (node.Relations.Any(x => x.GetDestination() == edgeNode && x.GetRelationType() == type))
+                return;
+
             node.Relations.Add(new Relation(edgeNode, type));
             edgeNode.Relations.Add(new Relation(node, reverserdTypes[type]));
         }
@@ -94,7 +99,7 @@ namespace IDesign.Core
         /// <param name="entityNode">the node which makes use of the other nodes</param>
         private void CreateUsingEdges(EntityNode entityNode)
         {
-            var childNodes = entityNode.GetTypeDeclarationSyntax().DescendantNodes();
+            var childNodes = entityNode.GetTypeDeclarationSyntax().Members.SelectMany(x => x.DescendantNodes());
             foreach (var identifier in childNodes.OfType<IdentifierNameSyntax>())
             {
                 if (identifier is IdentifierNameSyntax name)
@@ -126,6 +131,7 @@ namespace IDesign.Core
             }
             return null;
         }
+
 
         /// <summary>
         /// Creates Parent relations of a given node
