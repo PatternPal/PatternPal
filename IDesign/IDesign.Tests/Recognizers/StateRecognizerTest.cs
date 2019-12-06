@@ -12,39 +12,36 @@ using System.Text;
 
 namespace IDesign.Tests.Recognizers
 {
- 
+
     class StateRecognizerTest
     {
-        //[TestCase("ConcreteStateA.cs", 100)]
-        //[TestCase("ConcreteStateB.cs", 100)]
-        //[TestCase("Context.cs", 100)]
-        [TestCase("State.cs", 100)]
-        public void StateRecognizer_Returns_Correct_Score(string filename, int score)
+        [TestCase("StateTest2", "Account", 100)]
+        [TestCase("StateTest2", "GoldState", 100)]
+        [TestCase("StateTest2", "RedState", 100)]
+        [TestCase("StateTest2", "SilverState", 100)]
+        [TestCase("StateTest2", "State", 100)]
+        [TestCase("StateTest3", "State", 100)]
+        [TestCase("StateTest3", "Context", 100)]
+        [TestCase("StateTest3", "ConcreteStateA", 100)]
+        [TestCase("StateTest3", "ConcreteStateB", 100)]
+        [TestCase("StateTest4", "Player", 50)]
+        [TestCase("StateTest4", "State", 100)]
+        [TestCase("StateTest4", "DeadState", 100)]
+        [TestCase("StateTest4", "HealthyState", 100)]
+        [TestCase("StateTest4", "HurtState", 100)]
+        [TestCase("StrategyTest1", "CookingMethod", 100)]
+        [TestCase("StrategyTest1", "CookStrategy", 100)]
+        [TestCase("StrategyTest1", "DeepFrying", 0)]
+        [TestCase("StrategyTest1", "OvenBaking", 0)]
+        public void StateRecognizer_Returns_Correct_Score(string directory, string filename, int score)
         {
-            var singleton = new StateRecognizer();
-            string code = FileUtils.FileToString("StateTest3\\" + filename);
-
-
-            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var NameSpaceNode = root.Members[0] as NamespaceDeclarationSyntax;
-            var testNode = NameSpaceNode.Members[0] as ClassDeclarationSyntax;
-
-            var entityNode = new EntityNode
-            {
-                Name = testNode.Identifier.ToString(),
-                InterfaceOrClassNode = testNode,
-
-                MethodDeclarationSyntaxList =
-                    testNode.DescendantNodes().OfType<MethodDeclarationSyntax>().ToList(),
-                FieldDeclarationSyntaxList =
-                    testNode.DescendantNodes().OfType<FieldDeclarationSyntax>().ToList(),
-                PropertyDeclarationSyntaxList =
-                    testNode.DescendantNodes().OfType<PropertyDeclarationSyntax>().ToList(),
-                ConstructorDeclarationSyntaxList =
-                    testNode.DescendantNodes().OfType<ConstructorDeclarationSyntax>().ToList()
-            };
-
-            var result = singleton.Recognize(entityNode);
+            var state = new StateRecognizer();
+            var filesAsString = FileUtils.FilesToString($"{directory}\\");
+            var nameSpaceName = $"IDesign.Tests.TestClasses.{directory}";
+            var entityNodes = EntityNodeUtils.CreateEntityNodeGraph(filesAsString);
+            var createRelation = new DetermineRelations(entityNodes);
+            createRelation.GetEdgesOfEntityNode();
+            var result = state.Recognize(entityNodes[nameSpaceName + "." + filename]);
 
             Assert.AreEqual(score, result.GetScore());
         }

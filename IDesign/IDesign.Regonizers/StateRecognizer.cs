@@ -96,13 +96,15 @@ namespace IDesign.Recognizers
             //create list with only uses realations
             var usingRelations = relations.Where(x => x.GetRelationType() == RelationType.Uses).ToList();
 
-            if (inheritanceRelations.Count() > 0)
+            //create list with only creates relations
+            var createsRelations = relations.Where(x => x.GetRelationType() == RelationType.Creates).ToList();
+
+            if (inheritanceRelations.Count() > 0 && usingRelations.Count() > 0)
             {
-                ConcreteStateClassChecks(node, inheritanceRelations);
+                ConcreteStateClassChecks(node, inheritanceRelations, createsRelations);
             }
             if (usingRelations.Count() > 0 && inheritanceRelations.Count() <= 0)
             {
-                //node is probaly context class
                 ContextClassChecks(node, usingRelations);
             }
             return result;
@@ -114,7 +116,7 @@ namespace IDesign.Recognizers
         /// <param name="node"></param>
         /// <param name="inheritanceRelations"></param>
         /// <returns></returns>
-        private IResult ConcreteStateClassChecks(IEntityNode node, List<IRelation> inheritanceRelations)
+        private IResult ConcreteStateClassChecks(IEntityNode node, List<IRelation> inheritanceRelations, List<IRelation> creationRelations)
         {
             float amountOfChecks = 1;
             foreach (var edge in inheritanceRelations)
@@ -128,6 +130,19 @@ namespace IDesign.Recognizers
                         ((x.CheckTypeDeclaration(EntityNodeType.Class)) && (x.CheckModifier("abstract"))),"message")
                     };
                 CheckElements(result, new List<IEntityNode> { edgeNode }, inheritanceChecks);
+            }
+
+            foreach (var edge in creationRelations)
+            {
+                var edgeNode = edge.GetDestination();
+
+                //check if state makes other state in handle method
+                var createChecks = new List<ElementCheck<IMethod>>
+                {
+                    new ElementCheck<IMethod>(x => (x.CheckCreationType(edgeNode.GetName())) &&(!x.CheckCreationType(node.GetName())), $"{node.GetName()} should not be itself")
+                };
+                amountOfChecks++;
+                CheckElements(result, node.GetMethods(), createChecks);
             }
             result.Score = (int)(result.Score / amountOfChecks * 100f);
             return result;
