@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IDesign.Tests.Core.TestClasses
+namespace IDesign.Tests.TestClasses
 {
-    class TestClass1 : ITest
+    class TestClass1
     {
         public TestClass1(int x, int y)
         {

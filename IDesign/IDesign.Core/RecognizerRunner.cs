@@ -28,7 +28,6 @@ namespace IDesign.Core
         {
             var results = new List<RecognitionResult>();
 
-
             //loop over all files
             for (var i = 0; i < files.Count; i++)
             {
