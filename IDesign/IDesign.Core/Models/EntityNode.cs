@@ -117,7 +117,6 @@ namespace IDesign.Core
                 return EntityNodeType.Interface;
             }
             return EntityNodeType.Class;
-
         }
 
         public List<UsingDirectiveSyntax> GetUsings()

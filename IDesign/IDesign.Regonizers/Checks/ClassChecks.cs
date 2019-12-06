@@ -99,6 +99,11 @@ namespace IDesign.Recognizers.Checks
             return entityNode.GetModifiers().Where(x => x.ToString().IsEqual(modifier)).Any();
         }
 
+        public static bool CheckTypeDeclaration(this IEntityNode entityNode, EntityNodeType nodeType)
+        {
+            return entityNode.GetEntityNodeType().Equals(nodeType);
+        }
+
 
     }
 }

@@ -6,20 +6,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="TestClasses\FactoryTestClasses\**" />
+    <Compile Remove="TestClasses\SingletonTestClasses\**" />
+    <EmbeddedResource Remove="TestClasses\FactoryTestClasses\**" />
+    <EmbeddedResource Remove="TestClasses\SingletonTestClasses\**" />
+    <None Remove="TestClasses\FactoryTestClasses\**" />
+    <None Remove="TestClasses\SingletonTestClasses\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase1.cs" />
     <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase2.cs" />
     <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase3.cs" />
     <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase4.cs" />
     <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase5.cs" />
     <Compile Remove="TestClasses\FactorySimple\ProductA.cs" />
-    <Compile Remove="TestClasses\FactoryTestClasses\FactoryTestCase1.cs" />
-    <Compile Remove="TestClasses\FactoryTestClasses\FactoryTestCase2.cs" />
-    <Compile Remove="TestClasses\FactoryTestClasses\FactoryTestCase3.cs" />
-    <Compile Remove="TestClasses\FactoryTestClasses\FactoryTestCase4.cs" />
-    <Compile Remove="TestClasses\FactoryTestClasses\FactoryTestCase5.cs" />
-    <Compile Remove="TestClasses\FactoryTestClasses\IProduct.cs" />
-    <Compile Remove="TestClasses\FactoryTestClasses\ProductA.cs" />
-    <Compile Remove="TestClasses\FactoryTestClasses\ProductB.cs" />
     <Compile Remove="TestClasses\SingleTonTestCase1.cs" />
     <Compile Remove="TestClasses\SingleTonTestCase2.cs" />
     <Compile Remove="TestClasses\SingleTonTestCase3.cs" />
@@ -45,48 +46,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TestClasses\FactorySimple\ProductA.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestClasses\FactoryTestClasses\FactoryTestCase1.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestClasses\FactoryTestClasses\FactoryTestCase2.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestClasses\FactoryTestClasses\FactoryTestCase3.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestClasses\FactoryTestClasses\FactoryTestCase4.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestClasses\FactoryTestClasses\FactoryTestCase5.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestClasses\FactoryTestClasses\IProduct.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestClasses\FactoryTestClasses\ProductA.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestClasses\FactoryTestClasses\ProductB.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestClasses\SingletonTestClasses\SingleTonTestCase1.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestClasses\SingletonTestClasses\SingleTonTestCase2.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestClasses\SingletonTestClasses\SingleTonTestCase3.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestClasses\SingletonTestClasses\SingleTonTestCase4.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestClasses\SingletonTestClasses\SingleTonTestCase6.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestClasses\SingletonTestClasses\SingleTonTestCase7.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
