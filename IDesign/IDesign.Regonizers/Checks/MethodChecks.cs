@@ -85,9 +85,36 @@ namespace IDesign.Recognizers
             return result;
         }
 
-        public static bool CheckParameters(this IMethod methodSyntax, List<string> parameters)
+        /// <summary>
+        ///     Function thats checks if the parameters exist.
+        /// </summary>
+        /// <param name="methodSyntax">The methodsyntax witch it should check</param>
+        /// <param name="parameters">The expected parameters</param>
+        /// <returns></returns>
+        public static bool CheckParameters(this IMethod methodSyntax, IEnumerable<string> parameters)
         {
-            return parameters.All(x => methodSyntax.GetParameters().Any(y => x.Equals(y)));
+            return parameters.Any(x => methodSyntax.GetParameterTypes().Any(y => x.Equals(y)));
+        }
+
+        /// <summary>
+        ///     Function thats checks if the methods exist.
+        /// </summary>
+        /// <param name="methodSyntax">The methodsyntax witch it should check</param>
+        /// <param name="methods">The expected methods</param>
+        /// <returns></returns>
+        public static bool CheckName(this IMethod methodSyntax, IEnumerable<IMethod> methods)
+        {
+            return methods.Any(x => x.GetName().Equals(methodSyntax.GetName()));
+        }
+
+        public static bool CheckArguments(this IMethod methodSyntax, string interfaceName)
+        {
+            var parameters = methodSyntax.GetParameters().Where(y => y.Type.ToString().Equals(interfaceName));
+
+            if (parameters.Count() < 1)
+                return false;
+
+            return methodSyntax.GetArguments().Any(x => x.Equals(parameters.First().Identifier.ToString()));
         }
     }
 }

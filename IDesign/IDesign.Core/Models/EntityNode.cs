@@ -1,10 +1,11 @@
 ﻿using IDesign.Recognizers;
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis;
 
 namespace IDesign.Core
 {
@@ -57,8 +58,7 @@ namespace IDesign.Core
             foreach (var property in PropertyDeclarationSyntaxList)
                 if (property.AccessorList != null)
                 {
-                    var getters = property.AccessorList.Accessors.Where(x =>
-                        x.Kind() == SyntaxKind.GetAccessorDeclaration && x.Body != null);
+                    var getters = property.AccessorList.Accessors;
                     list.AddRange(getters.Select(x => new PropertyMethod(property, x)));
                 }
             return list;
@@ -121,6 +121,16 @@ namespace IDesign.Core
         public List<UsingDirectiveSyntax> GetUsings()
         {
             return UsingDeclarationSyntaxList;
+        }
+
+        public string GetSuggestionName()
+        {
+            return GetName();
+        }
+
+        public SyntaxNode GetSuggestionNode()
+        {
+            return GetTypeDeclarationSyntax();
         }
     }
 }

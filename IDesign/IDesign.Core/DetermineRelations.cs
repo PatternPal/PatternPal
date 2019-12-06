@@ -52,6 +52,9 @@ namespace IDesign.Core
 
         private void AddRelation(EntityNode node, RelationType type, EntityNode edgeNode)
         {
+            if (edgeNode == null)
+                return;
+
             node.Relations.Add(new Relation(edgeNode, type));
             edgeNode.Relations.Add(new Relation(node, reverserdTypes[type]));
         }

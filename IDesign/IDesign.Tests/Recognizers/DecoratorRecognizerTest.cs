@@ -4,6 +4,7 @@ using IDesign.Tests.Utils;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace IDesign.Tests.Recognizers
@@ -17,7 +18,22 @@ namespace IDesign.Tests.Recognizers
         }
 
         [Test]
-        [TestCase("DecoratorTestCase1.cs", 100)]
+        [TestCase("D:/Desktop/decorator-pattern/DecoratorPattern/DecoratorPattern", 100)]
+        public void DecoratorRecognizer_Returns_Correct_Score(string directoryPath, int score)
+        {
+            FileManager manager = new FileManager();
+            List<string> paths = manager.GetAllCsFilesFromDirectory(directoryPath);
+
+            RecognizerRunner runner = new RecognizerRunner();
+            List<RecognitionResult> result = runner.Run(paths, new List<DesignPattern>() { new DesignPattern("Decorator", new DecoratorRecognizer()) });
+
+            result = result.OrderBy(x => x.Result.GetScore()).ToList();
+
+            Assert.AreEqual(score, result.Last().Result.GetScore());
+        }
+
+
+        /*[TestCase("DecoratorTestCase1.cs", 100)]
         [TestCase("DecoratorTestCase2.cs", 100)]
         [TestCase("DecoratorTestCase3.cs", 100)]
         [TestCase("DecoratorTestCase4.cs", 50)]
@@ -52,6 +68,6 @@ namespace IDesign.Tests.Recognizers
             var result = decorator.Recognize(entityNode);
 
             Assert.AreEqual(score, result.GetScore());
-        }
+        }*/
     }
 }

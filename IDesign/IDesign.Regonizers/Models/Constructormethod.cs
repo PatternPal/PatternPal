@@ -45,9 +45,19 @@ namespace IDesign.Recognizers
             return Constructor;
         }
 
-        public List<string> GetParameters()
+        public IEnumerable<string> GetParameterTypes()
         {
             return Constructor.ParameterList.Parameters.Select(x => (x.Type is TypeSyntax id ? id.ToString() : "")).ToList();
+        }
+
+        public IEnumerable<ParameterSyntax> GetParameters()
+        {
+            return Constructor.ParameterList.Parameters;
+        }
+
+        public IEnumerable<string> GetArguments()
+        {
+            return Constructor.Initializer.ArgumentList.Arguments.ToList().Select(x => x.ToString());
         }
     }
 }

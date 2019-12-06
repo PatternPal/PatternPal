@@ -8,8 +8,10 @@ namespace IDesign.Recognizers
     {
         string GetName();
         string GetReturnType();
+        IEnumerable<string> GetArguments();
         BlockSyntax GetBody();
-        List<string> GetParameters();
+        IEnumerable<string> GetParameterTypes();
+        IEnumerable<ParameterSyntax> GetParameters();
         SyntaxTokenList GetModifiers();
     }
 }

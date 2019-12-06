@@ -30,7 +30,12 @@ namespace IDesign.Recognizers
             return Property.Identifier.ToString();
         }
 
-        public List<string> GetParameters()
+        public IEnumerable<ParameterSyntax> GetParameters()
+        {
+            return new List<ParameterSyntax>();
+        }
+
+        public IEnumerable<string> GetParameterTypes()
         {
             return new List<string>();
         }
@@ -48,6 +53,11 @@ namespace IDesign.Recognizers
         public SyntaxNode GetSuggestionNode()
         {
             return Property;
+        }
+
+        public IEnumerable<string> GetArguments()
+        {
+            return new List<string>();
         }
     }
 }

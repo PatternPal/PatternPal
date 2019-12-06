@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace IDesign.Recognizers.Abstractions
 {
-    public interface IEntityNode
+    public interface IEntityNode : ICheckable
     {
         /// <summary>
         ///     Get the declaration syntax of the node.

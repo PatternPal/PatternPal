@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IDesign.Recognizers.Models
 {
- public   enum EntityNodeType
+    public enum EntityNodeType
     {
         Class,
         Interface

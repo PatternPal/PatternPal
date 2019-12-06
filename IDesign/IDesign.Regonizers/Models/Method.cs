@@ -12,7 +12,6 @@ namespace IDesign.Recognizers
             MethodDeclaration = method;
         }
 
-
         public MethodDeclarationSyntax MethodDeclaration { get; set; }
 
         public BlockSyntax GetBody()
@@ -45,9 +44,19 @@ namespace IDesign.Recognizers
             return MethodDeclaration;
         }
 
-        public List<string> GetParameters()
+        public IEnumerable<string> GetParameterTypes()
         {
             return MethodDeclaration.ParameterList.Parameters.Select(x => (x.Type is TypeSyntax id ? id.ToString() : "")).ToList();
+        }
+
+        public IEnumerable<ParameterSyntax> GetParameters()
+        {
+            return MethodDeclaration.ParameterList.Parameters;
+        }
+
+        public IEnumerable<string> GetArguments()
+        {
+            return new List<string>();
         }
     }
 }
