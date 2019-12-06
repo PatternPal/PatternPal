@@ -87,59 +87,79 @@ namespace IDesign.Recognizers
         /// <param name="node"></param>
         private IResult ClassChecks(IEntityNode node)
         {
-            //standard amount of checks 
-            float amountOfChecks = 0;
-
             var relations = node.GetRelations();
 
             //create list with only Extends and Implements relations
-            relations = relations.Where(x => (x.GetRelationType() == RelationType.Implements) || (x.GetRelationType() == RelationType.Extends)).ToList();
+            var inheritanceRelations = relations.Where(x => (x.GetRelationType() == RelationType.Implements) ||
+            (x.GetRelationType() == RelationType.Extends)).ToList();
 
-            if (relations != null)
+            //create list with only uses realations
+            var usingRelations = relations.Where(x => x.GetRelationType() == RelationType.Uses).ToList();
+
+            if (inheritanceRelations.Count() > 0)
             {
-                foreach (var edge in relations)
-                {
-                    var edgeNode = edge.GetDestination();
-
-                    var inheritanceChecks = new List<ElementCheck<IEntityNode>>
-                    {
-                        //check if node is an interface or an abstract class
-                        new ElementCheck<IEntityNode>(x => (x.CheckTypeDeclaration(EntityNodeType.Interface)) | 
-                        ((x.CheckTypeDeclaration(EntityNodeType.Class)) && (x.CheckModifier("abstract"))),"message")
-                    };
-                    amountOfChecks = 1;
-
-                    CheckElements(result, new List<IEntityNode> { edgeNode }, inheritanceChecks);
-
-                    //TO DO: concrete state checks
-                }
+                ConcreteStateClassChecks(node, inheritanceRelations);
             }
-            else
+            if (usingRelations.Count() > 0 && inheritanceRelations.Count() <= 0)
             {
                 //node is probaly context class
-                //TO DO: context class checks
+                ContextClassChecks(node, usingRelations);
+            }
+            return result;
+        }
+
+        /// <summary>
+        ///     Function to do checks for the concrete state class
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="inheritanceRelations"></param>
+        /// <returns></returns>
+        private IResult ConcreteStateClassChecks(IEntityNode node, List<IRelation> inheritanceRelations)
+        {
+            float amountOfChecks = 1;
+            foreach (var edge in inheritanceRelations)
+            {
+                var edgeNode = edge.GetDestination();
+
+                var inheritanceChecks = new List<ElementCheck<IEntityNode>>
+                    {
+                        //check if node is an interface or an abstract class
+                        new ElementCheck<IEntityNode>(x => (x.CheckTypeDeclaration(EntityNodeType.Interface)) |
+                        ((x.CheckTypeDeclaration(EntityNodeType.Class)) && (x.CheckModifier("abstract"))),"message")
+                    };
+                CheckElements(result, new List<IEntityNode> { edgeNode }, inheritanceChecks);
             }
             result.Score = (int)(result.Score / amountOfChecks * 100f);
             return result;
-
         }
-
 
         /// <summary>
-        ///     Search if class contains a field that is private and with the type of the class
+        ///     Function to do checks for the context class
         /// </summary>
         /// <param name="node"></param>
-        /// <param name="edgeNode"></param>
-        private IResult SearchForField(IEntityNode node, IEntityNode edgeNode)
+        /// <param name="usingRelations"></param>
+        /// <returns></returns>
+        private IResult ContextClassChecks(IEntityNode node, List<IRelation> usingRelations)
         {
-            var checkEdges = new List<ElementCheck<IField>>
+            float amountOfChecks = 2;
+            foreach (var edge in usingRelations)
             {
-                new ElementCheck<IField>(x => x.CheckFieldType(edgeNode.GetName()), $"{node.GetName()} must be equal to {edgeNode.GetName()}"),
-                new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "modifier must be private")
-            };
-            CheckElements(result, node.GetFields(), checkEdges);
-            result.Score = (int)(result.Score / 2f * 100f);
+                var edgeNode = edge.GetDestination();
+
+                if ((edgeNode.CheckTypeDeclaration(EntityNodeType.Interface)) |
+                    (edgeNode.CheckTypeDeclaration(EntityNodeType.Class) && edgeNode.CheckModifier("abstract")))
+                {
+                    var usingChecks = new List<ElementCheck<IField>>
+                    {
+                        new ElementCheck<IField>(x => x.CheckFieldType(edgeNode.GetName()),$"{node.GetName()} must be equal to {edgeNode.GetName()}"),
+                        new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "modifier must be private")
+                    };
+                    CheckElements(result, node.GetFields(), usingChecks);
+                }
+            }
+            result.Score = (int)(result.Score / amountOfChecks * 100f);
             return result;
         }
+
     }
 }
