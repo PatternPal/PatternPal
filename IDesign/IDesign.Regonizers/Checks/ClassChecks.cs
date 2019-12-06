@@ -10,10 +10,10 @@ namespace IDesign.Recognizers.Checks
     public static class ClassChecks
     {
         /// <summary>
-        ///     Return a boolean based on if the interface .
+        ///     Return a boolean based on if node implements an interface with the given name.
         /// </summary>
         /// <param name="node">The node witch it should check</param>
-        /// <param name="name">The expected type</param>
+        /// <param name="name">The expected name of the interface</param>
         /// <returns>The field is the type that is given in the function</returns>
         public static bool ImplementsInterface(this IEntityNode node, string name)
         {
@@ -32,10 +32,10 @@ namespace IDesign.Recognizers.Checks
         }
 
         /// <summary>
-        ///     Return a boolean based on if the given field is an expected type.
+        ///     Return a boolean based on if the given node extends the node with the name
         /// </summary>
-        /// <param name="node">The field witch it should check</param>
-        /// <param name="name">The expected type</param>
+        /// <param name="node">The node it should check</param>
+        /// <param name="name">The expected name of the node it should extend</param>
         /// <returns>The field is the type that is given in the function</returns>
         public static bool ExtendsClass(this IEntityNode node, string name)
         {
@@ -52,7 +52,7 @@ namespace IDesign.Recognizers.Checks
 
         //helper functions
         /// <summary>
-        ///     Return a boolean based on if the given field is an expected type.
+        ///     Return a boolean based on if the given node directly implements the interface name given.
         /// </summary>
         /// <param name="node">The node witch it should check</param>
         /// <param name="name">The expected name of the interface</param>
@@ -60,7 +60,7 @@ namespace IDesign.Recognizers.Checks
         public static bool HasInterface(this IEntityNode node, string name)
         {
             return node.GetRelations()
-                .Any(x => x.GetRelationType() == RelationType.ImplementedBy && x.GetDestination().GetName() == name);
+                .Any(x => x.GetRelationType() == RelationType.Implements && x.GetDestination().GetName() == name);
         }
 
         /// <summary>

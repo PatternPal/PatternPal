@@ -62,7 +62,7 @@ namespace IDesign.Tests.Utils
             return graph;
         }
         /// <summary>
-        /// 
+        /// Makes a dictionary of entityNodes based on foldercontents
         /// </summary>
         /// <param name="projectCode">contents of the folder/project that needs to be converted</param>
         /// <returns>Dictionary of the whole folder/project</returns>

@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="TestClasses\ClassChecks\Class1.cs" />
+    <Compile Remove="TestClasses\ClassChecks\Class2.cs" />
+    <Compile Remove="TestClasses\ClassChecks\Class3.cs" />
+    <Compile Remove="TestClasses\ClassChecks\Class4.cs" />
+    <Compile Remove="TestClasses\ClassChecks\Class5.cs" />
     <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase1.cs" />
     <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase2.cs" />
     <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase3.cs" />
@@ -36,6 +41,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="TestClasses\ClassChecks\Class1.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\ClassChecks\Class2.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\ClassChecks\Class3.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\ClassChecks\Class4.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\ClassChecks\Class5.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="TestClasses\FactorySimple\FactorySimpleTestCase1.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

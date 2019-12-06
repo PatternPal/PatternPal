@@ -4,9 +4,9 @@ using System.Text;
 
 namespace IDesign.Tests.TestClasses.ClassChecks
 {
-  public  class Class1 : EClass1, IClass1{ }
+    public class Class2 : EClass2 { }
 
-    public interface IClass1 { }
+    public interface IClass2 { }
 
-    public class EClass1 { }
+    public class EClass2: IClass2 { }
 }

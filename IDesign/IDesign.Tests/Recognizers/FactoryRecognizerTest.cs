@@ -14,11 +14,11 @@ namespace IDesign.Tests.Recognizers
     public class FactoryRecognizerTest
     {
         [Test]
-        [TestCase("FactoryTestCase1", 50)]
-        [TestCase("FactoryTestCase2", 100)]
-        [TestCase("FactoryTestCase3", 50)]
-        [TestCase("FactoryTestCase4", 50)]
-        [TestCase("FactoryTestCase5", 50)]
+        [TestCase("FactoryTestCase1", 100)]
+        [TestCase("FactoryTestCase2", 0)]
+        [TestCase("FactoryTestCase3", 0)]
+        [TestCase("FactoryTestCase4", 100)]
+        [TestCase("FactoryTestCase5", 100)]
         public void FactoryRecognizer_Returns_Correct_Score(string baseClass, int score)
         {
             var factory = new FactoryRecognizer();
