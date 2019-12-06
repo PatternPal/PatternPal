@@ -96,7 +96,7 @@ namespace IDesign.Recognizers.Checks
 
         public static bool CheckModifier(this IEntityNode entityNode, string modifier)
         {
-            return entityNode.GetModifiers().Where(x => x.ToString().IsEqual(modifier)).Any();
+            return entityNode.GetModifiers().Any(x => x.ToString().IsEqual(modifier));
         }
 
         public static bool CheckTypeDeclaration(this IEntityNode entityNode, EntityNodeType nodeType)
