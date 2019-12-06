@@ -58,7 +58,9 @@ namespace IDesign.Core
             foreach (var property in PropertyDeclarationSyntaxList)
                 if (property.AccessorList != null)
                 {
-                    var getters = property.AccessorList.Accessors;
+                    var accessors = property.AccessorList.Accessors;
+                    var getters = accessors.Where(x => x.Kind() == SyntaxKind.GetAccessorDeclaration);
+                    getters = getters.Where(x => x.Body != null || x.ExpressionBody != null);
                     list.AddRange(getters.Select(x => new PropertyMethod(property, x)));
                 }
             return list;
@@ -102,7 +104,7 @@ namespace IDesign.Core
             return Relations;
         }
 
-       public EntityNodeType GetEntityNodeType()
+        public EntityNodeType GetEntityNodeType()
         {
             var declarationnode = this.GetTypeDeclarationSyntax();
 
@@ -110,7 +112,7 @@ namespace IDesign.Core
             {
                 return EntityNodeType.Class;
             }
-            else if(declarationnode.GetType() == typeof(InterfaceDeclarationSyntax))
+            else if (declarationnode.GetType() == typeof(InterfaceDeclarationSyntax))
             {
                 return EntityNodeType.Interface;
             }

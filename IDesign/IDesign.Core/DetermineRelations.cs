@@ -45,20 +45,42 @@ namespace IDesign.Core
             }
         }
 
+        /// <summary>
+        /// Makes an relation based on a node, a relationtype and a destinationNode.
+        /// </summary>
+        /// <param name="node">the given node</param>
+        /// <param name="type">the given relationtype</param>
+        /// <param name="destination">the given destination name as a string</param>
         private void AddRelation(EntityNode node, RelationType type, string destination)
         {
             AddRelation(node,type, GetNodeByName(node, destination));
         }
 
+        /// <summary>
+        /// Makes an relation based on a node, a reltiontype and a destinationNode as node
+        /// </summary>
+        /// <param name="node">the given node</param>
+        /// <param name="type">the given relationtype</param>
+        /// <param name="edgeNode">the given destination node</param>
         private void AddRelation(EntityNode node, RelationType type, EntityNode edgeNode)
         {
             if (edgeNode == null)
+            {
+                return;
+            }
+
+            //Make sure relation doesn't already exists
+            if (node.Relations.Any(x => x.GetDestination() == edgeNode && x.GetRelationType() == type))
                 return;
 
             node.Relations.Add(new Relation(edgeNode, type));
             edgeNode.Relations.Add(new Relation(node, reverserdTypes[type]));
         }
 
+        /// <summary>
+        /// Determines what nodes this node creates
+        /// </summary>
+        /// <param name="entityNode">the node which creates the other nodes</param>
         private void CreateCreationalEdges(EntityNode entityNode)
         {
             var childNodes = entityNode.GetTypeDeclarationSyntax().DescendantNodes();
@@ -71,9 +93,13 @@ namespace IDesign.Core
             }
         }
 
+        /// <summary>
+        /// Determines what nodes this node uses
+        /// </summary>
+        /// <param name="entityNode">the node which makes use of the other nodes</param>
         private void CreateUsingEdges(EntityNode entityNode)
         {
-            var childNodes = entityNode.GetTypeDeclarationSyntax().DescendantNodes();
+            var childNodes = entityNode.GetTypeDeclarationSyntax().Members.SelectMany(x => x.DescendantNodes());
             foreach (var identifier in childNodes.OfType<IdentifierNameSyntax>())
             {
                 if (identifier is IdentifierNameSyntax name)
@@ -83,6 +109,12 @@ namespace IDesign.Core
             }
         }
 
+        /// <summary>
+        /// Gets node from the dictionary by name
+        /// </summary>
+        /// <param name="node">the node from which you search</param>
+        /// <param name="name">the name of the node that is searched for</param>
+        /// <returns>the node which was searched for</returns>
         private EntityNode GetNodeByName(EntityNode node, string name)
         {
             var namespaces = new List<string>();
@@ -100,6 +132,11 @@ namespace IDesign.Core
             return null;
         }
 
+
+        /// <summary>
+        /// Creates Parent relations of a given node
+        /// </summary>
+        /// <param name="entityNode">the given node</param>
         private void CreateParentClasses(EntityNode entityNode)
         {
             if (entityNode.GetTypeDeclarationSyntax().BaseList != null)

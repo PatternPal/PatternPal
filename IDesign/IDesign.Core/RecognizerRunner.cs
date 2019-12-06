@@ -54,7 +54,6 @@ namespace IDesign.Core
                         Pattern = pattern
                     });
             }
-
             return results;
         }
 
