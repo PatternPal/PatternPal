@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IDesign.Tests.TestClasses.Decorator.DecoratorTestCase1
 {
-    abstract class Decorator : IComponent
+    public abstract class Decorator : IComponent
     {
         IComponent component;
 

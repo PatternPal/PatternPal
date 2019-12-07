@@ -11,18 +11,12 @@ namespace IDesign.Tests.Recognizers
 {
     public class DecoratorRecognizerTest
     {
-
-        [SetUp]
-        public void Setup()
-        {
-        }
-
         [Test]
-        [TestCase("D:/Desktop/decorator-pattern/DecoratorPattern/DecoratorPattern", 100)]
+        [TestCase("DecoratorTestCase1", 100)]
         public void DecoratorRecognizer_Returns_Correct_Score(string directoryPath, int score)
         {
             FileManager manager = new FileManager();
-            List<string> paths = manager.GetAllCsFilesFromDirectory(directoryPath);
+            List<string> paths = manager.GetAllCsFilesFromDirectory("../../../TestClasses/Decorator/" + directoryPath);
 
             RecognizerRunner runner = new RecognizerRunner();
             List<RecognitionResult> result = runner.Run(paths, new List<DesignPattern>() { new DesignPattern("Decorator", new DecoratorRecognizer()) });
@@ -31,7 +25,6 @@ namespace IDesign.Tests.Recognizers
 
             Assert.AreEqual(score, result.Last().Result.GetScore());
         }
-
 
         /*[TestCase("DecoratorTestCase1.cs", 100)]
         [TestCase("DecoratorTestCase2.cs", 100)]

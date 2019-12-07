@@ -4,7 +4,8 @@ using System.Text;
 
 namespace IDesign.Tests.TestClasses.Decorator.DecoratorTestCase1
 {
-    class IComponent
+    interface IComponent
     {
+        public int Operation();
     }
 }

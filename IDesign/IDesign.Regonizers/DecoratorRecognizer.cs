@@ -15,9 +15,9 @@ namespace IDesign.Recognizers
 
             var classChecks = new List<ElementCheck<IEntityNode>>()
             {
-                 new ElementCheck<IEntityNode>(x => x.CheckEntityNodeModifier("Abstract"), "De class mag geen interface zijn"),
-                 new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.Extends) || x.CheckRelationType(RelationType.Implements), "De class zit niet onder een interface of parent class"),
-                 new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.ExtendedBy), "De class wordt niet extend door een ander class")
+                new ElementCheck<IEntityNode>(x => x.CheckEntityNodeModifier("Abstract"), "De class mag geen interface zijn"),
+                new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.Extends) || x.CheckRelationType(RelationType.Implements), "De class zit niet onder een interface of parent class"),
+                new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.ExtendedBy), "De class wordt niet extend door een ander class")
             };
             CheckElements(result, new List<IEntityNode>() { entityNode }, classChecks);
 
@@ -25,18 +25,17 @@ namespace IDesign.Recognizers
 
             var constructorChecks = new List<ElementCheck<IMethod>>()
             {   
-                 new ElementCheck<IMethod>(x => x.CheckModifier("public") || x.CheckModifier("protected") , "Constructor moet public of protected zijn"),
-                 new ElementCheck<IMethod>(x => x.CheckParameters(entityNode.GetRelations().Where(y => y.GetRelationType() == RelationType.Implements)
-                 .Select(y => y.GetDestination().GetName()).ToList()), "Jeanrisotto")
+                new ElementCheck<IMethod>(x => x.CheckModifier("public") || x.CheckModifier("protected") , "Constructor moet public of protected zijn"),
+                new ElementCheck<IMethod>(x => x.CheckParameters(entityNode.GetRelations().Where(y => y.GetRelationType() == RelationType.Implements)
+                .Select(y => y.GetDestination().GetName()).ToList()), "Jeanrisotto")
             };
             CheckElements(result, entityNode.GetConstructors(), constructorChecks);
 
             var parentClass = entityNode.GetRelations().Where(x => x.GetRelationType().Equals(RelationType.Implements) || x.GetRelationType().Equals(RelationType.Extends));
-
             if (parentClass.Count() > 0 && result.Score > 3)
                 result.Score += parentClass.Select(x => CheckInterface(x.GetDestination(), entityNode.GetMethods(), entityNode)).Max(x => x.GetScore());
 
-            result.Score = (int)((result.Score) / 16f * 100f);
+            result.Score = (int)((result.Score) / 13f * 100f);
 
             return result;
         }
@@ -59,7 +58,6 @@ namespace IDesign.Recognizers
             CheckElements(result, new List<IEntityNode>() { interfaceNode }, classChecks);
 
             var extendsCore = core.GetRelations().Where(x => x.GetRelationType().Equals(RelationType.ExtendedBy));
-
             extendsCore.Select(x => CheckConcreteDecorator(x.GetDestination(), interfaceNode)).ToList().ForEach(x => result.Score += x.GetScore());
 
             return result;
