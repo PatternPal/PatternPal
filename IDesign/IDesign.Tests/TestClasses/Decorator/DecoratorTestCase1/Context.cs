@@ -10,6 +10,7 @@ namespace IDesign.Tests.TestClasses.Decorator.DecoratorTestCase1
         {
             IComponent component = new ConcreteComponent();
             ConcreteDecorator1 decorator = new ConcreteDecorator1(component);
+            Decorator d = new ConcreteDecorator1(decorator);
         }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace IDesign.Tests.Checks
 {
@@ -44,7 +45,7 @@ namespace IDesign.Tests.Checks
                 Assert.Fail();
 
             Assert.AreEqual(shouldBeValid,
-                new Field(field, field.Declaration.Variables.FirstOrDefault()).CheckFieldType(type));
+                new Field(field, field.Declaration.Variables.FirstOrDefault()).CheckFieldType(new List<string>() { type }));
         }
     }
 }

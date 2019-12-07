@@ -15,27 +15,32 @@ namespace IDesign.Recognizers
 
             var classChecks = new List<ElementCheck<IEntityNode>>()
             {
-                new ElementCheck<IEntityNode>(x => x.CheckEntityNodeModifier("Abstract"), "De class mag geen interface zijn"),
+                new ElementCheck<IEntityNode>(x => x.CheckEntityNodeModifier("Abstract"), "De class moet abstract zijn"),
                 new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.Extends) || x.CheckRelationType(RelationType.Implements), "De class zit niet onder een interface of parent class"),
                 new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.ExtendedBy), "De class wordt niet extend door een ander class")
             };
             CheckElements(result, new List<IEntityNode>() { entityNode }, classChecks);
 
-            var test = entityNode.GetMethods();
+            var interfaceOrParent = entityNode.GetRelations().Where(x => x.GetRelationType().Equals(RelationType.Implements) || x.GetRelationType().Equals(RelationType.Extends));
 
             var constructorChecks = new List<ElementCheck<IMethod>>()
             {   
-                new ElementCheck<IMethod>(x => x.CheckModifier("public") || x.CheckModifier("protected") , "Constructor moet public of protected zijn"),
-                new ElementCheck<IMethod>(x => x.CheckParameters(entityNode.GetRelations().Where(y => y.GetRelationType() == RelationType.Implements)
-                .Select(y => y.GetDestination().GetName()).ToList()), "Jeanrisotto")
+                new ElementCheck<IMethod>(x => x.CheckModifier("public") || x.CheckModifier("protected") , "De constructor moet public of protected zijn"),
+                new ElementCheck<IMethod>(x => x.CheckParameters(interfaceOrParent.Select(y => y.GetDestination().GetName()).ToList()), "De constructor moet de interface of parent als parameter hebben")
             };
             CheckElements(result, entityNode.GetConstructors(), constructorChecks);
+
+            var propertyChecks = new List<ElementCheck<IField>>
+            {
+               new ElementCheck<IField>(x => x.CheckFieldType(interfaceOrParent.Select(y => y.GetDestination().GetName()).ToList()) , "Incorrect type")
+            };
+            CheckElements(result, entityNode.GetFields(), propertyChecks);
 
             var parentClass = entityNode.GetRelations().Where(x => x.GetRelationType().Equals(RelationType.Implements) || x.GetRelationType().Equals(RelationType.Extends));
             if (parentClass.Count() > 0 && result.Score > 3)
                 result.Score += parentClass.Select(x => CheckInterface(x.GetDestination(), entityNode.GetMethods(), entityNode)).Max(x => x.GetScore());
 
-            result.Score = (int)((result.Score) / 13f * 100f);
+            result.Score = (int)((result.Score) / 14f * 100f);
 
             return result;
         }
