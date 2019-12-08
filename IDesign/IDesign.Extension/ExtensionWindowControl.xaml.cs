@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using EnvDTE;
 using IDesign.Core;
+using IDesign.Core.Models;
 using IDesign.Extension.ViewModels;
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio.ComponentModelHost;
@@ -183,7 +184,7 @@ namespace IDesign.Extension
             var viewModel = viewItem.DataContext as SuggestionViewModel;
             if (viewModel == null) return;
 
-            selectNodeInEditor(viewModel.Suggestion.GetSyntaxNode(), viewModel.Node.GetSourceFile());
+            selectNodeInEditor(viewModel.Feedback.GetSyntaxNode(), viewModel.Node.GetSourceFile());
         }
     }
 }

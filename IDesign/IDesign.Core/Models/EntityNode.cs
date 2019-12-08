@@ -1,5 +1,4 @@
-﻿using IDesign.Recognizers;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models;
@@ -7,7 +6,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis;
 
-namespace IDesign.Core
+namespace IDesign.Core.Models
 {
     public class EntityNode : IEntityNode
     {

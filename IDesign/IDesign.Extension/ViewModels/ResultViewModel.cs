@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using IDesign.Core;
+using IDesign.Core.Models;
 using IDesign.Recognizers.Abstractions;
 
 namespace IDesign.Extension.ViewModels
@@ -34,14 +35,14 @@ namespace IDesign.Extension.ViewModels
 
     public class SuggestionViewModel
     {
-        public SuggestionViewModel(ISuggestion suggestion, IEntityNode node)
+        public SuggestionViewModel(IFeedback feedback, IEntityNode node)
         {
-            Suggestion = suggestion;
+            Feedback = feedback;
             Node = node;
         }
 
-        public ISuggestion Suggestion { get; set; }
+        public IFeedback Feedback { get; set; }
         public IEntityNode Node { get; set; }
-        public string SuggestionText => Suggestion.GetMessage();
+        public string SuggestionText => Feedback.GetMessage();
     }
 }

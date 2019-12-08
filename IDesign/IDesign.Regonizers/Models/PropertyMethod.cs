@@ -1,7 +1,8 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using IDesign.Recognizers.Abstractions;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace IDesign.Recognizers
+namespace IDesign.Recognizers.Models
 {
     public class PropertyMethod : IMethod
     {

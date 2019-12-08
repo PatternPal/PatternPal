@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses
+﻿namespace IDesign.Tests.TestClasses.Singleton
 {
     public class SingleTonTestCase7
     {

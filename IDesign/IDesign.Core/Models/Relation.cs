@@ -1,7 +1,6 @@
-﻿using IDesign.Recognizers;
-using IDesign.Recognizers.Abstractions;
+﻿using IDesign.Recognizers.Abstractions;
 
-namespace IDesign.Core
+namespace IDesign.Core.Models
 {
     public class Relation : IRelation
     {

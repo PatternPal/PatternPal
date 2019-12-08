@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using IDesign.Core;
 using IDesign.Recognizers;
+using IDesign.Recognizers.Models;
 using IDesign.Tests.Utils;
 using NUnit.Framework;
 

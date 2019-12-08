@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using IDesign.Recognizers.Abstractions;
-using IDesign.Recognizers.Output;
+using IDesign.Recognizers.Models.ElementChecks;
+using IDesign.Recognizers.Models.Output;
 
 namespace IDesign.Recognizers
 {

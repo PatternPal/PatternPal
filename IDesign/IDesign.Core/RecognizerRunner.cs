@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using IDesign.Core.Models;
 using IDesign.Recognizers;
 
 namespace IDesign.Core

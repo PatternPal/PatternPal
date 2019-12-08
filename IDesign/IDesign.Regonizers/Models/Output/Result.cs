@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using IDesign.Recognizers.Abstractions;
 
-namespace IDesign.Recognizers.Output
+namespace IDesign.Recognizers.Models.Output
 {
     public class Result : IResult
     {
-        public List<ISuggestion> Suggestions { get; set; } = new List<ISuggestion>();
+        public List<IFeedback> Suggestions { get; set; } = new List<IFeedback>();
         public int Score { get; set; }
 
         public int GetScore()
@@ -13,7 +13,7 @@ namespace IDesign.Recognizers.Output
             return Score;
         }
 
-        public IList<ISuggestion> GetSuggestions()
+        public IList<IFeedback> GetSuggestions()
         {
             return Suggestions;
         }

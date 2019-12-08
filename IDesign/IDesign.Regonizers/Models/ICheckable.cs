@@ -1,6 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 
-namespace IDesign.Recognizers
+namespace IDesign.Recognizers.Models
 {
     public interface ICheckable
     {

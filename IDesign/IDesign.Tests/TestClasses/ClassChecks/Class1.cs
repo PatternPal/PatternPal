@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses.ClassChecksTestClasses
+﻿namespace IDesign.Tests.TestClasses.ClassChecks
 {
   public  class Class1 : EClass1, IClass1
     {

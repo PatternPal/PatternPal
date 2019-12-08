@@ -1,8 +1,10 @@
 using IDesign.Recognizers.Abstractions;
-using IDesign.Recognizers.Output;
-using System.Collections.Generic;
+ using System.Collections.Generic;
+ using IDesign.Recognizers.Checks;
+ using IDesign.Recognizers.Models.ElementChecks;
+ using IDesign.Recognizers.Models.Output;
 
-namespace IDesign.Recognizers
+ namespace IDesign.Recognizers
 {
     public class SingletonRecognizer : Recognizer, IRecognizer
     {

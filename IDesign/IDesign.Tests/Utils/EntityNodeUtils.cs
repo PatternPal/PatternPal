@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using IDesign.Core;
+using IDesign.Core.Models;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
