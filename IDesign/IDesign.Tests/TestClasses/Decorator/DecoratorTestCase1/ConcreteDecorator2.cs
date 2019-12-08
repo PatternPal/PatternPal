@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IDesign.Tests.TestClasses.Decorator.DecoratorTestCase1
 {
-    public class ConcreteDecorator2 : Decorator
+    class ConcreteDecorator2 : Decorator
     {
         public ConcreteDecorator2(IComponent component) : base(component) { }
 
