@@ -13,6 +13,8 @@ namespace IDesign.Tests.Recognizers
     {
         [Test]
         [TestCase("DecoratorTestCase1", 100)]
+        [TestCase("DecoratorTestCase2", 0)]
+        [TestCase("DecoratorTestCase3", 13)]
         public void DecoratorRecognizer_Returns_Correct_Score(string directoryPath, int score)
         {
             FileManager manager = new FileManager();

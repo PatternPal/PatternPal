@@ -107,9 +107,15 @@ namespace IDesign.Recognizers
             return methods.Any(x => x.GetName().Equals(methodSyntax.GetName()));
         }
 
-        public static bool CheckArguments(this IMethod methodSyntax, string interfaceName)
+        /// <summary>
+        ///     Function thats checks if the argument exist.
+        /// </summary>
+        /// <param name="methodSyntax">The methodsyntax witch it should check</param>
+        /// <param name="argument">The expected argument</param>
+        /// <returns></returns>
+        public static bool CheckArguments(this IMethod methodSyntax, string argument)
         {
-            var parameters = methodSyntax.GetParameters().Where(y => y.Type.ToString().Equals(interfaceName));
+            var parameters = methodSyntax.GetParameters().Where(y => y.Type.ToString().Equals(argument));
 
             if (parameters.Count() < 1)
                 return false;
