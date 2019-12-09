@@ -72,7 +72,8 @@ namespace IDesign.Console
 
             foreach (var pattern in selectedPatterns) System.Console.WriteLine(pattern.Name);
 
-            var results = recognizerRunner.Run(selectedFiles, selectedPatterns);
+            recognizerRunner.CreateGraph(selectedFiles);
+            var results = recognizerRunner.Run(selectedPatterns);
 
             PrintResults(results);
 
@@ -106,7 +107,7 @@ namespace IDesign.Console
 
                 System.Console.ForegroundColor = ConsoleColor.Red;
 
-                foreach (var suggestion in results[i].Result.GetSuggestions())
+                foreach (var suggestion in results[i].Result.GetResults())
                     System.Console.WriteLine($"\t- {suggestion.GetMessage()}");
 
                 System.Console.ForegroundColor = ConsoleColor.White;

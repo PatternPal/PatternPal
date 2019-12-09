@@ -2,8 +2,8 @@
 
 namespace IDesign.Recognizers.Abstractions
 {
-    public interface ICheck<T> where T : ICheckable
+    public interface ICheck<T> where T : class, ICheckable
     {
-        IFeedback Check(T elementToCheck);
+        ICheckResult Check(T elementToCheck);
     }
 }

@@ -3,6 +3,8 @@ using System.Linq;
 using IDesign.Core;
 using IDesign.Core.Models;
 using IDesign.Recognizers.Abstractions;
+using Microsoft.VisualStudio.Imaging;
+using Microsoft.VisualStudio.Imaging.Interop;
 
 namespace IDesign.Extension.ViewModels
 {
@@ -30,19 +32,38 @@ namespace IDesign.Extension.ViewModels
         public RecognitionResult Result { get; set; }
         public string PatternName => Result.Pattern.Name;
         public int Score => Result.Result.GetScore();
-        public List<SuggestionViewModel> Suggestions { get; set; } = new List<SuggestionViewModel>();
+        public IEnumerable<CheckResultViewModel> Results => Result.Result.GetResults().Select(x => new CheckResultViewModel(x));
     }
 
-    public class SuggestionViewModel
+    public class CheckResultViewModel
     {
-        public SuggestionViewModel(IFeedback feedback, IEntityNode node)
+        public CheckResultViewModel(ICheckResult  result)
         {
-            Feedback = feedback;
-            Node = node;
+            Result = result;
         }
 
-        public IFeedback Feedback { get; set; }
-        public IEntityNode Node { get; set; }
-        public string SuggestionText => Feedback.GetMessage();
+        public ICheckResult Result { get; set; }
+        public string Message => Result.GetMessage();
+        public int Score => Result.GetScore();
+        public FeedbackType Type => Result.GetFeedbackType();
+        public ImageMoniker Icon
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case FeedbackType.Correct:
+                        return KnownMonikers.StatusOK;
+                    case FeedbackType.SemiCorrect:
+                        return KnownMonikers.StatusExcluded;
+                    case FeedbackType.Incorrect:
+                        return KnownMonikers.StatusError;
+                }
+
+                return KnownMonikers.StatusHelp;
+            }
+        }
+
+        public IEnumerable<CheckResultViewModel> SubResults => Result.GetChildFeedback().Select(x => new CheckResultViewModel(x));
     }
 }

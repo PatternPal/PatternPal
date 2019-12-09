@@ -11,59 +11,60 @@ namespace IDesign.Recognizers.Models.ElementChecks
         Any,
         All
     }
+
     /// <summary>
     ///     A class for defining a check on a type with a predicate
     /// </summary>
     /// <typeparam name="T">The type witch the check is for</typeparam>
-    public class GroupCheck<T> : ICheck<T> where T : ICheckable
+    /// <typeparam name="">The type witch the check is for</typeparam>
+    public class GroupCheck<TParent, TChild> : ICheck<TParent> where TParent : class, ICheckable where TChild : class, ICheckable
     {
-        private readonly List<ICheck<T>> _checks;
+        private readonly List<ICheck<TChild>> _checks;
         private readonly string _description;
-        private readonly Func<T, IEnumerable<T>> _elements;
+        private readonly Func<TParent, IEnumerable<TChild>> _elements;
 
-        public GroupCheck(List<ICheck<T>> checks, Func<T, IEnumerable<T>> elements, string description)
+        public GroupCheck(List<ICheck<TChild>> checks, Func<TParent, IEnumerable<TChild>> elements, string description)
         {
             _checks = checks;
             _description = description;
             _elements = elements;
         }
 
-        public IFeedback Check(T elementToCheck)
+        private ICheckResult CreateFalseResult()
         {
-            var allChildFeedback = new Dictionary<T, (int score, IEnumerable<IFeedback> childFeedback)>();
-
-
-            foreach (var check in _checks)
+            return new CheckResult(_description, FeedbackType.Incorrect, null)
             {
-                var elements = _elements(elementToCheck);
-                var childFeedback = elements.Select(x => check.Check(x));
-                
-                
+                ChildFeedback = _checks.Select(x => x.Check(null)).ToList()
+            };
+        }
 
+        public ICheckResult Check(TParent elementToCheck)
+        {
+            if (elementToCheck == null) return CreateFalseResult();
+
+            var elements = _elements(elementToCheck).ToList();
+            if (!elements.Any()) return CreateFalseResult();
+
+            var allChildFeedback = new Dictionary<TChild, (int score, IEnumerable<ICheckResult> childFeedback)>();
+            foreach (var element in elements)
+            {
+                var childFeedback = _checks.Select(x => x.Check(element));
                 var score = childFeedback.Sum(x => x.GetScore());
                 allChildFeedback.Add(element, (score, childFeedback));
             }
 
-            var childFeedbackList = new List<Feedback>();
+            var highestScored = allChildFeedback.OrderByDescending(x => x.Value.score).FirstOrDefault();
+            var feedback = FeedbackType.Incorrect;
 
-            //Add feedback for best scored element
-            foreach (var elementScore in allChildFeedback)
-                //If element has the highest score
-                if (elementScore.Value.score == allChildFeedback.Values.Select(x => x.score).Max())
-                {
-                    foreach (var feedback in elementScore.Value.childFeedback)
-                        childFeedbackList.Add(
-                            new Feedback(
-                                _description,
-                                FeedbackType.Correct,
-                                elementScore.Key.GetSuggestionNode()
-                            )
-                        );
+            if (highestScored.Value.childFeedback.Any(x => x.GetFeedbackType() == FeedbackType.Correct))
+                feedback = FeedbackType.SemiCorrect;
+            if (highestScored.Value.childFeedback.All(x => x.GetFeedbackType() == FeedbackType.Correct))
+                feedback = FeedbackType.Correct;
 
-                    return (, elementScore.Value.score);
-                }
-
-            return new Feedback(_description, feedback, elementToCheck.GetSuggestionNode());
+            return new CheckResult(_description, feedback, elementToCheck.GetSuggestionNode())
+            {
+                ChildFeedback = highestScored.Value.childFeedback.ToList()
+            };
         }
     }
 }

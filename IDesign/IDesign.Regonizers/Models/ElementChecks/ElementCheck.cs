@@ -8,7 +8,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
     ///     A class for defining a check on a type with a predicate
     /// </summary>
     /// <typeparam name="T">The type witch the check is for</typeparam>
-    public class ElementCheck<T> : ICheck<T> where T : ICheckable
+    public class ElementCheck<T> : ICheck<T> where T : class, ICheckable
     {
         private readonly string _description;
         private readonly Predicate<T> _predicate;
@@ -24,11 +24,14 @@ namespace IDesign.Recognizers.Models.ElementChecks
             return _description;
         }
 
-        public IFeedback Check(T elementToCheck)
+        public ICheckResult Check(T elementToCheck)
         {
+            //Support checking without input (To create false result)
+            if (elementToCheck == null)
+                return new CheckResult(_description, FeedbackType.Incorrect, null);
             var isValid = _predicate(elementToCheck);
             var feedback = isValid ? FeedbackType.Correct : FeedbackType.Incorrect;
-            return new Feedback(_description, feedback, elementToCheck.GetSuggestionNode());
+            return new CheckResult(_description, feedback, elementToCheck.GetSuggestionNode());
         }
     }
 }

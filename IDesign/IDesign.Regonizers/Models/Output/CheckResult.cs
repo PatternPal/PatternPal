@@ -5,9 +5,9 @@ using Microsoft.CodeAnalysis;
 
 namespace IDesign.Recognizers.Models.Output
 {
-    public class Feedback : IFeedback
+    public class CheckResult : ICheckResult
     {
-        public Feedback(string message, FeedbackType feedbackType, SyntaxNode node)
+        public CheckResult(string message, FeedbackType feedbackType, SyntaxNode node)
         {
             Message = message;
             FeedbackType = feedbackType;
@@ -17,8 +17,7 @@ namespace IDesign.Recognizers.Models.Output
         public string Message { get; set; }
         public FeedbackType FeedbackType { get; set; }
         public SyntaxNode Node { get; set; }
-        public List<Feedback> ChildFeedback { get; set; }
-
+        public List<ICheckResult> ChildFeedback { get; set; } = new List<ICheckResult>();
 
 
         public string GetMessage()
@@ -26,7 +25,7 @@ namespace IDesign.Recognizers.Models.Output
             return Message;
         }
 
-        public IEnumerable<IFeedback> GetChildFeedback()
+        public IEnumerable<ICheckResult> GetChildFeedback()
         {
             return ChildFeedback;
         }
@@ -37,7 +36,7 @@ namespace IDesign.Recognizers.Models.Output
                 return FeedbackType == FeedbackType.Correct ? 1 : 0;
             return ChildFeedback.Sum(x => x.GetScore());
         }
-        
+
         public FeedbackType GetFeedbackType()
         {
             return FeedbackType;

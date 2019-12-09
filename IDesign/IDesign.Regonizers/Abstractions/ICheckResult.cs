@@ -11,7 +11,7 @@ namespace IDesign.Recognizers.Abstractions
         Incorrect
     }
 
-    public interface IFeedback
+    public interface ICheckResult
     {
         /// <summary>
         ///     Get the message for this feedback
@@ -24,7 +24,7 @@ namespace IDesign.Recognizers.Abstractions
         ///     Get the message for this feedback
         /// </summary>
         /// <returns>The suggestion message</returns>
-        IEnumerable<IFeedback> GetChildFeedback();
+        IEnumerable<ICheckResult> GetChildFeedback();
 
         /// <summary>
         ///     Get the score in percentage
@@ -43,5 +43,6 @@ namespace IDesign.Recognizers.Abstractions
         /// </summary>
         /// <returns>The related syntax node</returns>
         SyntaxNode GetSyntaxNode();
+
     }
 }

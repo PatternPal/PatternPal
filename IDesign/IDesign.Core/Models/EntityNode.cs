@@ -2,6 +2,7 @@
 using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis;
@@ -127,12 +128,11 @@ namespace IDesign.Core.Models
         {
             return InterfaceOrClassNode.Modifiers;
         }
-
+        
         public string GetSuggestionName()
         {
             return GetName() + "()";
         }
-
         public SyntaxNode GetSuggestionNode()
         {
             return InterfaceOrClassNode;

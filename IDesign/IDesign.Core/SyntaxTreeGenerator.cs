@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace IDesign.Core
 {
-    public class GenerateSyntaxTree
+    public class SyntaxTreeGenerator
     {
         public List<ClassDeclarationSyntax> ClassDeclarationSyntaxList = new List<ClassDeclarationSyntax>();
         public List<ConstructorDeclarationSyntax> ConstructorDeclarationSyntaxList;
@@ -18,14 +18,15 @@ namespace IDesign.Core
 
         public List<UsingDirectiveSyntax> UsingDirectiveSyntaxList = new List<UsingDirectiveSyntax>();
 
+
         /// <summary>
-        ///     Constructor of the GenerateSyntaxTree class.
+        ///     Constructor of the SyntaxTreeGenerator class.
         ///     Genarates a syntaxtree from a string
         /// </summary>
         /// <param name="content"></param>
         /// <param name="source"></param>
         /// <param name="entityNodes"></param>
-        public GenerateSyntaxTree(string content, string source, Dictionary<string, EntityNode> entityNodes)
+        public SyntaxTreeGenerator(string content, string source, Dictionary<string, EntityNode> entityNodes)
 
         {
             File = source;
@@ -42,7 +43,7 @@ namespace IDesign.Core
 
         public string File { get; set; }
         public CompilationUnitSyntax Root { get; set; }
-        private SyntaxTree Tree { get; }
+        public SyntaxTree Tree { get; }
 
         /// <summary>
         ///     Adds all usings of the syntaxtree to a list

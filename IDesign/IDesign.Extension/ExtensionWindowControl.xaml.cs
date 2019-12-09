@@ -9,6 +9,7 @@ using EnvDTE;
 using IDesign.Core;
 using IDesign.Core.Models;
 using IDesign.Extension.ViewModels;
+using IDesign.Recognizers.Abstractions;
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.LanguageServices;
@@ -37,6 +38,7 @@ namespace IDesign.Extension
         }
 
         public List<DesignPatternViewModel> ViewModels { get; set; }
+        public Dictionary<SyntaxTree, string> SyntaxTreeSources { get; set; }
         public List<string> Paths { get; set; }
         public bool Loading { get; set; }
         public DTE Dte { get; }
@@ -76,9 +78,6 @@ namespace IDesign.Extension
 
                 var resultViewModel = new ResultViewModel(result);
                 classViewModel.Results.Add(resultViewModel);
-
-                foreach (var suggestion in result.Result.GetSuggestions())
-                    resultViewModel.Suggestions.Add(new SuggestionViewModel(suggestion, result.EntityNode));
             }
 
             //Here you signal the UI thread to execute the action:
@@ -168,7 +167,8 @@ namespace IDesign.Extension
             runner.OnProgressUpdate += (o, recognizerProgress) => iprogress.Report(recognizerProgress);
             await Task.Run(() =>
             {
-                var results = runner.Run(Paths, SelectedPatterns);
+                SyntaxTreeSources = runner.CreateGraph(Paths);
+                var results = runner.Run(SelectedPatterns);
                 CreateResultViewModels(results);
             });
 
@@ -179,12 +179,12 @@ namespace IDesign.Extension
         private void EventSetter_OnHandler(object sender, MouseButtonEventArgs e)
         {
             var viewItem = sender as TreeViewItem;
-            if (viewItem == null) return;
 
-            var viewModel = viewItem.DataContext as SuggestionViewModel;
-            if (viewModel == null) return;
+            var checkResult = viewItem?.DataContext as ICheckResult;
+            if (checkResult == null) return;
 
-            selectNodeInEditor(viewModel.Feedback.GetSyntaxNode(), viewModel.Node.GetSourceFile());
+            var node = checkResult.GetSyntaxNode();
+            selectNodeInEditor(node,  SyntaxTreeSources[node.SyntaxTree]);
         }
     }
 }

@@ -5,7 +5,7 @@ namespace IDesign.Recognizers.Models.Output
 {
     public class Result : IResult
     {
-        public List<IFeedback> Suggestions { get; set; } = new List<IFeedback>();
+        public List<ICheckResult> Results { get; set; } = new List<ICheckResult>();
         public int Score { get; set; }
 
         public int GetScore()
@@ -13,9 +13,9 @@ namespace IDesign.Recognizers.Models.Output
             return Score;
         }
 
-        public IList<IFeedback> GetSuggestions()
+        public IList<ICheckResult> GetResults()
         {
-            return Suggestions;
+            return Results;
         }
 
         public override string ToString()
@@ -23,7 +23,7 @@ namespace IDesign.Recognizers.Models.Output
             var res = "";
             res += Score;
 
-            foreach (var suggestie in Suggestions)
+            foreach (var suggestie in Results)
                 res += ", " + suggestie.GetMessage();
 
             return res;

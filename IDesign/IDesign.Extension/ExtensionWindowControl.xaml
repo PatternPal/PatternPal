@@ -6,6 +6,10 @@
              xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
              xmlns:extension="clr-namespace:IDesign.Extension"
              xmlns:models="clr-namespace:IDesign.Extension.ViewModels"
+             xmlns:theming="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Imaging"
+             xmlns:catalog="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.ImageCatalog"
+             xmlns:abstractions="clr-namespace:IDesign.Recognizers.Abstractions;assembly=IDesign.Recognizers"
+             xmlns:imaging="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.Imaging"
              Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
              Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
              mc:Ignorable="d"
@@ -379,28 +383,29 @@
                     </StackPanel>
                 </HierarchicalDataTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type models:ResultViewModel}"
-                                          ItemsSource="{Binding Suggestions}">
+                                          ItemsSource="{Binding Results}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="Resources/logo.png" Width="20" Height="20" />
                         <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                             <TextBlock Text="{Binding PatternName}"
                                        Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
-                            <TextBlock Text=" ("
-                                       Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
-                            <TextBlock Text="{Binding Score}"
-                                       Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
-                            <TextBlock Text="%)"
-                                       Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
                         </StackPanel>
                     </StackPanel>
                 </HierarchicalDataTemplate>
-                <DataTemplate DataType="{x:Type models:SuggestionViewModel}">
+                <HierarchicalDataTemplate DataType="{x:Type models:CheckResultViewModel}" ItemsSource="{Binding SubResults}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="Resources/idealogo.png" Width="20" Height="20" />
-                        <TextBlock Margin="0 2 0 0" Text="{Binding SuggestionText}"
+                        <imaging:CrispImage Width="16" Height="16" Moniker="{Binding Icon}" />
+
+                        <StackPanel Orientation="Horizontal" Margin="0">
+                            <TextBlock Text="{Binding Message}"
                                    Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
+                            <TextBlock Text=" | "
+                                   Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
+                            <TextBlock Text="{Binding Score}"
+                                   Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
+                        </StackPanel>
                     </StackPanel>
-                </DataTemplate>
+                </HierarchicalDataTemplate>
             </TreeView.Resources>
         </TreeView>
         <ProgressBar Grid.Row="6" Height="20" VerticalAlignment="Bottom" Minimum="0" Maximum="100" Name="statusBar" />
