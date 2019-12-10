@@ -9,7 +9,7 @@ using System.Text;
 
 namespace IDesign.Recognizers
 {
-    public class StateRecognizer : Recognizer, IRecognizer
+    public class StrategyRecognizer : Recognizer, IRecognizer
     {
         Result result;
 
@@ -17,19 +17,19 @@ namespace IDesign.Recognizers
         {
             result = new Result();
 
-            //if node is interface, node is probaly a state. else node can be state, context or concrete state
+            //if node is interface, node is probaly a strategy. else node can be strategy, context or concrete strategy
             if (node.GetEntityNodeType() == EntityNodeType.Interface)
             {
-                //state checks
-                StateChecks(node);
+                //strategy checks
+                StrategyChecks(node);
             }
             else if (node.GetEntityNodeType() == EntityNodeType.Class)
             {
-                //if node is an abstract class, node is probaly a state
+                //if node is an abstract class, node is probaly a strategy
                 if (node.CheckModifier("abstract"))
                 {
-                    //state checks
-                    StateChecks(node);
+                    //strategy checks
+                    StrategyChecks(node);
                 }
                 else
                 {
@@ -41,13 +41,13 @@ namespace IDesign.Recognizers
         }
 
         /// <summary>
-        ///     Function to check if a node is an interface or abstract class, when true node is probaly a state
+        ///     Function to check if a node is an interface or abstract class, when true node is probaly a strategy
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        private IResult StateChecks(IEntityNode node)
+        private IResult StrategyChecks(IEntityNode node)
         {
-            //standard amount of checks for state when using an interface
+            //standard amount of checks for strategy when using an interface
             float amountOfChecks = 2;
 
             //check if node is an interface or an abstract class, canot be both
@@ -68,21 +68,21 @@ namespace IDesign.Recognizers
             //if node is an abstract class check of the method is also abstract and has void as return type
             if (node.CheckModifier("abstract"))
             {
-                var abstractStateChecks = new List<ElementCheck<IMethod>>
+                var abstractStrategyChecks = new List<ElementCheck<IMethod>>
                 {
                     new ElementCheck<IMethod>(x => x.CheckModifier("abstract"), "If using a class, the modifier should be abstract. Otherwise, use an interface"),
                     new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void")
 
                 };
                 amountOfChecks = 4;
-                CheckElements(result, node.GetMethods(), abstractStateChecks);
+                CheckElements(result, node.GetMethods(), abstractStrategyChecks);
             }
             result.Score = (int)(result.Score / amountOfChecks * 100f);
             return result;
         }
 
         /// <summary>
-        ///     Function to do the checks for a normall class (Context or ConcreteState)
+        ///     Function to do the checks for a normall class (Context or ConcreteStrategy)
         /// </summary>
         /// <param name="node"></param>
         private IResult ClassChecks(IEntityNode node)
@@ -96,12 +96,10 @@ namespace IDesign.Recognizers
             //create list with only uses realations
             var usingRelations = relations.Where(x => x.GetRelationType() == RelationType.Uses).ToList();
 
-            //create list with only creates relations
-            var createsRelations = relations.Where(x => x.GetRelationType() == RelationType.Creates).ToList();
 
-            if (inheritanceRelations.Count() > 0 && usingRelations.Count() > 0)
+            if (inheritanceRelations.Count() > 0 && usingRelations.Count() <= 0)
             {
-                ConcreteStateClassChecks(node, inheritanceRelations, createsRelations);
+                ConcreteStrategyClassChecks(node, inheritanceRelations);
             }
             if (usingRelations.Count() > 0 && inheritanceRelations.Count() <= 0)
             {
@@ -111,42 +109,39 @@ namespace IDesign.Recognizers
         }
 
         /// <summary>
-        ///     Function to do checks for the concrete state class
+        ///     Function to do checks for the concrete strategy class
         /// </summary>
         /// <param name="node"></param>
         /// <param name="inheritanceRelations"></param>
         /// <returns></returns>
-        private IResult ConcreteStateClassChecks(IEntityNode node, List<IRelation> inheritanceRelations, List<IRelation> creationRelations)
+        private IResult ConcreteStrategyClassChecks(IEntityNode node, List<IRelation> inheritanceRelations)
         {
-            float amountOfChecks = 1;
+            float amountOfChecks = 0;
+
             foreach (var edge in inheritanceRelations)
             {
                 var edgeNode = edge.GetDestination();
 
                 var inheritanceChecks = new List<ElementCheck<IEntityNode>>
-                    {
-                        //check if node is an interface or an abstract class
-                        new ElementCheck<IEntityNode>(x => (x.CheckTypeDeclaration(EntityNodeType.Interface)) |
-                        ((x.CheckTypeDeclaration(EntityNodeType.Class)) && (x.CheckModifier("abstract"))),"message")
-                    };
+                {
+                    //check if node is an interface or an abstract class
+                    new ElementCheck<IEntityNode>(x => (x.CheckTypeDeclaration(EntityNodeType.Interface)) |
+                    ((x.CheckTypeDeclaration(EntityNodeType.Class)) && (x.CheckModifier("abstract"))),"message")
+                };
+                amountOfChecks += 1;
                 CheckElements(result, new List<IEntityNode> { edgeNode }, inheritanceChecks);
             }
 
-            foreach (var edge in creationRelations)
+            //check if strategy has void method
+            var createChecks = new List<ElementCheck<IMethod>>
             {
-                var edgeNode = edge.GetDestination();
+                new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void!")
+                //TO DO: check of functie overerft van de strategy functie
+                //TO DO: check of de functie de zelfde naam heeft als de overervende functie
+            };
+            amountOfChecks += 1;
+            CheckElements(result, node.GetMethods(), createChecks);
 
-                //check if state makes other state in handle method and check if the return type is void
-                var createChecks = new List<ElementCheck<IMethod>>
-                {
-                    new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void!"),
-                    new ElementCheck<IMethod>(x => (x.CheckCreationType(edgeNode.GetName())) &&(!x.CheckCreationType(node.GetName())), $"{node.GetName()} should not be itself")
-                    //TO DO: check of functie overerft van de state functie
-                    //TO DO: check of de functie de zelfde naam heeft als de overervende functie
-                };
-                amountOfChecks += 2;
-                CheckElements(result, node.GetMethods(), createChecks);
-            }
             result.Score = (int)(result.Score / amountOfChecks * 100f);
             return result;
         }
@@ -178,6 +173,5 @@ namespace IDesign.Recognizers
             result.Score = (int)(result.Score / amountOfChecks * 100f);
             return result;
         }
-
     }
 }
