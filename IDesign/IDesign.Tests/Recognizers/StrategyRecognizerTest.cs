@@ -34,10 +34,10 @@ namespace IDesign.Tests.Recognizers
         [TestCase("StrategyTest2", "ConcreteStrategyB", 66)]
         [TestCase("StrategyTest2", "Context", 100)]
         [TestCase("StrategyTest2", "IStrategy", 50)]
-        [TestCase("StrategyTest2", "ConcreteStrategyA", 100)]
-        [TestCase("StrategyTest2", "ConcreteStrategyB", 100)]
-        [TestCase("StrategyTest2", "Context", 100)]
-        [TestCase("StrategyTest2", "Strategy", 100)]
+        [TestCase("StrategyTest3", "ConcreteStrategyA", 100)]
+        [TestCase("StrategyTest3", "ConcreteStrategyB", 100)]
+        [TestCase("StrategyTest3", "Context", 100)]
+        [TestCase("StrategyTest3", "Strategy", 100)]
         public void StateRecognizer_Returns_Correct_Score(string directory, string filename, int score)
         {
             var state = new StrategyRecognizer();

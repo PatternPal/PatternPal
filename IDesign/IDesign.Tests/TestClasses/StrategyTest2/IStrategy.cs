@@ -1,5 +1,7 @@
 ﻿namespace IDesign.Tests.TestClasses.StrategyTest2
 {
+    //this code is from https://refactoring.guru/design-patterns/strategy/csharp/example
+
     // The Strategy interface declares operations common to all supported
     // versions of some algorithm.
     //

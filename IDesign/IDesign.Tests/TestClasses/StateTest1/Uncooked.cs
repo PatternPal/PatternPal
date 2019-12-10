@@ -4,6 +4,8 @@ using System.Text;
 
 namespace IDesign.Tests.TestClasses.StateTest1
 {
+    //this code is from https://exceptionnotfound.net/state-pattern-in-csharp/
+
     /// <summary>
     /// A Concrete State class.
     /// </summary>
@@ -15,7 +17,6 @@ namespace IDesign.Tests.TestClasses.StateTest1
             steak = state.Steak;
             Initialize();
         }
-
         private void Initialize()
         {
             lowerTemp = 0;

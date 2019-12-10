@@ -4,16 +4,13 @@ using System.Text;
 
 namespace IDesign.Tests.TestClasses.StateTest2
 {
+    //this code is from https://www.dofactory.com/net/state-design-pattern
+
     /// <summary>
-
-    /// A 'ConcreteState' class
-
+    ///     A 'ConcreteState' class
     /// <remarks>
-
-    /// Silver indicates a non-interest bearing state
-
+    ///     Silver indicates a non-interest bearing state
     /// </remarks>
-
     /// </summary>
 
     class SilverState : State

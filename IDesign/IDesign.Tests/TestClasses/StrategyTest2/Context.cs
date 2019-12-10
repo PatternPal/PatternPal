@@ -4,6 +4,8 @@ using System.Text;
 
 namespace IDesign.Tests.TestClasses.StrategyTest2
 {
+    //this code is from https://refactoring.guru/design-patterns/strategy/csharp/example
+
     // The Context defines the interface of interest to clients.
     class Context
     {

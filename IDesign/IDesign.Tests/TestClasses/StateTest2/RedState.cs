@@ -4,13 +4,15 @@ using System.Text;
 
 namespace IDesign.Tests.TestClasses.StateTest2
 {
+    //this code is from https://www.dofactory.com/net/state-design-pattern
+
     /// <summary>
     /// A 'ConcreteState' class
     /// <remarks>
     /// Red indicates that account is overdrawn 
     /// </remarks>
     /// </summary>
-   class RedState : State
+    class RedState : State
     {
         private double _serviceFee;
 
