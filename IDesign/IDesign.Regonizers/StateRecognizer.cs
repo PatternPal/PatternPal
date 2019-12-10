@@ -19,7 +19,8 @@ namespace IDesign.Recognizers
             if (node.GetEntityNodeType() == EntityNodeType.Interface)
             {
                 //state checks
-                StateChecks(node);
+                //AbstractClassStateChecks(node);
+                InterfaceStateChecks(node);
             }
             else if (node.GetEntityNodeType() == EntityNodeType.Class)
             {
@@ -27,7 +28,7 @@ namespace IDesign.Recognizers
                 if (node.CheckModifier("abstract"))
                 {
                     //state checks
-                    StateChecks(node);
+                    AbstractClassStateChecks(node);
                 }
                 else
                 {
@@ -39,11 +40,11 @@ namespace IDesign.Recognizers
         }
 
         /// <summary>
-        ///     Function to check if a node is an interface or abstract class, when true node is probaly a state
+        ///     Function to do checks for a node that is probaly a state, implemented as an interface
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        private IResult StateChecks(IEntityNode node)
+        private IResult InterfaceStateChecks(IEntityNode node)
         {
             //standard amount of checks for state when using an interface
             float amountOfChecks = 0;
@@ -51,8 +52,7 @@ namespace IDesign.Recognizers
             //check if node is an interface or an abstract class, cannot be both
             var checkType = new List<ElementCheck<IEntityNode>>
             {
-                new ElementCheck<IEntityNode>(x => (x.CheckModifier("abstract")) |
-                (x.CheckTypeDeclaration(EntityNodeType.Interface)), "If using a class, the modifier should be abstract. Otherwise, use an interface")
+                new ElementCheck<IEntityNode>(x => x.CheckTypeDeclaration(EntityNodeType.Interface), "If using a class, the modifier should be abstract. Otherwise, use an interface")
             };
             amountOfChecks += 1;
             CheckElements(result, new List<IEntityNode> { node }, checkType);
@@ -65,19 +65,37 @@ namespace IDesign.Recognizers
             amountOfChecks += 1;
             CheckElements(result, node.GetMethods(), checkMethods);
 
-            //if node is an abstract class check of the method is also abstract and has void as return type
-            if (node.CheckModifier("abstract"))
-            {
-                var abstractStateChecks = new List<ElementCheck<IMethod>>
-                {
-                    new ElementCheck<IMethod>(x => x.CheckModifier("abstract"), "If using a class, the modifier should be abstract. Otherwise, use an interface"),
-                    new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void"),
-                    new ElementCheck<IMethod>(x => x.GetBody() == null, "Body should be empty!")
+            result.Score = (int)(result.Score / amountOfChecks * 100f);
+            return result;
+        }
 
-                };
-                amountOfChecks += 3;
-                CheckElements(result, node.GetMethods(), abstractStateChecks);
-            }
+        /// <summary>
+        ///     Function to do checks for a node that is probaly a state, implemented as an abstract class
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private IResult AbstractClassStateChecks(IEntityNode node)
+        {
+            //standard amount of checks for state when using an interface
+            float amountOfChecks = 0;
+
+            //check if node is an interface or an abstract class, cannot be both
+            var checkType = new List<ElementCheck<IEntityNode>>
+            {
+                new ElementCheck<IEntityNode>(x => x.CheckModifier("abstract"), "If using a class, the modifier should be abstract. Otherwise, use an interface")
+            };
+            amountOfChecks += 1;
+            CheckElements(result, new List<IEntityNode> { node }, checkType);
+
+            var abstractStateChecks = new List<ElementCheck<IMethod>>
+            {
+                new ElementCheck<IMethod>(x => x.CheckModifier("abstract"), "If using a class, the modifier should be abstract. Otherwise, use an interface"),
+                new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void"),
+                new ElementCheck<IMethod>(x => x.GetBody() == null, "Body should be empty!")
+            };
+            amountOfChecks += 3;
+            CheckElements(result, node.GetMethods(), abstractStateChecks);
+
             result.Score = (int)(result.Score / amountOfChecks * 100f);
             return result;
         }
