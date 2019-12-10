@@ -73,10 +73,11 @@ namespace IDesign.Recognizers
                 var abstractStateChecks = new List<ElementCheck<IMethod>>
                 {
                     new ElementCheck<IMethod>(x => x.CheckModifier("abstract"), "If using a class, the modifier should be abstract. Otherwise, use an interface"),
-                    new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void")
+                    new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void"),
+                    new ElementCheck<IMethod>(x => x.GetBody() == null, "Body should be empty!")
 
                 };
-                amountOfChecks += 2;
+                amountOfChecks += 3;
                 CheckElements(result, node.GetMethods(), abstractStateChecks);
             }
             result.Score = (int)(result.Score / amountOfChecks * 100f);
