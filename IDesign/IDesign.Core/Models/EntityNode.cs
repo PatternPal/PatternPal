@@ -5,6 +5,7 @@ using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis;
 
 namespace IDesign.Core
 {
@@ -116,12 +117,26 @@ namespace IDesign.Core
                 return EntityNodeType.Interface;
             }
             return EntityNodeType.Class;
-
         }
 
         public List<UsingDirectiveSyntax> GetUsings()
         {
             return UsingDeclarationSyntaxList;
+        }
+
+        public SyntaxTokenList GetModifiers()
+        {
+            return InterfaceOrClassNode.Modifiers;
+        }
+
+        public string GetSuggestionName()
+        {
+            return GetName() + "()";
+        }
+
+        public SyntaxNode GetSuggestionNode()
+        {
+            return InterfaceOrClassNode;
         }
     }
 }

@@ -8,7 +8,6 @@ namespace IDesign.Recognizers
         string GetName();
         string GetReturnType();
         BlockSyntax GetBody();
-
         SyntaxTokenList GetModifiers();
     }
 }

@@ -9,7 +9,6 @@ namespace IDesign.Tests.Utils
 {
     public static class EntityNodeUtils
     {
-
         /// <summary>
         /// Return an entitynode based on a TypeDeclarationSyntax.
         /// </summary>
@@ -61,6 +60,7 @@ namespace IDesign.Tests.Utils
             }
             return graph;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -72,7 +72,7 @@ namespace IDesign.Tests.Utils
             foreach (var fileCode in projectCode)
             {
                 var partialGraph = CreateEntityNodeGraphFromOneFile(fileCode);
-               graph = graph.Union(partialGraph).ToDictionary(k => k.Key, v => v.Value);
+                graph = graph.Union(partialGraph).ToDictionary(k => k.Key, v => v.Value);
             }
             return graph;
         }

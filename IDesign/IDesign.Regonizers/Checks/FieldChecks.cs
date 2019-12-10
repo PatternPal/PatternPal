@@ -15,7 +15,6 @@ namespace IDesign.Recognizers
             return fieldSyntax.GetFieldType().ToString().IsEqual(type);
         }
 
-
         /// <summary>
         ///     Return a boolean based on if the given field has an expected modifier.
         /// </summary>
@@ -24,7 +23,7 @@ namespace IDesign.Recognizers
         /// <returns>The field has the modifier that is given in the function</returns>
         public static bool CheckMemberModifier(this IField field, string modifier)
         {
-            return field.GetModifiers().Where(x => x.ToString().IsEqual(modifier)).Any();
+            return field.GetModifiers().Any(x => x.ToString().IsEqual(modifier));
         }
     }
 }

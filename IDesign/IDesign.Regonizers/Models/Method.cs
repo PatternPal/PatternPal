@@ -10,7 +10,6 @@ namespace IDesign.Recognizers
             MethodDeclaration = method;
         }
 
-
         public MethodDeclarationSyntax MethodDeclaration { get; set; }
 
         public BlockSyntax GetBody()

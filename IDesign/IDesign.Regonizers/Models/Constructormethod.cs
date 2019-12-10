@@ -10,7 +10,6 @@ namespace IDesign.Recognizers
             Constructor = constructor;
         }
 
-
         public ConstructorDeclarationSyntax Constructor { get; set; }
 
         public BlockSyntax GetBody()
