@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -80,6 +81,29 @@ namespace IDesign.Recognizers
                 result.AddRange(identifiers.Select(y => y.Identifier.ToString()));
             }
             return result;
+        }
+
+        public static bool CheckMethodIdentifier(this IMethod methodSyntax, string name)
+        {
+            return (methodSyntax.GetName().Equals(name) && methodSyntax.GetType() == typeof(Method));
+        }
+
+        public static bool CheckMethodModifiers(this IMethod methodSyntax, SyntaxTokenList modifiers)
+        {
+            return methodSyntax.GetModifiers() == modifiers;
+        }
+
+        public static bool CheckMethodParameters(this IMethod methodSyntax, string parameters)
+        {
+            var result = methodSyntax.GetParameter().ToString().Equals(parameters);
+            return methodSyntax.GetParameter().ToString().Equals(parameters);
+        }
+
+        public static bool MethodComparing(this IMethod methodSyntax , IMethod compareMethod)
+        {
+            return (methodSyntax.CheckMethodIdentifier(compareMethod.GetName())
+                && methodSyntax.CheckMethodParameters(compareMethod.GetParameter().ToString())
+                && methodSyntax.CheckReturnType(compareMethod.GetReturnType()));
         }
     }
 }

@@ -36,14 +36,14 @@ namespace IDesign.Recognizers
                     var isValid = check.Check(element);
                     score += isValid ? 1 : 0;
 
-                    if (!isValid) suggestions.Add(check.GetSuggestionMessage());
+                     suggestions.Add(check.GetSuggestionMessage());
                 }
 
                 scores.Add(element, (score, suggestions));
             }
 
             //Add suggestions for best scored element
-            foreach (var elementScore in scores)
+            foreach (var elementScore in scores) 
                 //If element has the highest score
                 if (elementScore.Value.score == scores.Values.Select(x => x.score).Max())
                 {
@@ -51,10 +51,8 @@ namespace IDesign.Recognizers
                         suggestionList.Add(new Suggestion(
                             elementScore.Key.GetSuggestionName() + ": " + propertySuggestion,
                             elementScore.Key.GetSuggestionNode()));
-
                     return (suggestionList, elementScore.Value.score);
                 }
-
             return (suggestionList, 0);
         }
     }

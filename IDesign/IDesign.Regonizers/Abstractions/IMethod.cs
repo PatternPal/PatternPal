@@ -10,5 +10,7 @@ namespace IDesign.Recognizers
         BlockSyntax GetBody();
 
         SyntaxTokenList GetModifiers();
+
+        ParameterListSyntax GetParameter();
     }
 }

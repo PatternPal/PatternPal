@@ -4,6 +4,7 @@ using System.Text;
 using IDesign.Recognizers.Abstractions;
 using System.Linq;
  using IDesign.Recognizers.Models;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace IDesign.Recognizers.Checks
 {
@@ -29,6 +30,24 @@ namespace IDesign.Recognizers.Checks
             {
                 return false;
             }
+        }
+
+        
+        public static bool ClassImlementsInterface(this IEntityNode node, IMethod method)
+        {
+            var implements = false;
+            foreach(var interFace in node.GetRelations().Where(x => x.GetRelationType() == RelationType.Implements))
+            {
+                if(InterfaceImplementsMethod(interFace.GetDestination(), method))
+                {
+                    implements = true;
+                }
+            }
+            return implements;
+        }
+        public static bool InterfaceImplementsMethod(this IEntityNode node, IMethod method)
+        {
+            return node.GetMethods().Any(x => x.MethodComparing(method));
         }
 
         /// <summary>

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IDesign.Tests.TestClasses.Factory
 {
-    public class FactoryTestCase5
+    public class FactoryTestCase5 : IFactoryTestCase5
     {
         public FactoryTestCase5() { }
 
@@ -12,5 +12,11 @@ namespace IDesign.Tests.TestClasses.Factory
         {
             return new ProductB();
         }
+
+    }
+
+    public interface IFactoryTestCase5
+    {
+        IProduct Create();
     }
 }

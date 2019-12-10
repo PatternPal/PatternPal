@@ -25,6 +25,9 @@
     <Compile Remove="TestClasses\FactoryTestClasses\IProduct.cs" />
     <Compile Remove="TestClasses\FactoryTestClasses\ProductA.cs" />
     <Compile Remove="TestClasses\FactoryTestClasses\ProductB.cs" />
+    <Compile Remove="TestClasses\Factory\FactoryTestCase6.cs" />
+    <Compile Remove="TestClasses\Factory\FactoryTestCase7.cs" />
+    <Compile Remove="TestClasses\Factory\FactoryTestCase8.cs" />
     <Compile Remove="TestClasses\Relation\RelationTestCase1.cs" />
     <Compile Remove="TestClasses\Relation\RelationTestCase2.cs" />
     <Compile Remove="TestClasses\Relation\RelationTestCase3.cs" />
@@ -87,6 +90,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TestClasses\Factory\FactoryTestCase5.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\Factory\FactoryTestCase6.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\Factory\FactoryTestCase7.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestClasses\Factory\FactoryTestCase8.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TestClasses\Factory\IProduct.cs">

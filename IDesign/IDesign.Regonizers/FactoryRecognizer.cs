@@ -5,6 +5,7 @@ using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Output;
 using IDesign.Recognizers.Checks;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace IDesign.Recognizers
 {
@@ -20,8 +21,19 @@ namespace IDesign.Recognizers
                 "Return type is niet hetzelfde als wat er gemaakt wordt" )
             };
             CheckElements(result, entityNode.GetMethods(), methodChecks);
-
-            result.Score = (int)(result.Score / 1f * 100f);
+            if (result.GetSuggestions() != null)
+            {
+                var BestMethod = new Method(result.GetSuggestions().First().GetSyntaxNode() as MethodDeclarationSyntax);
+                var classChecks = new List<ElementCheck<IEntityNode>>()
+            {
+                new ElementCheck<IEntityNode>(x => x.ClassImlementsInterface(BestMethod),
+                "Method isnt implemented in a interface")
+            };
+                 var entityList = new List<IEntityNode>();
+                entityList.Add(entityNode);
+                CheckElements(result,entityList , classChecks);
+            }
+            result.Score = (int)(result.Score / 2f * 100f);
             return result;
         }
 
