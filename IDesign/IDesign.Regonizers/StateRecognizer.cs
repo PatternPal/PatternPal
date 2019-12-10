@@ -48,14 +48,15 @@ namespace IDesign.Recognizers
         private IResult StateChecks(IEntityNode node)
         {
             //standard amount of checks for state when using an interface
-            float amountOfChecks = 2;
+            float amountOfChecks = 0;
 
-            //check if node is an interface or an abstract class, canot be both
+            //check if node is an interface or an abstract class, cannot be both
             var checkType = new List<ElementCheck<IEntityNode>>
             {
                 new ElementCheck<IEntityNode>(x => (x.CheckModifier("abstract")) |
                 (x.CheckTypeDeclaration(EntityNodeType.Interface)), "If using a class, the modifier should be abstract. Otherwise, use an interface")
             };
+            amountOfChecks += 1;
             CheckElements(result, new List<IEntityNode> { node }, checkType);
 
             //check if the method of the node has return type void
@@ -63,6 +64,7 @@ namespace IDesign.Recognizers
             {
                  new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void")
             };
+            amountOfChecks += 1;
             CheckElements(result, node.GetMethods(), checkMethods);
 
             //if node is an abstract class check of the method is also abstract and has void as return type
@@ -74,7 +76,7 @@ namespace IDesign.Recognizers
                     new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void")
 
                 };
-                amountOfChecks = 4;
+                amountOfChecks += 2;
                 CheckElements(result, node.GetMethods(), abstractStateChecks);
             }
             result.Score = (int)(result.Score / amountOfChecks * 100f);
@@ -118,7 +120,7 @@ namespace IDesign.Recognizers
         /// <returns></returns>
         private IResult ConcreteStateClassChecks(IEntityNode node, List<IRelation> inheritanceRelations, List<IRelation> creationRelations)
         {
-            float amountOfChecks = 1;
+            float amountOfChecks = 0;
             foreach (var edge in inheritanceRelations)
             {
                 var edgeNode = edge.GetDestination();
@@ -129,6 +131,7 @@ namespace IDesign.Recognizers
                         new ElementCheck<IEntityNode>(x => (x.CheckTypeDeclaration(EntityNodeType.Interface)) |
                         ((x.CheckTypeDeclaration(EntityNodeType.Class)) && (x.CheckModifier("abstract"))),"message")
                     };
+                amountOfChecks += 1;
                 CheckElements(result, new List<IEntityNode> { edgeNode }, inheritanceChecks);
             }
 
@@ -141,7 +144,7 @@ namespace IDesign.Recognizers
                 {
                     new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void!"),
                     new ElementCheck<IMethod>(x => (x.CheckCreationType(edgeNode.GetName())) &&(!x.CheckCreationType(node.GetName())), $"{node.GetName()} should not be itself")
-                    //TO DO: check of functie overerft van de state functie
+                    //TO DO: check of functie de zelfte parameters heeft als de interface/abstracte klasse functie
                     //TO DO: check of de functie de zelfde naam heeft als de overervende functie
                 };
                 amountOfChecks += 2;
@@ -159,7 +162,7 @@ namespace IDesign.Recognizers
         /// <returns></returns>
         private IResult ContextClassChecks(IEntityNode node, List<IRelation> usingRelations)
         {
-            float amountOfChecks = 2;
+            float amountOfChecks = 0;
             foreach (var edge in usingRelations)
             {
                 var edgeNode = edge.GetDestination();
@@ -172,6 +175,7 @@ namespace IDesign.Recognizers
                         new ElementCheck<IField>(x => x.CheckFieldType(edgeNode.GetName()),$"{node.GetName()} must be equal to {edgeNode.GetName()}"),
                         new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "modifier must be private")
                     };
+                    amountOfChecks += 2;
                     CheckElements(result, node.GetFields(), usingChecks);
                 }
             }
