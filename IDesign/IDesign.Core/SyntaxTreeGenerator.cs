@@ -23,9 +23,9 @@ namespace IDesign.Core
         ///     Constructor of the SyntaxTreeGenerator class.
         ///     Genarates a syntaxtree from a string
         /// </summary>
-        /// <param name="content"></param>
+        /// <param name="content"></param>s
         /// <param name="source"></param>
-        /// <param name="entityNodes"></param>
+            /// <param name="entityNodes"></param>
         public SyntaxTreeGenerator(string content, string source, Dictionary<string, EntityNode> entityNodes)
 
         {
@@ -77,16 +77,13 @@ namespace IDesign.Core
         {
             if (node.Kind() == SyntaxKind.ClassDeclaration)
             {
-                var classNode = (ClassDeclarationSyntax)node;
+                var classNode = (ClassDeclarationSyntax) node;
                 ClassDeclarationSyntaxList.Add(classNode);
                 var nameSpaceKey = "";
                 var nameSpace = classNode.Parent as NamespaceDeclarationSyntax;
-                if (nameSpace != null)
-                {
-                    nameSpaceKey += nameSpace.Name.ToString();
-                }
+                if (nameSpace != null) nameSpaceKey += nameSpace.Name.ToString();
 
-                var keybinding = nameSpaceKey + "." + classNode.Identifier.ToString();
+                var keybinding = nameSpaceKey + "." + classNode.Identifier;
                 if (!entityNodes.ContainsKey(keybinding))
                 {
                     var entityNode = new EntityNode
@@ -131,16 +128,13 @@ namespace IDesign.Core
         {
             if (node.Kind() == SyntaxKind.InterfaceDeclaration)
             {
-                var interfaceNode = (InterfaceDeclarationSyntax)node;
+                var interfaceNode = (InterfaceDeclarationSyntax) node;
                 InterfaceDeclarationSyntaxList.Add(interfaceNode);
                 var nameSpaceKey = "";
                 var nameSpace = interfaceNode.Parent as NamespaceDeclarationSyntax;
-                if (nameSpace != null)
-                {
-                    nameSpaceKey += nameSpace.Name.ToString();
-                }
+                if (nameSpace != null) nameSpaceKey += nameSpace.Name.ToString();
 
-                var keybinding = nameSpaceKey + "." + interfaceNode.Identifier.ToString();
+                var keybinding = nameSpaceKey + "." + interfaceNode.Identifier;
                 if (!entityNodes.ContainsKey(keybinding))
                 {
                     var entityNode = new EntityNode
@@ -164,7 +158,7 @@ namespace IDesign.Core
         /// <summary>
         ///     Parent function of the recursive function that searches for all constructors in a class
         /// </summary>
-        /// <param name="entityNodes"></param> 
+        /// <param name="entityNodes"></param>
         private void GetAllConstructorsOfAClass(Dictionary<string, EntityNode> entityNodes)
         {
             if (EntityNodes != null)
@@ -187,7 +181,7 @@ namespace IDesign.Core
                 foreach (var childNode in node.ChildNodes())
                     if (childNode.Kind() == SyntaxKind.ConstructorDeclaration)
                     {
-                        var constructorNode = (ConstructorDeclarationSyntax)childNode;
+                        var constructorNode = (ConstructorDeclarationSyntax) childNode;
                         ConstructorDeclarationSyntaxList.Add(constructorNode);
                     }
 
@@ -220,16 +214,17 @@ namespace IDesign.Core
                 foreach (var childeNode in node.ChildNodes())
                     if (childeNode.Kind() == SyntaxKind.MethodDeclaration)
                     {
-                        var methodNode = (MethodDeclarationSyntax)childeNode;
+                        var methodNode = (MethodDeclarationSyntax) childeNode;
                         MethodDeclarationSyntaxList.Add(methodNode);
                     }
+
             return MethodDeclarationSyntaxList;
         }
 
         /// <summary>
         ///     Parent of recursive function that searches for all properties of a class
         /// </summary>
-        /// <param name="entityNodes"></param> 
+        /// <param name="entityNodes"></param>
         private void GetAllPropertiesOfAClass(Dictionary<string, EntityNode> entityNodes)
         {
             if (EntityNodes != null)
@@ -252,7 +247,7 @@ namespace IDesign.Core
                 foreach (var childNode in node.ChildNodes())
                     if (childNode.Kind() == SyntaxKind.PropertyDeclaration)
                     {
-                        var propertyNode = (PropertyDeclarationSyntax)childNode;
+                        var propertyNode = (PropertyDeclarationSyntax) childNode;
                         PropertyDeclarationSyntaxList.Add(propertyNode);
                     }
             return PropertyDeclarationSyntaxList;
@@ -284,9 +279,10 @@ namespace IDesign.Core
                 foreach (var childNode in node.ChildNodes())
                     if (childNode.Kind() == SyntaxKind.FieldDeclaration)
                     {
-                        var fieldNode = (FieldDeclarationSyntax)childNode;
+                        var fieldNode = (FieldDeclarationSyntax) childNode;
                         FieldDeclarationSyntaxList.Add(fieldNode);
                     }
+
             return FieldDeclarationSyntaxList;
         }
     }

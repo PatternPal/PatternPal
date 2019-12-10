@@ -17,26 +17,22 @@ namespace IDesign.Recognizers.Models.ElementChecks
     /// </summary>
     /// <typeparam name="T">The type witch the check is for</typeparam>
     /// <typeparam name="">The type witch the check is for</typeparam>
-    public class GroupCheck<TParent, TChild> : ICheck<TParent> where TParent : class, ICheckable where TChild : class, ICheckable
+    public class GroupCheck<TParent, TChild> : ICheck<TParent>
+        where TParent : class, ICheckable where TChild : class, ICheckable
     {
         private readonly List<ICheck<TChild>> _checks;
         private readonly string _description;
         private readonly Func<TParent, IEnumerable<TChild>> _elements;
+        public GroupCheckType _type { get; set; }
 
-        public GroupCheck(List<ICheck<TChild>> checks, Func<TParent, IEnumerable<TChild>> elements, string description)
+        public GroupCheck(List<ICheck<TChild>> checks, Func<TParent, IEnumerable<TChild>> elements, string description, GroupCheckType type = GroupCheckType.Any)
         {
             _checks = checks;
             _description = description;
             _elements = elements;
+            _type = type;
         }
 
-        private ICheckResult CreateFalseResult()
-        {
-            return new CheckResult(_description, FeedbackType.Incorrect, null)
-            {
-                ChildFeedback = _checks.Select(x => x.Check(null)).ToList()
-            };
-        }
 
         public ICheckResult Check(TParent elementToCheck)
         {
@@ -53,17 +49,52 @@ namespace IDesign.Recognizers.Models.ElementChecks
                 allChildFeedback.Add(element, (score, childFeedback));
             }
 
-            var highestScored = allChildFeedback.OrderByDescending(x => x.Value.score).FirstOrDefault();
-            var feedback = FeedbackType.Incorrect;
-
-            if (highestScored.Value.childFeedback.Any(x => x.GetFeedbackType() == FeedbackType.Correct))
-                feedback = FeedbackType.SemiCorrect;
-            if (highestScored.Value.childFeedback.All(x => x.GetFeedbackType() == FeedbackType.Correct))
-                feedback = FeedbackType.Correct;
-
-            return new CheckResult(_description, feedback, elementToCheck.GetSuggestionNode())
+            if (_type == GroupCheckType.All)
             {
-                ChildFeedback = highestScored.Value.childFeedback.ToList()
+                var feedback = FeedbackType.Correct;
+                if (allChildFeedback.Values.All(x => x.score != 0))
+                    feedback = FeedbackType.Incorrect;
+                if (allChildFeedback.Values.Any(x => x.score != 0))
+                    feedback = FeedbackType.SemiCorrect;
+
+                var childResults = new List<ICheckResult>();
+                foreach (var valueTuple in allChildFeedback)
+                {
+                    childResults.Add(new CheckResult(_description, feedback, elementToCheck.GetSuggestionNode())
+                    {
+                        ChildFeedback = valueTuple.Value.childFeedback.ToList()
+                    });
+                }
+                
+                return new CheckResult(_description, feedback, elementToCheck.GetSuggestionNode())
+                {
+                    ChildFeedback = childResults
+                };
+            }
+            else if (_type == GroupCheckType.Any)
+            {
+                var highestScored = allChildFeedback.OrderByDescending(x => x.Value.score).FirstOrDefault();
+                var feedback = FeedbackType.Incorrect;
+
+                if (highestScored.Value.childFeedback.Any(x => x.GetFeedbackType() == FeedbackType.Correct))
+                    feedback = FeedbackType.SemiCorrect;
+                if (highestScored.Value.childFeedback.All(x => x.GetFeedbackType() == FeedbackType.Correct))
+                    feedback = FeedbackType.Correct;
+
+                return new CheckResult(_description, feedback, elementToCheck.GetSuggestionNode())
+                {
+                    ChildFeedback = highestScored.Value.childFeedback.ToList()
+                };
+            }
+
+            return null;
+        }
+
+        private ICheckResult CreateFalseResult()
+        {
+            return new CheckResult(_description, FeedbackType.Incorrect, null)
+            {
+                ChildFeedback = _checks.Select(x => x.Check(null)).ToList()
             };
         }
     }

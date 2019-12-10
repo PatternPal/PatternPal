@@ -3,7 +3,6 @@ using Microsoft.CodeAnalysis;
 
 namespace IDesign.Recognizers.Abstractions
 {
-
     public enum FeedbackType
     {
         Correct,
@@ -32,6 +31,13 @@ namespace IDesign.Recognizers.Abstractions
         /// <returns>The suggestion message</returns>
         int GetScore();
 
+
+        /// <summary>
+        ///     Get the score in percentage
+        /// </summary>
+        /// <returns>The suggestion message</returns>
+        int GetTotalChecks();
+
         /// <summary>
         ///     Get the type of this feedback
         /// </summary>
@@ -43,6 +49,5 @@ namespace IDesign.Recognizers.Abstractions
         /// </summary>
         /// <returns>The related syntax node</returns>
         SyntaxNode GetSyntaxNode();
-
     }
 }

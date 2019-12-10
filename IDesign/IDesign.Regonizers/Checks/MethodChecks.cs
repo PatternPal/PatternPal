@@ -52,7 +52,8 @@ namespace IDesign.Recognizers.Checks
                 return false;
             var creations = body.DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
             foreach (var creationExpression in creations)
-                if (creationExpression.Type is IdentifierNameSyntax name && name.Identifier.ToString().IsEqual(creationType))
+                if (creationExpression.Type is IdentifierNameSyntax name &&
+                    name.Identifier.ToString().IsEqual(creationType))
                     return true;
 
             return false;
@@ -83,6 +84,7 @@ namespace IDesign.Recognizers.Checks
                 var identifiers = creation.DescendantNodes().OfType<IdentifierNameSyntax>();
                 result.AddRange(identifiers.Select(y => y.Identifier.ToString()));
             }
+
             return result;
         }
     }

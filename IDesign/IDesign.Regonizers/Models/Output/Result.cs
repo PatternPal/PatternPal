@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using IDesign.Recognizers.Abstractions;
 
 namespace IDesign.Recognizers.Models.Output
@@ -6,11 +7,14 @@ namespace IDesign.Recognizers.Models.Output
     public class Result : IResult
     {
         public List<ICheckResult> Results { get; set; } = new List<ICheckResult>();
-        public int Score { get; set; }
 
         public int GetScore()
         {
-            return Score;
+            var total = (float) Results.Sum(x => x.GetTotalChecks());
+            var green = Results.Sum(x => x.GetScore());
+            if (total <= 0)
+                return 0;
+            return (int)(green / total * 100f);
         }
 
         public IList<ICheckResult> GetResults()
@@ -21,7 +25,7 @@ namespace IDesign.Recognizers.Models.Output
         public override string ToString()
         {
             var res = "";
-            res += Score;
+            res += GetScore();
 
             foreach (var suggestie in Results)
                 res += ", " + suggestie.GetMessage();

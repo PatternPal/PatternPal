@@ -15,6 +15,7 @@ namespace IDesign.Core
             new DesignPattern("State", new StateRecognizer()),
             new DesignPattern("Strategy", new StrategyRecognizer())
         };
+
         public Dictionary<string, EntityNode> EntityNodes =
             new Dictionary<string, EntityNode>();
 
@@ -30,7 +31,7 @@ namespace IDesign.Core
                 var tree = FileManager.MakeStringFromFile(files[i]);
                 var generateSyntaxTree = new SyntaxTreeGenerator(tree, files[i], EntityNodes);
                 syntaxTreeSources.Add(generateSyntaxTree.Tree, files[i]);
-                ProgressUpdate((int)(i / (float)files.Count * 50f), "Reading file: " + files[i]);
+                ProgressUpdate((int) (i / (float) files.Count * 50f), "Reading file: " + files[i]);
             }
 
             //Make relations
@@ -61,6 +62,7 @@ namespace IDesign.Core
                         Pattern = pattern
                     });
             }
+
             return results;
         }
 

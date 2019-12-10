@@ -37,6 +37,15 @@ namespace IDesign.Recognizers.Models.Output
             return ChildFeedback.Sum(x => x.GetScore());
         }
 
+        public int GetTotalChecks()
+        {
+            if (ChildFeedback.Count == 0)
+            {
+                return 1;
+            }
+            return ChildFeedback.Sum(x => x.GetTotalChecks());
+        }
+
         public FeedbackType GetFeedbackType()
         {
             return FeedbackType;

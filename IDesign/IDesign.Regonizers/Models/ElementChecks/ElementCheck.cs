@@ -19,11 +19,6 @@ namespace IDesign.Recognizers.Models.ElementChecks
             _description = description;
         }
 
-        public string GetDescription()
-        {
-            return _description;
-        }
-
         public ICheckResult Check(T elementToCheck)
         {
             //Support checking without input (To create false result)
@@ -32,6 +27,11 @@ namespace IDesign.Recognizers.Models.ElementChecks
             var isValid = _predicate(elementToCheck);
             var feedback = isValid ? FeedbackType.Correct : FeedbackType.Incorrect;
             return new CheckResult(_description, feedback, elementToCheck.GetSuggestionNode());
+        }
+
+        public string GetDescription()
+        {
+            return _description;
         }
     }
 }

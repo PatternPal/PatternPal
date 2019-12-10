@@ -184,7 +184,7 @@ namespace IDesign.Extension
             if (checkResult == null) return;
 
             var node = checkResult.GetSyntaxNode();
-            selectNodeInEditor(node,  SyntaxTreeSources[node.SyntaxTree]);
+            selectNodeInEditor(node, SyntaxTreeSources[node.SyntaxTree]);
         }
     }
 }

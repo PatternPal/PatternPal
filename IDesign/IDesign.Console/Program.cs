@@ -6,7 +6,7 @@ using IDesign.Core;
 using IDesign.Core.Models;
 using NDesk.Options;
 
-namespace IDesign.Console
+namespace IDesign.ConsoleApp
 {
     internal class Program
     {

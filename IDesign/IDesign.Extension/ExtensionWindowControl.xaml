@@ -392,17 +392,18 @@
                         </StackPanel>
                     </StackPanel>
                 </HierarchicalDataTemplate>
-                <HierarchicalDataTemplate DataType="{x:Type models:CheckResultViewModel}" ItemsSource="{Binding SubResults}">
-                    <StackPanel Orientation="Horizontal">
+                <HierarchicalDataTemplate DataType="{x:Type models:CheckResultViewModel}"
+                                          ItemsSource="{Binding SubResults}">
+                    <StackPanel Orientation="Horizontal" Height="20">
                         <imaging:CrispImage Width="16" Height="16" Moniker="{Binding Icon}" />
 
-                        <StackPanel Orientation="Horizontal" Margin="0">
+                        <StackPanel Orientation="Horizontal" Margin="5 2 0 2">
                             <TextBlock Text="{Binding Message}"
-                                   Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
+                                       Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
                             <TextBlock Text=" | "
-                                   Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
+                                       Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
                             <TextBlock Text="{Binding Score}"
-                                   Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
+                                       Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
                         </StackPanel>
                     </StackPanel>
                 </HierarchicalDataTemplate>

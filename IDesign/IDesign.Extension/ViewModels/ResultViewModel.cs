@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using IDesign.Core;
 using IDesign.Core.Models;
 using IDesign.Recognizers.Abstractions;
 using Microsoft.VisualStudio.Imaging;
@@ -32,12 +31,14 @@ namespace IDesign.Extension.ViewModels
         public RecognitionResult Result { get; set; }
         public string PatternName => Result.Pattern.Name;
         public int Score => Result.Result.GetScore();
-        public IEnumerable<CheckResultViewModel> Results => Result.Result.GetResults().Select(x => new CheckResultViewModel(x));
+
+        public IEnumerable<CheckResultViewModel> Results =>
+            Result.Result.GetResults().Select(x => new CheckResultViewModel(x));
     }
 
     public class CheckResultViewModel
     {
-        public CheckResultViewModel(ICheckResult  result)
+        public CheckResultViewModel(ICheckResult result)
         {
             Result = result;
         }
@@ -46,6 +47,7 @@ namespace IDesign.Extension.ViewModels
         public string Message => Result.GetMessage();
         public int Score => Result.GetScore();
         public FeedbackType Type => Result.GetFeedbackType();
+
         public ImageMoniker Icon
         {
             get
@@ -64,6 +66,7 @@ namespace IDesign.Extension.ViewModels
             }
         }
 
-        public IEnumerable<CheckResultViewModel> SubResults => Result.GetChildFeedback().Select(x => new CheckResultViewModel(x));
+        public IEnumerable<CheckResultViewModel> SubResults =>
+            Result.GetChildFeedback().Select(x => new CheckResultViewModel(x));
     }
 }

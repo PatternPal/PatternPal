@@ -13,12 +13,13 @@ namespace IDesign.Core.Models
     {
         public List<ConstructorDeclarationSyntax> ConstructorDeclarationSyntaxList =
             new List<ConstructorDeclarationSyntax>();
-        public string NameSpace { get; set; }
-        public List<IRelation> Relations = new List<IRelation>();
+
         public List<FieldDeclarationSyntax> FieldDeclarationSyntaxList = new List<FieldDeclarationSyntax>();
-        public List<UsingDirectiveSyntax> UsingDeclarationSyntaxList = new List<UsingDirectiveSyntax>();
         public List<MethodDeclarationSyntax> MethodDeclarationSyntaxList = new List<MethodDeclarationSyntax>();
         public List<PropertyDeclarationSyntax> PropertyDeclarationSyntaxList = new List<PropertyDeclarationSyntax>();
+        public List<IRelation> Relations = new List<IRelation>();
+        public List<UsingDirectiveSyntax> UsingDeclarationSyntaxList = new List<UsingDirectiveSyntax>();
+        public string NameSpace { get; set; }
         public string Name { get; set; }
         public string SourceFile { get; set; }
         public TypeDeclarationSyntax InterfaceOrClassNode { get; set; }
@@ -63,6 +64,7 @@ namespace IDesign.Core.Models
                     getters = getters.Where(x => x.Body != null || x.ExpressionBody != null);
                     list.AddRange(getters.Select(x => new PropertyMethod(property, x)));
                 }
+
             return list;
         }
 
@@ -73,7 +75,7 @@ namespace IDesign.Core.Models
                 if (property.AccessorList != null)
                 {
                     var getters = property.AccessorList.Accessors.Where(x =>
-                        x.Kind() == SyntaxKind.GetAccessorDeclaration && x.Body == null);
+                        x.Kind() == SyntaxKind.GetAccessorDeclaration && x.Body == null && x.ExpressionBody == null);
                     listGetters.AddRange(getters.Select(x => new PropertyField(property)));
                 }
 
@@ -89,16 +91,6 @@ namespace IDesign.Core.Models
             return listConstructors;
         }
 
-        public IEnumerable<ConstructorDeclarationSyntax> GetCostructors()
-        {
-            return ConstructorDeclarationSyntaxList;
-        }
-
-        public IEnumerable<PropertyDeclarationSyntax> GetProperties()
-        {
-            return PropertyDeclarationSyntaxList;
-        }
-
         public IEnumerable<IRelation> GetRelations()
         {
             return Relations;
@@ -106,22 +98,26 @@ namespace IDesign.Core.Models
 
         public EntityNodeType GetEntityNodeType()
         {
-            var declarationnode = this.GetTypeDeclarationSyntax();
+            var declarationnode = GetTypeDeclarationSyntax();
 
             if (declarationnode.GetType() == typeof(ClassDeclarationSyntax))
-            {
                 return EntityNodeType.Class;
-            }
-            else if (declarationnode.GetType() == typeof(InterfaceDeclarationSyntax))
-            {
-                return EntityNodeType.Interface;
-            }
+            if (declarationnode.GetType() == typeof(InterfaceDeclarationSyntax)) return EntityNodeType.Interface;
             return EntityNodeType.Class;
         }
 
-        public List<UsingDirectiveSyntax> GetUsings()
+        public string GetSuggestionName()
         {
-            return UsingDeclarationSyntaxList;
+            return Name;
+        }
+        public SyntaxNode GetSuggestionNode()
+        {
+            return GetTypeDeclarationSyntax();
+        }
+
+        public IEnumerable<ConstructorDeclarationSyntax> GetCostructors()
+        {
+            return ConstructorDeclarationSyntaxList;
         }
 
         public SyntaxTokenList GetModifiers()
@@ -137,5 +133,5 @@ namespace IDesign.Core.Models
         {
             return InterfaceOrClassNode;
         }
-    }
+        
 }

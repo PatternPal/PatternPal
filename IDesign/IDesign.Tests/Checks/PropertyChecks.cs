@@ -1,9 +1,8 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
+﻿using IDesign.Recognizers.Checks;
+using IDesign.Recognizers.Models;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
-using IDesign.Recognizers;
-using IDesign.Recognizers.Checks;
-using IDesign.Recognizers.Models;
 
 namespace IDesign.Tests.Checks
 {
