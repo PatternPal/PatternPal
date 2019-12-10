@@ -216,6 +216,18 @@
     <Compile Update="TestClasses\StrategyTest1\OvenBaking.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Update="TestClasses\StrategyTest2\ConcreteStrategyA.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StrategyTest2\ConcreteStrategyB.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StrategyTest2\Context.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StrategyTest2\IStrategy.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Update="TestClasses\TestClass1.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
