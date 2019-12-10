@@ -6,7 +6,7 @@ namespace IDesign.Core
 {
     public class Relation : IRelation
     {
-        public Relation(IEntityNode entityNode,RelationType type)
+        public Relation(IEntityNode entityNode, RelationType type)
         {
             EntityNode = entityNode;
             Type = type;
@@ -20,7 +20,7 @@ namespace IDesign.Core
             return EntityNode;
         }
 
-      public  RelationType GetRelationType()
+        public RelationType GetRelationType()
         {
             return Type;
         }
