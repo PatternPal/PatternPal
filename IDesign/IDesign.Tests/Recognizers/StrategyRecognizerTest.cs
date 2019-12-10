@@ -38,15 +38,15 @@ namespace IDesign.Tests.Recognizers
         [TestCase("StrategyTest3", "ConcreteStrategyB", 100)]
         [TestCase("StrategyTest3", "Context", 100)]
         [TestCase("StrategyTest3", "Strategy", 100)]
-        public void StateRecognizer_Returns_Correct_Score(string directory, string filename, int score)
+        public void StrategyRecognizer_Returns_Correct_Score(string directory, string filename, int score)
         {
-            var state = new StrategyRecognizer();
+            var strategy = new StrategyRecognizer();
             var filesAsString = FileUtils.FilesToString($"{directory}\\");
             var nameSpaceName = $"IDesign.Tests.TestClasses.{directory}";
             var entityNodes = EntityNodeUtils.CreateEntityNodeGraph(filesAsString);
             var createRelation = new DetermineRelations(entityNodes);
             createRelation.GetEdgesOfEntityNode();
-            var result = state.Recognize(entityNodes[nameSpaceName + "." + filename]);
+            var result = strategy.Recognize(entityNodes[nameSpaceName + "." + filename]);
 
             Assert.AreEqual(score, result.GetScore());
         }
