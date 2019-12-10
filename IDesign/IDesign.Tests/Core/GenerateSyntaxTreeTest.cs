@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using IDesign.Core;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 
 namespace IDesign.Tests.Core

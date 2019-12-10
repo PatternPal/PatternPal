@@ -15,7 +15,6 @@ namespace IDesign.Recognizers
             return fieldSyntax.GetFieldType().ToString().IsEqual(type);
         }
 
-
         /// <summary>
         ///     Return a boolean based on if the given field has an expected modifier.
         /// </summary>

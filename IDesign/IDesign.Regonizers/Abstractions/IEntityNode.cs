@@ -55,6 +55,10 @@ namespace IDesign.Recognizers.Abstractions
         /// </summary>
         EntityNodeType GetEntityNodeType();
 
+        /// <summary>
+        ///     Gets te modifiers of this class
+        /// </summary>
+        /// <returns></returns>
         SyntaxTokenList GetModifiers();
 
     }

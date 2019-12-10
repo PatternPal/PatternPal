@@ -2,9 +2,6 @@
 using IDesign.Recognizers;
 using IDesign.Tests.Utils;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace IDesign.Tests.Recognizers
 {

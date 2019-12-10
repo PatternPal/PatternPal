@@ -1,5 +1,4 @@
 ﻿using IDesign.Recognizers;
-using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;

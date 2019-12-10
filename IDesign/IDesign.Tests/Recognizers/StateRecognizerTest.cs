@@ -12,7 +12,6 @@ using System.Text;
 
 namespace IDesign.Tests.Recognizers
 {
-
     class StateRecognizerTest
     {
         [TestCase("StateTest2", "Account", 100)]

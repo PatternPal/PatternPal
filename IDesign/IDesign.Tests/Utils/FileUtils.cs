@@ -6,7 +6,6 @@ namespace IDesign.Tests.Utils
 {
     public static class FileUtils
     {
-
         /// <summary>
         /// Returns a string of all the contenst from the given file. 
         /// </summary>
@@ -38,7 +37,6 @@ namespace IDesign.Tests.Utils
                 filesContents.Add(File.ReadAllText(file));
             }
             return filesContents;
-
         }
     }
 }

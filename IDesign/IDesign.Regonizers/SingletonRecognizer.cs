@@ -1,5 +1,4 @@
-
-﻿using IDesign.Recognizers.Abstractions;
+using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Output;
 using System.Collections.Generic;
 
@@ -32,7 +31,7 @@ namespace IDesign.Recognizers
             };
             CheckElements(result, entityNode.GetConstructors(), constructorChecks);
 
-            result.Score = (int) (result.Score / 7f * 100f);
+            result.Score = (int)(result.Score / 7f * 100f);
             return result;
         }
     }

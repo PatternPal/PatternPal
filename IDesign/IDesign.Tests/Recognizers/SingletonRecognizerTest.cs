@@ -20,7 +20,7 @@ namespace IDesign.Tests.Recognizers
         public void SingletonRecognizer_Returns_Correct_Score(string filename, int score)
         {
             var singleton = new SingletonRecognizer();
-            var code = FileUtils.FileToString("Singleton\\" +filename);
+            var code = FileUtils.FileToString("Singleton\\" + filename);
             var testGraph = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
             var testNode = testGraph.Values.First();
 

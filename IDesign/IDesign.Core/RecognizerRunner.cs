@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using IDesign.Recognizers;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace IDesign.Core
 {
