@@ -110,6 +110,7 @@ namespace IDesign.Core.Models
         {
             return Name;
         }
+
         public SyntaxNode GetSuggestionNode()
         {
             return GetTypeDeclarationSyntax();
@@ -119,19 +120,14 @@ namespace IDesign.Core.Models
         {
             return ConstructorDeclarationSyntaxList;
         }
+        public List<UsingDirectiveSyntax> GetUsings()
+        {
+            return UsingDeclarationSyntaxList;
+        }
 
         public SyntaxTokenList GetModifiers()
         {
             return InterfaceOrClassNode.Modifiers;
         }
-        
-        public string GetSuggestionName()
-        {
-            return GetName() + "()";
-        }
-        public SyntaxNode GetSuggestionNode()
-        {
-            return InterfaceOrClassNode;
-        }
-        
+    }
 }

@@ -1,13 +1,14 @@
 ﻿using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Checks;
 using IDesign.Recognizers.Models;
-using IDesign.Recognizers.Output;
 using System.Collections.Generic;
 using System.Linq;
+using IDesign.Recognizers.Models.ElementChecks;
+using IDesign.Recognizers.Models.Output;
 
 namespace IDesign.Recognizers
 {
-    public class StrategyRecognizer : Recognizer, IRecognizer
+    public class StrategyRecognizer : IRecognizer
     {
         Result result;
 
@@ -32,6 +33,7 @@ namespace IDesign.Recognizers
                     ClassChecks(node);
                 }
             }
+
             return result;
         }
 
@@ -40,26 +42,22 @@ namespace IDesign.Recognizers
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        private IResult InterfaceStrategyChecks(IEntityNode node)
+        private void InterfaceStrategyChecks(IEntityNode node)
         {
-            float amountOfChecks = 0;
-
-            var checkType = new List<ElementCheck<IEntityNode>>
+            var checkType = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
             {
-                new ElementCheck<IEntityNode>(x => x.CheckTypeDeclaration(EntityNodeType.Interface), "If using a class, the modifier should be abstract. Otherwise, use an interface")
-            };
-            amountOfChecks += 1;
-            CheckElements(result, new List<IEntityNode> { node }, checkType);
+                new ElementCheck<IEntityNode>(x => x.CheckTypeDeclaration(EntityNodeType.Interface),
+                    "If using a class, the modifier should be abstract. Otherwise, use an interface")
 
-            var checkMethods = new List<ElementCheck<IMethod>>
+            }, x => new List<IEntityNode> {node}, "");
+
+            result.Results.Add(checkType.Check(node));
+            var checkMethods = new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
             {
-                 new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void")
-            };
-            amountOfChecks += 1;
-            CheckElements(result, node.GetMethods(), checkMethods);
+                new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void")
 
-            result.Score = (int)(result.Score / amountOfChecks * 100f);
-            return result;
+            }, x => x.GetMethods(), "");
+            result.Results.Add(checkMethods.Check(node));
         }
 
         /// <summary>
@@ -67,28 +65,25 @@ namespace IDesign.Recognizers
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        private IResult AbstractClassStrategyChecks(IEntityNode node)
+        private void AbstractClassStrategyChecks(IEntityNode node)
         {
-            float amountOfChecks = 0;
-
-            var checkType = new List<ElementCheck<IEntityNode>>
+            //check if node is an interface or an abstract class, cannot be both
+            var checkType = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
             {
-                new ElementCheck<IEntityNode>(x => x.CheckModifier("abstract"), "If using a class, the modifier should be abstract. Otherwise, use an interface")
-            };
-            amountOfChecks += 1;
-            CheckElements(result, new List<IEntityNode> { node }, checkType);
+                new ElementCheck<IEntityNode>(x => x.CheckModifier("abstract"),
+                    "If using a class, the modifier should be abstract. Otherwise, use an interface")
 
-            var abstractStrategyChecks = new List<ElementCheck<IMethod>>
+            }, x => new List<IEntityNode> {node}, "");
+            result.Results.Add(checkType.Check(node));
+
+            var abstractStateCheck = new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
             {
-                new ElementCheck<IMethod>(x => x.CheckModifier("abstract"), "If using a class, the modifier should be abstract. Otherwise, use an interface"),
+                new ElementCheck<IMethod>(x => x.CheckModifier("abstract"),
+                    "If using a class, the modifier should be abstract. Otherwise, use an interface"),
                 new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void"),
                 new ElementCheck<IMethod>(x => x.GetBody() == null, "Body should be empty!")
-            };
-            amountOfChecks += 3;
-            CheckElements(result, node.GetMethods(), abstractStrategyChecks);
-
-            result.Score = (int)(result.Score / amountOfChecks * 100f);
-            return result;
+            }, x => x.GetMethods(), "");
+            result.Results.Add(abstractStateCheck.Check(node));
         }
 
         /// <summary>
@@ -101,7 +96,7 @@ namespace IDesign.Recognizers
 
             //create list with only Extends and Implements relations
             var inheritanceRelations = relations.Where(x => (x.GetRelationType() == RelationType.Implements) ||
-            (x.GetRelationType() == RelationType.Extends)).ToList();
+                                                            (x.GetRelationType() == RelationType.Extends)).ToList();
 
             //create list with only uses realations
             var usingRelations = relations.Where(x => x.GetRelationType() == RelationType.Uses).ToList();
@@ -110,10 +105,12 @@ namespace IDesign.Recognizers
             {
                 ConcreteStrategyClassChecks(node, inheritanceRelations);
             }
+
             if (usingRelations.Count() > 0 && inheritanceRelations.Count() <= 0)
             {
                 ContextClassChecks(node, usingRelations);
             }
+
             return result;
         }
 
@@ -125,12 +122,14 @@ namespace IDesign.Recognizers
         /// <returns></returns>
         private IResult ConcreteStrategyClassChecks(IEntityNode node, List<IRelation> inheritanceRelations)
         {
+
             float amountOfChecks = 0;
             List<string> methodNamesList = new List<string>();
 
             foreach (var edge in inheritanceRelations)
             {
                 var edgeNode = edge.GetDestination();
+                amountOfChecks += 1;
 
                 //get all methodnames
                 foreach (var name in edgeNode.GetMethods())
@@ -138,31 +137,29 @@ namespace IDesign.Recognizers
                     methodNamesList.Add(name.GetName());
                 }
 
-                var inheritanceChecks = new List<ElementCheck<IEntityNode>>
+                //check if node is an interface or an abstract class
+                var check = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                 {
-                    //check if node is an interface or an abstract class
-                    new ElementCheck<IEntityNode>(x => (x.CheckTypeDeclaration(EntityNodeType.Interface)) |
-                    ((x.CheckTypeDeclaration(EntityNodeType.Class)) && (x.CheckModifier("abstract"))),"message")
-                };
-                amountOfChecks += 1;
-                CheckElements(result, new List<IEntityNode> { edgeNode }, inheritanceChecks);
+                    new ElementCheck<IEntityNode>(x => x.CheckTypeDeclaration(EntityNodeType.Interface) |
+                                                       (x.CheckTypeDeclaration(EntityNodeType.Class) &&
+                                                        (x.CheckModifier("abstract"))), "message")
+                }, x => new List<IEntityNode>() {edgeNode}, "");
+                result.Results.Add(check.Check(edgeNode));
             }
 
-            //check every method in the class
             foreach (var methodName in methodNamesList)
             {
-                //check if strategy has void method
-                var createChecks = new List<ElementCheck<IMethod>>
+                //check if state makes other state in handle method and check if the return type is void
+                var createCheck = new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                 {
                     new ElementCheck<IMethod>(x => x.GetName() == methodName, "names should be equal!"),
                     new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void!"),
-                    //TO DO: check of functie de zelfte parameters heeft als de interface/abstracte klasse functie
-                };
-                amountOfChecks += 2;
-                CheckElements(result, node.GetMethods(), createChecks);
+                    //TO DO: check of functie de zelfte parameters heeft als de interface/abstracte klasse functie                                      (x.CheckTypeDeclaration(EntityNodeType.Class) && (x.CheckModifier("abstract"))),"message")
+                }, x => x.GetMethods(), "");
+
+                result.Results.Add(createCheck.Check(node));
             }
 
-            result.Score = (int)(result.Score / amountOfChecks * 100f);
             return result;
         }
 
@@ -172,9 +169,8 @@ namespace IDesign.Recognizers
         /// <param name="node"></param>
         /// <param name="usingRelations"></param>
         /// <returns></returns>
-        private IResult ContextClassChecks(IEntityNode node, List<IRelation> usingRelations)
+        private void ContextClassChecks(IEntityNode node, List<IRelation> usingRelations)
         {
-            float amountOfChecks = 0;
             foreach (var edge in usingRelations)
             {
                 var edgeNode = edge.GetDestination();
@@ -182,17 +178,16 @@ namespace IDesign.Recognizers
                 if ((edgeNode.CheckTypeDeclaration(EntityNodeType.Interface)) |
                     (edgeNode.CheckTypeDeclaration(EntityNodeType.Class) && edgeNode.CheckModifier("abstract")))
                 {
-                    var usingChecks = new List<ElementCheck<IField>>
+                    //check if state makes other state in handle method and check if the return type is void
+                    var fieldCheck = new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
                     {
-                        new ElementCheck<IField>(x => x.CheckFieldType(edgeNode.GetName()),$"{node.GetName()} must be equal to {edgeNode.GetName()}"),
+                        new ElementCheck<IField>(x => x.CheckFieldType(edgeNode.GetName()),
+                            $"{node.GetName()} must be equal to {edgeNode.GetName()}"),
                         new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "modifier must be private")
-                    };
-                    amountOfChecks += 2;
-                    CheckElements(result, node.GetFields(), usingChecks);
+                    }, x => x.GetFields(), "");
+                    result.Results.Add(fieldCheck.Check(node));
                 }
             }
-            result.Score = (int)(result.Score / amountOfChecks * 100f);
-            return result;
         }
     }
 }

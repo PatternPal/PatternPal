@@ -1,4 +1,6 @@
-﻿namespace IDesign.Recognizers.Abstractions
+﻿using IDesign.Recognizers.Models;
+
+namespace IDesign.Recognizers.Abstractions
 {
     public interface IRelation
     {

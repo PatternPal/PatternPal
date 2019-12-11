@@ -180,10 +180,10 @@ namespace IDesign.Extension
         {
             var viewItem = sender as TreeViewItem;
 
-            var checkResult = viewItem?.DataContext as ICheckResult;
-            if (checkResult == null) return;
+            var viewModel = viewItem?.DataContext as CheckResultViewModel;
+            if (viewModel == null) return;
 
-            var node = checkResult.GetSyntaxNode();
+            var node = viewModel.Result.GetSyntaxNode();
             selectNodeInEditor(node, SyntaxTreeSources[node.SyntaxTree]);
         }
     }

@@ -1,4 +1,5 @@
 ﻿using IDesign.Recognizers.Abstractions;
+using IDesign.Recognizers.Models;
 
 namespace IDesign.Core.Models
 {
