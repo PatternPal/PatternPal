@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-<<<<<<< HEAD
     <Compile Remove="TestClasses\Decorator\DecoratorTestCase1.cs" />
     <Compile Remove="TestClasses\Decorator\DecoratorTestCase2.cs" />
     <Compile Remove="TestClasses\Decorator\DecoratorTestCase3.cs" />
@@ -14,7 +13,6 @@
     <Compile Remove="TestClasses\Decorator\DecoratorTestCase5.cs" />
     <Compile Remove="TestClasses\Decorator\DecoratorTestCase6.cs" />
     <Compile Remove="TestClasses\Decorator\DecoratorTestCase7.cs" />
-=======
     <Compile Remove="TestClasses\FactoryTestClasses\**" />
     <Compile Remove="TestClasses\SingletonTestClasses\**" />
     <EmbeddedResource Remove="TestClasses\FactoryTestClasses\**" />
@@ -24,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
->>>>>>> develop
     <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase1.cs" />
     <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase2.cs" />
     <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase3.cs" />
