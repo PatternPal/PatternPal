@@ -49,7 +49,7 @@ namespace IDesign.Recognizers.Checks
         }
         public static bool InterfaceImplementsMethod(this IEntityNode node, IMethod method)
         {
-            return node.GetMethods().Any(x => x.Equals(method));
+            return node.GetMethods().Any(x => x.IsEquals(method));
         }
 
         /// <summary>

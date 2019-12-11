@@ -112,7 +112,7 @@ namespace IDesign.Recognizers
         /// <param name="methodSyntax">The method it should check</param>
         /// <param name="compareMethod">The given method it should compare to</param>
         /// <returns>The methods are the same type</returns>
-        public static bool Equals(this IMethod methodSyntax , IMethod compareMethod)
+        public static bool IsEquals(this IMethod methodSyntax , IMethod compareMethod)
         {
             return (methodSyntax.CheckMethodIdentifier(compareMethod.GetName())
                 && methodSyntax.CheckMethodParameters(compareMethod.GetParameter().ToString())

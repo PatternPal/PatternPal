@@ -3,6 +3,7 @@ using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Output;
 using IDesign.Recognizers.Checks;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Linq;
 
 namespace IDesign.Recognizers
 {

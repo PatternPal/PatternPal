@@ -21,6 +21,8 @@
     <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase4.cs" />
     <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase5.cs" />
     <Compile Remove="TestClasses\FactorySimple\ProductA.cs" />
+    <Compile Remove="TestClasses\Factory\FactoryTestCase5.cs" />
+    <Compile Remove="TestClasses\Factory\FactoryTestCase7.cs" />
     <Compile Remove="TestClasses\SingleTonTestCase1.cs" />
     <Compile Remove="TestClasses\SingleTonTestCase2.cs" />
     <Compile Remove="TestClasses\SingleTonTestCase3.cs" />
@@ -148,9 +150,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Update="TestClasses\Factory\FactoryTestCase4.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="TestClasses\Factory\FactoryTestCase5.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Update="TestClasses\Factory\IProduct.cs">
