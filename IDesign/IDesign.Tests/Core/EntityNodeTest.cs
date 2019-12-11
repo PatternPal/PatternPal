@@ -1,10 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using IDesign.Core;
-using IDesign.Recognizers;
+﻿using System.Linq;
 using IDesign.Tests.Utils;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 
 namespace IDesign.Tests.Core

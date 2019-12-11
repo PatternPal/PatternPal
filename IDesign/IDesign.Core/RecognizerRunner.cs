@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using IDesign.Recognizers;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace IDesign.Core
 {
@@ -11,7 +10,9 @@ namespace IDesign.Core
         {
             new DesignPattern("Singleton", new SingletonRecognizer()),
             new DesignPattern("Factory Method", new FactoryRecognizer()),
-            new DesignPattern("Decorator", new DecoratorRecognizer())
+            new DesignPattern("Decorator", new DecoratorRecognizer()),
+            new DesignPattern("State", new StateRecognizer()),
+            new DesignPattern("Strategy", new StrategyRecognizer())
         };
         public Dictionary<string, EntityNode> EntityNodes =
             new Dictionary<string, EntityNode>();
@@ -34,7 +35,7 @@ namespace IDesign.Core
                 var tree = FileManager.MakeStringFromFile(files[i]);
                 var generateSyntaxTree = new GenerateSyntaxTree(tree, files[i], EntityNodes);
 
-                ProgressUpdate((int) (i / (float) files.Count * 50f), "Reading file: " + files[i]);
+                ProgressUpdate((int)(i / (float)files.Count * 50f), "Reading file: " + files[i]);
             }
 
             //Make relations
@@ -45,7 +46,7 @@ namespace IDesign.Core
             foreach (var node in EntityNodes.Values)
             {
                 j++;
-                ProgressUpdate((int) (j / (float) files.Count * 50f + 50), "Scanning class: " + node.GetName());
+                ProgressUpdate((int)(j / (float)files.Count * 50f + 50), "Scanning class: " + node.GetName());
                 foreach (var pattern in patterns)
                     results.Add(new RecognitionResult
                     {

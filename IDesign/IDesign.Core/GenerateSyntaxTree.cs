@@ -22,8 +22,10 @@ namespace IDesign.Core
         ///     Genarates a syntaxtree from a string
         /// </summary>
         /// <param name="content"></param>
-        public GenerateSyntaxTree(string content, string source, Dictionary<string,  EntityNode> entityNodes)
+        /// <param name="source"></param>
         /// <param name="entityNodes"></param>
+        public GenerateSyntaxTree(string content, string source, Dictionary<string, EntityNode> entityNodes)
+
         {
             File = source;
             Tree = CSharpSyntaxTree.ParseText(content);
@@ -52,7 +54,7 @@ namespace IDesign.Core
         }
 
         /// <summary>
-        ///     Parent function of the recursive function that adds all ClassNodes of the file to the ClassDeclarationSyntaxList
+        ///    Parent function of the recursive function that adds all ClassNodes of the file to the ClassDeclarationSyntaxList
         /// </summary>
         /// <param name="entityNodes"></param>
         private void GetAllClassesOfFile(Dictionary<string, EntityNode> entityNodes)
@@ -118,10 +120,10 @@ namespace IDesign.Core
         ///     Recursive function that adds all InterfaceNodes of the file to the InterfaceDeclarationSyntaxList
         /// </summary>
         /// <param name="node"></param>
+        /// <param name="entityNodes"></param>
         /// <returns>
         ///     Returns a List with InterfaceDeclarationSyntaxes
         /// </returns>
-        /// 
         private List<InterfaceDeclarationSyntax> GetAllInterfacesOfFile(SyntaxNode node,
             Dictionary<string, EntityNode> entityNodes)
         {
@@ -158,7 +160,7 @@ namespace IDesign.Core
         }
 
         /// <summary>
-        /// Parent function of the recursive function that searches for all constructors in a class
+        ///     Parent function of the recursive function that searches for all constructors in a class
         /// </summary>
         /// <param name="entityNodes"></param> 
         private void GetAllConstructorsOfAClass(Dictionary<string, EntityNode> entityNodes)
@@ -191,8 +193,9 @@ namespace IDesign.Core
         }
 
         /// <summary>
-        /// Parent of recursive function that searches for all methodes of a class
+        ///     Parent of recursive function that searches for all methodes of a class
         /// </summary>
+        /// <param name="entityNodes"></param>
         private void GetAllMethodsOfAClass(Dictionary<string, EntityNode> entityNodes)
         {
             if (EntityNodes != null)
@@ -222,7 +225,7 @@ namespace IDesign.Core
         }
 
         /// <summary>
-        /// Parent of recursive function that searches for all properties of a class
+        ///     Parent of recursive function that searches for all properties of a class
         /// </summary>
         /// <param name="entityNodes"></param> 
         private void GetAllPropertiesOfAClass(Dictionary<string, EntityNode> entityNodes)
@@ -250,13 +253,13 @@ namespace IDesign.Core
                         var propertyNode = (PropertyDeclarationSyntax)childNode;
                         PropertyDeclarationSyntaxList.Add(propertyNode);
                     }
-
             return PropertyDeclarationSyntaxList;
         }
 
         /// <summary>
         ///     Parent of recursive function that searches for all fields of a class
         /// </summary>
+        /// <param name="entityNodes"></param>
         private void GetAllFieldsOfAClass(Dictionary<string, EntityNode> entityNodes)
         {
             if (EntityNodes != null)

@@ -1,5 +1,4 @@
-
-﻿using IDesign.Recognizers.Abstractions;
+using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Output;
 using System.Collections.Generic;
 
@@ -11,27 +10,27 @@ namespace IDesign.Recognizers
         {
             var result = new Result();
 
-            var constructorChecks = new List<ElementCheck<IMethod>>()
-            {
-                 new ElementCheck<IMethod>(x => !x.CheckModifier("public") , "Is public moet private of protected zijn")
-            };
-            CheckElements(result, entityNode.GetConstructors(), constructorChecks);
-
             var methodChecks = new List<ElementCheck<IMethod>>()
             {
                 new ElementCheck<IMethod>(x => x.CheckReturnType(entityNode.GetName()) , "Incorrect return type"),
-                new ElementCheck<IMethod>(x => x.CheckModifier("static") , "Is not static"),
-                new ElementCheck<IMethod>(x => x.CheckReturnTypeSameAsCreation(), "Return type isnt the same as created" )
+                new ElementCheck<IMethod>(x => x.CheckModifier("static") , "Modefier should be static"),
+                new ElementCheck<IMethod>(x => x.CheckReturnTypeSameAsCreation(), "Return type is not the same as created" )
             };
             CheckElements(result, entityNode.GetMethods(), methodChecks);
 
             var propertyChecks = new List<ElementCheck<IField>>
             {
-               new ElementCheck<IField>(x => x.CheckFieldType(new List<string>() { entityNode.GetName() }) , "Incorrect type"),
-               new ElementCheck<IField>(x => x.CheckMemberModifier("static") , "Is not static"),
-               new ElementCheck<IField>(x => x.CheckMemberModifier("private") , "Is not private")
+               new ElementCheck<IField>(x => x.CheckFieldType(new List<string>(){ entityNode.GetName() }) , "Incorrect type"),
+               new ElementCheck<IField>(x => x.CheckMemberModifier("static") , "Modefier should be static"),
+               new ElementCheck<IField>(x => x.CheckMemberModifier("private") , "Modefier should be private")
             };
             CheckElements(result, entityNode.GetFields(), propertyChecks);
+
+            var constructorChecks = new List<ElementCheck<IMethod>>
+            {
+                 new ElementCheck<IMethod>(x => !x.CheckModifier("public") , "Modifier should be private or protected")
+            };
+            CheckElements(result, entityNode.GetConstructors(), constructorChecks);
 
             result.Score = (int)(result.Score / 7f * 100f);
             return result;

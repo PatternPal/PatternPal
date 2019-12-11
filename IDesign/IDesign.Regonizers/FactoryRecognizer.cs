@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
+﻿using System.Collections.Generic;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Output;
-using IDesign.Recognizers.Checks;
 
 namespace IDesign.Recognizers
 {
@@ -20,7 +16,7 @@ namespace IDesign.Recognizers
             };
             CheckElements(result, entityNode.GetMethods(), methodChecks);
 
-            result.Score = (int) (result.Score / 2f * 100f);
+            result.Score = (int)(result.Score / 2f * 100f);
             return result;
         }
     }
