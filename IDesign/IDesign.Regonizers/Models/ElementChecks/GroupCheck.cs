@@ -13,10 +13,10 @@ namespace IDesign.Recognizers.Models.ElementChecks
     }
 
     /// <summary>
-    ///     A class for defining a check on a type with a predicate
+    ///     A class for defining checks for the children of a parent class
     /// </summary>
-    /// <typeparam name="T">The type witch the check is for</typeparam>
-    /// <typeparam name="">The type witch the check is for</typeparam>
+    /// <typeparam name="TParent">Type of the element with sub elements</typeparam>
+    /// <typeparam name="TChild">Type of the elements that are checked</typeparam>
     public class GroupCheck<TParent, TChild> : ICheck<TParent>
         where TParent : class, ICheckable where TChild : class, ICheckable
     {
@@ -32,7 +32,6 @@ namespace IDesign.Recognizers.Models.ElementChecks
             _elements = elements;
             _type = type;
         }
-
 
         public ICheckResult Check(TParent elementToCheck)
         {
@@ -50,44 +49,48 @@ namespace IDesign.Recognizers.Models.ElementChecks
             }
 
             if (_type == GroupCheckType.All)
-            {
-                var feedback = FeedbackType.Correct;
-                if (allChildFeedback.Values.All(x => x.score != 0))
-                    feedback = FeedbackType.Incorrect;
-                if (allChildFeedback.Values.Any(x => x.score != 0))
-                    feedback = FeedbackType.SemiCorrect;
-
-                var childResults = new List<ICheckResult>();
-                foreach (var valueTuple in allChildFeedback)
-                {
-                    childResults.Add(new CheckResult(_description, feedback, elementToCheck.GetSuggestionNode())
-                    {
-                        ChildFeedback = valueTuple.Value.childFeedback.ToList()
-                    });
-                }
-                
-                return new CheckResult(_description, feedback, elementToCheck.GetSuggestionNode())
-                {
-                    ChildFeedback = childResults
-                };
-            }
+                return CheckAll(elementToCheck, allChildFeedback);
             else if (_type == GroupCheckType.Any)
+                return CheckAny(elementToCheck, allChildFeedback);
+            return null;
+        }
+
+        private ICheckResult CheckAny(TParent elementToCheck, Dictionary<TChild, (int score, IEnumerable<ICheckResult> childFeedback)>  allChildFeedback)
+        {
+            var highestScored = allChildFeedback.OrderByDescending(x => x.Value.score).FirstOrDefault();
+            var feedback = FeedbackType.Incorrect;
+
+            if (highestScored.Value.childFeedback.Any(x => x.GetFeedbackType() == FeedbackType.Correct))
+                feedback = FeedbackType.SemiCorrect;
+            if (highestScored.Value.childFeedback.All(x => x.GetFeedbackType() == FeedbackType.Correct))
+                feedback = FeedbackType.Correct;
+
+            return new CheckResult(_description, feedback, elementToCheck.GetSuggestionNode())
             {
-                var highestScored = allChildFeedback.OrderByDescending(x => x.Value.score).FirstOrDefault();
-                var feedback = FeedbackType.Incorrect;
+                ChildFeedback = highestScored.Value.childFeedback.ToList()
+            };
+        }
+        private ICheckResult CheckAll(TParent elementToCheck, Dictionary<TChild, (int score, IEnumerable<ICheckResult> childFeedback)> allChildFeedback)
+        {
+            var feedback = FeedbackType.Correct;
+            if (allChildFeedback.Values.All(x => x.score != 0))
+                feedback = FeedbackType.Incorrect;
+            if (allChildFeedback.Values.Any(x => x.score != 0))
+                feedback = FeedbackType.SemiCorrect;
 
-                if (highestScored.Value.childFeedback.Any(x => x.GetFeedbackType() == FeedbackType.Correct))
-                    feedback = FeedbackType.SemiCorrect;
-                if (highestScored.Value.childFeedback.All(x => x.GetFeedbackType() == FeedbackType.Correct))
-                    feedback = FeedbackType.Correct;
-
-                return new CheckResult(_description, feedback, elementToCheck.GetSuggestionNode())
+            var childResults = new List<ICheckResult>();
+            foreach (var valueTuple in allChildFeedback)
+            {
+                childResults.Add(new CheckResult(_description, feedback, elementToCheck.GetSuggestionNode())
                 {
-                    ChildFeedback = highestScored.Value.childFeedback.ToList()
-                };
+                    ChildFeedback = valueTuple.Value.childFeedback.ToList()
+                });
             }
 
-            return null;
+            return new CheckResult(_description, feedback, elementToCheck.GetSuggestionNode())
+            {
+                ChildFeedback = childResults
+            };
         }
 
         private ICheckResult CreateFalseResult()

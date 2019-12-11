@@ -5,9 +5,9 @@ using IDesign.Recognizers.Models.Output;
 namespace IDesign.Recognizers.Models.ElementChecks
 {
     /// <summary>
-    ///     A class for defining a check on a type with a predicate
+    ///     A class for defining a check on an element with a predicate
     /// </summary>
-    /// <typeparam name="T">The type witch the check is for</typeparam>
+    /// <typeparam name="T">Type of the element to be checked</typeparam>
     public class ElementCheck<T> : ICheck<T> where T : class, ICheckable
     {
         private readonly string _description;
