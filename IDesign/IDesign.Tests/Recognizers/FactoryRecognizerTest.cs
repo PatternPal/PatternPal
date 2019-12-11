@@ -30,7 +30,7 @@ namespace IDesign.Tests.Recognizers
             var entityNodes = EntityNodeUtils.CreateEntityNodeGraph(filesAsString);
             var createRelation = new DetermineRelations(entityNodes);
             createRelation.GetEdgesOfEntityNode();
-            var result = factory.Recognize(entityNodes[nameSpaceName +"." + baseClass]);
+            var result = factory.Recognize(entityNodes[nameSpaceName + "." + baseClass]);
 
             Assert.AreEqual(score, result.GetScore());
         }

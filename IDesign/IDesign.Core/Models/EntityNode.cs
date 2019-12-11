@@ -117,7 +117,6 @@ namespace IDesign.Core
                 return EntityNodeType.Interface;
             }
             return EntityNodeType.Class;
-
         }
 
         public List<UsingDirectiveSyntax> GetUsings()
@@ -125,9 +124,14 @@ namespace IDesign.Core
             return UsingDeclarationSyntaxList;
         }
 
+        public SyntaxTokenList GetModifiers()
+        {
+            return InterfaceOrClassNode.Modifiers;
+        }
+
         public string GetSuggestionName()
         {
-            return GetName();
+            return GetName() + "()";
         }
 
         public SyntaxNode GetSuggestionNode()

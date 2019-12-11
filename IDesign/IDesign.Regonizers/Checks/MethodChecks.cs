@@ -36,7 +36,7 @@ namespace IDesign.Recognizers
         /// <returns></returns>
         public static bool CheckModifier(this IMethod methodSyntax, string modifier)
         {
-            return methodSyntax.GetModifiers().Where(x => x.ToString().IsEqual(modifier)).Any();
+            return methodSyntax.GetModifiers().Any(x => x.ToString().IsEqual(modifier));
         }
 
         /// <summary>

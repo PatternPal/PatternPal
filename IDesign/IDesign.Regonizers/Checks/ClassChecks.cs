@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using IDesign.Recognizers.Abstractions;
+﻿using IDesign.Recognizers.Abstractions;
 using System.Linq;
  using IDesign.Recognizers.Models;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -18,8 +15,8 @@ namespace IDesign.Recognizers.Checks
         /// <returns>The field is the type that is given in the function</returns>
         public static bool ImplementsInterface(this IEntityNode node, string name)
         {
-            if(HasInterface(node, name))
-                {
+            if (HasInterface(node, name))
+            {
                 return true;
             }
             if (Extends(node))
@@ -65,7 +62,7 @@ namespace IDesign.Recognizers.Checks
         {
             if (Extends(node))
             {
-                if(GetExtends(node).GetName() == name)
+                if (GetExtends(node).GetName() == name)
                 {
                     return true;
                 }
@@ -116,6 +113,28 @@ namespace IDesign.Recognizers.Checks
         public static IEntityNode GetEdgeNode(this IEntityNode node, string name)
         {
             return node.GetRelations().Where(x => x.GetDestination().GetName() == name).FirstOrDefault().GetDestination();
+        }
+
+        /// <summary>
+        ///     Returns a boolean based on if the modifier is equal to the expected modifier
+        /// </summary>
+        /// <param name="entityNode"></param>
+        /// <param name="modifier"></param>
+        /// <returns></returns>
+        public static bool CheckModifier(this IEntityNode entityNode, string modifier)
+        {
+            return entityNode.GetModifiers().Any(x => x.ToString().IsEqual(modifier));
+        }
+
+        /// <summary>
+        ///     Returns a boolean based on if the TypeDeclaration of a node is equal to the expected TypeDeclaration
+        /// </summary>
+        /// <param name="entityNode"></param>
+        /// <param name="nodeType"></param>
+        /// <returns></returns>
+        public static bool CheckTypeDeclaration(this IEntityNode entityNode, EntityNodeType nodeType)
+        {
+            return entityNode.GetEntityNodeType().Equals(nodeType);
         }
     }
 }

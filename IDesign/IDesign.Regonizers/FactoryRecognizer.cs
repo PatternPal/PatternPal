@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
+﻿using System.Collections.Generic;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Output;
 using IDesign.Recognizers.Checks;
@@ -9,7 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace IDesign.Recognizers
 {
-    public class FactoryRecognizer : Recognizer, IRecognizer 
+    public class FactoryRecognizer : Recognizer, IRecognizer
     {
         public IResult Recognize(IEntityNode entityNode)
         {

@@ -21,7 +21,6 @@ namespace IDesign.Recognizers.Output
         public override string ToString()
         {
             var res = "";
-
             res += Score;
 
             foreach (var suggestie in Suggestions)

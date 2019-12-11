@@ -22,7 +22,6 @@ namespace IDesign.Recognizers
             IEnumerable<ElementCheck<T>> checks) where T : ICheckable
         {
             var suggestionList = new List<ISuggestion>();
-
             var scores = new Dictionary<T, (int score, IList<string> suggestions)>();
 
             //Give scores to elements
@@ -38,7 +37,6 @@ namespace IDesign.Recognizers
 
                      suggestions.Add(check.GetSuggestionMessage());
                 }
-
                 scores.Add(element, (score, suggestions));
             }
 

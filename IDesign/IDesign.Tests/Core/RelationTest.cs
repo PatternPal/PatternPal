@@ -1,11 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using IDesign.Core;
 using IDesign.Recognizers;
-using IDesign.Recognizers.Checks;
 using IDesign.Tests.Utils;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 
 namespace IDesign.Tests.Core
@@ -21,7 +17,7 @@ namespace IDesign.Tests.Core
         [TestCase("RelationTestCase6.cs", "RelationTestCase6", "IRelationTestCase6", false)]
         public void BaseClass_Should_Implement_RelatedInterface(string filename, string baseClass, string relatedClass, bool shouldBeValid)
         {
-            
+
             string code = FileUtils.FileToString("Relation\\" + filename);
             var entityNodes = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
             var NameSpaceNode = "IDesign.Tests.TestClasses.Relation";
