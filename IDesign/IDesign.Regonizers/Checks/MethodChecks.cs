@@ -102,7 +102,6 @@ namespace IDesign.Recognizers
         /// <returns>The method has the same parameters as the given string</returns>
         public static bool CheckMethodParameters(this IMethod methodSyntax, string parameters)
         {
-            var result = methodSyntax.GetParameter().ToString().Equals(parameters);
             return methodSyntax.GetParameter().ToString().Equals(parameters);
         }
 
