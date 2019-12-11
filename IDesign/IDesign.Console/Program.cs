@@ -1,9 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using IDesign.Core;
 using IDesign.Core.Models;
+using IDesign.Recognizers.Abstractions;
 using NDesk.Options;
 
 namespace IDesign.ConsoleApp
@@ -25,8 +26,8 @@ namespace IDesign.ConsoleApp
 
             if (args.Length <= 0)
             {
-                System.Console.WriteLine("No arguments or files specified please confront --help");
-                System.Console.ReadKey();
+                Console.WriteLine("No arguments or files specified please confront --help");
+                Console.ReadKey();
                 return;
             }
 
@@ -44,7 +45,7 @@ namespace IDesign.ConsoleApp
             if (showHelp)
             {
                 ShowHelp(options);
-                System.Console.ReadKey();
+                Console.ReadKey();
                 return;
             }
 
@@ -56,28 +57,31 @@ namespace IDesign.ConsoleApp
 
             if (selectedFiles.Count == 0)
             {
-                System.Console.WriteLine("No files specified!");
-                System.Console.ReadKey();
+                Console.WriteLine("No files specified!");
+                Console.ReadKey();
                 return;
             }
 
             //When no specific pattern is chosen, select all
             if (selectedPatterns.Count == 0) selectedPatterns = designPatternsList;
 
-            System.Console.WriteLine("Selected files:");
+            Console.WriteLine("Selected files:");
 
-            foreach (var file in selectedFiles) System.Console.WriteLine(file);
+            foreach (var file in selectedFiles) Console.WriteLine(" - " + file);
 
-            System.Console.WriteLine("\nSelected patterns:");
+            Console.WriteLine("\nSelected patterns:");
 
-            foreach (var pattern in selectedPatterns) System.Console.WriteLine(pattern.Name);
+            foreach (var pattern in selectedPatterns) Console.WriteLine(" - " + pattern.Name);
+
+            recognizerRunner.OnProgressUpdate += (sender, progress) =>
+                DrawTextProgressBar(progress.Status, progress.CurrentPercentage, 100);
 
             recognizerRunner.CreateGraph(selectedFiles);
             var results = recognizerRunner.Run(selectedPatterns);
 
             PrintResults(results);
 
-            System.Console.ReadKey();
+            Console.ReadKey();
         }
 
         /// <summary>
@@ -86,9 +90,9 @@ namespace IDesign.ConsoleApp
         /// <param name="options">All commandline options</param>
         private static void ShowHelp(OptionSet options)
         {
-            System.Console.WriteLine("Usage: idesign [INPUT] [OPTIONS]");
-            System.Console.WriteLine("Options:");
-            options.WriteOptionDescriptions(System.Console.Out);
+            Console.WriteLine("Usage: idesign [INPUT] [OPTIONS]");
+            Console.WriteLine("Options:");
+            options.WriteOptionDescriptions(Console.Out);
         }
 
         /// <summary>
@@ -97,21 +101,46 @@ namespace IDesign.ConsoleApp
         /// <param name="results">A List of RecognitionResult</param>
         private static void PrintResults(List<RecognitionResult> results)
         {
-            System.Console.WriteLine("\nResults:");
+            Console.WriteLine("\nResults:");
 
             for (var i = 0; i < results.Count; i++)
             {
-                System.Console.Write($"{i}) {results[i].EntityNode.GetName()} | {results[i].Pattern.Name}: ");
+                Console.Write($"{i}) {results[i].EntityNode.GetName()} | {results[i].Pattern.Name}: ");
 
                 PrintScore(results[i].Result.GetScore());
 
-                System.Console.ForegroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.Red;
 
-                foreach (var suggestion in results[i].Result.GetResults())
-                    System.Console.WriteLine($"\t- {suggestion.GetMessage()}");
+                foreach (var result in results[i].Result.GetResults())
+                    PrintResult(result, 1);
 
-                System.Console.ForegroundColor = ConsoleColor.White;
+                Console.ForegroundColor = ConsoleColor.White;
             }
+        }
+
+        public static void PrintResult(ICheckResult result, int depth)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            var symbol = "X";
+
+            if (result.GetFeedbackType() == FeedbackType.SemiCorrect)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                symbol = "-";
+            }
+
+            if (result.GetFeedbackType() == FeedbackType.Correct)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                symbol = "✓";
+            }
+
+            Console.WriteLine(new string('\t', depth) + symbol + $" {result.GetMessage()}");
+
+            foreach (var child in result.GetChildFeedback())
+            {
+                PrintResult(child, depth + 1);
+            } 
         }
 
         /// <summary>
@@ -121,15 +150,44 @@ namespace IDesign.ConsoleApp
         private static void PrintScore(int score)
         {
             if (score <= 33)
-                System.Console.ForegroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.Red;
             else if (score <= 66)
-                System.Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.ForegroundColor = ConsoleColor.Yellow;
             else
-                System.Console.ForegroundColor = ConsoleColor.Green;
+                Console.ForegroundColor = ConsoleColor.Green;
 
-            System.Console.WriteLine(score);
+            Console.WriteLine(score);
 
-            System.Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+        public static void DrawTextProgressBar(string stepDescription, int progress, int total)
+        {
+            int totalChunks = 30;
+
+            //draw empty progress bar
+            Console.CursorLeft = 0;
+            Console.Write("["); //start
+            Console.CursorLeft = totalChunks + 1;
+            Console.Write("]"); //end
+            Console.CursorLeft = 1;
+
+            double pctComplete = Convert.ToDouble(progress) / total;
+            int numChunksComplete = Convert.ToInt16(totalChunks * pctComplete);
+
+            //draw completed chunks
+            Console.BackgroundColor = ConsoleColor.Green;
+            Console.Write("".PadRight(numChunksComplete));
+
+            //draw incomplete chunks
+            Console.BackgroundColor = ConsoleColor.Gray;
+            Console.Write("".PadRight(totalChunks - numChunksComplete));
+
+            //draw totals
+            Console.CursorLeft = totalChunks + 5;
+            Console.BackgroundColor = ConsoleColor.Black;
+
+            string output = progress.ToString() + " of " + total.ToString();
+            Console.Write(output.PadRight(15) + stepDescription); //pad the output so when changing from 3 to 4 digits we avoid text shifting
         }
     }
 }

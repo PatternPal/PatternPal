@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using IDesign.Core.Models;
 using IDesign.Recognizers;
 using Microsoft.CodeAnalysis;
@@ -31,7 +32,8 @@ namespace IDesign.Core
                 var tree = FileManager.MakeStringFromFile(files[i]);
                 var generateSyntaxTree = new SyntaxTreeGenerator(tree, files[i], EntityNodes);
                 syntaxTreeSources.Add(generateSyntaxTree.Tree, files[i]);
-                ProgressUpdate((int) (i / (float) files.Count * 50f), "Reading file: " + files[i]);
+
+                ProgressUpdate((int) (i / (float) files.Count * 50f), "Reading file: " + Path.GetFileName(files[i]));
             }
 
             //Make relations
