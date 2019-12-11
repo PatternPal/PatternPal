@@ -28,7 +28,6 @@ namespace IDesign.Tests.Checks
             createRelation.GetEdgesOfEntityNode();
             var checkResult = nodes[nameSpaceName + "." + className].ImplementsInterface(interfaceName);
 
-
             Assert.AreEqual(shouldBeValid, checkResult);
         }
 
@@ -47,7 +46,6 @@ namespace IDesign.Tests.Checks
             createRelation.GetEdgesOfEntityNode();
             var checkResult = nodes[nameSpaceName + "." + className].ExtendsClass(eClassName);
 
-
             Assert.AreEqual(shouldBeValid, checkResult);
         }
 
@@ -65,7 +63,6 @@ namespace IDesign.Tests.Checks
             var createRelation = new DetermineRelations(nodes);
             createRelation.GetEdgesOfEntityNode();
             var checkResult = nodes[nameSpaceName + "." + className].HasInterface(interfaceName);
-
 
             Assert.AreEqual(shouldBeValid, checkResult);
         }

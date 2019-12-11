@@ -4,27 +4,27 @@ using System.Text;
 
 namespace IDesign.Tests.TestClasses.Factory
 {
-	public interface Product { }
+    public interface Product { }
 
-	public abstract class Creator
-	{
-		public void anOperation()
-		{
-			Product product = factoryMethod();
-		}
+    public abstract class Creator
+    {
+        public void anOperation()
+        {
+            Product product = factoryMethod();
+        }
 
-		protected abstract Product factoryMethod();
-	}
+        protected abstract Product factoryMethod();
+    }
 
-	public class ConcreteProduct : Product { }
+    public class ConcreteProduct : Product { }
 
-	public class FactoryTestCase6 : Creator
-	{
+    public class FactoryTestCase6 : Creator
+    {
 
 
-		protected override Product factoryMethod()
-		{
-			return new ConcreteProduct();
-		}
-	}
+        protected override Product factoryMethod()
+        {
+            return new ConcreteProduct();
+        }
+    }
 }

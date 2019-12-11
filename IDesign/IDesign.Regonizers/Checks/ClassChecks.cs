@@ -38,6 +38,7 @@ namespace IDesign.Recognizers.Checks
         public static bool ClassImlementsInterface(this IEntityNode node, IMethod method)
         {
             var implements = false;
+
             foreach(var interFace in node.GetRelations().Where(x => x.GetRelationType() == RelationType.Implements))
             {
                 if(InterfaceImplementsMethod(interFace.GetDestination(), method))
