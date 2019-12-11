@@ -83,23 +83,36 @@ namespace IDesign.Recognizers
             return result;
         }
 
+        /// <summary>
+        /// Return a boolean based on if the method has the same name as the given string
+        /// </summary>
+        /// <param name="methodSyntax">The given method which should have the name</param>
+        /// <param name="name">The name the method should have</param>
+        /// <returns></returns>
         public static bool CheckMethodIdentifier(this IMethod methodSyntax, string name)
         {
             return (methodSyntax.GetName().Equals(name) && methodSyntax.GetType() == typeof(Method));
         }
 
-        public static bool CheckMethodModifiers(this IMethod methodSyntax, SyntaxTokenList modifiers)
-        {
-            return methodSyntax.GetModifiers() == modifiers;
-        }
-
+        /// <summary>
+        /// Return a boolean based on if the Method parameters are the same as the given string
+        /// </summary>
+        /// <param name="methodSyntax">The method it should check the parameters from</param>
+        /// <param name="parameters">The given parameters it should have</param>
+        /// <returns>The method has the same parameters as the given string</returns>
         public static bool CheckMethodParameters(this IMethod methodSyntax, string parameters)
         {
             var result = methodSyntax.GetParameter().ToString().Equals(parameters);
             return methodSyntax.GetParameter().ToString().Equals(parameters);
         }
 
-        public static bool MethodComparing(this IMethod methodSyntax , IMethod compareMethod)
+        /// <summary>
+        /// Return a boolean based on if the given method is the same type as the other method
+        /// </summary>
+        /// <param name="methodSyntax">The method it should check</param>
+        /// <param name="compareMethod">The given method it should compare to</param>
+        /// <returns>The methods are the same type</returns>
+        public static bool Equals(this IMethod methodSyntax , IMethod compareMethod)
         {
             return (methodSyntax.CheckMethodIdentifier(compareMethod.GetName())
                 && methodSyntax.CheckMethodParameters(compareMethod.GetParameter().ToString())

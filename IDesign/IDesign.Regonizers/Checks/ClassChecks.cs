@@ -32,7 +32,12 @@ namespace IDesign.Recognizers.Checks
             }
         }
 
-        
+        /// <summary>
+        /// Return a boolean based on if the given method is implemented in a interface of the given node
+        /// </summary>
+        /// <param name="node">The node which should have the interface which contains the method</param>
+        /// <param name="method">The method which it should check</param>
+        /// <returns>The method is from an interface of the given node</returns>
         public static bool ClassImlementsInterface(this IEntityNode node, IMethod method)
         {
             var implements = false;
@@ -47,7 +52,7 @@ namespace IDesign.Recognizers.Checks
         }
         public static bool InterfaceImplementsMethod(this IEntityNode node, IMethod method)
         {
-            return node.GetMethods().Any(x => x.MethodComparing(method));
+            return node.GetMethods().Any(x => x.Equals(method));
         }
 
         /// <summary>
