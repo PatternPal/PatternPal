@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace IDesign.Recognizers
 {
@@ -14,7 +15,6 @@ namespace IDesign.Recognizers
         {
             return fieldSyntax.GetFieldType().ToString().IsEqual(type);
         }
-
 
         /// <summary>
         ///     Return a boolean based on if the given field has an expected modifier.

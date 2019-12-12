@@ -117,6 +117,18 @@
     <Compile Update="Checks\MethodChecks.cs">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Compile>
+    <Compile Update="TestClasses\EntityNodeChecks\Class1.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\EntityNodeChecks\Class2.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\EntityNodeChecks\Class3.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\EntityNodeChecks\Class4.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Update="TestClasses\Singleton\SingleTonTestCase1.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>

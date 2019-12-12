@@ -1,5 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace IDesign.Recognizers
 {
@@ -10,6 +12,10 @@ namespace IDesign.Recognizers
             Constructor = constructor;
         }
 
+        public IEnumerable<string> GetParameterTypes()
+        {
+            return Constructor.ParameterList.Parameters.Select(x => (x.Type is TypeSyntax id ? id.ToString() : "")).ToList();
+        }
 
         public ConstructorDeclarationSyntax Constructor { get; set; }
 

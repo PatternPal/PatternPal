@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Collections.Generic;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace IDesign.Recognizers
@@ -27,6 +28,11 @@ namespace IDesign.Recognizers
         public string GetName()
         {
             return Property.Identifier.ToString();
+        }
+
+        public IEnumerable<string> GetParameterTypes()
+        {
+            return new List<string>();
         }
 
         public string GetReturnType()

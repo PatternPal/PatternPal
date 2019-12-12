@@ -81,5 +81,25 @@ namespace IDesign.Recognizers
             }
             return result;
         }
+
+        /// <summary>
+        /// Check if the return type
+        /// </summary>
+        /// <param name="method1"></param>
+        /// <param name="method2"></param>
+        /// <returns></returns>
+        public static bool CompareMethodSameSignature(this IMethod method1, IMethod method2)
+        {
+            return true;
+        }
+
+        /// </summary>
+        /// <param name="methodSyntax">The methodsyntax witch it should check</param>
+        /// <param name="parameters">The expected parameters</param>
+        /// <returns></returns>
+        public static bool CheckParameters(this IMethod methodSyntax, IEnumerable<string> parameters)
+        {
+            return parameters.Any(x => methodSyntax.GetParameterTypes().Any(y => x.Equals(y)));
+        }
     }
 }
