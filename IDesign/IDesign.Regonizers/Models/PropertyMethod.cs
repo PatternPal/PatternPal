@@ -30,6 +30,11 @@ namespace IDesign.Recognizers.Models
             return Property.Identifier.ToString();
         }
 
+        public ParameterListSyntax GetParameter()
+        {
+            return null;
+        }
+
         public string GetReturnType()
         {
             return Property.Type.ToString();

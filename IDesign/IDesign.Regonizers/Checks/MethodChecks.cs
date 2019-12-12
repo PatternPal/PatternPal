@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using IDesign.Recognizers.Abstractions;
+using IDesign.Recognizers.Models;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace IDesign.Recognizers.Checks
@@ -69,6 +70,17 @@ namespace IDesign.Recognizers.Checks
             return methodSyntax.CheckCreationType(methodSyntax.GetReturnType());
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name=""></param>
+        /// <param name="currentClass"></param>
+        /// <returns></returns>
+        public static bool IsInterfaceMethod(this IMethod methodSyntax, IEntityNode currentClass)
+        {
+            return currentClass.ClassImlementsInterfaceMethod(methodSyntax);
+        }
+
         //helper functions
         /// <summary>
         ///     Return al list of all  types that this function makes as strings.
@@ -86,6 +98,41 @@ namespace IDesign.Recognizers.Checks
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Return a boolean based on if the method has the same name as the given string
+        /// </summary>
+        /// <param name="methodSyntax">The given method which should have the name</param>
+        /// <param name="name">The name the method should have</param>
+        /// <returns></returns>
+        public static bool CheckMethodIdentifier(this IMethod methodSyntax, string name)
+        {
+            return (methodSyntax.GetName().Equals(name) && methodSyntax.GetType() == typeof(Method));
+        }
+
+        /// <summary>
+        /// Return a boolean based on if the Method parameters are the same as the given string
+        /// </summary>
+        /// <param name="methodSyntax">The method it should check the parameters from</param>
+        /// <param name="parameters">The given parameters types it should have</param>
+        /// <returns>The method has the same parameters as the given string</returns>
+        public static bool CheckMethodParameterTypes(this IMethod methodSyntax, string parameters)
+        {
+            return methodSyntax.GetParameter().ToString().Equals(parameters);
+        }
+
+        /// <summary>
+        /// Return a boolean based on if the given method is the same type as the other method
+        /// </summary>
+        /// <param name="methodSyntax">The method it should check</param>
+        /// <param name="compareMethod">The given method it should compare to</param>
+        /// <returns>The methods are the same type</returns>
+        public static bool IsEquals(this IMethod methodSyntax , IMethod compareMethod)
+        {
+            return (methodSyntax.CheckMethodIdentifier(compareMethod.GetName())
+                && methodSyntax.CheckMethodParameterTypes(compareMethod.GetParameter().ToString())
+                && methodSyntax.CheckReturnType(compareMethod.GetReturnType()));
         }
     }
 }

@@ -28,6 +28,11 @@ namespace IDesign.Recognizers.Models
             return Constructor.Identifier.ToString();
         }
 
+        public ParameterListSyntax GetParameter()
+        {
+            return Constructor.ParameterList;
+        }
+
         public string GetReturnType()
         {
             return "void";
