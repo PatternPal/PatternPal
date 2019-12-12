@@ -1,4 +1,5 @@
 ﻿using IDesign.Core;
+using IDesign.Core.Models;
 using IDesign.Recognizers;
 using IDesign.Tests.Utils;
 using Microsoft.CodeAnalysis.CSharp;
@@ -14,14 +15,15 @@ namespace IDesign.Tests.Recognizers
         [Test]
         [TestCase("DecoratorTestCase1", 100)]
         [TestCase("DecoratorTestCase2", 0)]
-        [TestCase("DecoratorTestCase3", 13)]
+        [TestCase("DecoratorTestCase3", 18)]
         public void DecoratorRecognizer_Returns_Correct_Score(string directoryPath, int score)
         {
             FileManager manager = new FileManager();
             List<string> paths = manager.GetAllCsFilesFromDirectory("../../../TestClasses/Decorator/" + directoryPath);
 
             RecognizerRunner runner = new RecognizerRunner();
-            List<RecognitionResult> result = runner.Run(paths, new List<DesignPattern>() { new DesignPattern("Decorator", new DecoratorRecognizer()) });
+            runner.CreateGraph(paths);
+            List<RecognitionResult> result = runner.Run(new List<DesignPattern>() { new DesignPattern("Decorator", new DecoratorRecognizer()) });
 
             result = result.OrderBy(x => x.Result.GetScore()).ToList();
 

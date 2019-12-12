@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using IDesign.Core;
+﻿using IDesign.Core;
 using IDesign.Recognizers;
 using IDesign.Tests.Utils;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 
 namespace IDesign.Tests.Recognizers
@@ -14,11 +8,14 @@ namespace IDesign.Tests.Recognizers
     public class FactoryRecognizerTest
     {
         [Test]
-        [TestCase("FactoryTestCase1", 50)]
-        [TestCase("FactoryTestCase2", 100)]
-        [TestCase("FactoryTestCase3", 50)]
-        [TestCase("FactoryTestCase4", 50)]
-        [TestCase("FactoryTestCase5", 50)]
+        [TestCase("FactoryTestCase1", 66)]
+        [TestCase("FactoryTestCase2", 33)]
+        [TestCase("FactoryTestCase3", 33)]
+        [TestCase("FactoryTestCase4", 66)]
+        [TestCase("FactoryTestCase5", 100)]
+        [TestCase("FactoryTestCase6", 33)]
+        [TestCase("FactoryTestCase7", 100)]
+        [TestCase("FactoryTestCase8", 66)]
         public void FactoryRecognizer_Returns_Correct_Score(string baseClass, int score)
         {
             var factory = new FactoryRecognizer();

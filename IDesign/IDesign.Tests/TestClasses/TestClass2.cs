@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses
+﻿namespace IDesign.Tests.TestClasses
 {
-    internal class TestClass2 
+    internal class TestClass2
     {
         //Should be a field
-        private int _privateField;
 
         //Should be a constructor
         public TestClass2(int g)
@@ -25,11 +20,8 @@ namespace IDesign.Tests.TestClasses
         public string naam { get; set; }
 
         //Should be a method and field
-        public int PublicProperty
-        {
-            get => _privateField;
-            set => _privateField = value;
-        }
+        public int PublicProperty { get; set; }
+
         //Should be method
         public int Count(int g)
         {

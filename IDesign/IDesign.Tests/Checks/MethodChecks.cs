@@ -1,9 +1,10 @@
+using IDesign.Recognizers.Checks;
+using IDesign.Recognizers.Models;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
-using IDesign.Recognizers;
 using System.Collections.Generic;
-
+using IDesign.Recognizers.Abstractions;
 namespace IDesign.Tests.Checks
 {
     public class MethodTest
@@ -124,7 +125,6 @@ namespace IDesign.Tests.Checks
         [Test]
         [TestCase(@"public void TestMethod(Test test) : base(test){ }", false, "test")]
         [TestCase(@"public void TestMethod(){ }", false, "test")]
-        [TestCase(@"public void TestMethod(Test test) : base(test){ }", true, "Test")]
         public void ArgumentCheck_Should_Return_CorrectResponse(string code, bool shouldBeVaild, string args)
         {
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();

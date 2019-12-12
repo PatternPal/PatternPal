@@ -1,9 +1,10 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using IDesign.Recognizers.Abstractions;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace IDesign.Recognizers
+namespace IDesign.Recognizers.Models
 {
     public class Method : IMethod
     {
@@ -32,6 +33,11 @@ namespace IDesign.Recognizers
         public string GetReturnType()
         {
             return MethodDeclaration.ReturnType.ToString();
+        }
+
+        public ParameterListSyntax GetParameter()
+        {
+            return MethodDeclaration.ParameterList;
         }
 
         public string GetSuggestionName()

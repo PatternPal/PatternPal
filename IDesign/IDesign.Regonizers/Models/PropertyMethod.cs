@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+﻿using IDesign.Recognizers.Abstractions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace IDesign.Recognizers
+namespace IDesign.Recognizers.Models
 {
     public class PropertyMethod : IMethod
     {
@@ -38,6 +39,11 @@ namespace IDesign.Recognizers
         public IEnumerable<string> GetParameterTypes()
         {
             return new List<string>();
+        }
+
+        public ParameterListSyntax GetParameter()
+        {
+            return null;
         }
 
         public string GetReturnType()

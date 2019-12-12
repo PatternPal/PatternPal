@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using IDesign.Recognizers.Abstractions;
 
-namespace IDesign.Recognizers
+namespace IDesign.Recognizers.Checks
 {
     public static class FieldChecks
     {

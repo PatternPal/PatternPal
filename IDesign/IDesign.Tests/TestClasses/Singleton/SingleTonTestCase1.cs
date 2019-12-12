@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses.Singleton
+﻿namespace IDesign.Tests.TestClasses.Singleton
 {
     public class SingleTonTestCase1
     {
-        private static SingleTonTestCase1 instance = null;
+        private static SingleTonTestCase1 instance;
 
-        private SingleTonTestCase1() { }
+        private SingleTonTestCase1()
+        {
+        }
 
         public static SingleTonTestCase1 Instance
         {
             get
             {
-                if (instance == null)
-                {
-                    instance = new SingleTonTestCase1();
-                }
+                if (instance == null) instance = new SingleTonTestCase1();
                 return instance;
             }
         }

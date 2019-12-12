@@ -1,9 +1,10 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using IDesign.Recognizers.Abstractions;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace IDesign.Recognizers
+namespace IDesign.Recognizers.Models
 {
     public class Constructormethod : IMethod
     {
@@ -27,6 +28,11 @@ namespace IDesign.Recognizers
         public string GetName()
         {
             return Constructor.Identifier.ToString();
+        }
+
+        public ParameterListSyntax GetParameter()
+        {
+            return Constructor.ParameterList;
         }
 
         public string GetReturnType()
