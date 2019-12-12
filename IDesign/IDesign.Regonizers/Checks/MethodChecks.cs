@@ -133,8 +133,6 @@ namespace IDesign.Recognizers.Checks
             if (parameters.Count() < 1)
                 return false;
 
-            var test1 = methodSyntax.GetArguments();
-
             return methodSyntax.GetArguments().Any(x => x.Equals(parameters.First().Identifier.ToString()));
         }
 
