@@ -53,6 +53,8 @@
   <ItemGroup>
     <Compile Include="LeftMarginMultiplierConverter.cs" />
     <Compile Include="TreeViewItemExtensions.cs" />
+    <Compile Include="ViewModels\CheckResultViewModel.cs" />
+    <Compile Include="ViewModels\ClassViewModel.cs" />
     <Compile Include="ViewModels\DesignPatternViewModel.cs" />
     <Compile Include="ExtensionWindow.cs" />
     <Compile Include="ExtensionWindowCommand.cs" />

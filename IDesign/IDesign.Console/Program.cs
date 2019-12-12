@@ -118,6 +118,11 @@ namespace IDesign.ConsoleApp
             }
         }
 
+        /// <summary>
+        ///     Print the given result in the console
+        /// </summary>
+        /// <param name="result">Result to print</param>
+        /// <param name="depth">Depth of the result</param>
         public static void PrintResult(ICheckResult result, int depth)
         {
             Console.ForegroundColor = ConsoleColor.Red;
@@ -160,6 +165,13 @@ namespace IDesign.ConsoleApp
 
             Console.ForegroundColor = ConsoleColor.White;
         }
+
+        /// <summary>
+        ///     Draw a progress bar
+        /// </summary>
+        /// <param name="stepDescription">Current status</param>
+        /// <param name="progress">Progress</param>
+        /// <param name="total">Total</param>
         public static void DrawTextProgressBar(string stepDescription, int progress, int total)
         {
             int totalChunks = 30;
