@@ -4,27 +4,58 @@ using IDesign.Recognizers.Models;
 
 namespace IDesign.Recognizers.Checks
 {
-    public static class ClassChecks
+    public static class EntitynodeChecks
     {
         /// <summary>
-        ///     Return a boolean based on if the interface .
+        ///     Return a boolean based on if node implements an interface with the given name.
         /// </summary>
         /// <param name="node">The node witch it should check</param>
-        /// <param name="name">The expected type</param>
+        /// <param name="name">The expected name of the interface</param>
         /// <returns>The field is the type that is given in the function</returns>
         public static bool ImplementsInterface(this IEntityNode node, string name)
         {
-            if (HasInterface(node, name)) return true;
+            if (ClassImlementsInterface(node, name))    return true;
+
             if (Extends(node))
                 return ImplementsInterface(GetExtends(node), name);
             return false;
         }
 
         /// <summary>
-        ///     Return a boolean based on if the given field is an expected type.
+        /// Return a boolean based on if the given method is implemented in a interface of the given node
         /// </summary>
-        /// <param name="node">The field witch it should check</param>
-        /// <param name="name">The expected type</param>
+        /// <param name="node">The node which should have the interface which contains the method</param>
+        /// <param name="method">The method which it should check</param>
+        /// <returns>The method is from an interface of the given node</returns>
+        public static bool ClassImlementsInterfaceMethod(this IEntityNode node, IMethod method)
+        {
+            var implements = false;
+
+            foreach(var interFace in node.GetRelations().Where(x => x.GetRelationType() == RelationType.Implements))
+            {
+                if(InterfaceImplementsMethod(interFace.GetDestination(), method))
+                {
+                    implements = true;
+                }
+            }
+            return implements;
+        }
+        /// <summary>
+        /// Return a boolean based on if the given node has a method with that name
+        /// </summary>
+        /// <param name="node">The given node</param>
+        /// <param name="method">The method that the node should have</param>
+        /// <returns>The given node has the given method</returns>
+        public static bool InterfaceImplementsMethod(this IEntityNode node, IMethod method)
+        {
+            return node.GetMethods().Any(x => x.IsEquals(method));
+        }
+
+        /// <summary>
+        ///     Return a boolean based on if the given node extends the node with the name
+        /// </summary>
+        /// <param name="node">The node it should check</param>
+        /// <param name="name">The expected name of the node it should extend</param>
         /// <returns>The field is the type that is given in the function</returns>
         public static bool ExtendsClass(this IEntityNode node, string name)
         {
@@ -39,15 +70,15 @@ namespace IDesign.Recognizers.Checks
 
         //helper functions
         /// <summary>
-        ///     Return a boolean based on if the given field is an expected type.
+        ///     Return a boolean based on if the given node directly implements the interface name given.
         /// </summary>
         /// <param name="node">The node witch it should check</param>
         /// <param name="name">The expected name of the interface</param>
         /// <returns>The node has the interface with that name</returns>
-        public static bool HasInterface(this IEntityNode node, string name)
+        public static bool ClassImlementsInterface(this IEntityNode node, string name)
         {
             return node.GetRelations()
-                .Any(x => x.GetRelationType() == RelationType.ImplementedBy && x.GetDestination().GetName() == name);
+                .Any(x => x.GetRelationType() == RelationType.Implements && x.GetDestination().GetName() == name);
         }
 
         /// <summary>

@@ -10,5 +10,6 @@ namespace IDesign.Recognizers.Abstractions
         string GetReturnType();
         BlockSyntax GetBody();
         SyntaxTokenList GetModifiers();
+        ParameterListSyntax GetParameter();
     }
 }

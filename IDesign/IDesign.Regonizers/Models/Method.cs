@@ -33,6 +33,11 @@ namespace IDesign.Recognizers.Models
             return MethodDeclaration.ReturnType.ToString();
         }
 
+        public ParameterListSyntax GetParameter()
+        {
+            return MethodDeclaration.ParameterList;
+        }
+
         public string GetSuggestionName()
         {
             return GetName() + "()";
