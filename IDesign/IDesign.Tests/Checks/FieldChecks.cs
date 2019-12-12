@@ -1,4 +1,5 @@
-﻿using IDesign.Recognizers;
+﻿using IDesign.Recognizers.Checks;
+using IDesign.Recognizers.Models;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
@@ -16,7 +17,7 @@ namespace IDesign.Tests.Checks
         [TestCase("private", @"static Class[] TestProperty", false)]
         [TestCase("public", @"private var TestProperty", false)]
         [TestCase("static", @"public bool TestProperty", false)]
-        public void ModifierCheck_Should_Return_CorrectResponse(string modifier, string code, bool shouldBeValid)
+        public void CheckModifier_Should_Return_CorrectResponse(string modifier, string code, bool shouldBeValid)
         {
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
             var field = root.Members[0] as FieldDeclarationSyntax;

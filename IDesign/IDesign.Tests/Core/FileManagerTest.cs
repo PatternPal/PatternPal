@@ -6,8 +6,8 @@ namespace IDesign.Tests.Core
 {
     internal class FileManagerTest
     {
-        public string path = "../../../Core/TestClasses";
         private readonly FileManager readFiles = new FileManager();
+        public string path = "../../../Core/TestClasses";
 
         [Test]
         public void TestIfFilesListContainsRightFiles()

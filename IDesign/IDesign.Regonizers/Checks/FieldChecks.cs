@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using IDesign.Recognizers.Abstractions;
 
-namespace IDesign.Recognizers
+namespace IDesign.Recognizers.Checks
 {
     public static class FieldChecks
     {
@@ -16,7 +17,6 @@ namespace IDesign.Recognizers
             return types.Any(x => x.Equals(fieldSyntax.GetFieldType().ToString()));
         }
 
-
         /// <summary>
         ///     Return a boolean based on if the given field has an expected modifier.
         /// </summary>
@@ -25,7 +25,7 @@ namespace IDesign.Recognizers
         /// <returns>The field has the modifier that is given in the function</returns>
         public static bool CheckMemberModifier(this IField field, string modifier)
         {
-            return field.GetModifiers().Where(x => x.ToString().IsEqual(modifier)).Any();
+            return field.GetModifiers().Any(x => x.ToString().IsEqual(modifier));
         }
     }
 }

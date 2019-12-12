@@ -1,8 +1,9 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using IDesign.Recognizers.Models;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
 
-namespace IDesign.Recognizers
+namespace IDesign.Recognizers.Abstractions
 {
     public interface IMethod : ICheckable
     {
@@ -13,5 +14,6 @@ namespace IDesign.Recognizers
         IEnumerable<string> GetParameterTypes();
         IEnumerable<ParameterSyntax> GetParameters();
         SyntaxTokenList GetModifiers();
+        ParameterListSyntax GetParameter();
     }
 }

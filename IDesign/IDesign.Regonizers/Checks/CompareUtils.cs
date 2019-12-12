@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace IDesign.Recognizers
+namespace IDesign.Recognizers.Checks
 {
     public static class CompareUtils
     {
         /// <summary>
-        ///     Function that if two strings are equal.
+        ///     Function that checks if two strings are equal.
         ///     Not case sensitive.
         /// </summary>
         /// <param name="s1"></param>

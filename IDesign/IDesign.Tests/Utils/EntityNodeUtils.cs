@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using IDesign.Core;
+using IDesign.Core.Models;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -9,9 +8,8 @@ namespace IDesign.Tests.Utils
 {
     public static class EntityNodeUtils
     {
-
         /// <summary>
-        /// Return an entitynode based on a TypeDeclarationSyntax.
+        ///     Return an entitynode based on a TypeDeclarationSyntax.
         /// </summary>
         /// <param name="testNode">TypeDeclarationSyntax that needs to be converted</param>
         /// <returns>The node from the given TypeDeclarationsSyntax</returns>
@@ -19,10 +17,7 @@ namespace IDesign.Tests.Utils
         {
             var nameSpaceKey = "";
             var nameSpace = testNode.Parent as NamespaceDeclarationSyntax;
-            if (nameSpace != null)
-            {
-                nameSpaceKey += nameSpace.Name.ToString();
-            }
+            if (nameSpace != null) nameSpaceKey += nameSpace.Name.ToString();
             var entityNode = new EntityNode
             {
                 Name = testNode.Identifier.ToString(),
@@ -41,7 +36,7 @@ namespace IDesign.Tests.Utils
         }
 
         /// <summary>
-        /// Makes a dictionary of entityNodes based on filecontents
+        ///     Makes a dictionary of entityNodes based on filecontents
         /// </summary>
         /// <param name="code">contents of the file that needs to be converted</param>
         /// <returns>Dictionary of one file</returns>
@@ -55,14 +50,14 @@ namespace IDesign.Tests.Utils
                 var nameSpaceIdentifier = nameSpace.Name.ToString();
                 var nodes = nameSpace.DescendantNodes().OfType<TypeDeclarationSyntax>();
                 foreach (var node in nodes)
-                {
-                    graph.Add(nameSpaceIdentifier + "." + node.Identifier.ToString(), CreateTestEntityNode(node));
-                }
+                    graph.Add(nameSpaceIdentifier + "." + node.Identifier, CreateTestEntityNode(node));
             }
+
             return graph;
         }
+
         /// <summary>
-        /// 
+        /// Makes a dictionary of entityNodes based on foldercontents
         /// </summary>
         /// <param name="projectCode">contents of the folder/project that needs to be converted</param>
         /// <returns>Dictionary of the whole folder/project</returns>
@@ -72,8 +67,9 @@ namespace IDesign.Tests.Utils
             foreach (var fileCode in projectCode)
             {
                 var partialGraph = CreateEntityNodeGraphFromOneFile(fileCode);
-               graph = graph.Union(partialGraph).ToDictionary(k => k.Key, v => v.Value);
+                graph = graph.Union(partialGraph).ToDictionary(k => k.Key, v => v.Value);
             }
+
             return graph;
         }
     }

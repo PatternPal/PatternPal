@@ -1,11 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using IDesign.Core;
-using IDesign.Recognizers;
-using IDesign.Recognizers.Checks;
+using IDesign.Recognizers.Models;
 using IDesign.Tests.Utils;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 
 namespace IDesign.Tests.Core
@@ -19,16 +15,17 @@ namespace IDesign.Tests.Core
         [TestCase("RelationTestCase4.cs", "RelationTestCase4", "IRelationTestCase4", false)]
         [TestCase("RelationTestCase5.cs", "RelationTestCase5", "IRelationTestCase5", false)]
         [TestCase("RelationTestCase6.cs", "RelationTestCase6", "IRelationTestCase6", false)]
-        public void BaseClass_Should_Implement_RelatedInterface(string filename, string baseClass, string relatedClass, bool shouldBeValid)
+        public void BaseClass_Should_Implement_RelatedInterface(string filename, string baseClass, string relatedClass,
+            bool shouldBeValid)
         {
-            
-            string code = FileUtils.FileToString("Relation\\" + filename);
+            var code = FileUtils.FileToString("Relation\\" + filename);
             var entityNodes = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
             var NameSpaceNode = "IDesign.Tests.TestClasses.Relation";
             var createRelation = new DetermineRelations(entityNodes);
             createRelation.GetEdgesOfEntityNode();
             var interfaceCheck = entityNodes[NameSpaceNode + "." + baseClass].GetRelations()
-                .Any(x => x.GetRelationType() == RelationType.Implements && x.GetDestination().GetName() == relatedClass);
+                .Any(x => x.GetRelationType() == RelationType.Implements &&
+                          x.GetDestination().GetName() == relatedClass);
             Assert.AreEqual(shouldBeValid, interfaceCheck);
         }
 
@@ -39,9 +36,10 @@ namespace IDesign.Tests.Core
         [TestCase("RelationTestCase4.cs", "RelationTestCase4", "ERelationTestCase4", true)]
         [TestCase("RelationTestCase5.cs", "RelationTestCase5", "ERelationTestCase5", false)]
         [TestCase("RelationTestCase6.cs", "RelationTestCase6", "ERelationTestCase6", true)]
-        public void BaseClass_Should_Extend_RelatedClass(string filename, string baseClass, string relatedClass, bool shouldBeValid)
+        public void BaseClass_Should_Extend_RelatedClass(string filename, string baseClass, string relatedClass,
+            bool shouldBeValid)
         {
-            string code = FileUtils.FileToString("Relation\\" + filename);
+            var code = FileUtils.FileToString("Relation\\" + filename);
             var entityNodes = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
             var NameSpaceNode = "IDesign.Tests.TestClasses.Relation";
             var createRelation = new DetermineRelations(entityNodes);
@@ -58,9 +56,10 @@ namespace IDesign.Tests.Core
         [TestCase("RelationTestCase4.cs", "RelationTestCase4", "CRelationTestCase4", false)]
         [TestCase("RelationTestCase5.cs", "RelationTestCase5", "CRelationTestCase5", false)]
         [TestCase("RelationTestCase6.cs", "RelationTestCase6", "ERelationTestCase6", true)]
-        public void BaseClass_Should_Create_RelatedClass(string filename, string baseClass, string relatedClass, bool shouldBeValid)
+        public void BaseClass_Should_Create_RelatedClass(string filename, string baseClass, string relatedClass,
+            bool shouldBeValid)
         {
-            string code = FileUtils.FileToString("Relation\\" + filename);
+            var code = FileUtils.FileToString("Relation\\" + filename);
             var entityNodes = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
             var NameSpaceNode = "IDesign.Tests.TestClasses.Relation";
             var createRelation = new DetermineRelations(entityNodes);
@@ -78,9 +77,10 @@ namespace IDesign.Tests.Core
         [TestCase("RelationTestCase5.cs", "RelationTestCase5", "CRelationTestCase5", false)]
         [TestCase("RelationTestCase6.cs", "RelationTestCase6", "ERelationTestCase6", true)]
         [TestCase("RelationTestCase7.cs", "RelationTestCase7", "U1RelationTestCase7", true)]
-        public void BaseClass_Should_Use_RelatedClass(string filename, string baseClass, string relatedClass, bool shouldBeValid)
+        public void BaseClass_Should_Use_RelatedClass(string filename, string baseClass, string relatedClass,
+            bool shouldBeValid)
         {
-            string code = FileUtils.FileToString("Relation\\" + filename);
+            var code = FileUtils.FileToString("Relation\\" + filename);
             var entityNodes = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
             var NameSpaceNode = "IDesign.Tests.TestClasses.Relation";
             var createRelation = new DetermineRelations(entityNodes);
