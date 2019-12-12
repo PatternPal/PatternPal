@@ -135,5 +135,6 @@ namespace IDesign.Recognizers.Checks
         {
             return entityNode.GetEntityNodeType().Equals(nodeType);
         }
+
     }
 }

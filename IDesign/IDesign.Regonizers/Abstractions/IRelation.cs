@@ -2,7 +2,7 @@
 
 namespace IDesign.Recognizers.Abstractions
 {
-    public interface IRelation
+    public interface IRelation : ICheckable
     {
         /// <summary>
         ///     Gets the destination node of this relation

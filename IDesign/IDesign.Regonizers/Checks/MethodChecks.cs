@@ -110,7 +110,15 @@ namespace IDesign.Recognizers.Checks
         {
             return (methodSyntax.GetName().Equals(name) && methodSyntax.GetType() == typeof(Method));
         }
-
+        
+        
+        public static bool CheckFieldIsUsed(this IMethod method, string fieldName)
+        {
+            if (method.GetBody() == null)
+                return false;
+            return method.GetBody().DescendantNodes().OfType<IdentifierNameSyntax>().Any(x => x.Identifier.ToString().IsEqual(fieldName));
+        }
+        
         /// <summary>
         /// Return a boolean based on if the Method parameters are the same as the given string
         /// </summary>

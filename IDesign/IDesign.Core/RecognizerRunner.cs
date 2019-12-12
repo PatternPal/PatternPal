@@ -14,7 +14,8 @@ namespace IDesign.Core
             new DesignPattern("Singleton", new SingletonRecognizer()),
             new DesignPattern("Factory Method", new FactoryRecognizer()),
             new DesignPattern("State", new StateRecognizer()),
-            new DesignPattern("Strategy", new StrategyRecognizer())
+            new DesignPattern("Strategy", new StrategyRecognizer()),
+            new DesignPattern("Adapter", new AdapterRecognizer())
         };
 
         public Dictionary<string, EntityNode> EntityNodes =
