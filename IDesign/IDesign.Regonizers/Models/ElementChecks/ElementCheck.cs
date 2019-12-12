@@ -26,7 +26,8 @@ namespace IDesign.Recognizers.Models.ElementChecks
                 return new CheckResult(_description, FeedbackType.Incorrect, null);
             var isValid = _predicate(elementToCheck);
             var feedback = isValid ? FeedbackType.Correct : FeedbackType.Incorrect;
-            return new CheckResult(_description, feedback, elementToCheck.GetSuggestionNode());
+            var message = elementToCheck.GetSuggestionName() + " | " + _description;
+            return new CheckResult(message, feedback, elementToCheck.GetSuggestionNode());
         }
 
         public string GetDescription()

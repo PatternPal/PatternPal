@@ -65,7 +65,8 @@ namespace IDesign.Recognizers.Models.ElementChecks
             if (highestScored.Value.childFeedback.All(x => x.GetFeedbackType() == FeedbackType.Correct))
                 feedback = FeedbackType.Correct;
 
-            return new CheckResult(_description, feedback, elementToCheck.GetSuggestionNode())
+            var message = elementToCheck.GetSuggestionName() + " | " + _description;
+            return new CheckResult(message, feedback, elementToCheck.GetSuggestionNode())
             {
                 ChildFeedback = highestScored.Value.childFeedback.ToList()
             };
@@ -87,7 +88,8 @@ namespace IDesign.Recognizers.Models.ElementChecks
                 });
             }
 
-            return new CheckResult(_description, feedback, elementToCheck.GetSuggestionNode())
+            var message = elementToCheck.GetSuggestionName() + " | " + _description;
+            return new CheckResult(message, feedback, elementToCheck.GetSuggestionNode())
             {
                 ChildFeedback = childResults
             };
