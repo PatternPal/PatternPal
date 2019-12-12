@@ -4,9 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
-             xmlns:extension="clr-namespace:IDesign.Extension"
              xmlns:models="clr-namespace:IDesign.Extension.ViewModels"
              xmlns:theming="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Imaging"
+             xmlns:extension="clr-namespace:IDesign.Extension"
              xmlns:catalog="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.ImageCatalog"
              xmlns:abstractions="clr-namespace:IDesign.Recognizers.Abstractions;assembly=IDesign.Recognizers"
              xmlns:imaging="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.Imaging"
@@ -288,11 +288,19 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <Style TargetType="ComboBoxItem">
+                <Setter Property="Background" Value="{DynamicResource {x:Static vsshell:VsColors.BrandedUITextKey}}" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsColors.BackgroundKey}}" />
+            </Style>
+            <Style TargetType="ComboBox">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
+            </Style>
             <Style x:Key="ButtonBorder" TargetType="Border">
                 <Setter Property="BorderBrush"
                         Value="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowBorderKey}}" />
             </Style>
-            <Style TargetType="Button">
+                <Style TargetType="Button">
                 <Setter Property="Background" Value="{DynamicResource {x:Static vsshell:VsColors.BrandedUITextKey}}" />
                 <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
                 <Setter Property="Template">
@@ -350,8 +358,17 @@
         <StackPanel Grid.Row="2">
             <RadioButton Name="radio1" GroupName="path" Content="Active Document" VerticalContentAlignment="Center"
                          Height="25" IsChecked="True" />
-            <RadioButton Name="radio2" GroupName="path" Content="Whole Project" VerticalContentAlignment="Center"
+            <DockPanel HorizontalAlignment="Stretch">
+                <RadioButton Name="radio2" GroupName="path" Content="Project" VerticalContentAlignment="Center"
                          Height="25" />
+                <ComboBox DockPanel.Dock="Right" x:Name="ProjectSelection" Width="150">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+            </DockPanel>
         </StackPanel>
         <Border x:Name="ButtonBorder" Grid.Row="3" Background="Transparent" BorderThickness="0 1"
                 Style="{StaticResource ButtonBorder}">
