@@ -8,14 +8,14 @@ namespace IDesign.Tests.Recognizers
     public class FactoryRecognizerTest
     {
         [Test]
-        [TestCase("FactoryTestCase1", 50)]
-        [TestCase("FactoryTestCase2", 0)]
-        [TestCase("FactoryTestCase3", 0)]
-        [TestCase("FactoryTestCase4", 50)]
+        [TestCase("FactoryTestCase1", 66)]
+        [TestCase("FactoryTestCase2", 33)]
+        [TestCase("FactoryTestCase3", 33)]
+        [TestCase("FactoryTestCase4", 66)]
         [TestCase("FactoryTestCase5", 100)]
-        [TestCase("FactoryTestCase6", 50)]
+        [TestCase("FactoryTestCase6", 33)]
         [TestCase("FactoryTestCase7", 100)]
-        [TestCase("FactoryTestCase8", 50)]
+        [TestCase("FactoryTestCase8", 66)]
         public void FactoryRecognizer_Returns_Correct_Score(string baseClass, int score)
         {
             var factory = new FactoryRecognizer();

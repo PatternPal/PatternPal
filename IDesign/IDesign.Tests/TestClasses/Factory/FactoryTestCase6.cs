@@ -21,7 +21,6 @@ namespace IDesign.Tests.TestClasses.Factory
     public class FactoryTestCase6 : Creator
     {
 
-
         protected override Product factoryMethod()
         {
             return new ConcreteProduct();

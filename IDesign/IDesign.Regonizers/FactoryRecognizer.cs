@@ -2,8 +2,10 @@
 using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Checks;
+using IDesign.Recognizers.Models;
 using IDesign.Recognizers.Models.ElementChecks;
 using IDesign.Recognizers.Models.Output;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace IDesign.Recognizers
 {
@@ -12,26 +14,25 @@ namespace IDesign.Recognizers
         public IResult Recognize(IEntityNode entityNode)
         {
             var result = new Result();
-            var methodChecks = new List<ElementCheck<IMethod>>()
+            var methodChecks = new List<ICheck<IMethod>>
             {
+
                 new ElementCheck<IMethod>(x => CreatedClassExtendsReturnTypeInterface(entityNode, x)||
                 CreatedClassImplementsReturnTypeInterface(entityNode, x),
-                "Return type is not the same as created" )
+                "Return type is not the same as created" ),
+                  new ElementCheck<IMethod>(x => x.CheckModifier("public"),
+                "Method isnt public" ),
+                  new ElementCheck<IMethod>(x => x.IsInterfaceMethod(entityNode),
+                  "Method is not implemented in a interface")
             };
-            CheckElements(result, entityNode.GetMethods(), methodChecks);
-            if (result.GetSuggestions() != null)
+
+            var factoryCheck = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
             {
-                var BestMethod = new Method(result.GetSuggestions().First().GetSyntaxNode() as MethodDeclarationSyntax);
-                var classChecks = new List<ElementCheck<IEntityNode>>()
-            {
-                new ElementCheck<IEntityNode>(x => x.ClassImlementsInterfaceMethod(BestMethod),
-                "Method isnt implemented in a interface")
-            };
-                 var entityList = new List<IEntityNode>();
-                entityList.Add(entityNode);
-                CheckElements(result,entityList , classChecks);
-            }
-            result.Score = (int)(result.Score / 2f * 100f);
+                new GroupCheck<IEntityNode, IMethod>(methodChecks, x => x.GetMethods(), "Has Create()")
+            }, x => new List<IEntityNode> { entityNode }, "Factory", GroupCheckType.All);
+            var r = factoryCheck.Check(entityNode);
+
+            result.Results = r.GetChildFeedback().ToList();
             return result;
         }
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using IDesign.Recognizers.Abstractions;
+using IDesign.Recognizers.Models;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace IDesign.Recognizers.Checks
@@ -67,6 +68,17 @@ namespace IDesign.Recognizers.Checks
         public static bool CheckReturnTypeSameAsCreation(this IMethod methodSyntax)
         {
             return methodSyntax.CheckCreationType(methodSyntax.GetReturnType());
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name=""></param>
+        /// <param name="currentClass"></param>
+        /// <returns></returns>
+        public static bool IsInterfaceMethod(this IMethod methodSyntax, IEntityNode currentClass)
+        {
+            return currentClass.ClassImlementsInterfaceMethod(methodSyntax);
         }
 
         //helper functions
