@@ -79,7 +79,7 @@ namespace IDesign.Recognizers
 
             var abstractStateCheck = new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
             {
-                new ElementCheck<IMethod>(x => x.CheckModifier("abstract"), "If using a class, the modifier should be abstract. Otherwise, use an interface"),
+                new ElementCheck<IMethod>(x => x.CheckModifier("abstract"), "Modifier of the method should be abstract!"),
                 new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void"),
                 new ElementCheck<IMethod>(x => x.GetBody() == null, "Body should be empty!")
             }, x => x.GetMethods(), "Class has a method: ");
@@ -143,7 +143,7 @@ namespace IDesign.Recognizers
                     new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "Return type is void"),
                     new ElementCheck<IMethod>(x => (x.CheckCreationType(edgeNode.GetName())) &&(!x.CheckCreationType(node.GetName())), $"{node.GetName()} should not be itself")
                     //TO DO: check of functie de zelfte parameters heeft als de interface/abstracte klasse functie
-                    //TO DO: check of de functie de zelfde naam heeft als de overervende functie                                        (x.CheckTypeDeclaration(EntityNodeType.Class) && (x.CheckModifier("abstract"))),"message")
+                    //TO DO: check of de functie de zelfde naam heeft als de overervende functie              
                 }, x => x.GetMethods(), "ConcreteState has methods where:");
 
                 result.Results.Add(createCheck.Check(node));

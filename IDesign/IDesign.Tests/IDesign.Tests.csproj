@@ -251,4 +251,8 @@
     </Compile>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TestClasses\StateTest5\" />
+  </ItemGroup>
+
 </Project>
