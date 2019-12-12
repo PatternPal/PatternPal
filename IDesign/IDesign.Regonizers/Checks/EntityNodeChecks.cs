@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace IDesign.Recognizers.Checks
 {
-    public static class ClassChecks
+    public static class EntitynodeChecks
     {
         /// <summary>
         ///     Return a boolean based on if node implements an interface with the given name.
@@ -15,7 +15,7 @@ namespace IDesign.Recognizers.Checks
         /// <returns>The field is the type that is given in the function</returns>
         public static bool ImplementsInterface(this IEntityNode node, string name)
         {
-            if (HasInterface(node, name))
+            if (ClassImlementsInterface(node, name))
             {
                 return true;
             }
@@ -35,7 +35,7 @@ namespace IDesign.Recognizers.Checks
         /// <param name="node">The node which should have the interface which contains the method</param>
         /// <param name="method">The method which it should check</param>
         /// <returns>The method is from an interface of the given node</returns>
-        public static bool ClassImlementsInterface(this IEntityNode node, IMethod method)
+        public static bool ClassImlementsInterfaceMethod(this IEntityNode node, IMethod method)
         {
             var implements = false;
 
@@ -79,7 +79,7 @@ namespace IDesign.Recognizers.Checks
         /// <param name="node">The node witch it should check</param>
         /// <param name="name">The expected name of the interface</param>
         /// <returns>The node has the interface with that name</returns>
-        public static bool HasInterface(this IEntityNode node, string name)
+        public static bool ClassImlementsInterface(this IEntityNode node, string name)
         {
             return node.GetRelations()
                 .Any(x => x.GetRelationType() == RelationType.Implements && x.GetDestination().GetName() == name);

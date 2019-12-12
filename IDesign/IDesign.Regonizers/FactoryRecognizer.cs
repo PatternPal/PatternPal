@@ -16,7 +16,7 @@ namespace IDesign.Recognizers
             {
                 new ElementCheck<IMethod>(x => CreatedClassExtendsReturnTypeInterface(entityNode, x)||
                 CreatedClassImplementsReturnTypeInterface(entityNode, x),
-                "Return type is niet hetzelfde als wat er gemaakt wordt" )
+                "Return type is not the same as created" )
             };
             CheckElements(result, entityNode.GetMethods(), methodChecks);
             if (result.GetSuggestions() != null)
@@ -24,7 +24,7 @@ namespace IDesign.Recognizers
                 var BestMethod = new Method(result.GetSuggestions().First().GetSyntaxNode() as MethodDeclarationSyntax);
                 var classChecks = new List<ElementCheck<IEntityNode>>()
             {
-                new ElementCheck<IEntityNode>(x => x.ClassImlementsInterface(BestMethod),
+                new ElementCheck<IEntityNode>(x => x.ClassImlementsInterfaceMethod(BestMethod),
                 "Method isnt implemented in a interface")
             };
                  var entityList = new List<IEntityNode>();
@@ -35,20 +35,17 @@ namespace IDesign.Recognizers
             return result;
         }
 
-
         private bool CreatedClassImplementsReturnTypeInterface(IEntityNode node, IMethod method)
         {
             return method.GetCreatedTypes()
                  .Where(name => node.GetEdgeNode(name).ImplementsInterface(method.GetReturnType())).Any();
         }
 
-
         private bool CreatedClassExtendsReturnTypeInterface(IEntityNode node, IMethod method)
         {
             return method.GetCreatedTypes()
                 .Where(name => node.GetEdgeNode(name).ExtendsClass(method.GetReturnType())).Any();
         }
-
 
     }
 }

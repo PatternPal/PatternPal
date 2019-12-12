@@ -98,9 +98,9 @@ namespace IDesign.Recognizers
         /// Return a boolean based on if the Method parameters are the same as the given string
         /// </summary>
         /// <param name="methodSyntax">The method it should check the parameters from</param>
-        /// <param name="parameters">The given parameters it should have</param>
+        /// <param name="parameters">The given parameters types it should have</param>
         /// <returns>The method has the same parameters as the given string</returns>
-        public static bool CheckMethodParameters(this IMethod methodSyntax, string parameters)
+        public static bool CheckMethodParameterTypes(this IMethod methodSyntax, string parameters)
         {
             return methodSyntax.GetParameter().ToString().Equals(parameters);
         }
@@ -114,7 +114,7 @@ namespace IDesign.Recognizers
         public static bool IsEquals(this IMethod methodSyntax , IMethod compareMethod)
         {
             return (methodSyntax.CheckMethodIdentifier(compareMethod.GetName())
-                && methodSyntax.CheckMethodParameters(compareMethod.GetParameter().ToString())
+                && methodSyntax.CheckMethodParameterTypes(compareMethod.GetParameter().ToString())
                 && methodSyntax.CheckReturnType(compareMethod.GetReturnType()));
         }
     }

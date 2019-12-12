@@ -10,7 +10,7 @@ using IDesign.Core;
 
 namespace IDesign.Tests.Checks
 {
-    public class ClassChecks
+    public class EntityNodeChecks
     {
 
         [Test]
@@ -62,7 +62,7 @@ namespace IDesign.Tests.Checks
             var nodes = EntityNodeUtils.CreateEntityNodeGraph(code);
             var createRelation = new DetermineRelations(nodes);
             createRelation.GetEdgesOfEntityNode();
-            var checkResult = nodes[nameSpaceName + "." + className].HasInterface(interfaceName);
+            var checkResult = nodes[nameSpaceName + "." + className].ClassImlementsInterface(interfaceName);
 
             Assert.AreEqual(shouldBeValid, checkResult);
         }
