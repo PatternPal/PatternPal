@@ -1,6 +1,6 @@
 ﻿using IDesign.Recognizers.Abstractions;
 
-namespace IDesign.Core
+namespace IDesign.Core.Models
 {
     public class DesignPattern
     {

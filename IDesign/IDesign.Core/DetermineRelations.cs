@@ -1,8 +1,8 @@
-﻿using IDesign.Recognizers;
+﻿using System.Collections.Generic;
+using System.Linq;
+using IDesign.Core.Models;
 using IDesign.Recognizers.Models;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace IDesign.Core
 {
@@ -11,10 +11,10 @@ namespace IDesign.Core
     /// </summary>
     public class DetermineRelations
     {
-        private Dictionary<string, EntityNode> EntityNodes;
+        private readonly Dictionary<string, EntityNode> EntityNodes;
 
-        private Dictionary<RelationType, RelationType> reverserdTypes =
-            new Dictionary<RelationType, RelationType>()
+        private readonly Dictionary<RelationType, RelationType> reverserdTypes =
+            new Dictionary<RelationType, RelationType>
             {
                 {RelationType.Implements, RelationType.ImplementedBy},
                 {RelationType.Creates, RelationType.CreatedBy},
@@ -63,10 +63,7 @@ namespace IDesign.Core
         /// <param name="edgeNode">the given destination node</param>
         private void AddRelation(EntityNode node, RelationType type, EntityNode edgeNode)
         {
-            if (edgeNode == null)
-            {
-                return;
-            }
+            if (edgeNode == null) return;
 
             //Make sure relation doesn't already exists
             if (node.Relations.Any(x => x.GetDestination() == edgeNode && x.GetRelationType() == type))
@@ -84,12 +81,8 @@ namespace IDesign.Core
         {
             var childNodes = entityNode.GetTypeDeclarationSyntax().DescendantNodes();
             foreach (var creation in childNodes.OfType<ObjectCreationExpressionSyntax>())
-            {
                 if (creation.Type is IdentifierNameSyntax name)
-                {
                     AddRelation(entityNode, RelationType.Creates, name.ToString());
-                }
-            }
         }
 
         /// <summary>
@@ -100,12 +93,8 @@ namespace IDesign.Core
         {
             var childNodes = entityNode.GetTypeDeclarationSyntax().Members.SelectMany(x => x.DescendantNodes());
             foreach (var identifier in childNodes.OfType<IdentifierNameSyntax>())
-            {
                 if (identifier is IdentifierNameSyntax name)
-                {
                     AddRelation(entityNode, RelationType.Uses, name.ToString());
-                }
-            }
         }
 
         /// <summary>
@@ -118,16 +107,14 @@ namespace IDesign.Core
         {
             var namespaces = new List<string>();
             namespaces.Add(node.NameSpace + ".");
-            namespaces.AddRange(node.GetUsings().Select(x => x.Name.ToString() + "."));
+            namespaces.AddRange(node.GetUsings().Select(x => x.Name + "."));
             namespaces.Add("");
             foreach (var nameSpace in namespaces)
             {
                 var key = nameSpace + name;
-                if (EntityNodes.ContainsKey(key))
-                {
-                    return EntityNodes[key];
-                }
+                if (EntityNodes.ContainsKey(key)) return EntityNodes[key];
             }
+
             return null;
         }
 
@@ -138,16 +125,12 @@ namespace IDesign.Core
         private void CreateParentClasses(EntityNode entityNode)
         {
             if (entityNode.GetTypeDeclarationSyntax().BaseList != null)
-            {
                 foreach (var child in entityNode.GetTypeDeclarationSyntax().BaseList.ChildNodes())
                 {
                     var stringname = child.ToString();
                     {
                         var edgeNode = GetNodeByName(entityNode, stringname);
-                        if (edgeNode == null)
-                        {
-                            continue;
-                        }
+                        if (edgeNode == null) continue;
 
                         RelationType? relationType = null;
 
@@ -163,7 +146,6 @@ namespace IDesign.Core
                         AddRelation(entityNode, relationType.Value, edgeNode);
                     }
                 }
-            }
         }
     }
 }

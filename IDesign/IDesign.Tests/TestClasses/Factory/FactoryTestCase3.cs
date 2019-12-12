@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses.Factory
+﻿namespace IDesign.Tests.TestClasses.Factory
 {
-   public class FactoryTestCase3
+    public class FactoryTestCase3
     {
-        public FactoryTestCase3() { }
-        private ProductA product = new ProductA();
+        private readonly ProductA product = new ProductA();
+
         public IProduct CreateProductA()
         {
             return product;

@@ -1,4 +1,4 @@
-﻿namespace IDesign.Recognizers
+﻿namespace IDesign.Recognizers.Models
 {
     public enum RelationType
     {

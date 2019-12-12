@@ -1,7 +1,8 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using IDesign.Recognizers.Models;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace IDesign.Recognizers
+namespace IDesign.Recognizers.Abstractions
 {
     public interface IMethod : ICheckable
     {
