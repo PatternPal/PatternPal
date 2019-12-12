@@ -40,6 +40,12 @@ namespace IDesign.Recognizers.Checks
             }
             return implements;
         }
+        /// <summary>
+        /// Return a boolean based on if the given node has a method with that name
+        /// </summary>
+        /// <param name="node">The given node</param>
+        /// <param name="method">The method that the node should have</param>
+        /// <returns>The given node has the given method</returns>
         public static bool InterfaceImplementsMethod(this IEntityNode node, IMethod method)
         {
             return node.GetMethods().Any(x => x.IsEquals(method));

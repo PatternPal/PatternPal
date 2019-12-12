@@ -36,17 +36,18 @@ namespace IDesign.Recognizers
             return result;
         }
 
+        // checks if the created class is returned and the returntype is an interface
         private bool CreatedClassImplementsReturnTypeInterface(IEntityNode node, IMethod method)
         {
             return method.GetCreatedTypes()
                  .Where(name => node.GetEdgeNode(name).ImplementsInterface(method.GetReturnType())).Any();
         }
 
+        // checks if the created class is returned and the returntype is an parentclass
         private bool CreatedClassExtendsReturnTypeInterface(IEntityNode node, IMethod method)
         {
             return method.GetCreatedTypes()
                 .Where(name => node.GetEdgeNode(name).ExtendsClass(method.GetReturnType())).Any();
         }
-
     }
 }
