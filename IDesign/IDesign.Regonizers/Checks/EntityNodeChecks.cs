@@ -1,10 +1,13 @@
 ﻿using IDesign.Recognizers.Abstractions;
-using System.Linq;
 using IDesign.Recognizers.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace IDesign.Recognizers.Checks
 {
-    public static class ClassChecks
+    public static class EntityNodeChecks
     {
         /// <summary>
         ///     Return a boolean based on if the interface .
@@ -18,7 +21,7 @@ namespace IDesign.Recognizers.Checks
             {
                 return true;
             }
-            if (Extends(node))
+            if (CheckMinimalAmountOfRelationTypes(node, RelationType.Extends, 1))
             {
                 return ImplementsInterface(GetExtends(node), name);
             }
@@ -36,7 +39,7 @@ namespace IDesign.Recognizers.Checks
         /// <returns>The field is the type that is given in the function</returns>
         public static bool ExtendsClass(this IEntityNode node, string name)
         {
-            if (Extends(node))
+            if (CheckMinimalAmountOfRelationTypes(node, RelationType.Extends, 1))
             {
                 if (GetExtends(node).GetName() == name)
                 {
@@ -71,16 +74,6 @@ namespace IDesign.Recognizers.Checks
         }
 
         /// <summary>
-        ///     Return a boolean based on if the given node extends a node
-        /// </summary>
-        /// <param name="node">The node witch it should check</param>
-        /// <returns>The class has an extends/returns>
-        public static bool Extends(this IEntityNode node)
-        {
-            return node.GetRelations().Any(x => x.GetRelationType() == RelationType.Extends);
-        }
-
-        /// <summary>
         ///     Return a node based on if the name is in the edges list
         /// </summary>
         /// <param name="node">The node witch it should check</param>
@@ -111,6 +104,18 @@ namespace IDesign.Recognizers.Checks
         public static bool CheckTypeDeclaration(this IEntityNode entityNode, EntityNodeType nodeType)
         {
             return entityNode.GetEntityNodeType().Equals(nodeType);
+        }
+
+        /// <summary>
+        ///     Function thats checks the relation with another entitynode.
+        /// </summary>
+        /// <param name="entityNode">The entitynode witch it should check</param>
+        /// <param name="relationType">The expected relation type</param>
+        /// <param name="amount">The expected relation type</param>
+        /// <returns></returns>
+        public static bool CheckMinimalAmountOfRelationTypes(this IEntityNode entityNode, RelationType relationType, int amount)
+        {
+            return entityNode.GetRelations().Where(x => x.GetRelationType().Equals(relationType)).Count() >= amount;
         }
     }
 }

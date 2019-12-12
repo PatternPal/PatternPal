@@ -33,7 +33,7 @@ namespace IDesign.Core
             for (var i = 0; i < files.Count; i++)
             {
                 var tree = FileManager.MakeStringFromFile(files[i]);
-                var generateSyntaxTree = new GenerateSyntaxTree(tree, files[i], EntityNodes);
+                _ = new GenerateSyntaxTree(tree, files[i], EntityNodes);
 
                 ProgressUpdate((int)(i / (float)files.Count * 50f), "Reading file: " + files[i]);
             }

@@ -32,6 +32,7 @@ namespace IDesign.Tests.Utils
         public static List<string> FilesToString(string folderPath)
         {
             var filesContents = new List<string>();
+            var test = Directory.GetFiles("TestClasses//" + folderPath, "*.cs", SearchOption.AllDirectories);
             foreach (string file in Directory.EnumerateFiles("TestClasses\\" + folderPath, "*.cs"))
             {
                 filesContents.Add(File.ReadAllText(file));

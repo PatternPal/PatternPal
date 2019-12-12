@@ -9,15 +9,20 @@ namespace IDesign.Recognizers
 {
     public class DecoratorRecognizer : Recognizer, IRecognizer
     {
+        /// <summary>
+        ///     Function thats checks the returntype of a method.
+        /// </summary>
+        /// <param name="entityNode">The method witch it should check</param>
+        /// <returns></returns>
         public IResult Recognize(IEntityNode entityNode)
         {
             Result result = new Result();
 
             var classChecks = new List<ElementCheck<IEntityNode>>()
             {
-                new ElementCheck<IEntityNode>(x => x.CheckEntityNodeModifier("Abstract"), "De class moet abstract zijn"),
-                new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.Extends) || x.CheckRelationType(RelationType.Implements), "De class zit niet onder een interface of parent class"),
-                new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.ExtendedBy), "De class wordt niet extend door een ander class")
+                new ElementCheck<IEntityNode>(x => x.CheckModifier("Abstract"), "De class moet abstract zijn"),
+                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.Extends, 1) || x.CheckMinimalAmountOfRelationTypes(RelationType.Implements, 1), "De class zit niet onder een interface of parent class"),
+                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.ExtendedBy, 1), "De class wordt niet extend door een ander class")
             };
             CheckElements(result, new List<IEntityNode>() { entityNode }, classChecks);
 
@@ -42,7 +47,7 @@ namespace IDesign.Recognizers
             return result;
         }
 
-        public IResult CheckComponent(IEntityNode componentNode, IEnumerable<IMethod> methods, IEntityNode decoratorNode)
+        private IResult CheckComponent(IEntityNode componentNode, IEnumerable<IMethod> methods, IEntityNode decoratorNode)
         {
             Result result = new Result();
 
@@ -68,7 +73,7 @@ namespace IDesign.Recognizers
             return result;
         }
 
-        public IResult CheckConcreteDecorator(IEntityNode concreteDecoratorNode, IEntityNode componentNode)
+        private IResult CheckConcreteDecorator(IEntityNode concreteDecoratorNode, IEntityNode componentNode)
         {
             Result result = new Result();
 

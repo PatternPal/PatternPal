@@ -76,6 +76,12 @@
     <Compile Update="TestClasses\ClassChecks\Class1.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Update="TestClasses\Decorator\DecoratorTestCase1\Context.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Decorator\DecoratorTestCase1\Decorator.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Update="TestClasses\Factory\FactoryTestCase1.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
