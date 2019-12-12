@@ -140,7 +140,7 @@ namespace IDesign.Recognizers
                 //check if state makes other state in handle method and check if the return type is void
                 var createCheck = new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                 {
-                    new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "Return type is void"),
+                    new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "Return type should be void"),
                     new ElementCheck<IMethod>(x => (x.CheckCreationType(edgeNode.GetName())) &&(!x.CheckCreationType(node.GetName())), $"{node.GetName()} should not be itself")
                     //TO DO: check of functie de zelfte parameters heeft als de interface/abstracte klasse functie
                     //TO DO: check of de functie de zelfde naam heeft als de overervende functie                                        (x.CheckTypeDeclaration(EntityNodeType.Class) && (x.CheckModifier("abstract"))),"message")
@@ -168,7 +168,7 @@ namespace IDesign.Recognizers
                     var fieldCheck = new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
                     {
                         new ElementCheck<IField>(x => x.CheckFieldType(edgeNode.GetName()),$"{node.GetName()} must be equal to {edgeNode.GetName()}"),
-                        new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "Modifier must be private")
+                        new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "Modifier should be private")
                     }, x => x.GetFields(), "Context has method where:");
                     result.Results.Add(fieldCheck.Check(node));
                 }

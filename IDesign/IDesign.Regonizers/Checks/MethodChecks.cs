@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models;
@@ -83,20 +84,26 @@ namespace IDesign.Recognizers.Checks
 
         //helper functions
         /// <summary>
-        ///     Return al list of all  types that this function makes as strings.
+        ///     Return a list of all types that this function makes as strings.
         /// </summary>
         /// <param name="methodSyntax">The method witch it should check</param>
         /// <returns>all types that are created</returns>
         public static IEnumerable<string> GetCreatedTypes(this IMethod methodSyntax)
         {
             var result = new List<string>();
-            var creations = methodSyntax.GetBody().DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
-            foreach (var creation in creations)
+            try
             {
-                var identifiers = creation.DescendantNodes().OfType<IdentifierNameSyntax>();
-                result.AddRange(identifiers.Select(y => y.Identifier.ToString()));
+                var creations = methodSyntax.GetBody().DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
+                foreach (var creation in creations)
+                {
+                    var identifiers = creation.DescendantNodes().OfType<IdentifierNameSyntax>();
+                    result.AddRange(identifiers.Select(y => y.Identifier.ToString()));
+                }
             }
-
+            catch (Exception e)
+            {
+                _ = e.Message;
+            }
             return result;
         }
 
@@ -128,7 +135,7 @@ namespace IDesign.Recognizers.Checks
         /// <param name="methodSyntax">The method it should check</param>
         /// <param name="compareMethod">The given method it should compare to</param>
         /// <returns>The methods are the same type</returns>
-        public static bool IsEquals(this IMethod methodSyntax , IMethod compareMethod)
+        public static bool IsEquals(this IMethod methodSyntax, IMethod compareMethod)
         {
             return (methodSyntax.CheckMethodIdentifier(compareMethod.GetName())
                 && methodSyntax.CheckMethodParameterTypes(compareMethod.GetParameter().ToString())

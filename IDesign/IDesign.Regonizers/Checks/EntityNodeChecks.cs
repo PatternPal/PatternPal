@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models;
 
@@ -14,7 +15,7 @@ namespace IDesign.Recognizers.Checks
         /// <returns>The field is the type that is given in the function</returns>
         public static bool ImplementsInterface(this IEntityNode node, string name)
         {
-            if (ClassImlementsInterface(node, name))    return true;
+            if (ClassImlementsInterface(node, name)) return true;
 
             if (Extends(node))
                 return ImplementsInterface(GetExtends(node), name);
@@ -31,9 +32,9 @@ namespace IDesign.Recognizers.Checks
         {
             var implements = false;
 
-            foreach(var interFace in node.GetRelations().Where(x => x.GetRelationType() == RelationType.Implements))
+            foreach (var interFace in node.GetRelations().Where(x => x.GetRelationType() == RelationType.Implements))
             {
-                if(InterfaceImplementsMethod(interFace.GetDestination(), method))
+                if (InterfaceImplementsMethod(interFace.GetDestination(), method))
                 {
                     implements = true;
                 }
@@ -110,8 +111,17 @@ namespace IDesign.Recognizers.Checks
         /// <returns>The node that has this name</returns>
         public static IEntityNode GetEdgeNode(this IEntityNode node, string name)
         {
-            return node.GetRelations().Where(x => x.GetDestination().GetName() == name).FirstOrDefault()
-                .GetDestination();
+            try
+            {
+                node = node.GetRelations().Where(x => x.GetDestination().GetName() == name).FirstOrDefault()
+                             .GetDestination();
+            }
+            catch (Exception e)
+            {
+                _ = e.Message;
+            }
+            return node;
+
         }
 
         /// <summary>
