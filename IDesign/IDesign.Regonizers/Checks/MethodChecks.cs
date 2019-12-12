@@ -69,7 +69,7 @@ namespace IDesign.Recognizers
 
         //helper functions
         /// <summary>
-        ///     Return al list of all  types that this function makes as strings.
+        ///     Return al list of all types that this function makes as strings.
         /// </summary>
         /// <param name="methodSyntax">The method witch it should check</param>
         /// <returns>all types that are created</returns>
@@ -116,7 +116,7 @@ namespace IDesign.Recognizers
         public static bool CheckArguments(this IMethod methodSyntax, string argument)
         {
             var parameters = methodSyntax.GetParameters().Where(y => y.Type.ToString().Equals(argument));
-
+            var parameters2 = methodSyntax.GetParameters().Select(y => y.Type.ToString();
             if (parameters.Count() < 1)
                 return false;
 
