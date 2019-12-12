@@ -1,4 +1,4 @@
-namespace IDesign.Core
+namespace IDesign.Core.Models
 {
     public class RecognizerProgress
     {

@@ -1,9 +1,9 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using IDesign.Recognizers.Abstractions;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace IDesign.Recognizers
+namespace IDesign.Recognizers.Checks
 {
     public static class MethodChecks
     {
@@ -47,9 +47,13 @@ namespace IDesign.Recognizers
         /// <returns></returns>
         public static bool CheckCreationType(this IMethod methodSyntax, string creationType)
         {
-            var creations = methodSyntax.GetBody().DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
+            var body = methodSyntax.GetBody();
+            if (body == null)
+                return false;
+            var creations = body.DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
             foreach (var creationExpression in creations)
-                if (creationExpression.Type is IdentifierNameSyntax name && name.Identifier.ToString().IsEqual(creationType))
+                if (creationExpression.Type is IdentifierNameSyntax name &&
+                    name.Identifier.ToString().IsEqual(creationType))
                     return true;
 
             return false;
@@ -80,6 +84,7 @@ namespace IDesign.Recognizers
                 var identifiers = creation.DescendantNodes().OfType<IdentifierNameSyntax>();
                 result.AddRange(identifiers.Select(y => y.Identifier.ToString()));
             }
+
             return result;
         }
 

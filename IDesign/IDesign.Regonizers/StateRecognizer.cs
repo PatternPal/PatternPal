@@ -1,13 +1,14 @@
 ﻿using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Checks;
 using IDesign.Recognizers.Models;
-using IDesign.Recognizers.Output;
 using System.Collections.Generic;
 using System.Linq;
+using IDesign.Recognizers.Models.ElementChecks;
+using IDesign.Recognizers.Models.Output;
 
 namespace IDesign.Recognizers
 {
-    public class StateRecognizer : Recognizer, IRecognizer
+    public class StateRecognizer : IRecognizer
     {
         Result result;
 
@@ -44,29 +45,21 @@ namespace IDesign.Recognizers
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        private IResult InterfaceStateChecks(IEntityNode node)
+        private void InterfaceStateChecks(IEntityNode node)
         {
-            //standard amount of checks for state when using an interface
-            float amountOfChecks = 0;
-
-            //check if node is an interface or an abstract class, cannot be both
-            var checkType = new List<ElementCheck<IEntityNode>>
+            var checkType = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
             {
-                new ElementCheck<IEntityNode>(x => x.CheckTypeDeclaration(EntityNodeType.Interface), "If using a class, the modifier should be abstract. Otherwise, use an interface")
-            };
-            amountOfChecks += 1;
-            CheckElements(result, new List<IEntityNode> { node }, checkType);
+                new ElementCheck<IEntityNode>(x => x.CheckTypeDeclaration(EntityNodeType.Interface), "The modifier should be abstract. Otherwise, use an interface")
 
-            //check if the method of the node has return type void
-            var checkMethods = new List<ElementCheck<IMethod>>
+            }, x => new List<IEntityNode>{node}, "Class meets the requirements: ");
+
+            result.Results.Add(checkType.Check(node));
+            var checkMethods = new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
             {
-                 new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void")
-            };
-            amountOfChecks += 1;
-            CheckElements(result, node.GetMethods(), checkMethods);
+                new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void")
 
-            result.Score = (int)(result.Score / amountOfChecks * 100f);
-            return result;
+            }, x => x.GetMethods(), "Class has a method: ");
+            result.Results.Add(checkMethods.Check(node));
         }
 
         /// <summary>
@@ -74,37 +67,30 @@ namespace IDesign.Recognizers
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        private IResult AbstractClassStateChecks(IEntityNode node)
+        private void AbstractClassStateChecks(IEntityNode node)
         {
-            //standard amount of checks for state when using an interface
-            float amountOfChecks = 0;
-
             //check if node is an interface or an abstract class, cannot be both
-            var checkType = new List<ElementCheck<IEntityNode>>
+            var checkType = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
             {
                 new ElementCheck<IEntityNode>(x => x.CheckModifier("abstract"), "If using a class, the modifier should be abstract. Otherwise, use an interface")
-            };
-            amountOfChecks += 1;
-            CheckElements(result, new List<IEntityNode> { node }, checkType);
 
-            var abstractStateChecks = new List<ElementCheck<IMethod>>
+            }, x => new List<IEntityNode> { node }, "Class meets the requirements: ");
+            result.Results.Add(checkType.Check(node));
+
+            var abstractStateCheck = new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
             {
                 new ElementCheck<IMethod>(x => x.CheckModifier("abstract"), "If using a class, the modifier should be abstract. Otherwise, use an interface"),
                 new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void"),
                 new ElementCheck<IMethod>(x => x.GetBody() == null, "Body should be empty!")
-            };
-            amountOfChecks += 3;
-            CheckElements(result, node.GetMethods(), abstractStateChecks);
-
-            result.Score = (int)(result.Score / amountOfChecks * 100f);
-            return result;
+            }, x => x.GetMethods(), "Class has a method: ");
+            result.Results.Add(abstractStateCheck.Check(node));
         }
 
         /// <summary>
         ///     Function to do the checks for a normall class (Context or ConcreteState)
         /// </summary>
         /// <param name="node"></param>
-        private IResult ClassChecks(IEntityNode node)
+        private void ClassChecks(IEntityNode node)
         {
             var relations = node.GetRelations();
 
@@ -126,7 +112,6 @@ namespace IDesign.Recognizers
             {
                 ContextClassChecks(node, usingRelations);
             }
-            return result;
         }
 
         /// <summary>
@@ -135,40 +120,34 @@ namespace IDesign.Recognizers
         /// <param name="node"></param>
         /// <param name="inheritanceRelations"></param>
         /// <returns></returns>
-        private IResult ConcreteStateClassChecks(IEntityNode node, List<IRelation> inheritanceRelations, List<IRelation> creationRelations)
+        private void ConcreteStateClassChecks(IEntityNode node, List<IRelation> inheritanceRelations, List<IRelation> creationRelations)
         {
-            float amountOfChecks = 0;
             foreach (var edge in inheritanceRelations)
             {
                 var edgeNode = edge.GetDestination();
-
-                var inheritanceChecks = new List<ElementCheck<IEntityNode>>
-                    {
-                        //check if node is an interface or an abstract class
-                        new ElementCheck<IEntityNode>(x => (x.CheckTypeDeclaration(EntityNodeType.Interface)) |
-                        ((x.CheckTypeDeclaration(EntityNodeType.Class)) && (x.CheckModifier("abstract"))),"message")
-                    };
-                amountOfChecks += 1;
-                CheckElements(result, new List<IEntityNode> { edgeNode }, inheritanceChecks);
+                //check if node is an interface or an abstract class
+                var check = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
+                {
+                    new ElementCheck<IEntityNode>(x => x.CheckTypeDeclaration(EntityNodeType.Interface) |
+                                                       (x.CheckTypeDeclaration(EntityNodeType.Class) && (x.CheckModifier("abstract"))),"interface or an abstract class")
+                }, x => new List<IEntityNode>{ edgeNode }, "ConcreteState has:");
+                result.Results.Add(check.Check(edgeNode));
             }
 
             foreach (var edge in creationRelations)
             {
                 var edgeNode = edge.GetDestination();
-
                 //check if state makes other state in handle method and check if the return type is void
-                var createChecks = new List<ElementCheck<IMethod>>
+                var createCheck = new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                 {
-                    new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void!"),
+                    new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "Return type is void"),
                     new ElementCheck<IMethod>(x => (x.CheckCreationType(edgeNode.GetName())) &&(!x.CheckCreationType(node.GetName())), $"{node.GetName()} should not be itself")
                     //TO DO: check of functie de zelfte parameters heeft als de interface/abstracte klasse functie
-                    //TO DO: check of de functie de zelfde naam heeft als de overervende functie
-                };
-                amountOfChecks += 2;
-                CheckElements(result, node.GetMethods(), createChecks);
+                    //TO DO: check of de functie de zelfde naam heeft als de overervende functie                                        (x.CheckTypeDeclaration(EntityNodeType.Class) && (x.CheckModifier("abstract"))),"message")
+                }, x => x.GetMethods(), "ConcreteState has methods where:");
+
+                result.Results.Add(createCheck.Check(node));
             }
-            result.Score = (int)(result.Score / amountOfChecks * 100f);
-            return result;
         }
 
         /// <summary>
@@ -176,10 +155,8 @@ namespace IDesign.Recognizers
         /// </summary>
         /// <param name="node"></param>
         /// <param name="usingRelations"></param>
-        /// <returns></returns>
-        private IResult ContextClassChecks(IEntityNode node, List<IRelation> usingRelations)
+        private void ContextClassChecks(IEntityNode node, List<IRelation> usingRelations)
         {
-            float amountOfChecks = 0;
             foreach (var edge in usingRelations)
             {
                 var edgeNode = edge.GetDestination();
@@ -187,18 +164,15 @@ namespace IDesign.Recognizers
                 if ((edgeNode.CheckTypeDeclaration(EntityNodeType.Interface)) |
                     (edgeNode.CheckTypeDeclaration(EntityNodeType.Class) && edgeNode.CheckModifier("abstract")))
                 {
-                    var usingChecks = new List<ElementCheck<IField>>
+                    //check if state makes other state in handle method and check if the return type is void
+                    var fieldCheck = new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
                     {
                         new ElementCheck<IField>(x => x.CheckFieldType(edgeNode.GetName()),$"{node.GetName()} must be equal to {edgeNode.GetName()}"),
-                        new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "modifier must be private")
-                    };
-                    amountOfChecks += 2;
-                    CheckElements(result, node.GetFields(), usingChecks);
+                        new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "Modifier must be private")
+                    }, x => x.GetFields(), "Context has method where:");
+                    result.Results.Add(fieldCheck.Check(node));
                 }
             }
-            result.Score = (int)(result.Score / amountOfChecks * 100f);
-            return result;
         }
-
     }
 }

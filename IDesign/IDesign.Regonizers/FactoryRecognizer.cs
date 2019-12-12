@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
-using IDesign.Recognizers.Abstractions;
-using IDesign.Recognizers.Output;
-using IDesign.Recognizers.Checks;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
+using IDesign.Recognizers.Abstractions;
+using IDesign.Recognizers.Checks;
+using IDesign.Recognizers.Models.ElementChecks;
+using IDesign.Recognizers.Models.Output;
 
 namespace IDesign.Recognizers
 {
-    public class FactoryRecognizer : Recognizer, IRecognizer
+    public class FactoryRecognizer : IRecognizer
     {
         public IResult Recognize(IEntityNode entityNode)
         {

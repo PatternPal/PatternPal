@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.Core.TestClasses
+﻿namespace IDesign.Tests.Core.TestClasses
 {
-    class TestClass1 : ITest
+    internal class TestClass1 : ITest
     {
         public TestClass1(int x, int y)
         {
