@@ -30,7 +30,7 @@ namespace IDesign.Recognizers
 
             if ((entityNode.CheckTypeDeclaration(EntityNodeType.Interface)) | (entityNode.CheckTypeDeclaration(EntityNodeType.Class) && entityNode.CheckModifier("abstract")))
             {
-                if (usingRelations.Count > 0 && inheritanceRelations.Count <= 0)
+                if (usingRelations.Count > 0)
                 {
                     //creator
                     AbstractCreatorChecks(entityNode, usingRelations);
