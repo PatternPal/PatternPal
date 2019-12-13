@@ -28,7 +28,11 @@ namespace IDesign.Recognizers
             //create list with only creates relations
             var createsRelations = relations.Where(x => x.GetRelationType() == RelationType.Creates).ToList();
 
-            if ((entityNode.CheckTypeDeclaration(EntityNodeType.Interface)) | (entityNode.CheckTypeDeclaration(EntityNodeType.Class) && entityNode.CheckModifier("abstract")))
+            if (entityNode.CheckTypeDeclaration(EntityNodeType.Interface))
+            {
+                InterFaceProductChecks(entityNode);
+            }
+            else if (entityNode.CheckTypeDeclaration(EntityNodeType.Class) && entityNode.CheckModifier("abstract"))
             {
                 if (usingRelations.Count > 0)
                 {
@@ -58,12 +62,13 @@ namespace IDesign.Recognizers
             return result;
         }
 
+
         private void AbstractProductChecks(IEntityNode node)
         {
             var classCheck = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
             {
-                new ElementCheck<IEntityNode>(x => x.CheckModifier("abstract"), "if using a class the modifier should be abstract otherwise use an interface")
-            }, x => new List<IEntityNode> { node }, "Product has:");
+                new ElementCheck<IEntityNode>(x => (x.CheckModifier("abstract") && (x.CheckTypeDeclaration(EntityNodeType.Class))) , "if using a class the modifier should be abstract otherwise use an interface")
+            }, x => new List<IEntityNode> { node }, "Product is:");
             result.Results.Add(classCheck.Check(node));
 
             var fieldCheck = new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
@@ -73,8 +78,24 @@ namespace IDesign.Recognizers
             result.Results.Add(fieldCheck.Check(node));
         }
 
+        /// <summary>
+        ///     Function to check if node is an interface
+        /// </summary>
+        /// <param name="node"></param>
+        private void InterFaceProductChecks(IEntityNode node)
+        {
+            var classCheck = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
+            {
+                new ElementCheck<IEntityNode>(x => x.CheckTypeDeclaration(EntityNodeType.Interface), "if using a class the modifier should be abstract otherwise use an interface")
+            }, x => new List<IEntityNode> { node }, "Product is:");
+            result.Results.Add(classCheck.Check(node));
+        }
 
-
+        /// <summary>
+        ///     Function to check if node is a concrete product
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="inheritanceRelations"></param>
         private void ConcreteProductChecks(IEntityNode node, List<IRelation> inheritanceRelations)
         {
             foreach (var edge in inheritanceRelations)
@@ -92,12 +113,20 @@ namespace IDesign.Recognizers
 
         private void AbstractCreatorChecks(IEntityNode node, List<IRelation> usingRelations)
         {
+            var classCheck = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
+            {
+                new ElementCheck<IEntityNode>(x => (x.CheckTypeDeclaration(EntityNodeType.Class) && (x.CheckModifier("abstract"))), "class should be abstract!")
+
+            }, x => new List<IEntityNode> { node }, "Class:");
+            result.Results.Add(classCheck.Check(node));
+
             foreach (var edge in usingRelations)
             {
                 var edgeNode = edge.GetDestination();
 
                 if ((edgeNode.CheckTypeDeclaration(EntityNodeType.Interface)) |
                     (edgeNode.CheckTypeDeclaration(EntityNodeType.Class) && edgeNode.CheckModifier("abstract")))
+
                 {
                     var methodCheck = new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                     {
@@ -109,6 +138,7 @@ namespace IDesign.Recognizers
                 }
             }
         }
+
 
         private void ConcreteCreatorChecks(IEntityNode node, List<IRelation> inheritanceRelations, List<IRelation> creationRelations)
         {
