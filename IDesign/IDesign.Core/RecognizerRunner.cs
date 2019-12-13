@@ -12,7 +12,7 @@ namespace IDesign.Core
         public static List<DesignPattern> designPatterns = new List<DesignPattern>
         {
             new DesignPattern("Singleton", new SingletonRecognizer()),
-            new DesignPattern("Factory Method", new FactoryRecognizer()),
+            new DesignPattern("Factory Method", new FactoryMethodRecognizer()),
             new DesignPattern("State", new StateRecognizer()),
             new DesignPattern("Strategy", new StrategyRecognizer())
         };
