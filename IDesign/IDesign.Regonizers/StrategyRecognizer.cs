@@ -19,6 +19,7 @@ namespace IDesign.Recognizers
             //if node is interface, node is probaly a strategy. else node can be strategy, context or concrete strategy
             if (node.GetEntityNodeType() == EntityNodeType.Interface)
             {
+                StrategyChecks(node);
                 InterfaceStrategyChecks(node);
             }
             else if (node.GetEntityNodeType() == EntityNodeType.Class)
@@ -26,15 +27,41 @@ namespace IDesign.Recognizers
                 //if node is an abstract class, node is probaly a strategy
                 if (node.CheckModifier("abstract"))
                 {
+                    StrategyChecks(node);
                     AbstractClassStrategyChecks(node);
                 }
-                else
-                {
-                    ClassChecks(node);
-                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        ///     Function to check if pattern is strategy
+        /// </summary>
+        /// <param name="node"></param>
+        private void StrategyChecks(IEntityNode node)
+        {
+            var relations = node.GetRelations();
+
+            //create list with only Extends and Implements relations
+            var inheritanceRelations = relations.Where(x => (x.GetRelationType() == RelationType.ImplementedBy) ||
+            (x.GetRelationType() == RelationType.ExtendedBy)).ToList();
+
+            foreach (var edge in relations.Where(x => x.GetRelationType() == RelationType.UsedBy).ToList())
+            {
+                var edgeRelations = edge.GetDestination().GetRelations();
+                var usingEdgeRelations = edgeRelations.Where(x => x.GetRelationType() == RelationType.Uses).ToList();
+                ContextClassChecks(edge.GetDestination(), usingEdgeRelations);
             }
 
-            return result;
+            foreach (var edge in inheritanceRelations)
+            {
+                var edgeRelations = edge.GetDestination().GetRelations();
+
+                //create list with only Extends and Implements relations
+                var inheritanceEdgeRelations = edgeRelations.Where(x => (x.GetRelationType() == RelationType.Implements) ||
+                (x.GetRelationType() == RelationType.Extends)).ToList();
+                ConcreteStrategyClassChecks(edge.GetDestination(), inheritanceEdgeRelations);
+            }
         }
 
         /// <summary>
@@ -49,7 +76,7 @@ namespace IDesign.Recognizers
                 new ElementCheck<IEntityNode>(x => x.CheckTypeDeclaration(EntityNodeType.Interface),
                     "If using a class, the modifier should be abstract. Otherwise, use an interface")
 
-            }, x => new List<IEntityNode> {node}, "");
+            }, x => new List<IEntityNode> { node }, "");
 
             result.Results.Add(checkType.Check(node));
             var checkMethods = new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
@@ -73,7 +100,7 @@ namespace IDesign.Recognizers
                 new ElementCheck<IEntityNode>(x => x.CheckModifier("abstract"),
                     "If using a class, the modifier should be abstract. Otherwise, use an interface")
 
-            }, x => new List<IEntityNode> {node}, "");
+            }, x => new List<IEntityNode> { node }, "");
             result.Results.Add(checkType.Check(node));
 
             var abstractStateCheck = new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
@@ -86,33 +113,6 @@ namespace IDesign.Recognizers
             result.Results.Add(abstractStateCheck.Check(node));
         }
 
-        /// <summary>
-        ///     Function to do the checks for a normall class (Context or ConcreteStrategy)
-        /// </summary>
-        /// <param name="node"></param>
-        private IResult ClassChecks(IEntityNode node)
-        {
-            var relations = node.GetRelations();
-
-            //create list with only Extends and Implements relations
-            var inheritanceRelations = relations.Where(x => (x.GetRelationType() == RelationType.Implements) ||
-                                                            (x.GetRelationType() == RelationType.Extends)).ToList();
-
-            //create list with only uses realations
-            var usingRelations = relations.Where(x => x.GetRelationType() == RelationType.Uses).ToList();
-
-            if (inheritanceRelations.Count() > 0 && usingRelations.Count() <= 0)
-            {
-                ConcreteStrategyClassChecks(node, inheritanceRelations);
-            }
-
-            if (usingRelations.Count() > 0 && inheritanceRelations.Count() <= 0)
-            {
-                ContextClassChecks(node, usingRelations);
-            }
-
-            return result;
-        }
 
         /// <summary>
         ///     Function to do checks for the concrete strategy class
@@ -120,16 +120,13 @@ namespace IDesign.Recognizers
         /// <param name="node"></param>
         /// <param name="inheritanceRelations"></param>
         /// <returns></returns>
-        private IResult ConcreteStrategyClassChecks(IEntityNode node, List<IRelation> inheritanceRelations)
+        private void ConcreteStrategyClassChecks(IEntityNode node, List<IRelation> inheritanceRelations)
         {
-
-            float amountOfChecks = 0;
             List<string> methodNamesList = new List<string>();
 
             foreach (var edge in inheritanceRelations)
             {
                 var edgeNode = edge.GetDestination();
-                amountOfChecks += 1;
 
                 //get all methodnames
                 foreach (var name in edgeNode.GetMethods())
@@ -143,7 +140,7 @@ namespace IDesign.Recognizers
                     new ElementCheck<IEntityNode>(x => x.CheckTypeDeclaration(EntityNodeType.Interface) |
                                                        (x.CheckTypeDeclaration(EntityNodeType.Class) &&
                                                         (x.CheckModifier("abstract"))), "message")
-                }, x => new List<IEntityNode>() {edgeNode}, "");
+                }, x => new List<IEntityNode>() { edgeNode }, "");
                 result.Results.Add(check.Check(edgeNode));
             }
 
@@ -159,8 +156,6 @@ namespace IDesign.Recognizers
 
                 result.Results.Add(createCheck.Check(node));
             }
-
-            return result;
         }
 
         /// <summary>
@@ -184,7 +179,7 @@ namespace IDesign.Recognizers
                         new ElementCheck<IField>(x => x.CheckFieldType(edgeNode.GetName()),
                             $"{node.GetName()} must be equal to {edgeNode.GetName()}"),
                         new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "modifier must be private")
-                    }, x => x.GetFields(), "");
+                    }, x => x.GetFields(), "Context had method where:");
                     result.Results.Add(fieldCheck.Check(node));
                 }
             }
