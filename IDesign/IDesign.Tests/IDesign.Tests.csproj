@@ -99,6 +99,30 @@
     <Compile Update="TestClasses\FactoryMethodTest1\IBeer.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Update="TestClasses\FactoryMethodTest2\CardFactory.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\FactoryMethodTest2\CreditCard.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\FactoryMethodTest2\MoneyBackCreditCard.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\FactoryMethodTest2\MoneyBackFactory.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\FactoryMethodTest2\PlatinumCreditCard.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\FactoryMethodTest2\PlatinumFactory.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\FactoryMethodTest2\TitaniumCreditCard.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\FactoryMethodTest2\TitaniumFactory.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Update="TestClasses\Relation\IRelationTestCase6.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
@@ -255,6 +279,10 @@
     <Compile Update="TestClasses\TestClass2.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="TestClasses\FactoryMethodTest3\" />
   </ItemGroup>
 
 </Project>

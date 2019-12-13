@@ -8,6 +8,7 @@ namespace IDesign.Tests.Recognizers
     public class FactoryMethodRecognizerTest
     {
         [TestCase("FactoryMethodTest1", "BeerFactory", 100)]
+        [TestCase("FactoryMethodTest2", "CardFactory", 100)]
         public void FactoryMethodRecognizer_Returns_Correct_Score(string directory, string filename, int score)
         {
             var factoryMethodRecognizer = new FactoryMethodRecognizer();

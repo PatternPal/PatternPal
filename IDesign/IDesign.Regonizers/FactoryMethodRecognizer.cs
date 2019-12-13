@@ -11,7 +11,6 @@ namespace IDesign.Recognizers
 {
     public class FactoryMethodRecognizer : IRecognizer
     {
-
         Result result;
         public IResult Recognize(IEntityNode entityNode)
         {
@@ -28,7 +27,6 @@ namespace IDesign.Recognizers
             //create list with only creates relations
             var createsRelations = relations.Where(x => x.GetRelationType() == RelationType.Creates).ToList();
 
-
             if (entityNode.CheckTypeDeclaration(EntityNodeType.Class) && entityNode.CheckModifier("abstract"))
             {
                 if (usingRelations.Count > 0)
@@ -37,10 +35,13 @@ namespace IDesign.Recognizers
                     AbstractCreatorChecks(entityNode, usingRelations);
                 }
             }
-
             return result;
         }
 
+        /// <summary>
+        ///     Function to check if a node is a product
+        /// </summary>
+        /// <param name="node"></param>
         private void ProductChecks(IEntityNode node)
         {
             var relations = node.GetRelations();
@@ -49,12 +50,16 @@ namespace IDesign.Recognizers
 
             foreach (var edge in inheritanceRelations)
             {
-
                 var inheritanceEdgeRelations = edge.GetDestination().GetRelations().Where(x => (x.GetRelationType() == RelationType.Implements)
                || (x.GetRelationType() == RelationType.Extends)).ToList();
                 ConcreteProductChecks(edge.GetDestination(), inheritanceEdgeRelations);
             }
         }
+
+        /// <summary>
+        ///     Function to check if a product node is implemented as an abstract class
+        /// </summary>
+        /// <param name="node"></param>
         private void AbstractProductChecks(IEntityNode node)
         {
             var classCheck = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
@@ -71,7 +76,7 @@ namespace IDesign.Recognizers
         }
 
         /// <summary>
-        ///     Function to check if node is an interface
+        ///     Function to check if a product node is an interface
         /// </summary>
         /// <param name="node"></param>
         private void InterFaceProductChecks(IEntityNode node)
@@ -103,6 +108,11 @@ namespace IDesign.Recognizers
             }
         }
 
+        /// <summary>
+        ///     Function to check if a node is a creator
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="usingRelations"></param>
         private void AbstractCreatorChecks(IEntityNode node, List<IRelation> usingRelations)
         {
             var relations = node.GetRelations();
@@ -151,7 +161,12 @@ namespace IDesign.Recognizers
             }
         }
 
-
+        /// <summary>
+        ///     Function to check if a node is a concrete creator
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="inheritanceRelations"></param>
+        /// <param name="creationRelations"></param>
         private void ConcreteCreatorChecks(IEntityNode node, List<IRelation> inheritanceRelations, List<IRelation> creationRelations)
         {
             foreach (var edge in inheritanceRelations)
