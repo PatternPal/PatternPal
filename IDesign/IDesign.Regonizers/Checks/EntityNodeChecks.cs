@@ -29,16 +29,14 @@ namespace IDesign.Recognizers.Checks
         /// <returns>The method is from an interface of the given node</returns>
         public static bool ClassImlementsInterfaceMethod(this IEntityNode node, IMethod method)
         {
-            var implements = false;
-
             foreach(var interFace in node.GetRelations().Where(x => x.GetRelationType() == RelationType.Implements))
             {
                 if(InterfaceImplementsMethod(interFace.GetDestination(), method))
                 {
-                    implements = true;
+                    return true;
                 }
             }
-            return implements;
+            return false;
         }
         /// <summary>
         /// Return a boolean based on if the given node has a method with that name

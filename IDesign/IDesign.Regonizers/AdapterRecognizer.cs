@@ -41,6 +41,8 @@ namespace IDesign.Recognizers
                         {
                             new ElementCheck<IMethod>(x => x.CheckFieldIsUsed(currentField), "Method uses adpatee"),
                             new ElementCheck<IMethod>(x => !x.CheckReturnType(currentField), "Method does not return adaptee"),
+                            new ElementCheck<IMethod>(x => x.IsInterfaceMethod(entityNode) || x.CheckModifier("override"),
+                                "Method doen'st overide or isn't implemented"),
 
                         }, x => entityNode.GetMethods(), "Is used in every adapter method", GroupCheckType.All)
 
