@@ -122,7 +122,7 @@ namespace IDesign.Extension
 
         private void ChoosePath()
         {
-            if ((bool) radio1.IsChecked)
+            if ((bool)radio1.IsChecked)
                 GetCurrentPath();
             else
                 GetAllPaths();
@@ -133,9 +133,9 @@ namespace IDesign.Extension
         {
             try
             {
-                var cm = (IComponentModel) Package.GetGlobalService(typeof(SComponentModel));
-                var tm = (IVsTextManager) Package.GetGlobalService(typeof(SVsTextManager));
-                var ws = (Workspace) cm.GetService<VisualStudioWorkspace>();
+                var cm = (IComponentModel)Package.GetGlobalService(typeof(SComponentModel));
+                var tm = (IVsTextManager)Package.GetGlobalService(typeof(SVsTextManager));
+                var ws = (Workspace)cm.GetService<VisualStudioWorkspace>();
                 var did = ws.CurrentSolution.GetDocumentIdsWithFilePath(file);
                 ws.OpenDocument(did.FirstOrDefault());
                 tm.GetActiveView(1, null, out var av);
@@ -177,9 +177,10 @@ namespace IDesign.Extension
             runner.OnProgressUpdate += (o, recognizerProgress) => iprogress.Report(recognizerProgress);
             await Task.Run(() =>
             {
-                SyntaxTreeSources = runner.CreateGraph(Paths);
-                var results = runner.Run(SelectedPatterns);
-                    var results = runner.Run(Paths, SelectedPatterns);
+                try
+                {
+                    SyntaxTreeSources = runner.CreateGraph(Paths);
+                    var results = runner.Run(SelectedPatterns);
                     CreateResultViewModels(results);
                 }
                 catch
@@ -199,7 +200,7 @@ namespace IDesign.Extension
             var viewModel = viewItem?.DataContext as CheckResultViewModel;
             if (viewModel == null) return;
 
-            var node = viewModel.Suggestions.GetSyntaxNode();
+            var node = viewModel.Result.GetSyntaxNode();
             selectNodeInEditor(node, SyntaxTreeSources[node.SyntaxTree]);
         }
 
@@ -257,5 +258,6 @@ namespace IDesign.Extension
         {
             return VSConstants.S_OK;
         }
+
     }
 }
