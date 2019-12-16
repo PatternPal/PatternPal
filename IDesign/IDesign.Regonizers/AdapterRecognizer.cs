@@ -26,10 +26,8 @@ namespace IDesign.Recognizers
                     new ElementCheck<IRelation>(x =>
                     {
                         currentRelation = x;
-                        return x.GetRelationType() == RelationType.Uses ||
-                            x.GetRelationType() == RelationType.Extends
-                            ;
-                    }, "Is used by adapter"),
+                        return x.GetRelationType() == RelationType.Uses;
+                    }, "Adaptee is used by adapter"),
 
                     //Adapter has an adaptee field
                     new GroupCheck<IRelation, IField>(new List<ICheck<IField>>
@@ -39,6 +37,7 @@ namespace IDesign.Recognizers
                             currentField = x.GetName();
                             return x.CheckFieldType(currentRelation.GetDestination().GetName());
                         }, "Field has adaptee as type"),
+                        //Every method uses the adaptee 
                         new GroupCheck<IField, IMethod>(new List<ICheck<IMethod>>
                         {
                             new ElementCheck<IMethod>(x => x.CheckFieldIsUsed(currentField), "Method uses adpatee"),
@@ -48,16 +47,16 @@ namespace IDesign.Recognizers
 
                         }, x => entityNode.GetMethods(), "Is used in every adapter method", GroupCheckType.All)
 
-                    }, x => entityNode.GetFields(), "Adapter has an adaptee field")
+                    }, x => entityNode.GetFields(), "Adapter has an adaptee")
                 }, node => node.GetRelations(), "Has adaptee")
             }, x => new List<IEntityNode> { entityNode }, "Object adapter", GroupCheckType.All);
 
 
             var objectAdapterResult = adapterCheck.Check(entityNode);
-            
+
             var classAdapterResult = InheritanceAdapter(entityNode).Check(entityNode);
 
-            if((float)objectAdapterResult.GetTotalChecks() / objectAdapterResult.GetScore()  < (float)classAdapterResult.GetTotalChecks() / classAdapterResult.GetScore())
+            if ((float)objectAdapterResult.GetTotalChecks() / objectAdapterResult.GetScore() < (float)classAdapterResult.GetTotalChecks() / classAdapterResult.GetScore())
                 result.Results = objectAdapterResult.GetChildFeedback().ToList();
             else
                 result.Results = classAdapterResult.GetChildFeedback().ToList();
@@ -76,26 +75,23 @@ namespace IDesign.Recognizers
                     "Implements interface or extends class"),
                 new GroupCheck<IEntityNode, IRelation>(new List<ICheck<IRelation>>
                 {
-                    //Is used by adapter    
+                    //Is used by adapter (parent)    
                     new ElementCheck<IRelation>(x =>
                     {
                         currentRelation = x;
                         return x.GetRelationType() == RelationType.Extends ||
                                x.GetRelationType() == RelationType.Implements
                             ;
-                    }, "Is used by adapter"),
+                    }, "Extends an the adapter"),
 
                         new GroupCheck<IRelation, IMethod>(new List<ICheck<IMethod>>
                         {
                             new ElementCheck<IMethod>(x => x.CheckIfMethodCallsMethodInNode(currentRelation.GetDestination()), "Method uses adpatee"),
                             new ElementCheck<IMethod>(x => !x.CheckReturnType(currentRelation.GetDestination().GetName()), "Method does not return adaptee"),
                             new ElementCheck<IMethod>(x => x.IsInterfaceMethod(entityNode) || x.CheckModifier("override"),
-                                "Method doen'st overide or isn't implemented"),
+                                "Method is overriden or implemted"),
 
-                        }, x =>
-                        {
-                            return entityNode.GetMethods();
-                        }, "Is used in every adapter method", GroupCheckType.All)
+                        }, x => entityNode.GetMethods(), "Every method calls adaptee", GroupCheckType.All)
 
                 }, node => node.GetRelations(), "Has adaptee")
             }, x => new List<IEntityNode> { entityNode }, "Class adapter", GroupCheckType.All);

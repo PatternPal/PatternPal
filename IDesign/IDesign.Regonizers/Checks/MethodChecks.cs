@@ -100,6 +100,13 @@ namespace IDesign.Recognizers.Checks
             return result;
         }
 
+
+        /// <summary>
+        ///     Checks if a method calls a method in the given noe
+        /// </summary>
+        /// <param name="method">The method</param>
+        /// <param name="node">The node in witch the method could be</param>
+        /// <returns></returns>
         public static bool CheckIfMethodCallsMethodInNode(this IMethod method, IEntityNode node)
         {
             if (method.GetBody() == null)
