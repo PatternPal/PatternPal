@@ -100,6 +100,22 @@ namespace IDesign.Recognizers.Checks
             return result;
         }
 
+        public static bool CheckIfMethodCallsMethodInNode(this IMethod method, IEntityNode node)
+        {
+            if (method.GetBody() == null)
+                return false;
+            var invocations = method.GetBody().DescendantNodes().OfType<InvocationExpressionSyntax>();
+            foreach (var invocation in invocations)
+            {
+                var identifier = invocation.Expression.DescendantNodesAndSelf().OfType<IdentifierNameSyntax>().FirstOrDefault();
+                var arguments = invocation.ArgumentList.Arguments.Count;
+                if (node.MethodInEntityNode(identifier.ToString(), arguments))
+                    return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Return a boolean based on if the method has the same name as the given string
         /// </summary>

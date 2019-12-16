@@ -38,6 +38,35 @@ namespace IDesign.Recognizers.Checks
             }
             return false;
         }
+
+        /// <summary>
+        /// Return a boolean based on if the given method is implemented in a interface of the given node
+        /// </summary>
+        /// <param name="node">The node which should have the interface which contains the method</param>
+        /// <param name="method">The method which it should check</param>
+        /// <param name="amountOfParams"></param>
+        /// <returns>The method is from an interface of the given node</returns>
+        public static bool MethodInEntityNode(this IEntityNode node, string methodName, int amountOfParams){
+            //var name = method.GetName();
+
+            if (node.GetMethods().Any(x => x.CheckMethodIdentifier(methodName) && x.GetParameter().Parameters.Count == amountOfParams))
+            {
+                //Comtains method itself
+                return true;
+            }
+            //if (method.IsEquals())
+            foreach (var relation in node.GetRelations().Where(x => x.GetRelationType() == RelationType.Extends || x.GetRelationType() == RelationType.Implements))
+            {
+                if (relation.GetDestination().MethodInEntityNode(methodName, amountOfParams))
+                    return true;
+            }
+
+            return false;
+        }
+
+        
+        
+
         /// <summary>
         /// Return a boolean based on if the given node has a method with that name
         /// </summary>

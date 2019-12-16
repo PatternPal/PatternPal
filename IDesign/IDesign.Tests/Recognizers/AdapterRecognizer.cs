@@ -14,9 +14,13 @@ namespace IDesign.Tests.Recognizers
 {
     class AdapterRecognizerTest
     {
-        [TestCase("AdapterTest1", "Target", 0, 40)]
-        [TestCase("AdapterTest1", "Adaptee", 0, 40)]
-        [TestCase("AdapterTest1", "Adapter", 90, 100)]
+        [TestCase("AdapterTest1", "Target", 0, 80)] //Target
+        [TestCase("AdapterTest1", "Adaptee", 0, 80)] //Adaptee
+        [TestCase("AdapterTest1", "Adapter", 80, 100)] //Adapter
+        [TestCase("AdapterTest2", "ThirdPartyBillingSystem", 0, 80)] //Client
+        [TestCase("AdapterTest2", "ITarget", 0, 80)] //Target
+        [TestCase("AdapterTest2", "HRSystem", 0, 80)] //Adaptee
+        [TestCase("AdapterTest2", "EmployeeAdapter", 80, 100)] //Adapter
         public void AdapterRecognizer_Returns_Correct_Score(string directory, string filename, int minscore, int maxscore)
         {
             var state = new AdapterRecognizer();
