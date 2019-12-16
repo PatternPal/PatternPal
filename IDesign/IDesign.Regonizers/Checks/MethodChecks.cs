@@ -90,19 +90,14 @@ namespace IDesign.Recognizers.Checks
         public static IEnumerable<string> GetCreatedTypes(this IMethod methodSyntax)
         {
             var result = new List<string>();
-            try
-            {
+            if (methodSyntax.GetBody() == null)
+                return result;
                 var creations = methodSyntax.GetBody().DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
                 foreach (var creation in creations)
                 {
                     var identifiers = creation.DescendantNodes().OfType<IdentifierNameSyntax>();
                     result.AddRange(identifiers.Select(y => y.Identifier.ToString()));
                 }
-            }
-            catch (Exception e)
-            {
-                _ = e.Message;
-            }
             return result;
         }
 

@@ -44,9 +44,15 @@ namespace IDesign.Extension
             SelectPaths.ProjectSelection.ItemsSource = Projects;
             SelectPaths.ProjectSelection.SelectedIndex = 0;
             Dte = Package.GetGlobalService(typeof(SDTE)) as DTE;
+
+
+            var ss = (IVsRunningDocumentTable)Package.GetGlobalService(typeof(SVsRunningDocumentTable));
+            uint _SolutionEventsCookie;
+            ss.AdviseRunningDocTableEvents(this, out _SolutionEventsCookie);
             var ss = (IVsSolution)Package.GetGlobalService(typeof(SVsSolution));
             ss.AdviseSolutionEvents(this, out _SolutionEventsCookie);
         }
+
 
         /// <summary>
         ///     Adds all the existing designpatterns in a list.
@@ -83,25 +89,22 @@ namespace IDesign.Extension
                 }
             }
 
-            //Here you signal the UI thread to execute the action:
-            Dispatcher?.BeginInvoke(new Action(() =>
-            {
-                // - Change your UI information here
+            // - Change your UI information here
                 TreeViewResults.ResultsView.ItemsSource = viewModels;
-            }), null);
         }
 
         /// <summary>
         ///     Gets current active document path.
         /// </summary>
-        private void ChoosePath()
+        private List<string> GetCurrentPath()
         {
-            Paths = new List<string>();
+            var result = new List<string>();
 
             if ((bool)SelectPaths.radio1.IsChecked)
             {
                 if (Dte.ActiveDocument != null)
-                    Paths.Add(Dte.ActiveDocument.FullName);
+                result.Add(Dte.ActiveDocument.FullName);
+            return result;
             }
             else
             {
@@ -109,6 +112,7 @@ namespace IDesign.Extension
                 var selectedI = SelectPaths.ProjectSelection.SelectedIndex;
                 Paths.AddRange(Projects[selectedI].Documents.Select(x => x.FilePath));
             }
+            GetAllPaths();
         }
 
         /// <summary>
@@ -130,6 +134,11 @@ namespace IDesign.Extension
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification =
             "Default event handler naming pattern")]
         private async void Analyse_Button(object sender, RoutedEventArgs e)
+        {
+            Analyse();
+        }
+
+        private async void Analyse()
         {
             ChoosePath();
             var SelectedPatterns = ViewModels.Where(x => x.IsChecked).Select(x => x.Pattern).ToList();
@@ -154,7 +163,30 @@ namespace IDesign.Extension
                 {
                     TreeViewResults.SyntaxTreeSources = runner.CreateGraph(Paths);
                     var results = runner.Run(SelectedPatterns);
+                var cur = GetCurrentPath().FirstOrDefault();
+
+
+                //Here you signal the UI thread to execute the action:
+                Dispatcher?.BeginInvoke(new Action(() =>
+                {
+                    if ((bool)radio1.IsChecked)
+                        results = results.Where(x => x.FilePath == cur).ToList();
+
                     CreateResultViewModels(results);
+                    var cur = GetCurrentPath().FirstOrDefault();
+
+var cur = GetCurrentPath().FirstOrDefault();
+
+
+                //Here you signal the UI thread to execute the action:
+                Dispatcher?.BeginInvoke(new Action(() =>
+                {
+                    if ((bool)radio1.IsChecked)
+                        results = results.Where(x => x.FilePath == cur).ToList();
+
+                    CreateResultViewModels(results);
+                }));
+	
                 }
                 catch
                 {
@@ -172,6 +204,41 @@ namespace IDesign.Extension
             ProgressStatusBlock.Text = "";
         }
 
+        #region IVsRunningDocTableEvents3 implementation
+
+        int IVsRunningDocTableEvents.OnAfterFirstDocumentLock(uint docCookie, uint dwRDTLockType, uint dwReadLocksRemaining, uint dwEditLocksRemaining)
+        {
+            return VSConstants.S_OK;
+        }
+
+        int IVsRunningDocTableEvents.OnBeforeLastDocumentUnlock(uint docCookie, uint dwRDTLockType, uint dwReadLocksRemaining,
+            uint dwEditLocksRemaining)
+        {
+            return VSConstants.S_OK;
+        }
+
+        int IVsRunningDocTableEvents.OnAfterSave(uint docCookie)
+        {
+            Analyse();
+            return VSConstants.S_OK;
+        }
+
+        int IVsRunningDocTableEvents.OnAfterAttributeChange(uint docCookie, uint grfAttribs)
+        {
+            return VSConstants.S_OK;
+        }
+
+        int IVsRunningDocTableEvents.OnBeforeDocumentWindowShow(uint docCookie, int fFirstShow, IVsWindowFrame pFrame)
+        {
+            return VSConstants.S_OK;
+        }
+
+        int IVsRunningDocTableEvents.OnAfterDocumentWindowHide(uint docCookie, IVsWindowFrame pFrame)
+        {
+            return VSConstants.S_OK;
+        }
+
+        #endregion
         public int OnAfterOpenProject(IVsHierarchy pHierarchy, int fAdded)
         {
             return VSConstants.S_OK;

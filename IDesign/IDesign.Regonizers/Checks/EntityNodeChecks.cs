@@ -17,7 +17,9 @@ namespace IDesign.Recognizers.Checks
         /// <returns>The field is the type that is given in the function</returns>
         public static bool ImplementsInterface(this IEntityNode node, string name)
         {
-            if (ClassImlementsInterface(node, name)) return true;
+            if (node == null)
+                return false;
+            if (ClassImplementsInterface(node, name))    return true;
 
             if (CheckMinimalAmountOfRelationTypes(node, RelationType.Extends, 1))
                 return ImplementsInterface(GetExtends(node), name);
@@ -33,6 +35,9 @@ namespace IDesign.Recognizers.Checks
         /// <returns>The method is from an interface of the given node</returns>
         public static bool ClassImlementsInterfaceMethod(this IEntityNode node, IMethod method)
         {
+
+            if (node == null)
+                return false;
             foreach (var interFace in node.GetRelations().Where(x => x.GetRelationType() == RelationType.Implements))
             {
                 if (InterfaceImplementsMethod(interFace.GetDestination(), method))
@@ -73,6 +78,8 @@ namespace IDesign.Recognizers.Checks
         /// <returns>The given node has the given method</returns>
         public static bool InterfaceImplementsMethod(this IEntityNode node, IMethod method)
         {
+            if (node == null)
+                return false;
             return node.GetMethods().Any(x => x.IsEquals(method));
         }
 
@@ -84,6 +91,8 @@ namespace IDesign.Recognizers.Checks
         /// <returns>The field is the type that is given in the function</returns>
         public static bool ExtendsClass(this IEntityNode node, string name)
         {
+            if (node == null)
+                return false;
             if (CheckMinimalAmountOfRelationTypes(node, RelationType.Extends, 1))
             {
                 if (GetExtends(node).GetName() == name) return true;
@@ -100,8 +109,10 @@ namespace IDesign.Recognizers.Checks
         /// <param name="node">The node which it should check</param>
         /// <param name="name">The expected name of the interface</param>
         /// <returns>The node has the interface with that name</returns>
-        public static bool ClassImlementsInterface(this IEntityNode node, string name)
+        public static bool ClassImplementsInterface(this IEntityNode node, string name)
         {
+            if (node == null)
+                return false;
             return node.GetRelations()
                 .Any(x => x.GetRelationType() == RelationType.Implements && x.GetDestination().GetName() == name);
         }
@@ -113,6 +124,8 @@ namespace IDesign.Recognizers.Checks
         /// <returns>The node that is extended by the given node</returns>
         public static IEntityNode GetExtends(this IEntityNode node)
         {
+            if (node == null)
+                return null;
             return node.GetRelations().Where(x => x.GetRelationType() == RelationType.Extends).FirstOrDefault()
                 .GetDestination();
         }
@@ -135,9 +148,14 @@ namespace IDesign.Recognizers.Checks
         /// <returns>The node that has this name</returns>
         public static IEntityNode GetEdgeNode(this IEntityNode node, string name)
         {
-            try
-            {
-                node = node.GetRelations().Where(x => x.GetDestination().GetName() == name).FirstOrDefault()
+
+            if (node == null)
+                return null;
+            var relations = node.GetRelations().Where(x => { return x.GetDestination().GetName() == name; });
+
+            if (!relations.Any())
+                return null;
+            return relations.FirstOrDefault()
                              .GetDestination();
             }
             catch (Exception e)
@@ -154,9 +172,11 @@ namespace IDesign.Recognizers.Checks
         /// <param name="entityNode"></param>
         /// <param name="modifier"></param>
         /// <returns></returns>
-        public static bool CheckModifier(this IEntityNode entityNode, string modifier)
+        public static bool CheckModifier(this IEntityNode node, string modifier)
         {
-            return entityNode.GetModifiers().Any(x => x.ToString().IsEqual(modifier));
+            if (node == null)
+                return false;
+            return node.GetModifiers().Any(x => x.ToString().IsEqual(modifier));
         }
 
         /// <summary>
@@ -165,9 +185,11 @@ namespace IDesign.Recognizers.Checks
         /// <param name="entityNode"></param>
         /// <param name="nodeType"></param>
         /// <returns></returns>
-        public static bool CheckTypeDeclaration(this IEntityNode entityNode, EntityNodeType nodeType)
+        public static bool CheckTypeDeclaration(this IEntityNode node, EntityNodeType nodeType)
         {
-            return entityNode.GetEntityNodeType().Equals(nodeType);
+            if (node == null)
+                return false;
+            return node.GetEntityNodeType().Equals(nodeType);
         }
 
         /// <summary>
