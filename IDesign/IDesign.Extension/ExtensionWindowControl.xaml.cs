@@ -9,7 +9,6 @@ using EnvDTE;
 using IDesign.Core;
 using IDesign.Core.Models;
 using IDesign.Extension.ViewModels;
-using IDesign.Recognizers.Abstractions;
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
@@ -77,19 +76,15 @@ namespace IDesign.Extension
 
         private void CreateResultViewModels(IEnumerable<RecognitionResult> results)
         {
-            var viewModels = new List<ClassViewModel>();
+            var viewModels = new List<ResultViewModel>();
 
-            foreach (var result in results)
+            foreach (var item in RecognizerRunner.designPatterns)
             {
-                var classViewModel = viewModels.FirstOrDefault(x => x.EntityNode == result.EntityNode);
-                if (classViewModel == null)
+                var patterns = results.Where(x => x.Pattern.Equals(item));
+                if (patterns.Count() > 0)
                 {
-                    classViewModel = new ClassViewModel(result.EntityNode);
-                    viewModels.Add(classViewModel);
+                    viewModels.AddRange(patterns.Where(x => x.Result.GetScore() > 80).OrderBy(x => x.Result.GetScore()).Select(x => new ResultViewModel(x)));
                 }
-
-                var resultViewModel = new ResultViewModel(result);
-                classViewModel.Results.Add(resultViewModel);
             }
 
             //Here you signal the UI thread to execute the action:
