@@ -113,7 +113,6 @@ namespace IDesign.Recognizers
             result.Results.Add(abstractStateCheck.Check(node));
         }
 
-
         /// <summary>
         ///     Function to do checks for the concrete strategy class
         /// </summary>
@@ -141,6 +140,7 @@ namespace IDesign.Recognizers
                                                        (x.CheckTypeDeclaration(EntityNodeType.Class) &&
                                                         (x.CheckModifier("abstract"))), "message")
                 }, x => new List<IEntityNode>() { edgeNode }, "");
+
                 result.Results.Add(check.Check(edgeNode));
             }
 
@@ -151,7 +151,7 @@ namespace IDesign.Recognizers
                 {
                     new ElementCheck<IMethod>(x => x.GetName() == methodName, "names should be equal!"),
                     new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void!"),
-                    //TO DO: check of functie de zelfte parameters heeft als de interface/abstracte klasse functie                                      (x.CheckTypeDeclaration(EntityNodeType.Class) && (x.CheckModifier("abstract"))),"message")
+                    //TO DO: check of functie de zelfte parameters heeft als de interface/abstracte klasse functie                     
                 }, x => x.GetMethods(), "");
 
                 result.Results.Add(createCheck.Check(node));
@@ -176,7 +176,7 @@ namespace IDesign.Recognizers
                     //check if state makes other state in handle method and check if the return type is void
                     var fieldCheck = new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
                     {
-                        new ElementCheck<IField>(x => x.CheckFieldType(edgeNode.GetName()),
+                        new ElementCheck<IField>(x => x.CheckFieldType(new List<string>(){ edgeNode.GetName() }),
                             $"{node.GetName()} must be equal to {edgeNode.GetName()}"),
                         new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "modifier must be private")
                     }, x => x.GetFields(), "Context had method where:");
