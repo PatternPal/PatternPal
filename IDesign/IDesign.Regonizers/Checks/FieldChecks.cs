@@ -1,3 +1,4 @@
+﻿using System.Collections.Generic;
 ﻿using System.Linq;
 using IDesign.Recognizers.Abstractions;
 
@@ -11,9 +12,9 @@ namespace IDesign.Recognizers.Checks
         /// <param name="fieldSyntax">The field witch it should check</param>
         /// <param name="type">The expected type</param>
         /// <returns>The field is the type that is given in the function</returns>
-        public static bool CheckFieldType(this IField fieldSyntax, string type)
+        public static bool CheckFieldType(this IField fieldSyntax, IEnumerable<string> types)
         {
-            return fieldSyntax.GetFieldType().ToString().IsEqual(type);
+            return types.Any(x => x.Equals(fieldSyntax.GetFieldType().ToString()));
         }
 
         /// <summary>

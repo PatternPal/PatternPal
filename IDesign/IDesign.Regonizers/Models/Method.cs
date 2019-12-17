@@ -54,5 +54,16 @@ namespace IDesign.Recognizers.Models
         {
             return MethodDeclaration;
         }
+
+
+        public IEnumerable<ParameterSyntax> GetParameters()
+        {
+            return MethodDeclaration.ParameterList.Parameters;
+        }
+
+        public IEnumerable<string> GetArguments()
+        {
+            return new List<string>();
+        }
     }
 }

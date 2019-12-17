@@ -54,5 +54,15 @@ namespace IDesign.Recognizers.Models
         {
             return Constructor;
         }
+
+        public IEnumerable<ParameterSyntax> GetParameters()
+        {
+            return Constructor.ParameterList.Parameters;
+        }
+
+        public IEnumerable<string> GetArguments()
+        {
+            return Constructor.Initializer.ArgumentList.Arguments.ToList().Select(x => x.ToString());
+        }
     }
 }

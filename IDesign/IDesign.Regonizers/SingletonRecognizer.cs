@@ -23,7 +23,7 @@ namespace IDesign.Recognizers
 
             var propertyChecks = new List<ICheck<IField>>
             {
-                new ElementCheck<IField>(x => x.CheckFieldType(entityNode.GetName()), "Incorrect type"),
+                new ElementCheck<IField>(x => x.CheckFieldType(new List<string>(){ entityNode.GetName() }), "Incorrect type"),
                 new ElementCheck<IField>(x => x.CheckMemberModifier("static"), "Is not static"),
                 new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "Is not private")
             };

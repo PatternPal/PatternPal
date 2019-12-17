@@ -9,9 +9,11 @@ namespace IDesign.Recognizers.Abstractions
     {
         string GetName();
         string GetReturnType();
+        IEnumerable<string> GetArguments();
         BlockSyntax GetBody();
-        SyntaxTokenList GetModifiers();
         IEnumerable<string> GetParameterTypes();
+        IEnumerable<ParameterSyntax> GetParameters();
+        SyntaxTokenList GetModifiers();
         ParameterListSyntax GetParameter();
     }
 }

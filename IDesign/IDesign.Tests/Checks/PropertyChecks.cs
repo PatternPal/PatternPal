@@ -3,6 +3,8 @@ using IDesign.Recognizers.Models;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
+using IDesign.Recognizers;
+using System.Collections.Generic;
 
 namespace IDesign.Tests.Checks
 {
@@ -46,7 +48,7 @@ namespace IDesign.Tests.Checks
             if (property == null)
                 Assert.Fail();
 
-            Assert.AreEqual(shouldBeValid, new PropertyField(property).CheckFieldType(type));
+            Assert.AreEqual(shouldBeValid, new PropertyField(property).CheckFieldType(new List<string>() { type }));
         }
     }
 }

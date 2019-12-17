@@ -6,12 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase1.cs" />
-    <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase2.cs" />
-    <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase3.cs" />
-    <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase4.cs" />
-    <Compile Remove="TestClasses\FactorySimple\FactorySimpleTestCase5.cs" />
-    <Compile Remove="TestClasses\FactorySimple\ProductA.cs" />
     <Compile Remove="TestClasses\FactoryTestClasses\FactoryTestCase1.cs" />
     <Compile Remove="TestClasses\FactoryTestClasses\FactoryTestCase2.cs" />
     <Compile Remove="TestClasses\FactoryTestClasses\FactoryTestCase3.cs" />
@@ -27,6 +21,28 @@
     <Compile Remove="TestClasses\Relation\RelationTestCase5.cs" />
     <Compile Remove="TestClasses\Relation\RelationTestCase6.cs" />
     <Compile Remove="TestClasses\Relation\RelationTestCase7.cs" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase1.cs" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase2.cs" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase3.cs" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase4.cs" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase5.cs" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase6.cs" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase7.cs" />
+    <Compile Remove="TestClasses\FactorySimple\**" />
+    <Compile Remove="TestClasses\FactoryTestClasses\**" />
+    <Compile Remove="TestClasses\Factory\**" />
+    <Compile Remove="TestClasses\SingletonTestClasses\**" />
+    <EmbeddedResource Remove="TestClasses\FactorySimple\**" />
+    <EmbeddedResource Remove="TestClasses\FactoryTestClasses\**" />
+    <EmbeddedResource Remove="TestClasses\Factory\**" />
+    <EmbeddedResource Remove="TestClasses\SingletonTestClasses\**" />
+    <None Remove="TestClasses\FactorySimple\**" />
+    <None Remove="TestClasses\FactoryTestClasses\**" />
+    <None Remove="TestClasses\Factory\**" />
+    <None Remove="TestClasses\SingletonTestClasses\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="TestClasses\SingleTonTestCase1.cs" />
     <Compile Remove="TestClasses\SingleTonTestCase2.cs" />
     <Compile Remove="TestClasses\SingleTonTestCase3.cs" />
@@ -36,46 +52,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="TestClasses\FactorySimple\FactorySimpleTestCase1.cs">
+    <None Include="TestClasses\ClassChecks\Class1.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="TestClasses\FactorySimple\FactorySimpleTestCase2.cs">
+    <None Include="TestClasses\ClassChecks\Class2.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="TestClasses\FactorySimple\FactorySimpleTestCase3.cs">
+    <None Include="TestClasses\ClassChecks\Class3.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="TestClasses\FactorySimple\FactorySimpleTestCase4.cs">
+    <None Include="TestClasses\ClassChecks\Class4.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="TestClasses\FactorySimple\FactorySimpleTestCase5.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestClasses\FactorySimple\ProductA.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestClasses\Factory\FactoryTestCase1.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestClasses\Factory\FactoryTestCase2.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestClasses\Factory\FactoryTestCase3.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestClasses\Factory\FactoryTestCase4.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestClasses\Factory\FactoryTestCase5.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestClasses\Factory\IProduct.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestClasses\Factory\ProductA.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="TestClasses\Factory\ProductB.cs">
+    <None Include="TestClasses\ClassChecks\Class5.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TestClasses\Relation\RelationTestCase1.cs">
@@ -126,7 +115,130 @@
     <Compile Update="TestClasses\EntityNodeChecks\Class3.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Update="TestClasses\AdapterTest2\BaseCase1.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\AdapterTest1\BaseCase.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\ClassChecks\Class1.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\FactoryMethodTest1\BeerFactory.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\FactoryMethodTest1\Blond.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\FactoryMethodTest1\BlondFactory.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\FactoryMethodTest1\Dubbel.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\FactoryMethodTest1\DubbleFactory.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\FactoryMethodTest1\IBeer.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\FactoryMethodTest2\CardFactory.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\FactoryMethodTest2\CreditCard.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\FactoryMethodTest2\MoneyBackCreditCard.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\FactoryMethodTest2\MoneyBackFactory.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\FactoryMethodTest2\PlatinumCreditCard.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\FactoryMethodTest2\PlatinumFactory.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\FactoryMethodTest2\TitaniumCreditCard.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\FactoryMethodTest2\TitaniumFactory.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Update="TestClasses\EntityNodeChecks\Class4.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Observer\Case1\IObserver.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Observer\Case1\ISubject.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Observer\Case1\ObserverA.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Observer\Case1\ObserverTestCase1.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Observer\Case1\SubjectA.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Observer\Case2\IBM.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Observer\Case2\IInvestor.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Observer\Case2\Investor.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Observer\Case2\Stock.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Observer\Case3\IObserver.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Observer\Case3\ISubject.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Observer\Case3\ObserverA.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Observer\Case3\ObserverTestCase3.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Observer\Case3\SubjectA.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Observer\Case3\SubjectB.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Observer\Case4\IObserver.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Observer\Case4\ISubject.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Observer\Case4\ObserverA.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Observer\Case4\ObserverTestCase4.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Observer\Case5\IObserver.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Observer\Case5\ISubject.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Observer\Case5\ObserverA.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Observer\Case5\ObserverTestCase5.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Observer\Case5\SubjectA.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Update="TestClasses\Singleton\SingleTonTestCase1.cs">
@@ -150,6 +262,111 @@
     <Compile Update="TestClasses\Singleton\SingleTonTestCase7.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Update="TestClasses\StateTest1\Doneness.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StateTest1\Medium.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StateTest1\MediumRare.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StateTest1\Rare.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StateTest1\Ruined.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StateTest1\Steak.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StateTest1\Uncooked.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StateTest2\Account.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StateTest2\GoldState.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StateTest2\RedState.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StateTest2\SilverState.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StateTest2\State.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StateTest3\ConcreteStateA.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StateTest3\ConcreteStateB.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StateTest3\Context.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StateTest3\State.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StateTest4\DeadState.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StateTest4\HealthyState.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StateTest4\HurtState.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StateTest4\Player.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StateTest4\State.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StrategyTest1\CookingMethod.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StrategyTest1\CookStrategy.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StrategyTest1\DeepFrying.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StrategyTest1\Grilling.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StrategyTest1\OvenBaking.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StrategyTest2\ConcreteStrategyA.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StrategyTest2\ConcreteStrategyB.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StrategyTest2\Context.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StrategyTest2\IStrategy.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StrategyTest3\ConcreteStrategyA.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StrategyTest3\ConcreteStrategyB.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StrategyTest3\ConcreteStrategyC.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StrategyTest3\Context.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StrategyTest3\Strategy.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Update="TestClasses\TestClass1.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
@@ -157,5 +374,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
   </ItemGroup>
-
+  <ItemGroup>
+    <Folder Include="TestClasses\FactoryMethodTest3\" />
+  </ItemGroup>
 </Project>

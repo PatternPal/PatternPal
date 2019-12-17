@@ -50,7 +50,7 @@ namespace IDesign.Recognizers
 
                         new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
                         {
-                            new ElementCheck<IField>(x => x.CheckFieldType($"List<{ node.GetName() }>"), $"There should be a 1 list of type: { node.GetName() }"),
+                            new ElementCheck<IField>(x => x.CheckFieldType(new List<string> { $"List<{ node.GetName() }>" }), $"There should be a 1 list of type: { node.GetName() }"),
                         }, d => d.GetFields(), "concrete field", GroupCheckType.All),
                     }, c => c.GetRelations().Where(x => x.GetRelationType() == RelationType.ImplementedBy).Select(x => x.GetDestination()), "concrete subject", GroupCheckType.All),
                 }, b => node.GetRelations().Where(x => x.GetRelationType() == RelationType.UsedBy).Select(x => x.GetDestination()).ToList(), "subject interface"),
@@ -85,7 +85,7 @@ namespace IDesign.Recognizers
 
                     new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
                     {
-                        new ElementCheck<IField>(x => x.CheckFieldType($"List<{ node.GetName() }>"), $"There should be a 1 list of type: { node.GetName() }"),
+                        new ElementCheck<IField>(x => x.CheckFieldType(new List<string> { $"List<{ node.GetName() }>" }), $"There should be a 1 list of type: { node.GetName() }"),
                     }, d => d.GetFields(), "concrete subject fields"),
 
                     //Check to make sure a subject with an interface doesn't get mistaken for a concrete subject without an subject interface
