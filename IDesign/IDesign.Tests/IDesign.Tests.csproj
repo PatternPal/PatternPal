@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase1.cs" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase2.cs" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase3.cs" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase4.cs" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase5.cs" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase6.cs" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase7.cs" />
     <Compile Remove="TestClasses\FactoryTestClasses\**" />
     <Compile Remove="TestClasses\SingletonTestClasses\**" />
     <EmbeddedResource Remove="TestClasses\FactoryTestClasses\**" />
@@ -138,6 +145,12 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Compile>
     <Compile Update="TestClasses\ClassChecks\Class1.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Decorator\DecoratorTestCase1\Context.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\Decorator\DecoratorTestCase1\Decorator.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Update="TestClasses\Factory\FactoryTestCase1.cs">

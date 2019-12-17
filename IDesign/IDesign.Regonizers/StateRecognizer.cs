@@ -167,7 +167,7 @@ namespace IDesign.Recognizers
                     //check if state makes other state in handle method and check if the return type is void
                     var fieldCheck = new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
                     {
-                        new ElementCheck<IField>(x => x.CheckFieldType(edgeNode.GetName()),$"{node.GetName()} must be equal to {edgeNode.GetName()}"),
+                        new ElementCheck<IField>(x => x.CheckFieldType(new List<string>(){ edgeNode.GetName() }),$"{node.GetName()} must be equal to {edgeNode.GetName()}"),
                         new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "Modifier must be private")
                     }, x => x.GetFields(), "Context has method where:");
                     result.Results.Add(fieldCheck.Check(node));

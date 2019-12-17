@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IDesign.Tests.TestClasses.FactorySimple
 {
-   public  class FactorySimpleTestCase1
+   public class FactorySimpleTestCase1
     {
         public ProductA Create()
         {
