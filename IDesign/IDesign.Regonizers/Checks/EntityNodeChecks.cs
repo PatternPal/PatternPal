@@ -17,7 +17,7 @@ namespace IDesign.Recognizers.Checks
         /// <returns>The field is the type that is given in the function</returns>
         public static bool ImplementsInterface(this IEntityNode node, string name)
         {
-            if (ClassImlementsInterface(node, name))    return true;
+            if (ClassImlementsInterface(node, name)) return true;
 
             if (CheckMinimalAmountOfRelationTypes(node, RelationType.Extends, 1))
                 return ImplementsInterface(GetExtends(node), name);
@@ -32,9 +32,11 @@ namespace IDesign.Recognizers.Checks
         /// <returns>The method is from an interface of the given node</returns>
         public static bool ClassImlementsInterfaceMethod(this IEntityNode node, IMethod method)
         {
-            foreach(var interFace in node.GetRelations().Where(x => x.GetRelationType() == RelationType.Implements))
+            var implements = false;
+
+            foreach (var interFace in node.GetRelations().Where(x => x.GetRelationType() == RelationType.Implements))
             {
-                if(InterfaceImplementsMethod(interFace.GetDestination(), method))
+                if (InterfaceImplementsMethod(interFace.GetDestination(), method))
                 {
                     return true;
                 }
@@ -124,8 +126,17 @@ namespace IDesign.Recognizers.Checks
         /// <returns>The node that has this name</returns>
         public static IEntityNode GetEdgeNode(this IEntityNode node, string name)
         {
-            return node.GetRelations().Where(x => x.GetDestination().GetName() == name).FirstOrDefault()
-                .GetDestination();
+            try
+            {
+                node = node.GetRelations().Where(x => x.GetDestination().GetName() == name).FirstOrDefault()
+                             .GetDestination();
+            }
+            catch (Exception e)
+            {
+                _ = e.Message;
+            }
+            return node;
+
         }
 
         /// <summary>
