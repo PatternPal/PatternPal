@@ -4,9 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
-             xmlns:extension="clr-namespace:IDesign.Extension"
              xmlns:models="clr-namespace:IDesign.Extension.ViewModels"
              xmlns:theming="clr-namespace:Microsoft.VisualStudio.PlatformUI;assembly=Microsoft.VisualStudio.Imaging"
+             xmlns:extension="clr-namespace:IDesign.Extension"
              xmlns:catalog="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.ImageCatalog"
              xmlns:abstractions="clr-namespace:IDesign.Recognizers.Abstractions;assembly=IDesign.Recognizers"
              xmlns:imaging="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.Imaging"
@@ -328,7 +328,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="80" />
             <RowDefinition Height="30" />
-            <RowDefinition Height="50" />
+            <RowDefinition Height="60" />
             <RowDefinition Height="40" />
             <RowDefinition Height="30" />
             <RowDefinition Height="1*" />
@@ -347,11 +347,25 @@
                 </HierarchicalDataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <StackPanel Grid.Row="2">
+        <StackPanel Grid.Row="2" Margin="5">
             <RadioButton Name="radio1" GroupName="path" Content="Active Document" VerticalContentAlignment="Center"
                          Height="25" IsChecked="True" />
-            <RadioButton Name="radio2" GroupName="path" Content="Whole Project" VerticalContentAlignment="Center"
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="180"/>
+                </Grid.ColumnDefinitions>
+
+                <RadioButton Name="radio2" GroupName="path" Content="Project" VerticalContentAlignment="Center"
                          Height="25" />
+                <ComboBox Grid.Column="1" x:Name="ProjectSelection" Margin="5">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </Grid>
         </StackPanel>
         <Border x:Name="ButtonBorder" Grid.Row="3" Background="Transparent" BorderThickness="0 1"
                 Style="{StaticResource ButtonBorder}">

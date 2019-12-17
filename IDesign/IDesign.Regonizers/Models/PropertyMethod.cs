@@ -1,3 +1,4 @@
+﻿using System.Collections.Generic;
 ﻿using IDesign.Recognizers.Abstractions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -30,6 +31,16 @@ namespace IDesign.Recognizers.Models
             return Property.Identifier.ToString();
         }
 
+        public IEnumerable<ParameterSyntax> GetParameters()
+        {
+            return new List<ParameterSyntax>();
+        }
+
+        public IEnumerable<string> GetParameterTypes()
+        {
+            return new List<string>();
+        }
+
         public ParameterListSyntax GetParameter()
         {
             return null;
@@ -48,6 +59,11 @@ namespace IDesign.Recognizers.Models
         public SyntaxNode GetSuggestionNode()
         {
             return Property;
+        }
+
+        public IEnumerable<string> GetArguments()
+        {
+            return new List<string>();
         }
     }
 }

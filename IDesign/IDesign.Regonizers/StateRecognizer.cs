@@ -20,25 +20,46 @@ namespace IDesign.Recognizers
             if (node.GetEntityNodeType() == EntityNodeType.Interface)
             {
                 //state checks
-                //AbstractClassStateChecks(node);
+                StateChecks(node);
                 InterfaceStateChecks(node);
             }
-            else if (node.GetEntityNodeType() == EntityNodeType.Class)
+            if ((node.CheckTypeDeclaration(EntityNodeType.Class) && node.CheckModifier("abstract")))
             {
-                //if node is an abstract class, node is probaly a state
-                if (node.CheckModifier("abstract"))
-                {
-                    //state checks
-                    AbstractClassStateChecks(node);
-                }
-                else
-                {
-                    //normal class checks
-                    ClassChecks(node);
-                }
+                StateChecks(node);
+                AbstractClassStateChecks(node);
             }
             return result;
         }
+
+        /// <summary>
+        ///     Function to check if pattern is state
+        /// </summary>
+        /// <param name="node"></param>
+        private void StateChecks(IEntityNode node)
+        {
+            var relations = node.GetRelations();
+
+            //create list with only Extends and Implements relations
+            var inheritanceRelations = relations.Where(x => (x.GetRelationType() == RelationType.ImplementedBy) ||
+            (x.GetRelationType() == RelationType.ExtendedBy)).ToList();
+
+            foreach (var edge in relations.Where(x => x.GetRelationType() == RelationType.UsedBy).ToList())
+            {
+                var edgeRelations = edge.GetDestination().GetRelations();
+                var usingEdgeRelations = edgeRelations.Where(x => x.GetRelationType() == RelationType.UsedBy).ToList();
+                ContextClassChecks(edge.GetDestination(), usingEdgeRelations);
+            }
+
+            foreach (var edge in inheritanceRelations)
+            {
+                var edgeRelations = edge.GetDestination().GetRelations();
+
+                //create list with only creates relations
+                var createsRelations = edgeRelations.Where(x => x.GetRelationType() == RelationType.Creates).ToList();
+                ConcreteStateClassChecks(edge.GetDestination(), createsRelations);
+            }
+        }
+
 
         /// <summary>
         ///     Function to do checks for a node that is probaly a state, implemented as an interface
@@ -47,11 +68,12 @@ namespace IDesign.Recognizers
         /// <returns></returns>
         private void InterfaceStateChecks(IEntityNode node)
         {
+
             var checkType = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
             {
                 new ElementCheck<IEntityNode>(x => x.CheckTypeDeclaration(EntityNodeType.Interface), "The modifier should be abstract. Otherwise, use an interface")
 
-            }, x => new List<IEntityNode>{node}, "Class meets the requirements: ");
+            }, x => new List<IEntityNode> { node }, "Class meets the requirements: ");
 
             result.Results.Add(checkType.Check(node));
             var checkMethods = new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
@@ -86,33 +108,6 @@ namespace IDesign.Recognizers
             result.Results.Add(abstractStateCheck.Check(node));
         }
 
-        /// <summary>
-        ///     Function to do the checks for a normall class (Context or ConcreteState)
-        /// </summary>
-        /// <param name="node"></param>
-        private void ClassChecks(IEntityNode node)
-        {
-            var relations = node.GetRelations();
-
-            //create list with only Extends and Implements relations
-            var inheritanceRelations = relations.Where(x => (x.GetRelationType() == RelationType.Implements) ||
-            (x.GetRelationType() == RelationType.Extends)).ToList();
-
-            //create list with only uses realations
-            var usingRelations = relations.Where(x => x.GetRelationType() == RelationType.Uses).ToList();
-
-            //create list with only creates relations
-            var createsRelations = relations.Where(x => x.GetRelationType() == RelationType.Creates).ToList();
-
-            if (inheritanceRelations.Count() > 0 && usingRelations.Count() > 0)
-            {
-                ConcreteStateClassChecks(node, inheritanceRelations, createsRelations);
-            }
-            if (usingRelations.Count() > 0 && inheritanceRelations.Count() <= 0)
-            {
-                ContextClassChecks(node, usingRelations);
-            }
-        }
 
         /// <summary>
         ///     Function to do checks for the concrete state class
@@ -120,30 +115,19 @@ namespace IDesign.Recognizers
         /// <param name="node"></param>
         /// <param name="inheritanceRelations"></param>
         /// <returns></returns>
-        private void ConcreteStateClassChecks(IEntityNode node, List<IRelation> inheritanceRelations, List<IRelation> creationRelations)
+        private void ConcreteStateClassChecks(IEntityNode node, List<IRelation> creationRelations)
         {
-            foreach (var edge in inheritanceRelations)
-            {
-                var edgeNode = edge.GetDestination();
-                //check if node is an interface or an abstract class
-                var check = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
-                {
-                    new ElementCheck<IEntityNode>(x => x.CheckTypeDeclaration(EntityNodeType.Interface) |
-                                                       (x.CheckTypeDeclaration(EntityNodeType.Class) && (x.CheckModifier("abstract"))),"interface or an abstract class")
-                }, x => new List<IEntityNode>{ edgeNode }, "ConcreteState has:");
-                result.Results.Add(check.Check(edgeNode));
-            }
-
             foreach (var edge in creationRelations)
             {
                 var edgeNode = edge.GetDestination();
                 //check if state makes other state in handle method and check if the return type is void
                 var createCheck = new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                 {
-                    new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "Return type is void"),
-                    new ElementCheck<IMethod>(x => (x.CheckCreationType(edgeNode.GetName())) &&(!x.CheckCreationType(node.GetName())), $"{node.GetName()} should not be itself")
+                    new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "Return type should be void"),
+                    new ElementCheck<IMethod>(x => (x.CheckCreationType(edgeNode.GetName())) &&(!x.CheckCreationType(node.GetName())), $"new state should not be itself")
                     //TO DO: check of functie de zelfte parameters heeft als de interface/abstracte klasse functie
-                    //TO DO: check of de functie de zelfde naam heeft als de overervende functie              
+                    //TO DO: check of de functie de zelfde naam heeft als de overervende functie                                
+
                 }, x => x.GetMethods(), "ConcreteState has methods where:");
 
                 result.Results.Add(createCheck.Check(node));
@@ -167,7 +151,7 @@ namespace IDesign.Recognizers
                     //check if state makes other state in handle method and check if the return type is void
                     var fieldCheck = new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
                     {
-                        new ElementCheck<IField>(x => x.CheckFieldType(edgeNode.GetName()),$"{node.GetName()} must be equal to {edgeNode.GetName()}"),
+                        new ElementCheck<IField>(x => x.CheckFieldType(new List<string>(){ edgeNode.GetName() }),$"{node.GetName()} must be equal to {edgeNode.GetName()}"),
                         new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "Modifier must be private")
                     }, x => x.GetFields(), "Context has method where:");
                     result.Results.Add(fieldCheck.Check(node));

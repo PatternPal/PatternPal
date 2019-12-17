@@ -10,11 +10,14 @@ using IDesign.Core;
 using IDesign.Core.Models;
 using IDesign.Extension.ViewModels;
 using Microsoft.CodeAnalysis;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.LanguageServices;
+using Microsoft.VisualStudio.ProjectSystem;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
+using Project = Microsoft.CodeAnalysis.Project;
 using Task = System.Threading.Tasks.Task;
 
 namespace IDesign.Extension
@@ -22,8 +25,9 @@ namespace IDesign.Extension
     /// <summary>
     ///     Interaction logic for ExtensionWindowControl.
     /// </summary>
-    public partial class ExtensionWindowControl : UserControl
+    public partial class ExtensionWindowControl : UserControl, IVsSolutionEvents
     {
+        private UInt32 _SolutionEventsCookie;
         /// <summary>
         ///     Initializes a new instance of the <see cref="ExtensionWindowControl" /> class.
         /// </summary>
@@ -34,11 +38,19 @@ namespace IDesign.Extension
             Loading = false;
             Dispatcher.VerifyAccess();
             Dte = Package.GetGlobalService(typeof(SDTE)) as DTE;
+            var ss = (IVsSolution)Package.GetGlobalService(typeof(SVsSolution));
+            ss.AdviseSolutionEvents(this, out _SolutionEventsCookie);
+        }
+
+        private void SolutionEventsOnOpened()
+        {
+            var project = Dte.ActiveSolutionProjects;
         }
 
         public List<DesignPatternViewModel> ViewModels { get; set; }
         public Dictionary<SyntaxTree, string> SyntaxTreeSources { get; set; }
         public List<string> Paths { get; set; }
+        public List<Project> Projects { get; set; }
         public bool Loading { get; set; }
         public DTE Dte { get; }
 
@@ -99,15 +111,13 @@ namespace IDesign.Extension
         private void GetAllPaths()
         {
             Paths = new List<string>();
-            var cm = (IComponentModel) Package.GetGlobalService(typeof(SComponentModel));
-            var ws = (Workspace) cm.GetService<VisualStudioWorkspace>();
-            foreach (var project in ws.CurrentSolution.Projects)
-                Paths.AddRange(project.Documents.Select(x => x.FilePath));
+            var selectedI = ProjectSelection.SelectedIndex;
+            Paths.AddRange(Projects[selectedI].Documents.Select(x => x.FilePath));
         }
 
         private void ChoosePath()
         {
-            if ((bool) radio1.IsChecked)
+            if ((bool)radio1.IsChecked)
                 GetCurrentPath();
             else
                 GetAllPaths();
@@ -118,9 +128,9 @@ namespace IDesign.Extension
         {
             try
             {
-                var cm = (IComponentModel) Package.GetGlobalService(typeof(SComponentModel));
-                var tm = (IVsTextManager) Package.GetGlobalService(typeof(SVsTextManager));
-                var ws = (Workspace) cm.GetService<VisualStudioWorkspace>();
+                var cm = (IComponentModel)Package.GetGlobalService(typeof(SComponentModel));
+                var tm = (IVsTextManager)Package.GetGlobalService(typeof(SVsTextManager));
+                var ws = (Workspace)cm.GetService<VisualStudioWorkspace>();
                 var did = ws.CurrentSolution.GetDocumentIdsWithFilePath(file);
                 ws.OpenDocument(did.FirstOrDefault());
                 tm.GetActiveView(1, null, out var av);
@@ -162,9 +172,16 @@ namespace IDesign.Extension
             runner.OnProgressUpdate += (o, recognizerProgress) => iprogress.Report(recognizerProgress);
             await Task.Run(() =>
             {
-                SyntaxTreeSources = runner.CreateGraph(Paths);
-                var results = runner.Run(SelectedPatterns);
-                CreateResultViewModels(results);
+                try
+                {
+                    SyntaxTreeSources = runner.CreateGraph(Paths);
+                    var results = runner.Run(SelectedPatterns);
+                    CreateResultViewModels(results);
+                }
+                catch
+                {
+                    //@TODO User friendly error handling
+                }
             });
 
             statusBar.Value = 0;
@@ -181,5 +198,61 @@ namespace IDesign.Extension
             var node = viewModel.Result.GetSyntaxNode();
             selectNodeInEditor(node, SyntaxTreeSources[node.SyntaxTree]);
         }
+
+        public int OnAfterOpenProject(IVsHierarchy pHierarchy, int fAdded)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnQueryCloseProject(IVsHierarchy pHierarchy, int fRemoving, ref int pfCancel)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnBeforeCloseProject(IVsHierarchy pHierarchy, int fRemoved)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnAfterLoadProject(IVsHierarchy pStubHierarchy, IVsHierarchy pRealHierarchy)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnQueryUnloadProject(IVsHierarchy pRealHierarchy, ref int pfCancel)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnBeforeUnloadProject(IVsHierarchy pRealHierarchy, IVsHierarchy pStubHierarchy)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnAfterOpenSolution(object pUnkReserved, int fNewSolution)
+        {
+            var cm = (IComponentModel)Package.GetGlobalService(typeof(SComponentModel));
+            var ws = (Workspace)cm.GetService<VisualStudioWorkspace>();
+            Projects = ws.CurrentSolution.Projects.ToList();
+            ProjectSelection.ItemsSource = Projects;
+            ProjectSelection.SelectedIndex = 0;
+            return VSConstants.S_OK;
+        }
+
+        public int OnQueryCloseSolution(object pUnkReserved, ref int pfCancel)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnBeforeCloseSolution(object pUnkReserved)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnAfterCloseSolution(object pUnkReserved)
+        {
+            return VSConstants.S_OK;
+        }
+
     }
 }

@@ -1,10 +1,13 @@
-﻿using System.Linq;
+using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace IDesign.Recognizers.Checks
 {
-    public static class EntitynodeChecks
+    public static class EntityNodeChecks
     {
         /// <summary>
         ///     Return a boolean based on if node implements an interface with the given name.
@@ -14,9 +17,9 @@ namespace IDesign.Recognizers.Checks
         /// <returns>The field is the type that is given in the function</returns>
         public static bool ImplementsInterface(this IEntityNode node, string name)
         {
-            if (ClassImlementsInterface(node, name))    return true;
+            if (ClassImlementsInterface(node, name)) return true;
 
-            if (Extends(node))
+            if (CheckMinimalAmountOfRelationTypes(node, RelationType.Extends, 1))
                 return ImplementsInterface(GetExtends(node), name);
             return false;
         }
@@ -31,15 +34,38 @@ namespace IDesign.Recognizers.Checks
         {
             var implements = false;
 
-            foreach(var interFace in node.GetRelations().Where(x => x.GetRelationType() == RelationType.Implements))
+            foreach (var interFace in node.GetRelations().Where(x => x.GetRelationType() == RelationType.Implements))
             {
-                if(InterfaceImplementsMethod(interFace.GetDestination(), method))
+                if (InterfaceImplementsMethod(interFace.GetDestination(), method))
                 {
-                    implements = true;
+                    return true;
                 }
             }
-            return implements;
+            return false;
         }
+
+        /// <summary>
+        /// Return a boolean based on if the given method is implemented in a interface of the given node
+        /// </summary>
+        /// <param name="node">The node which should have the method</param>
+        /// <param name="methodName">The name of the method</param>
+        /// <param name="amountOfParams">The amount of parameters the method should have</param>
+        /// <returns>The method is found in the node</returns>
+        public static bool MethodInEntityNode(this IEntityNode node, string methodName, int amountOfParams){
+
+            if (node.GetMethods().Any(x => x.CheckMethodIdentifier(methodName) && x.GetParameter().Parameters.Count == amountOfParams))
+            {
+                return true;
+            }
+            foreach (var relation in node.GetRelations().Where(x => x.GetRelationType() == RelationType.Extends || x.GetRelationType() == RelationType.Implements))
+            {
+                if (relation.GetDestination().MethodInEntityNode(methodName, amountOfParams))
+                    return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Return a boolean based on if the given node has a method with that name
         /// </summary>
@@ -59,7 +85,7 @@ namespace IDesign.Recognizers.Checks
         /// <returns>The field is the type that is given in the function</returns>
         public static bool ExtendsClass(this IEntityNode node, string name)
         {
-            if (Extends(node))
+            if (CheckMinimalAmountOfRelationTypes(node, RelationType.Extends, 1))
             {
                 if (GetExtends(node).GetName() == name) return true;
                 return ExtendsClass(GetExtends(node), name);
@@ -93,16 +119,6 @@ namespace IDesign.Recognizers.Checks
         }
 
         /// <summary>
-        ///     Return a boolean based on if the given node extends a node
-        /// </summary>
-        /// <param name="node">The node witch it should check</param>
-        /// <returns>The class has an extends/returns>
-        public static bool Extends(this IEntityNode node)
-        {
-            return node.GetRelations().Any(x => x.GetRelationType() == RelationType.Extends);
-        }
-
-        /// <summary>
         ///     Return a node based on if the name is in the edges list
         /// </summary>
         /// <param name="node">The node witch it should check</param>
@@ -110,8 +126,17 @@ namespace IDesign.Recognizers.Checks
         /// <returns>The node that has this name</returns>
         public static IEntityNode GetEdgeNode(this IEntityNode node, string name)
         {
-            return node.GetRelations().Where(x => x.GetDestination().GetName() == name).FirstOrDefault()
-                .GetDestination();
+            try
+            {
+                node = node.GetRelations().Where(x => x.GetDestination().GetName() == name).FirstOrDefault()
+                             .GetDestination();
+            }
+            catch (Exception e)
+            {
+                _ = e.Message;
+            }
+            return node;
+
         }
 
         /// <summary>
@@ -135,5 +160,18 @@ namespace IDesign.Recognizers.Checks
         {
             return entityNode.GetEntityNodeType().Equals(nodeType);
         }
+
+        /// <summary>
+        ///     Function thats checks the relation with another entitynode.
+        /// </summary>
+        /// <param name="entityNode">The entitynode witch it should check</param>
+        /// <param name="relationType">The expected relation type</param>
+        /// <param name="amount">The expected relation type</param>
+        /// <returns></returns>
+        public static bool CheckMinimalAmountOfRelationTypes(this IEntityNode entityNode, RelationType relationType, int amount)
+        {
+            return entityNode.GetRelations().Where(x => x.GetRelationType().Equals(relationType)).Count() >= amount;
+        }
     }
 }
+

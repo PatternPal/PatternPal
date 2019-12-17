@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace IDesign.Recognizers.Checks
 {
@@ -56,7 +57,6 @@ namespace IDesign.Recognizers.Checks
                 if (creationExpression.Type is IdentifierNameSyntax name &&
                     name.Identifier.ToString().IsEqual(creationType))
                     return true;
-
             return false;
         }
 
@@ -83,24 +83,89 @@ namespace IDesign.Recognizers.Checks
 
         //helper functions
         /// <summary>
-        ///     Return al list of all  types that this function makes as strings.
+        ///     Return a list of all types that this function makes as strings.
         /// </summary>
         /// <param name="methodSyntax">The method witch it should check</param>
         /// <returns>all types that are created</returns>
         public static IEnumerable<string> GetCreatedTypes(this IMethod methodSyntax)
         {
             var result = new List<string>();
-            var creations = methodSyntax.GetBody().DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
-            foreach (var creation in creations)
+            try
             {
-                var identifiers = creation.DescendantNodes().OfType<IdentifierNameSyntax>();
-                result.AddRange(identifiers.Select(y => y.Identifier.ToString()));
+                var creations = methodSyntax.GetBody().DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
+                foreach (var creation in creations)
+                {
+                    var identifiers = creation.DescendantNodes().OfType<IdentifierNameSyntax>();
+                    result.AddRange(identifiers.Select(y => y.Identifier.ToString()));
+                }
             }
-
+            catch (Exception e)
+            {
+                _ = e.Message;
+            }
             return result;
         }
 
+
         /// <summary>
+        ///     Checks if a method calls a method in the given noe
+        /// </summary>
+        /// <param name="method">The method</param>
+        /// <param name="node">The node in witch the method could be</param>
+        /// <returns></returns>
+        public static bool CheckIfMethodCallsMethodInNode(this IMethod method, IEntityNode node)
+        {
+            if (method.GetBody() == null)
+                return false;
+            var invocations = method.GetBody().DescendantNodes().OfType<InvocationExpressionSyntax>();
+            foreach (var invocation in invocations)
+            {
+                var identifier = invocation.Expression.DescendantNodesAndSelf().OfType<IdentifierNameSyntax>().FirstOrDefault();
+                var arguments = invocation.ArgumentList.Arguments.Count;
+                if (node.MethodInEntityNode(identifier.ToString(), arguments))
+                    return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        ///     Function thats checks if the parameters exist.
+        /// </summary>
+        /// <param name="methodSyntax">The methodsyntax witch it should check</param>
+        /// <param name="parameters">The expected parameters</param>
+        /// <returns></returns>
+        public static bool CheckParameters(this IMethod methodSyntax, IEnumerable<string> parameters)
+        {
+            return parameters.Any(x => methodSyntax.GetParameterTypes().Any(y => x.Equals(y)));
+        }
+
+        /// <summary>
+        ///     Function thats checks if the methods exist.
+        /// </summary>
+        /// <param name="methodSyntax">The methodsyntax witch it should check</param>
+        /// <param name="methods">The expected methods</param>
+        /// <returns></returns>
+        public static bool CheckName(this IMethod methodSyntax, IEnumerable<IMethod> methods)
+        {
+            return methods.Any(x => x.GetName().Equals(methodSyntax.GetName()));
+        }
+
+        /// <summary>
+        ///     Function thats checks if the argument exist.
+        /// </summary>
+        /// <param name="methodSyntax">The methodsyntax witch it should check</param>
+        /// <param name="argument">The expected argument</param>
+        /// <returns></returns>
+        public static bool CheckArguments(this IMethod methodSyntax, string argument)
+        {
+            var parameters = methodSyntax.GetParameters().Where(y => y.Type.ToString().Equals(argument));
+            if (parameters.Count() < 1)
+                return false;
+
+            return methodSyntax.GetArguments().Any(x => x.Equals(parameters.First().Identifier.ToString()));
+        }
+
         /// Return a boolean based on if the method has the same name as the given string
         /// </summary>
         /// <param name="methodSyntax">The given method which should have the name</param>
@@ -110,7 +175,15 @@ namespace IDesign.Recognizers.Checks
         {
             return (methodSyntax.GetName().Equals(name) && methodSyntax.GetType() == typeof(Method));
         }
-
+        
+        
+        public static bool CheckFieldIsUsed(this IMethod method, string fieldName)
+        {
+            if (method.GetBody() == null)
+                return false;
+            return method.GetBody().DescendantNodes().OfType<IdentifierNameSyntax>().Any(x => x.Identifier.ToString().IsEqual(fieldName));
+        }
+        
         /// <summary>
         /// Return a boolean based on if the Method parameters are the same as the given string
         /// </summary>
@@ -128,7 +201,7 @@ namespace IDesign.Recognizers.Checks
         /// <param name="methodSyntax">The method it should check</param>
         /// <param name="compareMethod">The given method it should compare to</param>
         /// <returns>The methods are the same type</returns>
-        public static bool IsEquals(this IMethod methodSyntax , IMethod compareMethod)
+        public static bool IsEquals(this IMethod methodSyntax, IMethod compareMethod)
         {
             return (methodSyntax.CheckMethodIdentifier(compareMethod.GetName())
                 && methodSyntax.CheckMethodParameterTypes(compareMethod.GetParameter().ToString())

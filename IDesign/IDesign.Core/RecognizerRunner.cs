@@ -12,9 +12,11 @@ namespace IDesign.Core
         public static List<DesignPattern> designPatterns = new List<DesignPattern>
         {
             new DesignPattern("Singleton", new SingletonRecognizer()),
-            new DesignPattern("Factory Method", new FactoryRecognizer()),
+            new DesignPattern("Factory Method", new FactoryMethodRecognizer()),
+            new DesignPattern("Decorator", new DecoratorRecognizer()),
             new DesignPattern("State", new StateRecognizer()),
-            new DesignPattern("Strategy", new StrategyRecognizer())
+            new DesignPattern("Strategy", new StrategyRecognizer()),
+            new DesignPattern("Adapter", new AdapterRecognizer())
         };
 
         public Dictionary<string, EntityNode> EntityNodes =
@@ -32,7 +34,6 @@ namespace IDesign.Core
                 var tree = FileManager.MakeStringFromFile(files[i]);
                 var generateSyntaxTree = new SyntaxTreeGenerator(tree, files[i], EntityNodes);
                 syntaxTreeSources.Add(generateSyntaxTree.Tree, files[i]);
-
                 ProgressUpdate((int) (i / (float) files.Count * 50f), "Reading file: " + Path.GetFileName(files[i]));
             }
 
