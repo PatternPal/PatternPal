@@ -38,11 +38,34 @@ namespace IDesign.Recognizers.Checks
             {
                 if (InterfaceImplementsMethod(interFace.GetDestination(), method))
                 {
-                    implements = true;
+                    return true;
                 }
             }
-            return implements;
+            return false;
         }
+
+        /// <summary>
+        /// Return a boolean based on if the given method is implemented in a interface of the given node
+        /// </summary>
+        /// <param name="node">The node which should have the method</param>
+        /// <param name="methodName">The name of the method</param>
+        /// <param name="amountOfParams">The amount of parameters the method should have</param>
+        /// <returns>The method is found in the node</returns>
+        public static bool MethodInEntityNode(this IEntityNode node, string methodName, int amountOfParams){
+
+            if (node.GetMethods().Any(x => x.CheckMethodIdentifier(methodName) && x.GetParameter().Parameters.Count == amountOfParams))
+            {
+                return true;
+            }
+            foreach (var relation in node.GetRelations().Where(x => x.GetRelationType() == RelationType.Extends || x.GetRelationType() == RelationType.Implements))
+            {
+                if (relation.GetDestination().MethodInEntityNode(methodName, amountOfParams))
+                    return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Return a boolean based on if the given node has a method with that name
         /// </summary>

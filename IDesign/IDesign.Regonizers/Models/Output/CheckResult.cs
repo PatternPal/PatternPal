@@ -48,7 +48,19 @@ namespace IDesign.Recognizers.Models.Output
 
         public FeedbackType GetFeedbackType()
         {
-            return FeedbackType;
+            if (ChildFeedback.Count == 0)
+            {
+                return FeedbackType;
+            }
+
+            var feedback = FeedbackType.Incorrect;
+
+            if (ChildFeedback.Any(x => x.GetFeedbackType() == FeedbackType.Correct))
+                feedback = FeedbackType.SemiCorrect;
+            if (ChildFeedback.All(x => x.GetFeedbackType() == FeedbackType.Correct))
+                feedback = FeedbackType.Correct;
+
+            return feedback;
         }
 
         public SyntaxNode GetSyntaxNode()

@@ -23,3 +23,19 @@ namespace IDesign.Tests.Recognizers
         }
     }
 }
+
+
+public class Test1
+{
+
+    
+}
+
+
+public class test2
+{
+    public test2()
+    {
+        var t =  new Test1();
+    }
+}
