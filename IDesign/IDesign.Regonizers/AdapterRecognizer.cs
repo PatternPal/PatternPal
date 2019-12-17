@@ -35,7 +35,7 @@ namespace IDesign.Recognizers
                         new ElementCheck<IField>(x =>
                         {
                             currentField = x.GetName();
-                            return x.CheckFieldType(currentRelation.GetDestination().GetName());
+                            return x.CheckFieldType(new List<string>{ currentRelation.GetDestination().GetName() });
                         }, "Field has adaptee as type"),
                         //Every method uses the adaptee 
                         new GroupCheck<IField, IMethod>(new List<ICheck<IMethod>>
