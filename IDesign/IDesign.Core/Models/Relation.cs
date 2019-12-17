@@ -1,5 +1,6 @@
 ﻿using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models;
+using Microsoft.CodeAnalysis;
 
 namespace IDesign.Core.Models
 {
@@ -22,6 +23,16 @@ namespace IDesign.Core.Models
         public RelationType GetRelationType()
         {
             return Type;
+        }
+
+        public string GetSuggestionName()
+        {
+            return GetDestination().GetSuggestionName();
+        }
+
+        public SyntaxNode GetSuggestionNode()
+        {
+            return GetDestination().GetSuggestionNode();
         }
     }
 }

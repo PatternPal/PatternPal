@@ -99,6 +99,29 @@ namespace IDesign.Recognizers.Checks
             return result;
         }
 
+
+        /// <summary>
+        ///     Checks if a method calls a method in the given noe
+        /// </summary>
+        /// <param name="method">The method</param>
+        /// <param name="node">The node in witch the method could be</param>
+        /// <returns></returns>
+        public static bool CheckIfMethodCallsMethodInNode(this IMethod method, IEntityNode node)
+        {
+            if (method.GetBody() == null)
+                return false;
+            var invocations = method.GetBody().DescendantNodes().OfType<InvocationExpressionSyntax>();
+            foreach (var invocation in invocations)
+            {
+                var identifier = invocation.Expression.DescendantNodesAndSelf().OfType<IdentifierNameSyntax>().FirstOrDefault();
+                var arguments = invocation.ArgumentList.Arguments.Count;
+                if (node.MethodInEntityNode(identifier.ToString(), arguments))
+                    return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         ///     Function thats checks if the parameters exist.
         /// </summary>
@@ -145,7 +168,15 @@ namespace IDesign.Recognizers.Checks
         {
             return (methodSyntax.GetName().Equals(name) && methodSyntax.GetType() == typeof(Method));
         }
-
+        
+        
+        public static bool CheckFieldIsUsed(this IMethod method, string fieldName)
+        {
+            if (method.GetBody() == null)
+                return false;
+            return method.GetBody().DescendantNodes().OfType<IdentifierNameSyntax>().Any(x => x.Identifier.ToString().IsEqual(fieldName));
+        }
+        
         /// <summary>
         /// Return a boolean based on if the Method parameters are the same as the given string
         /// </summary>
