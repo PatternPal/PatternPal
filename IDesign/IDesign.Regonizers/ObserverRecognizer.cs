@@ -1,109 +1,104 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using IDesign.Recognizers.Abstractions;
-using IDesign.Recognizers.Output;
 using IDesign.Recognizers.Checks;
+using IDesign.Recognizers.Models.Output;
+using IDesign.Recognizers.Models;
+using IDesign.Recognizers.Models.ElementChecks;
 
 namespace IDesign.Recognizers
 {
-    public class ObserverRecognizer : Recognizer, IRecognizer
+    public class ObserverRecognizer : IRecognizer
     {
-        Result result;
-
         public IResult Recognize(IEntityNode entityNode)
         {
-            result = new Result();
+            var result1 = ObserverWithSubjectInterfaceCheck(entityNode);
+            var result2 = ObserverWithoutSubjectInterfaceCheck(entityNode);
 
-            var usesRelations = entityNode.GetRelations().Where(x => x.GetRelationType() == RelationType.Uses).ToList();
-
-            if (entityNode.GetEntityNodeType() == Models.EntityNodeType.Interface)
-                result = (Result)ObserverCheck(entityNode);
-            else
-                result.Suggestions.Add(new Suggestion("No observer interface found", entityNode.GetSuggestionNode()));
-
-            result.Score = (int)(result.Score / 7f * 100f);
-
-            return result;
+            if (result1.GetScore() >= result2.GetScore())
+                return result1;
+            else 
+                return result2;
         }
 
         /// <summary>
-        ///     Checks if a given node is an observer interface
+        ///     Checks if a given node is an implementation of observer pattern with an subject interface
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        private IResult ObserverCheck(IEntityNode node)
+        private IResult ObserverWithSubjectInterfaceCheck(IEntityNode node)
         {
-            var entityNodeChecks = new List<ElementCheck<IEntityNode>>
+            var result = new Result();
+
+            //Tests for implementation of observer pattern with an subject interface
+            var checks = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
             {
                 new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(1), "There should be atleast 1 method: update"),
                 new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.ImplementedBy), "There are no concrete observers"),
                 new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.UsedBy), "This class is not used by anything"),
-            };
 
-            CheckElements(result, new List<IEntityNode> { node }, entityNodeChecks);
+                new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
+                {
+                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(3), "There should be atleast 3 methods: add, remove and notify"),
+                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethodsWithParameter(new List<string> { node.GetName() }, 2), "There should be 2 methods which both have one of the same parameters: add(IObserver), remove(IObserver)"),
+                    new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.ImplementedBy), "This class isn't implemented by any other classes"),
 
-            var usedBy = node.GetRelations().Where(x => x.GetRelationType() == RelationType.UsedBy).ToList();
+                    new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
+                    {
+                        new ElementCheck<IEntityNode>(x => x.CheckTypeDeclaration(EntityNodeType.Class), $"Should be class"),
+                        new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(3), "There should be atleast 3 methods: add, remove and notify"),
 
-            if (usedBy.Count() > 0 && result.Score > 0)
-                result.Score += usedBy.Select(x => SubjectCheck(x.GetDestination(), node)).Max(x => x.GetScore());
-            else
-                result.Score = 0;
+                        new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
+                        {
+                            new ElementCheck<IField>(x => x.CheckFieldType($"List<{ node.GetName() }>"), $"There should be a 1 list of type: { node.GetName() }"),
+                        }, d => d.GetFields(), "concrete field", GroupCheckType.All),
+                    }, c => c.GetRelations().Where(x => x.GetRelationType() == RelationType.ImplementedBy).Select(x => x.GetDestination()), "concrete subject", GroupCheckType.All),
+                }, b => node.GetRelations().Where(x => x.GetRelationType() == RelationType.UsedBy).Select(x => x.GetDestination()).ToList(), "subject interface"),
+            }, a => new List<IEntityNode> { node }, "observer");
+
+            result.Results.Add(checks.Check(node));
 
             return result;
         }
 
         /// <summary>
-        ///     Checks if a given node is a subject 
+        ///     Checks if a given node is an implementation of observer pattern without an subject interface
         /// </summary>
-        /// <param name="subjectNode"></param>
-        /// <param name="observerNode"></param>
+        /// <param name="node"></param>
         /// <returns></returns>
-        private IResult SubjectCheck(IEntityNode subjectNode, IEntityNode observerNode)
+        private IResult ObserverWithoutSubjectInterfaceCheck(IEntityNode node)
         {
-            var _result = new Result();
-
-            var entityNodeChecks = new List<ElementCheck<IEntityNode>>
+            var result = new Result();
+            
+            //Tests for implementation of observer pattern without an subject interface
+            var checks = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
             {
-                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(3), "There should be atleast 3 methods: add, remove and notify"),
-                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethodsWithParameter(new List<string> { observerNode.GetName() }, 2), "There should be 2 methods which both have one of the same parameters: add(IObserver), remove(IObserver)"),
-                new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.ImplementedBy), "This class isn't implemented by any other classes"),
-            };
+                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(1), "There should be atleast 1 method: update"),
+                new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.ImplementedBy), "There are no concrete observers"),
+                new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.UsedBy), "This class is not used by anything"),
 
-            CheckElements(_result, new List<IEntityNode> { subjectNode }, entityNodeChecks);
+                new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
+                {
+                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(3), "There should be atleast 3 methods: add, remove and notify"),
+                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethodsWithParameter(new List<string> { node.GetName() }, 2), $"There should be 2 methods which both have one of the same parameters: add({ node.GetName() }), remove({ node.GetName() })"),
+                    new ElementCheck<IEntityNode>(x => x.CheckEntityNodeType(EntityNodeType.Class), "Concrete subject should be a class"),
 
-            if (subjectNode.GetEntityNodeType() == Models.EntityNodeType.Class)
-            {
-                _result.Score += ConcreteSubjectCheck(subjectNode, observerNode).GetScore();
-            }
-            else
-            {
-                var concreteSubjects = subjectNode.GetRelations().Where(x => x.GetRelationType() == RelationType.ImplementedBy).Select(x => x.GetDestination());
+                    new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
+                    {
+                        new ElementCheck<IField>(x => x.CheckFieldType($"List<{ node.GetName() }>"), $"There should be a 1 list of type: { node.GetName() }"),
+                    }, d => d.GetFields(), "concrete subject fields"),
 
-                if (concreteSubjects.Count() > 0)
-                    _result.Score += (int)concreteSubjects.Select(x => ConcreteSubjectCheck(x, observerNode).GetScore()).Sum() / concreteSubjects.Count();
-            }
+                    //Check to make sure a subject with an interface doesn't get mistaken for a concrete subject without an subject interface
+                    new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
+                    {
+                        new ElementCheck<IEntityNode>(x => x.CheckMaximumAmountOfMethodsWithParameter(new List<string> { node.GetName() }, 0), "Implementations of observer without an subject interface should not have an subject interface"),
+                    }, c => c.GetRelations().Where(x => x.GetRelationType() == RelationType.ImplementedBy).Select(x => x.GetDestination()).ToList(), "subject interface"),
+                }, b => node.GetRelations().Where(x => x.GetRelationType() == RelationType.UsedBy).Select(x => x.GetDestination()).ToList(), "concrete subject"),
+            }, a => new List<IEntityNode> { node }, "observer");
 
-            return _result;
-        }
+            result.Results.Add(checks.Check(node));
 
-        /// <summary>
-        ///     Checks if a given node is a concrete subject 
-        /// </summary>
-        /// <param name="subjectNode"></param>
-        /// <param name="observerNode"></param>
-        /// <returns></returns>
-        private IResult ConcreteSubjectCheck(IEntityNode subjectNode, IEntityNode observerNode)
-        {
-            var _result = new Result();
-
-            var fieldChecks = new List<ElementCheck<IField>>
-            {
-                new ElementCheck<IField>(x => x.CheckFieldType("List<" + observerNode.GetName() + ">"), $"There should be a 1 list of type: {observerNode.GetName()}"),
-            };
-
-            CheckElements(_result, subjectNode.GetFields(), fieldChecks);
-
-            return _result;
+            return result;
         }
     }
 }

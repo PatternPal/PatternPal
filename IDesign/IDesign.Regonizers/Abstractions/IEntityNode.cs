@@ -1,6 +1,7 @@
-﻿using IDesign.Recognizers.Models;
+﻿using System.Collections.Generic;
+using IDesign.Recognizers.Models;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections.Generic;
 
 namespace IDesign.Recognizers.Abstractions
 {
@@ -54,5 +55,10 @@ namespace IDesign.Recognizers.Abstractions
         /// </summary>
         EntityNodeType GetEntityNodeType();
 
+        /// <summary>
+        ///     Gets te modifiers of this class
+        /// </summary>
+        /// <returns></returns>
+        SyntaxTokenList GetModifiers();
     }
 }

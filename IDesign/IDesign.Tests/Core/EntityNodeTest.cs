@@ -1,10 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using IDesign.Core;
-using IDesign.Recognizers;
+﻿using System.Linq;
 using IDesign.Tests.Utils;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 
 namespace IDesign.Tests.Core
@@ -13,7 +8,7 @@ namespace IDesign.Tests.Core
     {
         [Test]
         [TestCase("TestClass1.cs", "x;y")]
-        [TestCase("TestClass2.cs", "Getal;Naam;naam;PublicProperty;_privateField")]
+        [TestCase("TestClass2.cs", "Getal;Naam;naam;PublicProperty")]
         public void Should_Returns_Correct_Fields(string filename, string expected)
         {
             var code = FileUtils.FileToString(filename);
@@ -25,7 +20,7 @@ namespace IDesign.Tests.Core
 
         [Test]
         [TestCase("TestClass1.cs", "Sum")]
-        [TestCase("TestClass2.cs", "Count;PublicProperty")]
+        [TestCase("TestClass2.cs", "Count")]
         public void Should_Returns_Correct_Methods(string filename, string expected)
         {
             var code = FileUtils.FileToString(filename);

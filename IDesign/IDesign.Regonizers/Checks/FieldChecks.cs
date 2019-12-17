@@ -1,7 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
+using IDesign.Recognizers.Abstractions;
 
-namespace IDesign.Recognizers
+namespace IDesign.Recognizers.Checks
 {
     public static class FieldChecks
     {
@@ -24,7 +24,7 @@ namespace IDesign.Recognizers
         /// <returns>The field has the modifier that is given in the function</returns>
         public static bool CheckMemberModifier(this IField field, string modifier)
         {
-            return field.GetModifiers().Where(x => x.ToString().IsEqual(modifier)).Any();
+            return field.GetModifiers().Any(x => x.ToString().IsEqual(modifier));
         }
     }
 }

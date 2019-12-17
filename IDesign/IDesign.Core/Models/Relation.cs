@@ -1,12 +1,11 @@
-﻿using IDesign.Recognizers;
-using IDesign.Recognizers.Abstractions;
+﻿using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models;
 
-namespace IDesign.Core
+namespace IDesign.Core.Models
 {
     public class Relation : IRelation
     {
-        public Relation(IEntityNode entityNode,RelationType type)
+        public Relation(IEntityNode entityNode, RelationType type)
         {
             EntityNode = entityNode;
             Type = type;
@@ -20,7 +19,7 @@ namespace IDesign.Core
             return EntityNode;
         }
 
-      public  RelationType GetRelationType()
+        public RelationType GetRelationType()
         {
             return Type;
         }

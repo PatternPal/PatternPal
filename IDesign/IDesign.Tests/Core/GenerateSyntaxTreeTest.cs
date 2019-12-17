@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using IDesign.Core;
+using IDesign.Core.Models;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 
 namespace IDesign.Tests.Core
@@ -40,7 +40,7 @@ namespace IDesign.Tests.Core
             1)]
         public void TestAmountOfClasses(string file, int expectedAmountOfClasses)
         {
-            var generateSyntaxTree = new GenerateSyntaxTree(file, "", entityNodes);
+            var generateSyntaxTree = new SyntaxTreeGenerator(file, "", entityNodes);
             var result = generateSyntaxTree.ClassDeclarationSyntaxList.Count;
             Assert.AreEqual(expectedAmountOfClasses, result);
         }
@@ -74,7 +74,7 @@ namespace IDesign.Tests.Core
             2)]
         public void TestAmountOfInterfaces(string file, int expectedAmountOfInterfaces)
         {
-            var generateSyntaxTree = new GenerateSyntaxTree(file, "", entityNodes);
+            var generateSyntaxTree = new SyntaxTreeGenerator(file, "", entityNodes);
             var result = generateSyntaxTree.InterfaceDeclarationSyntaxList.Count;
             Assert.AreEqual(expectedAmountOfInterfaces, result);
         }
@@ -111,7 +111,7 @@ namespace IDesign.Tests.Core
             6)]
         public void TestIfAmountOfUsingsIsRight(string file, int amountOfUsings)
         {
-            var generateSyntaxTree = new GenerateSyntaxTree(file, "", entityNodes);
+            var generateSyntaxTree = new SyntaxTreeGenerator(file, "", entityNodes);
             var result = generateSyntaxTree.UsingDirectiveSyntaxList;
             var count = 0;
 

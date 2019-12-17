@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Recognizers
+﻿namespace IDesign.Recognizers.Models
 {
-   public enum RelationType
+    public enum RelationType
     {
         Implements,
         ImplementedBy,
