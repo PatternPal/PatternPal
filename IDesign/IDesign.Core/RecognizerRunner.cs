@@ -13,6 +13,7 @@ namespace IDesign.Core
         {
             new DesignPattern("Singleton", new SingletonRecognizer()),
             new DesignPattern("Factory Method", new FactoryRecognizer()),
+            new DesignPattern("Decorator", new DecoratorRecognizer()),
             new DesignPattern("State", new StateRecognizer()),
             new DesignPattern("Strategy", new StrategyRecognizer()),
             new DesignPattern("Adapter", new AdapterRecognizer())
@@ -33,7 +34,6 @@ namespace IDesign.Core
                 var tree = FileManager.MakeStringFromFile(files[i]);
                 var generateSyntaxTree = new SyntaxTreeGenerator(tree, files[i], EntityNodes);
                 syntaxTreeSources.Add(generateSyntaxTree.Tree, files[i]);
-
                 ProgressUpdate((int) (i / (float) files.Count * 50f), "Reading file: " + Path.GetFileName(files[i]));
             }
 

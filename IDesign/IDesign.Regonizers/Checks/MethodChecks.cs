@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections.Generic;
 
 namespace IDesign.Recognizers.Checks
 {
@@ -56,7 +56,6 @@ namespace IDesign.Recognizers.Checks
                 if (creationExpression.Type is IdentifierNameSyntax name &&
                     name.Identifier.ToString().IsEqual(creationType))
                     return true;
-
             return false;
         }
 
@@ -83,7 +82,7 @@ namespace IDesign.Recognizers.Checks
 
         //helper functions
         /// <summary>
-        ///     Return al list of all  types that this function makes as strings.
+        ///     Return al list of all types that this function makes as strings.
         /// </summary>
         /// <param name="methodSyntax">The method witch it should check</param>
         /// <returns>all types that are created</returns>
@@ -124,6 +123,42 @@ namespace IDesign.Recognizers.Checks
         }
 
         /// <summary>
+        ///     Function thats checks if the parameters exist.
+        /// </summary>
+        /// <param name="methodSyntax">The methodsyntax witch it should check</param>
+        /// <param name="parameters">The expected parameters</param>
+        /// <returns></returns>
+        public static bool CheckParameters(this IMethod methodSyntax, IEnumerable<string> parameters)
+        {
+            return parameters.Any(x => methodSyntax.GetParameterTypes().Any(y => x.Equals(y)));
+        }
+
+        /// <summary>
+        ///     Function thats checks if the methods exist.
+        /// </summary>
+        /// <param name="methodSyntax">The methodsyntax witch it should check</param>
+        /// <param name="methods">The expected methods</param>
+        /// <returns></returns>
+        public static bool CheckName(this IMethod methodSyntax, IEnumerable<IMethod> methods)
+        {
+            return methods.Any(x => x.GetName().Equals(methodSyntax.GetName()));
+        }
+
+        /// <summary>
+        ///     Function thats checks if the argument exist.
+        /// </summary>
+        /// <param name="methodSyntax">The methodsyntax witch it should check</param>
+        /// <param name="argument">The expected argument</param>
+        /// <returns></returns>
+        public static bool CheckArguments(this IMethod methodSyntax, string argument)
+        {
+            var parameters = methodSyntax.GetParameters().Where(y => y.Type.ToString().Equals(argument));
+            if (parameters.Count() < 1)
+                return false;
+
+            return methodSyntax.GetArguments().Any(x => x.Equals(parameters.First().Identifier.ToString()));
+        }
+
         /// Return a boolean based on if the method has the same name as the given string
         /// </summary>
         /// <param name="methodSyntax">The given method which should have the name</param>
