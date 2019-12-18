@@ -241,7 +241,7 @@
     <Compile Update="TestClasses\StateTest4\Player.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="TestClasses\StateTest4\State.cs">
+    <Compile Update="TestClasses\StateTest4\IState.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Update="TestClasses\StrategyTest1\CookingMethod.cs">

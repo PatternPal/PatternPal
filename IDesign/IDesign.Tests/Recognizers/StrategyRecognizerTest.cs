@@ -23,7 +23,6 @@ namespace IDesign.Tests.Recognizers
             createRelation.GetEdgesOfEntityNode();
             var result = strategy.Recognize(entityNodes[nameSpaceName + "." + filename]);
 
-           // Assert.AreEqual(score, result.GetScore());
             Assert.That(result.GetScore(), Is.InRange(minScore, maxScore));
         }
     }

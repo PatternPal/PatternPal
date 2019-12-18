@@ -14,11 +14,11 @@ namespace IDesign.Tests.Recognizers
 {
     class StateRecognizerTest
     {
-        [TestCase("StateTest1","Doneness", 100)]
-        [TestCase("StateTest2", "State", 100)]
-        [TestCase("StateTest3", "State", 100)]
-        [TestCase("StateTest4", "State", 53)]
-        public void StateRecognizer_Returns_Correct_Score(string directory, string filename, int score)
+        [TestCase("StateTest1","Doneness", 80,100)]
+        [TestCase("StateTest2", "State", 80,100)]
+        [TestCase("StateTest3", "State", 80,100)]
+        [TestCase("StateTest4", "IState", 0,79)]
+        public void StateRecognizer_Returns_Correct_Score(string directory, string filename, int minScore, int maxScore)
         {
             var state = new StateRecognizer();
             var filesAsString = FileUtils.FilesToString($"{directory}\\");
@@ -28,7 +28,7 @@ namespace IDesign.Tests.Recognizers
             createRelation.GetEdgesOfEntityNode();
             var result = state.Recognize(entityNodes[nameSpaceName + "." + filename]);
 
-            Assert.AreEqual(score, result.GetScore());
+            Assert.That(result.GetScore(), Is.InRange(minScore, maxScore));
         }
     }
 }
