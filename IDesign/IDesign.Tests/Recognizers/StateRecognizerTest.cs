@@ -14,10 +14,10 @@ namespace IDesign.Tests.Recognizers
 {
     class StateRecognizerTest
     {
+        [TestCase("StateTest1","Doneness", 100)]
         [TestCase("StateTest2", "State", 100)]
         [TestCase("StateTest3", "State", 100)]
-        [TestCase("StateTest4", "State", 75)]
-        [TestCase("StrategyTest1", "CookStrategy", 100)]
+        [TestCase("StateTest4", "State", 53)]
         public void StateRecognizer_Returns_Correct_Score(string directory, string filename, int score)
         {
             var state = new StateRecognizer();

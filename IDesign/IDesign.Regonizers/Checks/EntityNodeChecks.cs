@@ -32,8 +32,6 @@ namespace IDesign.Recognizers.Checks
         /// <returns>The method is from an interface of the given node</returns>
         public static bool ClassImlementsInterfaceMethod(this IEntityNode node, IMethod method)
         {
-            var implements = false;
-
             foreach (var interFace in node.GetRelations().Where(x => x.GetRelationType() == RelationType.Implements))
             {
                 if (InterfaceImplementsMethod(interFace.GetDestination(), method))

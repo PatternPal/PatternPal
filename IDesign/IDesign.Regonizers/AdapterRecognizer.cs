@@ -67,7 +67,6 @@ namespace IDesign.Recognizers
         {
 
             IRelation currentRelation = null;
-            string currentField = null;
             var adapterCheck = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
             {
                 new ElementCheck<IEntityNode>(
