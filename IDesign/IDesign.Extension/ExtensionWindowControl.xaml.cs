@@ -27,7 +27,7 @@ namespace IDesign.Extension
     /// </summary>
     public partial class ExtensionWindowControl : UserControl, IVsSolutionEvents
     {
-        private UInt32 _SolutionEventsCookie;
+        private readonly UInt32 _SolutionEventsCookie;
         /// <summary>
         ///     Initializes a new instance of the <see cref="ExtensionWindowControl" /> class.
         /// </summary>
@@ -124,7 +124,7 @@ namespace IDesign.Extension
         }
 
 
-        private void selectNodeInEditor(SyntaxNode n, string file)
+        private void SelectNodeInEditor(SyntaxNode n, string file)
         {
             try
             {
@@ -138,8 +138,9 @@ namespace IDesign.Extension
                 var ep = n.GetLocation().GetMappedLineSpan().EndLinePosition;
                 av.SetSelection(sp.Line, sp.Character, ep.Line, ep.Character);
             }
-            catch
+            catch(Exception e)
             {
+                _ = e.Message;
             }
         }
 
@@ -196,7 +197,7 @@ namespace IDesign.Extension
             if (viewModel == null) return;
 
             var node = viewModel.Result.GetSyntaxNode();
-            selectNodeInEditor(node, SyntaxTreeSources[node.SyntaxTree]);
+            SelectNodeInEditor(node, SyntaxTreeSources[node.SyntaxTree]);
         }
 
         public int OnAfterOpenProject(IVsHierarchy pHierarchy, int fAdded)

@@ -15,148 +15,69 @@ namespace IDesign.Recognizers
         public IResult Recognize(IEntityNode node)
         {
             result = new Result();
-
-            //if node is interface, node is probaly a state. else node can be state, context or concrete state
-            if (node.GetEntityNodeType() == EntityNodeType.Interface)
-            {
-                //state checks
-                StateChecks(node);
-                InterfaceStateChecks(node);
-            }
-            if ((node.CheckTypeDeclaration(EntityNodeType.Class) && node.CheckModifier("abstract")))
-            {
-                StateChecks(node);
-                AbstractClassStateChecks(node);
-            }
-            return result;
-        }
-
-        /// <summary>
-        ///     Function to check if pattern is state
-        /// </summary>
-        /// <param name="node"></param>
-        private void StateChecks(IEntityNode node)
-        {
             var relations = node.GetRelations();
 
-            //create list with only Extends and Implements relations
-            var inheritanceRelations = relations.Where(x => (x.GetRelationType() == RelationType.ImplementedBy) ||
-            (x.GetRelationType() == RelationType.ExtendedBy)).ToList();
+            IEntityNode entityNode = null;
 
-            foreach (var edge in relations.Where(x => x.GetRelationType() == RelationType.UsedBy).ToList())
+            var statePatternCheck = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
             {
-                var edgeRelations = edge.GetDestination().GetRelations();
-                var usingEdgeRelations = edgeRelations.Where(x => x.GetRelationType() == RelationType.UsedBy).ToList();
-                ContextClassChecks(edge.GetDestination(), usingEdgeRelations);
-            }
+                //check if node is abstract class or interface
+                new ElementCheck<IEntityNode>(x => (x.CheckTypeDeclaration(EntityNodeType.Interface) ) |
+                (x.CheckTypeDeclaration(EntityNodeType.Class) && x.CheckModifier("abstract")),"State class should be abstract or an interface!"),
 
-            foreach (var edge in inheritanceRelations)
-            {
-                var edgeRelations = edge.GetDestination().GetRelations();
-
-                //create list with only creates relations
-                var createsRelations = edgeRelations.Where(x => x.GetRelationType() == RelationType.Creates).ToList();
-                ConcreteStateClassChecks(edge.GetDestination(), createsRelations);
-            }
-        }
-
-
-        /// <summary>
-        ///     Function to do checks for a node that is probaly a state, implemented as an interface
-        /// </summary>
-        /// <param name="node"></param>
-        /// <returns></returns>
-        private void InterfaceStateChecks(IEntityNode node)
-        {
-
-            var checkType = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
-            {
-                new ElementCheck<IEntityNode>(x => x.CheckTypeDeclaration(EntityNodeType.Interface), "The modifier should be abstract. Otherwise, use an interface")
-
-            }, x => new List<IEntityNode> { node }, "Class meets the requirements: ");
-
-            result.Results.Add(checkType.Check(node));
-            var checkMethods = new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
-            {
-                new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void")
-
-            }, x => x.GetMethods(), "Class has a method: ");
-            result.Results.Add(checkMethods.Check(node));
-        }
-
-        /// <summary>
-        ///     Function to do checks for a node that is probaly a state, implemented as an abstract class
-        /// </summary>
-        /// <param name="node"></param>
-        /// <returns></returns>
-        private void AbstractClassStateChecks(IEntityNode node)
-        {
-            //check if node is an interface or an abstract class, cannot be both
-            var checkType = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
-            {
-                new ElementCheck<IEntityNode>(x => x.CheckModifier("abstract"), "If using a class, the modifier should be abstract. Otherwise, use an interface")
-
-            }, x => new List<IEntityNode> { node }, "Class meets the requirements: ");
-            result.Results.Add(checkType.Check(node));
-
-            var abstractStateCheck = new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
-            {
-                new ElementCheck<IMethod>(x => x.CheckModifier("abstract"), "Modifier of the method should be abstract!"),
-                new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void"),
-                new ElementCheck<IMethod>(x => x.GetBody() == null, "Body should be empty!")
-            }, x => x.GetMethods(), "Class has a method: ");
-            result.Results.Add(abstractStateCheck.Check(node));
-        }
-
-
-        /// <summary>
-        ///     Function to do checks for the concrete state class
-        /// </summary>
-        /// <param name="node"></param>
-        /// <param name="inheritanceRelations"></param>
-        /// <returns></returns>
-        private void ConcreteStateClassChecks(IEntityNode node, List<IRelation> creationRelations)
-        {
-            foreach (var edge in creationRelations)
-            {
-                var edgeNode = edge.GetDestination();
-                //check if state makes other state in handle method and check if the return type is void
-                var createCheck = new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
+                //check state node methods
+                new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                 {
-                    new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "Return type should be void"),
-                    new ElementCheck<IMethod>(x => (x.CheckCreationType(edgeNode.GetName())) &&(!x.CheckCreationType(node.GetName())), $"new state should not be itself")
-                    //TO DO: check of functie de zelfte parameters heeft als de interface/abstracte klasse functie
-                    //TO DO: check of de functie de zelfde naam heeft als de overervende functie                                
+                    new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void"),
+                    new ElementCheck<IMethod>(x => x.GetBody() == null, "Body should be empty!")
+                    //TO DO: if abstract class method must be also abstract!
+                }, x => x.GetMethods(), "Methods: "),
 
-                }, x => x.GetMethods(), "ConcreteState has methods where:");
-
-                result.Results.Add(createCheck.Check(node));
-            }
-        }
-
-        /// <summary>
-        ///     Function to do checks for the context class
-        /// </summary>
-        /// <param name="node"></param>
-        /// <param name="usingRelations"></param>
-        private void ContextClassChecks(IEntityNode node, List<IRelation> usingRelations)
-        {
-            foreach (var edge in usingRelations)
-            {
-                var edgeNode = edge.GetDestination();
-
-                if ((edgeNode.CheckTypeDeclaration(EntityNodeType.Interface)) |
-                    (edgeNode.CheckTypeDeclaration(EntityNodeType.Class) && edgeNode.CheckModifier("abstract")))
+                //check state node used by relations
+                new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                 {
-                    //check if state makes other state in handle method and check if the return type is void
-                    var fieldCheck = new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
+                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.UsedBy, 1),$"Minimal amount of used by relations should be 1"),
+
+                    //check if field has state as type
+                    new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                     {
-                        new ElementCheck<IField>(x => x.CheckFieldType(new List<string>(){ edgeNode.GetName() }),$"{node.GetName()} must be equal to {edgeNode.GetName()}"),
-                        new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "Modifier must be private")
-                    }, x => x.GetFields(), "Context has method where:");
-                    result.Results.Add(fieldCheck.Check(node));
-                }
-            }
+                        new ElementCheck<IEntityNode>(x => (x.CheckTypeDeclaration(EntityNodeType.Interface)) |
+                        (x.CheckTypeDeclaration(EntityNodeType.Class) && x.CheckModifier("abstract")), "type should be an interface or abstract class")
+                    }, x => new List<IEntityNode> { node},"Used return type:"),
+                    
+                    //check context class fields
+                    new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
+                    {
+                        //TO DO: check name
+                        new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "modifier should be private")
+                    }, x=> x.GetFields(), "Fields", GroupCheckType.All)
+
+
+                },x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.UsedBy)).Select(y => y.GetDestination()), "Check used by relations"),
+
+                //check inheritance
+                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
+                 {
+                        new ElementCheck<IEntityNode>(x => {entityNode = x; return x.GetMethods().Any(); }, "Has functions"),
+
+                        new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
+                        {
+                            new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
+                            {
+                                new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "Return type should be void"),
+                                new ElementCheck<IMethod>(x => (x.CheckCreationType(entityNode.GetName()) && !(x.CheckCreationType(node.GetName()))), $"new state should not be itself")
+                                //TO DO: check of functie de zelfte parameters heeft als de interface/abstracte klasse functie
+                                //TO DO: check of de functie de zelfde naam heeft als de overervende functie  
+                            }, x=> x.GetMethods(), "Methods:"),
+
+                        },x => entityNode.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Creates)).Select(y => y.GetDestination()), "Check creates relations"),
+
+                 },x => x.GetRelations().Where(y => (y.GetRelationType().Equals(RelationType.ExtendedBy)) ||(y.GetRelationType().Equals(RelationType.ImplementedBy))
+                ).Select(y => y.GetDestination()), "Node is parent of: ", GroupCheckType.All),
+
+            }, x => new List<IEntityNode> { node }, "State"); ;
+            result.Results.Add(statePatternCheck.Check(node));
+            return result;
         }
     }
 }
