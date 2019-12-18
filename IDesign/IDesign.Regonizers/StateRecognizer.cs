@@ -117,6 +117,12 @@ namespace IDesign.Recognizers
         /// <returns></returns>
         private void ConcreteStateClassChecks(IEntityNode node, List<IRelation> creationRelations)
         {
+            var creationCheck = new GroupCheck<IEntityNode, IRelation>(new List<ICheck<IRelation>>
+            {
+                new ElementCheck<IRelation>(x => x.GetRelationType() == RelationType.Creates,$"class should have method wich makes new elements")
+            }, x => x.GetRelations(), "RELATIONS");
+            result.Results.Add(creationCheck.Check(node));
+
             foreach (var edge in creationRelations)
             {
                 var edgeNode = edge.GetDestination();
