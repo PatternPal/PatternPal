@@ -18,6 +18,7 @@ namespace IDesign.Tests.Recognizers
         [TestCase("StateTest2", "State", 80,100)]
         [TestCase("StateTest3", "State", 80,100)]
         [TestCase("StateTest4", "IState", 0,79)]
+        [TestCase("StateFactoryMethodTest1", "IState", 80,100)]
         public void StateRecognizer_Returns_Correct_Score(string directory, string filename, int minScore, int maxScore)
         {
             var state = new StateRecognizer();
