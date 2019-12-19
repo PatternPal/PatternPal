@@ -295,6 +295,33 @@
     <Compile Update="TestClasses\StateTest4\IState.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Update="TestClasses\StrategyFactoryMethodTest1\BeerFactory.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StrategyFactoryMethodTest1\Blond.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StrategyFactoryMethodTest1\BlondFactory.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StrategyFactoryMethodTest1\ConcreteStrategyA.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StrategyFactoryMethodTest1\ConcreteStrategyB.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StrategyFactoryMethodTest1\Dubbel.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StrategyFactoryMethodTest1\DubbleFactory.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StrategyFactoryMethodTest1\IBeer.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\StrategyFactoryMethodTest1\IStrategy.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Update="TestClasses\StrategyTest1\CookingMethod.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
