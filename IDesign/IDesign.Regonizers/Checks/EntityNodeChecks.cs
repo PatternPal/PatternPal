@@ -124,7 +124,7 @@ namespace IDesign.Recognizers.Checks
         /// <returns>The class has an extends/returns>
         public static bool Extends(this IEntityNode node)
         {
-            return node.GetRelations().Any(x => x.GetRelationType() == RelationType.Extends);
+            return node.CheckMinimalAmountOfRelationTypes(RelationType.Extends, 1);
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace IDesign.Recognizers.Checks
         /// <returns></returns>
         public static bool CheckRelationType(this IEntityNode entityNode, RelationType relationType)
         {
-            return entityNode.GetRelations().Any(x => x.GetRelationType().Equals(relationType));
+            return entityNode.CheckMinimalAmountOfRelationTypes(relationType, 1);
         }
 
         ///     Function thats checks the relation with another entitynode.

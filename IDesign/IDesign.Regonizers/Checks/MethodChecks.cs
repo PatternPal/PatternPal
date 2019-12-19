@@ -123,10 +123,7 @@ namespace IDesign.Recognizers.Checks
                 var identifier = invocation.Expression.DescendantNodesAndSelf().OfType<IdentifierNameSyntax>().FirstOrDefault();
                 var arguments = invocation.ArgumentList.Arguments.Count;
 
-                if (identifier == null)
-                    return false;
-
-                if (node.MethodInEntityNode(identifier.ToString(), arguments))
+                if (identifier != null && node.MethodInEntityNode(identifier.ToString(), arguments))
                     return true;
             }
 
