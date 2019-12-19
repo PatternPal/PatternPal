@@ -53,6 +53,15 @@
   <ItemGroup>
     <Compile Include="LeftMarginMultiplierConverter.cs" />
     <Compile Include="TreeViewItemExtensions.cs" />
+    <Compile Include="UserControls\PatternCheckbox.xaml.cs">
+      <DependentUpon>PatternCheckbox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\SelectPaths.xaml.cs">
+      <DependentUpon>SelectPaths.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\TreeViewResults.xaml.cs">
+      <DependentUpon>TreeViewResults.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\CheckResultViewModel.cs" />
     <Compile Include="ViewModels\DesignPatternViewModel.cs" />
     <Compile Include="ExtensionWindow.cs" />
@@ -97,6 +106,18 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="ExtensionWindowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PatternCheckbox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\SelectPaths.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\TreeViewResults.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
