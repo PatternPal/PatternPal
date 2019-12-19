@@ -82,7 +82,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Checks\MethodChecks.cs">
+    <Compile Update="Checks\MethodChecksTest.cs">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Compile>
     <Compile Update="TestClasses\AdapterTest2\BaseCase1.cs">

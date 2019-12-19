@@ -14,6 +14,7 @@ namespace IDesign.Tests.Recognizers
         [TestCase("StrategyTest2", "IStrategy", 80, 100)]
         [TestCase("StrategyTest3", "Strategy", 80,100)]
         [TestCase("StrategyFactoryMethodTest1", "IStrategy", 80,100)]
+        [TestCase("StateFactoryMethodTest1", "IState", 0,79)]
         public void StrategyRecognizer_Returns_Correct_Score(string directory, string filename,int minScore, int maxScore)
         {
             var strategy = new StrategyRecognizer();

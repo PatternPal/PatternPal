@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace IDesign.Tests.Checks
 {
-    class EntityNodeChecks
+    class EntityNodeChecksTest
     {
         [Test]
         [TestCase("Abstract", @"abstract class TestClass1 { }", true)]
