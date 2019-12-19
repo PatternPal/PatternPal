@@ -7,9 +7,12 @@ namespace IDesign.Tests.Recognizers
 {
     public class FactoryMethodRecognizerTest
     {
-        [TestCase("FactoryMethodTest1", "BeerFactory", 100)]
-        [TestCase("FactoryMethodTest2", "CardFactory", 100)]
-        public void FactoryMethodRecognizer_Returns_Correct_Score(string directory, string filename, int score)
+        [TestCase("FactoryMethodTest1", "BeerFactory", 80, 100)]
+        [TestCase("FactoryMethodTest2", "CardFactory", 80, 100)]
+        [TestCase("FactoryMethodTest3", "Creator", 80, 100)]
+        [TestCase("FactoryMethodTest4", "Sandwich", 0, 79)]
+        [TestCase("StateFactoryMethodTest1", "BeerFactory", 80, 100)]
+        public void FactoryMethodRecognizer_Returns_Correct_Score(string directory, string filename, int minScore, int maxScore)
         {
             var factoryMethodRecognizer = new FactoryMethodRecognizer();
             var filesAsString = FileUtils.FilesToString($"{directory}\\");
@@ -19,23 +22,7 @@ namespace IDesign.Tests.Recognizers
             createRelation.GetEdgesOfEntityNode();
             var result = factoryMethodRecognizer.Recognize(entityNodes[nameSpaceName + "." + filename]);
 
-            Assert.AreEqual(score, result.GetScore());
+            Assert.That(result.GetScore(), Is.InRange(minScore, maxScore));
         }
-    }
-}
-
-
-public class Test1
-{
-
-    
-}
-
-
-public class test2
-{
-    public test2()
-    {
-        var t =  new Test1();
     }
 }
