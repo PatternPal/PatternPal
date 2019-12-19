@@ -377,25 +377,6 @@
         <TreeView Grid.Row="5" x:Name="ResultsView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                   BorderThickness="0 1">
             <TreeView.Resources>
-                <HierarchicalDataTemplate DataType="{x:Type models:ClassViewModel}" ItemsSource="{Binding Results}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="Resources/clogo.png" Width="20" Height="20" />
-                        <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
-                            <TextBlock Text="{Binding ClassName}"
-                                       Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
-                            <TextBlock Text=" ["
-                                       Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
-                            <TextBlock Text="{Binding BestMatch.PatternName}"
-                                       Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
-                            <TextBlock Text=" | "
-                                       Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
-                            <TextBlock Text="{Binding BestMatch.Score}"
-                                       Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
-                            <TextBlock Text="%]"
-                                       Foreground="{DynamicResource {x:Static vsshell:VsBrushes.ClassDesignerConnectionRouteBorderKey}}" />
-                        </StackPanel>
-                    </StackPanel>
-                </HierarchicalDataTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type models:ResultViewModel}"
                                           ItemsSource="{Binding Results}">
                     <StackPanel Orientation="Horizontal">
@@ -403,6 +384,7 @@
                         <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                             <TextBlock Text="{Binding PatternName}"
                                        Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
+                            <ProgressBar x:Name="patternScore" Height="5" Value="{Binding Path=Score, Mode=OneWay}" Width="20" Margin="10 0 0 0" BorderBrush="{Binding Color}" BorderThickness="1" Foreground="{Binding Color}" />
                         </StackPanel>
                     </StackPanel>
                 </HierarchicalDataTemplate>

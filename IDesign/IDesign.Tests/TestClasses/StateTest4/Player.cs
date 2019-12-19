@@ -9,7 +9,7 @@ namespace IDesign.Tests.TestClasses.StateTest4
     // 'Context' class
     public class Player
     {
-        State currentState;
+        IState currentState;
 
         public Player()
         {
