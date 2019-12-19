@@ -77,7 +77,7 @@
                 <DockPanel LastChildFill="False" >
                     <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked, Mode=TwoWay}" Width="Auto"
                               Margin="3" DockPanel.Dock="Left"/>
-                    <Button DockPanel.Dock="Right" Width="20"  FontSize="15" Margin="0" Content="?" >
+                    <Button DockPanel.Dock="Right" FontSize="15" Margin="0,0,3,0" Width="20" Height="auto" Content="?" Click="ButtonClick">
                             <Button.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="360"/>
@@ -85,11 +85,7 @@
                             <Style TargetType="Button">
                                 <Setter Property="BorderBrush" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
                                 <Setter Property="Background" Value="Transparent"></Setter>
-                                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsColors.BrandedUITextKey}}"/>
-                                <!--
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
-                                -->
-                                <!--<Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsColors.BrandedUITextKey}}" />-->
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
                             </Style>
                             </Button.Resources>
                     </Button>

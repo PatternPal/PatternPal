@@ -7,6 +7,8 @@ namespace IDesign.Extension.ViewModels
     {
         private bool isChecked;
 
+        public string WikiLink { get; set; }
+
         public DesignPatternViewModel(string name, DesignPattern pattern)
         {
             Name = name;

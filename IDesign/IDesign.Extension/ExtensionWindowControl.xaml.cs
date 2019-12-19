@@ -228,5 +228,10 @@ namespace IDesign.Extension
             return VSConstants.S_OK;
         }
 
+
+        public void ButtonClick(object sender, EventArgs e)
+        {
+            
+        }
     }
 }
