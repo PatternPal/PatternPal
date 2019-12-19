@@ -62,6 +62,9 @@ namespace IDesign.Recognizers.Models
 
         public IEnumerable<string> GetArguments()
         {
+            if (Constructor.Initializer == null)
+                return null;
+
             return Constructor.Initializer.ArgumentList.Arguments.ToList().Select(x => x.ToString());
         }
     }
