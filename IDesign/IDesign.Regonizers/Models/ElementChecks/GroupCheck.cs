@@ -71,6 +71,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
                 ChildFeedback = highestScored.Value.childFeedback.ToList()
             };
         }
+
         private ICheckResult CheckAll(TParent elementToCheck, Dictionary<TChild, (int score, IEnumerable<ICheckResult> childFeedback)> allChildFeedback)
         {
             var feedback = FeedbackType.Correct;
