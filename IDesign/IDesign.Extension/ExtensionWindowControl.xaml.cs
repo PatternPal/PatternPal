@@ -28,14 +28,11 @@ namespace IDesign.Extension
     public partial class ExtensionWindowControl : UserControl, IVsSolutionEvents
     {
         private readonly UInt32 _SolutionEventsCookie;
-        public List<DesignPatternViewModel> ViewModels { get; set; }
-        public Dictionary<SyntaxTree, string> SyntaxTreeSources { get; set; }
-        public List<string> Paths { get; set; }
-        public List<Project> Projects { get; set; }
-        public bool Loading { get; set; }
-        public DTE Dte { get; set; }
-        public IComponentModel ComponentModel { get; set; }
-        public Workspace Workspace { get; set; }
+        private List<DesignPatternViewModel> ViewModels { get; set; }
+        private List<string> Paths { get; set; }
+        private List<Project> Projects { get; set; }
+        private bool Loading { get; set; }
+        private DTE Dte { get; set; }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ExtensionWindowControl" /> class.
@@ -49,8 +46,6 @@ namespace IDesign.Extension
             Dte = Package.GetGlobalService(typeof(SDTE)) as DTE;
             var ss = (IVsSolution)Package.GetGlobalService(typeof(SVsSolution));
             ss.AdviseSolutionEvents(this, out _SolutionEventsCookie);
-            ComponentModel = (IComponentModel)Package.GetGlobalService(typeof(SComponentModel));
-            Workspace = (Workspace)ComponentModel.GetService<VisualStudioWorkspace>();
         }
 
         /// <summary>
@@ -63,8 +58,7 @@ namespace IDesign.Extension
             foreach (var pattern in RecognizerRunner.designPatterns)
                 ViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern));
 
-            listBox.DataContext = ViewModels;
-
+            PatternCheckbox.listBox.DataContext = ViewModels;
             var height = ViewModels.Count * 30;
 
             if (height > 3 * 30)
@@ -93,7 +87,7 @@ namespace IDesign.Extension
             Dispatcher?.BeginInvoke(new Action(() =>
             {
                 // - Change your UI information here
-                ResultsView.ItemsSource = viewModels;
+                TreeViewResults.ResultsView.ItemsSource = viewModels;
             }), null);
         }
 
@@ -104,7 +98,7 @@ namespace IDesign.Extension
         {
             Paths = new List<string>();
 
-            if ((bool) radio1.IsChecked)
+            if ((bool) SelectPaths.radio1.IsChecked)
             {
                 if (Dte.ActiveDocument != null)
                     Paths.Add(Dte.ActiveDocument.FullName);
@@ -112,7 +106,7 @@ namespace IDesign.Extension
             else
             {
                 LoadProject();
-                var selectedI = ProjectSelection.SelectedIndex;
+                var selectedI = SelectPaths.ProjectSelection.SelectedIndex;
                 Paths.AddRange(Projects[selectedI].Documents.Select(x => x.FilePath));
             }
         }
@@ -122,28 +116,9 @@ namespace IDesign.Extension
         /// </summary>
         private void LoadProject()
         {
-            Projects = Workspace.CurrentSolution.Projects.ToList();
-        }
-
-        /// <summary>
-        ///     Clicking on the node brings you to the right document.
-        /// </summary>
-        private void SelectNodeInEditor(SyntaxNode n, string file)
-        {
-            try
-            {
-                var tm = (IVsTextManager)Package.GetGlobalService(typeof(SVsTextManager));
-                var did = Workspace.CurrentSolution.GetDocumentIdsWithFilePath(file);
-                Workspace.OpenDocument(did.FirstOrDefault());
-                tm.GetActiveView(1, null, out var av);
-                var sp = n.GetLocation().GetMappedLineSpan().StartLinePosition;
-                var ep = n.GetLocation().GetMappedLineSpan().EndLinePosition;
-                av.SetSelection(sp.Line, sp.Character, ep.Line, ep.Character);
-            }
-            catch(Exception e)
-            {
-                _ = e.Message;
-            }
+            var cm = (IComponentModel)Package.GetGlobalService(typeof(SComponentModel));
+            var ws = (Workspace)cm.GetService<VisualStudioWorkspace>();
+            Projects = ws.CurrentSolution.Projects.ToList();
         }
 
         /// <summary>
@@ -177,7 +152,7 @@ namespace IDesign.Extension
             {
                 try
                 {
-                    SyntaxTreeSources = runner.CreateGraph(Paths);
+                    TreeViewResults.SyntaxTreeSources = runner.CreateGraph(Paths);
                     var results = runner.Run(SelectedPatterns);
                     CreateResultViewModels(results);
                 }
@@ -187,19 +162,14 @@ namespace IDesign.Extension
                 }
             });
 
-            statusBar.Value = 0;
-            Loading = false;
+            ResetUI();
         }
 
-        private void EventSetter_OnHandler(object sender, MouseButtonEventArgs e)
+        private void ResetUI()
         {
-            var viewItem = sender as TreeViewItem;
-
-            var viewModel = viewItem?.DataContext as CheckResultViewModel;
-            if (viewModel == null) return;
-
-            var node = viewModel.Result.GetSyntaxNode();
-            SelectNodeInEditor(node, SyntaxTreeSources[node.SyntaxTree]);
+            statusBar.Value = 0;
+            Loading = false;
+            ProgressStatusBlock.Text = "";
         }
 
         public int OnAfterOpenProject(IVsHierarchy pHierarchy, int fAdded)
@@ -238,8 +208,8 @@ namespace IDesign.Extension
         public int OnAfterOpenSolution(object pUnkReserved, int fNewSolution)
         {
             LoadProject();
-            ProjectSelection.ItemsSource = Projects;
-            ProjectSelection.SelectedIndex = 0;
+            SelectPaths.ProjectSelection.ItemsSource = Projects;
+            SelectPaths.ProjectSelection.SelectedIndex = 0;
             return VSConstants.S_OK;
         }
 
