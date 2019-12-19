@@ -14,21 +14,13 @@ namespace IDesign.Tests.TestClasses.StateFactoryMethodTest1
         {
             Console.WriteLine("Choose batch Size: 6, 8 or 24");
             batchSize = Console.ReadLine();
-            switch (batchSize)
+            amount = batchSize switch
             {
-                case "6":
-                    amount = 6;
-                    break;
-                case "8":
-                    amount = 8;
-                    break;
-                case "24":
-                    amount = 24;
-                    break;
-                default:
-                    amount = 0;
-                    break;
-            }
+                "6" => 6,
+                "8" => 8,
+                "24" => 24,
+                _ => 0,
+            };
             return amount;
         }
 

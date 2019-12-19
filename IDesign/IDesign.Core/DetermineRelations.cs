@@ -105,8 +105,10 @@ namespace IDesign.Core
         /// <returns>the node which was searched for</returns>
         private EntityNode GetNodeByName(EntityNode node, string name)
         {
-            var namespaces = new List<string>();
-            namespaces.Add(node.NameSpace + ".");
+            var namespaces = new List<string>
+            {
+                node.NameSpace + "."
+            };
             namespaces.AddRange(node.GetUsings().Select(x => x.Name + "."));
             namespaces.Add("");
             foreach (var nameSpace in namespaces)
@@ -114,7 +116,6 @@ namespace IDesign.Core
                 var key = nameSpace + name;
                 if (EntityNodes.ContainsKey(key)) return EntityNodes[key];
             }
-
             return null;
         }
 
@@ -125,6 +126,7 @@ namespace IDesign.Core
         private void CreateParentClasses(EntityNode entityNode)
         {
             if (entityNode.GetTypeDeclarationSyntax().BaseList != null)
+            {
                 foreach (var child in entityNode.GetTypeDeclarationSyntax().BaseList.ChildNodes())
                 {
                     var stringname = child.ToString();
@@ -146,6 +148,7 @@ namespace IDesign.Core
                         AddRelation(entityNode, relationType.Value, edgeNode);
                     }
                 }
+            }
         }
     }
 }

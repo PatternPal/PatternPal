@@ -34,9 +34,9 @@ namespace IDesign.Core
                 var tree = FileManager.MakeStringFromFile(files[i]);
                 var generateSyntaxTree = new SyntaxTreeGenerator(tree, files[i], EntityNodes);
                 syntaxTreeSources.Add(generateSyntaxTree.Tree, files[i]);
-                ProgressUpdate((int) (i / (float) files.Count * 50f), "Reading file: " + Path.GetFileName(files[i]));
+                ProgressUpdate((int)(i / (float)files.Count * 50f), "Reading file: " + Path.GetFileName(files[i]));
             }
-            
+
             //Make relations
             var determineRelations = new DetermineRelations(EntityNodes);
             determineRelations.GetEdgesOfEntityNode();
@@ -56,7 +56,7 @@ namespace IDesign.Core
             foreach (var node in EntityNodes.Values)
             {
                 j++;
-                ProgressUpdate((int) (j / (float) EntityNodes.Count * 50f + 50), "Scanning class: " + node.GetName());
+                ProgressUpdate((int)(j / (float)EntityNodes.Count * 50f + 50), "Scanning class: " + node.GetName());
                 foreach (var pattern in patterns)
                     results.Add(new RecognitionResult
                     {
