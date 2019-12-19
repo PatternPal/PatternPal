@@ -37,7 +37,7 @@ namespace IDesign.Core
                 syntaxTreeSources.Add(generateSyntaxTree.Tree, files[i]);
                 ProgressUpdate((int) (i / (float) files.Count * 50f), "Reading file: " + Path.GetFileName(files[i]));
             }
-
+            
             //Make relations
             var determineRelations = new DetermineRelations(EntityNodes);
             determineRelations.GetEdgesOfEntityNode();
