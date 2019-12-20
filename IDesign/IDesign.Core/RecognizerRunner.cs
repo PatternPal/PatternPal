@@ -12,6 +12,7 @@ namespace IDesign.Core
         public static List<DesignPattern> designPatterns = new List<DesignPattern>
         {
             new DesignPattern("Singleton", new SingletonRecognizer()),
+            new DesignPattern("Observer", new ObserverRecognizer()),
             new DesignPattern("Factory Method", new FactoryMethodRecognizer()),
             new DesignPattern("Decorator", new DecoratorRecognizer()),
             new DesignPattern("State", new StateRecognizer()),
@@ -36,7 +37,7 @@ namespace IDesign.Core
                 syntaxTreeSources.Add(generateSyntaxTree.Tree, files[i]);
                 ProgressUpdate((int) (i / (float) files.Count * 50f), "Reading file: " + Path.GetFileName(files[i]));
             }
-
+            
             //Make relations
             var determineRelations = new DetermineRelations(EntityNodes);
             determineRelations.GetEdgesOfEntityNode();
