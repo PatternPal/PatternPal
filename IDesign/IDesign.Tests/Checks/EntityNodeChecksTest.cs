@@ -98,7 +98,7 @@ namespace IDesign.Tests.Checks
         [TestCase("Class3", "IClass3", false)]
         [TestCase("Class4", "IClass4", false)]
         [TestCase("Class5", "IClass5", false)]
-        public void CLassImplementsInterfaceDirectly(string className, string interfaceName, bool shouldBeValid)
+        public void ClassImplementsInterfaceDirectly(string className, string interfaceName, bool shouldBeValid)
         {
             var code = FileUtils.FilesToString("ClassChecks\\");
             var nameSpaceName = "IDesign.Tests.TestClasses.ClassChecks";
