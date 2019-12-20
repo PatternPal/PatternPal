@@ -26,8 +26,7 @@ namespace IDesign.Recognizers.Models.Output
         public FeedbackType FeedbackType { get; set; }
         public SyntaxNode Node { get; set; }
         public List<ICheckResult> ChildFeedback { get; set; } = new List<ICheckResult>();
-        public int Score { get; set; }
-
+        public float Score { get; set; }
 
         public string GetMessage()
         {
@@ -39,14 +38,16 @@ namespace IDesign.Recognizers.Models.Output
             return ChildFeedback;
         }
 
-        public int GetScore()
+        public float GetScore()
         {
             if (!ChildFeedback.Any())
                 return FeedbackType == FeedbackType.Correct ? Score : 0;
+
+            var test = ChildFeedback.Sum(x => x.GetScore());
             return ChildFeedback.Sum(x => x.GetScore());
         }
 
-        public int GetTotalChecks()
+        public float GetTotalChecks()
         {
             if (ChildFeedback.Count == 0)
             {
@@ -75,6 +76,16 @@ namespace IDesign.Recognizers.Models.Output
         public SyntaxNode GetSyntaxNode()
         {
             return Node;
+        }
+
+        public void ChangeScore(int newScore, int newTotalChecks)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void ChangeScore(float score)
+        {
+            Score = score;
         }
     }
 }

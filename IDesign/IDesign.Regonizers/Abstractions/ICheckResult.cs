@@ -29,14 +29,14 @@ namespace IDesign.Recognizers.Abstractions
         ///     Get the score in percentage
         /// </summary>
         /// <returns>The suggestion message</returns>
-        int GetScore();
+        float GetScore();
 
 
         /// <summary>
         ///     Get the score in percentage
         /// </summary>
         /// <returns>The suggestion message</returns>
-        int GetTotalChecks();
+        float GetTotalChecks();
 
         /// <summary>
         ///     Get the type of this feedback
@@ -49,5 +49,11 @@ namespace IDesign.Recognizers.Abstractions
         /// </summary>
         /// <returns>The related syntax node</returns>
         SyntaxNode GetSyntaxNode();
+
+        /// <summary>
+        ///     Changes the score and total checks
+        /// </summary>
+        /// <returns>The related syntax node</returns>
+        void ChangeScore(float score);
     }
 }

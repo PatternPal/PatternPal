@@ -9,7 +9,8 @@ namespace IDesign.Recognizers.Models.ElementChecks
     public enum GroupCheckType
     {
         Any,
-        All
+        All,
+        Median
     }
 
     /// <summary>
@@ -40,7 +41,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
             var elements = _elements(elementToCheck).ToList();
             if (!elements.Any()) return CreateFalseResult();
 
-            var allChildFeedback = new Dictionary<TChild, (int score, IEnumerable<ICheckResult> childFeedback)>();
+            var allChildFeedback = new Dictionary<TChild, (float score, IEnumerable<ICheckResult> childFeedback)>();
             foreach (var element in elements)
             {
                 var childFeedback = _checks.Select(x => x.Check(element));
@@ -52,10 +53,12 @@ namespace IDesign.Recognizers.Models.ElementChecks
                 return CheckAll(elementToCheck, allChildFeedback);
             else if (_type == GroupCheckType.Any)
                 return CheckAny(elementToCheck, allChildFeedback);
+            else if (_type == GroupCheckType.Median)
+                return CheckMedian(elementToCheck, allChildFeedback);
             return null;
         }
 
-        private ICheckResult CheckAny(TParent elementToCheck, Dictionary<TChild, (int score, IEnumerable<ICheckResult> childFeedback)>  allChildFeedback)
+        private ICheckResult CheckAny(TParent elementToCheck, Dictionary<TChild, (float score, IEnumerable<ICheckResult> childFeedback)> allChildFeedback)
         {
             var highestScored = allChildFeedback.OrderByDescending(x => x.Value.score).FirstOrDefault();
             var feedback = FeedbackType.Incorrect;
@@ -72,7 +75,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
             };
         }
 
-        private ICheckResult CheckAll(TParent elementToCheck, Dictionary<TChild, (int score, IEnumerable<ICheckResult> childFeedback)> allChildFeedback)
+        private ICheckResult CheckAll(TParent elementToCheck, Dictionary<TChild, (float score, IEnumerable<ICheckResult> childFeedback)> allChildFeedback)
         {
             var feedback = FeedbackType.Correct;
             if (allChildFeedback.Values.All(x => x.score != 0))
@@ -94,6 +97,45 @@ namespace IDesign.Recognizers.Models.ElementChecks
             {
                 ChildFeedback = childResults
             };
+        }
+
+        private ICheckResult CheckMedian(TParent elementToCheck, Dictionary<TChild, (float score, IEnumerable<ICheckResult> childFeedback)> allChildFeedback)
+        {
+            var feedback = FeedbackType.Correct;
+            if (allChildFeedback.Values.All(x => x.score != 0))
+                feedback = FeedbackType.Incorrect;
+            if (allChildFeedback.Values.Any(x => x.score != 0))
+                feedback = FeedbackType.SemiCorrect;
+
+            var childResults = new List<ICheckResult>();
+            foreach (var valueTuple in allChildFeedback)
+            {
+                var test = valueTuple.Value;
+
+                childResults.Add(new CheckResult(_description, feedback, elementToCheck.GetSuggestionNode())
+                {
+                    ChildFeedback = valueTuple.Value.childFeedback.ToList()
+                });
+            }
+
+            ChangeScore(childResults, childResults.Sum(x => x.GetTotalChecks()), childResults.Count() * childResults.Count());
+
+            var message = elementToCheck.GetSuggestionName() + " | " + _description;
+            return new CheckResult(message, feedback, elementToCheck.GetSuggestionNode())
+            {
+                ChildFeedback = childResults
+            };
+        }
+
+        private void ChangeScore(IEnumerable<ICheckResult> results, float score, float count)
+        {
+            var newScore = score / count;
+            results.ToList().ForEach(x =>
+            {
+                x.ChangeScore(score / count);
+                ChangeScore(x.GetChildFeedback(), newScore, x.GetChildFeedback().Count());
+            });
+            return;
         }
 
         private ICheckResult CreateFalseResult()
