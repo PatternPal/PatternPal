@@ -34,15 +34,15 @@ namespace IDesign.Recognizers
             //Tests for implementation of observer pattern with an subject interface
             var checks = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
             {
-                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(1), "There should be atleast 1 method: update"),
-                new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.ImplementedBy), "There should be concrete observers"),
-                new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.UsedBy), "This class should be used by other classes"),
+                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(1), "There should be atleast 1 method: update", 0.33f),
+                new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.ImplementedBy), "There should be concrete observers", 0.33f),
+                new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.UsedBy), "This class should be used by other classes", 0.33f),
 
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                 {
-                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(3), "There should be atleast 3 methods: add, remove and notify", 2),
-                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethodsWithParameter(new List<string> { node.GetName() }, 2), $"There should be 2 methods which both have one of the same parameters: add({ node.GetName() }), remove({ node.GetName() })", 2),
-                    new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.ImplementedBy), "This class should be implemented by other classes"),
+                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(3), "There should be atleast 3 methods: add, remove and notify", 0.66f),
+                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethodsWithParameter(new List<string> { node.GetName() }, 2), $"There should be 2 methods which both have one of the same parameters: add({ node.GetName() }), remove({ node.GetName() })", 0.66f),
+                    new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.ImplementedBy), "This class should be implemented by other classes", 0.33f),
 
                     new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                     {
@@ -50,7 +50,7 @@ namespace IDesign.Recognizers
 
                         new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
                         {
-                            new ElementCheck<IField>(x => x.CheckFieldType(new List<string> { $"List<{ node.GetName() }>" }), $"There should be a 1 list of type: { node.GetName() }", 3),
+                            new ElementCheck<IField>(x => x.CheckFieldType(new List<string> { $"List<{ node.GetName() }>" }), $"There should be a 1 list of type: { node.GetName() }", 1f),
                         }, d => d.GetFields(), "Concrete subject field"),
                     }, c => c.GetRelations().Where(x => x.GetRelationType() == RelationType.ImplementedBy).Select(x => x.GetDestination()), "Concrete subject", GroupCheckType.Median),
                 }, b => node.GetRelations().Where(x => x.GetRelationType() == RelationType.UsedBy).Select(x => x.GetDestination()).ToList(), "Subject interface"),
@@ -73,20 +73,20 @@ namespace IDesign.Recognizers
             //Tests for implementation of observer pattern without an subject interface
             var checks = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
             {
-                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(1), "There should be atleast 1 method: update"),
-                new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.ImplementedBy), "There should be concrete observers"),
-                new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.UsedBy), "This class should be used by other classes"),
+                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(1), "There should be atleast 1 method: update", 0.33f),
+                new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.ImplementedBy), "There should be concrete observers", 0.33f),
+                new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.UsedBy), "This class should be used by other classes", 0.33f),
 
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                 {
-                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(3), "There should be atleast 3 methods: add, remove and notify"),
-                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethodsWithParameter(new List<string> { node.GetName() }, 2), $"There should be 2 methods which both have one of the same parameters: add({ node.GetName() }), remove({ node.GetName() })", 2),
-                    new ElementCheck<IEntityNode>(x => x.CheckEntityNodeType(EntityNodeType.Class), "Concrete subject should be a class"),
-                    new ElementCheck<IEntityNode>(x => x.CheckMaximumAmountOfRelationTypes(RelationType.Implements, 0), "Should not implement"),
+                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(3), "There should be atleast 3 methods: add, remove and notify", 0.33f),
+                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethodsWithParameter(new List<string> { node.GetName() }, 2), $"There should be 2 methods which both have one of the same parameters: add({ node.GetName() }), remove({ node.GetName() })", 0.66f),
+                    new ElementCheck<IEntityNode>(x => x.CheckEntityNodeType(EntityNodeType.Class), "Concrete subject should be a class", 0.33f),
+                    new ElementCheck<IEntityNode>(x => x.CheckMaximumAmountOfRelationTypes(RelationType.Implements, 0), "Should not implement", 0.33f),
 
                     new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
                     {
-                        new ElementCheck<IField>(x => x.CheckFieldType(new List<string> { $"List<{ node.GetName() }>" }), $"There should be a 1 list of type: { node.GetName() }", 3),
+                        new ElementCheck<IField>(x => x.CheckFieldType(new List<string> { $"List<{ node.GetName() }>" }), $"There should be a 1 list of type: { node.GetName() }", 1f),
                     }, d => d.GetFields(), "Concrete subject fields"),
                 }, b => node.GetRelations().Where(x => x.GetRelationType() == RelationType.UsedBy).Select(x => x.GetDestination()).ToList(), "Concrete subject"),
             }, a => new List<IEntityNode> { node }, "Observer");

@@ -17,9 +17,9 @@ namespace IDesign.Tests.Recognizers
         [Test]
         [TestCase("Case1", 100)]
         [TestCase("Case2", 100)]
-        [TestCase("Case3", 91)]
+        [TestCase("Case3", 90)]
         [TestCase("Case4", 63)]
-        [TestCase("Case5", 66)]
+        [TestCase("Case5", 70)]
         public void ObserverRecognizer_Returns_Correct_Score(string directoryPath, int score)
         {
             var recognizer = new ObserverRecognizer();
