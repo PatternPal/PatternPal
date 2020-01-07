@@ -12,24 +12,22 @@ namespace IDesign.Tests.Recognizers
 {
     public class DecoratorRecognizerTest
     {
-        [Test]
-        [TestCase("DecoratorTestCase1", 100)]
-        [TestCase("DecoratorTestCase2", 0)]
-        [TestCase("DecoratorTestCase3", 18)]
-        [TestCase("DecoratorTestCase4", 54)]
-        [TestCase("DecoratorTestCase5", 63)]
-        public void DecoratorRecognizer_Returns_Correct_Score(string directoryPath, int score)
+        [TestCase("DecoratorTest1", "Decorator", 80, 100)]
+        [TestCase("DecoratorTest2", "Decorator", 0, 79)]
+        [TestCase("DecoratorTest3", "Decorator", 0, 79)]
+        [TestCase("DecoratorTest4", "Decorator", 0, 79)]
+        [TestCase("DecoratorTest5", "Decorator", 0, 79)]
+        public void DecoratorRecognizer_Returns_Correct_Score(string directory, string filename ,int minScore, int maxScore)
         {
-            FileManager manager = new FileManager();
-            List<string> paths = manager.GetAllCsFilesFromDirectory("../../../TestClasses/Decorator/" + directoryPath);
+            var decorator = new DecoratorRecognizer();
+            var filesAsString = FileUtils.FilesToString($"{directory}\\");
+            var nameSpaceName = $"IDesign.Tests.TestClasses.{directory}";
+            var entityNodes = EntityNodeUtils.CreateEntityNodeGraph(filesAsString);
+            var createRelation = new DetermineRelations(entityNodes);
+            createRelation.GetEdgesOfEntityNode();
+            var result = decorator.Recognize(entityNodes[nameSpaceName + "." + filename]);
 
-            RecognizerRunner runner = new RecognizerRunner();
-            runner.CreateGraph(paths);
-            List<RecognitionResult> result = runner.Run(new List<DesignPattern>() { new DesignPattern("Decorator", new DecoratorRecognizer(), "") });
-
-            result = result.OrderBy(x => x.Result.GetScore()).ToList();
-
-            Assert.AreEqual(score, result.Last().Result.GetScore());
+            Assert.That(result.GetScore(), Is.InRange(minScore, maxScore));
         }
     }
 }
