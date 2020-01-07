@@ -25,7 +25,7 @@ namespace IDesign.Tests.Recognizers
 
             RecognizerRunner runner = new RecognizerRunner();
             runner.CreateGraph(paths);
-            List<RecognitionResult> result = runner.Run(new List<DesignPattern>() { new DesignPattern("Decorator", new DecoratorRecognizer()) });
+            List<RecognitionResult> result = runner.Run(new List<DesignPattern>() { new DesignPattern("Decorator", new DecoratorRecognizer(), "") });
 
             result = result.OrderBy(x => x.Result.GetScore()).ToList();
 

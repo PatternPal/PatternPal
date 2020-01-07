@@ -56,7 +56,7 @@ namespace IDesign.Extension
             ViewModels = new List<DesignPatternViewModel>();
 
             foreach (var pattern in RecognizerRunner.designPatterns)
-                ViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern));
+                ViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern, pattern.WikiLink));
 
             PatternCheckbox.listBox.DataContext = ViewModels;
             var height = ViewModels.Count * 30;
@@ -226,12 +226,6 @@ namespace IDesign.Extension
         public int OnAfterCloseSolution(object pUnkReserved)
         {
             return VSConstants.S_OK;
-        }
-
-
-        public void ButtonClick(object sender, EventArgs e)
-        {
-            
         }
     }
 }

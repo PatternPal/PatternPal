@@ -7,10 +7,10 @@ namespace IDesign.Extension.ViewModels
     {
         private bool isChecked;
 
-        public string WikiLink { get; set; }
 
-        public DesignPatternViewModel(string name, DesignPattern pattern)
+        public DesignPatternViewModel(string name, DesignPattern pattern, string wikiLink)
         {
+            WikiLink = wikiLink;
             Name = name;
             Pattern = pattern;
             IsChecked = true;
@@ -19,6 +19,8 @@ namespace IDesign.Extension.ViewModels
         public DesignPattern Pattern { get; set; }
 
         public string Name { get; set; }
+
+        public string WikiLink { get; set; }
 
         public bool IsChecked
         {
