@@ -43,7 +43,6 @@ namespace IDesign.Recognizers.Models.Output
             if (!ChildFeedback.Any())
                 return FeedbackType == FeedbackType.Correct ? Score : 0;
 
-            var test = ChildFeedback.Sum(x => x.GetScore());
             return ChildFeedback.Sum(x => x.GetScore());
         }
 
@@ -76,11 +75,6 @@ namespace IDesign.Recognizers.Models.Output
         public SyntaxNode GetSyntaxNode()
         {
             return Node;
-        }
-
-        public void ChangeScore(int newScore, int newTotalChecks)
-        {
-            throw new System.NotImplementedException();
         }
 
         public void ChangeScore(float score)

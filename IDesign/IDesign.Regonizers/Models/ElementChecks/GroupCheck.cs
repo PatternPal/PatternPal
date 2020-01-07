@@ -135,7 +135,6 @@ namespace IDesign.Recognizers.Models.ElementChecks
                 x.ChangeScore(score / count);
                 ChangeScore(x.GetChildFeedback(), newScore, x.GetChildFeedback().Count());
             });
-            return;
         }
 
         private ICheckResult CreateFalseResult()
