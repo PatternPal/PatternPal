@@ -53,7 +53,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
                 return CheckAll(elementToCheck, allChildFeedback);
             else if (Type == GroupCheckType.Any)
                 return CheckAny(elementToCheck, allChildFeedback);
-            else if (_type == GroupCheckType.Median)
+            else if (Type == GroupCheckType.Median)
                 return CheckMedian(elementToCheck, allChildFeedback);
             return null;
         }
