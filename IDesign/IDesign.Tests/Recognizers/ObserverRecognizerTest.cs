@@ -28,7 +28,7 @@ namespace IDesign.Tests.Recognizers
             var runner = new RecognizerRunner();
 
             runner.CreateGraph(paths);
-            List<RecognitionResult> result = runner.Run(new List<DesignPattern>() { new DesignPattern("Observer", new ObserverRecognizer()) });
+            List<RecognitionResult> result = runner.Run(new List<DesignPattern>() { new DesignPattern("Observer", new ObserverRecognizer(), "") });
 
             result = result.OrderBy(x => x.Result.GetScore()).ToList();
 

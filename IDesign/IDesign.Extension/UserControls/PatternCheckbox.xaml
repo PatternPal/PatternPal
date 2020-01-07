@@ -67,15 +67,30 @@
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
-                </Setter>
+                </Setter>          
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
+
     <ListBox ItemsSource="{Binding}" Name="listBox" BorderThickness="0 1">
         <ListBox.ItemTemplate>
             <HierarchicalDataTemplate>
-                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked, Mode=TwoWay}" Width="Auto"
-                              Margin="3" />
+                <DockPanel LastChildFill="False">
+                    <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked, Mode=TwoWay}" Width="Auto"
+                              Margin="3" DockPanel.Dock="Left"/>
+                    <Button DockPanel.Dock="Right" FontSize="12" VerticalContentAlignment="Top" Margin="3,3,3,3" Width="17" Height="17" Content="?" Click="Button_Click" DataContext="{Binding WikiPage}" >
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="360"/>
+                            </Style>
+                            <Style TargetType="Button">
+                                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
+                                <Setter Property="Background" Value="Transparent"></Setter>
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                </DockPanel>
             </HierarchicalDataTemplate>
         </ListBox.ItemTemplate>
     </ListBox>
