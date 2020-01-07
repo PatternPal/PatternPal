@@ -50,7 +50,8 @@ namespace IDesign.Recognizers
                             new ElementCheck<IMethod>(x => x.CheckArguments(currentComponent.GetName()), new ResourceMessage("DecoratorConcreteMethodArguments"))
 
                         }, x => x.GetConstructors(), "Constructor")
-                    }, x => entityNode.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.ExtendedBy)).Select(y => y.GetDestination()), new ResourceMessage("DecoratorConcrete"), GroupCheckType.All)
+                    }, x => entityNode.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.ExtendedBy)).Select(y => y.GetDestination()), new ResourceMessage("DecoratorConcrete"), GroupCheckType.Median)
+
 
                 }, x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Implements) || y.GetRelationType().Equals(RelationType.Extends)).Select(y => y.GetDestination()), new ResourceMessage("DecoratorComponent"))
 

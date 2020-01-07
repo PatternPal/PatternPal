@@ -21,9 +21,9 @@ namespace IDesign.Extension.ViewModels
 
         public SolidColorBrush GetColor(int score)
         {
-            if (score <= 33)
+            if (score < 40)
                 return Brushes.Red;
-            else if (score <= 66)
+            else if (score < 80)
                 return Brushes.Yellow;
             else
                 return Brushes.Green;

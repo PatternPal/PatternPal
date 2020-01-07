@@ -12,9 +12,8 @@ using System.Linq;
 
 namespace IDesign.Tests.Checks
 {
-    class EntityNodeChecks
+    class EntityNodeChecksTest
     {
-        [Test]
         [TestCase("Abstract", @"abstract class TestClass1 { }", true)]
         [TestCase("Abstract", @"class TestClass1 { }", false)]
         [TestCase("Public", @"public class TestClass1 { }", true)]
@@ -39,7 +38,6 @@ namespace IDesign.Tests.Checks
             Assert.AreEqual(shouldBeValid, entityNode.CheckModifier(modifier));
         }
 
-        [Test]
         [TestCase("Decorator", RelationType.Implements, 1, true)]
         [TestCase("Decorator", RelationType.Implements, 2, false)]
         [TestCase("Decorator", RelationType.ExtendedBy, 1, true)]
@@ -61,13 +59,12 @@ namespace IDesign.Tests.Checks
 
             Assert.AreEqual(shouldBeValid, entityNode.CheckMinimalAmountOfRelationTypes(relation, amount));
         }
-        [Test]
         [TestCase("Class1", "IClass1", true)]
         [TestCase("Class2", "IClass2", true)]
         [TestCase("Class3", "IClass3", false)]
         [TestCase("Class4", "IClass4", true)]
         [TestCase("Class5", "IClass5", true)]
-        public void CLassImplementsInterface(string className, string interfaceName, bool shouldBeValid)
+        public void ClassImplementsInterface(string className, string interfaceName, bool shouldBeValid)
         {
             var code = FileUtils.FilesToString("ClassChecks\\");
             var nameSpaceName = "IDesign.Tests.TestClasses.ClassChecks";
@@ -79,7 +76,6 @@ namespace IDesign.Tests.Checks
             Assert.AreEqual(shouldBeValid, checkResult);
         }
 
-        [Test]
         [TestCase("Class1", "EClass1", true)]
         [TestCase("Class2", "EClass2", true)]
         [TestCase("Class3", "EClass3", true)]
@@ -97,13 +93,12 @@ namespace IDesign.Tests.Checks
             Assert.AreEqual(shouldBeValid, checkResult);
         }
 
-        [Test]
         [TestCase("Class1", "IClass1", true)]
         [TestCase("Class2", "IClass2", false)]
         [TestCase("Class3", "IClass3", false)]
         [TestCase("Class4", "IClass4", false)]
         [TestCase("Class5", "IClass5", false)]
-        public void CLassImplementsInterfaceDirectly(string className, string interfaceName, bool shouldBeValid)
+        public void ClassImplementsInterfaceDirectly(string className, string interfaceName, bool shouldBeValid)
         {
             var code = FileUtils.FilesToString("ClassChecks\\");
             var nameSpaceName = "IDesign.Tests.TestClasses.ClassChecks";

@@ -16,8 +16,7 @@ namespace IDesign.Tests.Utils
         public static EntityNode CreateTestEntityNode(TypeDeclarationSyntax testNode)
         {
             var nameSpaceKey = "";
-            var nameSpace = testNode.Parent as NamespaceDeclarationSyntax;
-            if (nameSpace != null) nameSpaceKey += nameSpace.Name.ToString();
+            if (testNode.Parent is NamespaceDeclarationSyntax nameSpace) nameSpaceKey += nameSpace.Name.ToString();
             var entityNode = new EntityNode
             {
                 Name = testNode.Identifier.ToString(),
@@ -52,7 +51,6 @@ namespace IDesign.Tests.Utils
                 foreach (var node in nodes)
                     graph.Add(nameSpaceIdentifier + "." + node.Identifier, CreateTestEntityNode(node));
             }
-
             return graph;
         }
 
@@ -69,7 +67,6 @@ namespace IDesign.Tests.Utils
                 var partialGraph = CreateEntityNodeGraphFromOneFile(fileCode);
                 graph = graph.Union(partialGraph).ToDictionary(k => k.Key, v => v.Value);
             }
-
             return graph;
         }
     }

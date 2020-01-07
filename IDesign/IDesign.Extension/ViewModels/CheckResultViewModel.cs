@@ -16,7 +16,7 @@ namespace IDesign.Extension.ViewModels
 
         public ICheckResult Result { get; set; }
         public string Message => ClassFeedbackRes.ResourceMessageToString(Result.GetFeedback());
-        public int Score => Result.GetScore();
+        public float Score => Result.GetScore();
         public FeedbackType Type => Result.GetFeedbackType();
 
         public ImageMoniker Icon

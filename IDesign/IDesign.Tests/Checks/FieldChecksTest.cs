@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace IDesign.Tests.Checks
 {
-    public class FieldChecks
+    public class FieldChecksTest
     {
         [Test]
         [TestCase("public", @"public string TestProperty", true)]

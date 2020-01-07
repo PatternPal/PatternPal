@@ -71,7 +71,7 @@ namespace IDesign.Recognizers.Checks
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name=""></param>
         /// <param name="currentClass"></param>
@@ -122,8 +122,8 @@ namespace IDesign.Recognizers.Checks
             {
                 var identifier = invocation.Expression.DescendantNodesAndSelf().OfType<IdentifierNameSyntax>().FirstOrDefault();
                 var arguments = invocation.ArgumentList.Arguments.Count;
-                if(identifier != null)
-                if (node.MethodInEntityNode(identifier.ToString(), arguments))
+
+                if (identifier != null && node.MethodInEntityNode(identifier.ToString(), arguments))
                     return true;
             }
 
@@ -163,7 +163,6 @@ namespace IDesign.Recognizers.Checks
             var parameters = methodSyntax.GetParameters().Where(y => y.Type.ToString().Equals(argument));
             if (parameters.Count() < 1)
                 return false;
-
             return methodSyntax.GetArguments().Any(x => x.Equals(parameters.First().Identifier.ToString()));
         }
 
@@ -176,15 +175,15 @@ namespace IDesign.Recognizers.Checks
         {
             return (methodSyntax.GetName().Equals(name) && methodSyntax.GetType() == typeof(Method));
         }
-        
-        
+
+
         public static bool CheckFieldIsUsed(this IMethod method, string fieldName)
         {
             if (method.GetBody() == null)
                 return false;
             return method.GetBody().DescendantNodes().OfType<IdentifierNameSyntax>().Any(x => x.Identifier.ToString().IsEqual(fieldName));
         }
-        
+
         /// <summary>
         /// Return a boolean based on if the Method parameters are the same as the given string
         /// </summary>

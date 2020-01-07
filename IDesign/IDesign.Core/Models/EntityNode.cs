@@ -63,7 +63,6 @@ namespace IDesign.Core.Models
                     getters = getters.Where(x => x.Body != null || x.ExpressionBody != null);
                     list.AddRange(getters.Select(x => new PropertyMethod(property, x)));
                 }
-
             return list;
         }
 
