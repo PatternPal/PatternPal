@@ -22,7 +22,7 @@ namespace IDesign.Extension
     /// <summary>
     ///     Interaction logic for ExtensionWindowControl.
     /// </summary>
-    public partial class ExtensionWindowControl : UserControl, IVsSolutionEvents
+    public partial class ExtensionWindowControl : UserControl, IVsSolutionEvents, IVsRunningDocTableEvents
     {
         private readonly UInt32 _SolutionEventsCookie;
         private List<DesignPatternViewModel> ViewModels { get; set; }
@@ -46,9 +46,9 @@ namespace IDesign.Extension
             Dte = Package.GetGlobalService(typeof(SDTE)) as DTE;
 
 
-            var ss = (IVsRunningDocumentTable)Package.GetGlobalService(typeof(SVsRunningDocumentTable));
+            var rdt = (IVsRunningDocumentTable)Package.GetGlobalService(typeof(SVsRunningDocumentTable));
             uint _SolutionEventsCookie;
-            ss.AdviseRunningDocTableEvents(this, out _SolutionEventsCookie);
+            rdt.AdviseRunningDocTableEvents(this, out _SolutionEventsCookie);
             var ss = (IVsSolution)Package.GetGlobalService(typeof(SVsSolution));
             ss.AdviseSolutionEvents(this, out _SolutionEventsCookie);
         }
@@ -90,28 +90,34 @@ namespace IDesign.Extension
             }
 
             // - Change your UI information here
-                TreeViewResults.ResultsView.ItemsSource = viewModels;
+            TreeViewResults.ResultsView.ItemsSource = viewModels;
         }
 
         /// <summary>
         ///     Gets current active document path.
         /// </summary>
+
         private List<string> GetCurrentPath()
         {
             var result = new List<string>();
-
-            if ((bool)SelectPaths.radio1.IsChecked)
-            {
-                if (Dte.ActiveDocument != null)
+            if ((bool)SelectPaths.radio1.IsChecked) 
+            if (Dte.ActiveDocument != null)
                 result.Add(Dte.ActiveDocument.FullName);
             return result;
-            }
-            else
-            {
-                LoadProject();
-                var selectedI = SelectPaths.ProjectSelection.SelectedIndex;
-                Paths.AddRange(Projects[selectedI].Documents.Select(x => x.FilePath));
-            }
+        }
+
+        /// <summary>
+        ///     Gets all paths in the solution.
+        /// </summary>
+        private void GetAllPaths()
+        {
+            Paths = new List<string>();
+            var selectedI = SelectPaths.ProjectSelection.SelectedIndex;
+            Paths.AddRange(Projects[selectedI].Documents.Select(x => x.FilePath));
+        }
+
+        private void ChoosePath()
+        {
             GetAllPaths();
         }
 
@@ -163,30 +169,18 @@ namespace IDesign.Extension
                 {
                     TreeViewResults.SyntaxTreeSources = runner.CreateGraph(Paths);
                     var results = runner.Run(SelectedPatterns);
-                var cur = GetCurrentPath().FirstOrDefault();
-
-
-                //Here you signal the UI thread to execute the action:
-                Dispatcher?.BeginInvoke(new Action(() =>
-                {
-                    if ((bool)radio1.IsChecked)
-                        results = results.Where(x => x.FilePath == cur).ToList();
-
-                    CreateResultViewModels(results);
                     var cur = GetCurrentPath().FirstOrDefault();
 
-var cur = GetCurrentPath().FirstOrDefault();
 
+                    //Here you signal the UI thread to execute the action:
+                    Dispatcher?.BeginInvoke(new Action(() =>
+                    {
+                        if ((bool)SelectPaths.radio1.IsChecked)
+                            results = results.Where(x => x.FilePath == cur).ToList();
 
-                //Here you signal the UI thread to execute the action:
-                Dispatcher?.BeginInvoke(new Action(() =>
-                {
-                    if ((bool)radio1.IsChecked)
-                        results = results.Where(x => x.FilePath == cur).ToList();
+                        CreateResultViewModels(results);
+                    }));
 
-                    CreateResultViewModels(results);
-                }));
-	
                 }
                 catch
                 {
