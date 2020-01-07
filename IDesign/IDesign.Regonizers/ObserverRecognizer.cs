@@ -40,20 +40,19 @@ namespace IDesign.Recognizers
 
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                 {
-                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(3), "There should be atleast 3 methods: add, remove and notify"),
-                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethodsWithParameter(new List<string> { node.GetName() }, 2), $"There should be 2 methods which both have one of the same parameters: add({ node.GetName() }), remove({ node.GetName() })"),
+                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(3), "There should be atleast 3 methods: add, remove and notify", 2),
+                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethodsWithParameter(new List<string> { node.GetName() }, 2), $"There should be 2 methods which both have one of the same parameters: add({ node.GetName() }), remove({ node.GetName() })", 2),
                     new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.ImplementedBy), "This class should be implemented by other classes"),
 
                     new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                     {
                         new ElementCheck<IEntityNode>(x => x.CheckTypeDeclaration(EntityNodeType.Class), $"Should be class"),
-                        new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(3), "There should be atleast 3 methods: add, remove and notify"),
 
                         new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
                         {
-                            new ElementCheck<IField>(x => x.CheckFieldType(new List<string> { $"List<{ node.GetName() }>" }), $"There should be a 1 list of type: { node.GetName() }"),
+                            new ElementCheck<IField>(x => x.CheckFieldType(new List<string> { $"List<{ node.GetName() }>" }), $"There should be a 1 list of type: { node.GetName() }", 3),
                         }, d => d.GetFields(), "Concrete subject field"),
-                    }, c => c.GetRelations().Where(x => x.GetRelationType() == RelationType.ImplementedBy).Select(x => x.GetDestination()), "Concrete subject", GroupCheckType.All),
+                    }, c => c.GetRelations().Where(x => x.GetRelationType() == RelationType.ImplementedBy).Select(x => x.GetDestination()), "Concrete subject", GroupCheckType.Median),
                 }, b => node.GetRelations().Where(x => x.GetRelationType() == RelationType.UsedBy).Select(x => x.GetDestination()).ToList(), "Subject interface"),
             }, a => new List<IEntityNode> { node }, "Observer");
 
@@ -81,19 +80,14 @@ namespace IDesign.Recognizers
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                 {
                     new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(3), "There should be atleast 3 methods: add, remove and notify"),
-                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethodsWithParameter(new List<string> { node.GetName() }, 2), $"There should be 2 methods which both have one of the same parameters: add({ node.GetName() }), remove({ node.GetName() })"),
+                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethodsWithParameter(new List<string> { node.GetName() }, 2), $"There should be 2 methods which both have one of the same parameters: add({ node.GetName() }), remove({ node.GetName() })", 2),
                     new ElementCheck<IEntityNode>(x => x.CheckEntityNodeType(EntityNodeType.Class), "Concrete subject should be a class"),
+                    new ElementCheck<IEntityNode>(x => x.CheckMaximumAmountOfRelationTypes(RelationType.Implements, 0), "Should not implement"),
 
                     new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
                     {
-                        new ElementCheck<IField>(x => x.CheckFieldType(new List<string> { $"List<{ node.GetName() }>" }), $"There should be a 1 list of type: { node.GetName() }"),
+                        new ElementCheck<IField>(x => x.CheckFieldType(new List<string> { $"List<{ node.GetName() }>" }), $"There should be a 1 list of type: { node.GetName() }", 3),
                     }, d => d.GetFields(), "Concrete subject fields"),
-
-                    //Check to make sure a subject with an interface doesn't get mistaken for a concrete subject without an subject interface
-                    new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
-                    {
-                        new ElementCheck<IEntityNode>(x => x.CheckMaximumAmountOfMethodsWithParameter(new List<string> { node.GetName() }, 0), "Implementations of observer without an subject interface should not have an subject interface"),
-                    }, c => c.GetRelations().Where(x => x.GetRelationType() == RelationType.ImplementedBy).Select(x => x.GetDestination()).ToList(), "Subject interface"),
                 }, b => node.GetRelations().Where(x => x.GetRelationType() == RelationType.UsedBy).Select(x => x.GetDestination()).ToList(), "Concrete subject"),
             }, a => new List<IEntityNode> { node }, "Observer");
 
