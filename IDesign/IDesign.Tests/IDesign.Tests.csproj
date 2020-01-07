@@ -166,30 +166,6 @@
     <Compile Update="TestClasses\Decorator\DecoratorTestCase1\IComponent.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="TestClasses\Decorator\DecoratorTestCase2\Decorator.cs">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="TestClasses\Decorator\DecoratorTestCase3\Decorator.cs">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="TestClasses\Decorator\DecoratorTestCase3\IComponent.cs">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="TestClasses\Decorator\DecoratorTestCase4\Decorator.cs">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="TestClasses\Decorator\DecoratorTestCase4\IComponent.cs">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="TestClasses\Decorator\DecoratorTestCase5\ConcreteComponent.cs">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="TestClasses\Decorator\DecoratorTestCase5\Decorator.cs">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="TestClasses\Decorator\DecoratorTestCase5\IComponent.cs">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Compile>
     <Compile Update="TestClasses\FactoryMethodTest1\BeerFactory.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
