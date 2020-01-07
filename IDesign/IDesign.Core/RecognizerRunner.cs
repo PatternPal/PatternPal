@@ -16,7 +16,8 @@ namespace IDesign.Core
             new DesignPattern("Decorator", new DecoratorRecognizer(), "https://en.wikipedia.org/wiki/Decorator_pattern"),
             new DesignPattern("State", new StateRecognizer(), "https://en.wikipedia.org/wiki/State_pattern"),
             new DesignPattern("Strategy", new StrategyRecognizer(), "https://en.wikipedia.org/wiki/Strategy_pattern"),
-            new DesignPattern("Adapter", new AdapterRecognizer(), "https://en.wikipedia.org/wiki/Adapter_pattern")
+            new DesignPattern("Adapter", new AdapterRecognizer(), "https://en.wikipedia.org/wiki/Adapter_pattern"),
+            new DesignPattern("Observer", new ObserverRecognizer(), "https://en.wikipedia.org/wiki/Observer_pattern"),
         };
 
         public Dictionary<string, EntityNode> EntityNodes =
