@@ -11,13 +11,13 @@ namespace IDesign.Core
     {
         public static List<DesignPattern> designPatterns = new List<DesignPattern>
         {
-            new DesignPattern("Singleton", new SingletonRecognizer(), "Singleton_pattern"),
-            new DesignPattern("Factory Method", new FactoryMethodRecognizer(), "Factory_method_pattern"),
-            new DesignPattern("Decorator", new DecoratorRecognizer(), "Decorator_pattern"),
-            new DesignPattern("State", new StateRecognizer(), "State_pattern"),
-            new DesignPattern("Strategy", new StrategyRecognizer(), "Strategy_pattern"),
-            new DesignPattern("Adapter", new AdapterRecognizer(), "Adapter_pattern"),
-            new DesignPattern("Observer", new ObserverRecognizer(), "Observer_pattern"),
+            new DesignPattern(Resources.DesignPatternNameResources.Singleton, new SingletonRecognizer(), Resources.WikiPageResources.Singleton),
+            new DesignPattern(Resources.DesignPatternNameResources.FactoryMethod, new FactoryMethodRecognizer(), Resources.WikiPageResources.FactoryMethod),
+            new DesignPattern(Resources.DesignPatternNameResources.Decorator, new DecoratorRecognizer(), Resources.WikiPageResources.Decorator),
+            new DesignPattern(Resources.DesignPatternNameResources.State, new StateRecognizer(), Resources.WikiPageResources.State),
+            new DesignPattern(Resources.DesignPatternNameResources.Strategy, new StrategyRecognizer(), Resources.WikiPageResources.Strategy),
+            new DesignPattern(Resources.DesignPatternNameResources.Adapter, new AdapterRecognizer(), Resources.WikiPageResources.Adapter),
+            new DesignPattern(Resources.DesignPatternNameResources.Observer, new ObserverRecognizer(), Resources.WikiPageResources.Observer),
         };
 
         public Dictionary<string, EntityNode> EntityNodes =
