@@ -12,22 +12,31 @@ namespace IDesign.Recognizers.Models.ElementChecks
     {
         private readonly string _description;
         private readonly Predicate<T> _predicate;
+        private int _score;
 
         public ElementCheck(Predicate<T> predicate, string description)
         {
             _predicate = predicate;
             _description = description;
+            _score = 1;
+        }
+
+        public ElementCheck(Predicate<T> predicate, string description, int score)
+        {
+            _predicate = predicate;
+            _description = description;
+            _score = score;
         }
 
         public ICheckResult Check(T elementToCheck)
         {
             //Support checking without input (To create false result)
             if (elementToCheck == null)
-                return new CheckResult(_description, FeedbackType.Incorrect, null);
+                return new CheckResult(_description, FeedbackType.Incorrect, null, _score);
             var isValid = _predicate(elementToCheck);
             var feedback = isValid ? FeedbackType.Correct : FeedbackType.Incorrect;
             var message = elementToCheck.GetSuggestionName() + " | " + _description;
-            return new CheckResult(message, feedback, elementToCheck.GetSuggestionNode());
+            return new CheckResult(message, feedback, elementToCheck.GetSuggestionNode(), _score);
         }
 
         public string GetDescription()

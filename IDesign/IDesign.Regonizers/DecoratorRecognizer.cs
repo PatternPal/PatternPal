@@ -50,7 +50,7 @@ namespace IDesign.Recognizers
                             new ElementCheck<IMethod>(x => x.CheckArguments(currentComponent.GetName()), "Sends the interface or parent class parameter in base")
 
                         }, x => x.GetConstructors(), "Constructor")
-                    }, x => entityNode.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.ExtendedBy)).Select(y => y.GetDestination()), "Concrete Decorator", GroupCheckType.All)
+                    }, x => entityNode.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.ExtendedBy)).Select(y => y.GetDestination()), "Concrete Decorator", GroupCheckType.Median)
 
                 }, x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Implements) || y.GetRelationType().Equals(RelationType.Extends)).Select(y => y.GetDestination()), "Interface or parent class")
 
