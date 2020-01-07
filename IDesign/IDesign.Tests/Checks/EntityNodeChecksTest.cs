@@ -105,7 +105,7 @@ namespace IDesign.Tests.Checks
             var nodes = EntityNodeUtils.CreateEntityNodeGraph(code);
             var createRelation = new DetermineRelations(nodes);
             createRelation.GetEdgesOfEntityNode();
-            var checkResult = nodes[nameSpaceName + "." + className].ClassImplementsInterface(interfaceName);
+            var checkResult = nodes[nameSpaceName + "." + className].ClassImlementsInterface(interfaceName);
 
             Assert.AreEqual(shouldBeValid, checkResult);
         }
