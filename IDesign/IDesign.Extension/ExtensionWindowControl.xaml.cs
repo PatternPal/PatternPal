@@ -40,6 +40,9 @@ namespace IDesign.Extension
             AddViewModels();
             Loading = false;
             Dispatcher.VerifyAccess();
+            LoadProject();
+            SelectPaths.ProjectSelection.ItemsSource = Projects;
+            SelectPaths.ProjectSelection.SelectedIndex = 0;
             Dte = Package.GetGlobalService(typeof(SDTE)) as DTE;
             var ss = (IVsSolution)Package.GetGlobalService(typeof(SVsSolution));
             ss.AdviseSolutionEvents(this, out _SolutionEventsCookie);
