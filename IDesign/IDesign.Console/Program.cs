@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using CommonResources;
 using IDesign.Core;
 using IDesign.Core.Models;
 using IDesign.Recognizers.Abstractions;
@@ -73,8 +74,8 @@ namespace IDesign.ConsoleApp
 
             foreach (var pattern in selectedPatterns) Console.WriteLine(" - " + pattern.Name);
 
-            recognizerRunner.OnProgressUpdate += (sender, progress) =>
-                DrawTextProgressBar(progress.Status, progress.CurrentPercentage, 100);
+           // recognizerRunner.OnProgressUpdate += (sender, progress) =>
+             //   DrawTextProgressBar(progress.Status, progress.CurrentPercentage, 100);
 
             recognizerRunner.CreateGraph(selectedFiles);
             var results = recognizerRunner.Run(selectedPatterns);
@@ -105,6 +106,7 @@ namespace IDesign.ConsoleApp
 
             for (var i = 0; i < results.Count; i++)
             {
+                if (results[i].Result.GetScore() < 79) continue;
                 Console.Write($"{i}) {results[i].EntityNode.GetName()} | {results[i].Pattern.Name}: ");
 
                 PrintScore(results[i].Result.GetScore());
@@ -140,7 +142,7 @@ namespace IDesign.ConsoleApp
                 symbol = "✓";
             }
 
-            Console.WriteLine(new string('\t', depth) + symbol + $" {result.GetMessage()}");
+            Console.WriteLine(new string('\t', depth) + symbol + $" {ClassFeedbackRes.ResourceMessageToString(result.GetFeedback())}");
 
             foreach (var child in result.GetChildFeedback())
             {

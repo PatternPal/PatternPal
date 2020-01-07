@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CommonResources;
 using IDesign.Recognizers.Abstractions;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
@@ -14,7 +15,7 @@ namespace IDesign.Extension.ViewModels
         }
 
         public ICheckResult Result { get; set; }
-        public string Message => Result.GetMessage();
+        public string Message => ClassFeedbackRes.ResourceMessageToString(Result.GetFeedback());
         public int Score => Result.GetScore();
         public FeedbackType Type => Result.GetFeedbackType();
 

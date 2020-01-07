@@ -49,5 +49,7 @@ namespace IDesign.Recognizers.Abstractions
         /// </summary>
         /// <returns>The related syntax node</returns>
         SyntaxNode GetSyntaxNode();
+
+        IResourceMessage GetFeedback();
     }
 }

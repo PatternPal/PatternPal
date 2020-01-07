@@ -14,10 +14,19 @@ namespace IDesign.Recognizers.Models.Output
             Node = node;
         }
 
+        public CheckResult(IResourceMessage feedback, FeedbackType feedbackType, SyntaxNode node)
+        {
+            _feedback = feedback;
+            FeedbackType = feedbackType;
+            Node = node;
+        }
+
         public string Message { get; set; }
         public FeedbackType FeedbackType { get; set; }
         public SyntaxNode Node { get; set; }
         public List<ICheckResult> ChildFeedback { get; set; } = new List<ICheckResult>();
+
+        public IResourceMessage _feedback { get; set; }
 
 
         public string GetMessage()
@@ -66,6 +75,11 @@ namespace IDesign.Recognizers.Models.Output
         public SyntaxNode GetSyntaxNode()
         {
             return Node;
+        }
+
+        public IResourceMessage GetFeedback()
+        {
+            return _feedback;
         }
     }
 }

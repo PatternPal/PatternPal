@@ -12,11 +12,18 @@ namespace IDesign.Recognizers.Models.ElementChecks
     {
         private readonly string _description;
         private readonly Predicate<T> _predicate;
+        private readonly IResourceMessage _feedback;
 
         public ElementCheck(Predicate<T> predicate, string description)
         {
             _predicate = predicate;
             _description = description;
+        }
+
+        public ElementCheck(Predicate<T> predicate, IResourceMessage feedback)
+        {
+            _predicate = predicate;
+            _feedback = feedback;
         }
 
         public ICheckResult Check(T elementToCheck)

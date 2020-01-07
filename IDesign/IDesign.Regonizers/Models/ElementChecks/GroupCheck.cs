@@ -21,6 +21,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
         where TParent : class, ICheckable where TChild : class, ICheckable
     {
         private readonly List<ICheck<TChild>> _checks;
+        private IResourceMessage _resourcemessage;
         private readonly string _description;
         private readonly Func<TParent, IEnumerable<TChild>> _elements;
         public GroupCheckType _type { get; set; }
@@ -29,6 +30,14 @@ namespace IDesign.Recognizers.Models.ElementChecks
         {
             _checks = checks;
             _description = description;
+            _elements = elements;
+            _type = type;
+        }
+
+        public GroupCheck(List<ICheck<TChild>> checks, Func<TParent, IEnumerable<TChild>> elements, IResourceMessage resourcemessage, GroupCheckType type = GroupCheckType.Any)
+        {
+            _checks = checks;
+            _resourcemessage = resourcemessage;
             _elements = elements;
             _type = type;
         }

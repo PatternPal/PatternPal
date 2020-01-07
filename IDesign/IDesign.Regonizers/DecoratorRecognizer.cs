@@ -22,22 +22,22 @@ namespace IDesign.Recognizers
             IEntityNode currentComponent = null;
             var decoratorCheck = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>()
             {
-                new ElementCheck<IEntityNode>(x => x.CheckModifier("Abstract"), "Is abstract"),
-                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.Extends, 1) || x.CheckMinimalAmountOfRelationTypes(RelationType.Implements, 1), "Has an interface or an parent class"),
-                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.ExtendedBy, 1), "Extends a different class"),
+                new ElementCheck<IEntityNode>(x => x.CheckModifier("Abstract"), new ResourceMessage("DecoratorNodeModifier")),
+                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.Extends, 1) || x.CheckMinimalAmountOfRelationTypes(RelationType.Implements, 1), new ResourceMessage("DecoratorNodeParent")),
+                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.ExtendedBy, 1), new ResourceMessage("DecoratorNodeChild")),
                 
                 //Component checks
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>{
-                    new ElementCheck<IEntityNode>(x => {currentComponent = x; return x.GetMethods().Any(); }, "Has functions"),
-                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.ExtendedBy, 2) || x.CheckMinimalAmountOfRelationTypes(RelationType.ImplementedBy, 2), "Extended or implemented by a different class"),
+                    new ElementCheck<IEntityNode>(x => {currentComponent = x; return x.GetMethods().Any(); }, new ResourceMessage("DecoratorComponentMethodAny")),
+                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.ExtendedBy, 2) || x.CheckMinimalAmountOfRelationTypes(RelationType.ImplementedBy, 2), new ResourceMessage("DecoratorComponentChild")),
 
                     new GroupCheck<IEntityNode, IMethod>( new List<ICheck<IMethod>>{
-                        new ElementCheck<IMethod>(x => x.CheckModifier("public") || x.CheckModifier("protected") , "Is public or protected"),
-                        new ElementCheck<IMethod>(x => x.CheckParameters(new List<string>{currentComponent.GetName() }), "Has the interface of an parent class as parameter")
+                        new ElementCheck<IMethod>(x => x.CheckModifier("public") || x.CheckModifier("protected") , new ResourceMessage("DecoratorComponentMethodModifier")),
+                        new ElementCheck<IMethod>(x => x.CheckParameters(new List<string>{currentComponent.GetName() }), new ResourceMessage("DecoratorComponentMethodParameters", new []{ currentComponent.GetName()}))
 
                     }, x => entityNode.GetConstructors(), "Constructor"),
                     new GroupCheck<IEntityNode, IField>( new List<ICheck<IField>>{
-                        new ElementCheck<IField>(x => x.CheckFieldType(new List<string>{currentComponent.GetName() }) , "Has the interface saved as a property or field")
+                        new ElementCheck<IField>(x => x.CheckFieldType(new List<string>{currentComponent.GetName() }) , new ResourceMessage("DecoratorComponentFieldType", new []{ currentComponent.GetName()}))
 
                     }, x => entityNode.GetFields(), "Field"),
 
@@ -45,16 +45,16 @@ namespace IDesign.Recognizers
                     new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>{
                         new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                         {
-                            new ElementCheck<IMethod>(x => x.CheckModifier("public"), "Is public or protected"),
-                            new ElementCheck<IMethod>(x => x.CheckParameters(new List<string>() { currentComponent.GetName() }), "Has the interface or parent class as parameter"),
-                            new ElementCheck<IMethod>(x => x.CheckArguments(currentComponent.GetName()), "Sends the interface or parent class parameter in base")
+                            new ElementCheck<IMethod>(x => x.CheckModifier("public"), new ResourceMessage("DecoratorConcreteMethodModifier")),
+                            new ElementCheck<IMethod>(x => x.CheckParameters(new List<string>() { currentComponent.GetName() }), new ResourceMessage("DecoratorConcreteMethodParameters", new[]{currentComponent.GetName()})),
+                            new ElementCheck<IMethod>(x => x.CheckArguments(currentComponent.GetName()), new ResourceMessage("DecoratorConcreteMethodArguments"))
 
                         }, x => x.GetConstructors(), "Constructor")
-                    }, x => entityNode.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.ExtendedBy)).Select(y => y.GetDestination()), "Concrete Decorator", GroupCheckType.All)
+                    }, x => entityNode.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.ExtendedBy)).Select(y => y.GetDestination()), new ResourceMessage("DecoratorConcrete"), GroupCheckType.All)
 
-                }, x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Implements) || y.GetRelationType().Equals(RelationType.Extends)).Select(y => y.GetDestination()), "Interface or parent class")
+                }, x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Implements) || y.GetRelationType().Equals(RelationType.Extends)).Select(y => y.GetDestination()), new ResourceMessage("DecoratorComponent"))
 
-            }, x => new List<IEntityNode>() { entityNode }, "Decorator");
+            }, x => new List<IEntityNode>() { entityNode },new ResourceMessage("Decorator"));
             var checkResult = decoratorCheck.Check(entityNode);
 
             result.Results = checkResult.GetChildFeedback().ToList();

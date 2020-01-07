@@ -52,6 +52,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="LeftMarginMultiplierConverter.cs" />
+    <Compile Include="Resources\FeedbackPatterns.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FeedbackPatterns.resx</DependentUpon>
+    </Compile>
     <Compile Include="TreeViewItemExtensions.cs" />
     <Compile Include="ViewModels\CheckResultViewModel.cs" />
     <Compile Include="ViewModels\DesignPatternViewModel.cs" />
@@ -121,12 +126,20 @@
     <Content Include="Resources\ExtensionWindowPackage.ico" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\FeedbackPatterns.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>FeedbackPatterns.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
       <ManifestResourceName>VSPackage</ManifestResourceName>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommonResources\CommonResources.csproj">
+      <Project>{9607C241-256A-43D8-B973-344B9FD1EB69}</Project>
+      <Name>CommonResources</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IDesign.Core\IDesign.Core.csproj">
       <Project>{39C79D09-34DA-496B-936D-4387F5DB9104}</Project>
       <Name>IDesign.Core</Name>
