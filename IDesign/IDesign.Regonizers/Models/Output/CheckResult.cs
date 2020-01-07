@@ -14,7 +14,7 @@ namespace IDesign.Recognizers.Models.Output
             Node = node;
         }
 
-        public CheckResult(string message, FeedbackType feedbackType, SyntaxNode node, int score)
+        public CheckResult(string message, FeedbackType feedbackType, SyntaxNode node, float score)
         {
             Message = message;
             FeedbackType = feedbackType;
