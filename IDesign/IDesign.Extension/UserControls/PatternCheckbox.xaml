@@ -75,7 +75,7 @@
     <ListBox ItemsSource="{Binding}" Name="listBox" BorderThickness="0 1">
         <ListBox.ItemTemplate>
             <HierarchicalDataTemplate>
-                <DockPanel LastChildFill="False" >
+                <DockPanel LastChildFill="False">
                     <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked, Mode=TwoWay}" Width="Auto"
                               Margin="3" DockPanel.Dock="Left"/>
                     <Button DockPanel.Dock="Right" FontSize="12" VerticalContentAlignment="Top" Margin="3,3,3,3" Width="17" Height="17" Content="?" Click="Button_Click" DataContext="{Binding WikiLink}" >
