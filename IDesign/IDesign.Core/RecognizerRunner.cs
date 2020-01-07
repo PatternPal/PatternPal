@@ -11,13 +11,13 @@ namespace IDesign.Core
     {
         public static List<DesignPattern> designPatterns = new List<DesignPattern>
         {
-            new DesignPattern("Singleton", new SingletonRecognizer(), "https://en.wikipedia.org/wiki/Singleton_pattern"),
-            new DesignPattern("Factory Method", new FactoryMethodRecognizer(), "https://en.wikipedia.org/wiki/Factory_method_pattern"),
-            new DesignPattern("Decorator", new DecoratorRecognizer(), "https://en.wikipedia.org/wiki/Decorator_pattern"),
-            new DesignPattern("State", new StateRecognizer(), "https://en.wikipedia.org/wiki/State_pattern"),
-            new DesignPattern("Strategy", new StrategyRecognizer(), "https://en.wikipedia.org/wiki/Strategy_pattern"),
-            new DesignPattern("Adapter", new AdapterRecognizer(), "https://en.wikipedia.org/wiki/Adapter_pattern"),
-            new DesignPattern("Observer", new ObserverRecognizer(), "https://en.wikipedia.org/wiki/Observer_pattern"),
+            new DesignPattern("Singleton", new SingletonRecognizer(), "Singleton_pattern"),
+            new DesignPattern("Factory Method", new FactoryMethodRecognizer(), "Factory_method_pattern"),
+            new DesignPattern("Decorator", new DecoratorRecognizer(), "Decorator_pattern"),
+            new DesignPattern("State", new StateRecognizer(), "State_pattern"),
+            new DesignPattern("Strategy", new StrategyRecognizer(), "Strategy_pattern"),
+            new DesignPattern("Adapter", new AdapterRecognizer(), "Adapter_pattern"),
+            new DesignPattern("Observer", new ObserverRecognizer(), "Observer_pattern"),
         };
 
         public Dictionary<string, EntityNode> EntityNodes =

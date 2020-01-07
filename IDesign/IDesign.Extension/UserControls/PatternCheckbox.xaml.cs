@@ -30,16 +30,16 @@ namespace IDesign.Extension.UserControls
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var url = (e.OriginalSource as Button).DataContext.ToString();
+            var wikiPage = (e.OriginalSource as Button).DataContext.ToString();
 
-            if (url == null || url == string.Empty)
+            if (wikiPage == null || wikiPage == string.Empty)
                 return;
 
             IVsWindowFrame ppFrame;
 
             var service = Package.GetGlobalService(typeof(IVsWebBrowsingService)) as IVsWebBrowsingService;
 
-            service.Navigate(url, 0, out ppFrame);
+            service.Navigate("https://en.wikipedia.org/wiki/" + wikiPage, 0, out ppFrame);
         }
     }
 }

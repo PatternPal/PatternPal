@@ -78,7 +78,7 @@
                 <DockPanel LastChildFill="False">
                     <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked, Mode=TwoWay}" Width="Auto"
                               Margin="3" DockPanel.Dock="Left"/>
-                    <Button DockPanel.Dock="Right" FontSize="12" VerticalContentAlignment="Top" Margin="3,3,3,3" Width="17" Height="17" Content="?" Click="Button_Click" DataContext="{Binding WikiLink}" >
+                    <Button DockPanel.Dock="Right" FontSize="12" VerticalContentAlignment="Top" Margin="3,3,3,3" Width="17" Height="17" Content="?" Click="Button_Click" DataContext="{Binding WikiPage}" >
                         <Button.Resources>
                             <Style TargetType="Border">
                                 <Setter Property="CornerRadius" Value="360"/>
