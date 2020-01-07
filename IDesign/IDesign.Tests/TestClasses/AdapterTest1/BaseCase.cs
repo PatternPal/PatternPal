@@ -5,9 +5,7 @@ namespace IDesign.Tests.TestClasses.AdapterTest1
     /// <summary>
     /// The 'Target' class
     /// </summary>
-
     class Target
-
     {
         public virtual void Request()
         {
@@ -18,7 +16,6 @@ namespace IDesign.Tests.TestClasses.AdapterTest1
     /// <summary>
     /// The 'Adapter' class
     /// </summary>
-
     class Adapter : Target
 
     {
@@ -35,7 +32,6 @@ namespace IDesign.Tests.TestClasses.AdapterTest1
     /// <summary>
     /// The 'Adaptee' class
     /// </summary>
-
     class Adaptee
 
     {

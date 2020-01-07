@@ -24,14 +24,14 @@ namespace IDesign.Recognizers.Models.ElementChecks
         private readonly List<ICheck<TChild>> _checks;
         private readonly string _description;
         private readonly Func<TParent, IEnumerable<TChild>> _elements;
-        public GroupCheckType _type { get; set; }
+        public GroupCheckType Type { get; set; }
 
         public GroupCheck(List<ICheck<TChild>> checks, Func<TParent, IEnumerable<TChild>> elements, string description, GroupCheckType type = GroupCheckType.Any)
         {
             _checks = checks;
             _description = description;
             _elements = elements;
-            _type = type;
+            Type = type;
         }
 
         public ICheckResult Check(TParent elementToCheck)
@@ -49,9 +49,9 @@ namespace IDesign.Recognizers.Models.ElementChecks
                 allChildFeedback.Add(element, (score, childFeedback));
             }
 
-            if (_type == GroupCheckType.All)
+            if (Type == GroupCheckType.All)
                 return CheckAll(elementToCheck, allChildFeedback);
-            else if (_type == GroupCheckType.Any)
+            else if (Type == GroupCheckType.Any)
                 return CheckAny(elementToCheck, allChildFeedback);
             else if (_type == GroupCheckType.Median)
                 return CheckMedian(elementToCheck, allChildFeedback);

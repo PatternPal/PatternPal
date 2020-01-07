@@ -1,3 +1,4 @@
+
 ﻿using IDesign.Core;
 using IDesign.Core.Models;
 using IDesign.Recognizers;
@@ -7,14 +8,12 @@ using IDesign.Tests.Utils;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace IDesign.Tests.Checks
 {
-    class EntityNodeChecks
+    class EntityNodeChecksTest
     {
-        [Test]
         [TestCase("Abstract", @"abstract class TestClass1 { }", true)]
         [TestCase("Abstract", @"class TestClass1 { }", false)]
         [TestCase("Public", @"public class TestClass1 { }", true)]
@@ -39,7 +38,6 @@ namespace IDesign.Tests.Checks
             Assert.AreEqual(shouldBeValid, entityNode.CheckModifier(modifier));
         }
 
-        [Test]
         [TestCase("Decorator", RelationType.Implements, 1, true)]
         [TestCase("Decorator", RelationType.Implements, 2, false)]
         [TestCase("Decorator", RelationType.ExtendedBy, 1, true)]
@@ -61,14 +59,12 @@ namespace IDesign.Tests.Checks
 
             Assert.AreEqual(shouldBeValid, entityNode.CheckMinimalAmountOfRelationTypes(relation, amount));
         }
-
-        [Test]
         [TestCase("Class1", "IClass1", true)]
         [TestCase("Class2", "IClass2", true)]
         [TestCase("Class3", "IClass3", false)]
         [TestCase("Class4", "IClass4", true)]
         [TestCase("Class5", "IClass5", true)]
-        public void CLassImplementsInterface(string className, string interfaceName, bool shouldBeValid)
+        public void ClassImplementsInterface(string className, string interfaceName, bool shouldBeValid)
         {
             var code = FileUtils.FilesToString("ClassChecks\\");
             var nameSpaceName = "IDesign.Tests.TestClasses.ClassChecks";
@@ -80,7 +76,6 @@ namespace IDesign.Tests.Checks
             Assert.AreEqual(shouldBeValid, checkResult);
         }
 
-        [Test]
         [TestCase("Class1", "EClass1", true)]
         [TestCase("Class2", "EClass2", true)]
         [TestCase("Class3", "EClass3", true)]
@@ -98,13 +93,12 @@ namespace IDesign.Tests.Checks
             Assert.AreEqual(shouldBeValid, checkResult);
         }
 
-        [Test]
         [TestCase("Class1", "IClass1", true)]
         [TestCase("Class2", "IClass2", false)]
         [TestCase("Class3", "IClass3", false)]
         [TestCase("Class4", "IClass4", false)]
         [TestCase("Class5", "IClass5", false)]
-        public void CLassImplementsInterfaceDirectly(string className, string interfaceName, bool shouldBeValid)
+        public void ClassImplementsInterfaceDirectly(string className, string interfaceName, bool shouldBeValid)
         {
             var code = FileUtils.FilesToString("ClassChecks\\");
             var nameSpaceName = "IDesign.Tests.TestClasses.ClassChecks";
@@ -115,45 +109,5 @@ namespace IDesign.Tests.Checks
 
             Assert.AreEqual(shouldBeValid, checkResult);
         }
-
-        [Test]
-        [TestCase("Class1", 1, true)]
-        [TestCase("Class1", 2, true)]
-        [TestCase("Class1", 3, true)]
-        [TestCase("Class1", 4, false)]
-        [TestCase("Class3", 0, true)]
-        [TestCase("Class3", 1, false)]
-        public void CheckMinimalAmountOfMethods_Should_Return_Correct_Response(string className, int amount, bool shouldBeValid)
-        {
-            var code = FileUtils.FileToString("../../../../TestClasses/EntityNodeChecks/" + className + ".cs");
-            var nameSpaceName = "IDesign.Tests.TestClasses.EntityNodeChecks";
-            var nodes = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
-            var createRelation = new DetermineRelations(nodes);
-            createRelation.GetEdgesOfEntityNode();
-            var checkResult = nodes[nameSpaceName + "." + className].CheckMinimalAmountOfMethods(amount);
-
-            Assert.AreEqual(shouldBeValid, checkResult);
-        }
-
-        [Test]
-        [TestCase("Class1", "int", 2, true)]
-        [TestCase("Class1", "int", 3, false)]
-        [TestCase("Class1", "string", 1, true)]
-        [TestCase("Class2", "string", 2, true)]
-        [TestCase("Class2", "string", 3, true)]
-        [TestCase("Class2", "string", 4, false)]
-        [TestCase("Class2", "int", 1, false)]
-        public void CheckMinimalAmountOfMethodsWithParameter_Should_Return_Correct_Response(string className, string parameter, int amount, bool shouldBeValid)
-        {
-            var code = FileUtils.FileToString("../../../../TestClasses/EntityNodeChecks/" + className + ".cs");
-            var nameSpaceName = "IDesign.Tests.TestClasses.EntityNodeChecks";
-            var nodes = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
-            var createRelation = new DetermineRelations(nodes);
-            createRelation.GetEdgesOfEntityNode();
-            var checkResult = nodes[nameSpaceName + "." + className].CheckMinimalAmountOfMethodsWithParameter(new List<string> { parameter }, amount);
-
-            Assert.AreEqual(shouldBeValid, checkResult);
-        }
-
     }
 }

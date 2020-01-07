@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using EnvDTE;
 using IDesign.Core;
 using IDesign.Core.Models;
@@ -13,10 +12,8 @@ using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.LanguageServices;
-using Microsoft.VisualStudio.ProjectSystem;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.TextManager.Interop;
 using Project = Microsoft.CodeAnalysis.Project;
 using Task = System.Threading.Tasks.Task;
 
@@ -101,7 +98,7 @@ namespace IDesign.Extension
         {
             Paths = new List<string>();
 
-            if ((bool) SelectPaths.radio1.IsChecked)
+            if ((bool)SelectPaths.radio1.IsChecked)
             {
                 if (Dte.ActiveDocument != null)
                     Paths.Add(Dte.ActiveDocument.FullName);
