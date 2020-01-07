@@ -113,6 +113,7 @@ namespace IDesign.Extension
         {
             Paths = new List<string>();
             var selectedI = SelectPaths.ProjectSelection.SelectedIndex;
+            if(selectedI != -1)
             Paths.AddRange(Projects[selectedI].Documents.Select(x => x.FilePath));
         }
 
@@ -144,9 +145,33 @@ namespace IDesign.Extension
             Analyse();
         }
 
+        private void SelectProjectFromFile(string path = null)
+        {
+
+            foreach (var project in Projects)
+            {
+                foreach(var doc in project.Documents)
+                {
+                    if (doc.FilePath == path)
+                    {
+                        var index = Projects.IndexOf(project);
+                        SelectPaths.ProjectSelection.SelectedIndex = index;
+                        return;
+                    }
+                }
+            }
+        }
+
         private async void Analyse()
         {
+            LoadProject();
+            var cur = GetCurrentPath().FirstOrDefault();
+            SelectProjectFromFile(cur);
             ChoosePath();
+
+            
+            
+
             var SelectedPatterns = ViewModels.Where(x => x.IsChecked).Select(x => x.Pattern).ToList();
 
             if (Loading || Paths.Count == 0 || SelectedPatterns.Count == 0)
@@ -163,13 +188,13 @@ namespace IDesign.Extension
 
             IProgress<RecognizerProgress> iprogress = progress;
             runner.OnProgressUpdate += (o, recognizerProgress) => iprogress.Report(recognizerProgress);
+            
             await Task.Run(() =>
             {
                 try
                 {
                     TreeViewResults.SyntaxTreeSources = runner.CreateGraph(Paths);
                     var results = runner.Run(SelectedPatterns);
-                    var cur = GetCurrentPath().FirstOrDefault();
 
 
                     //Here you signal the UI thread to execute the action:
@@ -177,13 +202,18 @@ namespace IDesign.Extension
                     {
                         if ((bool)SelectPaths.radio1.IsChecked)
                             results = results.Where(x => x.FilePath == cur).ToList();
+                        else
+                            results = results.Where(x => x.Result.GetScore() > 80).ToList();
+                        
+
 
                         CreateResultViewModels(results);
                     }));
 
                 }
-                catch
+                catch(Exception e)
                 {
+                    throw e;
                     //@TODO User friendly error handling
                 }
             });
