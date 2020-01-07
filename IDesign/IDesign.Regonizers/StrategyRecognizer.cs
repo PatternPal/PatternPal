@@ -28,7 +28,6 @@ namespace IDesign.Recognizers
                 {
                     new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void", 0.5f),
                     new ElementCheck<IMethod>(x => x.GetBody() == null, "Body should be empty!",1)
-                    //TO DO: if abstract class method must be also abstract!
                 }, x => x.GetMethods(), "Methods: "),
 
                 //check state node used by relations
