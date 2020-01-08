@@ -25,12 +25,12 @@ namespace IDesign.Recognizers
             {
                 new ElementCheck<IField>(x => x.CheckFieldType(new List<string>(){ entityNode.GetName() }), "Incorrect type",1),
                 new ElementCheck<IField>(x => x.CheckMemberModifier("static"), "Is not static",1),
-                new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "Is not private",1)
+                new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "Is not private",0.5f)
             };
 
             var constructorChecks = new List<ICheck<IMethod>>
             {
-                new ElementCheck<IMethod>(x => (x.CheckModifier("private")) ||(x.CheckModifier("protected")), "should be private or protected",1)
+                new ElementCheck<IMethod>(x => (x.CheckModifier("private")) ||(x.CheckModifier("protected")), "should be private or protected",0.5f)
             };
 
 
