@@ -49,7 +49,12 @@ namespace IDesign.Recognizers
                             new ElementCheck<IMethod>(x => x.CheckParameters(new List<string>() { currentComponent.GetName() }), "Has the interface or parent class as parameter"),
                             new ElementCheck<IMethod>(x => x.CheckArguments(currentComponent.GetName()), "Sends the interface or parent class parameter in base")
 
-                        }, x => x.GetConstructors(), "Constructor")
+                        }, x => x.GetConstructors(), "Constructor"),
+                        new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
+                        {
+                            new ElementCheck<IMethod>(x => x.CheckName(currentComponent.GetMethods()), "Contains overridden methods")
+
+                        }, x => x.GetMethods(), "Method")
                     }, x => entityNode.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.ExtendedBy)).Select(y => y.GetDestination()), "Concrete Decorator", GroupCheckType.Median)
 
                 }, x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Implements) || y.GetRelationType().Equals(RelationType.Extends)).Select(y => y.GetDestination()), "Interface or parent class")

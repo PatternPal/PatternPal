@@ -168,10 +168,6 @@ namespace IDesign.Extension
             var cur = GetCurrentPath().FirstOrDefault();
             SelectProjectFromFile(cur);
             ChoosePath();
-
-            
-            
-
             var SelectedPatterns = ViewModels.Where(x => x.IsChecked).Select(x => x.Pattern).ToList();
 
             if (Loading || Paths.Count == 0 || SelectedPatterns.Count == 0)
