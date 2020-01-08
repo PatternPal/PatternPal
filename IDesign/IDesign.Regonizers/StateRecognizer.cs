@@ -31,11 +31,11 @@ namespace IDesign.Recognizers
                 new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                 {
 
-                    new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void", 1),
+                    new ElementCheck<IMethod>(x => x.CheckReturnType("void"), new ResourceMessage("MethodReturnType", new [] {"void" }), 1),
                     new ElementCheck<IMethod>(x => x.GetBody() == null, new ResourceMessage("MethodBodyEmpty"), 1)
 
                     //TO DO: if abstract class method must be also abstract!
-                }, x => x.GetMethods(), "Methods: "),
+                }, x => x.GetMethods(), "StateNodeMethods"),
 
                 //check state node used by relations
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
@@ -49,7 +49,7 @@ namespace IDesign.Recognizers
                         new ElementCheck<IEntityNode>(x => (x.CheckTypeDeclaration(EntityNodeType.Interface)) |
 
                         (x.CheckTypeDeclaration(EntityNodeType.Class) && x.CheckModifier("abstract")), new ResourceMessage("NodeAbstractOrInterface"), 2)
-                    }, x => new List<IEntityNode> { node},"Used return type:"),
+                    }, x => new List<IEntityNode> { node},"StateFieldStateType"),
 
                     //check context class fields
                     new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
@@ -58,10 +58,10 @@ namespace IDesign.Recognizers
 
                         new ElementCheck<IField>(x => x.CheckMemberModifier("private"), new ResourceMessage("FieldModifierPrivate"), 0.5f)
 
-                    }, x=> x.GetFields(), "Fields", GroupCheckType.All)
+                    }, x=> x.GetFields(), "StateContextField", GroupCheckType.All)
 
 
-                },x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.UsedBy)).Select(y => y.GetDestination()), "Check used by relations"),
+                },x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.UsedBy)).Select(y => y.GetDestination()), "StateContext"),
 
                 //check inheritance
                  new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
@@ -72,16 +72,16 @@ namespace IDesign.Recognizers
                         {
                             new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                             {
-                                new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "Return type should be void", 1),
+                                new ElementCheck<IMethod>(x => x.CheckReturnType("void"), new ResourceMessage("MethodReturnType", new [] {"void"}), 1),
                                 new ElementCheck<IMethod>(x => (x.CheckCreationType(entityNode.GetName()) && !(x.CheckCreationType(node.GetName()))), new ResourceMessage("MethodCreateSameInterface"), 2)
                                 //TO DO: check of functie de zelfte parameters heeft als de interface/abstracte klasse functie
                                 //TO DO: check of de functie de zelfde naam heeft als de overervende functie
-                            }, x=> x.GetMethods(), "Methods:"),
+                            }, x=> x.GetMethods(), "StateClassChangeState"),
 
-                        },x => entityNode.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Creates)).Select(y => y.GetDestination()), "Check creates relations"),
+                        },x => entityNode.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Creates)).Select(y => y.GetDestination()), "StateCreatesOtherState"),
 
                  },x => x.GetRelations().Where(y => (y.GetRelationType().Equals(RelationType.ExtendedBy)) ||(y.GetRelationType().Equals(RelationType.ImplementedBy))
-                ).Select(y => y.GetDestination()), "Node is parent of: ", GroupCheckType.All),
+                ).Select(y => y.GetDestination()), "StateConcrete", GroupCheckType.All),
 
             }, x => new List<IEntityNode> { node }, "State"); ;
             result.Results.Add(statePatternCheck.Check(node));

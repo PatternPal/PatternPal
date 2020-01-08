@@ -158,7 +158,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonResources\CommonResources.csproj">
-      <Project>{9607C241-256A-43D8-B973-344B9FD1EB69}</Project>
+      <Project>{9607c241-256a-43d8-b973-344b9fd1eb69}</Project>
       <Name>CommonResources</Name>
     </ProjectReference>
     <ProjectReference Include="..\IDesign.Core\IDesign.Core.csproj">

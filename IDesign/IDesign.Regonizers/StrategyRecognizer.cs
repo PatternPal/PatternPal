@@ -29,7 +29,7 @@ namespace IDesign.Recognizers
 
                     new ElementCheck<IMethod>(x => x.GetBody() == null, new ResourceMessage("MethodBodyEmpty"), 1)
                     //TO DO: if abstract class method must be also abstract!
-                }, x => x.GetMethods(), "Methods: "),
+                }, x => x.GetMethods(), "StrategyNodeMethods "),
 
                 //check state node used by relations
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
@@ -41,17 +41,17 @@ namespace IDesign.Recognizers
                     {
                         new ElementCheck<IEntityNode>(x => (x.CheckTypeDeclaration(EntityNodeType.Interface)) |
                         (x.CheckTypeDeclaration(EntityNodeType.Class) && x.CheckModifier("abstract")), new ResourceMessage("NodeAbstractOrInterface"), 1)
-                    }, x => new List<IEntityNode> { node},"Used return type:"),
+                    }, x => new List<IEntityNode> { node},"StrategyFieldStateType"),
 
                     //check context class fields
                     new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
                     {
                         //TO DO: check name
                         new ElementCheck<IField>(x => x.CheckMemberModifier("private"), new ResourceMessage("FieldModifierPrivate"), 0.5f)
-                    }, x=> x.GetFields(), "Fields", GroupCheckType.All)
+                    }, x=> x.GetFields(), "StrategyContextField", GroupCheckType.All)
 
 
-                },x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.UsedBy)).Select(y => y.GetDestination()), "Check used by relations"),
+                },x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.UsedBy)).Select(y => y.GetDestination()), "StrategyContext"),
 
                 //check inheritance
                  new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
@@ -63,10 +63,10 @@ namespace IDesign.Recognizers
                      {
                         //TO DO: check of functie de zelfte parameters heeft als de interface/abstracte klasse functie
                         //TO DO: check of de functie de zelfde naam heeft als de overervende functie
-                     }, x=> x.GetMethods(), "Methods:"),
+                     }, x=> x.GetMethods(), "StrategyConcreteMethod"),
 
                  },x => x.GetRelations().Where(y => (y.GetRelationType().Equals(RelationType.ExtendedBy)) ||(y.GetRelationType().Equals(RelationType.ImplementedBy))
-                ).Select(y => y.GetDestination()), "Node is parent of: ", GroupCheckType.All),
+                ).Select(y => y.GetDestination()), "StrategyConcrete", GroupCheckType.All),
 
             }, x => new List<IEntityNode> { node }, "Strategy"); ; ;
             result.Results.Add(strategyPatternCheck.Check(node));

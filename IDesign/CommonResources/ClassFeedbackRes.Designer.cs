@@ -250,6 +250,69 @@ namespace CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Abstract Creator.
+        /// </summary>
+        public static string FactoryAbstractCreator {
+            get {
+                return ResourceManager.GetString("FactoryAbstractCreator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create method.
+        /// </summary>
+        public static string FactoryAbstractCreatorMethod {
+            get {
+                return ResourceManager.GetString("FactoryAbstractCreatorMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Concrete creator.
+        /// </summary>
+        public static string FactoryConcreteCreator {
+            get {
+                return ResourceManager.GetString("FactoryConcreteCreator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create method of the concrete creator.
+        /// </summary>
+        public static string FactoryConcreteCreatorMethod {
+            get {
+                return ResourceManager.GetString("FactoryConcreteCreatorMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Concrete creator should have at least one method..
+        /// </summary>
+        public static string FactoryConcreteCreatorMethodAny {
+            get {
+                return ResourceManager.GetString("FactoryConcreteCreatorMethodAny", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Concrete product should have at least one method.
+        /// </summary>
+        public static string FactoryConcreteProductMethodAny {
+            get {
+                return ResourceManager.GetString("FactoryConcreteProductMethodAny", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Product of the factory method.
+        /// </summary>
+        public static string FactoryCreates {
+            get {
+                return ResourceManager.GetString("FactoryCreates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Method should create a product..
         /// </summary>
         public static string FactoryMethodCreateTypeProduct {
@@ -354,6 +417,15 @@ namespace CommonResources {
         public static string MethodCreateType {
             get {
                 return ResourceManager.GetString("MethodCreateType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method should be abstract..
+        /// </summary>
+        public static string MethodModifierAbstract {
+            get {
+                return ResourceManager.GetString("MethodModifierAbstract", resourceCulture);
             }
         }
         
@@ -502,6 +574,33 @@ namespace CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Observer.
+        /// </summary>
+        public static string Observer {
+            get {
+                return ResourceManager.GetString("Observer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Observer concrete subject.
+        /// </summary>
+        public static string ObserverConcreteSubject {
+            get {
+                return ResourceManager.GetString("ObserverConcreteSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Observer concrete subject field.
+        /// </summary>
+        public static string ObserverConcreteSubjectField {
+            get {
+                return ResourceManager.GetString("ObserverConcreteSubjectField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There should be 2 methods which both have one of the same parameters {0}..
         /// </summary>
         public static string ObserverMethodParameters {
@@ -511,11 +610,29 @@ namespace CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Subject interface.
+        /// </summary>
+        public static string ObserverSubjectInterface {
+            get {
+                return ResourceManager.GetString("ObserverSubjectInterface", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Should be extended by or implemented by a class..
         /// </summary>
         public static string Parent {
             get {
                 return ResourceManager.GetString("Parent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should be product class..
+        /// </summary>
+        public static string ProductClass {
+            get {
+                return ResourceManager.GetString("ProductClass", resourceCulture);
             }
         }
         
@@ -570,6 +687,141 @@ namespace CommonResources {
         public static string SingletonMethodReturnType {
             get {
                 return ResourceManager.GetString("SingletonMethodReturnType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parent class or interface of the concrete state class.
+        /// </summary>
+        public static string State {
+            get {
+                return ResourceManager.GetString("State", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change state method in concrete state class.
+        /// </summary>
+        public static string StateClassChangeState {
+            get {
+                return ResourceManager.GetString("StateClassChangeState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to State concrete class.
+        /// </summary>
+        public static string StateConcrete {
+            get {
+                return ResourceManager.GetString("StateConcrete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to State context class.
+        /// </summary>
+        public static string StateContext {
+            get {
+                return ResourceManager.GetString("StateContext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to State context field.
+        /// </summary>
+        public static string StateContextField {
+            get {
+                return ResourceManager.GetString("StateContextField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Concrete state class creates another state.
+        /// </summary>
+        public static string StateCreatesOtherState {
+            get {
+                return ResourceManager.GetString("StateCreatesOtherState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Used return type.
+        /// </summary>
+        public static string StateFieldStateType {
+            get {
+                return ResourceManager.GetString("StateFieldStateType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change state method.
+        /// </summary>
+        public static string StateNodeMethods {
+            get {
+                return ResourceManager.GetString("StateNodeMethods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parent class or interface of the concrete strategy class.
+        /// </summary>
+        public static string Strategy {
+            get {
+                return ResourceManager.GetString("Strategy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Concrete strategy class.
+        /// </summary>
+        public static string StrategyConcrete {
+            get {
+                return ResourceManager.GetString("StrategyConcrete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Concrete strategy method.
+        /// </summary>
+        public static string StrategyConcreteMethod {
+            get {
+                return ResourceManager.GetString("StrategyConcreteMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Strategy context class.
+        /// </summary>
+        public static string StrategyContext {
+            get {
+                return ResourceManager.GetString("StrategyContext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Strategy context field.
+        /// </summary>
+        public static string StrategyContextField {
+            get {
+                return ResourceManager.GetString("StrategyContextField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Used return type.
+        /// </summary>
+        public static string StrategyFieldStateType {
+            get {
+                return ResourceManager.GetString("StrategyFieldStateType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Strategy method.
+        /// </summary>
+        public static string StrategyNodeMethods {
+            get {
+                return ResourceManager.GetString("StrategyNodeMethods", resourceCulture);
             }
         }
     }

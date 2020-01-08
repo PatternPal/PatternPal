@@ -88,7 +88,7 @@ namespace IDesign.Recognizers
                             new ElementCheck<IMethod>(x => x.CheckIfMethodCallsMethodInNode(currentRelation.GetDestination()), new ResourceMessage("AdapterMethodUses")),
                             new ElementCheck<IMethod>(x => !x.CheckReturnType(currentRelation.GetDestination().GetName()), new ResourceMessage("AdapterMethodReturnType")),
                             new ElementCheck<IMethod>(x => x.IsInterfaceMethod(entityNode) || x.CheckModifier("override"),
-                                n"MethodOverride"),
+                                "MethodOverride"),
 
                         }, x => entityNode.GetMethods(), "AdapterMethod", GroupCheckType.All)
 

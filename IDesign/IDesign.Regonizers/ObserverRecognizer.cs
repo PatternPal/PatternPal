@@ -52,9 +52,9 @@ namespace IDesign.Recognizers
                         new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
                         {
                             new ElementCheck<IField>(x => x.CheckFieldType(new List<string> { $"List<{ node.GetName() }>" }), new ResourceMessage("FieldType", new []{node.GetName()})),
-                        }, d => d.GetFields(), "Concrete subject field"),
-                    }, c => c.GetRelations().Where(x => x.GetRelationType() == RelationType.ImplementedBy).Select(x => x.GetDestination()), "Concrete subject", GroupCheckType.All),
-                }, b => node.GetRelations().Where(x => x.GetRelationType() == RelationType.UsedBy).Select(x => x.GetDestination()).ToList(), "Subject interface"),
+                        }, d => d.GetFields(), "ObserverConcreteSubjectField"),
+                    }, c => c.GetRelations().Where(x => x.GetRelationType() == RelationType.ImplementedBy).Select(x => x.GetDestination()), "ObserverConcreteSubject", GroupCheckType.All),
+                }, b => node.GetRelations().Where(x => x.GetRelationType() == RelationType.UsedBy).Select(x => x.GetDestination()).ToList(), "ObserverSubjectInterface"),
             }, a => new List<IEntityNode> { node }, "Observer");
 
             result.Results.Add(checks.Check(node));
@@ -76,7 +76,7 @@ namespace IDesign.Recognizers
             {
                 new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(1), new ResourceMessage("MethodAny")),
                 new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.ImplementedBy), new ResourceMessage("NodeImplementedByAny")),
-                new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.UsedBy), new ResourceMessage("NodeImplementedByAny")),
+                new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.UsedBy), new ResourceMessage("NodeUsedByAny")),
 
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                 {
@@ -87,13 +87,13 @@ namespace IDesign.Recognizers
                     new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
                     {
                         new ElementCheck<IField>(x => x.CheckFieldType(new List<string> { $"List<{ node.GetName() }>" }), new ResourceMessage("FieldType", new []{node.GetName()})),
-                    }, d => d.GetFields(), "Concrete subject fields"),
+                    }, d => d.GetFields(), "ObserverConcreteSubjectField"),
 
                     //Check to make sure a subject with an interface doesn't get mistaken for a concrete subject without an subject interface
                     new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                     {
                         new ElementCheck<IEntityNode>(x => x.CheckMaximumAmountOfMethodsWithParameter(new List<string> { node.GetName() }, 0), new ResourceMessage("MethodParameterNone", new[]{node.GetName()})),
-                    }, c => c.GetRelations().Where(x => x.GetRelationType() == RelationType.ImplementedBy).Select(x => x.GetDestination()).ToList(), "Subject interface"),
+                    }, c => c.GetRelations().Where(x => x.GetRelationType() == RelationType.ImplementedBy).Select(x => x.GetDestination()).ToList(), "ObserverSubjectInterface"),
                 }, b => node.GetRelations().Where(x => x.GetRelationType() == RelationType.UsedBy).Select(x => x.GetDestination()).ToList(), "Concrete subject"),
             }, a => new List<IEntityNode> { node }, "Observer");
 

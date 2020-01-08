@@ -180,6 +180,27 @@
   <data name="DecoratorConcreteMethodArguments" xml:space="preserve">
     <value>Concrete decorator method should use the component and call its base.</value>
   </data>
+  <data name="FactoryAbstractCreator" xml:space="preserve">
+    <value>Abstract Creator</value>
+  </data>
+  <data name="FactoryAbstractCreatorMethod" xml:space="preserve">
+    <value>Create method</value>
+  </data>
+  <data name="FactoryConcreteCreator" xml:space="preserve">
+    <value>Concrete creator</value>
+  </data>
+  <data name="FactoryConcreteCreatorMethod" xml:space="preserve">
+    <value>Create method of the concrete creator</value>
+  </data>
+  <data name="FactoryConcreteCreatorMethodAny" xml:space="preserve">
+    <value>Concrete creator should have at least one method.</value>
+  </data>
+  <data name="FactoryConcreteProductMethodAny" xml:space="preserve">
+    <value>Concrete product should have at least one method</value>
+  </data>
+  <data name="FactoryCreates" xml:space="preserve">
+    <value>Product of the factory method</value>
+  </data>
   <data name="FactoryMethodCreateTypeProduct" xml:space="preserve">
     <value>Method should create a product.</value>
   </data>
@@ -215,6 +236,9 @@
   </data>
   <data name="MethodCreateType" xml:space="preserve">
     <value>Method should create {0}.</value>
+  </data>
+  <data name="MethodModifierAbstract" xml:space="preserve">
+    <value>Method should be abstract.</value>
   </data>
   <data name="MethodModifierNotPrivate" xml:space="preserve">
     <value>Method should not be private.</value>
@@ -264,11 +288,26 @@
   <data name="ObjectAdapter" xml:space="preserve">
     <value>Object adapter</value>
   </data>
+  <data name="Observer" xml:space="preserve">
+    <value>Observer</value>
+  </data>
+  <data name="ObserverConcreteSubject" xml:space="preserve">
+    <value>Observer concrete subject</value>
+  </data>
+  <data name="ObserverConcreteSubjectField" xml:space="preserve">
+    <value>Observer concrete subject field</value>
+  </data>
   <data name="ObserverMethodParameters" xml:space="preserve">
     <value>There should be 2 methods which both have one of the same parameters {0}.</value>
   </data>
+  <data name="ObserverSubjectInterface" xml:space="preserve">
+    <value>Subject interface</value>
+  </data>
   <data name="Parent" xml:space="preserve">
     <value>Should be extended by or implemented by a class.</value>
+  </data>
+  <data name="ProductClass" xml:space="preserve">
+    <value>Should be product class.</value>
   </data>
   <data name="SingletonConstructor" xml:space="preserve">
     <value>Private constructor</value>
@@ -287,5 +326,50 @@
   </data>
   <data name="SingletonMethodReturnType" xml:space="preserve">
     <value>Singleton method  should return itself.</value>
+  </data>
+  <data name="State" xml:space="preserve">
+    <value>Parent class or interface of the concrete state class</value>
+  </data>
+  <data name="StateClassChangeState" xml:space="preserve">
+    <value>Change state method in concrete state class</value>
+  </data>
+  <data name="StateConcrete" xml:space="preserve">
+    <value>State concrete class</value>
+  </data>
+  <data name="StateContext" xml:space="preserve">
+    <value>State context class</value>
+  </data>
+  <data name="StateContextField" xml:space="preserve">
+    <value>State context field</value>
+  </data>
+  <data name="StateCreatesOtherState" xml:space="preserve">
+    <value>Concrete state class creates another state</value>
+  </data>
+  <data name="StateFieldStateType" xml:space="preserve">
+    <value>Used return type</value>
+  </data>
+  <data name="StateNodeMethods" xml:space="preserve">
+    <value>Change state method</value>
+  </data>
+  <data name="Strategy" xml:space="preserve">
+    <value>Parent class or interface of the concrete strategy class</value>
+  </data>
+  <data name="StrategyConcrete" xml:space="preserve">
+    <value>Concrete strategy class</value>
+  </data>
+  <data name="StrategyConcreteMethod" xml:space="preserve">
+    <value>Concrete strategy method</value>
+  </data>
+  <data name="StrategyContext" xml:space="preserve">
+    <value>Strategy context class</value>
+  </data>
+  <data name="StrategyContextField" xml:space="preserve">
+    <value>Strategy context field</value>
+  </data>
+  <data name="StrategyFieldStateType" xml:space="preserve">
+    <value>Used return type</value>
+  </data>
+  <data name="StrategyNodeMethods" xml:space="preserve">
+    <value>Strategy method</value>
   </data>
 </root>
