@@ -14,25 +14,22 @@ namespace IDesign.Tests.Recognizers
 {
     public class ObserverRecognizerTest
     {
-        [Test]
-        [TestCase("Case1", 100)]
-        [TestCase("Case2", 100)]
-        [TestCase("Case3", 90)]
-        [TestCase("Case4", 63)]
-        [TestCase("Case5", 70)]
-        public void ObserverRecognizer_Returns_Correct_Score(string directoryPath, int score)
+        [TestCase("ObserverTest1", "IObserver", 80, 100)]
+        [TestCase("ObserverTest2", "IInvestor", 80, 100)]
+        [TestCase("ObserverTest3", "IObserver", 80, 100)]
+        [TestCase("ObserverTest4", "IObserver", 0, 79)]
+        [TestCase("ObserverTest5", "IObserver", 0, 79)]
+        public void ObserverRecognizer_Returns_Correct_Score(string directory, string filename, int minScore, int maxScore)
         {
-            var recognizer = new ObserverRecognizer();
-            var manager = new FileManager();
-            var paths = manager.GetAllCsFilesFromDirectory("../../../TestClasses/Observer/" + directoryPath);
-            var runner = new RecognizerRunner();
+            var observer = new ObserverRecognizer();
+            var filesAsString = FileUtils.FilesToString($"{directory}\\");
+            var nameSpaceName = $"IDesign.Tests.TestClasses.{directory}";
+            var entityNodes = EntityNodeUtils.CreateEntityNodeGraph(filesAsString);
+            var createRelation = new DetermineRelations(entityNodes);
+            createRelation.GetEdgesOfEntityNode();
+            var result = observer.Recognize(entityNodes[nameSpaceName + "." + filename]);
 
-            runner.CreateGraph(paths);
-            List<RecognitionResult> result = runner.Run(new List<DesignPattern>() { new DesignPattern("Observer", new ObserverRecognizer(), "") });
-
-            result = result.OrderBy(x => x.Result.GetScore()).ToList();
-
-            Assert.AreEqual(score, result.Last().Result.GetScore());
+            Assert.That(result.GetScore(), Is.InRange(minScore, maxScore));
         }
     }
 }

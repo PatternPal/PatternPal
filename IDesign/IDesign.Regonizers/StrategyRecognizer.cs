@@ -26,9 +26,7 @@ namespace IDesign.Recognizers
                 //check state node methods
                 new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                 {
-                    new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void", 0.5f),
                     new ElementCheck<IMethod>(x => x.GetBody() == null, "Body should be empty!",1)
-                    //TO DO: if abstract class method must be also abstract!
                 }, x => x.GetMethods(), "Methods: "),
 
                 //check state node used by relations
@@ -46,7 +44,7 @@ namespace IDesign.Recognizers
                     //check context class fields
                     new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
                     {
-                        new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "modifier should be private",1)
+                        new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "modifier should be private",0.5f)
                     }, x=> x.GetFields(), "Fields", GroupCheckType.All)
 
 
