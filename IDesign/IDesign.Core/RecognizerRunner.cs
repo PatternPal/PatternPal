@@ -63,6 +63,7 @@ namespace IDesign.Core
                     {
                         Result = pattern.Recognizer.Recognize(node),
                         EntityNode = node,
+                        FilePath = node.SourceFile,
                         Pattern = pattern
                     });
             }
