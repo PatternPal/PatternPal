@@ -144,8 +144,17 @@
   <data name="Child" xml:space="preserve">
     <value>Should be extended by a class.</value>
   </data>
+  <data name="ConcreteDecoratorConstructor" xml:space="preserve">
+    <value>Concrete decorator constructor</value>
+  </data>
+  <data name="ConcreteDecoratorMethodParameters" xml:space="preserve">
+    <value>Method should have the component as a parameter.</value>
+  </data>
   <data name="ConstructorModifierNotPublic" xml:space="preserve">
     <value>Constructor should not be public.</value>
+  </data>
+  <data name="Decorator" xml:space="preserve">
+    <value>Decorator</value>
   </data>
   <data name="DecoratorComponent" xml:space="preserve">
     <value>Decorator component</value>
@@ -153,11 +162,32 @@
   <data name="DecoratorComponentChild" xml:space="preserve">
     <value>Should be implemented or extended by one other class.</value>
   </data>
+  <data name="DecoratorComponentConstructor" xml:space="preserve">
+    <value>Decorator component constructor</value>
+  </data>
+  <data name="DecoratorComponentField" xml:space="preserve">
+    <value>Decorator component field</value>
+  </data>
+  <data name="DecoratorComponentFieldType" xml:space="preserve">
+    <value>Field should be the component.</value>
+  </data>
+  <data name="DecoratorComponentMethodParameters" xml:space="preserve">
+    <value>Method should have the component as a parameter.</value>
+  </data>
   <data name="DecoratorConcrete" xml:space="preserve">
     <value>Concrete decorator</value>
   </data>
   <data name="DecoratorConcreteMethodArguments" xml:space="preserve">
-    <value>Concrete decorator method should use {0} and call its base.</value>
+    <value>Concrete decorator method should use the component and call its base.</value>
+  </data>
+  <data name="FactoryMethodCreateTypeProduct" xml:space="preserve">
+    <value>Method should create a product.</value>
+  </data>
+  <data name="FactoryMethodReturnTypeProduct" xml:space="preserve">
+    <value>Method should return a product.</value>
+  </data>
+  <data name="FactoryMethodReturnTypeProductInterface" xml:space="preserve">
+    <value>Method should return a product interface.</value>
   </data>
   <data name="FieldModifierNotPublic" xml:space="preserve">
     <value>Field should not be public.</value>

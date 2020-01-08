@@ -57,9 +57,10 @@ namespace CommonResources
         public static string ResultToString(ICheckResult result)
         {
             var res = " ";
-            if (result.GetElement() != null)
-                res += result.GetElement().GetSuggestionName();
-            res += " | ";
+            if (result.GetFeedback() == null) 
+                return res;
+            if(result.GetElement() != null)
+                res += result.GetElement().GetSuggestionName() + " | ";
             res += ResourceMessageToString(result.GetFeedback());
 
             return res;

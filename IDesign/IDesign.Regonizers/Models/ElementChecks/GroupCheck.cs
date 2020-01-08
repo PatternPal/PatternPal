@@ -29,6 +29,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
         public GroupCheck(List<ICheck<TChild>> checks, Func<TParent, IEnumerable<TChild>> elements, string resourcemessage, GroupCheckType type = GroupCheckType.Any)
         {
             _checks = checks;
+            _resourcemessage = new ResourceMessage(resourcemessage);
             _elements = elements;
             Type = type;
         }

@@ -39,7 +39,7 @@ namespace IDesign.Recognizers
                         //check if method in node (concrete creator) creates new node (concrete product)
                         new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                         {
-                            new ElementCheck<IMethod>(x => x.CheckCreationType(productnode.GetName()), new ResourceMessage("MethodCreateType", new []{productnode.GetName() })),
+                            new ElementCheck<IMethod>(x => x.CheckCreationType(productnode.GetName()), new ResourceMessage("FactoryMethodCreateTypeProduct")),
                         }, x => entityNode.GetMethods(), "method"),
 
                         //check if node (concrete product) implements/extends a node (product)
@@ -50,7 +50,7 @@ namespace IDesign.Recognizers
 
                             new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                             {
-                                new ElementCheck<IMethod>(x => x.CheckReturnType(productnode.GetName()), new ResourceMessage("MethodReturnType", new[]{productnode.GetName()})),
+                                new ElementCheck<IMethod>(x => x.CheckReturnType(productnode.GetName()), new ResourceMessage("FactoryMethodCreateTypeProduct")),
                             }, x => node.GetMethods(), "method")
 
                         }, x => x.GetRelations().Where(y => (y.GetRelationType().Equals(RelationType.Extends)) ||
@@ -74,7 +74,7 @@ namespace IDesign.Recognizers
                     {
                          new ElementCheck<IMethod>(x => x.CheckModifier("public"),new ResourceMessage("MethodModifierPublic")),
                          new ElementCheck<IMethod>(x => x.CheckModifier("abstract"),new ResourceMessage("MethodModifierAbstract")),
-                         new ElementCheck<IMethod>(x => x.CheckReturnType(entityNode.GetName()),new ResourceMessage("MethodReturnType", new []{entityNode.GetName()}))
+                         new ElementCheck<IMethod>(x => x.CheckReturnType(entityNode.GetName()),new ResourceMessage("FactoryMethodReturnTypeProductInterface"))
                     }, x=> node.GetMethods(), "Methods")
 
                 }, x=> x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Uses))

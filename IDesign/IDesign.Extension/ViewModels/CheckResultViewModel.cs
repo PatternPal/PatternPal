@@ -12,10 +12,11 @@ namespace IDesign.Extension.ViewModels
         public CheckResultViewModel(ICheckResult result)
         {
             Result = result;
+            Message = CommonResources.Resources.ResultToString(Result);
         }
 
         public ICheckResult Result { get; set; }
-        public string Message => CommonResources.Resources.ResultToString(Result);
+        public string Message { get; set; }
         public float Score => Result.GetScore();
         public FeedbackType Type => Result.GetFeedbackType();
 

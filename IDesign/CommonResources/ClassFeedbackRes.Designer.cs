@@ -142,11 +142,38 @@ namespace CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Concrete decorator constructor.
+        /// </summary>
+        public static string ConcreteDecoratorConstructor {
+            get {
+                return ResourceManager.GetString("ConcreteDecoratorConstructor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method should have the component as a parameter..
+        /// </summary>
+        public static string ConcreteDecoratorMethodParameters {
+            get {
+                return ResourceManager.GetString("ConcreteDecoratorMethodParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Constructor should not be public..
         /// </summary>
         public static string ConstructorModifierNotPublic {
             get {
                 return ResourceManager.GetString("ConstructorModifierNotPublic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Decorator.
+        /// </summary>
+        public static string Decorator {
+            get {
+                return ResourceManager.GetString("Decorator", resourceCulture);
             }
         }
         
@@ -169,6 +196,42 @@ namespace CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Decorator component constructor.
+        /// </summary>
+        public static string DecoratorComponentConstructor {
+            get {
+                return ResourceManager.GetString("DecoratorComponentConstructor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Decorator component field.
+        /// </summary>
+        public static string DecoratorComponentField {
+            get {
+                return ResourceManager.GetString("DecoratorComponentField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Field should be the component..
+        /// </summary>
+        public static string DecoratorComponentFieldType {
+            get {
+                return ResourceManager.GetString("DecoratorComponentFieldType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method should have the component as a parameter..
+        /// </summary>
+        public static string DecoratorComponentMethodParameters {
+            get {
+                return ResourceManager.GetString("DecoratorComponentMethodParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Concrete decorator.
         /// </summary>
         public static string DecoratorConcrete {
@@ -178,11 +241,38 @@ namespace CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Concrete decorator method should use {0} and call its base..
+        ///   Looks up a localized string similar to Concrete decorator method should use the component and call its base..
         /// </summary>
         public static string DecoratorConcreteMethodArguments {
             get {
                 return ResourceManager.GetString("DecoratorConcreteMethodArguments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method should create a product..
+        /// </summary>
+        public static string FactoryMethodCreateTypeProduct {
+            get {
+                return ResourceManager.GetString("FactoryMethodCreateTypeProduct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method should return a product..
+        /// </summary>
+        public static string FactoryMethodReturnTypeProduct {
+            get {
+                return ResourceManager.GetString("FactoryMethodReturnTypeProduct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method should return a product interface..
+        /// </summary>
+        public static string FactoryMethodReturnTypeProductInterface {
+            get {
+                return ResourceManager.GetString("FactoryMethodReturnTypeProductInterface", resourceCulture);
             }
         }
         
