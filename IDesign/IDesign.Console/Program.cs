@@ -105,6 +105,8 @@ namespace IDesign.ConsoleApp
 
             for (var i = 0; i < results.Count; i++)
             {
+                if (results[i].Result.GetScore() < 80)
+                   continue;
                 Console.Write($"{i}) {results[i].EntityNode.GetName()} | {results[i].Pattern.Name}: ");
 
                 PrintScore(results[i].Result.GetScore());
@@ -125,6 +127,8 @@ namespace IDesign.ConsoleApp
         /// <param name="depth">Depth of the result</param>
         public static void PrintResult(ICheckResult result, int depth)
         {
+
+
             Console.ForegroundColor = ConsoleColor.Red;
             var symbol = "X";
 
@@ -140,7 +144,7 @@ namespace IDesign.ConsoleApp
                 symbol = "✓";
             }
 
-            Console.WriteLine(new string('\t', depth) + symbol + $" {result.GetMessage()}");
+            Console.WriteLine(new string('\t', depth) + symbol + $" {result.GetMessage()} | {result.GetScore()}p / {result.GetTotalChecks()}p");
 
             foreach (var child in result.GetChildFeedback())
             {
