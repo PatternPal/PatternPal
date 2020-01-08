@@ -12,8 +12,10 @@ namespace IDesign.Recognizers.Models.ElementChecks
     {
         private readonly string _description;
         private readonly Predicate<T> _predicate;
+
         private readonly IResourceMessage _feedback;
-        private int _score;
+
+        private readonly float _score;
 
 
         public ElementCheck(Predicate<T> predicate, string description)
@@ -23,7 +25,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
             _score = 1;
         }
 
-        public ElementCheck(Predicate<T> predicate, string description, int score)
+        public ElementCheck(Predicate<T> predicate, string description, float score)
         {
             _predicate = predicate;
             _description = description;

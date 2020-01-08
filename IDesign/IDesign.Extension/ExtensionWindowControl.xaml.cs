@@ -22,7 +22,7 @@ namespace IDesign.Extension
     /// <summary>
     ///     Interaction logic for ExtensionWindowControl.
     /// </summary>
-    public partial class ExtensionWindowControl : UserControl, IVsSolutionEvents
+    public partial class ExtensionWindowControl : UserControl, IVsSolutionEvents, IVsRunningDocTableEvents
     {
         private readonly UInt32 _SolutionEventsCookie;
         private List<DesignPatternViewModel> ViewModels { get; set; }
@@ -44,9 +44,15 @@ namespace IDesign.Extension
             SelectPaths.ProjectSelection.ItemsSource = Projects;
             SelectPaths.ProjectSelection.SelectedIndex = 0;
             Dte = Package.GetGlobalService(typeof(SDTE)) as DTE;
+
+
+            var rdt = (IVsRunningDocumentTable)Package.GetGlobalService(typeof(SVsRunningDocumentTable));
+            uint _SolutionEventsCookie;
+            rdt.AdviseRunningDocTableEvents(this, out _SolutionEventsCookie);
             var ss = (IVsSolution)Package.GetGlobalService(typeof(SVsSolution));
             ss.AdviseSolutionEvents(this, out _SolutionEventsCookie);
         }
+
 
         /// <summary>
         ///     Adds all the existing designpatterns in a list.
@@ -83,32 +89,37 @@ namespace IDesign.Extension
                 }
             }
 
-            //Here you signal the UI thread to execute the action:
-            Dispatcher?.BeginInvoke(new Action(() =>
-            {
-                // - Change your UI information here
-                TreeViewResults.ResultsView.ItemsSource = viewModels;
-            }), null);
+            // - Change your UI information here
+            TreeViewResults.ResultsView.ItemsSource = viewModels;
         }
 
         /// <summary>
         ///     Gets current active document path.
         /// </summary>
-        private void ChoosePath()
+
+        private List<string> GetCurrentPath()
+        {
+            var result = new List<string>();
+            if ((bool)SelectPaths.radio1.IsChecked) 
+            if (Dte.ActiveDocument != null)
+                result.Add(Dte.ActiveDocument.FullName);
+            return result;
+        }
+
+        /// <summary>
+        ///     Gets all paths in the solution.
+        /// </summary>
+        private void GetAllPaths()
         {
             Paths = new List<string>();
+            var selectedI = SelectPaths.ProjectSelection.SelectedIndex;
+            if(selectedI != -1)
+            Paths.AddRange(Projects[selectedI].Documents.Select(x => x.FilePath));
+        }
 
-            if ((bool)SelectPaths.radio1.IsChecked)
-            {
-                if (Dte.ActiveDocument != null)
-                    Paths.Add(Dte.ActiveDocument.FullName);
-            }
-            else
-            {
-                LoadProject();
-                var selectedI = SelectPaths.ProjectSelection.SelectedIndex;
-                Paths.AddRange(Projects[selectedI].Documents.Select(x => x.FilePath));
-            }
+        private void ChoosePath()
+        {
+            GetAllPaths();
         }
 
         /// <summary>
@@ -131,7 +142,36 @@ namespace IDesign.Extension
             "Default event handler naming pattern")]
         private async void Analyse_Button(object sender, RoutedEventArgs e)
         {
+            Analyse();
+        }
+
+        private void SelectProjectFromFile(string path = null)
+        {
+
+            foreach (var project in Projects)
+            {
+                foreach(var doc in project.Documents)
+                {
+                    if (doc.FilePath == path)
+                    {
+                        var index = Projects.IndexOf(project);
+                        SelectPaths.ProjectSelection.SelectedIndex = index;
+                        return;
+                    }
+                }
+            }
+        }
+
+        private async void Analyse()
+        {
+            LoadProject();
+            var cur = GetCurrentPath().FirstOrDefault();
+            SelectProjectFromFile(cur);
             ChoosePath();
+
+            
+            
+
             var SelectedPatterns = ViewModels.Where(x => x.IsChecked).Select(x => x.Pattern).ToList();
 
             if (Loading || Paths.Count == 0 || SelectedPatterns.Count == 0)
@@ -148,16 +188,32 @@ namespace IDesign.Extension
 
             IProgress<RecognizerProgress> iprogress = progress;
             runner.OnProgressUpdate += (o, recognizerProgress) => iprogress.Report(recognizerProgress);
+            
             await Task.Run(() =>
             {
                 try
                 {
                     TreeViewResults.SyntaxTreeSources = runner.CreateGraph(Paths);
                     var results = runner.Run(SelectedPatterns);
-                    CreateResultViewModels(results);
+
+
+                    //Here you signal the UI thread to execute the action:
+                    Dispatcher?.BeginInvoke(new Action(() =>
+                    {
+                        if ((bool)SelectPaths.radio1.IsChecked)
+                            results = results.Where(x => x.FilePath == cur).ToList();
+                        else
+                            results = results.Where(x => x.Result.GetScore() > 80).ToList();
+                        
+
+
+                        CreateResultViewModels(results);
+                    }));
+
                 }
-                catch
+                catch(Exception e)
                 {
+                    throw e;
                     //@TODO User friendly error handling
                 }
             });
@@ -172,6 +228,41 @@ namespace IDesign.Extension
             ProgressStatusBlock.Text = "";
         }
 
+        #region IVsRunningDocTableEvents3 implementation
+
+        int IVsRunningDocTableEvents.OnAfterFirstDocumentLock(uint docCookie, uint dwRDTLockType, uint dwReadLocksRemaining, uint dwEditLocksRemaining)
+        {
+            return VSConstants.S_OK;
+        }
+
+        int IVsRunningDocTableEvents.OnBeforeLastDocumentUnlock(uint docCookie, uint dwRDTLockType, uint dwReadLocksRemaining,
+            uint dwEditLocksRemaining)
+        {
+            return VSConstants.S_OK;
+        }
+
+        int IVsRunningDocTableEvents.OnAfterSave(uint docCookie)
+        {
+            Analyse();
+            return VSConstants.S_OK;
+        }
+
+        int IVsRunningDocTableEvents.OnAfterAttributeChange(uint docCookie, uint grfAttribs)
+        {
+            return VSConstants.S_OK;
+        }
+
+        int IVsRunningDocTableEvents.OnBeforeDocumentWindowShow(uint docCookie, int fFirstShow, IVsWindowFrame pFrame)
+        {
+            return VSConstants.S_OK;
+        }
+
+        int IVsRunningDocTableEvents.OnAfterDocumentWindowHide(uint docCookie, IVsWindowFrame pFrame)
+        {
+            return VSConstants.S_OK;
+        }
+
+        #endregion
         public int OnAfterOpenProject(IVsHierarchy pHierarchy, int fAdded)
         {
             return VSConstants.S_OK;

@@ -29,7 +29,8 @@ namespace IDesign.Recognizers.Models.Output
             Element = element;
             Score = score;
         }
-        public CheckResult(string message, FeedbackType feedbackType, ICheckable element, int score)
+        public CheckResult(string message, FeedbackType feedbackType, SyntaxNode node, float score)
+
         {
             Message = message;
             FeedbackType = feedbackType;
@@ -49,7 +50,7 @@ namespace IDesign.Recognizers.Models.Output
         public float Score { get; set; }
 
 
-        
+
 
         public IEnumerable<ICheckResult> GetChildFeedback()
         {

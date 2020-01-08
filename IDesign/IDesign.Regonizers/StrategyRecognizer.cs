@@ -21,33 +21,33 @@ namespace IDesign.Recognizers
             {
                 //check if node is abstract class or interface
                 new ElementCheck<IEntityNode>(x => (x.CheckTypeDeclaration(EntityNodeType.Interface) ) |
-                (x.CheckTypeDeclaration(EntityNodeType.Class) && x.CheckModifier("abstract")),new ResourceMessage("NodeAbstractOrInterface")),
+                (x.CheckTypeDeclaration(EntityNodeType.Class) && x.CheckModifier("abstract")),new ResourceMessage("NodeAbstractOrInterface"), 2),
 
                 //check state node methods
                 new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                 {
-                    new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void"),
-                    new ElementCheck<IMethod>(x => x.GetBody() == null, new ResourceMessage("MethodBodyEmpty"))
+
+                    new ElementCheck<IMethod>(x => x.GetBody() == null, new ResourceMessage("MethodBodyEmpty"), 1)
                     //TO DO: if abstract class method must be also abstract!
                 }, x => x.GetMethods(), "Methods: "),
 
                 //check state node used by relations
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                 {
-                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.UsedBy, 1),new ResourceMessage("NodeUses1")),
+                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.UsedBy, 1),new ResourceMessage("NodeUses1"), 1),
 
                     //check if field has state as type
                     new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                     {
                         new ElementCheck<IEntityNode>(x => (x.CheckTypeDeclaration(EntityNodeType.Interface)) |
-                        (x.CheckTypeDeclaration(EntityNodeType.Class) && x.CheckModifier("abstract")), new ResourceMessage("NodeAbstractOrInterface"))
+                        (x.CheckTypeDeclaration(EntityNodeType.Class) && x.CheckModifier("abstract")), new ResourceMessage("NodeAbstractOrInterface"), 1)
                     }, x => new List<IEntityNode> { node},"Used return type:"),
-                    
+
                     //check context class fields
                     new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
                     {
                         //TO DO: check name
-                        new ElementCheck<IField>(x => x.CheckMemberModifier("private"), new ResourceMessage("FieldModifierPrivate"))
+                        new ElementCheck<IField>(x => x.CheckMemberModifier("private"), new ResourceMessage("FieldModifierPrivate"), 0.5f)
                     }, x=> x.GetFields(), "Fields", GroupCheckType.All)
 
 
@@ -56,13 +56,13 @@ namespace IDesign.Recognizers
                 //check inheritance
                  new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                  {
-                     new ElementCheck<IEntityNode>(x => !x.GetRelations().Any(y => y.GetRelationType() ==RelationType.Creates),new ResourceMessage("NodeDoesNotCreate")),
-                     new ElementCheck<IEntityNode>(x => !x.GetRelations().Any(y => y.GetRelationType() ==RelationType.Uses), new ResourceMessage("NodeDoesNotUse")),
-                     
+                     new ElementCheck<IEntityNode>(x => !x.GetRelations().Any(y => y.GetRelationType() ==RelationType.Creates),new ResourceMessage("NodeDoesNotCreate"), 2),
+                     new ElementCheck<IEntityNode>(x => !x.GetRelations().Any(y => y.GetRelationType() ==RelationType.Uses), new ResourceMessage("NodeDoesNotUse"), 1),
+
                      new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                      {
                         //TO DO: check of functie de zelfte parameters heeft als de interface/abstracte klasse functie
-                        //TO DO: check of de functie de zelfde naam heeft als de overervende functie  
+                        //TO DO: check of de functie de zelfde naam heeft als de overervende functie
                      }, x=> x.GetMethods(), "Methods:"),
 
                  },x => x.GetRelations().Where(y => (y.GetRelationType().Equals(RelationType.ExtendedBy)) ||(y.GetRelationType().Equals(RelationType.ImplementedBy))
