@@ -22,7 +22,7 @@ namespace IDesign.Recognizers
             {
                 //check if node is abstract class (creator)
                 new ElementCheck<IEntityNode>(x => x.CheckTypeDeclaration(EntityNodeType.Class)&& x.CheckModifier("abstract"),"creator should be an abstract class",2),
-                new ElementCheck<IEntityNode>(x=> x.CheckMinimalAmountOfRelationTypes(RelationType.Uses,1),"Node should have min 1 uses relation"),
+                new ElementCheck<IEntityNode>(x=> x.CheckMinimalAmountOfRelationTypes(RelationType.Uses,1),"Node should have min 1 uses relation",1),
 
                 //check concretecreators
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
@@ -46,7 +46,7 @@ namespace IDesign.Recognizers
                         new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                         {
                             //product
-                            new ElementCheck<IEntityNode>(x => {productnode = x; return x.GetMethods().Any() || x.GetFields().Any(); }, "product",1),
+                            new ElementCheck<IEntityNode>(x => {productnode = x; return x.GetMethods().Any() || x.GetFields().Any(); }, "product"),
 
                             new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                             {
