@@ -36,6 +36,13 @@ namespace IDesign.Recognizers.Models.ElementChecks
         {
             _predicate = predicate;
             _feedback = feedback;
+            _score = 1;
+        }
+        public ElementCheck(Predicate<T> predicate, IResourceMessage feedback, float score)
+        {
+            _predicate = predicate;
+            _feedback = feedback;
+            _score = score;
         }
 
         public ICheckResult Check(T elementToCheck)

@@ -22,14 +22,14 @@ namespace IDesign.Recognizers.Models.Output
             Element = element;
         }
 
-        public CheckResult(IResourceMessage feedback, FeedbackType feedbackType, ICheckable element, int score)
+        public CheckResult(IResourceMessage feedback, FeedbackType feedbackType, ICheckable element, float score)
         {
             _feedback = feedback;
             FeedbackType = feedbackType;
             Element = element;
             Score = score;
         }
-        public CheckResult(string message, FeedbackType feedbackType, SyntaxNode node, float score)
+        public CheckResult(string message, FeedbackType feedbackType, ICheckable element, float score)
 
         {
             Message = message;
