@@ -24,7 +24,6 @@ namespace IDesign.Extension
     /// </summary>
     public partial class ExtensionWindowControl : UserControl, IVsSolutionEvents, IVsRunningDocTableEvents
     {
-        private readonly UInt32 _SolutionEventsCookie;
         private List<DesignPatternViewModel> ViewModels { get; set; }
         private List<string> Paths { get; set; }
         private List<Project> Projects { get; set; }
@@ -47,10 +46,9 @@ namespace IDesign.Extension
 
 
             var rdt = (IVsRunningDocumentTable)Package.GetGlobalService(typeof(SVsRunningDocumentTable));
-            uint _SolutionEventsCookie;
-            rdt.AdviseRunningDocTableEvents(this, out _SolutionEventsCookie);
+            rdt.AdviseRunningDocTableEvents(this, out _);
             var ss = (IVsSolution)Package.GetGlobalService(typeof(SVsSolution));
-            ss.AdviseSolutionEvents(this, out _SolutionEventsCookie);
+            ss.AdviseSolutionEvents(this, out _);
         }
 
 
@@ -59,23 +57,20 @@ namespace IDesign.Extension
         /// </summary>
         private void AddViewModels()
         {
-            ViewModels = new List<DesignPatternViewModel>();
-
-            foreach (var pattern in RecognizerRunner.designPatterns)
-                ViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern, pattern.WikiPage));
+            ViewModels = (from pattern in RecognizerRunner.designPatterns
+                          select new DesignPatternViewModel(pattern.Name, pattern, pattern.WikiPage)).ToList();
 
             PatternCheckbox.listBox.DataContext = ViewModels;
             var height = ViewModels.Count * 30;
 
             if (height > 3 * 30)
+            {
                 height = 3 * 30;
+            }
 
             Grid.RowDefinitions[1].Height = new GridLength(height);
         }
 
-        /// <summary>
-        ///     Creates the viewmodel for the treeview.
-        /// </summary>
         private void CreateResultViewModels(IEnumerable<RecognitionResult> results)
         {
             var viewModels = new List<ResultViewModel>();
@@ -93,28 +88,28 @@ namespace IDesign.Extension
             TreeViewResults.ResultsView.ItemsSource = viewModels;
         }
 
-        /// <summary>
-        ///     Gets current active document path.
-        /// </summary>
 
         private List<string> GetCurrentPath()
         {
             var result = new List<string>();
-            if ((bool)SelectPaths.radio1.IsChecked) 
-            if (Dte.ActiveDocument != null)
-                result.Add(Dte.ActiveDocument.FullName);
+            if ((bool)SelectPaths.radio1.IsChecked)
+            {
+                if (Dte.ActiveDocument != null)
+                {
+                    result.Add(Dte.ActiveDocument.FullName);
+                }
+            }
             return result;
         }
 
-        /// <summary>
-        ///     Gets all paths in the solution.
-        /// </summary>
         private void GetAllPaths()
         {
             Paths = new List<string>();
             var selectedI = SelectPaths.ProjectSelection.SelectedIndex;
-            if(selectedI != -1)
-            Paths.AddRange(Projects[selectedI].Documents.Select(x => x.FilePath));
+            if (selectedI != -1)
+            {
+                Paths.AddRange(Projects[selectedI].Documents.Select(x => x.FilePath));
+            }
         }
 
         private void ChoosePath()
@@ -122,9 +117,6 @@ namespace IDesign.Extension
             GetAllPaths();
         }
 
-        /// <summary>
-        ///     Loads the project to get all the available projects.
-        /// </summary>
         private void LoadProject()
         {
             var cm = (IComponentModel)Package.GetGlobalService(typeof(SComponentModel));
@@ -147,17 +139,15 @@ namespace IDesign.Extension
 
         private void SelectProjectFromFile(string path = null)
         {
-
             foreach (var project in Projects)
             {
-                foreach(var doc in project.Documents)
+                foreach (var index in from doc in project.Documents
+                                      where doc.FilePath == path
+                                      let index = Projects.IndexOf(project)
+                                      select index)
                 {
-                    if (doc.FilePath == path)
-                    {
-                        var index = Projects.IndexOf(project);
-                        SelectPaths.ProjectSelection.SelectedIndex = index;
-                        return;
-                    }
+                    SelectPaths.ProjectSelection.SelectedIndex = index;
+                    return;
                 }
             }
         }
@@ -169,56 +159,51 @@ namespace IDesign.Extension
             SelectProjectFromFile(cur);
             ChoosePath();
 
-            
-            
-
             var SelectedPatterns = ViewModels.Where(x => x.IsChecked).Select(x => x.Pattern).ToList();
 
-            if (Loading || Paths.Count == 0 || SelectedPatterns.Count == 0)
-                return;
-
-            var runner = new RecognizerRunner();
-            Loading = true;
-            statusBar.Value = 0;
-            var progress = new Progress<RecognizerProgress>(value =>
+            if (!Loading && Paths.Count != 0 && SelectedPatterns.Count != 0)
             {
-                statusBar.Value = value.CurrentPercentage;
-                ProgressStatusBlock.Text = value.Status;
-            });
-
-            IProgress<RecognizerProgress> iprogress = progress;
-            runner.OnProgressUpdate += (o, recognizerProgress) => iprogress.Report(recognizerProgress);
-            
-            await Task.Run(() =>
-            {
-                try
+                var runner = new RecognizerRunner();
+                Loading = true;
+                statusBar.Value = 0;
+                var progress = new Progress<RecognizerProgress>(value =>
                 {
-                    TreeViewResults.SyntaxTreeSources = runner.CreateGraph(Paths);
-                    var results = runner.Run(SelectedPatterns);
+                    statusBar.Value = value.CurrentPercentage;
+                    ProgressStatusBlock.Text = value.Status;
+                });
 
+                IProgress<RecognizerProgress> iprogress = progress;
+                runner.OnProgressUpdate += (o, recognizerProgress) => iprogress.Report(recognizerProgress);
 
-                    //Here you signal the UI thread to execute the action:
-                    Dispatcher?.BeginInvoke(new Action(() =>
+                await Task.Run(() =>
+                {
+                    try
                     {
-                        if ((bool)SelectPaths.radio1.IsChecked)
-                            results = results.Where(x => x.FilePath == cur).ToList();
-                        else
-                            results = results.Where(x => x.Result.GetScore() > 80).ToList();
-                        
+                        TreeViewResults.SyntaxTreeSources = runner.CreateGraph(Paths);
+                        var results = runner.Run(SelectedPatterns);
 
+                        //Here you signal the UI thread to execute the action:
+                        Dispatcher?.BeginInvoke(new Action(() =>
+                            {
+                                if ((bool)SelectPaths.radio1.IsChecked)
+                                {
+                                    results = results.Where(x => x.FilePath == cur).ToList();
+                                }
+                                else
+                                {
+                                    results = results.Where(x => x.Result.GetScore() > 80).ToList();
+                                }
 
-                        CreateResultViewModels(results);
-                    }));
-
-                }
-                catch(Exception e)
-                {
-                    throw e;
-                    //@TODO User friendly error handling
-                }
-            });
-
-            ResetUI();
+                                CreateResultViewModels(results);
+                            }));
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
+                });
+                ResetUI();
+            }
         }
 
         private void ResetUI()

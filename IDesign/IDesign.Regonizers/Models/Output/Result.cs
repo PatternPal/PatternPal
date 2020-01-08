@@ -13,14 +13,13 @@ namespace IDesign.Recognizers.Models.Output
             var total = (float) Results.Sum(x => x.GetTotalChecks());
             var green = Results.Sum(x => x.GetScore());
             if (total <= 0)
+            {
                 return 0;
+            }
             return (int)(green / total * 100f);
         }
 
-        public IList<ICheckResult> GetResults()
-        {
-            return Results;
-        }
+        public IList<ICheckResult> GetResults() => Results;
 
         public override string ToString()
         {
@@ -28,7 +27,9 @@ namespace IDesign.Recognizers.Models.Output
             res += GetScore();
 
             foreach (var suggestie in Results)
+            {
                 res += ", " + suggestie.GetMessage();
+            }
 
             return res;
         }

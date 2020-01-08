@@ -27,7 +27,7 @@ namespace IDesign.Recognizers
                 new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                 {
                     new ElementCheck<IMethod>(x => x.GetBody() == null, "Body should be empty!",1)
-                }, x => x.GetMethods(), "Methods: "),
+                }, x => x.GetMethodsAndProperties(), "Methods: "),
 
                 //check state node used by relations
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>

@@ -24,7 +24,9 @@ namespace IDesign.Tests.Checks
             var property = root.Members[0] as PropertyDeclarationSyntax;
 
             if (property == null)
+            {
                 Assert.Fail();
+            }
 
             Assert.AreEqual(shouldBeValid, new PropertyField(property).CheckMemberModifier(modifier));
         }
@@ -46,7 +48,9 @@ namespace IDesign.Tests.Checks
             var property = root.Members[0] as PropertyDeclarationSyntax;
 
             if (property == null)
+            {
                 Assert.Fail();
+            }
 
             Assert.AreEqual(shouldBeValid, new PropertyField(property).CheckFieldType(new List<string>() { type }));
         }

@@ -9,7 +9,6 @@ namespace IDesign.Recognizers.Abstractions
         SemiCorrect,
         Incorrect
     }
-
     public interface ICheckResult
     {
         /// <summary>

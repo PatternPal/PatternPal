@@ -10,15 +10,9 @@ namespace IDesign.Extension
     /// </summary>
     internal sealed class ExtensionWindowCommand
     {
-        /// <summary>
-        ///     Command ID.
-        /// </summary>
         public const int CommandId = 0x0100;
 
-        /// <summary>
-        ///     Command menu group (command set GUID).
-        /// </summary>
-        public static readonly Guid CommandSet = new Guid("5eb4c6e9-8015-4fa4-8670-f71284492188");
+        public static readonly Guid CommandSetGUID = new Guid("5eb4c6e9-8015-4fa4-8670-f71284492188");
 
         /// <summary>
         ///     VS Package that provides this command, not null.
@@ -36,7 +30,7 @@ namespace IDesign.Extension
             this.package = package ?? throw new ArgumentNullException(nameof(package));
             commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
 
-            var menuCommandID = new CommandID(CommandSet, CommandId);
+            var menuCommandID = new CommandID(CommandSetGUID, CommandId);
             var menuItem = new MenuCommand(Execute, menuCommandID);
             commandService.AddCommand(menuItem);
         }
@@ -45,11 +39,6 @@ namespace IDesign.Extension
         ///     Gets the instance of the command.
         /// </summary>
         public static ExtensionWindowCommand Instance { get; private set; }
-
-        /// <summary>
-        ///     Gets the service provider from the owner package.
-        /// </summary>
-        private IAsyncServiceProvider ServiceProvider => package;
 
         /// <summary>
         ///     Initializes the singleton instance of the command.
@@ -76,7 +65,9 @@ namespace IDesign.Extension
             {
                 var window = await package.ShowToolWindowAsync(typeof(ExtensionWindow), 0, true, package.DisposalToken);
                 if (null == window || null == window.Frame)
+                {
                     throw new NotSupportedException("Cannot create tool window");
+                }
             });
         }
     }

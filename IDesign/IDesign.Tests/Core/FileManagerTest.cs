@@ -12,11 +12,13 @@ namespace IDesign.Tests.Core
         [Test]
         public void TestIfFilesListContainsRightFiles()
         {
-            var expected = new List<string>();
-            expected.Add(@"../../../Core/TestClasses\ITest.cs");
-            expected.Add(@"../../../Core/TestClasses\TestClass1.cs");
+            var expected = new List<string>
+            {
+                @"../../../Core/TestClasses\ITest.cs",
+                @"../../../Core/TestClasses\TestClass1.cs"
+            };
 
-            var actual = readFiles.GetAllCsFilesFromDirectory(path);
+            var actual = readFiles.GetAllCSharpFilesFromDirectory(path);
             Assert.AreEqual(expected, actual);
         }
     }

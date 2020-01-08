@@ -31,7 +31,7 @@ namespace IDesign.Recognizers
                     new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void",1),
                     new ElementCheck<IMethod>(x => x.GetBody() == null, "Body should be empty!",1)
                     //TO DO: if abstract class method must be also abstract!
-                }, x => x.GetMethods(), "Methods: "),
+                }, x => x.GetMethodsAndProperties(), "Methods: "),
 
                 //check state node used by relations
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
@@ -58,7 +58,7 @@ namespace IDesign.Recognizers
                 //check inheritance
                  new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                  {
-                        new ElementCheck<IEntityNode>(x => {entityNode = x; return x.GetMethods().Any(); }, "Has functions"),
+                        new ElementCheck<IEntityNode>(x => {entityNode = x; return x.GetMethodsAndProperties().Any(); }, "Has functions"),
 
                         new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                         {
@@ -68,7 +68,7 @@ namespace IDesign.Recognizers
                                 new ElementCheck<IMethod>(x => (x.CheckCreationType(entityNode.GetName()) && !(x.CheckCreationType(node.GetName()))), $"new state should not be itself",2)
                                 //TO DO: check of functie de zelfte parameters heeft als de interface/abstracte klasse functie
                                 //TO DO: check of de functie de zelfde naam heeft als de overervende functie  
-                            }, x=> x.GetMethods(), "Methods:"),
+                            }, x=> x.GetMethodsAndProperties(), "Methods:"),
 
                         },x => entityNode.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Creates)).Select(y => y.GetDestination()), "Check creates relations"),
 

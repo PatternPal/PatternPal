@@ -28,34 +28,23 @@ namespace IDesign.Core.Models
             return InterfaceOrClassNode;
         }
 
-        /// <summary>
-        ///     Get name of entitynode
-        /// </summary>
-        /// <returns></returns>
         public string GetName()
         {
             return Name;
         }
 
-        /// <summary>
-        ///     Get source file of an entitynode
-        /// </summary>
-        /// <returns></returns>
         public string GetSourceFile()
         {
             return SourceFile;
         }
 
-        /// <summary>
-        ///     Get all methods and properties of a class
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<IMethod> GetMethods()
+        public IEnumerable<IMethod> GetMethodsAndProperties()
         {
             var list = new List<IMethod>();
             list.AddRange(MethodDeclarationSyntaxList.Select(x => new Method(x)));
 
             foreach (var property in PropertyDeclarationSyntaxList)
+            {
                 if (property.AccessorList != null)
                 {
                     var accessors = property.AccessorList.Accessors;
@@ -63,6 +52,7 @@ namespace IDesign.Core.Models
                     getters = getters.Where(x => x.Body != null || x.ExpressionBody != null);
                     list.AddRange(getters.Select(x => new PropertyMethod(property, x)));
                 }
+            }
             return list;
         }
 
@@ -70,15 +60,19 @@ namespace IDesign.Core.Models
         {
             var listGetters = new List<IField>();
             foreach (var property in PropertyDeclarationSyntaxList)
+            {
                 if (property.AccessorList != null)
                 {
                     var getters = property.AccessorList.Accessors.Where(x =>
                         x.Kind() == SyntaxKind.GetAccessorDeclaration && x.Body == null && x.ExpressionBody == null);
                     listGetters.AddRange(getters.Select(x => new PropertyField(property)));
                 }
+            }
 
             foreach (var field in FieldDeclarationSyntaxList)
+            {
                 listGetters.AddRange(field.Declaration.Variables.Select(x => new Field(field, x)));
+            }
             return listGetters;
         }
 
@@ -99,26 +93,31 @@ namespace IDesign.Core.Models
             var declarationnode = GetTypeDeclarationSyntax();
 
             if (declarationnode.GetType() == typeof(ClassDeclarationSyntax))
+            {
                 return EntityNodeType.Class;
-            if (declarationnode.GetType() == typeof(InterfaceDeclarationSyntax)) return EntityNodeType.Interface;
+            }
+           
+            if (declarationnode.GetType() == typeof(InterfaceDeclarationSyntax))
+            {
+                return EntityNodeType.Interface;
+            }
+
             return EntityNodeType.Class;
         }
 
-        public string GetSuggestionName()
-        {
-            return Name;
-        }
+        public string GetSuggestionName() => Name;
 
         public SyntaxNode GetSuggestionNode()
         {
             return GetTypeDeclarationSyntax();
         }
 
-        public IEnumerable<ConstructorDeclarationSyntax> GetCostructors()
+        public IEnumerable<ConstructorDeclarationSyntax> GetCostructorDeclarationSyntaxList()
         {
             return ConstructorDeclarationSyntaxList;
         }
-        public List<UsingDirectiveSyntax> GetUsings()
+
+        public List<UsingDirectiveSyntax> GetUsingDeclarationSyntaxList()
         {
             return UsingDeclarationSyntaxList;
         }

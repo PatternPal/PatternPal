@@ -31,7 +31,6 @@ namespace IDesign.Extension.ViewModels
                     case FeedbackType.Incorrect:
                         return KnownMonikers.StatusError;
                 }
-
                 return KnownMonikers.StatusHelp;
             }
         }

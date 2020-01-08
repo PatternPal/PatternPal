@@ -41,7 +41,9 @@ namespace IDesign.Recognizers.Models.Output
         public float GetScore()
         {
             if (!ChildFeedback.Any())
+            {
                 return FeedbackType == FeedbackType.Correct ? Score : 0;
+            }
 
             return ChildFeedback.Sum(x => x.GetScore());
         }
@@ -65,9 +67,14 @@ namespace IDesign.Recognizers.Models.Output
             var feedback = FeedbackType.Incorrect;
 
             if (ChildFeedback.Any(x => x.GetFeedbackType() == FeedbackType.Correct))
+            {
                 feedback = FeedbackType.SemiCorrect;
+            }
+
             if (ChildFeedback.All(x => x.GetFeedbackType() == FeedbackType.Correct))
+            {
                 feedback = FeedbackType.Correct;
+            }
 
             return feedback;
         }

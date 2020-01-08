@@ -17,9 +17,13 @@ namespace IDesign.Recognizers
             var result2 = ObserverWithoutSubjectInterfaceCheck(entityNode);
 
             if (result1.GetScore() >= result2.GetScore())
+            {
                 return result1;
-            else 
+            }
+            else
+            {
                 return result2;
+            }
         }
 
         /// <summary>
@@ -70,7 +74,7 @@ namespace IDesign.Recognizers
         private IResult ObserverWithoutSubjectInterfaceCheck(IEntityNode node)
         {
             var result = new Result();
-            
+
             //Tests for implementation of observer pattern without an subject interface
             var checks = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
             {

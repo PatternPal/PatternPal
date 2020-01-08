@@ -36,10 +36,10 @@ namespace IDesign.Recognizers
 
             var singletonCheck = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
             {
-                new GroupCheck<IEntityNode, IMethod>(methodChecks, x => x.GetMethods(), "Has GetInstance()"),
+                new GroupCheck<IEntityNode, IMethod>(methodChecks, x => x.GetMethodsAndProperties(), "Has GetInstance()"),
                 new GroupCheck<IEntityNode, IField>(propertyChecks, x => x.GetFields(), "Has instance of itself"),
                 new GroupCheck<IEntityNode, IMethod>(constructorChecks, x => x.GetConstructors(), "Private constructor")
-            }, x => new List<IEntityNode> {entityNode}, "Singleton", GroupCheckType.All);
+            }, x => new List<IEntityNode> { entityNode }, "Singleton", GroupCheckType.All);
 
 
             var r = singletonCheck.Check(entityNode);

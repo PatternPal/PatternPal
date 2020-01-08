@@ -3,7 +3,7 @@
 namespace IDesign.Recognizers.Abstractions
 {
     /// <summary>
-    ///     A interface for a check that could be evaluated on an element
+    ///     An interface for a check that could be evaluated on an element
     /// </summary>
     /// <typeparam name="T">Type of the element to be checked</typeparam>
     public interface ICheck<T> where T : class, ICheckable
