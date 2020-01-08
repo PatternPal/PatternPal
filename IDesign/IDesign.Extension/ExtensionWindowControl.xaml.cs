@@ -84,9 +84,7 @@ namespace IDesign.Extension
             {
                 var patterns = results.Where(x => x.Pattern.Equals(item));
                 if (patterns.Count() > 0)
-                {
                     viewModels.AddRange(patterns.OrderBy(x => x.Result.GetScore()).Select(x => new ResultViewModel(x)));
-                }
             }
 
             // - Change your UI information here
