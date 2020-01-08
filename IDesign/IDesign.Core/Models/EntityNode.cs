@@ -53,6 +53,7 @@ namespace IDesign.Core.Models
                     list.AddRange(getters.Select(x => new PropertyMethod(property, x)));
                 }
             }
+
             return list;
         }
 
@@ -96,7 +97,7 @@ namespace IDesign.Core.Models
             {
                 return EntityNodeType.Class;
             }
-           
+
             if (declarationnode.GetType() == typeof(InterfaceDeclarationSyntax))
             {
                 return EntityNodeType.Interface;

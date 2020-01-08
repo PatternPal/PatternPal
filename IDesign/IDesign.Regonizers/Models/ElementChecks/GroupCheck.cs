@@ -37,9 +37,14 @@ namespace IDesign.Recognizers.Models.ElementChecks
 
         public ICheckResult Check(TParent elementToCheck)
         {
+            if (elementToCheck == null)
+            {
+                return CreateFalseResult();
+            }
+
             var elements = _elements(elementToCheck).ToList();
 
-            if (elementToCheck == null || !elements.Any())
+            if (!elements.Any())
             {
                 return CreateFalseResult();
             }
