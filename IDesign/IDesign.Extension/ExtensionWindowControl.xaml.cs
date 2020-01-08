@@ -41,11 +41,10 @@ namespace IDesign.Extension
             Loading = false;
             Dispatcher.VerifyAccess();
             LoadProject();
+            SelectAll.IsChecked = true;
             SelectPaths.ProjectSelection.ItemsSource = Projects;
             SelectPaths.ProjectSelection.SelectedIndex = 0;
             Dte = Package.GetGlobalService(typeof(SDTE)) as DTE;
-
-
             var rdt = (IVsRunningDocumentTable)Package.GetGlobalService(typeof(SVsRunningDocumentTable));
             uint _SolutionEventsCookie;
             rdt.AdviseRunningDocTableEvents(this, out _SolutionEventsCookie);

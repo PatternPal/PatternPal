@@ -2,7 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/Active Documentblend/2008" 
+             xmlns:UIResources="clr-namespace:IDesign.Extension.Resources"
              xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
              mc:Ignorable="d" 
              d:DesignHeight="60" d:DesignWidth="800">
@@ -60,7 +61,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <StackPanel Margin="5">
-        <RadioButton Name="radio1" GroupName="path" Content="Active Document" VerticalContentAlignment="Center"
+        <RadioButton Name="radio1" GroupName="path" Content="{x:Static UIResources:ExtensionUIResources.ActiveDocument}" VerticalContentAlignment="Center"
                          Height="25" IsChecked="True" />
         <Grid>
             <Grid.ColumnDefinitions>
@@ -68,7 +69,7 @@
                 <ColumnDefinition Width="180"/>
             </Grid.ColumnDefinitions>
 
-            <RadioButton Name="radio2" GroupName="path" Content="Project" VerticalContentAlignment="Center"
+            <RadioButton Name="radio2" GroupName="path" Content="{x:Static UIResources:ExtensionUIResources.Project}" VerticalContentAlignment="Center"
                          Height="25" />
             <ComboBox Grid.Column="1" x:Name="ProjectSelection" Margin="5">
                 <ComboBox.ItemTemplate>
