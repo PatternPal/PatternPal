@@ -111,7 +111,7 @@
             <TextBlock Text="IDesign" VerticalAlignment="Center" FontSize="50" />
         </StackPanel>
         <Border  Grid.Row="1" BorderThickness="0 1 0 0" Style="{StaticResource ButtonBorder}">
-            <CheckBox x:Name="SelectAll" Margin="5 0 0 0" Content="Select All Patterns" HorizontalAlignment="Left" VerticalAlignment="Center" Unchecked="SelectAll_Unchecked" Checked="SelectAll_Checked"/>
+            <CheckBox x:Name="SelectAll" Margin="5 0 0 0" IsChecked="True" Content="Select All Patterns" HorizontalAlignment="Left" VerticalAlignment="Center" Unchecked="SelectAll_Unchecked" Checked="SelectAll_Checked"/>
         </Border>
         <usercontrol:PatternCheckbox Grid.Row="2" x:Name="PatternCheckbox" />
         <usercontrol:SelectPaths Grid.Row="3" x:Name="SelectPaths" />
