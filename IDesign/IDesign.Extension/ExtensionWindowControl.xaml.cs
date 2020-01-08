@@ -64,7 +64,7 @@ namespace IDesign.Extension
             if (height > 3 * 30)
                 height = 3 * 30;
 
-            Grid.RowDefinitions[1].Height = new GridLength(height);
+            Grid.RowDefinitions[2].Height = new GridLength(height);
         }
 
         /// <summary>
@@ -111,6 +111,26 @@ namespace IDesign.Extension
             }
         }
 
+        private void SaveAllFiles()
+        {
+            var soln = Dte.Solution;
+
+            for (int i = 1; i <= soln.Projects.Count; i++)
+            {
+                if (!soln.Projects.Item(i).Saved)
+                {
+                    soln.Projects.Item(i).Save();
+                }
+                for (int j = 1; j <= soln.Projects.Item(i).ProjectItems.Count; j++)
+                {
+                    if (!soln.Projects.Item(i).ProjectItems.Item(j).Saved)
+                    {
+                        soln.Projects.Item(i).ProjectItems.Item(j).Save();
+                    }
+                }
+            }
+        }
+
         /// <summary>
         ///     Loads the project to get all the available projects.
         /// </summary>
@@ -131,6 +151,7 @@ namespace IDesign.Extension
             "Default event handler naming pattern")]
         private async void Analyse_Button(object sender, RoutedEventArgs e)
         {
+            SaveAllFiles();
             ChoosePath();
             var SelectedPatterns = ViewModels.Where(x => x.IsChecked).Select(x => x.Pattern).ToList();
 
@@ -226,6 +247,26 @@ namespace IDesign.Extension
         public int OnAfterCloseSolution(object pUnkReserved)
         {
             return VSConstants.S_OK;
+        }
+
+        private void SelectAll_Checked(object sender, RoutedEventArgs e)
+        {
+            var designPatternViewModels = PatternCheckbox.listBox.Items.OfType<DesignPatternViewModel>().ToList();
+
+            for (int i = 0; i < designPatternViewModels.Count(); i++)
+            {
+                designPatternViewModels[i].IsChecked = true;
+            }
+        }
+
+        private void SelectAll_Unchecked(object sender, RoutedEventArgs e)
+        {
+            var designPatternViewModels = PatternCheckbox.listBox.Items.OfType<DesignPatternViewModel>().ToList();
+
+            for (int i = 0; i < designPatternViewModels.Count(); i++)
+            {
+                designPatternViewModels[i].IsChecked = false;
+            }
         }
     }
 }
