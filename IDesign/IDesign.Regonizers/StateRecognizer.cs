@@ -23,33 +23,33 @@ namespace IDesign.Recognizers
             {
                 //check if node is abstract class or interface
                 new ElementCheck<IEntityNode>(x => (x.CheckTypeDeclaration(EntityNodeType.Interface) ) |
-                (x.CheckTypeDeclaration(EntityNodeType.Class) && x.CheckModifier("abstract")),"State class should be abstract or an interface!"),
+                (x.CheckTypeDeclaration(EntityNodeType.Class) && x.CheckModifier("abstract")),new ResourceMessage("NodeAbstractOrInterface")),
 
                 //check state node methods
                 new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                 {
                     new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void"),
-                    new ElementCheck<IMethod>(x => x.GetBody() == null, "Body should be empty!")
+                    new ElementCheck<IMethod>(x => x.GetBody() == null, new ResourceMessage("MethodBodyEmpty"))
                     //TO DO: if abstract class method must be also abstract!
                 }, x => x.GetMethods(), "Methods: "),
 
                 //check state node used by relations
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                 {
-                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.UsedBy, 1),$"Minimal amount of used by relations should be 1"),
+                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.UsedBy, 1), new ResourceMessage("NodeUses1")),
 
                     //check if field has state as type
                     new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                     {
                         new ElementCheck<IEntityNode>(x => (x.CheckTypeDeclaration(EntityNodeType.Interface)) |
-                        (x.CheckTypeDeclaration(EntityNodeType.Class) && x.CheckModifier("abstract")), "type should be an interface or abstract class")
+                        (x.CheckTypeDeclaration(EntityNodeType.Class) && x.CheckModifier("abstract")), new ResourceMessage("NodeAbstractOrInterface"))
                     }, x => new List<IEntityNode> { node},"Used return type:"),
                     
                     //check context class fields
                     new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
                     {
                         //TO DO: check name
-                        new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "modifier should be private")
+                        new ElementCheck<IField>(x => x.CheckMemberModifier("private"), new ResourceMessage("FieldModifierPrivate"))
                     }, x=> x.GetFields(), "Fields", GroupCheckType.All)
 
 
@@ -58,14 +58,14 @@ namespace IDesign.Recognizers
                 //check inheritance
                  new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                  {
-                        new ElementCheck<IEntityNode>(x => {entityNode = x; return x.GetMethods().Any(); }, "Has functions"),
+                        new ElementCheck<IEntityNode>(x => {entityNode = x; return x.GetMethods().Any(); }, new ResourceMessage("MethodAny")),
 
                         new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                         {
                             new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                             {
                                 new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "Return type should be void"),
-                                new ElementCheck<IMethod>(x => (x.CheckCreationType(entityNode.GetName()) && !(x.CheckCreationType(node.GetName()))), $"new state should not be itself")
+                                new ElementCheck<IMethod>(x => (x.CheckCreationType(entityNode.GetName()) && !(x.CheckCreationType(node.GetName()))), new ResourceMessage("MethodCreateSameInterface"))
                                 //TO DO: check of functie de zelfte parameters heeft als de interface/abstracte klasse functie
                                 //TO DO: check of de functie de zelfde naam heeft als de overervende functie  
                             }, x=> x.GetMethods(), "Methods:"),

@@ -133,79 +133,118 @@
     <value>Class adapter</value>
   </data>
   <data name="AdapterMethod" xml:space="preserve">
-    <value>All Adapter methods should call adaptee</value>
-  </data>
-  <data name="AdapterMethodOverride" xml:space="preserve">
-    <value>Adapter method should override or is ipmlemented</value>
+    <value>All Adapter methods should call adaptee.</value>
   </data>
   <data name="AdapterMethodReturnType" xml:space="preserve">
-    <value>Adapter method should return adaptee</value>
+    <value>Adapter method should return adaptee.</value>
   </data>
   <data name="AdapterMethodUses" xml:space="preserve">
-    <value>Adapter method uses adpatee</value>
+    <value>Adapter method uses adpatee.</value>
   </data>
-  <data name="AdapterParent" xml:space="preserve">
-    <value>Adapter should be extended by or implemented by</value>
+  <data name="Child" xml:space="preserve">
+    <value>Should be extended by a class.</value>
+  </data>
+  <data name="ConstructorModifierNotPublic" xml:space="preserve">
+    <value>Constructor should not be public.</value>
   </data>
   <data name="DecoratorComponent" xml:space="preserve">
     <value>Decorator component</value>
   </data>
-  <data name="DecoratorComponentChilDecoratorComponentChild" xml:space="preserve">
-    <value>Decorator component should be implemented or extended by one other class</value>
-  </data>
-  <data name="DecoratorComponentFieldType" xml:space="preserve">
-    <value>Decorator component field should be {0}</value>
-  </data>
-  <data name="DecoratorComponentMethodAny" xml:space="preserve">
-    <value>Decorator component should have at least one method</value>
-  </data>
-  <data name="DecoratorComponentMethodModifier" xml:space="preserve">
-    <value>Decorator component should method should be public or protected</value>
-  </data>
-  <data name="DecoratorComponentMethodParameters" xml:space="preserve">
-    <value>Decorator component method should have a parameter with type {0}</value>
+  <data name="DecoratorComponentChild" xml:space="preserve">
+    <value>Should be implemented or extended by one other class.</value>
   </data>
   <data name="DecoratorConcrete" xml:space="preserve">
     <value>Concrete decorator</value>
   </data>
   <data name="DecoratorConcreteMethodArguments" xml:space="preserve">
-    <value>Concrete decorator method should use {0} and call its base</value>
+    <value>Concrete decorator method should use {0} and call its base.</value>
   </data>
-  <data name="DecoratorConcreteMethodModifier" xml:space="preserve">
-    <value>Concrete decorator method should be public</value>
+  <data name="FieldModifierNotPublic" xml:space="preserve">
+    <value>Field should not be public.</value>
   </data>
-  <data name="DecoratorConcreteMethodParameters" xml:space="preserve">
-    <value>Concrete decorator method should have a parameter with type {0}</value>
+  <data name="FieldModifierPrivate" xml:space="preserve">
+    <value>Field should be private.</value>
   </data>
-  <data name="DecoratorNodeChild" xml:space="preserve">
-    <value>Decorator should be extended by a class</value>
+  <data name="FieldModifierStatic" xml:space="preserve">
+    <value>Field should be static.</value>
   </data>
-  <data name="DecoratorNodeModifier" xml:space="preserve">
-    <value>Decorator should be abstract.</value>
+  <data name="FieldType" xml:space="preserve">
+    <value>Field type should be {0}.</value>
   </data>
-  <data name="DecoratorNodeParent" xml:space="preserve">
-    <value>Decorator should extend or implement a class</value>
+  <data name="MethodAmountThree" xml:space="preserve">
+    <value>There should be atleast 3 methods: add, remove and notify.</value>
+  </data>
+  <data name="MethodAny" xml:space="preserve">
+    <value>Should have at least one method.</value>
+  </data>
+  <data name="MethodBodyEmpty" xml:space="preserve">
+    <value>Method body should be empty.</value>
+  </data>
+  <data name="MethodCreateSameInterface" xml:space="preserve">
+    <value>Method should create an interface of this class but not this class itself.</value>
+  </data>
+  <data name="MethodCreateType" xml:space="preserve">
+    <value>Method should create {0}.</value>
+  </data>
+  <data name="MethodModifierNotPrivate" xml:space="preserve">
+    <value>Method should not be private.</value>
+  </data>
+  <data name="MethodModifierPublic" xml:space="preserve">
+    <value>Method should be public.</value>
+  </data>
+  <data name="MethodModifierStatic" xml:space="preserve">
+    <value>Method should be static.</value>
+  </data>
+  <data name="MethodOverride" xml:space="preserve">
+    <value>Method should override or is implemented.</value>
+  </data>
+  <data name="MethodParameterNone" xml:space="preserve">
+    <value>Class should have no methods with this parameter type {0}.</value>
+  </data>
+  <data name="MethodParameters" xml:space="preserve">
+    <value>Method should have a parameter with type {0}.</value>
+  </data>
+  <data name="MethodReturnType" xml:space="preserve">
+    <value>Method should return {0}.</value>
+  </data>
+  <data name="NodeAbstractOrInterface" xml:space="preserve">
+    <value>Class should be abstract or an interface.</value>
+  </data>
+  <data name="NodeDoesNotCreate" xml:space="preserve">
+    <value>Node should not make other classes.</value>
+  </data>
+  <data name="NodeDoesNotUse" xml:space="preserve">
+    <value>Node should not use other classes.</value>
+  </data>
+  <data name="NodeImplementedByAny" xml:space="preserve">
+    <value>Should be implemented by a class.</value>
+  </data>
+  <data name="NodeModifierAbstract" xml:space="preserve">
+    <value>Class should be abstract.</value>
+  </data>
+  <data name="NodeTypeClass" xml:space="preserve">
+    <value>Should be a class.</value>
+  </data>
+  <data name="NodeUsedByAny" xml:space="preserve">
+    <value>This class should be used by other classes.</value>
+  </data>
+  <data name="NodeUses1" xml:space="preserve">
+    <value>Node must have atleast 1 uses relation.</value>
   </data>
   <data name="ObjectAdapter" xml:space="preserve">
     <value>Object adapter</value>
   </data>
+  <data name="ObserverMethodParameters" xml:space="preserve">
+    <value>There should be 2 methods which both have one of the same parameters {0}.</value>
+  </data>
+  <data name="Parent" xml:space="preserve">
+    <value>Should be extended by or implemented by a class.</value>
+  </data>
   <data name="SingletonConstructor" xml:space="preserve">
     <value>Private constructor</value>
   </data>
-  <data name="SingletonConstructorModifier" xml:space="preserve">
-    <value>Singleton constructor should not be public.</value>
-  </data>
   <data name="SingletonField" xml:space="preserve">
     <value>Has instance of itself</value>
-  </data>
-  <data name="SingletonFieldModifierPriv1ate" xml:space="preserve">
-    <value>Singleton field should not be public.</value>
-  </data>
-  <data name="SingletonFieldModifierPrivate" xml:space="preserve">
-    <value>Singleton field should not be public.</value>
-  </data>
-  <data name="SingletonFieldModifierStatic" xml:space="preserve">
-    <value>Singleton field should be static.</value>
   </data>
   <data name="SingletonFieldType" xml:space="preserve">
     <value>Singleton field type should be {0}.</value>
@@ -213,13 +252,10 @@
   <data name="SingletonMethod" xml:space="preserve">
     <value>Has GetInstance()</value>
   </data>
-  <data name="SingletonMethodModifier" xml:space="preserve">
-    <value>Singleton method should be public.</value>
-  </data>
   <data name="SingletonMethodReturnCreationType" xml:space="preserve">
     <value>Singleton method should be able to return a new Singleton.</value>
   </data>
   <data name="SingletonMethodReturnType" xml:space="preserve">
-    <value>Singleton method  shoudl return itself.</value>
+    <value>Singleton method  should return itself.</value>
   </data>
 </root>

@@ -16,22 +16,22 @@ namespace IDesign.Recognizers
 
             var methodChecks = new List<ICheck<IMethod>>
             {
-                new ElementCheck<IMethod>(x => x.CheckReturnType(entityNode.GetName()), new ResourceMessage("SingletonMethodReturnType", new [] { entityNode.GetName() } )),
-                new ElementCheck<IMethod>(x => x.CheckModifier("static"), new ResourceMessage("SingletonMethodModifier")),
+                new ElementCheck<IMethod>(x => x.CheckReturnType(entityNode.GetName()), new ResourceMessage("MethodReturnType", new [] { entityNode.GetName() } )),
+                new ElementCheck<IMethod>(x => x.CheckModifier("static"), new ResourceMessage("MethodModifierStatic")),
                 new ElementCheck<IMethod>(x => x.CheckReturnTypeSameAsCreation(),
                    new ResourceMessage("SingletonMethodReturnCreationType"))
             };
 
             var propertyChecks = new List<ICheck<IField>>
             {
-                new ElementCheck<IField>(x => x.CheckFieldType(new List<string>(){ entityNode.GetName() }), new ResourceMessage("SingletonFieldType", new []{ entityNode.GetName()})),
-                new ElementCheck<IField>(x => x.CheckMemberModifier("static"), new ResourceMessage("SingletonFieldModifierStatic")),
-                new ElementCheck<IField>(x => !x.CheckMemberModifier("public"), new ResourceMessage("SingletonFieldModifierPrivate"))
+                new ElementCheck<IField>(x => x.CheckFieldType(new List<string>(){ entityNode.GetName() }), new ResourceMessage("FieldType", new []{ entityNode.GetName()})),
+                new ElementCheck<IField>(x => x.CheckMemberModifier("static"), new ResourceMessage("FieldModifierStatic")),
+                new ElementCheck<IField>(x => !x.CheckMemberModifier("public"), new ResourceMessage("FieldModifierNotPublic"))
             };
 
             var constructorChecks = new List<ICheck<IMethod>>
             {
-                new ElementCheck<IMethod>(x => !x.CheckModifier("public"), new ResourceMessage("SingletonConstructorModifier"))
+                new ElementCheck<IMethod>(x => !x.CheckModifier("public"), new ResourceMessage("ConstructorModifierNotPublic"))
             };
 
 

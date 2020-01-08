@@ -7,32 +7,40 @@ namespace IDesign.Recognizers.Models.Output
 {
     public class CheckResult : ICheckResult
     {
-        public CheckResult(string message, FeedbackType feedbackType, SyntaxNode node)
+        public CheckResult(string message, FeedbackType feedbackType, ICheckable element)
         {
             Message = message;
             FeedbackType = feedbackType;
-            Node = node;
+            Element = element;
         }
 
 
-        public CheckResult(IResourceMessage feedback, FeedbackType feedbackType, SyntaxNode node)
+        public CheckResult(IResourceMessage feedback, FeedbackType feedbackType, ICheckable element)
         {
             _feedback = feedback;
             FeedbackType = feedbackType;
-            Node = node;
+            Element = element;
+        }
 
-        public CheckResult(string message, FeedbackType feedbackType, SyntaxNode node, int score)
+        public CheckResult(IResourceMessage feedback, FeedbackType feedbackType, ICheckable element, int score)
+        {
+            _feedback = feedback;
+            FeedbackType = feedbackType;
+            Element = element;
+            Score = score;
+        }
+        public CheckResult(string message, FeedbackType feedbackType, ICheckable element, int score)
         {
             Message = message;
             FeedbackType = feedbackType;
-            Node = node;
+            Element = element;
             Score = score;
 
         }
 
         public string Message { get; set; }
         public FeedbackType FeedbackType { get; set; }
-        public SyntaxNode Node { get; set; }
+        public ICheckable Element { get; set; }
         public List<ICheckResult> ChildFeedback { get; set; } = new List<ICheckResult>();
 
 
@@ -41,10 +49,7 @@ namespace IDesign.Recognizers.Models.Output
         public float Score { get; set; }
 
 
-        public string GetMessage()
-        {
-            return Message;
-        }
+        
 
         public IEnumerable<ICheckResult> GetChildFeedback()
         {
@@ -85,9 +90,9 @@ namespace IDesign.Recognizers.Models.Output
             return feedback;
         }
 
-        public SyntaxNode GetSyntaxNode()
+        public ICheckable GetElement()
         {
-            return Node;
+            return Element;
         }
 
         public IResourceMessage GetFeedback()

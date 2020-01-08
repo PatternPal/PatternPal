@@ -6,6 +6,7 @@ using CommonResources;
 using IDesign.Core;
 using IDesign.Core.Models;
 using IDesign.Recognizers.Abstractions;
+using Microsoft.CodeAnalysis;
 using NDesk.Options;
 
 namespace IDesign.ConsoleApp
@@ -74,8 +75,8 @@ namespace IDesign.ConsoleApp
 
             foreach (var pattern in selectedPatterns) Console.WriteLine(" - " + pattern.Name);
 
-           // recognizerRunner.OnProgressUpdate += (sender, progress) =>
-             //   DrawTextProgressBar(progress.Status, progress.CurrentPercentage, 100);
+            // recognizerRunner.OnProgressUpdate += (sender, progress) =>
+            //   DrawTextProgressBar(progress.Status, progress.CurrentPercentage, 100);
 
             recognizerRunner.CreateGraph(selectedFiles);
             var results = recognizerRunner.Run(selectedPatterns);
@@ -106,7 +107,7 @@ namespace IDesign.ConsoleApp
 
             for (var i = 0; i < results.Count; i++)
             {
-                if (results[i].Result.GetScore() < 79) continue;
+                if (results[i].Result.GetScore() < 0) continue;
                 Console.Write($"{i}) {results[i].EntityNode.GetName()} | {results[i].Pattern.Name}: ");
 
                 PrintScore(results[i].Result.GetScore());
@@ -132,7 +133,7 @@ namespace IDesign.ConsoleApp
 
             if (result.GetFeedbackType() == FeedbackType.SemiCorrect)
             {
-                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.ForegroundColor = ConsoleColor.Yellow;
                 symbol = "-";
             }
 
@@ -141,8 +142,7 @@ namespace IDesign.ConsoleApp
                 Console.ForegroundColor = ConsoleColor.Green;
                 symbol = "✓";
             }
-
-            Console.WriteLine(new string('\t', depth) + symbol + $" {ClassFeedbackRes.ResourceMessageToString(result.GetFeedback())}");
+            Console.WriteLine(new string('\t', depth) + symbol + Resources.ResultToString(result));
 
             foreach (var child in result.GetChildFeedback())
             {
@@ -166,6 +166,12 @@ namespace IDesign.ConsoleApp
             Console.WriteLine(score);
 
             Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        private static string NodeToString(SyntaxNode sNode)
+        {
+            if (sNode == null) return "";
+            return sNode.ToString();
         }
 
         /// <summary>
@@ -203,5 +209,6 @@ namespace IDesign.ConsoleApp
             string output = progress.ToString() + " of " + total.ToString();
             Console.Write(output.PadRight(15) + stepDescription); //pad the output so when changing from 3 to 4 digits we avoid text shifting
         }
+
     }
 }

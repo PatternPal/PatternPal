@@ -22,22 +22,22 @@ namespace IDesign.Recognizers
             IEntityNode currentComponent = null;
             var decoratorCheck = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>()
             {
-                new ElementCheck<IEntityNode>(x => x.CheckModifier("Abstract"), new ResourceMessage("DecoratorNodeModifier")),
-                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.Extends, 1) || x.CheckMinimalAmountOfRelationTypes(RelationType.Implements, 1), new ResourceMessage("DecoratorNodeParent")),
-                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.ExtendedBy, 1), new ResourceMessage("DecoratorNodeChild")),
+                new ElementCheck<IEntityNode>(x => x.CheckModifier("Abstract"), new ResourceMessage("NodeModifierAbstract")),
+                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.Extends, 1) || x.CheckMinimalAmountOfRelationTypes(RelationType.Implements, 1), new ResourceMessage("Parent")),
+                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.ExtendedBy, 1), new ResourceMessage("Child")),
                 
                 //Component checks
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>{
-                    new ElementCheck<IEntityNode>(x => {currentComponent = x; return x.GetMethods().Any(); }, new ResourceMessage("DecoratorComponentMethodAny")),
+                    new ElementCheck<IEntityNode>(x => {currentComponent = x; return x.GetMethods().Any(); }, new ResourceMessage("MethodAny")),
                     new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.ExtendedBy, 2) || x.CheckMinimalAmountOfRelationTypes(RelationType.ImplementedBy, 2), new ResourceMessage("DecoratorComponentChild")),
 
                     new GroupCheck<IEntityNode, IMethod>( new List<ICheck<IMethod>>{
-                        new ElementCheck<IMethod>(x => x.CheckModifier("public") || x.CheckModifier("protected") , new ResourceMessage("DecoratorComponentMethodModifier")),
-                        new ElementCheck<IMethod>(x => x.CheckParameters(new List<string>{currentComponent.GetName() }), new ResourceMessage("DecoratorComponentMethodParameters", new []{ currentComponent.GetName()}))
+                        new ElementCheck<IMethod>(x => x.CheckModifier("public") || x.CheckModifier("protected") , new ResourceMessage("MethodModifierNotPrivate")),
+                        new ElementCheck<IMethod>(x => x.CheckParameters(new List<string>{currentComponent.GetName() }), new ResourceMessage("MethodParameters", new []{ currentComponent.GetName()}))
 
                     }, x => entityNode.GetConstructors(), "Constructor"),
                     new GroupCheck<IEntityNode, IField>( new List<ICheck<IField>>{
-                        new ElementCheck<IField>(x => x.CheckFieldType(new List<string>{currentComponent.GetName() }) , new ResourceMessage("DecoratorComponentFieldType", new []{ currentComponent.GetName()}))
+                        new ElementCheck<IField>(x => x.CheckFieldType(new List<string>{currentComponent.GetName() }) , new ResourceMessage("FieldType", new []{ currentComponent.GetName()}))
 
                     }, x => entityNode.GetFields(), "Field"),
 
@@ -45,8 +45,8 @@ namespace IDesign.Recognizers
                     new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>{
                         new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                         {
-                            new ElementCheck<IMethod>(x => x.CheckModifier("public"), new ResourceMessage("DecoratorConcreteMethodModifier")),
-                            new ElementCheck<IMethod>(x => x.CheckParameters(new List<string>() { currentComponent.GetName() }), new ResourceMessage("DecoratorConcreteMethodParameters", new[]{currentComponent.GetName()})),
+                            new ElementCheck<IMethod>(x => x.CheckModifier("public"), new ResourceMessage("MethodModifierPublic")),
+                            new ElementCheck<IMethod>(x => x.CheckParameters(new List<string>() { currentComponent.GetName() }), new ResourceMessage("MethodParameters", new[]{currentComponent.GetName()})),
                             new ElementCheck<IMethod>(x => x.CheckArguments(currentComponent.GetName()), new ResourceMessage("DecoratorConcreteMethodArguments"))
 
                         }, x => x.GetConstructors(), "Constructor")

@@ -106,7 +106,7 @@ namespace CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All Adapter methods should call adaptee.
+        ///   Looks up a localized string similar to All Adapter methods should call adaptee..
         /// </summary>
         public static string AdapterMethod {
             get {
@@ -115,16 +115,7 @@ namespace CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adapter method should override or is ipmlemented.
-        /// </summary>
-        public static string AdapterMethodOverride {
-            get {
-                return ResourceManager.GetString("AdapterMethodOverride", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Adapter method should return adaptee.
+        ///   Looks up a localized string similar to Adapter method should return adaptee..
         /// </summary>
         public static string AdapterMethodReturnType {
             get {
@@ -133,7 +124,7 @@ namespace CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adapter method uses adpatee.
+        ///   Looks up a localized string similar to Adapter method uses adpatee..
         /// </summary>
         public static string AdapterMethodUses {
             get {
@@ -142,11 +133,20 @@ namespace CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adapter should be extended by or implemented by.
+        ///   Looks up a localized string similar to Should be extended by a class..
         /// </summary>
-        public static string AdapterParent {
+        public static string Child {
             get {
-                return ResourceManager.GetString("AdapterParent", resourceCulture);
+                return ResourceManager.GetString("Child", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Constructor should not be public..
+        /// </summary>
+        public static string ConstructorModifierNotPublic {
+            get {
+                return ResourceManager.GetString("ConstructorModifierNotPublic", resourceCulture);
             }
         }
         
@@ -160,47 +160,11 @@ namespace CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Decorator component should be implemented or extended by one other class.
+        ///   Looks up a localized string similar to Should be implemented or extended by one other class..
         /// </summary>
-        public static string DecoratorComponentChilDecoratorComponentChild {
+        public static string DecoratorComponentChild {
             get {
-                return ResourceManager.GetString("DecoratorComponentChilDecoratorComponentChild", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Decorator component field should be {0}.
-        /// </summary>
-        public static string DecoratorComponentFieldType {
-            get {
-                return ResourceManager.GetString("DecoratorComponentFieldType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Decorator component should have at least one method.
-        /// </summary>
-        public static string DecoratorComponentMethodAny {
-            get {
-                return ResourceManager.GetString("DecoratorComponentMethodAny", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Decorator component should method should be public or protected.
-        /// </summary>
-        public static string DecoratorComponentMethodModifier {
-            get {
-                return ResourceManager.GetString("DecoratorComponentMethodModifier", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Decorator component method should have a parameter with type {0}.
-        /// </summary>
-        public static string DecoratorComponentMethodParameters {
-            get {
-                return ResourceManager.GetString("DecoratorComponentMethodParameters", resourceCulture);
+                return ResourceManager.GetString("DecoratorComponentChild", resourceCulture);
             }
         }
         
@@ -214,7 +178,7 @@ namespace CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Concrete decorator method should use {0} and call its base.
+        ///   Looks up a localized string similar to Concrete decorator method should use {0} and call its base..
         /// </summary>
         public static string DecoratorConcreteMethodArguments {
             get {
@@ -223,47 +187,218 @@ namespace CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Concrete decorator method should be public.
+        ///   Looks up a localized string similar to Field should not be public..
         /// </summary>
-        public static string DecoratorConcreteMethodModifier {
+        public static string FieldModifierNotPublic {
             get {
-                return ResourceManager.GetString("DecoratorConcreteMethodModifier", resourceCulture);
+                return ResourceManager.GetString("FieldModifierNotPublic", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Concrete decorator method should have a parameter with type {0}.
+        ///   Looks up a localized string similar to Field should be private..
         /// </summary>
-        public static string DecoratorConcreteMethodParameters {
+        public static string FieldModifierPrivate {
             get {
-                return ResourceManager.GetString("DecoratorConcreteMethodParameters", resourceCulture);
+                return ResourceManager.GetString("FieldModifierPrivate", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Decorator should be extended by a class.
+        ///   Looks up a localized string similar to Field should be static..
         /// </summary>
-        public static string DecoratorNodeChild {
+        public static string FieldModifierStatic {
             get {
-                return ResourceManager.GetString("DecoratorNodeChild", resourceCulture);
+                return ResourceManager.GetString("FieldModifierStatic", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Decorator should be abstract..
+        ///   Looks up a localized string similar to Field type should be {0}..
         /// </summary>
-        public static string DecoratorNodeModifier {
+        public static string FieldType {
             get {
-                return ResourceManager.GetString("DecoratorNodeModifier", resourceCulture);
+                return ResourceManager.GetString("FieldType", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Decorator should extend or implement a class.
+        ///   Looks up a localized string similar to There should be atleast 3 methods: add, remove and notify..
         /// </summary>
-        public static string DecoratorNodeParent {
+        public static string MethodAmountThree {
             get {
-                return ResourceManager.GetString("DecoratorNodeParent", resourceCulture);
+                return ResourceManager.GetString("MethodAmountThree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should have at least one method..
+        /// </summary>
+        public static string MethodAny {
+            get {
+                return ResourceManager.GetString("MethodAny", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method body should be empty..
+        /// </summary>
+        public static string MethodBodyEmpty {
+            get {
+                return ResourceManager.GetString("MethodBodyEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method should create an interface of this class but not this class itself..
+        /// </summary>
+        public static string MethodCreateSameInterface {
+            get {
+                return ResourceManager.GetString("MethodCreateSameInterface", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method should create {0}..
+        /// </summary>
+        public static string MethodCreateType {
+            get {
+                return ResourceManager.GetString("MethodCreateType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method should not be private..
+        /// </summary>
+        public static string MethodModifierNotPrivate {
+            get {
+                return ResourceManager.GetString("MethodModifierNotPrivate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method should be public..
+        /// </summary>
+        public static string MethodModifierPublic {
+            get {
+                return ResourceManager.GetString("MethodModifierPublic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method should be static..
+        /// </summary>
+        public static string MethodModifierStatic {
+            get {
+                return ResourceManager.GetString("MethodModifierStatic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method should override or is implemented..
+        /// </summary>
+        public static string MethodOverride {
+            get {
+                return ResourceManager.GetString("MethodOverride", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Class should have no methods with this parameter type {0}..
+        /// </summary>
+        public static string MethodParameterNone {
+            get {
+                return ResourceManager.GetString("MethodParameterNone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method should have a parameter with type {0}..
+        /// </summary>
+        public static string MethodParameters {
+            get {
+                return ResourceManager.GetString("MethodParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method should return {0}..
+        /// </summary>
+        public static string MethodReturnType {
+            get {
+                return ResourceManager.GetString("MethodReturnType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Class should be abstract or an interface..
+        /// </summary>
+        public static string NodeAbstractOrInterface {
+            get {
+                return ResourceManager.GetString("NodeAbstractOrInterface", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Node should not make other classes..
+        /// </summary>
+        public static string NodeDoesNotCreate {
+            get {
+                return ResourceManager.GetString("NodeDoesNotCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Node should not use other classes..
+        /// </summary>
+        public static string NodeDoesNotUse {
+            get {
+                return ResourceManager.GetString("NodeDoesNotUse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should be implemented by a class..
+        /// </summary>
+        public static string NodeImplementedByAny {
+            get {
+                return ResourceManager.GetString("NodeImplementedByAny", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Class should be abstract..
+        /// </summary>
+        public static string NodeModifierAbstract {
+            get {
+                return ResourceManager.GetString("NodeModifierAbstract", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should be a class..
+        /// </summary>
+        public static string NodeTypeClass {
+            get {
+                return ResourceManager.GetString("NodeTypeClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This class should be used by other classes..
+        /// </summary>
+        public static string NodeUsedByAny {
+            get {
+                return ResourceManager.GetString("NodeUsedByAny", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Node must have atleast 1 uses relation..
+        /// </summary>
+        public static string NodeUses1 {
+            get {
+                return ResourceManager.GetString("NodeUses1", resourceCulture);
             }
         }
         
@@ -277,6 +412,24 @@ namespace CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There should be 2 methods which both have one of the same parameters {0}..
+        /// </summary>
+        public static string ObserverMethodParameters {
+            get {
+                return ResourceManager.GetString("ObserverMethodParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should be extended by or implemented by a class..
+        /// </summary>
+        public static string Parent {
+            get {
+                return ResourceManager.GetString("Parent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Private constructor.
         /// </summary>
         public static string SingletonConstructor {
@@ -286,47 +439,11 @@ namespace CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Singleton constructor should not be public..
-        /// </summary>
-        public static string SingletonConstructorModifier {
-            get {
-                return ResourceManager.GetString("SingletonConstructorModifier", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Has instance of itself.
         /// </summary>
         public static string SingletonField {
             get {
                 return ResourceManager.GetString("SingletonField", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Singleton field should not be public..
-        /// </summary>
-        public static string SingletonFieldModifierPriv1ate {
-            get {
-                return ResourceManager.GetString("SingletonFieldModifierPriv1ate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Singleton field should not be public..
-        /// </summary>
-        public static string SingletonFieldModifierPrivate {
-            get {
-                return ResourceManager.GetString("SingletonFieldModifierPrivate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Singleton field should be static..
-        /// </summary>
-        public static string SingletonFieldModifierStatic {
-            get {
-                return ResourceManager.GetString("SingletonFieldModifierStatic", resourceCulture);
             }
         }
         
@@ -349,15 +466,6 @@ namespace CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Singleton method should be public..
-        /// </summary>
-        public static string SingletonMethodModifier {
-            get {
-                return ResourceManager.GetString("SingletonMethodModifier", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Singleton method should be able to return a new Singleton..
         /// </summary>
         public static string SingletonMethodReturnCreationType {
@@ -367,7 +475,7 @@ namespace CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Singleton method  shoudl return itself..
+        ///   Looks up a localized string similar to Singleton method  should return itself..
         /// </summary>
         public static string SingletonMethodReturnType {
             get {
