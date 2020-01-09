@@ -199,7 +199,7 @@
     <value>Concrete creator should have at least one method.</value>
   </data>
   <data name="FactoryConcreteProductMethodAny" xml:space="preserve">
-    <value>Concrete product should have at least one method</value>
+    <value>Concrete product should have at least one method.</value>
   </data>
   <data name="FactoryCreates" xml:space="preserve">
     <value>Product of the factory method</value>
