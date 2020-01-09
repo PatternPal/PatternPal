@@ -73,14 +73,12 @@ namespace IDesign.Extension
         private void CreateResultViewModels(IEnumerable<RecognitionResult> results)
         {
             var viewModels = new List<ResultViewModel>();
-
-            foreach (var item in RecognizerRunner.designPatterns)
+            foreach (var patterns in from item in RecognizerRunner.designPatterns
+                                     let patterns = results.Where(x => x.Pattern.Equals(item))
+                                     where patterns.Count() > 0
+                                     select patterns)
             {
-                var patterns = results.Where(x => x.Pattern.Equals(item));
-                if (patterns.Count() > 0)
-                {
-                    viewModels.AddRange(patterns.OrderBy(x => x.Result.GetScore()).Select(x => new ResultViewModel(x)));
-                }
+                viewModels.AddRange(patterns.OrderBy(x => x.Result.GetScore()).Select(x => new ResultViewModel(x)));
             }
 
             // - Change your UI information here
@@ -144,17 +142,16 @@ namespace IDesign.Extension
 
         private void SelectProjectFromFile(string path = null)
         {
-            foreach (var project in Projects)
-            {
-                foreach (var index in from doc in project.Documents
+            foreach (var index in from project in Projects
+                                  from index in
+                                      from doc in project.Documents
                                       where doc.FilePath == path
                                       let index = Projects.IndexOf(project)
-                                      select index)
-                {
-                    SelectPaths.ProjectSelection.SelectedIndex = index;
-                    return;
-
-                }
+                                      select index
+                                  select index)
+            {
+                SelectPaths.ProjectSelection.SelectedIndex = index;
+                return;
             }
         }
 
@@ -188,25 +185,25 @@ namespace IDesign.Extension
                         var results = runner.Run(SelectedPatterns);
 
 
-                    //Here you signal the UI thread to execute the action:
-                    Dispatcher?.BeginInvoke(new Action(() =>
-                        {
-
-                            var allResults = results;
-                            if ((bool)SelectPaths.radio1.IsChecked)
+                        //Here you signal the UI thread to execute the action:
+                        Dispatcher?.BeginInvoke(new Action(() =>
                             {
-                                results = results.Where(x => x.FilePath == cur).ToList();
-                                SummaryRow.Height = new GridLength(100);
-                            }
-                            else
-                            {
-                                results = results.Where(x => x.Result.GetScore() >= 80).ToList();
-                                SummaryRow.Height = new GridLength(0);
-                            }
 
-                            SummaryControl.Text = SummaryFactory.CreateSummary(results, allResults);
-                            CreateResultViewModels(results);
-                        }));
+                                var allResults = results;
+                                if ((bool)SelectPaths.radio1.IsChecked)
+                                {
+                                    results = results.Where(x => x.FilePath == cur).ToList();
+                                    SummaryRow.Height = new GridLength(100);
+                                }
+                                else
+                                {
+                                    results = results.Where(x => x.Result.GetScore() >= 80).ToList();
+                                    SummaryRow.Height = new GridLength(0);
+                                }
+
+                                SummaryControl.Text = SummaryFactory.CreateSummary(results, allResults);
+                                CreateResultViewModels(results);
+                            }));
 
                     }
                     catch (Exception e)

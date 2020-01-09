@@ -11,26 +11,35 @@ namespace IDesign.Extension
 {
     class SummaryFactory
     {
-
         private string CreateFilesAnalysedSummary(IEnumerable<string> uniqueFiles, IEnumerable<IEntityNode> uniqueEntityNodes)
         {
             var result = "";
             if (uniqueFiles.Count() <= 1)
-                result += SummaryRescources.OneFile + " ";
+            {
+                result += $"{SummaryRescources.OneFile} ";
+            }
             else
-                result += string.Format(SummaryRescources.MultipleFiles, uniqueFiles.Count()) + " ";
+            {
+                result += $"{string.Format(SummaryRescources.MultipleFiles, uniqueFiles.Count())} ";
+            }
 
-            if (uniqueEntityNodes.Count() == 1)
-                result += SummaryRescources.OneEntityNodeAnalysed + " ";
-            else
-                result += string.Format(SummaryRescources.MultipleEntiyNodesAnalysed, uniqueEntityNodes.Count()) + " ";
-
+            switch (uniqueEntityNodes.Count())
+            {
+                case 1:
+                    result += $"{SummaryRescources.OneEntityNodeAnalysed} ";
+                    break;
+                default:
+                    result += $"{string.Format(SummaryRescources.MultipleEntiyNodesAnalysed, uniqueEntityNodes.Count())} ";
+                    break;
+            }
 
             return result;
         }
 
 
-        private string CreatePartOfPatternSummary(IEnumerable<string> uniqueFiles, IEnumerable<RecognitionResult> allResults, IEnumerable<IEntityNode> uniqueEntityNodes, ref int recognizedPatternsCount)
+        private string CreatePartOfPatternSummary(
+            IEnumerable<string> uniqueFiles, IEnumerable<RecognitionResult> allResults,
+            IEnumerable<IEntityNode> uniqueEntityNodes, ref int recognizedPatternsCount)
         {
             var resultList = "";
             if (uniqueFiles.Count() == 1)
@@ -39,16 +48,14 @@ namespace IDesign.Extension
                         allResults
                         .Where(x => x.Result.GetScore() >= 80)
                         .OrderByDescending(x => x.Result.GetScore());
-                foreach (var entityNode in uniqueEntityNodes)
+                foreach (var (entityNode, partOfPatterns) in from entityNode in uniqueEntityNodes
+                                                             let partOfPatterns = allRecognizedPatters
+                        .Where(x => x.Result.GetRelatedSubTypes().ContainsKey(entityNode))
+                                                             where partOfPatterns.Count() > 0
+                                                             select (entityNode, partOfPatterns))
                 {
-                    var partOfPatterns = allRecognizedPatters
-                        .Where(x => x.Result.GetRelatedSubTypes().ContainsKey(entityNode));
-
-                    if (partOfPatterns.Count() > 0)
-                    {
-                        resultList += Environment.NewLine + string.Format(SummaryRescources.ClassSeemsPartOf, entityNode.GetName(), partOfPatterns.First().Pattern.Name);
-                        recognizedPatternsCount++;
-                    }
+                    resultList += $"{Environment.NewLine}{string.Format(SummaryRescources.ClassSeemsPartOf, entityNode.GetName(), partOfPatterns.First().Pattern.Name)}";
+                    recognizedPatternsCount++;
                 }
             }
             return resultList;
@@ -57,14 +64,16 @@ namespace IDesign.Extension
 
         private string CreateNoPatternsFoundSummary(IEnumerable<RecognitionResult> results)
         {
-            
+
             var result = SummaryRescources.NoPatternsRecognized + " ";
-            var resultsWithScore = results.Where(x => x.Result.GetScore() > 0).OrderByDescending(x => x.Result.GetScore());
+            var resultsWithScore = results.Where(x => x.Result.GetScore() > 0)
+                                          .OrderByDescending(x => x.Result.GetScore());
 
             if (resultsWithScore.Count() > 0)
             {
                 var highestScored = resultsWithScore.First();
-                result += string.Format(SummaryRescources.ClassScoresHighestOn, highestScored.EntityNode.GetName(), highestScored.Pattern.Name);
+                result += string.Format(SummaryRescources.ClassScoresHighestOn, highestScored.EntityNode.GetName(),
+                                        highestScored.Pattern.Name);
             }
             return result;
         }
@@ -73,7 +82,9 @@ namespace IDesign.Extension
         {
             var result = "";
             if (results.Count() == 0)
+            {
                 return SummaryRescources.NothingClassesOrInterfacesFound;
+            }
 
             var uniqueFiles = results.Select(x => x.FilePath).Distinct();
             var uniqueEntityNodes = results.Select(x => x.EntityNode).Distinct();
@@ -86,14 +97,23 @@ namespace IDesign.Extension
             var resultList = CreatePartOfPatternSummary(uniqueFiles, allResults, uniqueEntityNodes, ref recognizedPatternsCount);
 
             if (resultList.Count() == 0 && recognizedPatternsCount == 0)
+            {
                 result += CreateNoPatternsFoundSummary(results);
-            else if (recognizedPatternsCount == 1)
-                result += SummaryRescources.OnePatternRecognized + " ";
-            else
-                result += string.Format(SummaryRescources.MultiplePatternsRecognized, recognizedPatternsCount) + " ";
+            }
+            else switch (recognizedPatternsCount)
+                {
+                    case 1:
+                        result += SummaryRescources.OnePatternRecognized + " ";
+                        break;
+                    default:
+                        result += $"{string.Format(SummaryRescources.MultiplePatternsRecognized, recognizedPatternsCount)} ";
+                        break;
+                }
 
             foreach (var recognizedPattern in recognizedPatters)
-                result += Environment.NewLine + string.Format(SummaryRescources.ClassSeemsPartOf, recognizedPattern.EntityNode.GetName(), recognizedPattern.Pattern.Name);
+            {
+                result += $"{Environment.NewLine}{string.Format(SummaryRescources.ClassSeemsPartOf, recognizedPattern.EntityNode.GetName(), recognizedPattern.Pattern.Name)}";
+            }
 
             result += resultList;
 
