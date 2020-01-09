@@ -12,6 +12,9 @@ namespace IDesign.Tests.Recognizers
     {
         [Test]
         [TestCase("MethodReturnType", "BeerFactory", "Method should return BeerFactory.")]
+        [TestCase("MethodReturnType", "Hello", "Method should return Hello.")]
+        [TestCase("NodeAbstractOrInterface", "", "Class should be abstract or an interface.")]
+        [TestCase("NodeAbstractOrInterface", "BeerFactory", "Class should be abstract or an interface.")]
         public void ResourceMessage_Should_Be(string key, string parameter, string resourceMessage)
         {
           var rs =   new ResourceMessage(key, new[] { parameter });
