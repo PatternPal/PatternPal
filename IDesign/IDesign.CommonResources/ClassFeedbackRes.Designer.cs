@@ -70,7 +70,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adapter Field should have adaptee as type.
+        ///   Looks up a localized string similar to Adapter field should have adaptee as type.
         /// </summary>
         public static string AdapteeField {
             get {
@@ -79,7 +79,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adaptee should be  used by adapter.
+        ///   Looks up a localized string similar to Adaptee should be  used by an adapter..
         /// </summary>
         public static string AdapteeIsUsed {
             get {
@@ -502,6 +502,15 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Method should return this class..
+        /// </summary>
+        public static string MethodReturnItself {
+            get {
+                return ResourceManager.GetString("MethodReturnItself", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Method should return {0}..
         /// </summary>
         public static string MethodReturnType {
@@ -682,15 +691,6 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Singleton field type should be {0}..
-        /// </summary>
-        public static string SingletonFieldType {
-            get {
-                return ResourceManager.GetString("SingletonFieldType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Has GetInstance().
         /// </summary>
         public static string SingletonMethod {
@@ -705,15 +705,6 @@ namespace IDesign.CommonResources {
         public static string SingletonMethodReturnCreationType {
             get {
                 return ResourceManager.GetString("SingletonMethodReturnCreationType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Singleton method  should return itself..
-        /// </summary>
-        public static string SingletonMethodReturnType {
-            get {
-                return ResourceManager.GetString("SingletonMethodReturnType", resourceCulture);
             }
         }
         

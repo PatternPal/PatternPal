@@ -121,10 +121,10 @@
     <value>Adaptee should Extends an the adapter</value>
   </data>
   <data name="AdapteeField" xml:space="preserve">
-    <value>Adapter Field should have adaptee as type</value>
+    <value>Adapter field should have adaptee as type</value>
   </data>
   <data name="AdapteeIsUsed" xml:space="preserve">
-    <value>Adaptee should be  used by adapter</value>
+    <value>Adaptee should be  used by an adapter.</value>
   </data>
   <data name="AdapterAdaptee" xml:space="preserve">
     <value>Has adaptee</value>
@@ -264,6 +264,9 @@
   <data name="MethodParameters" xml:space="preserve">
     <value>Method should have a parameter with type {0}.</value>
   </data>
+  <data name="MethodReturnItself" xml:space="preserve">
+    <value>Method should return this class.</value>
+  </data>
   <data name="MethodReturnType" xml:space="preserve">
     <value>Method should return {0}.</value>
   </data>
@@ -324,17 +327,11 @@
   <data name="SingletonField" xml:space="preserve">
     <value>Has instance of itself</value>
   </data>
-  <data name="SingletonFieldType" xml:space="preserve">
-    <value>Singleton field type should be {0}.</value>
-  </data>
   <data name="SingletonMethod" xml:space="preserve">
     <value>Has GetInstance()</value>
   </data>
   <data name="SingletonMethodReturnCreationType" xml:space="preserve">
     <value>Singleton method should be able to return a new Singleton.</value>
-  </data>
-  <data name="SingletonMethodReturnType" xml:space="preserve">
-    <value>Singleton method  should return itself.</value>
   </data>
   <data name="State" xml:space="preserve">
     <value>Parent class or interface of the concrete state class</value>
