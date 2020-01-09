@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AdapteeExtendsApter" xml:space="preserve">
-    <value>Adaptee should Extends an the adapter</value>
+    <value>Adaptee should extend an adapter.</value>
   </data>
   <data name="AdapteeField" xml:space="preserve">
     <value>Adapter Field should have adaptee as type</value>
