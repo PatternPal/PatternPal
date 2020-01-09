@@ -22,22 +22,22 @@ namespace IDesign.Recognizers
             IEntityNode currentComponent = null;
             var decoratorCheck = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>()
             {
-                new ElementCheck<IEntityNode>(x => x.CheckModifier("Abstract"), "Is abstract"),
-                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.Extends, 1) || x.CheckMinimalAmountOfRelationTypes(RelationType.Implements, 1), "Has an interface or an parent class"),
-                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.ExtendedBy, 1), "Extends a different class"),
+                new ElementCheck<IEntityNode>(x => x.CheckModifier("Abstract"), "Is abstract", 0.5f),
+                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.Extends, 1) || x.CheckMinimalAmountOfRelationTypes(RelationType.Implements, 1), "Has an interface or an parent class", 1),
+                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.ExtendedBy, 1), "Extends a different class", 1),
                 
                 //Component checks
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>{
-                    new ElementCheck<IEntityNode>(x => {currentComponent = x; return x.GetMethods().Any(); }, "Has functions"),
-                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.ExtendedBy, 2) || x.CheckMinimalAmountOfRelationTypes(RelationType.ImplementedBy, 2), "Extended or implemented by a different class"),
+                    new ElementCheck<IEntityNode>(x => {currentComponent = x; return x.GetMethods().Any(); }, "Has functions", 1),
+                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.ExtendedBy, 2) || x.CheckMinimalAmountOfRelationTypes(RelationType.ImplementedBy, 2), "Extended or implemented by a different class", 1),
 
                     new GroupCheck<IEntityNode, IMethod>( new List<ICheck<IMethod>>{
-                        new ElementCheck<IMethod>(x => x.CheckModifier("public") || x.CheckModifier("protected") , "Is public or protected"),
-                        new ElementCheck<IMethod>(x => x.CheckParameters(new List<string>{currentComponent.GetName() }), "Has the interface of an parent class as parameter")
+                        new ElementCheck<IMethod>(x => x.CheckModifier("public") || x.CheckModifier("protected") , "Is public or protected", 1),
+                        new ElementCheck<IMethod>(x => x.CheckParameters(new List<string>{currentComponent.GetName() }), "Has the interface of an parent class as parameter", 1)
 
                     }, x => entityNode.GetConstructors(), "Constructor"),
                     new GroupCheck<IEntityNode, IField>( new List<ICheck<IField>>{
-                        new ElementCheck<IField>(x => x.CheckFieldType(new List<string>{currentComponent.GetName() }) , "Has the interface saved as a property or field")
+                        new ElementCheck<IField>(x => x.CheckFieldType(new List<string>{currentComponent.GetName() }) , "Has the interface saved as a property or field", 2)
 
                     }, x => entityNode.GetFields(), "Field"),
 
@@ -45,11 +45,16 @@ namespace IDesign.Recognizers
                     new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>{
                         new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                         {
-                            new ElementCheck<IMethod>(x => x.CheckModifier("public"), "Is public or protected"),
-                            new ElementCheck<IMethod>(x => x.CheckParameters(new List<string>() { currentComponent.GetName() }), "Has the interface or parent class as parameter"),
-                            new ElementCheck<IMethod>(x => x.CheckArguments(currentComponent.GetName()), "Sends the interface or parent class parameter in base")
+                            new ElementCheck<IMethod>(x => x.CheckModifier("public"), "Is public or protected", 1),
+                            new ElementCheck<IMethod>(x => x.CheckParameters(new List<string>() { currentComponent.GetName() }), "Has the interface or parent class as parameter", 1),
+                            new ElementCheck<IMethod>(x => x.CheckArguments(currentComponent.GetName()), "Sends the interface or parent class parameter in base", 1)
 
-                        }, x => x.GetConstructors(), "Constructor")
+                        }, x => x.GetConstructors(), "Constructor"),
+                        new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
+                        {
+                            new ElementCheck<IMethod>(x => x.CheckName(currentComponent.GetMethods()), "Contains overridden methods")
+
+                        }, x => x.GetMethods(), "Method")
                     }, x => entityNode.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.ExtendedBy)).Select(y => y.GetDestination()), "Concrete Decorator", GroupCheckType.Median)
 
                 }, x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Implements) || y.GetRelationType().Equals(RelationType.Extends)).Select(y => y.GetDestination()), "Interface or parent class")

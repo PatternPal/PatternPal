@@ -83,9 +83,7 @@ namespace IDesign.Extension
             {
                 var patterns = results.Where(x => x.Pattern.Equals(item));
                 if (patterns.Count() > 0)
-                {
                     viewModels.AddRange(patterns.OrderBy(x => x.Result.GetScore()).Select(x => new ResultViewModel(x)));
-                }
             }
 
             // - Change your UI information here
@@ -172,8 +170,7 @@ namespace IDesign.Extension
             LoadProject();
             var cur = GetCurrentPath().FirstOrDefault();
             SelectProjectFromFile(cur);
-            ChoosePath(); 
-
+            ChoosePath();
             var SelectedPatterns = ViewModels.Where(x => x.IsChecked).Select(x => x.Pattern).ToList();
 
             if (Loading || Paths.Count == 0 || SelectedPatterns.Count == 0)
