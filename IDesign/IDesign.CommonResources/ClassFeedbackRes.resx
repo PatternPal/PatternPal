@@ -277,7 +277,7 @@
     <value>Node should not use other classes.</value>
   </data>
   <data name="NodeImplementedByAny" xml:space="preserve">
-    <value>Should be implemented by a class.</value>
+    <value>Node should be implemented by a class.</value>
   </data>
   <data name="NodeModifierAbstract" xml:space="preserve">
     <value>Class should be abstract.</value>
