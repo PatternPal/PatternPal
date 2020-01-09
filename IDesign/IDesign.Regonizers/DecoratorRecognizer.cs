@@ -22,7 +22,6 @@ namespace IDesign.Recognizers
             IEntityNode currentComponent = null;
             var decoratorCheck = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>()
             {
-
                 new ElementCheck<IEntityNode>(x => x.CheckModifier("Abstract"), "Is abstract", 0.5f),
                 new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.Extends, 1) || x.CheckMinimalAmountOfRelationTypes(RelationType.Implements, 1), "Has an interface or an parent class", 1),
                 new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.ExtendedBy, 1), "Extends a different class", 1),
@@ -47,7 +46,6 @@ namespace IDesign.Recognizers
                     {
                         new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                         {
-
                             new ElementCheck<IMethod>(x => x.CheckModifier("public"), "Is public or protected", 1),
                             new ElementCheck<IMethod>(x => x.CheckParameters(new List<string>() { currentComponent.GetName() }), "Has the interface or parent class as parameter", 1),
                             new ElementCheck<IMethod>(x => x.CheckIfArgumentsExists(currentComponent.GetName()), "Sends the interface or parent class parameter in base", 1)

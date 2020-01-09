@@ -10,7 +10,6 @@ namespace IDesign.Recognizers.Models.Output
         Sum,
         Average
     }
-
     public class CheckResult : ICheckResult
     {
         public CheckCalculationType CalculationType { get; set; } = CheckCalculationType.Sum;

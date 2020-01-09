@@ -53,7 +53,6 @@ namespace IDesign.Recognizers
                                 new ElementCheck<IMethod>(x => x.CheckReturnType(productnode.GetName()), $"return type should be equal to the product",2),
                             }, x => node.GetMethodsAndProperties(), "method")
 
-
                         }, x => x.GetRelations().Where(y => (y.GetRelationType().Equals(RelationType.Extends)) ||
                         (y.GetRelationType().Equals(RelationType.Implements)))
                         .Select(y => y.GetDestination()),"implements/extends"),

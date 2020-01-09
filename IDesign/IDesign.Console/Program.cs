@@ -108,7 +108,6 @@ namespace IDesign.ConsoleApp
             options.WriteOptionDescriptions(Console.Out);
         }
 
-
         private static void PrintResults(List<RecognitionResult> results, List<string> selectedDirectories)
         {
             Console.WriteLine("\nResults:");
@@ -121,12 +120,16 @@ namespace IDesign.ConsoleApp
 
                 //If a directory was selected, show from which subdirectories the entitynode originated
                 if (selectedDirectories.Count > 0)
+                {
                     foreach (var item in selectedDirectories)
+                    {
                         if (results[i].EntityNode.GetSourceFile().Contains(item))
                         {
                             name = results[i].EntityNode.GetSourceFile().Replace(item, "");
                             break;
                         }
+                    }
+                }
 
                 Console.Write($"{i}) {name} | {results[i].Pattern.Name}: ");
 
@@ -145,8 +148,6 @@ namespace IDesign.ConsoleApp
 
         public static void PrintResult(ICheckResult result, int depth)
         {
-
-
             Console.ForegroundColor = ConsoleColor.Red;
             var symbol = "X";
 

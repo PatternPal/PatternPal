@@ -15,7 +15,8 @@ namespace IDesign.Recognizers.Models
 
         public IEnumerable<string> GetParameterTypes()
         {
-            return Constructor.ParameterList.Parameters.Select(x => (x.Type is TypeSyntax id ? id.ToString() : "")).ToList();
+            return Constructor.ParameterList.Parameters.Select(x => (x.Type is TypeSyntax id ? id.ToString() : ""))
+                                                       .ToList();
         }
 
         public ConstructorDeclarationSyntax Constructor { get; set; }
@@ -62,12 +63,8 @@ namespace IDesign.Recognizers.Models
 
         public IEnumerable<string> GetArguments()
         {
-            if (Constructor.Initializer == null)
-            {
-                return null;
-            }
-
-            return Constructor.Initializer.ArgumentList.Arguments.ToList().Select(x => x.ToString());
+            return Constructor.Initializer?.ArgumentList.Arguments.ToList()
+                                                                  .Select(x => x.ToString());
         }
     }
 }

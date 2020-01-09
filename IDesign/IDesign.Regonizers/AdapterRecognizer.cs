@@ -60,9 +60,6 @@ namespace IDesign.Recognizers
                     }, x => entityNode.GetFields(), "Adapter has an adaptee", GroupCheckType.Median)
                 }, node => node.GetRelations(), "Has adaptee")
             }, x => new List<IEntityNode> { entityNode }, "Object adapter", GroupCheckType.All);
-
-
-
             return adapterCheck;
         }
 
@@ -71,7 +68,6 @@ namespace IDesign.Recognizers
             IRelation currentRelation = null;
             var adapterCheck = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
             {
-
                 GetImplementsInterfaceOrExtendsClassCheck()                ,
                 new GroupCheck<IEntityNode, IRelation>(new List<ICheck<IRelation>>
                 {
@@ -88,24 +84,19 @@ namespace IDesign.Recognizers
                         {
                             new ElementCheck<IMethod>(x => x.CheckIfMethodCallsMethodInNode(currentRelation.GetDestination()), "Method uses adpatee", 2),
                             new ElementCheck<IMethod>(x => !x.CheckReturnType(currentRelation.GetDestination().GetName()), "Method does not return adaptee", 1),
-                            new ElementCheck<IMethod>(x => x.IsInterfaceMethod(entityNode) || x.CheckModifier("override"),
-
-                                "Method is overriden or implemted", 1),
-
+                            new ElementCheck<IMethod>(x => x.IsInterfaceMethod(entityNode) || x.CheckModifier("override"),"Method is overriden or implemted", 1),
                         }, x => entityNode.GetMethodsAndProperties(), "Every method calls adaptee", GroupCheckType.Median)
 
                 }, node => node.GetRelations(), "Has adaptee")
             }, x => new List<IEntityNode> { entityNode }, "Class adapter", GroupCheckType.All);
             return adapterCheck;
-
         }
 
         private ElementCheck<IEntityNode> GetImplementsInterfaceOrExtendsClassCheck()
         {
             return new ElementCheck<IEntityNode>(
                     x => x.GetRelations()
-                          .Any(y => y.GetRelationType() == RelationType.Implements || y.GetRelationType() == RelationType.Extends),
-                    "Implements interface or extends class");
+                          .Any(y => y.GetRelationType() == RelationType.Implements || y.GetRelationType() == RelationType.Extends),"Implements interface or extends class");
         }
     }
 }

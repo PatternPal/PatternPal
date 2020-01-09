@@ -33,7 +33,8 @@ namespace IDesign.Recognizers.Models
         public IEnumerable<string> GetParameterTypes()
         {
             return MethodDeclaration.ParameterList.Parameters
-                .Select(x => (x.Type is TypeSyntax id ? id.ToString() : "")).ToList();
+                .Select(x => (x.Type is TypeSyntax id ? id.ToString() : ""))
+                .ToList();
         }
 
         public string GetReturnType()

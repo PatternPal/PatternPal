@@ -16,14 +16,7 @@ namespace IDesign.Recognizers
             var result1 = ObserverWithSubjectInterfaceCheck(entityNode);
             var result2 = ObserverWithoutSubjectInterfaceCheck(entityNode);
 
-            if (result1.GetScore() >= result2.GetScore())
-            {
-                return result1;
-            }
-            else
-            {
-                return result2;
-            }
+            return result1.GetScore() >= result2.GetScore() ? result1 : result2;
         }
 
         /// <summary>

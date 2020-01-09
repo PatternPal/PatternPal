@@ -47,7 +47,6 @@ namespace IDesign.Recognizers
                         new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "modifier should be private",0.5f)
                     }, x=> x.GetFields(), "Fields", GroupCheckType.All)
 
-
                 },x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.UsedBy)).Select(y => y.GetDestination()), "Check used by relations"),
 
                 //check inheritance
