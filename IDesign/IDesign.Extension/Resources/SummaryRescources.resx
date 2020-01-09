@@ -123,10 +123,10 @@
   <data name="ClassSeemsPartOf" xml:space="preserve">
     <value>• '{0}' seems part of the {1} pattern.</value>
   </data>
-  <data name="MulitpleEntiyNodesAnalysed" xml:space="preserve">
+  <data name="MultipleEntiyNodesAnalysed" xml:space="preserve">
     <value>{0} classes and/or interfaces were analysed</value>
   </data>
-  <data name="MulitpleFiles" xml:space="preserve">
+  <data name="MultipleFiles" xml:space="preserve">
     <value>From {0} files</value>
   </data>
   <data name="MultiplePatternsRecognized" xml:space="preserve">

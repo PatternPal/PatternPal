@@ -83,7 +83,7 @@ namespace IDesign.Extension.Resources {
         /// </summary>
         internal static string MultipleEntiyNodesAnalysed {
             get {
-                return ResourceManager.GetString("MulitpleEntiyNodesAnalysed", resourceCulture);
+                return ResourceManager.GetString("MultipleEntiyNodesAnalysed", resourceCulture);
             }
         }
         
@@ -92,7 +92,7 @@ namespace IDesign.Extension.Resources {
         /// </summary>
         internal static string MultipleFiles {
             get {
-                return ResourceManager.GetString("MulitpleFiles", resourceCulture);
+                return ResourceManager.GetString("MultipleFiles", resourceCulture);
             }
         }
         

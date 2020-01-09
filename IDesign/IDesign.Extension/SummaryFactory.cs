@@ -18,12 +18,12 @@ namespace IDesign.Extension
             if (uniqueFiles.Count() <= 1)
                 result += SummaryRescources.OneFile + " ";
             else
-                result += string.Format(SummaryRescources.MulitpleFiles, uniqueFiles.Count()) + " ";
+                result += string.Format(SummaryRescources.MultipleFiles, uniqueFiles.Count()) + " ";
 
             if (uniqueEntityNodes.Count() == 1)
                 result += SummaryRescources.OneEntityNodeAnalysed + " ";
             else
-                result += string.Format(SummaryRescources.MulitpleEntiyNodesAnalysed, uniqueEntityNodes.Count()) + " ";
+                result += string.Format(SummaryRescources.MultipleEntiyNodesAnalysed, uniqueEntityNodes.Count()) + " ";
 
 
             return result;
