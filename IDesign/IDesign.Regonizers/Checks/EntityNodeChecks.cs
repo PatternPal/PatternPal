@@ -11,28 +11,20 @@ namespace IDesign.Recognizers.Checks
     {
         public static bool ImplementsInterface(this IEntityNode node, string name)
         {
-            if (ClassImlementsInterface(node, name))
-            {
-                return true;
-            }
-
-            if (CheckMinimalAmountOfRelationTypes(node, RelationType.Extends, 1))
-            {
-                return ImplementsInterface(GetExtends(node), name);
-            }
-
-            return false;
+            return ClassImlementsInterface(node, name)
+                ? true
+                : CheckMinimalAmountOfRelationTypes(node, RelationType.Extends, 1) ? ImplementsInterface(GetExtends(node), name) : false;
         }
 
         public static bool ClassImlementsInterfaceMethod(this IEntityNode node, IMethod method)
         {
-            foreach (var interFace in node.GetRelations().Where(x => x.GetRelationType() == RelationType.Implements))
+            foreach (var _ in from interFace in node.GetRelations().Where(x => x.GetRelationType() == RelationType.Implements)
+                              where InterfaceImplementsMethod(interFace.GetDestination(), method)
+                              select new { })
             {
-                if (InterfaceImplementsMethod(interFace.GetDestination(), method))
-                {
-                    return true;
-                }
+                return true;
             }
+
             return false;
         }
 
@@ -44,14 +36,14 @@ namespace IDesign.Recognizers.Checks
                 return true;
             }
 
-            foreach (var relation in node.GetRelations().Where(x => x.GetRelationType() == RelationType.Extends ||
-            x.GetRelationType() == RelationType.Implements))
+            foreach (var _ in from relation in node.GetRelations().Where(x => x.GetRelationType() == RelationType.Extends ||
+                              x.GetRelationType() == RelationType.Implements)
+                              where relation.GetDestination().MethodInEntityNode(methodName, amountOfParams)
+                              select new { })
             {
-                if (relation.GetDestination().MethodInEntityNode(methodName, amountOfParams))
-                {
-                    return true;
-                }
+                return true;
             }
+
             return false;
         }
 
@@ -64,11 +56,7 @@ namespace IDesign.Recognizers.Checks
         {
             if (CheckMinimalAmountOfRelationTypes(node, RelationType.Extends, 1))
             {
-                if (GetExtends(node).GetName() == name)
-                {
-                    return true;
-                }
-                return ExtendsClass(GetExtends(node), name);
+                return GetExtends(node).GetName() == name ? true : ExtendsClass(GetExtends(node), name);
             }
             return false;
         }
@@ -76,13 +64,15 @@ namespace IDesign.Recognizers.Checks
         public static bool ClassImlementsInterface(this IEntityNode node, string name)
         {
             return node.GetRelations()
-                .Any(x => x.GetRelationType() == RelationType.Implements && x.GetDestination().GetName() == name);
+                       .Any(x => x.GetRelationType() == RelationType.Implements && x.GetDestination().GetName() == name);
         }
 
         public static IEntityNode GetExtends(this IEntityNode node)
         {
-            return node.GetRelations().Where(x => x.GetRelationType() == RelationType.Extends).FirstOrDefault()
-                .GetDestination();
+            return node.GetRelations()
+                       .Where(x => x.GetRelationType() == RelationType.Extends)
+                       .FirstOrDefault()
+                       .GetDestination();
         }
 
         public static bool Extends(this IEntityNode node)
@@ -94,8 +84,10 @@ namespace IDesign.Recognizers.Checks
         {
             try
             {
-                node = node.GetRelations().Where(x => x.GetDestination().GetName() == name).FirstOrDefault()
-                             .GetDestination();
+                node = node.GetRelations()
+                           .Where(x => x.GetDestination().GetName() == name)
+                           .FirstOrDefault()
+                           .GetDestination();
             }
             catch (Exception e)
             {
@@ -143,7 +135,7 @@ namespace IDesign.Recognizers.Checks
         {
             return node.GetMethodsAndProperties().Where(x => x.CheckParameters(parameters)).Count() < amount;
         }
-      
+
         public static bool CheckMaximumAmountOfRelationTypes(this IEntityNode entityNode, RelationType relationType, int amount)
         {
             return entityNode.GetRelations().Where(x => x.GetRelationType().Equals(relationType)).Count() <= amount;
