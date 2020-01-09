@@ -283,7 +283,7 @@
     <value>Class should be abstract.</value>
   </data>
   <data name="NodeNotImplementedAny" xml:space="preserve">
-    <value>Should not implement an interface.</value>
+    <value>Node should not implement an interface.</value>
   </data>
   <data name="NodeTypeClass" xml:space="preserve">
     <value>Node should be a class.</value>
