@@ -193,10 +193,6 @@
                     <StackPanel Orientation="Horizontal" Margin="5 2 0 2">
                         <TextBlock Text="{Binding Message}"
                                        Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
-                        <TextBlock Text=" | "
-                                       Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
-                        <TextBlock Text="{Binding Score}"
-                                       Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
                     </StackPanel>
                 </StackPanel>
             </HierarchicalDataTemplate>

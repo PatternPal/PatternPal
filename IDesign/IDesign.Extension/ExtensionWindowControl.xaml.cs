@@ -41,11 +41,10 @@ namespace IDesign.Extension
             Loading = false;
             Dispatcher.VerifyAccess();
             LoadProject();
+            SelectAll.IsChecked = true;
             SelectPaths.ProjectSelection.ItemsSource = Projects;
             SelectPaths.ProjectSelection.SelectedIndex = 0;
             Dte = Package.GetGlobalService(typeof(SDTE)) as DTE;
-
-
             var rdt = (IVsRunningDocumentTable)Package.GetGlobalService(typeof(SVsRunningDocumentTable));
             uint _SolutionEventsCookie;
             rdt.AdviseRunningDocTableEvents(this, out _SolutionEventsCookie);
@@ -70,7 +69,7 @@ namespace IDesign.Extension
             if (height > 3 * 30)
                 height = 3 * 30;
 
-            Grid.RowDefinitions[1].Height = new GridLength(height);
+            Grid.RowDefinitions[2].Height = new GridLength(height);
         }
 
         /// <summary>
@@ -120,6 +119,11 @@ namespace IDesign.Extension
             GetAllPaths();
         }
 
+        private void SaveAllDocuments()
+        {
+            Dte.Documents.SaveAll();
+        }
+
         /// <summary>
         ///     Loads the project to get all the available projects.
         /// </summary>
@@ -140,6 +144,7 @@ namespace IDesign.Extension
             "Default event handler naming pattern")]
         private async void Analyse_Button(object sender, RoutedEventArgs e)
         {
+            SaveAllDocuments();
             Analyse();
         }
 
@@ -311,6 +316,26 @@ namespace IDesign.Extension
         public int OnAfterCloseSolution(object pUnkReserved)
         {
             return VSConstants.S_OK;
+        }
+
+        private void SelectAll_Checked(object sender, RoutedEventArgs e)
+        {
+            var designPatternViewModels = PatternCheckbox.listBox.Items.OfType<DesignPatternViewModel>().ToList();
+
+            for (int i = 0; i < designPatternViewModels.Count(); i++)
+            {
+                designPatternViewModels[i].IsChecked = true;
+            }
+        }
+
+        private void SelectAll_Unchecked(object sender, RoutedEventArgs e)
+        {
+            var designPatternViewModels = PatternCheckbox.listBox.Items.OfType<DesignPatternViewModel>().ToList();
+
+            for (int i = 0; i < designPatternViewModels.Count(); i++)
+            {
+                designPatternViewModels[i].IsChecked = false;
+            }
         }
     }
 }
