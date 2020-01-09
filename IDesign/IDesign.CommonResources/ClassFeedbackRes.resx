@@ -286,7 +286,7 @@
     <value>Should not implement an interface.</value>
   </data>
   <data name="NodeTypeClass" xml:space="preserve">
-    <value>Should be a class.</value>
+    <value>Node should be a class.</value>
   </data>
   <data name="NodeUsedByAny" xml:space="preserve">
     <value>This class should be used by other classes.</value>
