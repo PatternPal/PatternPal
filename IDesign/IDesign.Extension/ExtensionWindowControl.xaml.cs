@@ -7,7 +7,9 @@ using System.Windows.Controls;
 using EnvDTE;
 using IDesign.Core;
 using IDesign.Core.Models;
+using IDesign.Extension.Resources;
 using IDesign.Extension.ViewModels;
+using IDesign.Recognizers.Abstractions;
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
@@ -24,12 +26,12 @@ namespace IDesign.Extension
     /// </summary>
     public partial class ExtensionWindowControl : UserControl, IVsSolutionEvents, IVsRunningDocTableEvents
     {
-        private readonly UInt32 _SolutionEventsCookie;
         private List<DesignPatternViewModel> ViewModels { get; set; }
         private List<string> Paths { get; set; }
         private List<Project> Projects { get; set; }
         private bool Loading { get; set; }
         private DTE Dte { get; set; }
+        private SummaryFactory _summaryFactory = new SummaryFactory();
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ExtensionWindowControl" /> class.
@@ -64,10 +66,8 @@ namespace IDesign.Extension
                 ViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern, pattern.WikiPage));
 
             PatternCheckbox.listBox.DataContext = ViewModels;
-            var height = ViewModels.Count * 30;
-
-            if (height > 3 * 30)
-                height = 3 * 30;
+            var maxHeight = 3 * 30;
+            var height = Math.Min(ViewModels.Count * 30, maxHeight);
 
             Grid.RowDefinitions[2].Height = new GridLength(height);
         }
@@ -97,8 +97,7 @@ namespace IDesign.Extension
         private List<string> GetCurrentPath()
         {
             var result = new List<string>();
-            if ((bool)SelectPaths.radio1.IsChecked) 
-            if (Dte.ActiveDocument != null)
+            if ((bool)SelectPaths.radio1.IsChecked && Dte.ActiveDocument != null)
                 result.Add(Dte.ActiveDocument.FullName);
             return result;
         }
@@ -110,8 +109,8 @@ namespace IDesign.Extension
         {
             Paths = new List<string>();
             var selectedI = SelectPaths.ProjectSelection.SelectedIndex;
-            if(selectedI != -1)
-            Paths.AddRange(Projects[selectedI].Documents.Select(x => x.FilePath));
+            if (selectedI != -1)
+                Paths.AddRange(Projects[selectedI].Documents.Select(x => x.FilePath));
         }
 
         private void ChoosePath()
@@ -153,14 +152,11 @@ namespace IDesign.Extension
 
             foreach (var project in Projects)
             {
-                foreach(var doc in project.Documents)
+                foreach (var doc in project.Documents.Where(x => x.FilePath == path))
                 {
-                    if (doc.FilePath == path)
-                    {
                         var index = Projects.IndexOf(project);
                         SelectPaths.ProjectSelection.SelectedIndex = index;
                         return;
-                    }
                 }
             }
         }
@@ -187,7 +183,7 @@ namespace IDesign.Extension
 
             IProgress<RecognizerProgress> iprogress = progress;
             runner.OnProgressUpdate += (o, recognizerProgress) => iprogress.Report(recognizerProgress);
-            
+
             await Task.Run(() =>
             {
                 try
@@ -199,18 +195,27 @@ namespace IDesign.Extension
                     //Here you signal the UI thread to execute the action:
                     Dispatcher?.BeginInvoke(new Action(() =>
                     {
+
+                        var allResults = results;
                         if ((bool)SelectPaths.radio1.IsChecked)
+                        {
                             results = results.Where(x => x.FilePath == cur).ToList();
+                            SummaryRow.Height = new GridLength(100);
+                        }
                         else
-                            results = results.Where(x => x.Result.GetScore() > 80).ToList();
-                        
+                        {
+                            results = results.Where(x => x.Result.GetScore() >= 80).ToList();
+                            SummaryRow.Height = new GridLength(0);
+                        }
+
+                        SummaryControl.Text = _summaryFactory.CreateSummary(results, allResults);
 
 
                         CreateResultViewModels(results);
                     }));
 
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     throw e;
                     //@TODO User friendly error handling
@@ -219,6 +224,7 @@ namespace IDesign.Extension
 
             ResetUI();
         }
+
 
         private void ResetUI()
         {
