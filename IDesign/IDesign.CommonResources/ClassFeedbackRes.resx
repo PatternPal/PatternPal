@@ -292,7 +292,7 @@
     <value>This class should be used by other classes.</value>
   </data>
   <data name="NodeUses1" xml:space="preserve">
-    <value>Node must have atleast 1 uses relation.</value>
+    <value>Node should have at least 1 uses relation.</value>
   </data>
   <data name="ObjectAdapter" xml:space="preserve">
     <value>Object adapter</value>
