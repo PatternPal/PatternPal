@@ -138,9 +138,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CommonResources\CommonResources.csproj">
-      <Project>{9607C241-256A-43D8-B973-344B9FD1EB69}</Project>
-      <Name>CommonResources</Name>
+    <ProjectReference Include="..\IDesign.CommonResources\IDesign.CommonResources.csproj">
+      <Project>{68b3c66e-d837-4b67-b674-c994bc4e207b}</Project>
+      <Name>IDesign.CommonResources</Name>
     </ProjectReference>
     <ProjectReference Include="..\IDesign.Core\IDesign.Core.csproj">
       <Project>{39c79d09-34da-496b-936d-4387f5db9104}</Project>

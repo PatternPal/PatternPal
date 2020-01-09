@@ -159,9 +159,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CommonResources\CommonResources.csproj">
-      <Project>{9607c241-256a-43d8-b973-344b9fd1eb69}</Project>
-      <Name>CommonResources</Name>
+    <ProjectReference Include="..\IDesign.CommonResources\IDesign.CommonResources.csproj">
+      <Project>{68b3c66e-d837-4b67-b674-c994bc4e207b}</Project>
+      <Name>IDesign.CommonResources</Name>
     </ProjectReference>
     <ProjectReference Include="..\IDesign.Core\IDesign.Core.csproj">
       <Project>{39C79D09-34DA-496B-936D-4387F5DB9104}</Project>

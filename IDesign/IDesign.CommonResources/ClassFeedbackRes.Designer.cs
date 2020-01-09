@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CommonResources {
+namespace IDesign.CommonResources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace CommonResources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CommonResources.ClassFeedbackRes", typeof(ClassFeedbackRes).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IDesign.CommonResources.ClassFeedbackRes", typeof(ClassFeedbackRes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

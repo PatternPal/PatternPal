@@ -1,11 +1,12 @@
-﻿using IDesign.Recognizers.Abstractions;
+﻿using IDesign.CommonResources;
+using IDesign.Recognizers.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CommonResources
+namespace IDesign.CommonResources
 {
-    public static class Resources
+    public static class ResourceUtils
     {
 
         private static global::System.Resources.ResourceManager resourceMan;
@@ -17,7 +18,7 @@ namespace CommonResources
             {
                 if (object.ReferenceEquals(resourceMan, null))
                 {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CommonResources.ClassFeedbackRes", typeof(ClassFeedbackRes).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IDesign.CommonResources.ClassFeedbackRes", typeof(ClassFeedbackRes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

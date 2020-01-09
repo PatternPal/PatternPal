@@ -3,7 +3,7 @@ using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
-using CommonResources;
+using IDesign.CommonResources;
 
 namespace IDesign.Extension.ViewModels
 {
@@ -12,7 +12,7 @@ namespace IDesign.Extension.ViewModels
         public CheckResultViewModel(ICheckResult result)
         {
             Result = result;
-            Message = CommonResources.Resources.ResultToString(Result);
+            Message = CommonResources.ResourceUtils.ResultToString(Result);
         }
 
         public ICheckResult Result { get; set; }

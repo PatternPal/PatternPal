@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using CommonResources;
+using IDesign.CommonResources;
 using IDesign.Core;
 using IDesign.Core.Models;
 using IDesign.Recognizers.Abstractions;
@@ -146,7 +146,7 @@ namespace IDesign.ConsoleApp
                 symbol = "✓";
             }
 
-            Console.WriteLine(new string('\t', depth) + symbol + $"{Resources.ResultToString(result)} | {result.GetScore()}p / {result.GetTotalChecks()}p");
+            Console.WriteLine(new string('\t', depth) + symbol + $"{ResourceUtils.ResultToString(result)} | {result.GetScore()}p / {result.GetTotalChecks()}p");
 
 
 
