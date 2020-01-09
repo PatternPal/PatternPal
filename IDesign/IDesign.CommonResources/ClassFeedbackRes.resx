@@ -352,7 +352,7 @@
     <value>State context field</value>
   </data>
   <data name="StateCreatesOtherState" xml:space="preserve">
-    <value>Concrete state class creates another state</value>
+    <value>Concrete state class should create another state</value>
   </data>
   <data name="StateFieldStateType" xml:space="preserve">
     <value>Used return type</value>
