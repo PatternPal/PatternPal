@@ -253,7 +253,7 @@
     <value>Method should be static.</value>
   </data>
   <data name="MethodNameOverride" xml:space="preserve">
-    <value>Method overrides base method.</value>
+    <value>Method should override base method.</value>
   </data>
   <data name="MethodOverride" xml:space="preserve">
     <value>Method should override or is implemented.</value>
