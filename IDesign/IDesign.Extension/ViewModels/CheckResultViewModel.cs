@@ -25,11 +25,11 @@ namespace IDesign.Extension.ViewModels
                 switch (Type)
                 {
                     case FeedbackType.Correct:
-                        return KnownMonikers.StatusOK;
+                        return KnownMonikers.OnlineStatusAvailable;
                     case FeedbackType.SemiCorrect:
-                        return KnownMonikers.StatusExcluded;
+                        return KnownMonikers.OnlineStatusAway;
                     case FeedbackType.Incorrect:
-                        return KnownMonikers.StatusError;
+                        return KnownMonikers.OnlineStatusBusy;
                 }
 
                 return KnownMonikers.StatusHelp;
