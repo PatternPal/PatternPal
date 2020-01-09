@@ -15,22 +15,22 @@ namespace IDesign.Recognizers
 
             var methodChecks = new List<ICheck<IMethod>>
             {
-                new ElementCheck<IMethod>(x => x.CheckReturnType(entityNode.GetName()), "Incorrect return type"),
-                new ElementCheck<IMethod>(x => x.CheckModifier("static"), "Is not static"),
+                new ElementCheck<IMethod>(x => x.CheckReturnType(entityNode.GetName()), "Incorrect return type",1),
+                new ElementCheck<IMethod>(x => x.CheckModifier("static"), "Is not static",1),
                 new ElementCheck<IMethod>(x => x.CheckReturnTypeSameAsCreation(),
                     "Return type isnt the same as created")
             };
 
             var propertyChecks = new List<ICheck<IField>>
             {
-                new ElementCheck<IField>(x => x.CheckFieldType(new List<string>(){ entityNode.GetName() }), "Incorrect type"),
-                new ElementCheck<IField>(x => x.CheckMemberModifier("static"), "Is not static"),
-                new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "Is not private")
+                new ElementCheck<IField>(x => x.CheckFieldType(new List<string>(){ entityNode.GetName() }), "Incorrect type",1),
+                new ElementCheck<IField>(x => x.CheckMemberModifier("static"), "Is not static",1),
+                new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "Is not private",0.5f)
             };
 
             var constructorChecks = new List<ICheck<IMethod>>
             {
-                new ElementCheck<IMethod>(x => !x.CheckModifier("public"), "Is public must be private or protected")
+                new ElementCheck<IMethod>(x => (x.CheckModifier("private")) ||(x.CheckModifier("protected")), "should be private or protected",0.5f)
             };
 
 

@@ -21,8 +21,8 @@ namespace IDesign.Recognizers
             var factoryMethodChecks = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
             {
                 //check if node is abstract class (creator)
-                new ElementCheck<IEntityNode>(x => x.CheckTypeDeclaration(EntityNodeType.Class)&& x.CheckModifier("abstract"),"creator should be an abstract class"),
-                new ElementCheck<IEntityNode>(x=> x.CheckMinimalAmountOfRelationTypes(RelationType.Uses,1),"Node must have min 1 uses relation"),
+                new ElementCheck<IEntityNode>(x => x.CheckTypeDeclaration(EntityNodeType.Class)&& x.CheckModifier("abstract"),"creator should be an abstract class",2),
+                new ElementCheck<IEntityNode>(x=> x.CheckMinimalAmountOfRelationTypes(RelationType.Uses,1),"Node should have min 1 uses relation",1),
 
                 //check concretecreators
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
@@ -39,7 +39,7 @@ namespace IDesign.Recognizers
                         //check if method in node (concrete creator) creates new node (concrete product)
                         new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                         {
-                            new ElementCheck<IMethod>(x => x.CheckCreationType(productnode.GetName()), $"should create new conrete product"),
+                            new ElementCheck<IMethod>(x => x.CheckCreationType(productnode.GetName()), $"should create new conrete product",2),
                         }, x => entityNode.GetMethodsAndProperties(), "method"),
 
                         //check if node (concrete product) implements/extends a node (product)
@@ -50,8 +50,9 @@ namespace IDesign.Recognizers
 
                             new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                             {
-                                new ElementCheck<IMethod>(x => x.CheckReturnType(productnode.GetName()), $"return type should be equal to the product"),
+                                new ElementCheck<IMethod>(x => x.CheckReturnType(productnode.GetName()), $"return type should be equal to the product",2),
                             }, x => node.GetMethodsAndProperties(), "method")
+
 
                         }, x => x.GetRelations().Where(y => (y.GetRelationType().Equals(RelationType.Extends)) ||
                         (y.GetRelationType().Equals(RelationType.Implements)))
@@ -72,9 +73,10 @@ namespace IDesign.Recognizers
                     //check if node (creator) has uses relations (method) with return type of interface node (product)
                     new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                     {
-                         new ElementCheck<IMethod>(x => x.CheckModifier("public"),"modifier should be public"),
-                         new ElementCheck<IMethod>(x => x.CheckModifier("abstract"),"modifier should be abstract"),
-                         new ElementCheck<IMethod>(x => x.CheckReturnType(entityNode.GetName()),"Return type should be equal to the product")
+
+                         new ElementCheck<IMethod>(x => x.CheckModifier("public"),"modifier should be public",0.5f),
+                         new ElementCheck<IMethod>(x => x.CheckModifier("abstract"),"modifier should be abstract",1),
+                         new ElementCheck<IMethod>(x => x.CheckReturnType(entityNode.GetName()),"Return type should be equal to the product",2)
                     }, x=> node.GetMethodsAndProperties(), "Methods")
 
                 }, x=> x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Uses))

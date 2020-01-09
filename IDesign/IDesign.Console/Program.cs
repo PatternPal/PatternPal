@@ -20,6 +20,7 @@ namespace IDesign.ConsoleApp
             var designPatternsList = RecognizerRunner.designPatterns;
             var showHelp = false;
             var selectedFiles = new List<string>();
+            var selectedDirectories = new List<string>();
             var selectedPatterns = new List<DesignPattern>();
             var fileManager = new FileManager();
             var recognizerRunner = new RecognizerRunner();
@@ -59,6 +60,7 @@ namespace IDesign.ConsoleApp
             {
                 selectedFiles.AddRange(fileManager.GetAllCSharpFilesFromDirectory(arg));
             }
+            selectedDirectories = (from dir in arguments where Directory.Exists(dir) select dir).ToList();
 
             if (selectedFiles.Count == 0)
             {
@@ -93,7 +95,11 @@ namespace IDesign.ConsoleApp
             recognizerRunner.CreateGraph(selectedFiles);
             var results = recognizerRunner.Run(selectedPatterns);
 
+<<<<<<< HEAD
             PrintResultsOfRecognizerRunner(results);
+=======
+            PrintResults(results, selectedDirectories);
+>>>>>>> develop
 
             Console.ReadKey();
         }
@@ -105,13 +111,35 @@ namespace IDesign.ConsoleApp
             options.WriteOptionDescriptions(Console.Out);
         }
 
+<<<<<<< HEAD
         private static void PrintResultsOfRecognizerRunner(List<RecognitionResult> results)
+=======
+        /// <summary>
+        ///     Prints results of RecognizerRunner.Run
+        /// </summary>
+        /// <param name="results">A List of RecognitionResult</param>
+        /// <param name="selectedDirectories">A List of directories that might be selected</param>
+        private static void PrintResults(List<RecognitionResult> results, List<string> selectedDirectories)
+>>>>>>> develop
         {
             Console.WriteLine("\nResults:");
 
+            results = results.Where(x => x.Result.GetScore() >= 80).ToList();
+
             for (var i = 0; i < results.Count; i++)
             {
-                Console.Write($"{i}) {results[i].EntityNode.GetName()} | {results[i].Pattern.Name}: ");
+                var name = results[i].EntityNode.GetName();
+
+                //If a directory was selected, show from which subdirectories the entitynode originated
+                if (selectedDirectories.Count > 0)
+                    foreach (var item in selectedDirectories)
+                        if (results[i].EntityNode.GetSourceFile().Contains(item))
+                        {
+                            name = results[i].EntityNode.GetSourceFile().Replace(item, "");
+                            break;
+                        }
+
+                Console.Write($"{i}) {name} | {results[i].Pattern.Name}: ");
 
                 PrintScore(results[i].Result.GetScore());
 
@@ -128,6 +156,8 @@ namespace IDesign.ConsoleApp
 
         public static void PrintResult(ICheckResult result, int depth)
         {
+
+
             Console.ForegroundColor = ConsoleColor.Red;
             var symbol = "X";
 
@@ -143,7 +173,7 @@ namespace IDesign.ConsoleApp
                     break;
             }
 
-            Console.WriteLine(new string('\t', depth) + symbol + $" {result.GetMessage()}");
+            Console.WriteLine(new string('\t', depth) + symbol + $" {result.GetMessage()} | {result.GetScore()}p / {result.GetTotalChecks()}p");
 
             foreach (var child in result.GetChildFeedback())
             {

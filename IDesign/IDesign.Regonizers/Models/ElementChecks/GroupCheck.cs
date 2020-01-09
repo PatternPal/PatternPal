@@ -145,23 +145,14 @@ namespace IDesign.Recognizers.Models.ElementChecks
                 });
             }
 
-            ChangeScore(childResults, childResults.Sum(x => x.GetTotalChecks()), childResults.Count() * childResults.Count());
+           // ChangeScore(childResults, childResults.Sum(x => x.GetTotalChecks()), childResults.Count() * childResults.Count());
 
             var message = elementToCheck.GetSuggestionName() + " | " + _description;
             return new CheckResult(message, feedback, elementToCheck.GetSuggestionNode())
             {
-                ChildFeedback = childResults
+                ChildFeedback = childResults,
+                CalculationType = CheckCalculationType.Average
             };
-        }
-
-        private void ChangeScore(IEnumerable<ICheckResult> results, float score, float count)
-        {
-            var newScore = score / count;
-            results.ToList().ForEach(x =>
-            {
-                x.ChangeScore(score / count);
-                ChangeScore(x.GetChildFeedback(), newScore, x.GetChildFeedback().Count());
-            });
         }
 
         private ICheckResult CreateFalseResult()

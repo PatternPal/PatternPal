@@ -40,11 +40,10 @@ namespace IDesign.Extension
             Loading = false;
             Dispatcher.VerifyAccess();
             LoadProject();
+            SelectAll.IsChecked = true;
             SelectPaths.ProjectSelection.ItemsSource = Projects;
             SelectPaths.ProjectSelection.SelectedIndex = 0;
             Dte = Package.GetGlobalService(typeof(SDTE)) as DTE;
-
-
             var rdt = (IVsRunningDocumentTable)Package.GetGlobalService(typeof(SVsRunningDocumentTable));
             rdt.AdviseRunningDocTableEvents(this, out _);
             var ss = (IVsSolution)Package.GetGlobalService(typeof(SVsSolution));
@@ -68,7 +67,7 @@ namespace IDesign.Extension
                 height = 3 * 30;
             }
 
-            Grid.RowDefinitions[1].Height = new GridLength(height);
+            Grid.RowDefinitions[2].Height = new GridLength(height);
         }
 
         private void CreateResultViewModels(IEnumerable<RecognitionResult> results)
@@ -79,9 +78,7 @@ namespace IDesign.Extension
             {
                 var patterns = results.Where(x => x.Pattern.Equals(item));
                 if (patterns.Count() > 0)
-                {
                     viewModels.AddRange(patterns.OrderBy(x => x.Result.GetScore()).Select(x => new ResultViewModel(x)));
-                }
             }
 
             // - Change your UI information here
@@ -117,6 +114,12 @@ namespace IDesign.Extension
             GetAllPaths();
         }
 
+        private void SaveAllDocuments()
+        {
+            Dte.Documents.SaveAll();
+        }
+
+
         private void LoadProject()
         {
             var cm = (IComponentModel)Package.GetGlobalService(typeof(SComponentModel));
@@ -134,6 +137,7 @@ namespace IDesign.Extension
             "Default event handler naming pattern")]
         private async void Analyse_Button(object sender, RoutedEventArgs e)
         {
+            SaveAllDocuments();
             Analyse();
         }
 
@@ -302,6 +306,26 @@ namespace IDesign.Extension
         public int OnAfterCloseSolution(object pUnkReserved)
         {
             return VSConstants.S_OK;
+        }
+
+        private void SelectAll_Checked(object sender, RoutedEventArgs e)
+        {
+            var designPatternViewModels = PatternCheckbox.listBox.Items.OfType<DesignPatternViewModel>().ToList();
+
+            for (int i = 0; i < designPatternViewModels.Count(); i++)
+            {
+                designPatternViewModels[i].IsChecked = true;
+            }
+        }
+
+        private void SelectAll_Unchecked(object sender, RoutedEventArgs e)
+        {
+            var designPatternViewModels = PatternCheckbox.listBox.Items.OfType<DesignPatternViewModel>().ToList();
+
+            for (int i = 0; i < designPatternViewModels.Count(); i++)
+            {
+                designPatternViewModels[i].IsChecked = false;
+            }
         }
     }
 }

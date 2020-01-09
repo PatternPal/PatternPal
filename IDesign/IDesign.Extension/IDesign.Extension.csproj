@@ -52,6 +52,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="LeftMarginMultiplierConverter.cs" />
+    <Compile Include="Resources\ExtensionUIResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExtensionUIResources.resx</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="TreeViewItemExtensions.cs" />
     <Compile Include="UserControls\PatternCheckbox.xaml.cs">
       <DependentUpon>PatternCheckbox.xaml</DependentUpon>
@@ -126,9 +132,10 @@
     <Resource Include="Resources\idealogo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\logo.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
+    <Content Include="Resources\logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <VSCTCompile Include="ExtensionWindowPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>
@@ -142,6 +149,11 @@
     <Content Include="Resources\ExtensionWindowPackage.ico" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\ExtensionUIResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ExtensionUIResources.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
       <ManifestResourceName>VSPackage</ManifestResourceName>
