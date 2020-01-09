@@ -16,4 +16,28 @@
     <ProjectReference Include="..\IDesign.Regonizers\IDesign.Recognizers.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Resources\DesignPatternNameResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DesignPatternNameResources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\WikiPageResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>WikiPageResources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\DesignPatternNameResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DesignPatternNameResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\WikiPageResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WikiPageResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

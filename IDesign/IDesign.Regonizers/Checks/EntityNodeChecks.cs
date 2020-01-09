@@ -209,6 +209,18 @@ namespace IDesign.Recognizers.Checks
         }
 
         /// <summary>
+        ///     Function thats checks the maximum amount of relation of a specific type with another entitynode.
+        /// </summary>
+        /// <param name="entityNode">The entitynode witch it should check</param>
+        /// <param name="relationType">The expected relation type</param>
+        /// <param name="amount">The maximum amount of occurrences of the specified relation</param>
+        /// <returns></returns>
+        public static bool CheckMaximumAmountOfRelationTypes(this IEntityNode entityNode, RelationType relationType, int amount)
+        {
+            return entityNode.GetRelations().Where(x => x.GetRelationType().Equals(relationType)).Count() <= amount;
+        }
+
+        /// <summary>
         ///     Checks for the mininmal amount of occurences of methods which use a specific paramater 
         /// </summary>
         /// <param name="node">The entitynode which it should check</param>
@@ -218,18 +230,6 @@ namespace IDesign.Recognizers.Checks
         public static bool CheckMinimalAmountOfMethodsWithParameter(this IEntityNode node, List<string> parameters, int amount)
         {
             return node.GetMethods().Where(x => x.CheckParameters(parameters)).Count() >= amount;
-        }
-
-        /// <summary>
-        ///     Checks for the maximum amount of occurences of methods which use a specific paramater 
-        /// </summary>
-        /// <param name="node">The entitynode which it should check</param>
-        /// <param name="parameters">The parameters which it should check</param>
-        /// <param name="amount">The maximum amount of times the paramaters should be found within the methods of the given entitynode</param>
-        /// <returns></returns>
-        public static bool CheckMaximumAmountOfMethodsWithParameter(this IEntityNode node, List<string> parameters, int amount)
-        {
-            return node.GetMethods().Where(x => x.CheckParameters(parameters)).Count() < amount;
         }
 
         /// <summary>

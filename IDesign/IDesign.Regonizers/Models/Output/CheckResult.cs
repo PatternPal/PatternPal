@@ -5,8 +5,15 @@ using Microsoft.CodeAnalysis;
 
 namespace IDesign.Recognizers.Models.Output
 {
+    public enum CheckCalculationType
+    {
+        Sum,
+        Average
+    }
+
     public class CheckResult : ICheckResult
     {
+        public CheckCalculationType CalculationType { get; set; } = CheckCalculationType.Sum;
         public CheckResult(string message, FeedbackType feedbackType, ICheckable element)
         {
             Message = message;
@@ -62,6 +69,8 @@ namespace IDesign.Recognizers.Models.Output
             if (!ChildFeedback.Any())
                 return FeedbackType == FeedbackType.Correct ? Score : 0;
 
+            if(CalculationType == CheckCalculationType.Average)
+                return ChildFeedback.Average(x => x.GetScore());
             return ChildFeedback.Sum(x => x.GetScore());
         }
 
@@ -71,6 +80,8 @@ namespace IDesign.Recognizers.Models.Output
             {
                 return Score;
             }
+            if (CalculationType == CheckCalculationType.Average)
+                return ChildFeedback.Average(x => x.GetTotalChecks());
             return ChildFeedback.Sum(x => x.GetTotalChecks());
         }
 
