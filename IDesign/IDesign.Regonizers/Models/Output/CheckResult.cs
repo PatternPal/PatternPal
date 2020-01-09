@@ -37,20 +37,17 @@ namespace IDesign.Recognizers.Models.Output
             Score = score;
         }
         public CheckResult(string message, FeedbackType feedbackType, ICheckable element, float score)
-
         {
             Message = message;
             FeedbackType = feedbackType;
             Element = element;
             Score = score;
-
         }
 
         public string Message { get; set; }
         public FeedbackType FeedbackType { get; set; }
         public ICheckable Element { get; set; }
         public List<ICheckResult> ChildFeedback { get; set; } = new List<ICheckResult>();
-
 
         public IResourceMessage _feedback { get; set; }
 

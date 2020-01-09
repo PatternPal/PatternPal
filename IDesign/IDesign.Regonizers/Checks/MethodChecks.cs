@@ -71,10 +71,10 @@ namespace IDesign.Recognizers.Checks
         }
 
         /// <summary>
-        ///
+        ///Checks if the method comes from an interface of a class.
         /// </summary>
-        /// <param name=""></param>
-        /// <param name="currentClass"></param>
+        /// <param name="methodSyntax">Method that should be in an interface</param>
+        /// <param name="currentClass">Class which should have this method in one of its interfaces</param>
         /// <returns></returns>
         public static bool IsInterfaceMethod(this IMethod methodSyntax, IEntityNode currentClass)
         {
