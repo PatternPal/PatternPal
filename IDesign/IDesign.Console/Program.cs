@@ -189,12 +189,6 @@ namespace IDesign.ConsoleApp
             Console.ForegroundColor = ConsoleColor.White;
         }
 
-        private static string NodeToString(SyntaxNode sNode)
-        {
-            if (sNode == null) return "";
-            return sNode.ToString();
-        }
-
         /// <summary>
         ///     Draw a progress bar
         /// </summary>
