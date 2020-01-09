@@ -121,9 +121,9 @@ namespace IDesign.Extension
             GetAllPaths();
         }
 
-        private void SaveAllFiles()
+        private void SaveAllDocuments()
         {
-            Dte.ActiveDocument.Save();
+            Dte.Documents.SaveAll();
         }
 
         /// <summary>
@@ -146,7 +146,7 @@ namespace IDesign.Extension
             "Default event handler naming pattern")]
         private async void Analyse_Button(object sender, RoutedEventArgs e)
         {
-            SaveAllFiles();
+            SaveAllDocuments();
             Analyse();
         }
 
