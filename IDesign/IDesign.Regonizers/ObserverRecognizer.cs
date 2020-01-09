@@ -34,19 +34,19 @@ namespace IDesign.Recognizers
             //Tests for implementation of observer pattern with an subject interface
             var checks = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
             {
-                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(1), new ResourceMessage("MethodAny"), 0.33f),
-                new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.ImplementedBy), new ResourceMessage("NodeImplementedByAny"), 0.33f),
-                new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.UsedBy), new ResourceMessage("NodeUsedByAny"), 0.33f),
+                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(1), "MethodAny", 0.33f),
+                new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.ImplementedBy), "NodeImplementedByAny", 0.33f),
+                new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.UsedBy), "NodeUsedByAny", 0.33f),
 
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                 {
-                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(3), new ResourceMessage("MethodAmountThree"),0.66f),
+                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(3), "MethodAmountThree",0.66f),
                     new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethodsWithParameter(new List<string> { node.GetName() }, 2), new ResourceMessage("ObserverMethodParameters", new []{node.GetName()}), 0.66f),
-                    new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.ImplementedBy), new ResourceMessage("NodeImplementedByAny"),0.33f ),
+                    new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.ImplementedBy), "NodeImplementedByAny",0.33f ),
 
                     new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                     {
-                        new ElementCheck<IEntityNode>(x => x.CheckTypeDeclaration(EntityNodeType.Class), new ResourceMessage("NodeTypeClass")),
+                        new ElementCheck<IEntityNode>(x => x.CheckTypeDeclaration(EntityNodeType.Class), "NodeTypeClass"),
 
                         new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
                         {
@@ -73,15 +73,15 @@ namespace IDesign.Recognizers
             //Tests for implementation of observer pattern without an subject interface
             var checks = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
             {
-                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(1), new ResourceMessage("MethodAny"), 0.33f),
-                new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.ImplementedBy), new ResourceMessage("NodeImplementedByAny"), 0.33f),
-                new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.UsedBy), new ResourceMessage("NodeUsedByAny"), 0.33f),
+                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(1), "MethodAny", 0.33f),
+                new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.ImplementedBy), "NodeImplementedByAny", 0.33f),
+                new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.UsedBy), "NodeUsedByAny", 0.33f),
 
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                 {
-                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(3),new ResourceMessage("MethodAmountThree"), 0.33f),
+                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(3),"MethodAmountThree", 0.33f),
                     new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethodsWithParameter(new List<string> { node.GetName() }, 2), new ResourceMessage("ObserverMethodParameters", new []{node.GetName()}), 0.66f),
-                    new ElementCheck<IEntityNode>(x => x.CheckEntityNodeType(EntityNodeType.Class), new ResourceMessage("NodeTypeClass"), 0.33f),
+                    new ElementCheck<IEntityNode>(x => x.CheckEntityNodeType(EntityNodeType.Class), "NodeTypeClass", 0.33f),
                     new ElementCheck<IEntityNode>(x => x.CheckMaximumAmountOfRelationTypes(RelationType.Implements, 0), "NodeNotImplementedAny", 0.33f),
 
                     new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>

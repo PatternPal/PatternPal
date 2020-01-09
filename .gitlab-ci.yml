@@ -9,8 +9,6 @@ before_script:
     - "cd IDesign"
     - "dotnet restore"
     - "dotnet sln IDesign.sln remove IDesign.Extension/IDesign.Extension.csproj"
-    - "dotnet sln IDesign.sln remove IDesign.CommonResources/IDesign.CommonResources.csproj"
-    - "dotnet sln IDesign.sln remove IDesign.Console/IDesign.ConsoleApp.csproj"
     - "nuget restore IDesign.sln"
     - "cd ..\\"
 

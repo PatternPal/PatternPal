@@ -21,33 +21,33 @@ namespace IDesign.Recognizers
             {
                 //check if node is abstract class or interface
                 new ElementCheck<IEntityNode>(x => (x.CheckTypeDeclaration(EntityNodeType.Interface) ) |
-                (x.CheckTypeDeclaration(EntityNodeType.Class) && x.CheckModifier("abstract")),new ResourceMessage("NodeAbstractOrInterface"), 2),
+                (x.CheckTypeDeclaration(EntityNodeType.Class) && x.CheckModifier("abstract")),"NodeAbstractOrInterface", 2),
 
                 //check state node methods
                 new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                 {
 
-                    new ElementCheck<IMethod>(x => x.GetBody() == null, new ResourceMessage("MethodBodyEmpty"), 1)
+                    new ElementCheck<IMethod>(x => x.GetBody() == null, "MethodBodyEmpty", 1)
                     //TO DO: if abstract class method must be also abstract!
                 }, x => x.GetMethods(), "StrategyNodeMethods "),
 
                 //check state node used by relations
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                 {
-                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.UsedBy, 1),new ResourceMessage("NodeUses1"), 1),
+                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.UsedBy, 1),"NodeUses1", 1),
 
                     //check if field has state as type
                     new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                     {
                         new ElementCheck<IEntityNode>(x => (x.CheckTypeDeclaration(EntityNodeType.Interface)) |
-                        (x.CheckTypeDeclaration(EntityNodeType.Class) && x.CheckModifier("abstract")), new ResourceMessage("NodeAbstractOrInterface"), 1)
+                        (x.CheckTypeDeclaration(EntityNodeType.Class) && x.CheckModifier("abstract")), "NodeAbstractOrInterface", 1)
                     }, x => new List<IEntityNode> { node},"StrategyFieldStateType"),
 
                     //check context class fields
                     new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
                     {
                         //TO DO: check name
-                        new ElementCheck<IField>(x => x.CheckMemberModifier("private"), new ResourceMessage("FieldModifierPrivate"), 0.5f)
+                        new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "FieldModifierPrivate", 0.5f)
                     }, x=> x.GetFields(), "StrategyContextField", GroupCheckType.All)
 
 
@@ -56,8 +56,8 @@ namespace IDesign.Recognizers
                 //check inheritance
                  new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                  {
-                     new ElementCheck<IEntityNode>(x => !x.GetRelations().Any(y => y.GetRelationType() ==RelationType.Creates),new ResourceMessage("NodeDoesNotCreate"), 2),
-                     new ElementCheck<IEntityNode>(x => !x.GetRelations().Any(y => y.GetRelationType() ==RelationType.Uses), new ResourceMessage("NodeDoesNotUse"), 1),
+                     new ElementCheck<IEntityNode>(x => !x.GetRelations().Any(y => y.GetRelationType() ==RelationType.Creates),"NodeDoesNotCreate", 2),
+                     new ElementCheck<IEntityNode>(x => !x.GetRelations().Any(y => y.GetRelationType() ==RelationType.Uses), "NodeDoesNotUse", 1),
 
                      new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                      {

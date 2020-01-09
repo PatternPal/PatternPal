@@ -85,12 +85,12 @@ namespace IDesign.Recognizers
 
                         new GroupCheck<IRelation, IMethod>(new List<ICheck<IMethod>>
                         {
-                            new ElementCheck<IMethod>(x => x.CheckIfMethodCallsMethodInNode(currentRelation.GetDestination()), new ResourceMessage("AdapterMethodUses"), 2),
-                            new ElementCheck<IMethod>(x => !x.CheckReturnType(currentRelation.GetDestination().GetName()), new ResourceMessage("AdapterMethodReturnType"), 1),
+                            new ElementCheck<IMethod>(x => x.CheckIfMethodCallsMethodInNode(currentRelation.GetDestination()), "AdapterMethodUses", 2),
+                            new ElementCheck<IMethod>(x => !x.CheckReturnType(currentRelation.GetDestination().GetName()), "AdapterMethodReturnType", 1),
                             new ElementCheck<IMethod>(x => x.IsInterfaceMethod(entityNode) || x.CheckModifier("override"),
                                 "MethodOverride", 1),
 
-                        }, x => entityNode.GetMethods(), "AdapterMethod", GroupCheckType.All)
+                        }, x => entityNode.GetMethods(), "AdapterMethod", GroupCheckType.Median)
 
                 }, node => node.GetRelations(), "AdapterAdaptee")
             }, x => new List<IEntityNode> { entityNode }, "AdapterClass", GroupCheckType.All);

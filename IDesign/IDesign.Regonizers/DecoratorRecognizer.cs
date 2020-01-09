@@ -23,7 +23,7 @@ namespace IDesign.Recognizers
             var decoratorCheck = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>()
             {
                 new ElementCheck<IEntityNode>(x => x.CheckModifier("Abstract"), "NodeModifierAbstract", 0.5f),
-                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.Extends, 1) || x.CheckMinimalAmountOfRelationTypes(RelationType.Implements, 1), new ResourceMessage("Parent"), 1),
+                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.Extends, 1) || x.CheckMinimalAmountOfRelationTypes(RelationType.Implements, 1), "Parent", 1),
                 new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.ExtendedBy, 1), "Child", 1),
 
                 //Component checks
