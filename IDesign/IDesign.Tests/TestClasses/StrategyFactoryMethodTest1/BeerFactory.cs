@@ -24,6 +24,7 @@ namespace IDesign.Tests.TestClasses.StrategyFactoryMethodTest1
             return amount;
         }
 
+
         public string FillBottle()
         {
             if (amount > 0)

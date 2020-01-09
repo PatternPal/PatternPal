@@ -58,6 +58,12 @@
       <DependentUpon>ExtensionUIResources.resx</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="Resources\SummaryRescources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SummaryRescources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SummaryFactory.cs" />
     <Compile Include="TreeViewItemExtensions.cs" />
     <Compile Include="UserControls\PatternCheckbox.xaml.cs">
       <DependentUpon>PatternCheckbox.xaml</DependentUpon>
@@ -153,6 +159,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ExtensionUIResources.Designer.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\SummaryRescources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SummaryRescources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>

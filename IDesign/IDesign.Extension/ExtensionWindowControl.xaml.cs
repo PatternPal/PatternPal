@@ -7,7 +7,9 @@ using System.Windows.Controls;
 using EnvDTE;
 using IDesign.Core;
 using IDesign.Core.Models;
+using IDesign.Extension.Resources;
 using IDesign.Extension.ViewModels;
+using IDesign.Recognizers.Abstractions;
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
@@ -29,6 +31,7 @@ namespace IDesign.Extension
         private List<Project> Projects { get; set; }
         private bool Loading { get; set; }
         private DTE Dte { get; set; }
+        private readonly SummaryFactory SummaryFactory = new SummaryFactory();
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ExtensionWindowControl" /> class.
@@ -60,12 +63,9 @@ namespace IDesign.Extension
                           select new DesignPatternViewModel(pattern.Name, pattern, pattern.WikiPage)).ToList();
 
             PatternCheckbox.listBox.DataContext = ViewModels;
-            var height = ViewModels.Count * 30;
 
-            if (height > 3 * 30)
-            {
-                height = 3 * 30;
-            }
+            var maxHeight = 3 * 30;
+            var height = Math.Min(ViewModels.Count * 30, maxHeight);
 
             Grid.RowDefinitions[2].Height = new GridLength(height);
         }
@@ -78,7 +78,9 @@ namespace IDesign.Extension
             {
                 var patterns = results.Where(x => x.Pattern.Equals(item));
                 if (patterns.Count() > 0)
+                {
                     viewModels.AddRange(patterns.OrderBy(x => x.Result.GetScore()).Select(x => new ResultViewModel(x)));
+                }
             }
 
             // - Change your UI information here
@@ -89,12 +91,10 @@ namespace IDesign.Extension
         private List<string> GetCurrentPath()
         {
             var result = new List<string>();
-            if ((bool)SelectPaths.radio1.IsChecked)
+
+            if ((bool)SelectPaths.radio1.IsChecked && Dte.ActiveDocument != null)
             {
-                if (Dte.ActiveDocument != null)
-                {
-                    result.Add(Dte.ActiveDocument.FullName);
-                }
+                result.Add(Dte.ActiveDocument.FullName);
             }
             return result;
         }
@@ -107,6 +107,7 @@ namespace IDesign.Extension
             {
                 Paths.AddRange(Projects[selectedI].Documents.Select(x => x.FilePath));
             }
+
         }
 
         private void ChoosePath()
@@ -152,6 +153,7 @@ namespace IDesign.Extension
                 {
                     SelectPaths.ProjectSelection.SelectedIndex = index;
                     return;
+
                 }
             }
         }
@@ -162,7 +164,6 @@ namespace IDesign.Extension
             var cur = GetCurrentPath().FirstOrDefault();
             SelectProjectFromFile(cur);
             ChoosePath();
-
             var SelectedPatterns = ViewModels.Where(x => x.IsChecked).Select(x => x.Pattern).ToList();
 
             if (!Loading && Paths.Count != 0 && SelectedPatterns.Count != 0)
@@ -186,29 +187,37 @@ namespace IDesign.Extension
                         TreeViewResults.SyntaxTreeSources = runner.CreateGraph(Paths);
                         var results = runner.Run(SelectedPatterns);
 
-                        //Here you signal the UI thread to execute the action:
-                        Dispatcher?.BeginInvoke(new Action(() =>
-                            {
-                                if ((bool)SelectPaths.radio1.IsChecked)
-                                {
-                                    results = results.Where(x => x.FilePath == cur).ToList();
-                                }
-                                else
-                                {
-                                    results = results.Where(x => x.Result.GetScore() > 80).ToList();
-                                }
 
-                                CreateResultViewModels(results);
-                            }));
+                    //Here you signal the UI thread to execute the action:
+                    Dispatcher?.BeginInvoke(new Action(() =>
+                        {
+
+                            var allResults = results;
+                            if ((bool)SelectPaths.radio1.IsChecked)
+                            {
+                                results = results.Where(x => x.FilePath == cur).ToList();
+                                SummaryRow.Height = new GridLength(100);
+                            }
+                            else
+                            {
+                                results = results.Where(x => x.Result.GetScore() >= 80).ToList();
+                                SummaryRow.Height = new GridLength(0);
+                            }
+
+                            SummaryControl.Text = SummaryFactory.CreateSummary(results, allResults);
+                            CreateResultViewModels(results);
+                        }));
+
                     }
                     catch (Exception e)
                     {
                         throw e;
-                    }
+                    };
+                    ResetUI();
                 });
-                ResetUI();
             }
         }
+
 
         private void ResetUI()
         {
