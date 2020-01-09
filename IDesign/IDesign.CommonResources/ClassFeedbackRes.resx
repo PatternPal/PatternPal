@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AdapteeExtendsApter" xml:space="preserve">
-    <value>Adaptee should Extends an the adapter</value>
+    <value>Adaptee should extend an adapter.</value>
   </data>
   <data name="AdapteeField" xml:space="preserve">
     <value>Adapter field should have adaptee as type</value>
@@ -184,7 +184,7 @@
     <value>Concrete decorator method should use the component and call its base.</value>
   </data>
   <data name="FactoryAbstractCreator" xml:space="preserve">
-    <value>Abstract Creator</value>
+    <value>Abstract creator</value>
   </data>
   <data name="FactoryAbstractCreatorMethod" xml:space="preserve">
     <value>Create method</value>
@@ -199,7 +199,7 @@
     <value>Concrete creator should have at least one method.</value>
   </data>
   <data name="FactoryConcreteProductMethodAny" xml:space="preserve">
-    <value>Concrete product should have at least one method</value>
+    <value>Concrete product should have at least one method.</value>
   </data>
   <data name="FactoryCreates" xml:space="preserve">
     <value>Product of the factory method</value>
@@ -226,7 +226,7 @@
     <value>Field type should be {0}.</value>
   </data>
   <data name="MethodAmountThree" xml:space="preserve">
-    <value>There should be atleast 3 methods: add, remove and notify.</value>
+    <value>There should be at least 3 methods: add, remove and notify.</value>
   </data>
   <data name="MethodAny" xml:space="preserve">
     <value>Should have at least one method.</value>
@@ -253,7 +253,7 @@
     <value>Method should be static.</value>
   </data>
   <data name="MethodNameOverride" xml:space="preserve">
-    <value>Method overrides base method.</value>
+    <value>Method should override base method.</value>
   </data>
   <data name="MethodOverride" xml:space="preserve">
     <value>Method should override or is implemented.</value>
@@ -274,28 +274,28 @@
     <value>Class should be abstract or an interface.</value>
   </data>
   <data name="NodeDoesNotCreate" xml:space="preserve">
-    <value>Node should not make other classes.</value>
+    <value>Node should not create other classes.</value>
   </data>
   <data name="NodeDoesNotUse" xml:space="preserve">
     <value>Node should not use other classes.</value>
   </data>
   <data name="NodeImplementedByAny" xml:space="preserve">
-    <value>Should be implemented by a class.</value>
+    <value>Node should be implemented by a class.</value>
   </data>
   <data name="NodeModifierAbstract" xml:space="preserve">
     <value>Class should be abstract.</value>
   </data>
   <data name="NodeNotImplementedAny" xml:space="preserve">
-    <value>Should not implement an interface.</value>
+    <value>Node should not implement an interface.</value>
   </data>
   <data name="NodeTypeClass" xml:space="preserve">
-    <value>Should be a class.</value>
+    <value>Node should be a class.</value>
   </data>
   <data name="NodeUsedByAny" xml:space="preserve">
     <value>This class should be used by other classes.</value>
   </data>
   <data name="NodeUses1" xml:space="preserve">
-    <value>Node must have atleast 1 uses relation.</value>
+    <value>Node should have at least 1 uses relation.</value>
   </data>
   <data name="ObjectAdapter" xml:space="preserve">
     <value>Object adapter</value>
@@ -325,7 +325,7 @@
     <value>Private constructor</value>
   </data>
   <data name="SingletonField" xml:space="preserve">
-    <value>Has instance of itself</value>
+    <value>Should have an instance of itself.</value>
   </data>
   <data name="SingletonMethod" xml:space="preserve">
     <value>Has GetInstance()</value>
@@ -349,7 +349,7 @@
     <value>State context field</value>
   </data>
   <data name="StateCreatesOtherState" xml:space="preserve">
-    <value>Concrete state class creates another state</value>
+    <value>Concrete state class should create another state</value>
   </data>
   <data name="StateFieldStateType" xml:space="preserve">
     <value>Used return type</value>
