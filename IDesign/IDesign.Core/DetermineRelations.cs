@@ -32,7 +32,7 @@ namespace IDesign.Core
         }
 
         /// <summary>
-        ///     Makes an relation based on a node, a relationtype and a destinationNode.
+        ///     Makes a relation based on a node, a relationtype and a destinationNode.
         /// </summary>
         /// <param name="node">the given node</param>
         /// <param name="type">the given relationtype</param>
@@ -41,7 +41,7 @@ namespace IDesign.Core
             AddRelation(node, type, GetNodeByName(node, destination));
 
         /// <summary>
-        ///     Makes an relation based on a node, a reltiontype and a destinationNode as node
+        ///     Makes a relation based on a node, a reltiontype and a destinationNode as node
         /// </summary>
         /// <param name="node">the given node</param>
         /// <param name="type">the given relationtype</param>
@@ -50,7 +50,7 @@ namespace IDesign.Core
         {
             if (edgeNode != null)
             {
-                //Make sure relation doesn't already exists
+                //Make sure relation does not already exists
                 if (node.Relations.Any(x => x.GetDestination() == edgeNode && x.GetRelationType() == type))
                 {
                     return;
@@ -93,14 +93,14 @@ namespace IDesign.Core
             };
             namespaces.AddRange(node.GetUsingDeclarationSyntaxList().Select(x => x.Name + "."));
             namespaces.Add("");
-            foreach (var nameSpace in namespaces)
+            foreach (var key in from nameSpace in namespaces
+                                let key = nameSpace + name
+                                where EntityNodes.ContainsKey(key)
+                                select key)
             {
-                var key = nameSpace + name;
-                if (EntityNodes.ContainsKey(key))
-                {
-                    return EntityNodes[key];
-                }
+                return EntityNodes[key];
             }
+
             return null;
         }
 

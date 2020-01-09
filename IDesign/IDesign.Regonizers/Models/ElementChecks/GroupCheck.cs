@@ -50,11 +50,11 @@ namespace IDesign.Recognizers.Models.ElementChecks
             }
 
             var allChildFeedback = new Dictionary<TChild, (float score, IEnumerable<ICheckResult> childFeedback)>();
-
-            foreach (var element in elements)
+            foreach (var (element, childFeedback, score) in from element in elements
+                                                            let childFeedback = _checks.Select(x => x.Check(element))
+                                                            let score = childFeedback.Sum(x => x.GetScore())
+                                                            select (element, childFeedback, score))
             {
-                var childFeedback = _checks.Select(x => x.Check(element));
-                var score = childFeedback.Sum(x => x.GetScore());
                 allChildFeedback.Add(element, (score, childFeedback));
             }
 
@@ -66,6 +66,8 @@ namespace IDesign.Recognizers.Models.ElementChecks
                     return CheckAny(elementToCheck, allChildFeedback);
                 case GroupCheckType.Median:
                     return CheckMedian(elementToCheck, allChildFeedback);
+                default:
+                    break;
             }
             return null;
         }
@@ -85,7 +87,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
                 feedback = FeedbackType.Correct;
             }
 
-            var message = elementToCheck.GetSuggestionName() + " | " + _description;
+            var message = $"{elementToCheck.GetSuggestionName()} | {_description}";
             return new CheckResult(message, feedback, elementToCheck.GetSuggestionNode())
             {
                 ChildFeedback = highestScored.Value.childFeedback.ToList()
@@ -114,7 +116,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
                 });
             }
 
-            var message = elementToCheck.GetSuggestionName() + " | " + _description;
+            var message = $"{elementToCheck.GetSuggestionName()} | {_description}";
             return new CheckResult(message, feedback, elementToCheck.GetSuggestionNode())
             {
                 ChildFeedback = childResults
@@ -147,7 +149,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
 
            // ChangeScore(childResults, childResults.Sum(x => x.GetTotalChecks()), childResults.Count() * childResults.Count());
 
-            var message = elementToCheck.GetSuggestionName() + " | " + _description;
+            var message = $"{elementToCheck.GetSuggestionName()} | {_description}";
             return new CheckResult(message, feedback, elementToCheck.GetSuggestionNode())
             {
                 ChildFeedback = childResults,

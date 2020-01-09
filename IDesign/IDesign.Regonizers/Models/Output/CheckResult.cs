@@ -47,25 +47,20 @@ namespace IDesign.Recognizers.Models.Output
 
         public float GetScore()
         {
-            if (!ChildFeedback.Any())
-            {
-                return FeedbackType == FeedbackType.Correct ? Score : 0;
-            }
-
-            if(CalculationType == CheckCalculationType.Average)
-                return ChildFeedback.Average(x => x.GetScore());
-            return ChildFeedback.Sum(x => x.GetScore());
+            return !ChildFeedback.Any()
+                ? FeedbackType == FeedbackType.Correct ? Score : 0
+                : CalculationType == CheckCalculationType.Average
+                ? ChildFeedback.Average(x => x.GetScore())
+                : ChildFeedback.Sum(x => x.GetScore());
         }
 
         public float GetTotalChecks()
         {
-            if (ChildFeedback.Count == 0)
-            {
-                return Score;
-            }
-            if (CalculationType == CheckCalculationType.Average)
-                return ChildFeedback.Average(x => x.GetTotalChecks());
-            return ChildFeedback.Sum(x => x.GetTotalChecks());
+            return ChildFeedback.Count == 0
+                ? Score
+                : CalculationType == CheckCalculationType.Average
+                ? ChildFeedback.Average(x => x.GetTotalChecks())
+                : ChildFeedback.Sum(x => x.GetTotalChecks());
         }
 
         public FeedbackType GetFeedbackType()

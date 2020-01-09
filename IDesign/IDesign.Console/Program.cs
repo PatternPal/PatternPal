@@ -95,7 +95,6 @@ namespace IDesign.ConsoleApp
             recognizerRunner.CreateGraph(selectedFiles);
             var results = recognizerRunner.Run(selectedPatterns);
 
-
             PrintResults(results, selectedDirectories);
 
             Console.ReadKey();
