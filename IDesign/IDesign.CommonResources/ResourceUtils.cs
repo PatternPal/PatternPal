@@ -57,7 +57,7 @@ namespace IDesign.CommonResources
 
         public static string ResultToString(ICheckResult result)
         {
-            var res = " ";
+            var res = "";
             if (result.GetFeedback() == null) 
                 return res;
             if(result.GetElement() != null)
