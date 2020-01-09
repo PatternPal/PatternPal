@@ -204,7 +204,7 @@ namespace IDesign.Extension
                         }
                         else
                         {
-                            results = results.Where(x => x.Result.GetScore() > 80).ToList();
+                            results = results.Where(x => x.Result.GetScore() >= 80).ToList();
                             SummaryRow.Height = new GridLength(0);
                         }
 

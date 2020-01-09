@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ClassScoresHighestOn" xml:space="preserve">
-    <value>But {0} mostly looks like a {1} pattern.</value>
+    <value>But {0} mostly looks like the {1} pattern.</value>
   </data>
   <data name="ClassSeemsPartOf" xml:space="preserve">
     <value>• '{0}' seems part of the {1} pattern.</value>

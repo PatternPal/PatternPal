@@ -61,7 +61,7 @@ namespace IDesign.Extension.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to But {0} mostly looks like a {1} pattern..
+        ///   Looks up a localized string similar to But {0} mostly looks like the {1} pattern..
         /// </summary>
         internal static string ClassScoresHighestOn {
             get {
@@ -81,7 +81,7 @@ namespace IDesign.Extension.Resources {
         /// <summary>
         ///   Looks up a localized string similar to {0} classes and/or interfaces were analysed.
         /// </summary>
-        internal static string MulitpleEntiyNodesAnalysed {
+        internal static string MultipleEntiyNodesAnalysed {
             get {
                 return ResourceManager.GetString("MulitpleEntiyNodesAnalysed", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace IDesign.Extension.Resources {
         /// <summary>
         ///   Looks up a localized string similar to From {0} files.
         /// </summary>
-        internal static string MulitpleFiles {
+        internal static string MultipleFiles {
             get {
                 return ResourceManager.GetString("MulitpleFiles", resourceCulture);
             }

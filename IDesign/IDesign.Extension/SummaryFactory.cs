@@ -86,9 +86,7 @@ namespace IDesign.Extension
             var resultList = CreatePartOfPatternSummary(uniqueFiles, allResults, uniqueEntityNodes, ref recognizedPatternsCount);
 
             if (resultList.Count() == 0 && recognizedPatternsCount == 0)
-            {
                 result += CreateNoPatternsFoundSummary(results);
-            }
             else if (recognizedPatternsCount == 1)
                 result += SummaryRescources.OnePatternRecognized + " ";
             else
