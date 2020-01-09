@@ -226,7 +226,7 @@
     <value>Field type should be {0}.</value>
   </data>
   <data name="MethodAmountThree" xml:space="preserve">
-    <value>There should be atleast 3 methods: add, remove and notify.</value>
+    <value>There should be at least 3 methods: add, remove and notify.</value>
   </data>
   <data name="MethodAny" xml:space="preserve">
     <value>Should have at least one method.</value>
