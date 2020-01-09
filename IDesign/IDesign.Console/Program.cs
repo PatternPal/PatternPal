@@ -95,11 +95,8 @@ namespace IDesign.ConsoleApp
             recognizerRunner.CreateGraph(selectedFiles);
             var results = recognizerRunner.Run(selectedPatterns);
 
-<<<<<<< HEAD
-            PrintResultsOfRecognizerRunner(results);
-=======
+
             PrintResults(results, selectedDirectories);
->>>>>>> develop
 
             Console.ReadKey();
         }
@@ -111,16 +108,8 @@ namespace IDesign.ConsoleApp
             options.WriteOptionDescriptions(Console.Out);
         }
 
-<<<<<<< HEAD
-        private static void PrintResultsOfRecognizerRunner(List<RecognitionResult> results)
-=======
-        /// <summary>
-        ///     Prints results of RecognizerRunner.Run
-        /// </summary>
-        /// <param name="results">A List of RecognitionResult</param>
-        /// <param name="selectedDirectories">A List of directories that might be selected</param>
+
         private static void PrintResults(List<RecognitionResult> results, List<string> selectedDirectories)
->>>>>>> develop
         {
             Console.WriteLine("\nResults:");
 
