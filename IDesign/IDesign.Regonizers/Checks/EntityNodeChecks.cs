@@ -142,7 +142,11 @@ namespace IDesign.Recognizers.Checks
         public static bool CheckMaximumAmountOfMethodsWithParameter(this IEntityNode node, List<string> parameters, int amount)
         {
             return node.GetMethodsAndProperties().Where(x => x.CheckParameters(parameters)).Count() < amount;
-
+        }
+      
+        public static bool CheckMaximumAmountOfRelationTypes(this IEntityNode entityNode, RelationType relationType, int amount)
+        {
+            return entityNode.GetRelations().Where(x => x.GetRelationType().Equals(relationType)).Count() <= amount;
         }
 
         public static bool CheckMinimalAmountOfMethods(this IEntityNode node, int amount)

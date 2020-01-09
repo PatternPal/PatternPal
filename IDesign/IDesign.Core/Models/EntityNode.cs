@@ -12,7 +12,6 @@ namespace IDesign.Core.Models
     {
         public List<ConstructorDeclarationSyntax> ConstructorDeclarationSyntaxList =
             new List<ConstructorDeclarationSyntax>();
-
         public List<FieldDeclarationSyntax> FieldDeclarationSyntaxList = new List<FieldDeclarationSyntax>();
         public List<MethodDeclarationSyntax> MethodDeclarationSyntaxList = new List<MethodDeclarationSyntax>();
         public List<PropertyDeclarationSyntax> PropertyDeclarationSyntaxList = new List<PropertyDeclarationSyntax>();
