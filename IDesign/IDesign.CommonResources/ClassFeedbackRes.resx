@@ -322,7 +322,7 @@
     <value>Private constructor</value>
   </data>
   <data name="SingletonField" xml:space="preserve">
-    <value>Has instance of itself</value>
+    <value>Should have an instance of itself.</value>
   </data>
   <data name="SingletonFieldType" xml:space="preserve">
     <value>Singleton field type should be {0}.</value>
