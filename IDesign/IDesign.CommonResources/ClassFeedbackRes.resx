@@ -271,7 +271,7 @@
     <value>Class should be abstract or an interface.</value>
   </data>
   <data name="NodeDoesNotCreate" xml:space="preserve">
-    <value>Node should not make other classes.</value>
+    <value>Node should not create other classes.</value>
   </data>
   <data name="NodeDoesNotUse" xml:space="preserve">
     <value>Node should not use other classes.</value>
