@@ -147,6 +147,9 @@
   <data name="ConcreteDecoratorConstructor" xml:space="preserve">
     <value>Concrete decorator constructor</value>
   </data>
+  <data name="ConcreteDecoratorMethod" xml:space="preserve">
+    <value>Concrete decorator method</value>
+  </data>
   <data name="ConcreteDecoratorMethodParameters" xml:space="preserve">
     <value>Method should have the component as a parameter.</value>
   </data>
@@ -248,6 +251,9 @@
   </data>
   <data name="MethodModifierStatic" xml:space="preserve">
     <value>Method should be static.</value>
+  </data>
+  <data name="MethodNameOverride" xml:space="preserve">
+    <value>Method overrides base method.</value>
   </data>
   <data name="MethodOverride" xml:space="preserve">
     <value>Method should override or is implemented.</value>

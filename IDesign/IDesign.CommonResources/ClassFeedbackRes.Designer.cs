@@ -151,6 +151,15 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Concrete decorator method.
+        /// </summary>
+        public static string ConcreteDecoratorMethod {
+            get {
+                return ResourceManager.GetString("ConcreteDecoratorMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Method should have the component as a parameter..
         /// </summary>
         public static string ConcreteDecoratorMethodParameters {
@@ -453,6 +462,15 @@ namespace IDesign.CommonResources {
         public static string MethodModifierStatic {
             get {
                 return ResourceManager.GetString("MethodModifierStatic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method overrides base method..
+        /// </summary>
+        public static string MethodNameOverride {
+            get {
+                return ResourceManager.GetString("MethodNameOverride", resourceCulture);
             }
         }
         
