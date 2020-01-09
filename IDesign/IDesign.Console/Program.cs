@@ -22,6 +22,7 @@ namespace IDesign.ConsoleApp
             var designPatternsList = RecognizerRunner.designPatterns;
             var showHelp = false;
             var selectedFiles = new List<string>();
+            var selectedDirectories = new List<string>();
             var selectedPatterns = new List<DesignPattern>();
             var fileManager = new FileManager();
             var recognizerRunner = new RecognizerRunner();
@@ -53,9 +54,10 @@ namespace IDesign.ConsoleApp
 
             selectedFiles = (from a in arguments where a.EndsWith(".cs") && a.Length > 3 select a).ToList();
 
-            foreach (var arg in arguments)
-                if (Directory.Exists(arg))
-                    selectedFiles.AddRange(fileManager.GetAllCsFilesFromDirectory(arg));
+            selectedDirectories = (from dir in arguments where Directory.Exists(dir) select dir).ToList();
+
+            foreach (var dir in selectedDirectories)
+                selectedFiles.AddRange(fileManager.GetAllCsFilesFromDirectory(dir));
 
             if (selectedFiles.Count == 0)
             {
@@ -81,7 +83,7 @@ namespace IDesign.ConsoleApp
             recognizerRunner.CreateGraph(selectedFiles);
             var results = recognizerRunner.Run(selectedPatterns);
 
-            PrintResults(results);
+            PrintResults(results, selectedDirectories);
 
             Console.ReadKey();
         }
@@ -101,15 +103,27 @@ namespace IDesign.ConsoleApp
         ///     Prints results of RecognizerRunner.Run
         /// </summary>
         /// <param name="results">A List of RecognitionResult</param>
-        private static void PrintResults(List<RecognitionResult> results)
+        /// <param name="selectedDirectories">A List of directories that might be selected</param>
+        private static void PrintResults(List<RecognitionResult> results, List<string> selectedDirectories)
         {
             Console.WriteLine("\nResults:");
 
+            results = results.Where(x => x.Result.GetScore() >= 80).ToList();
+
             for (var i = 0; i < results.Count; i++)
             {
-                if (results[i].Result.GetScore() < 80)
-                   continue;
-                Console.Write($"{i}) {results[i].EntityNode.GetName()} | {results[i].Pattern.Name}: ");
+                var name = results[i].EntityNode.GetName();
+
+                //If a directory was selected, show from which subdirectories the entitynode originated
+                if (selectedDirectories.Count > 0)
+                    foreach (var item in selectedDirectories)
+                        if (results[i].EntityNode.GetSourceFile().Contains(item))
+                        {
+                            name = results[i].EntityNode.GetSourceFile().Replace(item, "");
+                            break;
+                        }
+
+                Console.Write($"{i}) {name} | {results[i].Pattern.Name}: ");
 
                 PrintScore(results[i].Result.GetScore());
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.Shell;
+﻿using IDesign.Extension.ViewModels;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Generic;
@@ -40,6 +41,20 @@ namespace IDesign.Extension.UserControls
             var service = Package.GetGlobalService(typeof(IVsWebBrowsingService)) as IVsWebBrowsingService;
 
             service.Navigate("https://en.wikipedia.org/wiki/" + wikiPage, 0, out ppFrame);
+        }
+
+        private void CheckBox_Changed(object sender, RoutedEventArgs e)
+        {
+            var designPatternViewModels = listBox.Items.OfType<DesignPatternViewModel>().ToList();
+
+            if (designPatternViewModels.All(x => x.IsChecked))
+            {
+                (((this.Parent as Grid).Children[1] as Border).Child as CheckBox).IsChecked = true;
+            }
+            else if (designPatternViewModels.All(x => !x.IsChecked))
+            {
+                (((this.Parent as Grid).Children[1] as Border).Child as CheckBox).IsChecked = false;
+            }
         }
     }
 }
