@@ -41,16 +41,13 @@ namespace IDesign.Core.Models
         {
             var list = new List<IMethod>();
             list.AddRange(MethodDeclarationSyntaxList.Select(x => new Method(x)));
-
-            foreach (var property in PropertyDeclarationSyntaxList)
+            foreach (var property in PropertyDeclarationSyntaxList.Where(property => property.AccessorList != null)
+                                                                  .Select(property => property))
             {
-                if (property.AccessorList != null)
-                {
-                    var accessors = property.AccessorList.Accessors;
-                    var getters = accessors.Where(x => x.Kind() == SyntaxKind.GetAccessorDeclaration);
-                    getters = getters.Where(x => x.Body != null || x.ExpressionBody != null);
-                    list.AddRange(getters.Select(x => new PropertyMethod(property, x)));
-                }
+                var accessors = property.AccessorList.Accessors;
+                var getters = accessors.Where(x => x.Kind() == SyntaxKind.GetAccessorDeclaration);
+                getters = getters.Where(x => x.Body != null || x.ExpressionBody != null);
+                list.AddRange(getters.Select(x => new PropertyMethod(property, x)));
             }
 
             return list;
@@ -59,14 +56,10 @@ namespace IDesign.Core.Models
         public IEnumerable<IField> GetFields()
         {
             var listGetters = new List<IField>();
-            foreach (var property in PropertyDeclarationSyntaxList)
+            foreach (var property in PropertyDeclarationSyntaxList.Where(property => property.AccessorList != null).Select(property => property))
             {
-                if (property.AccessorList != null)
-                {
-                    var getters = property.AccessorList.Accessors.Where(x =>
-                        x.Kind() == SyntaxKind.GetAccessorDeclaration && x.Body == null && x.ExpressionBody == null);
-                    listGetters.AddRange(getters.Select(x => new PropertyField(property)));
-                }
+                var getters = property.AccessorList.Accessors.Where(x => x.Kind() == SyntaxKind.GetAccessorDeclaration && x.Body == null && x.ExpressionBody == null);
+                listGetters.AddRange(getters.Select(x => new PropertyField(property)));
             }
 
             foreach (var field in FieldDeclarationSyntaxList)

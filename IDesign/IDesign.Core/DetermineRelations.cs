@@ -51,13 +51,11 @@ namespace IDesign.Core
             if (edgeNode != null)
             {
                 //Make sure relation does not already exists
-                if (node.Relations.Any(x => x.GetDestination() == edgeNode && x.GetRelationType() == type))
+                if (!node.Relations.Any(x => x.GetDestination() == edgeNode && x.GetRelationType() == type))
                 {
-                    return;
+                    node.Relations.Add(new Relation(edgeNode, type));
+                    edgeNode.Relations.Add(new Relation(node, reverserdTypes[type]));
                 }
-
-                node.Relations.Add(new Relation(edgeNode, type));
-                edgeNode.Relations.Add(new Relation(node, reverserdTypes[type]));
             }
         }
 
@@ -124,6 +122,8 @@ namespace IDesign.Core
                                     break;
                                 case EntityNodeType.Interface:
                                     relationType = RelationType.Implements;
+                                    break;
+                                default:
                                     break;
                             }
                             AddRelation(entityNode, relationType.Value, edgeNode);
