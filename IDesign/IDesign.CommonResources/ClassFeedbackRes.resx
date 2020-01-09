@@ -184,7 +184,7 @@
     <value>Concrete decorator method should use the component and call its base.</value>
   </data>
   <data name="FactoryAbstractCreator" xml:space="preserve">
-    <value>Abstract Creator</value>
+    <value>Abstract creator</value>
   </data>
   <data name="FactoryAbstractCreatorMethod" xml:space="preserve">
     <value>Create method</value>
