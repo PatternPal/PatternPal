@@ -538,6 +538,15 @@ namespace CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Should not implement an interface..
+        /// </summary>
+        public static string NodeNotImplementedAny {
+            get {
+                return ResourceManager.GetString("NodeNotImplementedAny", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Should be a class..
         /// </summary>
         public static string NodeTypeClass {

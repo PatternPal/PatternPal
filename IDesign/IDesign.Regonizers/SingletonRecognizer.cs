@@ -16,7 +16,7 @@ namespace IDesign.Recognizers
 
             var methodChecks = new List<ICheck<IMethod>>
             {
-                new ElementCheck<IMethod>(x => x.CheckReturnType(entityNode.GetName()), new ResourceMessage("MethodReturnType", new [] { entityNode.GetName() } , 1
+                new ElementCheck<IMethod>(x => x.CheckReturnType(entityNode.GetName()), new ResourceMessage("MethodReturnType", new [] { entityNode.GetName() }) , 1),
                 new ElementCheck<IMethod>(x => x.CheckModifier("static"), new ResourceMessage("MethodModifierStatic"), 1),
                 new ElementCheck<IMethod>(x => x.CheckReturnTypeSameAsCreation(),
                    new ResourceMessage("SingletonMethodReturnCreationType"))
