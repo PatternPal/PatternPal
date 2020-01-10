@@ -77,8 +77,8 @@ namespace IDesign.ConsoleApp
 
             foreach (var pattern in selectedPatterns) Console.WriteLine(" - " + pattern.Name);
 
-             // recognizerRunner.OnProgressUpdate += (sender, progress) =>
-              //DrawTextProgressBar(progress.Status, progress.CurrentPercentage, 100);
+             recognizerRunner.OnProgressUpdate += (sender, progress) =>
+              DrawTextProgressBar(progress.Status, progress.CurrentPercentage, 100);
 
             recognizerRunner.CreateGraph(selectedFiles);
             var results = recognizerRunner.Run(selectedPatterns);
