@@ -127,7 +127,7 @@
     <value>Adaptee should be used by an adapter.</value>
   </data>
   <data name="AdapterAdaptee" xml:space="preserve">
-    <value>Has adaptee</value>
+    <value>Should have adaptee.</value>
   </data>
   <data name="AdapterClass" xml:space="preserve">
     <value>Class adapter</value>
