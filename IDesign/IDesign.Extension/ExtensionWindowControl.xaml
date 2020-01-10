@@ -124,7 +124,7 @@
             </Grid>
         </Border>
         <TextBlock Grid.Row="5" Text="{x:Static UIResources:ExtensionUIResources.Output}" VerticalAlignment="Top" FontSize="15" FontWeight="Bold" Margin="5" />
-        <TextBlock Grid.Row="6" x:Name="SummaryControl" TextWrapping="Wrap" VerticalAlignment="Top" Margin="8" />
+        <TextBlock Grid.Row="6" x:Name="SummaryControl" TextWrapping="Wrap"  Margin="8" />
         <usercontrol:TreeViewResults x:Name="TreeViewResults" Grid.Row="7" />
         <ProgressBar Grid.Row="8" Height="20" VerticalAlignment="Bottom" Minimum="0" Maximum="100" Name="statusBar" />
         <TextBlock Grid.Row="8" x:Name="ProgressStatusBlock" Height="20" HorizontalAlignment="Center" FontWeight="Bold" />

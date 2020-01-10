@@ -27,17 +27,6 @@ namespace IDesign.Recognizers.Models.Output
             return Results;
         }
 
-        public override string ToString()
-        {
-            var res = "";
-            res += GetScore();
-
-            foreach (var suggestie in Results)
-                res += ", " + suggestie.GetMessage();
-
-            return res;
-        }
-
         public IDictionary<IEntityNode, string> GetRelatedSubTypes()
         {
             return RelatedSubTypes;
