@@ -121,13 +121,13 @@
     <value>Adaptee should extend an adapter.</value>
   </data>
   <data name="AdapteeField" xml:space="preserve">
-    <value>Adapter field should have adaptee as type</value>
+    <value>Adapter field should have adaptee as type.</value>
   </data>
   <data name="AdapteeIsUsed" xml:space="preserve">
-    <value>Adaptee should be  used by an adapter.</value>
+    <value>Adaptee should be used by an adapter.</value>
   </data>
   <data name="AdapterAdaptee" xml:space="preserve">
-    <value>Has adaptee</value>
+    <value>Should have adaptee.</value>
   </data>
   <data name="AdapterClass" xml:space="preserve">
     <value>Class adapter</value>
@@ -235,7 +235,7 @@
     <value>Method body should be empty.</value>
   </data>
   <data name="MethodCreateSameInterface" xml:space="preserve">
-    <value>Method should create an interface of this class but not this class itself.</value>
+    <value>Method should create a different class of the same interface as this class.</value>
   </data>
   <data name="MethodCreateType" xml:space="preserve">
     <value>Method should create {0}.</value>
@@ -328,7 +328,7 @@
     <value>Should have an instance of itself.</value>
   </data>
   <data name="SingletonMethod" xml:space="preserve">
-    <value>Has GetInstance()</value>
+    <value>Should have GetInstance().</value>
   </data>
   <data name="SingletonMethodReturnCreationType" xml:space="preserve">
     <value>Singleton method should be able to return a new Singleton.</value>
