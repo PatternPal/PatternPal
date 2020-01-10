@@ -61,13 +61,13 @@ namespace IDesign.Recognizers
                     .Select(y => y.GetDestination()), "FactoryCreates")
 
                 }, x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.ExtendedBy))
-                .Select(y => y.GetDestination()), "FactoryConcreteCreator", GroupCheckType.Any),
+                .Select(y => y.GetDestination()), "FactoryConcreteCreator", GroupCheckType.All),
 
                 //product node
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                 {
                     //product
-                    new ElementCheck<IEntityNode>(x => {entityNode = x; return x.GetMethods().Any() || x.GetFields().Any(); }, "ProductClass"),
+                    new ElementCheck<IEntityNode>(x => {entityNode = x; return x.GetMethods().Any() || x.GetFields().Any(); }, "ProductClassNotEmpty"),
 
                     //check if node (creator) has uses relations (method) with return type of interface node (product)
                     new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>

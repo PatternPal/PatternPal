@@ -61,7 +61,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adaptee should Extends an the adapter.
+        ///   Looks up a localized string similar to Adaptee should extend an adapter..
         /// </summary>
         public static string AdapteeExtendsApter {
             get {
@@ -259,7 +259,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Abstract Creator.
+        ///   Looks up a localized string similar to Abstract creator.
         /// </summary>
         public static string FactoryAbstractCreator {
             get {
@@ -304,7 +304,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Concrete product should have at least one method.
+        ///   Looks up a localized string similar to Concrete product should have at least one method..
         /// </summary>
         public static string FactoryConcreteProductMethodAny {
             get {
@@ -385,7 +385,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There should be atleast 3 methods: add, remove and notify..
+        ///   Looks up a localized string similar to There should be at least 3 methods: add, remove and notify..
         /// </summary>
         public static string MethodAmountThree {
             get {
@@ -466,7 +466,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method overrides base method..
+        ///   Looks up a localized string similar to Method should override base method..
         /// </summary>
         public static string MethodNameOverride {
             get {
@@ -529,7 +529,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Node should not make other classes..
+        ///   Looks up a localized string similar to Node should not create other classes..
         /// </summary>
         public static string NodeDoesNotCreate {
             get {
@@ -547,7 +547,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should be implemented by a class..
+        ///   Looks up a localized string similar to Node should be implemented by a class..
         /// </summary>
         public static string NodeImplementedByAny {
             get {
@@ -565,7 +565,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should not implement an interface..
+        ///   Looks up a localized string similar to Node should not implement an interface..
         /// </summary>
         public static string NodeNotImplementedAny {
             get {
@@ -574,7 +574,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should be a class..
+        ///   Looks up a localized string similar to Node should be a class..
         /// </summary>
         public static string NodeTypeClass {
             get {
@@ -592,7 +592,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Node must have atleast 1 uses relation..
+        ///   Looks up a localized string similar to Node should have at least 1 uses relation..
         /// </summary>
         public static string NodeUses1 {
             get {
@@ -673,6 +673,15 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Product class should not be empty..
+        /// </summary>
+        public static string ProductClassNotEmpty {
+            get {
+                return ResourceManager.GetString("ProductClassNotEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Private constructor.
         /// </summary>
         public static string SingletonConstructor {
@@ -682,7 +691,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Has instance of itself.
+        ///   Looks up a localized string similar to Should have an instance of itself..
         /// </summary>
         public static string SingletonField {
             get {
@@ -754,7 +763,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Concrete state class creates another state.
+        ///   Looks up a localized string similar to Concrete state class should create another state.
         /// </summary>
         public static string StateCreatesOtherState {
             get {

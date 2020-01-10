@@ -17,12 +17,6 @@ namespace IDesign.Recognizers.Abstractions
         ///     Get the message for this feedback
         /// </summary>
         /// <returns>The suggestion message</returns>
-
-
-        /// <summary>
-        ///     Get the message for this feedback
-        /// </summary>
-        /// <returns>The suggestion message</returns>
         IEnumerable<ICheckResult> GetChildFeedback();
 
         /// <summary>
