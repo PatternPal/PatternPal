@@ -124,7 +124,7 @@
     <value>Adapter field should have adaptee as type.</value>
   </data>
   <data name="AdapteeIsUsed" xml:space="preserve">
-    <value>Adaptee should be  used by an adapter.</value>
+    <value>Adaptee should be used by an adapter.</value>
   </data>
   <data name="AdapterAdaptee" xml:space="preserve">
     <value>Has adaptee</value>
