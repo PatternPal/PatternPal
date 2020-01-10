@@ -43,6 +43,7 @@ namespace IDesign.Extension.UserControls
             if (viewModel.Result.GetElement() != null)
             {
                 var node = viewModel.Result.GetElement().GetSuggestionNode();
+                if (node == null) return;
                 SelectNodeInEditor(node, SyntaxTreeSources[node.SyntaxTree]);
             }
         }
