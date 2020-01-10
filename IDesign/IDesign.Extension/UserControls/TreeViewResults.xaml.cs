@@ -40,9 +40,12 @@ namespace IDesign.Extension.UserControls
             var viewModel = viewItem?.DataContext as CheckResultViewModel;
             if (viewModel == null) return;
 
-            var node = viewModel.Result.GetSyntaxNode();
-            if (node == null) return;
-            SelectNodeInEditor(node, SyntaxTreeSources[node.SyntaxTree]);
+            if (viewModel.Result.GetElement() != null)
+            {
+                var node = viewModel.Result.GetElement().GetSuggestionNode();
+                if (node == null) return;
+                SelectNodeInEditor(node, SyntaxTreeSources[node.SyntaxTree]);
+            }
         }
 
         /// <summary>

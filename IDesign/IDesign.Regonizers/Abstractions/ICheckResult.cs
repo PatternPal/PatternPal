@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using IDesign.Recognizers.Models;
 using Microsoft.CodeAnalysis;
 
 namespace IDesign.Recognizers.Abstractions
@@ -12,13 +13,6 @@ namespace IDesign.Recognizers.Abstractions
 
     public interface ICheckResult
     {
-        /// <summary>
-        ///     Get the message for this feedback
-        /// </summary>
-        /// <returns>The suggestion message</returns>
-        string GetMessage();
-
-
         /// <summary>
         ///     Get the message for this feedback
         /// </summary>
@@ -48,7 +42,9 @@ namespace IDesign.Recognizers.Abstractions
         ///     Get the syntax node related to this feedback
         /// </summary>
         /// <returns>The related syntax node</returns>
-        SyntaxNode GetSyntaxNode();
+        ICheckable GetElement();
+
+        IResourceMessage GetFeedback();
 
         /// <summary>
         ///     Changes the score and total checks

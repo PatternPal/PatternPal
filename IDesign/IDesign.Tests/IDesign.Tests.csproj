@@ -77,6 +77,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\IDesign.CommonResources\IDesign.CommonResources.csproj" />
     <ProjectReference Include="..\IDesign.Core\IDesign.Core.csproj" />
     <ProjectReference Include="..\IDesign.Regonizers\IDesign.Recognizers.csproj" />
   </ItemGroup>

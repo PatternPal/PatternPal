@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using IDesign.CommonResources;
 using IDesign.Core;
 using IDesign.Core.Models;
 using IDesign.Recognizers.Abstractions;
+using Microsoft.CodeAnalysis;
 using NDesk.Options;
 
 namespace IDesign.ConsoleApp
@@ -75,8 +77,8 @@ namespace IDesign.ConsoleApp
 
             foreach (var pattern in selectedPatterns) Console.WriteLine(" - " + pattern.Name);
 
-            recognizerRunner.OnProgressUpdate += (sender, progress) =>
-                DrawTextProgressBar(progress.Status, progress.CurrentPercentage, 100);
+             recognizerRunner.OnProgressUpdate += (sender, progress) =>
+              DrawTextProgressBar(progress.Status, progress.CurrentPercentage, 100);
 
             recognizerRunner.CreateGraph(selectedFiles);
             var results = recognizerRunner.Run(selectedPatterns);
@@ -142,13 +144,12 @@ namespace IDesign.ConsoleApp
         public static void PrintResult(ICheckResult result, int depth)
         {
 
-
             Console.ForegroundColor = ConsoleColor.Red;
             var symbol = "X";
 
             if (result.GetFeedbackType() == FeedbackType.SemiCorrect)
             {
-                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.ForegroundColor = ConsoleColor.Yellow;
                 symbol = "-";
             }
 
@@ -158,7 +159,7 @@ namespace IDesign.ConsoleApp
                 symbol = "✓";
             }
 
-            Console.WriteLine(new string('\t', depth) + symbol + $" {result.GetMessage()} | {result.GetScore()}p / {result.GetTotalChecks()}p");
+            Console.WriteLine(new string('\t', depth) + symbol + $"{ResourceUtils.ResultToString(result)} | {result.GetScore()}p / {result.GetTotalChecks()}p");
 
             foreach (var child in result.GetChildFeedback())
             {
@@ -219,5 +220,6 @@ namespace IDesign.ConsoleApp
             string output = progress.ToString() + " of " + total.ToString();
             Console.Write(output.PadRight(15) + stepDescription); //pad the output so when changing from 3 to 4 digits we avoid text shifting
         }
+
     }
 }

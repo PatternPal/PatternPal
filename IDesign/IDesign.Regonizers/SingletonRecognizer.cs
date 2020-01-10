@@ -9,36 +9,37 @@ namespace IDesign.Recognizers
 {
     public class SingletonRecognizer : IRecognizer
     {
+
         public IResult Recognize(IEntityNode entityNode)
         {
             var result = new Result();
 
             var methodChecks = new List<ICheck<IMethod>>
             {
-                new ElementCheck<IMethod>(x => x.CheckReturnType(entityNode.GetName()), "Incorrect return type",1),
-                new ElementCheck<IMethod>(x => x.CheckModifier("static"), "Is not static",1),
+                new ElementCheck<IMethod>(x => x.CheckReturnType(entityNode.GetName()), new ResourceMessage("MethodReturnType", new [] { entityNode.GetName() }) , 1),
+                new ElementCheck<IMethod>(x => x.CheckModifier("static"), "MethodModifierStatic", 1),
                 new ElementCheck<IMethod>(x => x.CheckReturnTypeSameAsCreation(),
-                    "Return type isnt the same as created")
+                   new ResourceMessage("SingletonMethodReturnCreationType"))
             };
 
             var propertyChecks = new List<ICheck<IField>>
             {
-                new ElementCheck<IField>(x => x.CheckFieldType(new List<string>(){ entityNode.GetName() }), "Incorrect type",1),
-                new ElementCheck<IField>(x => x.CheckMemberModifier("static"), "Is not static",1),
-                new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "Is not private",0.5f)
+                new ElementCheck<IField>(x => x.CheckFieldType(new List<string>(){ entityNode.GetName() }), new ResourceMessage("FieldType", new []{ entityNode.GetName()}), 1),
+                new ElementCheck<IField>(x => x.CheckMemberModifier("static"), "FieldModifierStatic", 1),
+                new ElementCheck<IField>(x => !x.CheckMemberModifier("public"), "FieldModifierNotPublic", 1)
             };
 
             var constructorChecks = new List<ICheck<IMethod>>
             {
-                new ElementCheck<IMethod>(x => (x.CheckModifier("private")) ||(x.CheckModifier("protected")), "should be private or protected",0.5f)
+                new ElementCheck<IMethod>(x => !x.CheckModifier("public"), "ConstructorModifierNotPublic", 0.5F)
             };
 
 
             var singletonCheck = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
             {
-                new GroupCheck<IEntityNode, IMethod>(methodChecks, x => x.GetMethods(), "Has GetInstance()"),
-                new GroupCheck<IEntityNode, IField>(propertyChecks, x => x.GetFields(), "Has instance of itself"),
-                new GroupCheck<IEntityNode, IMethod>(constructorChecks, x => x.GetConstructors(), "Private constructor")
+                new GroupCheck<IEntityNode, IMethod>(methodChecks, x => x.GetMethods(), "SingletonMethod"),
+                new GroupCheck<IEntityNode, IField>(propertyChecks, x => x.GetFields(), "SingletonField"),
+                new GroupCheck<IEntityNode, IMethod>(constructorChecks, x => x.GetConstructors(), "SingletonConstructor")
             }, x => new List<IEntityNode> { entityNode }, "Singleton", GroupCheckType.All);
 
 

@@ -22,14 +22,22 @@ namespace IDesign.Recognizers.Models.ElementChecks
         where TParent : class, ICheckable where TChild : class, ICheckable
     {
         private readonly List<ICheck<TChild>> _checks;
-        private readonly string _description;
+        private IResourceMessage _resourcemessage;
         private readonly Func<TParent, IEnumerable<TChild>> _elements;
         public GroupCheckType Type { get; set; }
 
-        public GroupCheck(List<ICheck<TChild>> checks, Func<TParent, IEnumerable<TChild>> elements, string description, GroupCheckType type = GroupCheckType.Any)
+        public GroupCheck(List<ICheck<TChild>> checks, Func<TParent, IEnumerable<TChild>> elements, string resourcemessage, GroupCheckType type = GroupCheckType.Any)
         {
             _checks = checks;
-            _description = description;
+            _resourcemessage = new ResourceMessage(resourcemessage);
+            _elements = elements;
+            Type = type;
+        }
+
+        public GroupCheck(List<ICheck<TChild>> checks, Func<TParent, IEnumerable<TChild>> elements, IResourceMessage resourcemessage, GroupCheckType type = GroupCheckType.Any)
+        {
+            _checks = checks;
+            _resourcemessage = resourcemessage;
             _elements = elements;
             Type = type;
         }
@@ -68,8 +76,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
             if (highestScored.Value.childFeedback.All(x => x.GetFeedbackType() == FeedbackType.Correct))
                 feedback = FeedbackType.Correct;
 
-            var message = elementToCheck.GetSuggestionName() + " | " + _description;
-            return new CheckResult(message, feedback, elementToCheck.GetSuggestionNode())
+            return new CheckResult(_resourcemessage, feedback, elementToCheck)
             {
                 ChildFeedback = highestScored.Value.childFeedback.ToList()
             };
@@ -86,14 +93,13 @@ namespace IDesign.Recognizers.Models.ElementChecks
             var childResults = new List<ICheckResult>();
             foreach (var valueTuple in allChildFeedback)
             {
-                childResults.Add(new CheckResult(valueTuple.Key.GetSuggestionName(), feedback, elementToCheck.GetSuggestionNode())
+                childResults.Add(new CheckResult(valueTuple.Key.GetSuggestionName(), feedback, elementToCheck)
                 {
                     ChildFeedback = valueTuple.Value.childFeedback.ToList()
                 });
             }
 
-            var message = elementToCheck.GetSuggestionName() + " | " + _description;
-            return new CheckResult(message, feedback, elementToCheck.GetSuggestionNode())
+            return new CheckResult(_resourcemessage, feedback, elementToCheck)
             {
                 ChildFeedback = childResults
             };
@@ -112,7 +118,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
             {
                 var test = valueTuple.Value;
 
-                childResults.Add(new CheckResult(valueTuple.Key.GetSuggestionName(), feedback, elementToCheck.GetSuggestionNode())
+                childResults.Add(new CheckResult(valueTuple.Key.GetSuggestionName(), feedback, elementToCheck)
                 {
                     ChildFeedback = valueTuple.Value.childFeedback.ToList()
                 });
@@ -120,8 +126,8 @@ namespace IDesign.Recognizers.Models.ElementChecks
 
            // ChangeScore(childResults, childResults.Sum(x => x.GetTotalChecks()), childResults.Count() * childResults.Count());
 
-            var message = elementToCheck.GetSuggestionName() + " | " + _description;
-            return new CheckResult(message, feedback, elementToCheck.GetSuggestionNode())
+           
+            return new CheckResult(_resourcemessage, feedback, elementToCheck)
             {
                 ChildFeedback = childResults,
                 CalculationType = CheckCalculationType.Average
@@ -130,7 +136,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
 
         private ICheckResult CreateFalseResult()
         {
-            return new CheckResult(_description, FeedbackType.Incorrect, null)
+            return new CheckResult(_resourcemessage, FeedbackType.Incorrect, null)
             {
                 ChildFeedback = _checks.Select(x => x.Check(null)).ToList()
             };

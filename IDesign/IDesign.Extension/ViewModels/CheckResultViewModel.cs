@@ -3,6 +3,7 @@ using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
+using IDesign.CommonResources;
 
 namespace IDesign.Extension.ViewModels
 {
@@ -11,10 +12,11 @@ namespace IDesign.Extension.ViewModels
         public CheckResultViewModel(ICheckResult result)
         {
             Result = result;
+            Message = CommonResources.ResourceUtils.ResultToString(Result);
         }
 
         public ICheckResult Result { get; set; }
-        public string Message => Result.GetMessage();
+        public string Message { get; set; }
         public float Score => Result.GetScore();
         public FeedbackType Type => Result.GetFeedbackType();
 

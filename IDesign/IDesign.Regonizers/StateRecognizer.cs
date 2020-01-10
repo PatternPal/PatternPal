@@ -23,57 +23,65 @@ namespace IDesign.Recognizers
             {
                 //check if node is abstract class or interface
                 new ElementCheck<IEntityNode>(x => (x.CheckTypeDeclaration(EntityNodeType.Interface) ) |
-                (x.CheckTypeDeclaration(EntityNodeType.Class) && x.CheckModifier("abstract")),"State class should be abstract or an interface!",2),
+
+                (x.CheckTypeDeclaration(EntityNodeType.Class) && x.CheckModifier("abstract")), "NodeAbstractOrInterface", 2),
+
 
                 //check state node methods
                 new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                 {
-                    new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "return type should be void",1),
-                    new ElementCheck<IMethod>(x => x.GetBody() == null, "Body should be empty!",1)
+
+                    new ElementCheck<IMethod>(x => x.CheckReturnType("void"), new ResourceMessage("MethodReturnType", new [] {"void" }), 1),
+                    new ElementCheck<IMethod>(x => x.GetBody() == null, "MethodBodyEmpty", 1)
+
                     //TO DO: if abstract class method must be also abstract!
-                }, x => x.GetMethods(), "Methods: "),
+                }, x => x.GetMethods(), "StateNodeMethods"),
 
                 //check state node used by relations
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                 {
-                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.UsedBy, 1),$"Minimal amount of used by relations should be 1",0.5f),
+
+                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.UsedBy, 1), "NodeUses1", 0.5f),
 
                     //check if field has state as type
                     new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                     {
                         new ElementCheck<IEntityNode>(x => (x.CheckTypeDeclaration(EntityNodeType.Interface)) |
-                        (x.CheckTypeDeclaration(EntityNodeType.Class) && x.CheckModifier("abstract")), "type should be an interface or abstract class",2)
-                    }, x => new List<IEntityNode> { node},"Used return type:"),
-                    
+
+                        (x.CheckTypeDeclaration(EntityNodeType.Class) && x.CheckModifier("abstract")), "NodeAbstractOrInterface", 2)
+                    }, x => new List<IEntityNode> { node},"StateFieldStateType"),
+
                     //check context class fields
                     new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
                     {
                         //TO DO: check name
-                        new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "modifier should be private",0.5f)
-                    }, x=> x.GetFields(), "Fields", GroupCheckType.All)
+
+                        new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "FieldModifierPrivate", 0.5f)
+
+                    }, x=> x.GetFields(), "StateContextField", GroupCheckType.All)
 
 
-                },x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.UsedBy)).Select(y => y.GetDestination()), "Check used by relations"),
+                },x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.UsedBy)).Select(y => y.GetDestination()), "StateContext"),
 
                 //check inheritance
                  new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                  {
-                        new ElementCheck<IEntityNode>(x => {entityNode = x; return x.GetMethods().Any(); }, "Has functions"),
+                        new ElementCheck<IEntityNode>(x => {entityNode = x; return x.GetMethods().Any(); }, "MethodAny"),
 
                         new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                         {
                             new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                             {
-                                new ElementCheck<IMethod>(x => x.CheckReturnType("void"), "Return type should be void",1),
-                                new ElementCheck<IMethod>(x => (x.CheckCreationType(entityNode.GetName()) && !(x.CheckCreationType(node.GetName()))), $"new state should not be itself",2)
+                                new ElementCheck<IMethod>(x => x.CheckReturnType("void"), new ResourceMessage("MethodReturnType", new [] {"void"}), 1),
+                                new ElementCheck<IMethod>(x => (x.CheckCreationType(entityNode.GetName()) && !(x.CheckCreationType(node.GetName()))), new ResourceMessage("MethodCreateSameInterface"), 2)
                                 //TO DO: check of functie de zelfte parameters heeft als de interface/abstracte klasse functie
-                                //TO DO: check of de functie de zelfde naam heeft als de overervende functie  
-                            }, x=> x.GetMethods(), "Methods:"),
+                                //TO DO: check of de functie de zelfde naam heeft als de overervende functie
+                            }, x=> x.GetMethods(), "StateClassChangeState"),
 
-                        },x => entityNode.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Creates)).Select(y => y.GetDestination()), "Check creates relations"),
+                        },x => entityNode.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Creates)).Select(y => y.GetDestination()), "StateCreatesOtherState"),
 
                  },x => x.GetRelations().Where(y => (y.GetRelationType().Equals(RelationType.ExtendedBy)) ||(y.GetRelationType().Equals(RelationType.ImplementedBy))
-                ).Select(y => y.GetDestination()), "Node is parent of: ", GroupCheckType.All),
+                ).Select(y => y.GetDestination()), "StateConcrete", GroupCheckType.All),
 
             }, x => new List<IEntityNode> { node }, "State"); ;
             result.Results.Add(statePatternCheck.Check(node));

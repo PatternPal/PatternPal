@@ -13,7 +13,7 @@ namespace IDesign.Recognizers
         public IResult Recognize(IEntityNode entityNode)
         {
             var result = new Result();
-           
+
             var objectAdapterResult = GetObjectAdapterCheck(entityNode).Check(entityNode);
             var classAdapterResult = GetInheritanceAdapterCheck(entityNode).Check(entityNode);
 
@@ -33,12 +33,12 @@ namespace IDesign.Recognizers
                 GetImplementsInterfaceOrExtendsClassCheck(),
                 new GroupCheck<IEntityNode, IRelation>(new List<ICheck<IRelation>>
                 {
-                    //Is used by adapter    
+                    //Is used by adapter
                     new ElementCheck<IRelation>(x =>
                     {
                         currentRelation = x;
                         return x.GetRelationType() == RelationType.Uses;
-                    }, "Adaptee is used by adapter"),
+                    }, "AdapteeIsUsed"),
 
                     //Adapter has an adaptee field
                     new GroupCheck<IRelation, IField>(new List<ICheck<IField>>
@@ -47,20 +47,20 @@ namespace IDesign.Recognizers
                         {
                             currentField = x.GetName();
                             return x.CheckFieldType(new List<string>{ currentRelation.GetDestination().GetName() });
-                        }, "Field has adaptee as type", 2),
-                        //Every method uses the adaptee 
+                        }, "AdapteeField"),
+                        //Every method uses the adaptee
                         new GroupCheck<IField, IMethod>(new List<ICheck<IMethod>>
                         {
-                            new ElementCheck<IMethod>(x => x.CheckFieldIsUsed(currentField), "Method uses adpatee", 2),
-                            new ElementCheck<IMethod>(x => !x.CheckReturnType(currentField), "Method does not return adaptee", 1),
+                            new ElementCheck<IMethod>(x => x.CheckFieldIsUsed(currentField), "AdapterMethodUses", 2),
+                            new ElementCheck<IMethod>(x => !x.CheckReturnType(currentField), "AdapterMethodReturnType", 1),
                             new ElementCheck<IMethod>(x => x.IsInterfaceMethod(entityNode) || x.CheckModifier("override"),
-                                "Method overrides or is ipmlemented", 1),
+                                "MethodOverride", 1)
 
-                        }, x => entityNode.GetMethods(), "Is used in every adapter method", GroupCheckType.Median)
+                        }, x => entityNode.GetMethods(), "AdapterMethod", GroupCheckType.Median)
 
-                    }, x => entityNode.GetFields(), "Adapter has an adaptee", GroupCheckType.Median)
-                }, node => node.GetRelations(), "Has adaptee")
-            }, x => new List<IEntityNode> { entityNode }, "Object adapter", GroupCheckType.All);
+                    }, x => entityNode.GetFields(), "AdapteeField", GroupCheckType.Median)
+                }, node => node.GetRelations(),  "AdapterAdaptee")
+            }, x => new List<IEntityNode> { entityNode }, "ObjectAdapter", GroupCheckType.All);
 
 
             return adapterCheck;
@@ -74,26 +74,26 @@ namespace IDesign.Recognizers
                 GetImplementsInterfaceOrExtendsClassCheck()                ,
                 new GroupCheck<IEntityNode, IRelation>(new List<ICheck<IRelation>>
                 {
-                    //Is used by adapter (parent)    
+                    //Is used by adapter (parent)
                     new ElementCheck<IRelation>(x =>
                     {
                         currentRelation = x;
                         return x.GetRelationType() == RelationType.Extends ||
                                x.GetRelationType() == RelationType.Implements
                             ;
-                    }, "Extends an the adapter", 2),
+                    }, "AdapteeExtendsApter", 2),
 
                         new GroupCheck<IRelation, IMethod>(new List<ICheck<IMethod>>
                         {
-                            new ElementCheck<IMethod>(x => x.CheckIfMethodCallsMethodInNode(currentRelation.GetDestination()), "Method uses adpatee", 2),
-                            new ElementCheck<IMethod>(x => !x.CheckReturnType(currentRelation.GetDestination().GetName()), "Method does not return adaptee", 1),
+                            new ElementCheck<IMethod>(x => x.CheckIfMethodCallsMethodInNode(currentRelation.GetDestination()), "AdapterMethodUses", 2),
+                            new ElementCheck<IMethod>(x => !x.CheckReturnType(currentRelation.GetDestination().GetName()), "AdapterMethodReturnType", 1),
                             new ElementCheck<IMethod>(x => x.IsInterfaceMethod(entityNode) || x.CheckModifier("override"),
-                                "Method is overriden or implemted", 1),
+                                "MethodOverride", 1),
 
-                        }, x => entityNode.GetMethods(), "Every method calls adaptee", GroupCheckType.Median)
+                        }, x => entityNode.GetMethods(), "AdapterMethod", GroupCheckType.Median)
 
-                }, node => node.GetRelations(), "Has adaptee")
-            }, x => new List<IEntityNode> { entityNode }, "Class adapter", GroupCheckType.All);
+                }, node => node.GetRelations(), "AdapterAdaptee")
+            }, x => new List<IEntityNode> { entityNode }, "AdapterClass", GroupCheckType.All);
 
             return adapterCheck;
         }
@@ -102,7 +102,7 @@ namespace IDesign.Recognizers
         {
             return new ElementCheck<IEntityNode>(
                     x => x.GetRelations().Any(y => y.GetRelationType() == RelationType.Implements || y.GetRelationType() == RelationType.Extends),
-                    "Implements interface or extends class");
+                    "Parent");
         }
     }
 }
