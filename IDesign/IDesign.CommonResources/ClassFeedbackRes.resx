@@ -235,7 +235,7 @@
     <value>Method body should be empty.</value>
   </data>
   <data name="MethodCreateSameInterface" xml:space="preserve">
-    <value>Method should create an interface of this class but not this class itself.</value>
+    <value>Method should create a different class of the same interface as this class.</value>
   </data>
   <data name="MethodCreateType" xml:space="preserve">
     <value>Method should create {0}.</value>
