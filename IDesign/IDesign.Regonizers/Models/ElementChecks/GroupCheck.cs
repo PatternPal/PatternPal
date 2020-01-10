@@ -93,7 +93,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
             var childResults = new List<ICheckResult>();
             foreach (var valueTuple in allChildFeedback)
             {
-                childResults.Add(new CheckResult(_resourcemessage, feedback, elementToCheck)
+                childResults.Add(new CheckResult(valueTuple.Key.GetSuggestionName(), feedback, elementToCheck)
                 {
                     ChildFeedback = valueTuple.Value.childFeedback.ToList()
                 });
@@ -118,7 +118,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
             {
                 var test = valueTuple.Value;
 
-                childResults.Add(new CheckResult(_resourcemessage, feedback, elementToCheck)
+                childResults.Add(new CheckResult(valueTuple.Key.GetSuggestionName(), feedback, elementToCheck)
                 {
                     ChildFeedback = valueTuple.Value.childFeedback.ToList()
                 });
