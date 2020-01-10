@@ -52,8 +52,8 @@ namespace IDesign.Recognizers
                         }, x => x.GetConstructors(), "Constructor"),
                         new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                         {
-                            new ElementCheck<IMethod>(x => x.CheckName(currentComponent.GetMethods()), "Contains overridden methods")
-
+                            new ElementCheck<IMethod>(x => x.CheckName(currentComponent.GetMethods()), "Contains overridden methods"),
+                            new ElementCheck<IMethod>(x => x.CheckIfMethodCallsBase(), "Calls base method")
                         }, x => x.GetMethods(), "Method")
                     }, x => entityNode.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.ExtendedBy)).Select(y => y.GetDestination()), "Concrete Decorator", GroupCheckType.Median)
 
