@@ -125,6 +125,14 @@ namespace IDesign.Recognizers.Checks
             return false;
         }
 
+        public static bool CheckIfMethodCallsBase(this IMethod method)
+        {
+            if (method.GetBody() == null)
+                return false;
+
+            return method.GetBody().DescendantNodes().OfType<BaseExpressionSyntax>().Any();
+        }
+
         /// <summary>
         ///     Function thats checks if the parameters exist.
         /// </summary>
@@ -170,7 +178,6 @@ namespace IDesign.Recognizers.Checks
         {
             return (methodSyntax.GetName().Equals(name) && methodSyntax.GetType() == typeof(Method));
         }
-
 
         public static bool CheckFieldIsUsed(this IMethod method, string fieldName)
         {
