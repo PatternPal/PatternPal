@@ -328,7 +328,7 @@
     <value>Should have an instance of itself.</value>
   </data>
   <data name="SingletonMethod" xml:space="preserve">
-    <value>Has GetInstance()</value>
+    <value>Should have GetInstance().</value>
   </data>
   <data name="SingletonMethodReturnCreationType" xml:space="preserve">
     <value>Singleton method should be able to return a new Singleton.</value>
