@@ -139,7 +139,7 @@
     <value>Adapter method should return adaptee.</value>
   </data>
   <data name="AdapterMethodUses" xml:space="preserve">
-    <value>Adapter method uses adpatee.</value>
+    <value>Adapter method should use adpatee.</value>
   </data>
   <data name="Child" xml:space="preserve">
     <value>Should be extended by a class.</value>
@@ -230,6 +230,9 @@
   </data>
   <data name="MethodAny" xml:space="preserve">
     <value>Should have at least one method.</value>
+  </data>
+  <data name="MethodBaseCall" xml:space="preserve">
+    <value>Calls base method</value>
   </data>
   <data name="MethodBodyEmpty" xml:space="preserve">
     <value>Method body should be empty.</value>

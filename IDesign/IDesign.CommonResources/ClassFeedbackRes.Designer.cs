@@ -70,7 +70,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adapter field should have adaptee as type.
+        ///   Looks up a localized string similar to Adapter field should have adaptee as type..
         /// </summary>
         public static string AdapteeField {
             get {
@@ -79,7 +79,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adaptee should be  used by an adapter..
+        ///   Looks up a localized string similar to Adaptee should be used by an adapter..
         /// </summary>
         public static string AdapteeIsUsed {
             get {
@@ -88,7 +88,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Has adaptee.
+        ///   Looks up a localized string similar to Should have adaptee..
         /// </summary>
         public static string AdapterAdaptee {
             get {
@@ -124,7 +124,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adapter method uses adpatee..
+        ///   Looks up a localized string similar to Adapter method should use adpatee..
         /// </summary>
         public static string AdapterMethodUses {
             get {
@@ -403,6 +403,15 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Calls base method.
+        /// </summary>
+        public static string MethodBaseCall {
+            get {
+                return ResourceManager.GetString("MethodBaseCall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Method body should be empty..
         /// </summary>
         public static string MethodBodyEmpty {
@@ -412,7 +421,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method should create an interface of this class but not this class itself..
+        ///   Looks up a localized string similar to Method should create a different class of the same interface as this class..
         /// </summary>
         public static string MethodCreateSameInterface {
             get {
@@ -673,15 +682,6 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Product class should not be empty..
-        /// </summary>
-        public static string ProductClassNotEmpty {
-            get {
-                return ResourceManager.GetString("ProductClassNotEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Private constructor.
         /// </summary>
         public static string SingletonConstructor {
@@ -700,7 +700,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Has GetInstance().
+        ///   Looks up a localized string similar to Should have GetInstance()..
         /// </summary>
         public static string SingletonMethod {
             get {
