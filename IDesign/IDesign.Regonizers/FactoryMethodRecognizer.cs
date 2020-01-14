@@ -28,30 +28,30 @@ namespace IDesign.Recognizers
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                 {
                     //concrete creator
-                    new ElementCheck<IEntityNode>(x => {entityNode = x; return x.GetMethods().Any(); }, "FactoryConcreteCreatorMethodAny"),
+                    new ElementCheck<IEntityNode>(x => {entityNode = x; return x.GetMethodsAndProperties().Any(); }, "FactoryConcreteCreatorMethodAny"),
 
                     //check if node (concrete creator) has creates relations
                     new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                     {
                         //concrete product
-                        new ElementCheck<IEntityNode>(x => {productnode = x; return x.GetMethods().Any(); }, "FactoryConcreteProductMethodAny"),
+                        new ElementCheck<IEntityNode>(x => {productnode = x; return x.GetMethodsAndProperties().Any(); }, "FactoryConcreteProductMethodAny"),
 
                         //check if method in node (concrete creator) creates new node (concrete product)
                         new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                         {
                             new ElementCheck<IMethod>(x => x.CheckCreationType(productnode.GetName()), "FactoryMethodCreateTypeProduct", 2),
-                        }, x => entityNode.GetMethods(), "FactoryAbstractCreatorMethod"),
+                        }, x => entityNode.GetMethodsAndProperties(), "FactoryAbstractCreatorMethod"),
 
                         //check if node (concrete product) implements/extends a node (product)
                         new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                         {
                             //product
-                            new ElementCheck<IEntityNode>(x => {productnode = x; return x.GetMethods().Any() || x.GetFields().Any(); }, "ProductClass"),
+                            new ElementCheck<IEntityNode>(x => {productnode = x; return x.GetMethodsAndProperties().Any() || x.GetFields().Any(); }, "ProductClass"),
 
                             new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                             {
                                 new ElementCheck<IMethod>(x => x.CheckReturnType(productnode.GetName()),"FactoryMethodCreateTypeProduct", 2),
-                            }, x => node.GetMethods(), "FactoryAbstractCreatorMethod")
+                            }, x => node.GetMethodsAndProperties(), "FactoryAbstractCreatorMethod")
 
                         }, x => x.GetRelations().Where(y => (y.GetRelationType().Equals(RelationType.Extends)) ||
                         (y.GetRelationType().Equals(RelationType.Implements)))
@@ -67,7 +67,7 @@ namespace IDesign.Recognizers
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                 {
                     //product
-                    new ElementCheck<IEntityNode>(x => {entityNode = x; return x.GetMethods().Any() || x.GetFields().Any(); }, "ProductClassNotEmpty"),
+                    new ElementCheck<IEntityNode>(x => {entityNode = x; return x.GetMethodsAndProperties().Any() || x.GetFields().Any(); }, "ProductClassNotEmpty"),
 
                     //check if node (creator) has uses relations (method) with return type of interface node (product)
                     new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
@@ -75,7 +75,7 @@ namespace IDesign.Recognizers
                          new ElementCheck<IMethod>(x => x.CheckModifier("public"),"MethodModifierPublic", 0.5f),
                          new ElementCheck<IMethod>(x => x.CheckModifier("abstract"),"MethodModifierAbstract", 1),
                          new ElementCheck<IMethod>(x => x.CheckReturnType(entityNode.GetName()),"FactoryMethodReturnTypeProductInterface", 2)
-                    }, x=> node.GetMethods(), "FactoryConcreteCreatorMethod")
+                    }, x=> node.GetMethodsAndProperties(), "FactoryConcreteCreatorMethod")
 
                 }, x=> x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Uses))
                 .Select(y => y.GetDestination()),"ProductClass", GroupCheckType.Any)

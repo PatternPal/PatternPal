@@ -37,14 +37,12 @@ namespace IDesign.Recognizers
 
             var singletonCheck = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
             {
-                new GroupCheck<IEntityNode, IMethod>(methodChecks, x => x.GetMethods(), "SingletonMethod"),
+                new GroupCheck<IEntityNode, IMethod>(methodChecks, x => x.GetMethodsAndProperties(), "SingletonMethod"),
                 new GroupCheck<IEntityNode, IField>(propertyChecks, x => x.GetFields(), "SingletonField"),
                 new GroupCheck<IEntityNode, IMethod>(constructorChecks, x => x.GetConstructors(), "SingletonConstructor")
             }, x => new List<IEntityNode> { entityNode }, "Singleton", GroupCheckType.All);
 
-
             var r = singletonCheck.Check(entityNode);
-
             result.Results = r.GetChildFeedback().ToList();
             return result;
         }

@@ -24,7 +24,9 @@ namespace IDesign.Tests.Checks
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
             var methodSyntax = root.Members[0] as MethodDeclarationSyntax;
             if (methodSyntax == null)
+            {
                 Assert.Fail();
+            }
             var method = new Method(methodSyntax);
 
             Assert.AreEqual(shouldBeValid, method.CheckReturnType(returnType));
@@ -40,12 +42,14 @@ namespace IDesign.Tests.Checks
         [TestCase("public", @"private static void TestMethod(){}", false)]
         public void ModifierCheck_Should_Return_CorrectResponse(string modifier, string code, bool shouldBeValid)
         {
-            
+
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
             var method = root.Members[0] as MethodDeclarationSyntax;
 
             if (method == null)
+            {
                 Assert.Fail();
+            }
 
             Assert.AreEqual(shouldBeValid, new Method(method).CheckModifier(modifier));
         }
@@ -62,7 +66,9 @@ namespace IDesign.Tests.Checks
             var method = root.Members[0] as MethodDeclarationSyntax;
 
             if (method == null)
+            {
                 Assert.Fail();
+            }
 
             Assert.AreEqual(shouldBeVaild, new Method(method).CheckCreationalFunction());
         }
@@ -79,7 +85,9 @@ namespace IDesign.Tests.Checks
             var method = root.Members[0] as MethodDeclarationSyntax;
 
             if (method == null)
+            {
                 Assert.Fail();
+            }
 
             Assert.AreEqual(shouldBeVaild, new Method(method).CheckReturnTypeSameAsCreation());
         }
@@ -96,7 +104,9 @@ namespace IDesign.Tests.Checks
             var method = root.Members[0] as MethodDeclarationSyntax;
 
             if (method == null)
+            {
                 Assert.Fail();
+            }
 
             Assert.AreEqual(shouldBeVaild, new Method(method).CheckParameters(parameters));
         }
@@ -117,9 +127,11 @@ namespace IDesign.Tests.Checks
             }
 
             if (method == null)
+            {
                 Assert.Fail();
+            }
 
-            Assert.AreEqual(shouldBeVaild, new Method(method).CheckName(methods));
+            Assert.AreEqual(shouldBeVaild, new Method(method).CheckIfNameExists(methods));
         }
 
         [Test]
@@ -131,9 +143,11 @@ namespace IDesign.Tests.Checks
             var method = root.Members[0] as MethodDeclarationSyntax;
 
             if (method == null)
+            {
                 Assert.Fail();
+            }
 
-            Assert.AreEqual(shouldBeVaild, new Method(method).CheckArguments(args));
+            Assert.AreEqual(shouldBeVaild, new Method(method).CheckIfArgumentsExists(args));
         }
     }
 }

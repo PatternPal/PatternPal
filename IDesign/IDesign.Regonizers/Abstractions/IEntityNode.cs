@@ -31,7 +31,7 @@ namespace IDesign.Recognizers.Abstractions
         ///     Get a list of methods declared in this node
         /// </summary>
         /// <returns>A list of methods</returns>
-        IEnumerable<IMethod> GetMethods();
+        IEnumerable<IMethod> GetMethodsAndProperties();
 
         /// <summary>
         ///     Get a list of fields declared in this node

@@ -47,11 +47,13 @@ namespace IDesign.Recognizers.Models.ElementChecks
         public ICheckResult Check(T elementToCheck)
         {
             //Support checking without input (To create false result)
-            if (elementToCheck == null)
-                return new CheckResult(_feedback, FeedbackType.Incorrect, null, _score);
-            var isValid = _predicate(elementToCheck);
-            var feedback = isValid ? FeedbackType.Correct : FeedbackType.Incorrect;
-            return new CheckResult(_feedback, feedback, elementToCheck, _score);
+            if (elementToCheck != null)
+            {
+                var isValid = _predicate(elementToCheck);
+                var feedback = isValid ? FeedbackType.Correct : FeedbackType.Incorrect;
+                return new CheckResult(_feedback, feedback, elementToCheck, _score);
+            }
+            return new CheckResult(_feedback, FeedbackType.Incorrect, null, _score);
         }
     }
 }

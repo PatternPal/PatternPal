@@ -34,13 +34,12 @@ namespace IDesign.Extension.UserControls
             var wikiPage = (e.OriginalSource as Button).DataContext.ToString();
 
             if (wikiPage == null || wikiPage == string.Empty)
+            {
                 return;
-
-            IVsWindowFrame ppFrame;
+            }
 
             var service = Package.GetGlobalService(typeof(IVsWebBrowsingService)) as IVsWebBrowsingService;
-
-            service.Navigate("https://en.wikipedia.org/wiki/" + wikiPage, 0, out ppFrame);
+            service.Navigate("https://en.wikipedia.org/wiki/" + wikiPage, 0, out _);
         }
 
         private void CheckBox_Changed(object sender, RoutedEventArgs e)
@@ -49,11 +48,11 @@ namespace IDesign.Extension.UserControls
 
             if (designPatternViewModels.All(x => x.IsChecked))
             {
-                (((this.Parent as Grid).Children[1] as Border).Child as CheckBox).IsChecked = true;
+                (((Parent as Grid).Children[1] as Border).Child as CheckBox).IsChecked = true;
             }
             else if (designPatternViewModels.All(x => !x.IsChecked))
             {
-                (((this.Parent as Grid).Children[1] as Border).Child as CheckBox).IsChecked = false;
+                (((Parent as Grid).Children[1] as Border).Child as CheckBox).IsChecked = false;
             }
         }
     }

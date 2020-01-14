@@ -116,8 +116,13 @@ namespace IDesign.Tests.Core
             var count = 0;
 
             foreach (var i in result)
+            {
                 if (i.Kind() == SyntaxKind.UsingDirective)
+                {
                     count++;
+                }
+            }
+
             Assert.AreEqual(amountOfUsings, count);
         }
     }

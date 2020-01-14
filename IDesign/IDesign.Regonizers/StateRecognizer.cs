@@ -26,7 +26,6 @@ namespace IDesign.Recognizers
 
                 (x.CheckTypeDeclaration(EntityNodeType.Class) && x.CheckModifier("abstract")), "NodeAbstractOrInterface", 2),
 
-
                 //check state node methods
                 new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                 {
@@ -34,13 +33,11 @@ namespace IDesign.Recognizers
                     new ElementCheck<IMethod>(x => x.CheckReturnType("void"), new ResourceMessage("MethodReturnType", new [] {"void" }), 1),
                     new ElementCheck<IMethod>(x => x.GetBody() == null, "MethodBodyEmpty", 1)
 
-                    //TO DO: if abstract class method must be also abstract!
-                }, x => x.GetMethods(), "StateNodeMethods"),
+                }, x => x.GetMethodsAndProperties(), "StateNodeMethods"),
 
                 //check state node used by relations
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                 {
-
                     new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.UsedBy, 1), "NodeUses1", 0.5f),
 
                     //check if field has state as type
@@ -66,7 +63,7 @@ namespace IDesign.Recognizers
                 //check inheritance
                  new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                  {
-                        new ElementCheck<IEntityNode>(x => {entityNode = x; return x.GetMethods().Any(); }, "MethodAny"),
+                        new ElementCheck<IEntityNode>(x => {entityNode = x; return x.GetMethodsAndProperties().Any(); }, "MethodAny"),
 
                         new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                         {
@@ -74,9 +71,7 @@ namespace IDesign.Recognizers
                             {
                                 new ElementCheck<IMethod>(x => x.CheckReturnType("void"), new ResourceMessage("MethodReturnType", new [] {"void"}), 1),
                                 new ElementCheck<IMethod>(x => (x.CheckCreationType(entityNode.GetName()) && !(x.CheckCreationType(node.GetName()))), new ResourceMessage("MethodCreateSameInterface"), 2)
-                                //TO DO: check of functie de zelfte parameters heeft als de interface/abstracte klasse functie
-                                //TO DO: check of de functie de zelfde naam heeft als de overervende functie
-                            }, x=> x.GetMethods(), "StateClassChangeState"),
+                            }, x=> x.GetMethodsAndProperties(), "StateClassChangeState"),
 
                         },x => entityNode.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Creates)).Select(y => y.GetDestination()), "StateCreatesOtherState"),
 
@@ -86,15 +81,13 @@ namespace IDesign.Recognizers
             }, x => new List<IEntityNode> { node }, "State"); ;
             result.Results.Add(statePatternCheck.Check(node));
 
-
             foreach (var concrete in node.GetRelations().Where(x =>
                      (x.GetRelationType().Equals(RelationType.ExtendedBy)) ||
                      (x.GetRelationType().Equals(RelationType.ImplementedBy))
                 ).Select(x => x.GetDestination()))
-                {
+            {
                 result.RelatedSubTypes.Add(concrete, "ConcreteState");
             }
-
             return result;
         }
     }

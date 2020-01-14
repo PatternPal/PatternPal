@@ -4,6 +4,7 @@ using System.IO;
 using IDesign.Core.Models;
 using IDesign.Recognizers;
 using Microsoft.CodeAnalysis;
+using System.Linq;
 
 namespace IDesign.Core
 {
@@ -29,7 +30,6 @@ namespace IDesign.Core
         {
             var syntaxTreeSources = new Dictionary<SyntaxTree, string>();
 
-            //loop over all files
             for (var i = 0; i < files.Count; i++)
             {
                 var tree = FileManager.MakeStringFromFile(files[i]);
@@ -40,7 +40,7 @@ namespace IDesign.Core
 
             //Make relations
             var determineRelations = new DetermineRelations(EntityNodes);
-            determineRelations.GetEdgesOfEntityNode();
+            determineRelations.CreateEdgesOfEntityNode();
             return syntaxTreeSources;
         }
 
@@ -58,16 +58,15 @@ namespace IDesign.Core
             {
                 j++;
                 ProgressUpdate((int)(j / (float)EntityNodes.Count * 50f + 50), "Scanning class: " + node.GetName());
-                foreach (var pattern in patterns)
-                    results.Add(new RecognitionResult
-                    {
-                        Result = pattern.Recognizer.Recognize(node),
-                        EntityNode = node,
-                        FilePath = node.SourceFile,
-                        Pattern = pattern
-                    });
+                results.AddRange(from pattern in patterns
+                                 select new RecognitionResult
+                                 {
+                                     Result = pattern.Recognizer.Recognize(node),
+                                     EntityNode = node,
+                                     FilePath = node.SourceFile,
+                                     Pattern = pattern
+                                 });
             }
-
             return results;
         }
 

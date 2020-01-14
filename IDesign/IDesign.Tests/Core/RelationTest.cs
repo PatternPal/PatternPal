@@ -22,7 +22,7 @@ namespace IDesign.Tests.Core
             var entityNodes = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
             var NameSpaceNode = "IDesign.Tests.TestClasses.Relation";
             var createRelation = new DetermineRelations(entityNodes);
-            createRelation.GetEdgesOfEntityNode();
+            createRelation.CreateEdgesOfEntityNode();
             var interfaceCheck = entityNodes[NameSpaceNode + "." + baseClass].GetRelations()
                 .Any(x => x.GetRelationType() == RelationType.Implements &&
                           x.GetDestination().GetName() == relatedClass);
@@ -43,7 +43,7 @@ namespace IDesign.Tests.Core
             var entityNodes = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
             var NameSpaceNode = "IDesign.Tests.TestClasses.Relation";
             var createRelation = new DetermineRelations(entityNodes);
-            createRelation.GetEdgesOfEntityNode();
+            createRelation.CreateEdgesOfEntityNode();
             var extendsCheck = entityNodes[NameSpaceNode + "." + baseClass].GetRelations()
                 .Any(x => x.GetRelationType() == RelationType.Extends && x.GetDestination().GetName() == relatedClass);
             Assert.AreEqual(shouldBeValid, extendsCheck);
@@ -63,7 +63,7 @@ namespace IDesign.Tests.Core
             var entityNodes = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
             var NameSpaceNode = "IDesign.Tests.TestClasses.Relation";
             var createRelation = new DetermineRelations(entityNodes);
-            createRelation.GetEdgesOfEntityNode();
+            createRelation.CreateEdgesOfEntityNode();
             var createCheck = entityNodes[NameSpaceNode + "." + baseClass].GetRelations()
                 .Any(x => x.GetRelationType() == RelationType.Creates && x.GetDestination().GetName() == relatedClass);
             Assert.AreEqual(shouldBeValid, createCheck);
@@ -84,7 +84,7 @@ namespace IDesign.Tests.Core
             var entityNodes = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
             var NameSpaceNode = "IDesign.Tests.TestClasses.Relation";
             var createRelation = new DetermineRelations(entityNodes);
-            createRelation.GetEdgesOfEntityNode();
+            createRelation.CreateEdgesOfEntityNode();
             var usingCheck = entityNodes[NameSpaceNode + "." + baseClass].GetRelations()
                 .Any(x => x.GetRelationType() == RelationType.Uses && x.GetDestination().GetName() == relatedClass);
             Assert.AreEqual(shouldBeValid, usingCheck);

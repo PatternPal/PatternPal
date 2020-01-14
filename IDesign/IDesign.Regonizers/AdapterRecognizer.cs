@@ -17,10 +17,11 @@ namespace IDesign.Recognizers
             var objectAdapterResult = GetObjectAdapterCheck(entityNode).Check(entityNode);
             var classAdapterResult = GetInheritanceAdapterCheck(entityNode).Check(entityNode);
 
-            if ((float)objectAdapterResult.GetTotalChecks() / objectAdapterResult.GetScore() < (float)classAdapterResult.GetTotalChecks() / classAdapterResult.GetScore())
-                result.Results = objectAdapterResult.GetChildFeedback().ToList();
-            else
-                result.Results = classAdapterResult.GetChildFeedback().ToList();
+            result.Results = objectAdapterResult.GetTotalChecks()
+                             / objectAdapterResult.GetScore() < classAdapterResult.GetTotalChecks() / classAdapterResult.GetScore()
+                ? objectAdapterResult.GetChildFeedback().ToList()
+                : classAdapterResult.GetChildFeedback().ToList();
+
             return result;
         }
 
@@ -54,14 +55,14 @@ namespace IDesign.Recognizers
                             new ElementCheck<IMethod>(x => x.CheckFieldIsUsed(currentField), "AdapterMethodUses", 2),
                             new ElementCheck<IMethod>(x => !x.CheckReturnType(currentField), "AdapterMethodReturnType", 1),
                             new ElementCheck<IMethod>(x => x.IsInterfaceMethod(entityNode) || x.CheckModifier("override"),
+
                                 "MethodOverride", 1)
 
-                        }, x => entityNode.GetMethods(), "AdapterMethod", GroupCheckType.Median)
+                        }, x => entityNode.GetMethodsAndProperties(), "AdapterMethod", GroupCheckType.Median)
 
                     }, x => entityNode.GetFields(), "AdapteeField", GroupCheckType.Median)
                 }, node => node.GetRelations(),  "AdapterAdaptee")
             }, x => new List<IEntityNode> { entityNode }, "ObjectAdapter", GroupCheckType.All);
-
 
             return adapterCheck;
         }
@@ -90,7 +91,7 @@ namespace IDesign.Recognizers
                             new ElementCheck<IMethod>(x => x.IsInterfaceMethod(entityNode) || x.CheckModifier("override"),
                                 "MethodOverride", 1),
 
-                        }, x => entityNode.GetMethods(), "AdapterMethod", GroupCheckType.Median)
+                        }, x => entityNode.GetMethodsAndProperties(), "AdapterMethod", GroupCheckType.Median)
 
                 }, node => node.GetRelations(), "AdapterAdaptee")
             }, x => new List<IEntityNode> { entityNode }, "AdapterClass", GroupCheckType.All);

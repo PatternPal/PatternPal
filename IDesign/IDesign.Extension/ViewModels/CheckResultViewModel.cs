@@ -12,7 +12,7 @@ namespace IDesign.Extension.ViewModels
         public CheckResultViewModel(ICheckResult result)
         {
             Result = result;
-            Message = CommonResources.ResourceUtils.ResultToString(Result);
+            Message = ResourceUtils.ResultToString(Result);
         }
 
         public ICheckResult Result { get; set; }
@@ -33,7 +33,6 @@ namespace IDesign.Extension.ViewModels
                     case FeedbackType.Incorrect:
                         return KnownMonikers.OnlineStatusBusy;
                 }
-
                 return KnownMonikers.StatusHelp;
             }
         }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using IDesign.Recognizers.Models;
-using Microsoft.CodeAnalysis;
 
 namespace IDesign.Recognizers.Abstractions
 {
@@ -10,7 +9,6 @@ namespace IDesign.Recognizers.Abstractions
         SemiCorrect,
         Incorrect
     }
-
     public interface ICheckResult
     {
         /// <summary>
