@@ -80,7 +80,6 @@ namespace IDesign.Extension
             {
                 viewModels.AddRange(patterns.OrderBy(x => x.Result.GetScore()).Select(x => new ResultViewModel(x)));
             }
-
             // - Change your UI information here
             TreeViewResults.ResultsView.ItemsSource = viewModels;
         }
@@ -105,7 +104,6 @@ namespace IDesign.Extension
             {
                 Paths.AddRange(Projects[selectedI].Documents.Select(x => x.FilePath));
             }
-
         }
 
         private void ChoosePath()

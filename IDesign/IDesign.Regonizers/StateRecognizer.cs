@@ -26,7 +26,6 @@ namespace IDesign.Recognizers
 
                 (x.CheckTypeDeclaration(EntityNodeType.Class) && x.CheckModifier("abstract")), "NodeAbstractOrInterface", 2),
 
-
                 //check state node methods
                 new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                 {
@@ -34,14 +33,11 @@ namespace IDesign.Recognizers
                     new ElementCheck<IMethod>(x => x.CheckReturnType("void"), new ResourceMessage("MethodReturnType", new [] {"void" }), 1),
                     new ElementCheck<IMethod>(x => x.GetBody() == null, "MethodBodyEmpty", 1)
 
-                    //TO DO: if abstract class method must be also abstract!
-
                 }, x => x.GetMethodsAndProperties(), "StateNodeMethods"),
 
                 //check state node used by relations
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                 {
-
                     new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.UsedBy, 1), "NodeUses1", 0.5f),
 
                     //check if field has state as type
@@ -85,7 +81,6 @@ namespace IDesign.Recognizers
             }, x => new List<IEntityNode> { node }, "State"); ;
             result.Results.Add(statePatternCheck.Check(node));
 
-
             foreach (var concrete in node.GetRelations().Where(x =>
                      (x.GetRelationType().Equals(RelationType.ExtendedBy)) ||
                      (x.GetRelationType().Equals(RelationType.ImplementedBy))
@@ -93,7 +88,6 @@ namespace IDesign.Recognizers
             {
                 result.RelatedSubTypes.Add(concrete, "ConcreteState");
             }
-
             return result;
         }
     }

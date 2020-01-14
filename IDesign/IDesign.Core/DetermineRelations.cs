@@ -31,21 +31,9 @@ namespace IDesign.Core
             }
         }
 
-        /// <summary>
-        ///     Makes a relation based on a node, a relationtype and a destinationNode.
-        /// </summary>
-        /// <param name="node">the given node</param>
-        /// <param name="type">the given relationtype</param>
-        /// <param name="destination">the given destination name as a string</param>
         private void AddRelation(EntityNode node, RelationType type, string destination) =>
             AddRelation(node, type, GetNodeByName(node, destination));
 
-        /// <summary>
-        ///     Makes a relation based on a node, a reltiontype and a destinationNode as node
-        /// </summary>
-        /// <param name="node">the given node</param>
-        /// <param name="type">the given relationtype</param>
-        /// <param name="edgeNode">the given destination node</param>
         private void AddRelation(EntityNode node, RelationType type, EntityNode edgeNode)
         {
             if (edgeNode != null)
@@ -98,7 +86,6 @@ namespace IDesign.Core
             {
                 return EntityNodes[key];
             }
-
             return null;
         }
 

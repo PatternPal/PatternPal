@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using IDesign.Recognizers.Models;
-using Microsoft.CodeAnalysis;
 
 namespace IDesign.Recognizers.Abstractions
 {

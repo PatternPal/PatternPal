@@ -27,6 +27,4 @@ namespace IDesign.Recognizers.Models.Output
             return RelatedSubTypes;
         }
     }
-
-
 }

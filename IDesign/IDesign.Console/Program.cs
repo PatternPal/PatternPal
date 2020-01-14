@@ -91,8 +91,8 @@ namespace IDesign.ConsoleApp
                 Console.WriteLine(" - " + pattern.Name);
             }
 
-             recognizerRunner.OnProgressUpdate += (sender, progress) =>
-              DrawTextProgressBar(progress.Status, progress.CurrentPercentage, 100);
+            recognizerRunner.OnProgressUpdate += (sender, progress) =>
+             DrawTextProgressBar(progress.Status, progress.CurrentPercentage, 100);
 
             recognizerRunner.CreateGraph(selectedFiles);
             var results = recognizerRunner.Run(selectedPatterns);
@@ -153,7 +153,6 @@ namespace IDesign.ConsoleApp
             var symbol = "X";
 
             switch (result.GetFeedbackType())
-
             {
                 case FeedbackType.SemiCorrect:
                     Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -173,10 +172,6 @@ namespace IDesign.ConsoleApp
             }
         }
 
-        /// <summary>
-        ///     Prints the score with a color depending on the score
-        /// </summary>
-        /// <param name="score"></param>
         private static void PrintScore(int score)
         {
             Console.ForegroundColor = score < 40 ? ConsoleColor.Red : score < 80 ? ConsoleColor.Yellow : ConsoleColor.Green;

@@ -37,8 +37,7 @@ namespace IDesign.Recognizers.Checks
             {
                 var creations = body.DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
                 foreach (var _ in from creationExpression in creations
-                                  where creationExpression.Type is IdentifierNameSyntax name &&
-          name.Identifier.ToString().CheckIfTwoStringsAreEqual(creationType)
+                                  where creationExpression.Type is IdentifierNameSyntax name && name.Identifier.ToString().CheckIfTwoStringsAreEqual(creationType)
                                   select new { })
                 {
                     return true;
@@ -94,10 +93,7 @@ namespace IDesign.Recognizers.Checks
 
         public static bool CheckIfMethodCallsBase(this IMethod method)
         {
-            if (method.GetBody() == null)
-                return false;
-
-            return method.GetBody().DescendantNodes().OfType<BaseExpressionSyntax>().Any();
+            return method.GetBody() != null ? method.GetBody().DescendantNodes().OfType<BaseExpressionSyntax>().Any() : false;
         }
 
 

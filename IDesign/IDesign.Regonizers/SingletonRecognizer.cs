@@ -42,9 +42,7 @@ namespace IDesign.Recognizers
                 new GroupCheck<IEntityNode, IMethod>(constructorChecks, x => x.GetConstructors(), "SingletonConstructor")
             }, x => new List<IEntityNode> { entityNode }, "Singleton", GroupCheckType.All);
 
-
             var r = singletonCheck.Check(entityNode);
-
             result.Results = r.GetChildFeedback().ToList();
             return result;
         }

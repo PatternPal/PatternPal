@@ -28,7 +28,6 @@ namespace IDesign.Recognizers
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                 {
                     //concrete creator
-
                     new ElementCheck<IEntityNode>(x => {entityNode = x; return x.GetMethodsAndProperties().Any(); }, "FactoryConcreteCreatorMethodAny"),
 
                     //check if node (concrete creator) has creates relations
@@ -47,7 +46,6 @@ namespace IDesign.Recognizers
                         new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                         {
                             //product
-
                             new ElementCheck<IEntityNode>(x => {productnode = x; return x.GetMethodsAndProperties().Any() || x.GetFields().Any(); }, "ProductClass"),
 
                             new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>

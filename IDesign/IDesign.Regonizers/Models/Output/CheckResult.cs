@@ -47,13 +47,8 @@ namespace IDesign.Recognizers.Models.Output
         public FeedbackType FeedbackType { get; set; }
         public ICheckable Element { get; set; }
         public List<ICheckResult> ChildFeedback { get; set; } = new List<ICheckResult>();
-
         public IResourceMessage _feedback { get; set; }
-
         public float Score { get; set; }
-
-
-
 
         public IEnumerable<ICheckResult> GetChildFeedback()
         {
@@ -87,16 +82,14 @@ namespace IDesign.Recognizers.Models.Output
 
             var feedback = FeedbackType.Incorrect;
 
-            if (ChildFeedback.Any(x => x.GetFeedbackType() == FeedbackType.Correct))
-            {
-                feedback = FeedbackType.SemiCorrect;
-            }
-
             if (ChildFeedback.All(x => x.GetFeedbackType() == FeedbackType.Correct))
             {
                 feedback = FeedbackType.Correct;
             }
-
+            else if (ChildFeedback.Any(x => x.GetFeedbackType() == FeedbackType.Correct))
+            {
+                feedback = FeedbackType.SemiCorrect;
+            }
             return feedback;
         }
 
@@ -108,12 +101,11 @@ namespace IDesign.Recognizers.Models.Output
         public IResourceMessage GetFeedback()
         {
             return _feedback;
-
         }
+
         public void ChangeScore(float score)
         {
             Score = score;
-
         }
     }
 }

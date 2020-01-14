@@ -44,7 +44,6 @@ namespace IDesign.Recognizers
                     //check context class fields
                     new GroupCheck<IEntityNode, IField>(new List<ICheck<IField>>
                     {
-                        //TO DO: check name
                         new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "FieldModifierPrivate", 0.5f)
                     }, x=> x.GetFields(), "StrategyContextField", GroupCheckType.All)
 
@@ -55,12 +54,6 @@ namespace IDesign.Recognizers
                  {
                      new ElementCheck<IEntityNode>(x => !x.GetRelations().Any(y => y.GetRelationType() ==RelationType.Creates),"NodeDoesNotCreate", 2),
                      new ElementCheck<IEntityNode>(x => !x.GetRelations().Any(y => y.GetRelationType() ==RelationType.Uses), "NodeDoesNotUse", 1),
-
-                     new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
-                     {
-                        //TO DO: check of functie de zelfte parameters heeft als de interface/abstracte klasse functie
-                        //TO DO: check of de functie de zelfde naam heeft als de overervende functie
-                     }, x=> x.GetMethodsAndProperties(), "StrategyConcreteMethod"),
 
                  },x => x.GetRelations().Where(y => (y.GetRelationType().Equals(RelationType.ExtendedBy)) ||(y.GetRelationType().Equals(RelationType.ImplementedBy))
                 ).Select(y => y.GetDestination()), "StrategyConcrete", GroupCheckType.All),

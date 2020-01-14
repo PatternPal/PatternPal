@@ -17,10 +17,11 @@ namespace IDesign.Recognizers
             var objectAdapterResult = GetObjectAdapterCheck(entityNode).Check(entityNode);
             var classAdapterResult = GetInheritanceAdapterCheck(entityNode).Check(entityNode);
 
-            if ((float)objectAdapterResult.GetTotalChecks() / objectAdapterResult.GetScore() < (float)classAdapterResult.GetTotalChecks() / classAdapterResult.GetScore())
-                result.Results = objectAdapterResult.GetChildFeedback().ToList();
-            else
-                result.Results = classAdapterResult.GetChildFeedback().ToList();
+            result.Results = objectAdapterResult.GetTotalChecks()
+                             / objectAdapterResult.GetScore() < classAdapterResult.GetTotalChecks() / classAdapterResult.GetScore()
+                ? objectAdapterResult.GetChildFeedback().ToList()
+                : classAdapterResult.GetChildFeedback().ToList();
+
             return result;
         }
 
