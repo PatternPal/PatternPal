@@ -92,6 +92,15 @@ namespace IDesign.Recognizers.Checks
             return false;
         }
 
+        public static bool CheckIfMethodCallsBase(this IMethod method)
+        {
+            if (method.GetBody() == null)
+                return false;
+
+            return method.GetBody().DescendantNodes().OfType<BaseExpressionSyntax>().Any();
+        }
+
+
         public static bool CheckParameters(this IMethod methodSyntax, IEnumerable<string> parameters)
         {
             return parameters.Any(x => methodSyntax.GetParameterTypes()

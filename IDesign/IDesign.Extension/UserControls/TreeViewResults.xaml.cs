@@ -37,9 +37,13 @@ namespace IDesign.Extension.UserControls
         {
             var viewItem = sender as TreeViewItem;
 
-            if (viewItem?.DataContext is CheckResultViewModel viewModel)
+            var viewModel = viewItem?.DataContext as CheckResultViewModel;
+            if (viewModel == null) return;
+
+            if (viewModel.Result.GetElement() != null)
             {
-                var node = viewModel.Result.GetSyntaxNode();
+                var node = viewModel.Result.GetElement().GetSuggestionNode();
+                if (node == null) return;
                 SelectNodeInEditor(node, SyntaxTreeSources[node.SyntaxTree]);
             }
         }

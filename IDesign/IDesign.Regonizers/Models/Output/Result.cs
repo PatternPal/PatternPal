@@ -7,6 +7,7 @@ namespace IDesign.Recognizers.Models.Output
     public class Result : IResult
     {
         public List<ICheckResult> Results { get; set; } = new List<ICheckResult>();
+
         public Dictionary<IEntityNode, string> RelatedSubTypes = new Dictionary<IEntityNode, string>();
 
         public int GetScore()
@@ -19,19 +20,6 @@ namespace IDesign.Recognizers.Models.Output
         public IList<ICheckResult> GetResults()
         {
             return Results;
-        }
-
-        public override string ToString()
-        {
-            var result = "";
-            result += GetScore();
-
-            foreach (var suggestie in Results)
-            {
-                result += ", " + suggestie.GetMessage();
-            }
-
-            return result;
         }
 
         public IDictionary<IEntityNode, string> GetRelatedSubTypes()

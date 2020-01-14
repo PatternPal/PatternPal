@@ -138,6 +138,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IDesign.CommonResources\IDesign.CommonResources.csproj">
+      <Project>{68b3c66e-d837-4b67-b674-c994bc4e207b}</Project>
+      <Name>IDesign.CommonResources</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IDesign.Core\IDesign.Core.csproj">
       <Project>{39c79d09-34da-496b-936d-4387f5db9104}</Project>
       <Name>IDesign.Core</Name>

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using IDesign.CommonResources;
 using IDesign.Core;
 using IDesign.Core.Models;
 using IDesign.Recognizers.Abstractions;
+using Microsoft.CodeAnalysis;
 using NDesk.Options;
 
 namespace IDesign.ConsoleApp
@@ -89,8 +91,8 @@ namespace IDesign.ConsoleApp
                 Console.WriteLine(" - " + pattern.Name);
             }
 
-            recognizerRunner.OnProgressUpdate += (sender, progress) =>
-                DrawTextProgressBar(progress.Status, progress.CurrentPercentage, 100);
+             recognizerRunner.OnProgressUpdate += (sender, progress) =>
+              DrawTextProgressBar(progress.Status, progress.CurrentPercentage, 100);
 
             recognizerRunner.CreateGraph(selectedFiles);
             var results = recognizerRunner.Run(selectedPatterns);
@@ -151,6 +153,7 @@ namespace IDesign.ConsoleApp
             var symbol = "X";
 
             switch (result.GetFeedbackType())
+
             {
                 case FeedbackType.SemiCorrect:
                     Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -162,7 +165,7 @@ namespace IDesign.ConsoleApp
                     break;
             }
 
-            Console.WriteLine(new string('\t', depth) + symbol + $" {result.GetMessage()} | {result.GetScore()}p / {result.GetTotalChecks()}p");
+            Console.WriteLine(new string('\t', depth) + symbol + $"{ResourceUtils.ResultToString(result)} | {result.GetScore()}p / {result.GetTotalChecks()}p");
 
             foreach (var child in result.GetChildFeedback())
             {
@@ -211,5 +214,6 @@ namespace IDesign.ConsoleApp
             //pad the output so when changing from 3 to 4 digits we avoid text shifting
             Console.Write(output.PadRight(15) + stepDescription);
         }
+
     }
 }

@@ -22,44 +22,47 @@ namespace IDesign.Recognizers
             IEntityNode currentComponent = null;
             var decoratorCheck = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>()
             {
-                new ElementCheck<IEntityNode>(x => x.CheckModifier("Abstract"), "Is abstract", 0.5f),
-                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.Extends, 1) || x.CheckMinimalAmountOfRelationTypes(RelationType.Implements, 1), "Has an interface or an parent class", 1),
-                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.ExtendedBy, 1), "Extends a different class", 1),
-                
+                new ElementCheck<IEntityNode>(x => x.CheckModifier("Abstract"), "NodeModifierAbstract", 0.5f),
+                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.Extends, 1) || x.CheckMinimalAmountOfRelationTypes(RelationType.Implements, 1), "Parent", 1),
+                new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.ExtendedBy, 1), "Child", 1),
+
                 //Component checks
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>{
-                    new ElementCheck<IEntityNode>(x => {currentComponent = x; return x.GetMethodsAndProperties().Any(); }, "Has functions", 1),
-                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.ExtendedBy, 2) || x.CheckMinimalAmountOfRelationTypes(RelationType.ImplementedBy, 2), "Extended or implemented by a different class", 1),
+                    new ElementCheck<IEntityNode>(x => {currentComponent = x; return x.GetMethodsAndProperties().Any(); }, "MethodAny", 1),
+                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.ExtendedBy, 2) || x.CheckMinimalAmountOfRelationTypes(RelationType.ImplementedBy, 2), "DecoratorComponentChild", 1),
 
                     new GroupCheck<IEntityNode, IMethod>( new List<ICheck<IMethod>>{
-                        new ElementCheck<IMethod>(x => x.CheckModifier("public") || x.CheckModifier("protected") , "Is public or protected", 1),
-                        new ElementCheck<IMethod>(x => x.CheckParameters(new List<string>{currentComponent.GetName() }), "Has the interface of an parent class as parameter", 1)
+                        new ElementCheck<IMethod>(x => x.CheckModifier("public") || x.CheckModifier("protected") , "MethodModifierNotPrivate", 1),
+                        new ElementCheck<IMethod>(x => x.CheckParameters(new List<string>{currentComponent.GetName() }), "DecoratorComponentMethodParameters", 1)
 
-                    }, x => entityNode.GetConstructors(), "Constructor"),
+                    }, x => entityNode.GetConstructors(), "DecoratorComponentConstructor"),
                     new GroupCheck<IEntityNode, IField>( new List<ICheck<IField>>{
-                        new ElementCheck<IField>(x => x.CheckFieldType(new List<string>{currentComponent.GetName() }) , "Has the interface saved as a property or field", 2)
+                        new ElementCheck<IField>(x => x.CheckFieldType(new List<string>{currentComponent.GetName() }) , "DecoratorComponentFieldType", 2)
 
-                    }, x => entityNode.GetFields(), "Field"),
+                    }, x => entityNode.GetFields(), "DecoratorComponentField"),
 
                     //Concrete decorator
                     new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                     {
                         new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                         {
-                            new ElementCheck<IMethod>(x => x.CheckModifier("public"), "Is public or protected", 1),
-                            new ElementCheck<IMethod>(x => x.CheckParameters(new List<string>() { currentComponent.GetName() }), "Has the interface or parent class as parameter", 1),
-                            new ElementCheck<IMethod>(x => x.CheckIfArgumentsExists(currentComponent.GetName()), "Sends the interface or parent class parameter in base", 1)
 
-                        }, x => x.GetConstructors(), "Constructor"),
+                            new ElementCheck<IMethod>(x => x.CheckModifier("public"), "MethodModifierPublic", 1),
+                            new ElementCheck<IMethod>(x => x.CheckParameters(new List<string>() { currentComponent.GetName() }), "ConcreteDecoratorMethodParameters", 1),
+                            new ElementCheck<IMethod>(x => x.CheckIfArgumentsExists(currentComponent.GetName()), "DecoratorConcreteMethodArguments", 1)
+
+                        }, x => x.GetConstructors(), "ConcreteDecoratorConstructor"),
                         new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                         {
-                            new ElementCheck<IMethod>(x => x.CheckIfNameExists(currentComponent.GetMethodsAndProperties()), "Contains overridden methods")
 
-                        }, x => x.GetMethodsAndProperties(), "Method")
-                    }, x => entityNode.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.ExtendedBy)).Select(y => y.GetDestination()), "Concrete Decorator", GroupCheckType.Median)
+                            new ElementCheck<IMethod>(x => x.CheckIfNameExists(currentComponent.GetMethodsAndProperties()), "MethodNameOverride"),
+                            new ElementCheck<IMethod>(x => x.CheckIfMethodCallsBase(), "MethodBaseCall")
 
-                }, x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Implements) || 
-                y.GetRelationType().Equals(RelationType.Extends)).Select(y => y.GetDestination()), "Interface or parent class")
+                        }, x => x.GetMethodsAndProperties(), "ConcreteDecoratorMethod")
+                    }, x => entityNode.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.ExtendedBy)).Select(y => y.GetDestination()), "DecoratorConcrete", GroupCheckType.Median)
+
+
+                }, x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Implements) || y.GetRelationType().Equals(RelationType.Extends)).Select(y => y.GetDestination()), "DecoratorComponent")
 
             }, x => new List<IEntityNode>() { entityNode }, "Decorator");
             var checkResult = decoratorCheck.Check(entityNode);

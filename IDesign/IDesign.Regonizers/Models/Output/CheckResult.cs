@@ -13,32 +13,47 @@ namespace IDesign.Recognizers.Models.Output
     public class CheckResult : ICheckResult
     {
         public CheckCalculationType CalculationType { get; set; } = CheckCalculationType.Sum;
-
-        public CheckResult(string message, FeedbackType feedbackType, SyntaxNode node)
+        public CheckResult(string message, FeedbackType feedbackType, ICheckable element)
         {
             Message = message;
             FeedbackType = feedbackType;
-            Node = node;
+            Element = element;
         }
 
-        public CheckResult(string message, FeedbackType feedbackType, SyntaxNode node, float score)
+
+        public CheckResult(IResourceMessage feedback, FeedbackType feedbackType, ICheckable element)
+        {
+            _feedback = feedback;
+            FeedbackType = feedbackType;
+            Element = element;
+        }
+
+        public CheckResult(IResourceMessage feedback, FeedbackType feedbackType, ICheckable element, float score)
+        {
+            _feedback = feedback;
+            FeedbackType = feedbackType;
+            Element = element;
+            Score = score;
+        }
+        public CheckResult(string message, FeedbackType feedbackType, ICheckable element, float score)
         {
             Message = message;
             FeedbackType = feedbackType;
-            Node = node;
+            Element = element;
             Score = score;
         }
 
         public string Message { get; set; }
         public FeedbackType FeedbackType { get; set; }
-        public SyntaxNode Node { get; set; }
+        public ICheckable Element { get; set; }
         public List<ICheckResult> ChildFeedback { get; set; } = new List<ICheckResult>();
+
+        public IResourceMessage _feedback { get; set; }
+
         public float Score { get; set; }
 
-        public string GetMessage()
-        {
-            return Message;
-        }
+
+
 
         public IEnumerable<ICheckResult> GetChildFeedback()
         {
@@ -85,14 +100,20 @@ namespace IDesign.Recognizers.Models.Output
             return feedback;
         }
 
-        public SyntaxNode GetSyntaxNode()
+        public ICheckable GetElement()
         {
-            return Node;
+            return Element;
         }
 
+        public IResourceMessage GetFeedback()
+        {
+            return _feedback;
+
+        }
         public void ChangeScore(float score)
         {
             Score = score;
+
         }
     }
 }
