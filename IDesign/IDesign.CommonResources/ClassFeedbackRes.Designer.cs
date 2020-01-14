@@ -124,7 +124,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adapter method should use adpatee..
+        ///   Looks up a localized string similar to Adapter method should use adaptee..
         /// </summary>
         public static string AdapterMethodUses {
             get {
@@ -664,7 +664,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should be extended by or implemented by a class..
+        ///   Looks up a localized string similar to Should be extended by a class or implemented by an interface..
         /// </summary>
         public static string Parent {
             get {

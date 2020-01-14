@@ -139,7 +139,7 @@
     <value>Adapter method should return adaptee.</value>
   </data>
   <data name="AdapterMethodUses" xml:space="preserve">
-    <value>Adapter method should use adpatee.</value>
+    <value>Adapter method should use adaptee.</value>
   </data>
   <data name="Child" xml:space="preserve">
     <value>Should be extended by a class.</value>
@@ -319,7 +319,7 @@
     <value>Subject interface</value>
   </data>
   <data name="Parent" xml:space="preserve">
-    <value>Should be extended by or implemented by a class.</value>
+    <value>Should be extended by a class or implemented by an interface.</value>
   </data>
   <data name="ProductClass" xml:space="preserve">
     <value>Should be product class.</value>
