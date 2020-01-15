@@ -135,22 +135,12 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\idealogo.png">
+    <Resource Include="Resources\logo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Content Include="Resources\logo.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
     <VSCTCompile Include="ExtensionWindowPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>
-    <Resource Include="Resources\c#logo.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\clogo.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
     <Content Include="Resources\ExtensionWindowCommand.png" />
     <Content Include="Resources\ExtensionWindowPackage.ico" />
   </ItemGroup>
