@@ -19,6 +19,7 @@ namespace IDesign.Extension.ViewModels
         public CheckResultViewModel(ICheckResult result, FeedbackType feedbackType)
         {
             Result = result;
+            Message = ResourceUtils.ResultToString(Result);
             Type = feedbackType;
         }
 
