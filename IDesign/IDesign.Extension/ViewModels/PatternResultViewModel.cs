@@ -22,9 +22,9 @@ namespace IDesign.Extension.ViewModels
 
         public List<Named> Childs => new List<Named>()
         {
-            new PatternResultPartViewModel<PatternComponentViewModel>("Components ", Components.ToList()),
-            new PatternResultPartViewModel<CheckResultViewModel>("Improvements ", Improvements.ToList()),
-            new PatternResultPartViewModel<CheckResultViewModel>("All requirements ", Requirements.ToList()),
+            new PatternResultPartViewModel("Components ", Components.ToList()),
+            new PatternResultPartViewModel("Improvements ", Improvements.ToList()),
+            new PatternResultPartViewModel("All requirements ", Requirements.ToList()),
         };
 
         public SolidColorBrush Color => GetColor(Result.Result.GetScore());
@@ -44,7 +44,7 @@ namespace IDesign.Extension.ViewModels
             return FeedbackType.Correct;
         }
 
-        public IEnumerable<PatternComponentViewModel> Components
+        public IEnumerable<object> Components
         {
             get
             {
@@ -65,12 +65,12 @@ namespace IDesign.Extension.ViewModels
             }
         }
 
-        public IEnumerable<CheckResultViewModel> Requirements
+        public IEnumerable<object> Requirements
         {
             get { return Result.Result.GetResults().Select(x => new CheckResultViewModel(x)); }
         }
 
-        public IEnumerable<CheckResultViewModel> Improvements
+        public IEnumerable<object> Improvements
         {
             get { return AddImprovementsFromResults(Result.Result.GetResults(), new List<CheckResultViewModel>()); }
         }
@@ -99,12 +99,12 @@ namespace IDesign.Extension.ViewModels
         string Name { get; }
     }
 
-    public class PatternResultPartViewModel<T> : Named
+    public class PatternResultPartViewModel : Named
     {
-        public string Name { get; set; }
-        public List<T> ChildViewModels { get; set; }
+        public string Name { get; set; }object
+        public List<object> ChildViewModels { get; set; }
 
-        public PatternResultPartViewModel(string name, List<T> childViewModels)
+        public PatternResultPartViewModel(string name, List<object> childViewModels)
         {
             Name = name;
             ChildViewModels = childViewModels;

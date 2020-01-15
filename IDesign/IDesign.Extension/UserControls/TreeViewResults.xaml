@@ -186,8 +186,8 @@
                     </StackPanel>
                 </StackPanel>
             </HierarchicalDataTemplate>
-            <HierarchicalDataTemplate DataType="{x:Type models:PatternResultViewModel}"
-                                      ItemsSource="{Binding EntityNodeViewModels}">
+            <HierarchicalDataTemplate DataType="{x:Type models:PatternResultPartViewModel}"
+                                      ItemsSource="{Binding ChildViewModels}">
                 <StackPanel Orientation="Horizontal"   Height="32">
                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                         <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="10,0,0,0"
