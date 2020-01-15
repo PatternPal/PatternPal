@@ -97,7 +97,7 @@
             <RowDefinition Height="80" />
             <RowDefinition Height="30" />
             <RowDefinition Height="30" />
-            <RowDefinition Height="60" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="40" />
             <RowDefinition Height="30" />
             <RowDefinition x:Name="SummaryRow" Height="0" />
