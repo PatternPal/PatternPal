@@ -24,8 +24,19 @@ namespace IDesign.Extension.ViewModels
             return score < 40 ? Brushes.Red : score < 80 ? Brushes.Yellow : Brushes.Green;
         }
 
+        public FeedbackType GetFeedbackType()
+        {
+            int score = Result.Result.GetScore();
+            if (score < 40)
+                return FeedbackType.Incorrect;
+            else if (score < 80)
+                return FeedbackType.SemiCorrect;
+            else
+                return FeedbackType.Correct;
+        }
+
         public IEnumerable<CheckResultViewModel> Results =>
-            Result.Result.GetResults().Select(x => new CheckResultViewModel(x));
+            Result.Result.GetResults().Select(x => new CheckResultViewModel(x, GetFeedbackType()));
 
         public IEntityNode EntityNode { get; internal set; }
     }

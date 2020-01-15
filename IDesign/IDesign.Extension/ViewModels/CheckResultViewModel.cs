@@ -13,13 +13,30 @@ namespace IDesign.Extension.ViewModels
         {
             Result = result;
             Message = ResourceUtils.ResultToString(Result);
+            Type = Result.GetFeedbackType();
+        }
+
+        public CheckResultViewModel(ICheckResult result, FeedbackType feedbackType)
+        {
+            Result = result;
+            Type = feedbackType;
         }
 
         public ICheckResult Result { get; set; }
         public string Message { get; set; }
         public float Score => Result.GetScore();
-        public FeedbackType Type => Result.GetFeedbackType();
-
+        public FeedbackType type;
+        public FeedbackType Type 
+        {
+            get
+            {
+                return type;
+            }
+            set
+            {
+                type = value; 
+            }
+        }
         public ImageMoniker Icon
         {
             get

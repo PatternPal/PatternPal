@@ -111,7 +111,8 @@ namespace IDesign.Recognizers.Checks
         public static bool CheckIfArgumentsExists(this IMethod methodSyntax, string argument)
         {
             var parameters = methodSyntax.GetParameters().Where(y => y.Type.ToString().Equals(argument));
-            return parameters.Count() < 1 ? false : methodSyntax.GetArguments().Any(x => x.Equals(parameters.First().Identifier.ToString()));
+
+            return parameters.Count() < 1 ? false : methodSyntax.GetArguments().Any(x => parameters.Any(y => x.Equals(y.Identifier.ToString())));
         }
 
         public static bool CheckMethodIdentifier(this IMethod methodSyntax, string name)
