@@ -26,7 +26,7 @@ namespace IDesign.Tests.Recognizers
             var nameSpaceName = $"IDesign.Tests.TestClasses.{directory}";
             var entityNodes = EntityNodeUtils.CreateEntityNodeGraph(filesAsString);
             var createRelation = new DetermineRelations(entityNodes);
-            createRelation.GetEdgesOfEntityNode();
+            createRelation.CreateEdgesOfEntityNode();
             var result = observer.Recognize(entityNodes[nameSpaceName + "." + filename]);
 
             Assert.That(result.GetScore(), Is.InRange(minScore, maxScore));

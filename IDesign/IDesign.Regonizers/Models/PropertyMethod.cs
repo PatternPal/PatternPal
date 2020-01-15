@@ -53,7 +53,7 @@ namespace IDesign.Recognizers.Models
 
         public string GetSuggestionName()
         {
-            return GetName() + "_get";
+            return $"{GetName()}_get";
         }
 
         public SyntaxNode GetSuggestionNode()

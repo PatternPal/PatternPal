@@ -24,11 +24,12 @@ namespace IDesign.Tests.Checks
         [TestCase("Internal", @"class TestClass1 { }", false)]
         public void ModifierCheck_Should_Return_CorrectRepsonse(string modifier, string code, bool shouldBeValid)
         {
-
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
             var typeDeclarationSyntax = root.Members[0] as TypeDeclarationSyntax;
             if (typeDeclarationSyntax == null)
+            {
                 Assert.Fail();
+            }
 
             var entityNode = new EntityNode
             {
@@ -54,7 +55,7 @@ namespace IDesign.Tests.Checks
             var nameSpace = "IDesign.Tests.TestClasses.Decorator.DecoratorTestCase1";
             var entityNodes = EntityNodeUtils.CreateEntityNodeGraph(filesAsString);
             var createRelation = new DetermineRelations(entityNodes);
-            createRelation.GetEdgesOfEntityNode();
+            createRelation.CreateEdgesOfEntityNode();
             var entityNode = entityNodes[nameSpace + "." + className];
 
             Assert.AreEqual(shouldBeValid, entityNode.CheckMinimalAmountOfRelationTypes(relation, amount));
@@ -70,7 +71,7 @@ namespace IDesign.Tests.Checks
             var nameSpaceName = "IDesign.Tests.TestClasses.ClassChecks";
             var nodes = EntityNodeUtils.CreateEntityNodeGraph(code);
             var createRelation = new DetermineRelations(nodes);
-            createRelation.GetEdgesOfEntityNode();
+            createRelation.CreateEdgesOfEntityNode();
             var checkResult = nodes[nameSpaceName + "." + className].ImplementsInterface(interfaceName);
 
             Assert.AreEqual(shouldBeValid, checkResult);
@@ -87,7 +88,7 @@ namespace IDesign.Tests.Checks
             var nameSpaceName = "IDesign.Tests.TestClasses.ClassChecks";
             var nodes = EntityNodeUtils.CreateEntityNodeGraph(code);
             var createRelation = new DetermineRelations(nodes);
-            createRelation.GetEdgesOfEntityNode();
+            createRelation.CreateEdgesOfEntityNode();
             var checkResult = nodes[nameSpaceName + "." + className].ExtendsClass(eClassName);
 
             Assert.AreEqual(shouldBeValid, checkResult);
@@ -104,7 +105,7 @@ namespace IDesign.Tests.Checks
             var nameSpaceName = "IDesign.Tests.TestClasses.ClassChecks";
             var nodes = EntityNodeUtils.CreateEntityNodeGraph(code);
             var createRelation = new DetermineRelations(nodes);
-            createRelation.GetEdgesOfEntityNode();
+            createRelation.CreateEdgesOfEntityNode();
             var checkResult = nodes[nameSpaceName + "." + className].ClassImlementsInterface(interfaceName);
 
             Assert.AreEqual(shouldBeValid, checkResult);

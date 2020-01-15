@@ -21,16 +21,22 @@ namespace IDesign.Extension.ViewModels
 
         public SolidColorBrush GetColor(int score)
         {
+            return score < 40 ? Brushes.Red : score < 80 ? Brushes.Yellow : Brushes.Green;
+        }
+
+        public FeedbackType GetFeedbackType()
+        {
+            int score = Result.Result.GetScore();
             if (score < 40)
-                return Brushes.Red;
+                return FeedbackType.Incorrect;
             else if (score < 80)
-                return Brushes.Yellow;
+                return FeedbackType.SemiCorrect;
             else
-                return Brushes.Green;
+                return FeedbackType.Correct;
         }
 
         public IEnumerable<CheckResultViewModel> Results =>
-            Result.Result.GetResults().Select(x => new CheckResultViewModel(x));
+            Result.Result.GetResults().Select(x => new CheckResultViewModel(x, GetFeedbackType()));
 
         public IEntityNode EntityNode { get; internal set; }
     }

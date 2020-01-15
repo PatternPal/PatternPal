@@ -2,8 +2,8 @@
 {
     internal interface ITest
     {
-        int x { get; set; }
-        int y { get; set; }
+        int X { get; set; }
+        int Y { get; set; }
         int Sum();
     }
 }

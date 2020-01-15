@@ -28,7 +28,7 @@ namespace IDesign.Recognizers
 
                 //Component checks
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>{
-                    new ElementCheck<IEntityNode>(x => {currentComponent = x; return x.GetMethods().Any(); }, "MethodAny", 1),
+                    new ElementCheck<IEntityNode>(x => {currentComponent = x; return x.GetMethodsAndProperties().Any(); }, "MethodAny", 1),
                     new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.ExtendedBy, 2) || x.CheckMinimalAmountOfRelationTypes(RelationType.ImplementedBy, 2), "DecoratorComponentChild", 1),
 
                     new GroupCheck<IEntityNode, IMethod>( new List<ICheck<IMethod>>{
@@ -42,26 +42,27 @@ namespace IDesign.Recognizers
                     }, x => entityNode.GetFields(), "DecoratorComponentField"),
 
                     //Concrete decorator
-                    new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>{
+                    new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
+                    {
                         new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                         {
                             new ElementCheck<IMethod>(x => x.CheckModifier("public"), "MethodModifierPublic", 1),
                             new ElementCheck<IMethod>(x => x.CheckParameters(new List<string>() { currentComponent.GetName() }), "ConcreteDecoratorMethodParameters", 1),
-                            new ElementCheck<IMethod>(x => x.CheckArguments(currentComponent.GetName()), "DecoratorConcreteMethodArguments", 1)
-
+                            new ElementCheck<IMethod>(x => x.CheckIfArgumentsExists(currentComponent.GetName()), "DecoratorConcreteMethodArguments", 1)
                         }, x => x.GetConstructors(), "ConcreteDecoratorConstructor"),
                         new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                         {
-                            new ElementCheck<IMethod>(x => x.CheckName(currentComponent.GetMethods()), "MethodNameOverride"),
+
+                            new ElementCheck<IMethod>(x => x.CheckIfNameExists(currentComponent.GetMethodsAndProperties()), "MethodNameOverride"),
                             new ElementCheck<IMethod>(x => x.CheckIfMethodCallsBase(), "MethodBaseCall")
 
-                        }, x => x.GetMethods(), "ConcreteDecoratorMethod")
+                        }, x => x.GetMethodsAndProperties(), "ConcreteDecoratorMethod")
                     }, x => entityNode.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.ExtendedBy)).Select(y => y.GetDestination()), "DecoratorConcrete", GroupCheckType.Median)
 
 
                 }, x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Implements) || y.GetRelationType().Equals(RelationType.Extends)).Select(y => y.GetDestination()), "DecoratorComponent")
 
-            }, x => new List<IEntityNode>() { entityNode },"Decorator");
+            }, x => new List<IEntityNode>() { entityNode }, "Decorator");
             var checkResult = decoratorCheck.Check(entityNode);
 
             result.Results = checkResult.GetChildFeedback().ToList();

@@ -26,7 +26,7 @@ namespace IDesign.Tests.Core
             var code = FileUtils.FileToString(filename);
             var testGraph = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
             var testNode = testGraph.Values.First();
-            var fields = string.Join(";", testNode.GetMethods().Select(x => x.GetName()));
+            var fields = string.Join(";", testNode.GetMethodsAndProperties().Select(x => x.GetName()));
             Assert.AreEqual(expected, fields);
         }
 

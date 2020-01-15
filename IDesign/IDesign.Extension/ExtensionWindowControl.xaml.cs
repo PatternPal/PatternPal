@@ -31,7 +31,7 @@ namespace IDesign.Extension
         private List<Project> Projects { get; set; }
         private bool Loading { get; set; }
         private DTE Dte { get; set; }
-        private SummaryFactory _summaryFactory = new SummaryFactory();
+        private readonly SummaryFactory SummaryFactory = new SummaryFactory();
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ExtensionWindowControl" /> class.
@@ -48,10 +48,9 @@ namespace IDesign.Extension
             SelectPaths.ProjectSelection.SelectedIndex = 0;
             Dte = Package.GetGlobalService(typeof(SDTE)) as DTE;
             var rdt = (IVsRunningDocumentTable)Package.GetGlobalService(typeof(SVsRunningDocumentTable));
-            uint _SolutionEventsCookie;
-            rdt.AdviseRunningDocTableEvents(this, out _SolutionEventsCookie);
+            rdt.AdviseRunningDocTableEvents(this, out _);
             var ss = (IVsSolution)Package.GetGlobalService(typeof(SVsSolution));
-            ss.AdviseSolutionEvents(this, out _SolutionEventsCookie);
+            ss.AdviseSolutionEvents(this, out _);
         }
 
 
@@ -60,57 +59,51 @@ namespace IDesign.Extension
         /// </summary>
         private void AddViewModels()
         {
-            ViewModels = new List<DesignPatternViewModel>();
-
-            foreach (var pattern in RecognizerRunner.designPatterns)
-                ViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern, pattern.WikiPage));
+            ViewModels = (from pattern in RecognizerRunner.designPatterns
+                          select new DesignPatternViewModel(pattern.Name, pattern, pattern.WikiPage)).ToList();
 
             PatternCheckbox.listBox.DataContext = ViewModels;
+
             var maxHeight = 3 * 30;
             var height = Math.Min(ViewModels.Count * 30, maxHeight);
 
             Grid.RowDefinitions[2].Height = new GridLength(height);
         }
 
-        /// <summary>
-        ///     Creates the viewmodel for the treeview.
-        /// </summary>
         private void CreateResultViewModels(IEnumerable<RecognitionResult> results)
         {
             var viewModels = new List<ResultViewModel>();
-
-            foreach (var item in RecognizerRunner.designPatterns)
+            foreach (var patterns in from item in RecognizerRunner.designPatterns
+                                     let patterns = results.Where(x => x.Pattern.Equals(item))
+                                     where patterns.Count() > 0
+                                     select patterns)
             {
-                var patterns = results.Where(x => x.Pattern.Equals(item));
-                if (patterns.Count() > 0)
-                    viewModels.AddRange(patterns.OrderBy(x => x.Result.GetScore()).Select(x => new ResultViewModel(x)));
+                viewModels.AddRange(patterns.OrderBy(x => x.Result.GetScore()).Select(x => new ResultViewModel(x)));
             }
-
             // - Change your UI information here
             TreeViewResults.ResultsView.ItemsSource = viewModels;
         }
 
-        /// <summary>
-        ///     Gets current active document path.
-        /// </summary>
 
         private List<string> GetCurrentPath()
         {
             var result = new List<string>();
+
             if ((bool)SelectPaths.radio1.IsChecked && Dte.ActiveDocument != null)
+            {
                 result.Add(Dte.ActiveDocument.FullName);
+            }
             return result;
         }
 
-        /// <summary>
-        ///     Gets all paths in the solution.
-        /// </summary>
         private void GetAllPaths()
         {
             Paths = new List<string>();
             var selectedI = SelectPaths.ProjectSelection.SelectedIndex;
             if (selectedI != -1)
+            {
                 Paths.AddRange(Projects[selectedI].Documents.Select(x => x.FilePath));
+            }
         }
 
         private void ChoosePath()
@@ -123,9 +116,7 @@ namespace IDesign.Extension
             Dte.Documents.SaveAll();
         }
 
-        /// <summary>
-        ///     Loads the project to get all the available projects.
-        /// </summary>
+
         private void LoadProject()
         {
             var cm = (IComponentModel)Package.GetGlobalService(typeof(SComponentModel));
@@ -149,15 +140,16 @@ namespace IDesign.Extension
 
         private void SelectProjectFromFile(string path = null)
         {
-
-            foreach (var project in Projects)
+            foreach (var index in from project in Projects
+                                  from index in
+                                      from doc in project.Documents
+                                      where doc.FilePath == path
+                                      let index = Projects.IndexOf(project)
+                                      select index
+                                  select index)
             {
-                foreach (var doc in project.Documents.Where(x => x.FilePath == path))
-                {
-                        var index = Projects.IndexOf(project);
-                        SelectPaths.ProjectSelection.SelectedIndex = index;
-                        return;
-                }
+                SelectPaths.ProjectSelection.SelectedIndex = index;
+                return;
             }
         }
 
@@ -169,60 +161,56 @@ namespace IDesign.Extension
             ChoosePath();
             var SelectedPatterns = ViewModels.Where(x => x.IsChecked).Select(x => x.Pattern).ToList();
 
-            if (Loading || Paths.Count == 0 || SelectedPatterns.Count == 0)
-                return;
-
-            var runner = new RecognizerRunner();
-            Loading = true;
-            statusBar.Value = 0;
-            var progress = new Progress<RecognizerProgress>(value =>
+            if (!Loading && Paths.Count != 0 && SelectedPatterns.Count != 0)
             {
-                statusBar.Value = value.CurrentPercentage;
-                ProgressStatusBlock.Text = value.Status;
-            });
-
-            IProgress<RecognizerProgress> iprogress = progress;
-            runner.OnProgressUpdate += (o, recognizerProgress) => iprogress.Report(recognizerProgress);
-
-            await Task.Run(() =>
-            {
-                try
+                var runner = new RecognizerRunner();
+                Loading = true;
+                statusBar.Value = 0;
+                var progress = new Progress<RecognizerProgress>(value =>
                 {
-                    TreeViewResults.SyntaxTreeSources = runner.CreateGraph(Paths);
-                    var results = runner.Run(SelectedPatterns);
+                    statusBar.Value = value.CurrentPercentage;
+                    ProgressStatusBlock.Text = value.Status;
+                });
 
+                IProgress<RecognizerProgress> iprogress = progress;
+                runner.OnProgressUpdate += (o, recognizerProgress) => iprogress.Report(recognizerProgress);
 
-                    //Here you signal the UI thread to execute the action:
-                    Dispatcher?.BeginInvoke(new Action(() =>
+                await Task.Run(() =>
+                {
+                    try
                     {
-
-                        var allResults = results;
-                        if ((bool)SelectPaths.radio1.IsChecked)
-                        {
-                            results = results.Where(x => x.FilePath == cur).ToList();
-                            SummaryRow.Height = new GridLength(100);
-                        }
-                        else
-                        {
-                            results = results.Where(x => x.Result.GetScore() >= 80).ToList();
-                            SummaryRow.Height = new GridLength(0);
-                        }
-
-                        SummaryControl.Text = _summaryFactory.CreateSummary(results, allResults);
+                        TreeViewResults.SyntaxTreeSources = runner.CreateGraph(Paths);
+                        var results = runner.Run(SelectedPatterns);
 
 
-                        CreateResultViewModels(results);
-                    }));
+                        //Here you signal the UI thread to execute the action:
+                        Dispatcher?.BeginInvoke(new Action(() =>
+                            {
 
-                }
-                catch (Exception e)
-                {
-                    throw e;
-                    //@TODO User friendly error handling
-                }
-            });
+                                var allResults = results;
+                                if ((bool)SelectPaths.radio1.IsChecked)
+                                {
+                                    results = results.Where(x => x.FilePath == cur).ToList();
+                                    SummaryRow.Height = GridLength.Auto;
+                                }
+                                else
+                                {
+                                    results = results.Where(x => x.Result.GetScore() >= 80).ToList();
+                                    SummaryRow.Height = new GridLength(0);
+                                }
 
-            ResetUI();
+                                SummaryControl.Text = SummaryFactory.CreateSummary(results, allResults);
+                                CreateResultViewModels(results);
+                            }));
+
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    };
+                    ResetUI();
+                });
+            }
         }
 
 

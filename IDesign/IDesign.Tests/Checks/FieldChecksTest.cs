@@ -23,7 +23,9 @@ namespace IDesign.Tests.Checks
             var field = root.Members[0] as FieldDeclarationSyntax;
 
             if (field == null)
+            {
                 Assert.Fail();
+            }
 
             Assert.AreEqual(shouldBeValid,
                 new Field(field, field.Declaration.Variables.FirstOrDefault()).CheckMemberModifier(modifier));
@@ -43,7 +45,9 @@ namespace IDesign.Tests.Checks
             var field = root.Members[0] as FieldDeclarationSyntax;
 
             if (field == null)
+            {
                 Assert.Fail();
+            }
 
             Assert.AreEqual(shouldBeValid,
                 new Field(field, field.Declaration.Variables.FirstOrDefault()).CheckFieldType(new List<string>() { type }));
