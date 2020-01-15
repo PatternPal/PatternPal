@@ -49,8 +49,6 @@ namespace IDesign.CommonResources
             }
             if (result.GetFeedback() != null)
             {
-                
-
                 res += ResourceMessageToString(result.GetFeedback());
             }
             return res;
