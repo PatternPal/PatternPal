@@ -41,7 +41,7 @@ namespace IDesign.Recognizers
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                 {
                     new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(3), "MethodAmountThree",0.66f),
-                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethodsWithParameter(new List<string> { node.GetName() }, 2), new ResourceMessage("ObserverMethodParameters", new []{node.GetName()}), 0.66f),
+                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethodsWithParameter(new List<string> { node.GetName() }, 2), new ResourceMessage("ObserverMethodParameters", new []{node.GetName()}), 1f),
                     new ElementCheck<IEntityNode>(x => x.CheckRelationType(RelationType.ImplementedBy), "NodeImplementedByAny",0.33f ),
 
                     new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
@@ -80,7 +80,7 @@ namespace IDesign.Recognizers
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                 {
                     new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethods(3),"MethodAmountThree", 0.33f),
-                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethodsWithParameter(new List<string> { node.GetName() }, 2), new ResourceMessage("ObserverMethodParameters", new []{node.GetName()}), 0.66f),
+                    new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfMethodsWithParameter(new List<string> { node.GetName() }, 2), new ResourceMessage("ObserverMethodParameters", new []{node.GetName()}), 1f),
                     new ElementCheck<IEntityNode>(x => x.CheckEntityNodeType(EntityNodeType.Class), "NodeTypeClass", 0.33f),
                     new ElementCheck<IEntityNode>(x => x.CheckMaximumAmountOfRelationTypes(RelationType.Implements, 0), "NodeNotImplementedAny", 0.33f),
 
@@ -88,8 +88,6 @@ namespace IDesign.Recognizers
                     {
                         new ElementCheck<IField>(x => x.CheckFieldType(new List<string> { $"List<{ node.GetName() }>" }), new ResourceMessage("FieldType", new []{node.GetName()}), 1f),
                     }, d => d.GetFields(), "ObserverConcreteSubjectField"),
-
-                    
                 }, b => node.GetRelations().Where(x => x.GetRelationType() == RelationType.UsedBy).Select(x => x.GetDestination()).ToList(), "Concrete subject"),
             }, a => new List<IEntityNode> { node }, "Observer");
 
