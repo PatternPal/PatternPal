@@ -538,7 +538,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Node should not create other classes..
+        ///   Looks up a localized string similar to Should not create other classes..
         /// </summary>
         public static string NodeDoesNotCreate {
             get {
@@ -547,7 +547,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Node should not use other classes..
+        ///   Looks up a localized string similar to Should not use other classes..
         /// </summary>
         public static string NodeDoesNotUse {
             get {
@@ -556,7 +556,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Node should be implemented by a class..
+        ///   Looks up a localized string similar to Should be implemented by an interface.
         /// </summary>
         public static string NodeImplementedByAny {
             get {
@@ -574,7 +574,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Node should not implement an interface..
+        ///   Looks up a localized string similar to Should not implement an interface..
         /// </summary>
         public static string NodeNotImplementedAny {
             get {
@@ -583,7 +583,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Node should be a class..
+        ///   Looks up a localized string similar to Should be a class..
         /// </summary>
         public static string NodeTypeClass {
             get {
@@ -601,7 +601,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Node should have at least 1 uses relation..
+        ///   Looks up a localized string similar to Should have at least 1 uses relation..
         /// </summary>
         public static string NodeUses1 {
             get {
