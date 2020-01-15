@@ -61,9 +61,17 @@
                 <Setter Property="BorderBrush"
                         Value="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowBorderKey}}" />
             </Style>
+
             <Style TargetType="Button">
-                <Setter Property="Background" Value="{DynamicResource {x:Static vsshell:VsColors.BrandedUITextKey}}" />
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush  StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#4573EF" Offset="0"/>
+                            <GradientStop Color="#4496F3" Offset="0.53"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                    </Setter>
+                    <Setter Property="Foreground" Value="#ffffff" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Button}">
@@ -77,10 +85,14 @@
                 </Setter>
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background"
-                                Value="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowTabMouseOverBackgroundBeginKey}}" />
-                        <Setter Property="Foreground"
-                                Value="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowTabTextKey}}" />
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <LinearGradientBrush  StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#4496F3" Offset="0"/>
+                                    <GradientStop Color="#4573EF" Offset="0.53"/>
+                                </LinearGradientBrush>
+                            </Setter.Value>
+                        </Setter>
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -97,6 +109,7 @@
             <RowDefinition Height="80" />
             <RowDefinition Height="30" />
             <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
             <RowDefinition Height="60" />
             <RowDefinition Height="40" />
             <RowDefinition Height="30" />
@@ -109,21 +122,29 @@
                    VerticalAlignment="Top" />
             <TextBlock Text="{x:Static UIResources:ExtensionUIResources.ExtensionName}" VerticalAlignment="Center" FontSize="50" />
         </StackPanel>
-        <Border  Grid.Row="1" BorderThickness="0 1 0 0" Style="{StaticResource ButtonBorder}">
+        <StackPanel Orientation="Horizontal" Grid.Row="1" >
+            <Rectangle Width="15" Height="15" Fill="#4496F3" Margin="0,0,2,0"/>
+            <TextBlock Text="{x:Static UIResources:ExtensionUIResources.Settings}" Foreground="#4496F3"  VerticalAlignment="Top" FontSize="15" FontWeight="Bold" Margin="5" />
+        </StackPanel>
+        <Border Grid.Row="2" BorderThickness="0 0 0 0" Style="{StaticResource ButtonBorder}" Margin="20,0,0,0">
             <CheckBox x:Name="SelectAll" Margin="5 0 0 0" Content="Select All Patterns" HorizontalAlignment="Left" VerticalAlignment="Center" Unchecked="SelectAll_Unchecked" Checked="SelectAll_Checked"/>
         </Border>
-        <usercontrol:PatternCheckbox Grid.Row="2" x:Name="PatternCheckbox" />
-        <usercontrol:SelectPaths Grid.Row="3" x:Name="SelectPaths" />
-        <Border x:Name="ButtonBorder" Grid.Row="4" Background="Transparent" BorderThickness="0 1"
+        <usercontrol:PatternCheckbox Grid.Row="3" x:Name="PatternCheckbox" Margin="20,0,20,0" />
+        <usercontrol:SelectPaths Grid.Row="4" x:Name="SelectPaths"  Margin="20,0,20,0"/>
+        <Border x:Name="ButtonBorder" Grid.Row="5" Background="Transparent" BorderThickness="0 0"  Margin="20,0,20,0"
                 Style="{StaticResource ButtonBorder}">
             <Grid>
-                <Button Content="{x:Static UIResources:ExtensionUIResources.Analyse}" Height="30" Click="Analyse_Button" Margin="5 0" />
+                <Button Content="{x:Static UIResources:ExtensionUIResources.Analyse}" Height="30" Click="Analyse_Button" Margin="5 0">
+                </Button>
             </Grid>
         </Border>
-        <TextBlock Grid.Row="5" Text="{x:Static UIResources:ExtensionUIResources.Output}" VerticalAlignment="Top" FontSize="15" FontWeight="Bold" Margin="5" />
-        <TextBlock Grid.Row="6" x:Name="SummaryControl" TextWrapping="Wrap"  Margin="8" />
-        <usercontrol:TreeViewResults x:Name="TreeViewResults" Grid.Row="7" />
-        <ProgressBar Grid.Row="8" Height="20" VerticalAlignment="Bottom" Minimum="0" Maximum="100" Name="statusBar" />
-        <TextBlock Grid.Row="8" x:Name="ProgressStatusBlock" Height="20" HorizontalAlignment="Center" FontWeight="Bold" />
+        <StackPanel Orientation="Horizontal" Grid.Row="6" >
+            <Rectangle Width="15" Height="15" Fill="#4496F3" Margin="0,0,2,0"/>
+            <TextBlock Text="{x:Static UIResources:ExtensionUIResources.Output}" Foreground="#4496F3"  VerticalAlignment="Top" FontSize="15" FontWeight="Bold" Margin="5" />
+        </StackPanel>
+        <TextBlock Grid.Row="7" x:Name="SummaryControl" TextWrapping="Wrap"  Margin="20,8,20,8" />
+        <usercontrol:TreeViewResults x:Name="TreeViewResults" Grid.Row="8"  Margin="20,0,20,0" Loaded="TreeViewResults_Loaded"/>
+        <ProgressBar Grid.Row="9" Height="20" VerticalAlignment="Bottom" Minimum="0" Maximum="100" Name="statusBar" />
+        <TextBlock Grid.Row="8" x:Name="ProgressStatusBlock" Height="20" HorizontalAlignment="Left" FontWeight="Bold" Margin="150,0,0,0" />
     </Grid>
 </UserControl>

@@ -5,6 +5,7 @@ using IDesign.CommonResources;
 using IDesign.Core.Models;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models.Output;
+using Microsoft.VisualStudio.ProjectSystem.VS;
 
 namespace IDesign.Extension.ViewModels
 {
@@ -19,7 +20,12 @@ namespace IDesign.Extension.ViewModels
         public string PatternName => Result.Pattern.Name;
         public int Score => Result.Result.GetScore();
 
-
+        public List<Named> Childs => new List<Named>()
+        {
+            new PatternResultPartViewModel<PatternComponentViewModel>("Components ", Components.ToList()),
+            new PatternResultPartViewModel<CheckResultViewModel>("Improvements ", Improvements.ToList()),
+            new PatternResultPartViewModel<CheckResultViewModel>("All requirements ", Requirements.ToList()),
+        };
 
         public SolidColorBrush Color => GetColor(Result.Result.GetScore());
 
@@ -86,5 +92,22 @@ namespace IDesign.Extension.ViewModels
         }
 
         public IEntityNode EntityNode { get; internal set; }
+    }
+
+    public interface Named
+    {
+        string Name { get; }
+    }
+
+    public class PatternResultPartViewModel<T> : Named
+    {
+        public string Name { get; set; }
+        public List<T> ChildViewModels { get; set; }
+
+        public PatternResultPartViewModel(string name, List<T> childViewModels)
+        {
+            Name = name;
+            ChildViewModels = childViewModels;
+        }
     }
 }

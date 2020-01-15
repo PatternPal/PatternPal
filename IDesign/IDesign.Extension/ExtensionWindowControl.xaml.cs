@@ -67,18 +67,18 @@ namespace IDesign.Extension
             var maxHeight = 3 * 30;
             var height = Math.Min(ViewModels.Count * 30, maxHeight);
 
-            Grid.RowDefinitions[2].Height = new GridLength(height);
+            Grid.RowDefinitions[3].Height = new GridLength(height);
         }
 
         private void CreateResultViewModels(IEnumerable<RecognitionResult> results)
         {
-            var viewModels = new List<ResultViewModel>();
+            var viewModels = new List<PatternResultViewModel>();
             foreach (var patterns in from item in RecognizerRunner.designPatterns
                                      let patterns = results.Where(x => x.Pattern.Equals(item))
                                      where patterns.Count() > 0
                                      select patterns)
             {
-                viewModels.AddRange(patterns.OrderBy(x => x.Result.GetScore()).Select(x => new ResultViewModel(x)));
+                viewModels.AddRange(patterns.OrderBy(x => x.Result.GetScore()).Select(x => new PatternResultViewModel(x)));
             }
             // - Change your UI information here
             TreeViewResults.ResultsView.ItemsSource = viewModels;
@@ -330,6 +330,11 @@ namespace IDesign.Extension
             {
                 designPatternViewModels[i].IsChecked = false;
             }
+        }
+
+        private void TreeViewResults_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
