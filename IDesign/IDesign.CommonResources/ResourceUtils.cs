@@ -43,12 +43,13 @@ namespace IDesign.CommonResources
         public static string ResultToString(ICheckResult result)
         {
             var res = "";
+            if (result.GetElement() != null)
+            {
+                res += result.GetElement().GetSuggestionName() + " | ";
+            }
             if (result.GetFeedback() != null)
             {
-                if (result.GetElement() != null)
-                {
-                    res += result.GetElement().GetSuggestionName() + " | ";
-                }
+                
 
                 res += ResourceMessageToString(result.GetFeedback());
             }

@@ -147,9 +147,10 @@ namespace IDesign.Recognizers.Models.ElementChecks
             foreach (var valueTuple in allChildFeedback)
             {
                 var (score, childFeedback) = valueTuple.Value;
-
-                childResults.Add(new CheckResult(valueTuple.Key.GetSuggestionName(), feedback, elementToCheck)
+               
+                childResults.Add(new CheckResult(valueTuple.Key.GetSuggestionName(), feedback, valueTuple.Key)
                 {
+                    _feedback = _resourcemessage,
                     ChildFeedback = valueTuple.Value.childFeedback.ToList()
                 });
             }
