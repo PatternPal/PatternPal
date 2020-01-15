@@ -208,8 +208,8 @@ namespace IDesign.Extension
                     {
                         throw e;
                     };
-                    ResetUI();
                 });
+                ResetUI();
             }
         }
 
