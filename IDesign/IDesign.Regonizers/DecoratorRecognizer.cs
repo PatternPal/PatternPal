@@ -46,11 +46,9 @@ namespace IDesign.Recognizers
                     {
                         new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                         {
-
                             new ElementCheck<IMethod>(x => x.CheckModifier("public"), "MethodModifierPublic", 1),
                             new ElementCheck<IMethod>(x => x.CheckParameters(new List<string>() { currentComponent.GetName() }), "ConcreteDecoratorMethodParameters", 1),
                             new ElementCheck<IMethod>(x => x.CheckIfArgumentsExists(currentComponent.GetName()), "DecoratorConcreteMethodArguments", 1)
-
                         }, x => x.GetConstructors(), "ConcreteDecoratorConstructor"),
                         new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                         {

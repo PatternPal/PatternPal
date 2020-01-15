@@ -141,9 +141,6 @@
                                                  Margin=" 4 4 0 0"
                                                  Stroke="{TemplateBinding BorderBrush}"
                                                  StrokeThickness="1" Grid.RowSpan="2">
-                                            <Ellipse.Effect>
-                                                <DropShadowEffect BlurRadius="5" ShadowDepth="2" />
-                                            </Ellipse.Effect>
                                         </Ellipse>
                                         <Ellipse x:Name="CheckMark"
                                                  Margin="7 7 3 3"

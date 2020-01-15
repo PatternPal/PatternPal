@@ -191,7 +191,7 @@ namespace IDesign.Extension
                                 if ((bool)SelectPaths.radio1.IsChecked)
                                 {
                                     results = results.Where(x => x.FilePath == cur).ToList();
-                                    SummaryRow.Height = new GridLength(100);
+                                    SummaryRow.Height = GridLength.Auto;
                                 }
                                 else
                                 {

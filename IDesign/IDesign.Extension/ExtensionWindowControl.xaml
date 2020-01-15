@@ -25,9 +25,6 @@
                                             Background="Transparent"
                                             BorderBrush="{TemplateBinding BorderBrush}"
                                             BorderThickness="1">
-                                        <Border.Effect>
-                                            <DropShadowEffect BlurRadius="5" ShadowDepth="2" />
-                                        </Border.Effect>
                                         <Path x:Name="CheckMark"
                                               Width="10"
                                               Height="10"
@@ -103,7 +100,7 @@
             <RowDefinition Height="60" />
             <RowDefinition Height="40" />
             <RowDefinition Height="30" />
-            <RowDefinition x:Name="SummaryRow" Height="100" />
+            <RowDefinition x:Name="SummaryRow" Height="0" />
             <RowDefinition Height="1*" />
             <RowDefinition Height="20" />
         </Grid.RowDefinitions>

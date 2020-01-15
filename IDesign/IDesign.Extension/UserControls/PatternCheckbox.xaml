@@ -37,9 +37,6 @@
                                             Background="Transparent"
                                             BorderBrush="{TemplateBinding BorderBrush}"
                                             BorderThickness="1">
-                                        <Border.Effect>
-                                            <DropShadowEffect BlurRadius="5" ShadowDepth="2" />
-                                        </Border.Effect>
                                         <Path x:Name="CheckMark"
                                               Width="10"
                                               Height="10"
