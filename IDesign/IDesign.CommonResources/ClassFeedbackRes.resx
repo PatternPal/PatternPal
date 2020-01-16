@@ -153,6 +153,9 @@
   <data name="ConcreteDecoratorMethodParameters" xml:space="preserve">
     <value>Method should have the component as a parameter.</value>
   </data>
+  <data name="ConcreteState" xml:space="preserve">
+    <value>Concrete State</value>
+  </data>
   <data name="ConstructorModifierNotPublic" xml:space="preserve">
     <value>Constructor should not be public.</value>
   </data>

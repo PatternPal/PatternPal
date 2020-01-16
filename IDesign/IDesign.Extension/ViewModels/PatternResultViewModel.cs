@@ -20,12 +20,21 @@ namespace IDesign.Extension.ViewModels
         public string PatternName => Result.Pattern.Name;
         public int Score => Result.Result.GetScore();
 
-        public List<Named> Childs => new List<Named>()
+        public List<Named> Childs
         {
-            new PatternResultPartViewModel("Components ", Components.ToList()),
-            new PatternResultPartViewModel("Improvements ", Improvements.ToList()),
-            new PatternResultPartViewModel("All requirements ", Requirements.ToList()),
-        };
+            get
+            {
+                var result = new List<Named>();
+                if (Components.Any())
+                    result.Add(new PatternResultPartViewModel("Components ", Components.ToList()));
+                if (Improvements.Any())
+                    result.Add(new PatternResultPartViewModel("Improvements ", Improvements.ToList()));
+                if (Requirements.Any())
+                    result.Add(new PatternResultPartViewModel("All requirements ", Requirements.ToList()));
+                
+            return result;
+        }
+        }
 
         public SolidColorBrush Color => GetColor(Result.Result.GetScore());
 
