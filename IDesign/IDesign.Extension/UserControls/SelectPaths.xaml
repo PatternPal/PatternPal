@@ -139,8 +139,22 @@
                                     <Setter TargetName="Border" Property="BorderBrush" Value="Transparent" />
                                 </Trigger>
                                 <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter TargetName="Border" Property="Background" Value="#4496F3" />
-                                    <Setter TargetName="Border" Property="BorderBrush" Value="#4496F3" />
+                                    <Setter TargetName="Border" Property="Background">
+                                        <Setter.Value>
+                                            <LinearGradientBrush  StartPoint="0,0" EndPoint="1,1">
+                                                <GradientStop Color="#4496F3" Offset="0"/>
+                                                <GradientStop Color="#4573EF" Offset="0.53"/>
+                                            </LinearGradientBrush>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter TargetName="Border" Property="BorderBrush">
+                                        <Setter.Value>
+                                            <LinearGradientBrush  StartPoint="0,0" EndPoint="1,1">
+                                                <GradientStop Color="#4496F3" Offset="0"/>
+                                                <GradientStop Color="#4573EF" Offset="0.53"/>
+                                            </LinearGradientBrush>
+                                        </Setter.Value>
+                                    </Setter>
                                 </Trigger>
                                 <Trigger Property="IsEnabled" Value="false">
                                     <Setter TargetName="Border" Property="Background" Value="Yellow" />

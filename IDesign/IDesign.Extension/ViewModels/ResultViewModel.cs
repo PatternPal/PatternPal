@@ -29,10 +29,9 @@ namespace IDesign.Extension.ViewModels
             int score = Result.Result.GetScore();
             if (score < 40)
                 return FeedbackType.Incorrect;
-            else if (score < 80)
+            if (score < 80)
                 return FeedbackType.SemiCorrect;
-            else
-                return FeedbackType.Correct;
+            return FeedbackType.Correct;
         }
 
         public IEnumerable<CheckResultViewModel> Results =>

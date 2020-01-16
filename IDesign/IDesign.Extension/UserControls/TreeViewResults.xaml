@@ -172,26 +172,53 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <TreeView x:Name="ResultsView" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                  BorderThickness="0 1">
+                  BorderThickness="0 0">
         <TreeView.Resources>
-            <HierarchicalDataTemplate DataType="{x:Type models:ResultViewModel}"
-                                          ItemsSource="{Binding Results}">
-                <StackPanel Orientation="Horizontal">
+            <HierarchicalDataTemplate DataType="{x:Type models:PatternResultViewModel}"
+                                          ItemsSource="{Binding Childs}">
+                <StackPanel Orientation="Horizontal"   Height="32">
                     <Image Source="/IDesign.Extension;component/Resources/logo.png" Width="20" Height="20" />
                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
-                        <TextBlock Text="{Binding PatternName}"
-                                       Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
                         <ProgressBar x:Name="patternScore" Height="5" Value="{Binding Path=Score, Mode=OneWay}" Width="20" Margin="10 0 0 0" BorderBrush="{Binding Color}" BorderThickness="1" Foreground="{Binding Color}" />
+
+                        <TextBlock Text="{Binding PatternName}" VerticalAlignment="Center" Margin="10,0,0,0"
+                                       Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
                     </StackPanel>
                 </StackPanel>
             </HierarchicalDataTemplate>
+            <HierarchicalDataTemplate DataType="{x:Type models:PatternResultPartViewModel}"
+                                      ItemsSource="{Binding ChildViewModels}">
+                <StackPanel Orientation="Horizontal"   Height="32">
+                    <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
+                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="10,0,0,0"
+                                   Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
+                    </StackPanel>
+                </StackPanel>
+            </HierarchicalDataTemplate>
+            <HierarchicalDataTemplate DataType="{x:Type models:PatternComponentViewModel}"
+                                      ItemsSource="{Binding EntityNodeViewModels}">
+                <StackPanel Orientation="Horizontal"   Height="32">
+                    <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
+                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="10,0,0,0"
+                                   Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
+                    </StackPanel>
+                </StackPanel>
+            </HierarchicalDataTemplate>
+            <DataTemplate DataType="{x:Type models:EntityNodeViewModel}">
+                <StackPanel Orientation="Horizontal" Height="32">
+                    <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
+                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="10,0,0,0"
+                                   Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
+                    </StackPanel>
+                </StackPanel>
+            </DataTemplate>
             <HierarchicalDataTemplate DataType="{x:Type models:CheckResultViewModel}"
                                           ItemsSource="{Binding SubResults}">
-                <StackPanel Orientation="Horizontal" Height="20">
+                <StackPanel Orientation="Horizontal" Height="24">
                     <imaging:CrispImage Width="16" Height="16" Moniker="{Binding Icon}" />
 
-                    <StackPanel Orientation="Horizontal" Margin="5 2 0 2">
-                        <TextBlock Text="{Binding Message}"
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Message}" VerticalAlignment="Center"
                                        Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
                     </StackPanel>
                 </StackPanel>

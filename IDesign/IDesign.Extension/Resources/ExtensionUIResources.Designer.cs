@@ -88,7 +88,7 @@ namespace IDesign.Extension.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Output.
+        ///   Looks up a localized string similar to Detected design patterns.
         /// </summary>
         public static string Output {
             get {
@@ -102,6 +102,15 @@ namespace IDesign.Extension.Resources {
         public static string Project {
             get {
                 return ResourceManager.GetString("Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string Settings {
+            get {
+                return ResourceManager.GetString("Settings", resourceCulture);
             }
         }
     }

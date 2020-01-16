@@ -127,9 +127,12 @@
     <value>IDesign</value>
   </data>
   <data name="Output" xml:space="preserve">
-    <value>Output</value>
+    <value>Detected design patterns</value>
   </data>
   <data name="Project" xml:space="preserve">
     <value>Project</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
   </data>
 </root>
