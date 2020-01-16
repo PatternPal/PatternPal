@@ -31,6 +31,7 @@ namespace IDesign.Extension
         private List<Project> Projects { get; set; }
         private bool Loading { get; set; }
         private DTE Dte { get; set; }
+        private List<RecognitionResult> Results { get; set; }
         private readonly SummaryFactory SummaryFactory = new SummaryFactory();
 
         /// <summary>
@@ -163,6 +164,11 @@ namespace IDesign.Extension
 
             if (!Loading && Paths.Count != 0 && SelectedPatterns.Count != 0)
             {
+                if ((bool)SelectPaths.radio1.IsChecked)
+                    CheckSwitch.IsChecked = true;
+                else
+                    CheckSwitch.IsChecked = false;
+
                 var runner = new RecognizerRunner();
                 Loading = true;
                 statusBar.Value = 0;
@@ -180,43 +186,70 @@ namespace IDesign.Extension
                     try
                     {
                         TreeViewResults.SyntaxTreeSources = runner.CreateGraph(Paths);
-                        var results = runner.Run(SelectedPatterns);
+                        Results = new List<RecognitionResult>();
+                        Results = runner.Run(SelectedPatterns);
 
                         //Here you signal the UI thread to execute the action:
                         Dispatcher?.BeginInvoke(new Action(() =>
                             {
-
-                                var allResults = results;
+                                var results = Results;
+                                var allResults = Results;
                                 if ((bool)SelectPaths.radio1.IsChecked)
                                 {
                                     results = results.Where(x => x.FilePath == cur).ToList();
+                                    Results = results;
+
                                     SummaryRow.Height = GridLength.Auto;
                                 }
                                 else
-                                {
-                                    results = results.Where(x => x.Result.GetScore() >= 80).ToList();
                                     SummaryRow.Height = new GridLength(0);
-                                }
+
+                                if (!(bool)CheckSwitch.IsChecked)
+                                    results = Results.Where(x => x.Result.GetScore() >= 80).ToList();
 
                                 SummaryControl.Text = SummaryFactory.CreateSummary(results, allResults);
                                 CreateResultViewModels(results);
+                                var foundPatterns = new HashSet<DesignPattern>();
+                                var total = 0;
+                                foreach(var result in Results.OrderByDescending(x=>x.Result.GetScore()))
+                                {
+                                    if (foundPatterns.Contains(result.Pattern))
+                                        continue;
+                                    foundPatterns.Add(result.Pattern);
+                                    total += result.Result.GetScore();
+                                }
+
+
+                                var score = (100f / 700f) * total;
+                                ResetUI(score);
                             }));
-                        var score = 100 / 700 * results.OrderByDescending(x => x.Result.GetScore()).GroupBy(y => y.Pattern).Select(z => z.First()).Sum(a => a.Result.GetScore());
                     }
                     catch (Exception e)
                     {
                         throw e;
                     };
                 });
-                ResetUI();
             }
         }
 
-        private void ResetUI()
+        private void CheckSwitch_Checked(object sender, RoutedEventArgs e)
+        {
+            if (Results == null) return;
+            CreateResultViewModels(Results);
+        }
+
+        private void CheckSwitch_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (Results == null) return;
+            var results = Results.Where(x => x.Result.GetScore() >= 80).ToList();
+            CreateResultViewModels(results);
+        }
+
+        private void ResetUI(float score)
         {
             statusBar.Value = 0;
             Loading = false;
-            ProgressStatusBlock.Text = "";
+            ProgressStatusBlock.Text = "Score: " + (int) score;
         }
 
         #region IVsRunningDocTableEvents3 implementation
@@ -328,11 +361,6 @@ namespace IDesign.Extension
             {
                 designPatternViewModels[i].IsChecked = false;
             }
-        }
-
-        private void TreeViewResults_Loaded(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }
