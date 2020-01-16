@@ -169,6 +169,15 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Concrete State.
+        /// </summary>
+        public static string ConcreteState {
+            get {
+                return ResourceManager.GetString("ConcreteState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Constructor should not be public..
         /// </summary>
         public static string ConstructorModifierNotPublic {

@@ -176,7 +176,7 @@
         <TreeView.Resources>
             <HierarchicalDataTemplate DataType="{x:Type models:PatternResultViewModel}"
                                           ItemsSource="{Binding Childs}">
-                <StackPanel Orientation="Horizontal"   Height="32">
+                <StackPanel Orientation="Horizontal"   Height="26">
                     <Image Source="/IDesign.Extension;component/Resources/logo.png" Width="20" Height="20" />
                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                         <ProgressBar x:Name="patternScore" Height="5" Value="{Binding Path=Score, Mode=OneWay}" Width="20" Margin="10 0 0 0" BorderBrush="{Binding Color}" BorderThickness="1" Foreground="{Binding Color}" />
@@ -188,7 +188,7 @@
             </HierarchicalDataTemplate>
             <HierarchicalDataTemplate DataType="{x:Type models:PatternResultPartViewModel}"
                                       ItemsSource="{Binding ChildViewModels}">
-                <StackPanel Orientation="Horizontal"   Height="32">
+                <StackPanel Orientation="Horizontal"   Height="24">
                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                         <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="10,0,0,0"
                                    Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
@@ -197,7 +197,7 @@
             </HierarchicalDataTemplate>
             <HierarchicalDataTemplate DataType="{x:Type models:PatternComponentViewModel}"
                                       ItemsSource="{Binding EntityNodeViewModels}">
-                <StackPanel Orientation="Horizontal"   Height="32">
+                <StackPanel Orientation="Horizontal"   Height="24">
                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                         <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="10,0,0,0"
                                    Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
@@ -205,7 +205,7 @@
                 </StackPanel>
             </HierarchicalDataTemplate>
             <DataTemplate DataType="{x:Type models:EntityNodeViewModel}">
-                <StackPanel Orientation="Horizontal" Height="32">
+                <StackPanel Orientation="Horizontal" Height="24">
                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                         <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="10,0,0,0"
                                    Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
@@ -217,7 +217,7 @@
                 <StackPanel Orientation="Horizontal" Height="24">
                     <imaging:CrispImage Width="16" Height="16" Moniker="{Binding Icon}" />
 
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
                         <TextBlock Text="{Binding Message}" VerticalAlignment="Center"
                                        Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
                     </StackPanel>
