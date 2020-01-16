@@ -54,6 +54,13 @@ namespace IDesign.Recognizers
             }, a => new List<IEntityNode> { node }, "Observer");
 
             result.Results.Add(checks.Check(node));
+            result.RelatedSubTypes.Add(node, "Observer");
+            foreach (var concrete in node.GetRelations().Where(x =>
+                     (x.GetRelationType().Equals(RelationType.ImplementedBy))
+                ).Select(x => x.GetDestination()))
+            {
+                result.RelatedSubTypes.Add(concrete, "ConcreteObserver");
+            }
 
             return result;
         }
@@ -89,6 +96,16 @@ namespace IDesign.Recognizers
             }, a => new List<IEntityNode> { node }, "Observer");
 
             result.Results.Add(checks.Check(node));
+
+
+            result.Results.Add(checks.Check(node));
+            result.RelatedSubTypes.Add(node, "Observer");
+            foreach (var concrete in node.GetRelations().Where(x =>
+                     (x.GetRelationType().Equals(RelationType.ImplementedBy))
+                ).Select(x => x.GetDestination()))
+            {
+                result.RelatedSubTypes.Add(concrete, "ConcreteObserver");
+            }
 
             return result;
         }

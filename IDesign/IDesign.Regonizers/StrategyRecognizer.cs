@@ -60,6 +60,19 @@ namespace IDesign.Recognizers
 
             }, x => new List<IEntityNode> { node }, "Strategy"); ; ;
             result.Results.Add(strategyPatternCheck.Check(node));
+
+
+
+            result.RelatedSubTypes.Add(node, "AbstractStrategy");
+
+            foreach (var concrete in node.GetRelations().Where(x =>
+                     (x.GetRelationType().Equals(RelationType.ExtendedBy)) ||
+                     (x.GetRelationType().Equals(RelationType.ImplementedBy))
+                ).Select(x => x.GetDestination()))
+            {
+                result.RelatedSubTypes.Add(concrete, "ConcreteStrategy");
+            }
+
             return result;
         }
     }

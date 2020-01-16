@@ -44,6 +44,9 @@ namespace IDesign.Recognizers
 
             var r = singletonCheck.Check(entityNode);
             result.Results = r.GetChildFeedback().ToList();
+
+
+            result.RelatedSubTypes.Add(entityNode, "Singleton");
             return result;
         }
     }

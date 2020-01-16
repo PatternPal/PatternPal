@@ -61,6 +61,15 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Abstract State.
+        /// </summary>
+        public static string AbstractState {
+            get {
+                return ResourceManager.GetString("AbstractState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Adaptee should extend an adapter..
         /// </summary>
         public static string AdapteeExtendsApter {
