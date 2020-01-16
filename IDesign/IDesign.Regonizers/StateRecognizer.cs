@@ -81,6 +81,7 @@ namespace IDesign.Recognizers
             }, x => new List<IEntityNode> { node }, "State"); ;
             result.Results.Add(statePatternCheck.Check(node));
 
+            result.RelatedSubTypes.Add(entityNode, "AbstractState");
             foreach (var concrete in node.GetRelations().Where(x =>
                      (x.GetRelationType().Equals(RelationType.ExtendedBy)) ||
                      (x.GetRelationType().Equals(RelationType.ImplementedBy))
