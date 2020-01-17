@@ -209,19 +209,7 @@ namespace IDesign.Extension
 
                                 SummaryControl.Text = SummaryFactory.CreateSummary(results, allResults);
                                 CreateResultViewModels(results);
-                                var foundPatterns = new HashSet<DesignPattern>();
-                                var total = 0;
-                                foreach(var result in Results.OrderByDescending(x=>x.Result.GetScore()))
-                                {
-                                    if (foundPatterns.Contains(result.Pattern))
-                                        continue;
-                                    foundPatterns.Add(result.Pattern);
-                                    total += result.Result.GetScore();
-                                }
-
-
-                                var score = (100f / 700f) * total;
-                                ResetUI(score);
+                                ResetUI();
                             }));
                     }
                     catch (Exception e)
@@ -245,11 +233,11 @@ namespace IDesign.Extension
             CreateResultViewModels(results);
         }
 
-        private void ResetUI(float score)
+        private void ResetUI()
         {
             statusBar.Value = 0;
             Loading = false;
-            ProgressStatusBlock.Text = "Score: " + (int) score;
+            ProgressStatusBlock.Text = "";
         }
 
         #region IVsRunningDocTableEvents3 implementation

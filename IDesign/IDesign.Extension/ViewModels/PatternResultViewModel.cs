@@ -25,8 +25,6 @@ namespace IDesign.Extension.ViewModels
             get
             {
                 var result = new List<Named>();
-                if (Components.Any())
-                    result.Add(new PatternResultPartViewModel("Components ", Components.ToList()));
                 if (Improvements.Any())
                     result.Add(new PatternResultPartViewModel("Improvements ", Improvements.ToList()));
                 if (Requirements.Any())
@@ -51,27 +49,6 @@ namespace IDesign.Extension.ViewModels
             if (score < 80)
                 return FeedbackType.SemiCorrect;
             return FeedbackType.Correct;
-        }
-
-        public IEnumerable<object> Components
-        {
-            get
-            {
-                var dict = new Dictionary<string, PatternComponentViewModel>();
-
-                foreach (var relatedSubType in Result.Result.GetRelatedSubTypes())
-                {
-                    if (!dict.ContainsKey(relatedSubType.Value))
-                    {
-                        var key = relatedSubType.Value;
-                        var name = ResourceUtils.ResourceMessageToString(new ResourceMessage(key));
-                        dict.Add(relatedSubType.Value, new PatternComponentViewModel(name));
-                    }
-                    dict[relatedSubType.Value].EntityNodes.Add(relatedSubType.Key);
-                }
-
-                return dict.Values;
-            }
         }
 
         public IEnumerable<object> Requirements

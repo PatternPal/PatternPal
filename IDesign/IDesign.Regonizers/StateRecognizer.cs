@@ -78,10 +78,9 @@ namespace IDesign.Recognizers
                  },x => x.GetRelations().Where(y => (y.GetRelationType().Equals(RelationType.ExtendedBy)) ||(y.GetRelationType().Equals(RelationType.ImplementedBy))
                 ).Select(y => y.GetDestination()), "StateConcrete", GroupCheckType.All),
 
-            }, x => new List<IEntityNode> { node }, "State"); ;
-            result.Results.Add(statePatternCheck.Check(node));
+            }, x => new List<IEntityNode> { node }, "State");
 
-            result.RelatedSubTypes.Add(entityNode, "AbstractState");
+            result.Results.Add(statePatternCheck.Check(node));
             foreach (var concrete in node.GetRelations().Where(x =>
                      (x.GetRelationType().Equals(RelationType.ExtendedBy)) ||
                      (x.GetRelationType().Equals(RelationType.ImplementedBy))
