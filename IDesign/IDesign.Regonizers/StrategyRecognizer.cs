@@ -23,18 +23,18 @@ namespace IDesign.Recognizers
                 new ElementCheck<IEntityNode>(x => (x.CheckTypeDeclaration(EntityNodeType.Interface) ) |
                 (x.CheckTypeDeclaration(EntityNodeType.Class) && x.CheckModifier("abstract")),"NodeAbstractOrInterface", 2),
 
-                //check state node methods
+                //check strategy node methods
                 new GroupCheck<IEntityNode, IMethod>(new List<ICheck<IMethod>>
                 {
                     new ElementCheck<IMethod>(x => x.GetBody() == null, "MethodBodyEmpty", 1)
                 }, x => x.GetMethodsAndProperties(), "StrategyNodeMethods "),
 
-                //check state node used by relations
+                //check strategy node used by relations
                 new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                 {
                     new ElementCheck<IEntityNode>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.UsedBy, 1),"NodeUses1", 1),
 
-                    //check if field has state as type
+                    //check if field has stratgey as type
                     new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
                     {
                         new ElementCheck<IEntityNode>(x => (x.CheckTypeDeclaration(EntityNodeType.Interface)) |
