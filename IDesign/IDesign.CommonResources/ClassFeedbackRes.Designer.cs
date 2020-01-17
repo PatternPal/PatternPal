@@ -61,6 +61,15 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Abstract State.
+        /// </summary>
+        public static string AbstractState {
+            get {
+                return ResourceManager.GetString("AbstractState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Adaptee should extend an adapter..
         /// </summary>
         public static string AdapteeExtendsApter {
@@ -165,6 +174,15 @@ namespace IDesign.CommonResources {
         public static string ConcreteDecoratorMethodParameters {
             get {
                 return ResourceManager.GetString("ConcreteDecoratorMethodParameters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Concrete State.
+        /// </summary>
+        public static string ConcreteState {
+            get {
+                return ResourceManager.GetString("ConcreteState", resourceCulture);
             }
         }
         

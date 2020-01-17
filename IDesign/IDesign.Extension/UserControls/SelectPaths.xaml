@@ -6,7 +6,7 @@
              xmlns:UIResources="clr-namespace:IDesign.Extension.Resources"
              xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
              mc:Ignorable="d" 
-             d:DesignHeight="60" d:DesignWidth="800">
+             d:DesignHeight="400" d:DesignWidth="400">
     <UserControl.Resources>
         <ResourceDictionary>
             <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
@@ -122,46 +122,44 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            <Style TargetType="RadioButton">
+            <Style x:Key="{x:Type RadioButton}" TargetType="{x:Type RadioButton}">
                 <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
                 <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="RadioButton">
-                            <BulletDecorator Background="Transparent">
-                                <BulletDecorator.Bullet>
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="13*" />
-                                            <RowDefinition Height="11*" />
-                                        </Grid.RowDefinitions>
-                                        <Ellipse x:Name="Border"
-                                                 Width="16"
-                                                 Height="16"
-                                                 Margin=" 4 4 0 0"
-                                                 Stroke="{TemplateBinding BorderBrush}"
-                                                 StrokeThickness="1" Grid.RowSpan="2">
-                                        </Ellipse>
-                                        <Ellipse x:Name="CheckMark"
-                                                 Margin="7 7 3 3"
-                                                 Width="8"
-                                                 Height="8"
-                                                 Fill="{TemplateBinding BorderBrush}"
-                                                 StrokeThickness="2" Grid.RowSpan="2" />
-                                    </Grid>
-                                </BulletDecorator.Bullet>
-                                <ContentPresenter Margin="5 0"
-                                                  HorizontalAlignment="Left"
-                                                  VerticalAlignment="Center"
-                                                  RecognizesAccessKey="True" />
-                            </BulletDecorator>
+                        <ControlTemplate TargetType="{x:Type RadioButton}">
+                            <Border x:Name="Border" Background="Transparent" BorderThickness="0 0 0 4" BorderBrush="#4496F3">
+                                <ContentPresenter 
+                                    Margin="4,0,0,0"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"
+                                    RecognizesAccessKey="True"/>
+                            </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsChecked" Value="false">
-                                    <Setter TargetName="CheckMark" Property="Visibility" Value="Collapsed" />
+                                    <Setter TargetName="Border" Property="BorderBrush" Value="Transparent" />
                                 </Trigger>
                                 <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter TargetName="Border" Property="Stroke"
-                                            Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                                    <Setter TargetName="Border" Property="Background">
+                                        <Setter.Value>
+                                            <LinearGradientBrush  StartPoint="0,0" EndPoint="1,1">
+                                                <GradientStop Color="#4496F3" Offset="0"/>
+                                                <GradientStop Color="#4573EF" Offset="0.53"/>
+                                            </LinearGradientBrush>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter TargetName="Border" Property="BorderBrush">
+                                        <Setter.Value>
+                                            <LinearGradientBrush  StartPoint="0,0" EndPoint="1,1">
+                                                <GradientStop Color="#4496F3" Offset="0"/>
+                                                <GradientStop Color="#4573EF" Offset="0.53"/>
+                                            </LinearGradientBrush>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter TargetName="Border" Property="Background" Value="Yellow" />
+                                    <Setter TargetName="Border" Property="BorderBrush" Value="#40000000" />
+                                    <Setter Property="Foreground" Value="#80000000"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -170,24 +168,24 @@
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
-    <StackPanel Margin="5">
-        <RadioButton Name="radio1" GroupName="path" Content="{x:Static UIResources:ExtensionUIResources.ActiveDocument}" VerticalContentAlignment="Center"
-                         Height="25" IsChecked="True" />
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="180"/>
-            </Grid.ColumnDefinitions>
+    <Grid x:Name="RadioGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+        <RadioButton Grid.Column="0" GroupName="Radio" x:Name="radio1" IsChecked="True" Content="Active Document" Checked="ActiveDocument_Checked"/>
+        <RadioButton Grid.Column="1" GroupName="Radio" Content="Project" Checked="Project_Checked"/>
+        <ComboBox Grid.Row="1" Grid.ColumnSpan="2" x:Name="ProjectSelection" Height="20" Margin="5">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
 
-            <RadioButton Name="radio2" GroupName="path" Content="{x:Static UIResources:ExtensionUIResources.Project}" VerticalContentAlignment="Center"
-                         Height="25" />
-            <ComboBox Grid.Column="1" x:Name="ProjectSelection" Margin="5">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-        </Grid>
-    </StackPanel>
+    </Grid>
 </UserControl>

@@ -1,5 +1,9 @@
-﻿using System;
+﻿using IDesign.Extension.ViewModels;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,23 +20,14 @@ using System.Windows.Shapes;
 namespace IDesign.Extension.UserControls
 {
     /// <summary>
-    /// Interaction logic for SelectPaths.xaml
+    /// Interaction logic for PatternCheckbox.xaml
     /// </summary>
-    public partial class SelectPaths : UserControl
+    public partial class DesignPatternResult : UserControl
     {
-        public SelectPaths()
+        public DesignPatternResult()
         {
             InitializeComponent();
         }
 
-        private void ActiveDocument_Checked(object sender, RoutedEventArgs e)
-        {
-            RadioGrid.RowDefinitions[1].Height = new GridLength(0);
-        }
-
-        private void Project_Checked(object sender, RoutedEventArgs e)
-        {
-            RadioGrid.RowDefinitions[1].Height = new GridLength(30);
-        }
     }
 }

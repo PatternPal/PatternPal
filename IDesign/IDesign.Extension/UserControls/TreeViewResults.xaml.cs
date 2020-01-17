@@ -30,7 +30,7 @@ namespace IDesign.Extension.UserControls
 
         public TreeViewResults()
         {
-            InitializeComponent();
+InitializeComponent();
         }
 
         private void EventSetter_OnHandler(object sender, MouseButtonEventArgs e)

@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AbstractState" xml:space="preserve">
+    <value>Abstract State</value>
+  </data>
   <data name="AdapteeExtendsApter" xml:space="preserve">
     <value>Adaptee should extend an adapter.</value>
   </data>
@@ -152,6 +155,9 @@
   </data>
   <data name="ConcreteDecoratorMethodParameters" xml:space="preserve">
     <value>Method should have the component as a parameter.</value>
+  </data>
+  <data name="ConcreteState" xml:space="preserve">
+    <value>Concrete State</value>
   </data>
   <data name="ConstructorModifierNotPublic" xml:space="preserve">
     <value>Constructor should not be public.</value>

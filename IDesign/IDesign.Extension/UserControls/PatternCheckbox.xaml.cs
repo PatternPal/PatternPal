@@ -48,11 +48,11 @@ namespace IDesign.Extension.UserControls
 
             if (designPatternViewModels.All(x => x.IsChecked))
             {
-                (((Parent as Grid).Children[1] as Border).Child as CheckBox).IsChecked = true;
+                (((Parent as Grid).Children[2] as Border).Child as CheckBox).IsChecked = true;
             }
             else if (designPatternViewModels.All(x => !x.IsChecked))
             {
-                (((Parent as Grid).Children[1] as Border).Child as CheckBox).IsChecked = false;
+                (((Parent as Grid).Children[2] as Border).Child as CheckBox).IsChecked = false;
             }
         }
     }

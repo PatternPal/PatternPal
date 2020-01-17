@@ -31,6 +31,7 @@ namespace IDesign.Extension
         private List<Project> Projects { get; set; }
         private bool Loading { get; set; }
         private DTE Dte { get; set; }
+        private List<RecognitionResult> Results { get; set; }
         private readonly SummaryFactory SummaryFactory = new SummaryFactory();
 
         /// <summary>
@@ -67,18 +68,18 @@ namespace IDesign.Extension
             var maxHeight = 3 * 30;
             var height = Math.Min(ViewModels.Count * 30, maxHeight);
 
-            Grid.RowDefinitions[2].Height = new GridLength(height);
+            Grid.RowDefinitions[3].Height = new GridLength(height);
         }
 
         private void CreateResultViewModels(IEnumerable<RecognitionResult> results)
         {
-            var viewModels = new List<ResultViewModel>();
+            var viewModels = new List<PatternResultViewModel>();
             foreach (var patterns in from item in RecognizerRunner.designPatterns
                                      let patterns = results.Where(x => x.Pattern.Equals(item))
                                      where patterns.Count() > 0
                                      select patterns)
             {
-                viewModels.AddRange(patterns.OrderBy(x => x.Result.GetScore()).Select(x => new ResultViewModel(x)));
+                viewModels.AddRange(patterns.OrderBy(x => x.Result.GetScore()).Select(x => new PatternResultViewModel(x)));
             }
             // - Change your UI information here
             TreeViewResults.ResultsView.ItemsSource = viewModels;
@@ -163,6 +164,11 @@ namespace IDesign.Extension
 
             if (!Loading && Paths.Count != 0 && SelectedPatterns.Count != 0)
             {
+                if ((bool)SelectPaths.radio1.IsChecked)
+                    CheckSwitch.IsChecked = true;
+                else
+                    CheckSwitch.IsChecked = false;
+
                 var runner = new RecognizerRunner();
                 Loading = true;
                 statusBar.Value = 0;
@@ -180,39 +186,51 @@ namespace IDesign.Extension
                     try
                     {
                         TreeViewResults.SyntaxTreeSources = runner.CreateGraph(Paths);
-                        var results = runner.Run(SelectedPatterns);
-
+                        Results = runner.Run(SelectedPatterns);
 
                         //Here you signal the UI thread to execute the action:
                         Dispatcher?.BeginInvoke(new Action(() =>
                             {
-
-                                var allResults = results;
+                                var results = Results;
+                                var allResults = Results;
                                 if ((bool)SelectPaths.radio1.IsChecked)
                                 {
                                     results = results.Where(x => x.FilePath == cur).ToList();
+                                    Results = results;
+
                                     SummaryRow.Height = GridLength.Auto;
                                 }
                                 else
-                                {
-                                    results = results.Where(x => x.Result.GetScore() >= 80).ToList();
                                     SummaryRow.Height = new GridLength(0);
-                                }
+
+                                if (!(bool)CheckSwitch.IsChecked)
+                                    results = Results.Where(x => x.Result.GetScore() >= 80).ToList();
 
                                 SummaryControl.Text = SummaryFactory.CreateSummary(results, allResults);
                                 CreateResultViewModels(results);
+                                ResetUI();
                             }));
-
                     }
                     catch (Exception e)
                     {
                         throw e;
                     };
                 });
-                ResetUI();
             }
         }
 
+        private void CheckSwitch_Checked(object sender, RoutedEventArgs e)
+        {
+            if (Results == null) return;
+            CreateResultViewModels(Results);
+        }
+
+        private void CheckSwitch_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (Results == null) return;
+            var results = Results.Where(x => x.Result.GetScore() >= 80).ToList();
+            CreateResultViewModels(results);
+        }
 
         private void ResetUI()
         {
