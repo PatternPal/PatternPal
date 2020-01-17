@@ -186,7 +186,6 @@ namespace IDesign.Extension
                     try
                     {
                         TreeViewResults.SyntaxTreeSources = runner.CreateGraph(Paths);
-                        Results = new List<RecognitionResult>();
                         Results = runner.Run(SelectedPatterns);
 
                         //Here you signal the UI thread to execute the action:
