@@ -15,6 +15,8 @@ namespace IDesign.Recognizers.Abstractions
         ///     Get a list of suggestions for this result.
         /// </summary>
         /// <returns>A list of suggestions</returns>
-        IList<ISuggestion> GetSuggestions();
+        IList<ICheckResult> GetResults();
+
+        IDictionary<IEntityNode, string> GetRelatedSubTypes();
     }
 }

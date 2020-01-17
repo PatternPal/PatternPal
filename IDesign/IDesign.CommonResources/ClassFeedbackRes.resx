@@ -1,0 +1,390 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AbstractState" xml:space="preserve">
+    <value>Abstract State</value>
+  </data>
+  <data name="AdapteeExtendsApter" xml:space="preserve">
+    <value>Adaptee should extend an adapter.</value>
+  </data>
+  <data name="AdapteeField" xml:space="preserve">
+    <value>Adapter field should have adaptee as type.</value>
+  </data>
+  <data name="AdapteeIsUsed" xml:space="preserve">
+    <value>Adaptee should be used by an adapter.</value>
+  </data>
+  <data name="AdapterAdaptee" xml:space="preserve">
+    <value>Should have adaptee.</value>
+  </data>
+  <data name="AdapterClass" xml:space="preserve">
+    <value>Class adapter</value>
+  </data>
+  <data name="AdapterMethod" xml:space="preserve">
+    <value>All Adapter methods should call adaptee.</value>
+  </data>
+  <data name="AdapterMethodReturnType" xml:space="preserve">
+    <value>Adapter method should return adaptee.</value>
+  </data>
+  <data name="AdapterMethodUses" xml:space="preserve">
+    <value>Adapter method should use adaptee.</value>
+  </data>
+  <data name="Child" xml:space="preserve">
+    <value>Should be extended by a class.</value>
+  </data>
+  <data name="ConcreteDecoratorConstructor" xml:space="preserve">
+    <value>Concrete decorator constructor</value>
+  </data>
+  <data name="ConcreteDecoratorMethod" xml:space="preserve">
+    <value>Concrete decorator method</value>
+  </data>
+  <data name="ConcreteDecoratorMethodParameters" xml:space="preserve">
+    <value>Method should have the component as a parameter.</value>
+  </data>
+  <data name="ConcreteState" xml:space="preserve">
+    <value>Concrete State</value>
+  </data>
+  <data name="ConstructorModifierNotPublic" xml:space="preserve">
+    <value>Constructor should not be public.</value>
+  </data>
+  <data name="Decorator" xml:space="preserve">
+    <value>Decorator</value>
+  </data>
+  <data name="DecoratorComponent" xml:space="preserve">
+    <value>Decorator component</value>
+  </data>
+  <data name="DecoratorComponentChild" xml:space="preserve">
+    <value>Should be implemented or extended by one other class.</value>
+  </data>
+  <data name="DecoratorComponentConstructor" xml:space="preserve">
+    <value>Decorator component constructor</value>
+  </data>
+  <data name="DecoratorComponentField" xml:space="preserve">
+    <value>Decorator component field</value>
+  </data>
+  <data name="DecoratorComponentFieldType" xml:space="preserve">
+    <value>Field should be the component.</value>
+  </data>
+  <data name="DecoratorComponentMethodParameters" xml:space="preserve">
+    <value>Method should have the component as a parameter.</value>
+  </data>
+  <data name="DecoratorConcrete" xml:space="preserve">
+    <value>Concrete decorator</value>
+  </data>
+  <data name="DecoratorConcreteMethodArguments" xml:space="preserve">
+    <value>Concrete decorator method should use the component and call its base.</value>
+  </data>
+  <data name="FactoryAbstractCreator" xml:space="preserve">
+    <value>Abstract creator</value>
+  </data>
+  <data name="FactoryAbstractCreatorMethod" xml:space="preserve">
+    <value>Create method</value>
+  </data>
+  <data name="FactoryConcreteCreator" xml:space="preserve">
+    <value>Concrete creator</value>
+  </data>
+  <data name="FactoryConcreteCreatorMethod" xml:space="preserve">
+    <value>Create method of the concrete creator</value>
+  </data>
+  <data name="FactoryConcreteCreatorMethodAny" xml:space="preserve">
+    <value>Concrete creator should have at least one method.</value>
+  </data>
+  <data name="FactoryConcreteProductMethodAny" xml:space="preserve">
+    <value>Concrete product should have at least one method.</value>
+  </data>
+  <data name="FactoryCreates" xml:space="preserve">
+    <value>Product of the factory method</value>
+  </data>
+  <data name="FactoryMethodCreateTypeProduct" xml:space="preserve">
+    <value>Method should create a product.</value>
+  </data>
+  <data name="FactoryMethodReturnTypeProduct" xml:space="preserve">
+    <value>Method should return a product.</value>
+  </data>
+  <data name="FactoryMethodReturnTypeProductInterface" xml:space="preserve">
+    <value>Method should return a product interface.</value>
+  </data>
+  <data name="FieldModifierNotPublic" xml:space="preserve">
+    <value>Field should not be public.</value>
+  </data>
+  <data name="FieldModifierPrivate" xml:space="preserve">
+    <value>Field should be private.</value>
+  </data>
+  <data name="FieldModifierStatic" xml:space="preserve">
+    <value>Field should be static.</value>
+  </data>
+  <data name="FieldType" xml:space="preserve">
+    <value>Field type should be {0}.</value>
+  </data>
+  <data name="MethodAmountThree" xml:space="preserve">
+    <value>There should be at least 3 methods: add, remove and notify.</value>
+  </data>
+  <data name="MethodAny" xml:space="preserve">
+    <value>Should have at least one method.</value>
+  </data>
+  <data name="MethodBaseCall" xml:space="preserve">
+    <value>Calls base method</value>
+  </data>
+  <data name="MethodBodyEmpty" xml:space="preserve">
+    <value>Method body should be empty.</value>
+  </data>
+  <data name="MethodCreateSameInterface" xml:space="preserve">
+    <value>Method should create a different class of the same interface as this class.</value>
+  </data>
+  <data name="MethodCreateType" xml:space="preserve">
+    <value>Method should create {0}.</value>
+  </data>
+  <data name="MethodModifierAbstract" xml:space="preserve">
+    <value>Method should be abstract.</value>
+  </data>
+  <data name="MethodModifierNotPrivate" xml:space="preserve">
+    <value>Method should not be private.</value>
+  </data>
+  <data name="MethodModifierPublic" xml:space="preserve">
+    <value>Method should be public.</value>
+  </data>
+  <data name="MethodModifierStatic" xml:space="preserve">
+    <value>Method should be static.</value>
+  </data>
+  <data name="MethodNameOverride" xml:space="preserve">
+    <value>Method should override base method.</value>
+  </data>
+  <data name="MethodOverride" xml:space="preserve">
+    <value>Method should override or is implemented.</value>
+  </data>
+  <data name="MethodParameterNone" xml:space="preserve">
+    <value>Class should have no methods with this parameter type {0}.</value>
+  </data>
+  <data name="MethodParameters" xml:space="preserve">
+    <value>Method should have a parameter with type {0}.</value>
+  </data>
+  <data name="MethodReturnItself" xml:space="preserve">
+    <value>Method should return this class.</value>
+  </data>
+  <data name="MethodReturnType" xml:space="preserve">
+    <value>Method should return {0}.</value>
+  </data>
+  <data name="NodeAbstractOrInterface" xml:space="preserve">
+    <value>Class should be abstract or an interface.</value>
+  </data>
+  <data name="NodeDoesNotCreate" xml:space="preserve">
+    <value>Should not create other classes.</value>
+  </data>
+  <data name="NodeDoesNotUse" xml:space="preserve">
+    <value>Should not use other classes.</value>
+  </data>
+  <data name="NodeImplementedByAny" xml:space="preserve">
+    <value>Should be implemented by an interface</value>
+  </data>
+  <data name="NodeModifierAbstract" xml:space="preserve">
+    <value>Class should be abstract.</value>
+  </data>
+  <data name="NodeNotImplementedAny" xml:space="preserve">
+    <value>Should not implement an interface.</value>
+  </data>
+  <data name="NodeTypeClass" xml:space="preserve">
+    <value>Should be a class.</value>
+  </data>
+  <data name="NodeUsedByAny" xml:space="preserve">
+    <value>This class should be used by other classes.</value>
+  </data>
+  <data name="NodeUses1" xml:space="preserve">
+    <value>Should have at least 1 uses relation.</value>
+  </data>
+  <data name="ObjectAdapter" xml:space="preserve">
+    <value>Object adapter</value>
+  </data>
+  <data name="Observer" xml:space="preserve">
+    <value>Observer</value>
+  </data>
+  <data name="ObserverConcreteSubject" xml:space="preserve">
+    <value>Observer concrete subject</value>
+  </data>
+  <data name="ObserverConcreteSubjectField" xml:space="preserve">
+    <value>Observer concrete subject field</value>
+  </data>
+  <data name="ObserverMethodParameters" xml:space="preserve">
+    <value>There should be 2 methods which both have one of the same parameters {0}.</value>
+  </data>
+  <data name="ObserverSubjectInterface" xml:space="preserve">
+    <value>Subject interface</value>
+  </data>
+  <data name="Parent" xml:space="preserve">
+    <value>Should be extended by a class or implemented by an interface.</value>
+  </data>
+  <data name="ProductClass" xml:space="preserve">
+    <value>Should be product class.</value>
+  </data>
+  <data name="SingletonConstructor" xml:space="preserve">
+    <value>Private constructor</value>
+  </data>
+  <data name="SingletonField" xml:space="preserve">
+    <value>Should have an instance of itself.</value>
+  </data>
+  <data name="SingletonMethod" xml:space="preserve">
+    <value>Should have GetInstance().</value>
+  </data>
+  <data name="SingletonMethodReturnCreationType" xml:space="preserve">
+    <value>Singleton method should be able to return a new Singleton.</value>
+  </data>
+  <data name="State" xml:space="preserve">
+    <value>Parent class or interface of the concrete state class</value>
+  </data>
+  <data name="StateClassChangeState" xml:space="preserve">
+    <value>Change state method in concrete state class</value>
+  </data>
+  <data name="StateConcrete" xml:space="preserve">
+    <value>State concrete class</value>
+  </data>
+  <data name="StateContext" xml:space="preserve">
+    <value>State context class</value>
+  </data>
+  <data name="StateContextField" xml:space="preserve">
+    <value>State context field</value>
+  </data>
+  <data name="StateCreatesOtherState" xml:space="preserve">
+    <value>Concrete state class should create another state</value>
+  </data>
+  <data name="StateFieldStateType" xml:space="preserve">
+    <value>Used return type</value>
+  </data>
+  <data name="StateNodeMethods" xml:space="preserve">
+    <value>Change state method</value>
+  </data>
+  <data name="Strategy" xml:space="preserve">
+    <value>Parent class or interface of the concrete strategy class</value>
+  </data>
+  <data name="StrategyConcrete" xml:space="preserve">
+    <value>Concrete strategy class</value>
+  </data>
+  <data name="StrategyConcreteMethod" xml:space="preserve">
+    <value>Concrete strategy method</value>
+  </data>
+  <data name="StrategyContext" xml:space="preserve">
+    <value>Strategy context class</value>
+  </data>
+  <data name="StrategyContextField" xml:space="preserve">
+    <value>Strategy context field</value>
+  </data>
+  <data name="StrategyFieldStateType" xml:space="preserve">
+    <value>Used return type</value>
+  </data>
+  <data name="StrategyNodeMethods" xml:space="preserve">
+    <value>Strategy method</value>
+  </data>
+</root>

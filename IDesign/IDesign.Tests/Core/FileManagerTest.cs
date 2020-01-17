@@ -6,17 +6,19 @@ namespace IDesign.Tests.Core
 {
     internal class FileManagerTest
     {
-        public string path = "../../../Core/TestClasses";
         private readonly FileManager readFiles = new FileManager();
+        public string path = "../../../Core/TestClasses";
 
         [Test]
         public void TestIfFilesListContainsRightFiles()
         {
-            var expected = new List<string>();
-            expected.Add(@"../../../Core/TestClasses\ITest.cs");
-            expected.Add(@"../../../Core/TestClasses\TestClass1.cs");
+            var expected = new List<string>
+            {
+                @"../../../Core/TestClasses\ITest.cs",
+                @"../../../Core/TestClasses\TestClass1.cs"
+            };
 
-            var actual = readFiles.GetAllCsFilesFromDirectory(path);
+            var actual = readFiles.GetAllCSharpFilesFromDirectory(path);
             Assert.AreEqual(expected, actual);
         }
     }

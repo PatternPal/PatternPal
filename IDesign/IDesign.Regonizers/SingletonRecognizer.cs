@@ -1,40 +1,52 @@
-﻿using System.Collections.Generic;
-using IDesign.Checks;
-using IDesign.Models;
+using System.Collections.Generic;
+using System.Linq;
 using IDesign.Recognizers.Abstractions;
-using IDesign.Recognizers.Output;
+using IDesign.Recognizers.Checks;
+using IDesign.Recognizers.Models.ElementChecks;
+using IDesign.Recognizers.Models.Output;
 
 namespace IDesign.Recognizers
 {
-    public class SingletonRecognizer : Recognizer, IRecognizer
+    public class SingletonRecognizer : IRecognizer
     {
+
         public IResult Recognize(IEntityNode entityNode)
         {
             var result = new Result();
-            var methodChecks = new List<ElementCheck<IMethod>>
+
+            var methodChecks = new List<ICheck<IMethod>>
             {
-                new ElementCheck<IMethod>(x => x.CheckReturnType(entityNode.GetName()), "Incorrecte return type"),
-                new ElementCheck<IMethod>(x => x.CheckModifier("static"), "Is niet static"),
+                new ElementCheck<IMethod>(x => x.CheckReturnType(entityNode.GetName()), new ResourceMessage("MethodReturnType", new [] { entityNode.GetName() }) , 1),
+                new ElementCheck<IMethod>(x => x.CheckModifier("static"), "MethodModifierStatic", 1),
                 new ElementCheck<IMethod>(x => x.CheckReturnTypeSameAsCreation(),
-                    "Return type is niet hetzelfde als wat er gemaakt wordt")
+                   new ResourceMessage("SingletonMethodReturnCreationType"))
             };
-            CheckElements(result, entityNode.GetMethods(), methodChecks);
 
-            var propertyChecks = new List<ElementCheck<IField>>
+            var propertyChecks = new List<ICheck<IField>>
             {
-                new ElementCheck<IField>(x => x.CheckFieldType(entityNode.GetName()), "Incorrecte type"),
-                new ElementCheck<IField>(x => x.CheckMemberModifier("static"), "Is niet static"),
-                new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "Is niet private")
+                new ElementCheck<IField>(x => x.CheckFieldType(new List<string>(){ entityNode.GetName() }), new ResourceMessage("FieldType", new []{ entityNode.GetName()}), 1),
+                new ElementCheck<IField>(x => x.CheckMemberModifier("static"), "FieldModifierStatic", 1),
+                new ElementCheck<IField>(x => !x.CheckMemberModifier("public"), "FieldModifierNotPublic", 1)
             };
-            CheckElements(result, entityNode.GetFields(), propertyChecks);
 
-            var constructorChecks = new List<ElementCheck<IMethod>>
+            var constructorChecks = new List<ICheck<IMethod>>
             {
-                new ElementCheck<IMethod>(x => !x.CheckModifier("public"), "Is public moet private of protected zijn")
+                new ElementCheck<IMethod>(x => !x.CheckModifier("public"), "ConstructorModifierNotPublic", 0.5F)
             };
-            CheckElements(result, entityNode.GetConstructors(), constructorChecks);
 
-            result.Score = (int) (result.Score / 7f * 100f);
+
+            var singletonCheck = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
+            {
+                new GroupCheck<IEntityNode, IMethod>(methodChecks, x => x.GetMethodsAndProperties(), "SingletonMethod"),
+                new GroupCheck<IEntityNode, IField>(propertyChecks, x => x.GetFields(), "SingletonField"),
+                new GroupCheck<IEntityNode, IMethod>(constructorChecks, x => x.GetConstructors(), "SingletonConstructor")
+            }, x => new List<IEntityNode> { entityNode }, "Singleton", GroupCheckType.All);
+
+            var r = singletonCheck.Check(entityNode);
+            result.Results = r.GetChildFeedback().ToList();
+
+
+            result.RelatedSubTypes.Add(entityNode, "Singleton");
             return result;
         }
     }

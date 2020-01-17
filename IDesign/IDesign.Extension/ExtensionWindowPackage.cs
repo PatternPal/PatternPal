@@ -67,14 +67,20 @@ namespace IDesign.Extension
         public override IVsAsyncToolWindowFactory GetAsyncToolWindowFactory(Guid toolWindowType)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            if (toolWindowType == typeof(ExtensionWindow).GUID) return this;
+            if (toolWindowType == typeof(ExtensionWindow).GUID)
+            {
+                return this;
+            }
 
             return base.GetAsyncToolWindowFactory(toolWindowType);
         }
 
         protected override string GetToolWindowTitle(Type toolWindowType, int id)
         {
-            if (toolWindowType == typeof(ExtensionWindow)) return "ExtensionWindow loading";
+            if (toolWindowType == typeof(ExtensionWindow))
+            {
+                return "ExtensionWindow loading";
+            }
 
             return base.GetToolWindowTitle(toolWindowType, id);
         }

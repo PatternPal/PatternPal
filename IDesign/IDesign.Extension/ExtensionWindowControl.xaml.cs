@@ -4,16 +4,19 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using EnvDTE;
 using IDesign.Core;
+using IDesign.Core.Models;
+using IDesign.Extension.Resources;
 using IDesign.Extension.ViewModels;
+using IDesign.Recognizers.Abstractions;
 using Microsoft.CodeAnalysis;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.TextManager.Interop;
+using Project = Microsoft.CodeAnalysis.Project;
 using Task = System.Threading.Tasks.Task;
 
 namespace IDesign.Extension
@@ -21,8 +24,16 @@ namespace IDesign.Extension
     /// <summary>
     ///     Interaction logic for ExtensionWindowControl.
     /// </summary>
-    public partial class ExtensionWindowControl : UserControl
+    public partial class ExtensionWindowControl : UserControl, IVsSolutionEvents, IVsRunningDocTableEvents
     {
+        private List<DesignPatternViewModel> ViewModels { get; set; }
+        private List<string> Paths { get; set; }
+        private List<Project> Projects { get; set; }
+        private bool Loading { get; set; }
+        private DTE Dte { get; set; }
+        private List<RecognitionResult> Results { get; set; }
+        private readonly SummaryFactory SummaryFactory = new SummaryFactory();
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="ExtensionWindowControl" /> class.
         /// </summary>
@@ -32,110 +43,86 @@ namespace IDesign.Extension
             AddViewModels();
             Loading = false;
             Dispatcher.VerifyAccess();
+            LoadProject();
+            SelectAll.IsChecked = true;
+            SelectPaths.ProjectSelection.ItemsSource = Projects;
+            SelectPaths.ProjectSelection.SelectedIndex = 0;
             Dte = Package.GetGlobalService(typeof(SDTE)) as DTE;
+            var rdt = (IVsRunningDocumentTable)Package.GetGlobalService(typeof(SVsRunningDocumentTable));
+            rdt.AdviseRunningDocTableEvents(this, out _);
+            var ss = (IVsSolution)Package.GetGlobalService(typeof(SVsSolution));
+            ss.AdviseSolutionEvents(this, out _);
         }
 
-        public List<DesignPatternViewModel> ViewModels { get; set; }
-        public List<string> Paths { get; set; }
-        public bool Loading { get; set; }
-        public DTE Dte { get; }
 
         /// <summary>
         ///     Adds all the existing designpatterns in a list.
         /// </summary>
         private void AddViewModels()
         {
-            ViewModels = new List<DesignPatternViewModel>();
+            ViewModels = (from pattern in RecognizerRunner.designPatterns
+                          select new DesignPatternViewModel(pattern.Name, pattern, pattern.WikiPage)).ToList();
 
-            foreach (var pattern in RecognizerRunner.designPatterns)
-                ViewModels.Add(new DesignPatternViewModel(pattern.Name, pattern));
+            PatternCheckbox.listBox.DataContext = ViewModels;
 
-            listBox.DataContext = ViewModels;
+            var maxHeight = 3 * 30;
+            var height = Math.Min(ViewModels.Count * 30, maxHeight);
 
-            var height = ViewModels.Count * 30;
-
-            if (height > 3 * 30)
-                height = 3 * 30;
-
-            Grid.RowDefinitions[1].Height = new GridLength(height);
+            Grid.RowDefinitions[3].Height = new GridLength(height);
         }
 
         private void CreateResultViewModels(IEnumerable<RecognitionResult> results)
         {
-            var viewModels = new List<ClassViewModel>();
-
-            foreach (var result in results)
+            var viewModels = new List<PatternResultViewModel>();
+            foreach (var patterns in from item in RecognizerRunner.designPatterns
+                                     let patterns = results.Where(x => x.Pattern.Equals(item))
+                                     where patterns.Count() > 0
+                                     select patterns)
             {
-                var classViewModel = viewModels.FirstOrDefault(x => x.EntityNode == result.EntityNode);
-                if (classViewModel == null)
-                {
-                    classViewModel = new ClassViewModel(result.EntityNode);
-                    viewModels.Add(classViewModel);
-                }
-
-                var resultViewModel = new ResultViewModel(result);
-                classViewModel.Results.Add(resultViewModel);
-
-                foreach (var suggestion in result.Result.GetSuggestions())
-                    resultViewModel.Suggestions.Add(new SuggestionViewModel(suggestion, result.EntityNode));
+                viewModels.AddRange(patterns.OrderBy(x => x.Result.GetScore()).Select(x => new PatternResultViewModel(x)));
             }
-
-            //Here you signal the UI thread to execute the action:
-            Dispatcher?.BeginInvoke(new Action(() =>
-            {
-                // - Change your UI information here
-                ResultsView.ItemsSource = viewModels;
-            }), null);
+            // - Change your UI information here
+            TreeViewResults.ResultsView.ItemsSource = viewModels;
         }
 
-        /// <summary>
-        ///     Gets current active document path.
-        /// </summary>
-        private void GetCurrentPath()
+
+        private List<string> GetCurrentPath()
         {
-            Paths = new List<string>();
-            if (Dte.ActiveDocument != null)
-                Paths.Add(Dte.ActiveDocument.FullName);
+            var result = new List<string>();
+
+            if ((bool)SelectPaths.radio1.IsChecked && Dte.ActiveDocument != null)
+            {
+                result.Add(Dte.ActiveDocument.FullName);
+            }
+            return result;
         }
 
-        /// <summary>
-        ///     Gets all paths in the solution.
-        /// </summary>
         private void GetAllPaths()
         {
             Paths = new List<string>();
-            var cm = (IComponentModel) Package.GetGlobalService(typeof(SComponentModel));
-            var ws = (Workspace) cm.GetService<VisualStudioWorkspace>();
-            foreach (var project in ws.CurrentSolution.Projects)
-                Paths.AddRange(project.Documents.Select(x => x.FilePath));
+            var selectedI = SelectPaths.ProjectSelection.SelectedIndex;
+            if (selectedI != -1)
+            {
+                Paths.AddRange(Projects[selectedI].Documents.Select(x => x.FilePath));
+            }
         }
 
         private void ChoosePath()
         {
-            if ((bool) radio1.IsChecked)
-                GetCurrentPath();
-            else
-                GetAllPaths();
+            GetAllPaths();
+        }
+
+        private void SaveAllDocuments()
+        {
+            Dte.Documents.SaveAll();
         }
 
 
-        private void selectNodeInEditor(SyntaxNode n, string file)
+        private void LoadProject()
         {
-            try
-            {
-                var cm = (IComponentModel) Package.GetGlobalService(typeof(SComponentModel));
-                var tm = (IVsTextManager) Package.GetGlobalService(typeof(SVsTextManager));
-                var ws = (Workspace) cm.GetService<VisualStudioWorkspace>();
-                var did = ws.CurrentSolution.GetDocumentIdsWithFilePath(file);
-                ws.OpenDocument(did.FirstOrDefault());
-                tm.GetActiveView(1, null, out var av);
-                var sp = n.GetLocation().GetMappedLineSpan().StartLinePosition;
-                var ep = n.GetLocation().GetMappedLineSpan().EndLinePosition;
-                av.SetSelection(sp.Line, sp.Character, ep.Line, ep.Character);
-            }
-            catch
-            {
-            }
+            var cm = (IComponentModel)Package.GetGlobalService(typeof(SComponentModel));
+            var ws = (Workspace)cm.GetService<VisualStudioWorkspace>();
+            Projects = ws.CurrentSolution.Projects.ToList();
         }
 
         /// <summary>
@@ -148,42 +135,219 @@ namespace IDesign.Extension
             "Default event handler naming pattern")]
         private async void Analyse_Button(object sender, RoutedEventArgs e)
         {
+            SaveAllDocuments();
+            Analyse();
+        }
+
+        private void SelectProjectFromFile(string path = null)
+        {
+            foreach (var index in from project in Projects
+                                  from index in
+                                      from doc in project.Documents
+                                      where doc.FilePath == path
+                                      let index = Projects.IndexOf(project)
+                                      select index
+                                  select index)
+            {
+                SelectPaths.ProjectSelection.SelectedIndex = index;
+                return;
+            }
+        }
+
+        private async void Analyse()
+        {
+            LoadProject();
+            var cur = GetCurrentPath().FirstOrDefault();
+            SelectProjectFromFile(cur);
             ChoosePath();
             var SelectedPatterns = ViewModels.Where(x => x.IsChecked).Select(x => x.Pattern).ToList();
 
-            if (Loading || Paths.Count == 0 || SelectedPatterns.Count == 0)
-                return;
-
-            var runner = new RecognizerRunner();
-            Loading = true;
-            statusBar.Value = 0;
-            var progress = new Progress<RecognizerProgress>(value =>
+            if (!Loading && Paths.Count != 0 && SelectedPatterns.Count != 0)
             {
-                statusBar.Value = value.CurrentPercentage;
-                ProgressStatusBlock.Text = value.Status;
-            });
+                if ((bool)SelectPaths.radio1.IsChecked)
+                    CheckSwitch.IsChecked = true;
+                else
+                    CheckSwitch.IsChecked = false;
 
-            IProgress<RecognizerProgress> iprogress = progress;
-            runner.OnProgressUpdate += (o, recognizerProgress) => iprogress.Report(recognizerProgress);
-            await Task.Run(() =>
-            {
-                var results = runner.Run(Paths, SelectedPatterns);
-                CreateResultViewModels(results);
-            });
+                var runner = new RecognizerRunner();
+                Loading = true;
+                statusBar.Value = 0;
+                var progress = new Progress<RecognizerProgress>(value =>
+                {
+                    statusBar.Value = value.CurrentPercentage;
+                    ProgressStatusBlock.Text = value.Status;
+                });
 
-            statusBar.Value = 0;
-            Loading = false;
+                IProgress<RecognizerProgress> iprogress = progress;
+                runner.OnProgressUpdate += (o, recognizerProgress) => iprogress.Report(recognizerProgress);
+
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        TreeViewResults.SyntaxTreeSources = runner.CreateGraph(Paths);
+                        Results = runner.Run(SelectedPatterns);
+
+                        //Here you signal the UI thread to execute the action:
+                        Dispatcher?.BeginInvoke(new Action(() =>
+                            {
+                                var results = Results;
+                                var allResults = Results;
+                                if ((bool)SelectPaths.radio1.IsChecked)
+                                {
+                                    results = results.Where(x => x.FilePath == cur).ToList();
+                                    Results = results;
+
+                                    SummaryRow.Height = GridLength.Auto;
+                                }
+                                else
+                                    SummaryRow.Height = new GridLength(0);
+
+                                if (!(bool)CheckSwitch.IsChecked)
+                                    results = Results.Where(x => x.Result.GetScore() >= 80).ToList();
+
+                                SummaryControl.Text = SummaryFactory.CreateSummary(results, allResults);
+                                CreateResultViewModels(results);
+                                ResetUI();
+                            }));
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    };
+                });
+            }
         }
 
-        private void EventSetter_OnHandler(object sender, MouseButtonEventArgs e)
+        private void CheckSwitch_Checked(object sender, RoutedEventArgs e)
         {
-            var viewItem = sender as TreeViewItem;
-            if (viewItem == null) return;
+            if (Results == null) return;
+            CreateResultViewModels(Results);
+        }
 
-            var viewModel = viewItem.DataContext as SuggestionViewModel;
-            if (viewModel == null) return;
+        private void CheckSwitch_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (Results == null) return;
+            var results = Results.Where(x => x.Result.GetScore() >= 80).ToList();
+            CreateResultViewModels(results);
+        }
 
-            selectNodeInEditor(viewModel.Suggestion.GetSyntaxNode(), viewModel.Node.GetSourceFile());
+        private void ResetUI()
+        {
+            statusBar.Value = 0;
+            Loading = false;
+            ProgressStatusBlock.Text = "";
+        }
+
+        #region IVsRunningDocTableEvents3 implementation
+
+        int IVsRunningDocTableEvents.OnAfterFirstDocumentLock(uint docCookie, uint dwRDTLockType, uint dwReadLocksRemaining, uint dwEditLocksRemaining)
+        {
+            return VSConstants.S_OK;
+        }
+
+        int IVsRunningDocTableEvents.OnBeforeLastDocumentUnlock(uint docCookie, uint dwRDTLockType, uint dwReadLocksRemaining,
+            uint dwEditLocksRemaining)
+        {
+            return VSConstants.S_OK;
+        }
+
+        int IVsRunningDocTableEvents.OnAfterSave(uint docCookie)
+        {
+            Analyse();
+            return VSConstants.S_OK;
+        }
+
+        int IVsRunningDocTableEvents.OnAfterAttributeChange(uint docCookie, uint grfAttribs)
+        {
+            return VSConstants.S_OK;
+        }
+
+        int IVsRunningDocTableEvents.OnBeforeDocumentWindowShow(uint docCookie, int fFirstShow, IVsWindowFrame pFrame)
+        {
+            return VSConstants.S_OK;
+        }
+
+        int IVsRunningDocTableEvents.OnAfterDocumentWindowHide(uint docCookie, IVsWindowFrame pFrame)
+        {
+            return VSConstants.S_OK;
+        }
+
+        #endregion
+        public int OnAfterOpenProject(IVsHierarchy pHierarchy, int fAdded)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnQueryCloseProject(IVsHierarchy pHierarchy, int fRemoving, ref int pfCancel)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnBeforeCloseProject(IVsHierarchy pHierarchy, int fRemoved)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnAfterLoadProject(IVsHierarchy pStubHierarchy, IVsHierarchy pRealHierarchy)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnQueryUnloadProject(IVsHierarchy pRealHierarchy, ref int pfCancel)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnBeforeUnloadProject(IVsHierarchy pRealHierarchy, IVsHierarchy pStubHierarchy)
+        {
+            return VSConstants.S_OK;
+        }
+
+        /// <summary>
+        ///     Gets all the projects after opening solution.
+        /// </summary>
+        public int OnAfterOpenSolution(object pUnkReserved, int fNewSolution)
+        {
+            LoadProject();
+            SelectPaths.ProjectSelection.ItemsSource = Projects;
+            SelectPaths.ProjectSelection.SelectedIndex = 0;
+            return VSConstants.S_OK;
+        }
+
+        public int OnQueryCloseSolution(object pUnkReserved, ref int pfCancel)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnBeforeCloseSolution(object pUnkReserved)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnAfterCloseSolution(object pUnkReserved)
+        {
+            return VSConstants.S_OK;
+        }
+
+        private void SelectAll_Checked(object sender, RoutedEventArgs e)
+        {
+            var designPatternViewModels = PatternCheckbox.listBox.Items.OfType<DesignPatternViewModel>().ToList();
+
+            for (int i = 0; i < designPatternViewModels.Count(); i++)
+            {
+                designPatternViewModels[i].IsChecked = true;
+            }
+        }
+
+        private void SelectAll_Unchecked(object sender, RoutedEventArgs e)
+        {
+            var designPatternViewModels = PatternCheckbox.listBox.Items.OfType<DesignPatternViewModel>().ToList();
+
+            for (int i = 0; i < designPatternViewModels.Count(); i++)
+            {
+                designPatternViewModels[i].IsChecked = false;
+            }
         }
     }
 }

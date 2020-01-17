@@ -1,28 +1,44 @@
 ﻿using System.Linq;
-using IDesign.Core;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using IDesign.Tests.Utils;
 using NUnit.Framework;
 
 namespace IDesign.Tests.Core
 {
     public class EntityNodeTest
     {
-        public void Should_Create_Fields()
+        [Test]
+        [TestCase("TestClass1.cs", "x;y")]
+        [TestCase("TestClass2.cs", "Getal;Naam;naam;PublicProperty")]
+        public void Should_Returns_Correct_Fields(string filename, string expected)
         {
-            var testClass = @"";
-            var root = CSharpSyntaxTree.ParseText(testClass).GetCompilationUnitRoot();
-            var testNode = root.Members[0] as ClassDeclarationSyntax;
+            var code = FileUtils.FileToString(filename);
+            var testGraph = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
+            var testNode = testGraph.Values.First();
+            var fields = string.Join(";", testNode.GetFields().Select(x => x.GetName()));
+            Assert.AreEqual(expected, fields);
+        }
 
-            var entityNode = new EntityNode();
-            entityNode.Name = testNode.Identifier.ToString();
-            entityNode.InterfaceOrClassNode = testNode;
-            entityNode.FieldDeclarationSyntaxList =
-                testNode.DescendantNodes().OfType<FieldDeclarationSyntax>().ToList();
-            entityNode.PropertyDeclarationSyntaxList =
-                testNode.DescendantNodes().OfType<PropertyDeclarationSyntax>().ToList();
+        [Test]
+        [TestCase("TestClass1.cs", "Sum")]
+        [TestCase("TestClass2.cs", "Count")]
+        public void Should_Returns_Correct_Methods(string filename, string expected)
+        {
+            var code = FileUtils.FileToString(filename);
+            var testGraph = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
+            var testNode = testGraph.Values.First();
+            var fields = string.Join(";", testNode.GetMethodsAndProperties().Select(x => x.GetName()));
+            Assert.AreEqual(expected, fields);
+        }
 
-            var fields = string.Join(";", entityNode.GetFields().Select(x => x.GetName()));
+        [Test]
+        [TestCase("TestClass1.cs", 1)]
+        [TestCase("TestClass2.cs", 1)]
+        public void Should_Returns_Correct_Constructors(string filename, int expected)
+        {
+            var code = FileUtils.FileToString(filename);
+            var testGraph = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
+            var testNode = testGraph.Values.First();
+            Assert.AreEqual(expected, testNode.GetConstructors().Count());
         }
     }
 }

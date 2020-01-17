@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
-using IDesign.Models;
+using IDesign.Recognizers.Models;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace IDesign.Recognizers.Abstractions
 {
-    public interface IEntityNode
+    public interface IEntityNode : ICheckable
     {
         /// <summary>
         ///     Get the declaration syntax of the node.
@@ -30,7 +31,7 @@ namespace IDesign.Recognizers.Abstractions
         ///     Get a list of methods declared in this node
         /// </summary>
         /// <returns>A list of methods</returns>
-        IEnumerable<IMethod> GetMethods();
+        IEnumerable<IMethod> GetMethodsAndProperties();
 
         /// <summary>
         ///     Get a list of fields declared in this node
@@ -43,5 +44,21 @@ namespace IDesign.Recognizers.Abstractions
         /// </summary>
         /// <returns>A list of constructors</returns>
         IEnumerable<IMethod> GetConstructors();
+
+        /// <summary>
+        ///     Gets the relations of this class
+        /// </summary>
+        IEnumerable<IRelation> GetRelations();
+
+        /// <summary>
+        ///     Gets the type of this class
+        /// </summary>
+        EntityNodeType GetEntityNodeType();
+
+        /// <summary>
+        ///     Gets te modifiers of this class
+        /// </summary>
+        /// <returns></returns>
+        SyntaxTokenList GetModifiers();
     }
 }

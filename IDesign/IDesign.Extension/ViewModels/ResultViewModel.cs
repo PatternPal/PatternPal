@@ -1,24 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using IDesign.Core;
+using System.Windows.Media;
+using IDesign.Core.Models;
 using IDesign.Recognizers.Abstractions;
 
 namespace IDesign.Extension.ViewModels
 {
-    public class ClassViewModel
-    {
-        public ClassViewModel(IEntityNode entityNode)
-        {
-            EntityNode = entityNode;
-        }
-
-        public IEntityNode EntityNode { get; set; }
-        public string ClassName => EntityNode.GetName();
-
-        public ResultViewModel BestMatch => Results.OrderByDescending(x => x.Score).FirstOrDefault();
-        public List<ResultViewModel> Results { get; set; } = new List<ResultViewModel>();
-    }
-
     public class ResultViewModel
     {
         public ResultViewModel(RecognitionResult result)
@@ -29,19 +16,27 @@ namespace IDesign.Extension.ViewModels
         public RecognitionResult Result { get; set; }
         public string PatternName => Result.Pattern.Name;
         public int Score => Result.Result.GetScore();
-        public List<SuggestionViewModel> Suggestions { get; set; } = new List<SuggestionViewModel>();
-    }
 
-    public class SuggestionViewModel
-    {
-        public SuggestionViewModel(ISuggestion suggestion, IEntityNode node)
+        public SolidColorBrush Color => GetColor(Result.Result.GetScore());
+
+        public SolidColorBrush GetColor(int score)
         {
-            Suggestion = suggestion;
-            Node = node;
+            return score < 40 ? Brushes.Red : score < 80 ? Brushes.Yellow : Brushes.Green;
         }
 
-        public ISuggestion Suggestion { get; set; }
-        public IEntityNode Node { get; set; }
-        public string SuggestionText => Suggestion.GetMessage();
+        public FeedbackType GetFeedbackType()
+        {
+            int score = Result.Result.GetScore();
+            if (score < 40)
+                return FeedbackType.Incorrect;
+            if (score < 80)
+                return FeedbackType.SemiCorrect;
+            return FeedbackType.Correct;
+        }
+
+        public IEnumerable<CheckResultViewModel> Results =>
+            Result.Result.GetResults().Select(x => new CheckResultViewModel(x, GetFeedbackType()));
+
+        public IEntityNode EntityNode { get; internal set; }
     }
 }
