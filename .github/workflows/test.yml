@@ -22,7 +22,7 @@ jobs:
           dotnet-version: 5.0.x
       - run: dotnet sln IDesign.sln remove IDesign.Extension/IDesign.Extension.csproj
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore &
              nuget restore
       - name: Build
         run: dotnet build --no-restore
