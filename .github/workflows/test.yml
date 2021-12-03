@@ -23,7 +23,7 @@ jobs:
       - run: dotnet sln IDesign.sln remove IDesign.Extension/IDesign.Extension.csproj
       - name: Restore dependencies
         run: dotnet restore &
-             nuget restore
+      - run: nuget restore
       - name: Build
         run: dotnet build --no-restore
       - name: Test
