@@ -12,7 +12,7 @@ defaults:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -22,8 +22,9 @@ jobs:
           dotnet-version: 5.0.x
       - run: dotnet sln IDesign.sln remove IDesign.Extension/IDesign.Extension.csproj
       - name: Restore dependencies
-        run: dotnet restore &
-      - run: nuget restore
+        run: |
+          dotnet restore
+          nuget restore
       - name: Build
         run: dotnet build --no-restore
       - name: Test
