@@ -11,7 +11,7 @@ using NDesk.Options;
 
 namespace IDesign.ConsoleApp
 {
-    internal class Program
+    internal static class Program
     {
         /// <summary>
         ///     Prints the parses commandline input and starts the runner
@@ -27,13 +27,6 @@ namespace IDesign.ConsoleApp
             var fileManager = new FileManager();
             var recognizerRunner = new RecognizerRunner();
 
-            if (args.Length <= 0)
-            {
-                Console.WriteLine("No arguments or files specified please confront --help");
-                Console.ReadKey();
-                return;
-            }
-
             var options = new OptionSet
             {
                 {"h|help", "shows this message and exit", v => showHelp = v != null}
@@ -42,7 +35,19 @@ namespace IDesign.ConsoleApp
             //Add design patterns as specifiable option
             foreach (var pattern in designPatternsList)
             {
-                options.Add(pattern.Name, "includes " + pattern.Name, v => selectedPatterns.Add(pattern));
+                options.Add(pattern.Name.Replace(" ", "_"), "includes " + pattern.Name, v => selectedPatterns.Add(pattern));
+            }
+            
+            if (args.Length <= 0)
+            {
+                Console.WriteLine("No arguments or files specified\n");
+                ShowHelpMessage(options); 
+                Console.WriteLine("\nYou can write the argument in the console:");
+                string input = Console.ReadLine();
+                if (input == null) return;
+                
+                args = SplitCommandLine(input).ToArray();
+                if (args.Length <= 0) return;
             }
 
             var arguments = options.Parse(args);
@@ -50,7 +55,6 @@ namespace IDesign.ConsoleApp
             if (showHelp)
             {
                 ShowHelpMessage(options);
-                Console.ReadKey();
                 return;
             }
 
@@ -210,5 +214,45 @@ namespace IDesign.ConsoleApp
             Console.Write(output.PadRight(15) + stepDescription);
         }
 
+        public static IEnumerable<string> SplitCommandLine(string commandLine)
+        {
+            bool inQuotes = false;
+
+            return commandLine.Split(c =>
+                {
+                    if (c == '\"')
+                        inQuotes = !inQuotes;
+
+                    return !inQuotes && c == ' ';
+                })
+                .Select(arg => arg.Trim().TrimMatchingQuotes('\"'))
+                .Where(arg => !string.IsNullOrEmpty(arg));
+        }
+        
+        public static IEnumerable<string> Split(this string str, 
+            Func<char, bool> controller)
+        {
+            int nextPiece = 0;
+
+            for (int c = 0; c < str.Length; c++)
+            {
+                if (controller(str[c]))
+                {
+                    yield return str.Substring(nextPiece, c - nextPiece);
+                    nextPiece = c + 1;
+                }
+            }
+
+            yield return str.Substring(nextPiece);
+        }
+        
+        public static string TrimMatchingQuotes(this string input, char quote)
+        {
+            if ((input.Length >= 2) && 
+                (input[0] == quote) && (input[input.Length - 1] == quote))
+                return input.Substring(1, input.Length - 2);
+
+            return input;
+        }
     }
 }
