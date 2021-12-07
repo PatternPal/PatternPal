@@ -70,6 +70,15 @@ namespace IDesign.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bridge_pattern.
+        /// </summary>
+        internal static string Bridge {
+            get {
+                return ResourceManager.GetString("Bridge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Decorator_pattern.
         /// </summary>
         internal static string Decorator {

@@ -120,6 +120,9 @@
   <data name="Adapter" xml:space="preserve">
     <value>Adapter_pattern</value>
   </data>
+  <data name="Bridge" xml:space="preserve">
+    <value>Bridge_pattern</value>
+  </data>
   <data name="Decorator" xml:space="preserve">
     <value>Decorator_pattern</value>
   </data>
