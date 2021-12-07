@@ -13,13 +13,16 @@ namespace IDesign.Core
         private readonly Dictionary<RelationType, RelationType> reverserdTypes =
             new Dictionary<RelationType, RelationType>
             {
-                {RelationType.Implements, RelationType.ImplementedBy},
-                {RelationType.Creates, RelationType.CreatedBy},
-                {RelationType.Uses, RelationType.UsedBy},
-                {RelationType.Extends, RelationType.ExtendedBy}
+                { RelationType.Implements, RelationType.ImplementedBy },
+                { RelationType.Creates, RelationType.CreatedBy },
+                { RelationType.Uses, RelationType.UsedBy },
+                { RelationType.Extends, RelationType.ExtendedBy }
             };
 
-        public DetermineRelations(Dictionary<string, EntityNode> entityNodes) => EntityNodes = entityNodes;
+        public DetermineRelations(Dictionary<string, EntityNode> entityNodes)
+        {
+            EntityNodes = entityNodes;
+        }
 
         public void CreateEdgesOfEntityNode()
         {
@@ -31,8 +34,10 @@ namespace IDesign.Core
             }
         }
 
-        private void AddRelation(EntityNode node, RelationType type, string destination) =>
+        private void AddRelation(EntityNode node, RelationType type, string destination)
+        {
             AddRelation(node, type, GetNodeByName(node, destination));
+        }
 
         private void AddRelation(EntityNode node, RelationType type, EntityNode edgeNode)
         {
@@ -73,19 +78,17 @@ namespace IDesign.Core
 
         private EntityNode GetNodeByName(EntityNode node, string name)
         {
-            var namespaces = new List<string>
-            {
-                node.NameSpace + "."
-            };
+            var namespaces = new List<string> { node.NameSpace + "." };
             namespaces.AddRange(node.GetUsingDeclarationSyntaxList().Select(x => x.Name + "."));
             namespaces.Add("");
             foreach (var key in from nameSpace in namespaces
-                                let key = nameSpace + name
-                                where EntityNodes.ContainsKey(key)
-                                select key)
+                let key = nameSpace + name
+                where EntityNodes.ContainsKey(key)
+                select key)
             {
                 return EntityNodes[key];
             }
+
             return null;
         }
 
@@ -110,9 +113,8 @@ namespace IDesign.Core
                                 case EntityNodeType.Interface:
                                     relationType = RelationType.Implements;
                                     break;
-                                default:
-                                    break;
                             }
+
                             AddRelation(entityNode, relationType.Value, edgeNode);
                         }
                     }

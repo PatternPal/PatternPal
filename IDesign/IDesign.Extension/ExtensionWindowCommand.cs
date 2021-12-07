@@ -61,14 +61,18 @@ namespace IDesign.Extension
         /// <param name="e">The event args.</param>
         private void Execute(object sender, EventArgs e)
         {
-            package.JoinableTaskFactory.RunAsync(async delegate
-            {
-                var window = await package.ShowToolWindowAsync(typeof(ExtensionWindow), 0, true, package.DisposalToken);
-                if (null == window || null == window.Frame)
+            package.JoinableTaskFactory.RunAsync(
+                async delegate
                 {
-                    throw new NotSupportedException("Cannot create tool window");
+                    var window = await package.ShowToolWindowAsync(
+                        typeof(ExtensionWindow), 0, true, package.DisposalToken
+                    );
+                    if (null == window || null == window.Frame)
+                    {
+                        throw new NotSupportedException("Cannot create tool window");
+                    }
                 }
-            });
+            );
         }
     }
 }

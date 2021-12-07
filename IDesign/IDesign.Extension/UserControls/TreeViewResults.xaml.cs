@@ -1,37 +1,28 @@
-﻿using IDesign.Extension.ViewModels;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Controls;
+using System.Windows.Input;
+using IDesign.Extension.ViewModels;
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TextManager.Interop;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace IDesign.Extension.UserControls
 {
     /// <summary>
-    /// Interaction logic for TreeViewResults.xaml
+    ///     Interaction logic for TreeViewResults.xaml
     /// </summary>
     public partial class TreeViewResults : UserControl
     {
-        public Dictionary<SyntaxTree, string> SyntaxTreeSources { get; set; }
-
         public TreeViewResults()
         {
-InitializeComponent();
+            InitializeComponent();
         }
+
+        public Dictionary<SyntaxTree, string> SyntaxTreeSources { get; set; }
 
         private void EventSetter_OnHandler(object sender, MouseButtonEventArgs e)
         {

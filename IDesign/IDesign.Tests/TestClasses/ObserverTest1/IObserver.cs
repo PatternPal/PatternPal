@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses.ObserverTest1
+﻿namespace IDesign.Tests.TestClasses.ObserverTest1
 {
-    interface IObserver
+    internal interface IObserver
     {
         void Update();
     }

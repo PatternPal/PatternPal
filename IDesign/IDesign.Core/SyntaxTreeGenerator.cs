@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using IDesign.Core.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Linq;
 
 namespace IDesign.Core
 {
@@ -38,8 +38,10 @@ namespace IDesign.Core
 
         private List<UsingDirectiveSyntax> GetUsingsOfFile()
         {
-            UsingDirectiveSyntaxList.AddRange(from element in Root.Usings
-                                              select element);
+            UsingDirectiveSyntaxList.AddRange(
+                from element in Root.Usings
+                select element
+            );
             return UsingDirectiveSyntaxList;
         }
 
@@ -54,8 +56,10 @@ namespace IDesign.Core
             }
         }
 
-        private List<ClassDeclarationSyntax> GetAllClassesOfFile(SyntaxNode node,
-            Dictionary<string, EntityNode> entityNodes)
+        private List<ClassDeclarationSyntax> GetAllClassesOfFile(
+            SyntaxNode node,
+            Dictionary<string, EntityNode> entityNodes
+        )
         {
             if (node.Kind() == SyntaxKind.ClassDeclaration)
             {
@@ -89,6 +93,7 @@ namespace IDesign.Core
                     GetAllClassesOfFile(childNode, entityNodes);
                 }
             }
+
             return ClassDeclarationSyntaxList;
         }
 
@@ -103,8 +108,10 @@ namespace IDesign.Core
             }
         }
 
-        private List<InterfaceDeclarationSyntax> GetAllInterfacesOfFile(SyntaxNode node,
-            Dictionary<string, EntityNode> entityNodes)
+        private List<InterfaceDeclarationSyntax> GetAllInterfacesOfFile(
+            SyntaxNode node,
+            Dictionary<string, EntityNode> entityNodes
+        )
         {
             if (node.Kind() == SyntaxKind.InterfaceDeclaration)
             {
@@ -138,6 +145,7 @@ namespace IDesign.Core
                     GetAllInterfacesOfFile(childNode, entityNodes);
                 }
             }
+
             return InterfaceDeclarationSyntaxList;
         }
 
@@ -148,7 +156,7 @@ namespace IDesign.Core
                 foreach (var classElement in entityNodes)
                 {
                     classElement.Value.ConstructorDeclarationSyntaxList =
-                            GetAllConstructorsOfAClass(classElement.Value.InterfaceOrClassNode);
+                        GetAllConstructorsOfAClass(classElement.Value.InterfaceOrClassNode);
                 }
             }
         }
@@ -158,11 +166,14 @@ namespace IDesign.Core
             ConstructorDeclarationSyntaxList = new List<ConstructorDeclarationSyntax>();
             if (node.ChildNodes() != null)
             {
-                ConstructorDeclarationSyntaxList.AddRange(from childNode in node.ChildNodes()
-                                                          where childNode.Kind() == SyntaxKind.ConstructorDeclaration
-                                                          let constructorNode = (ConstructorDeclarationSyntax)childNode
-                                                          select constructorNode);
+                ConstructorDeclarationSyntaxList.AddRange(
+                    from childNode in node.ChildNodes()
+                    where childNode.Kind() == SyntaxKind.ConstructorDeclaration
+                    let constructorNode = (ConstructorDeclarationSyntax)childNode
+                    select constructorNode
+                );
             }
+
             return ConstructorDeclarationSyntaxList;
         }
 
@@ -173,7 +184,7 @@ namespace IDesign.Core
                 foreach (var classElement in entityNodes)
                 {
                     classElement.Value.MethodDeclarationSyntaxList =
-                         GetAllMethodsOfAClass(classElement.Value.InterfaceOrClassNode);
+                        GetAllMethodsOfAClass(classElement.Value.InterfaceOrClassNode);
                 }
             }
         }
@@ -183,11 +194,14 @@ namespace IDesign.Core
             MethodDeclarationSyntaxList = new List<MethodDeclarationSyntax>();
             if (node.ChildNodes() != null)
             {
-                MethodDeclarationSyntaxList.AddRange(from childeNode in node.ChildNodes()
-                                                     where childeNode.Kind() == SyntaxKind.MethodDeclaration
-                                                     let methodNode = (MethodDeclarationSyntax)childeNode
-                                                     select methodNode);
+                MethodDeclarationSyntaxList.AddRange(
+                    from childeNode in node.ChildNodes()
+                    where childeNode.Kind() == SyntaxKind.MethodDeclaration
+                    let methodNode = (MethodDeclarationSyntax)childeNode
+                    select methodNode
+                );
             }
+
             return MethodDeclarationSyntaxList;
         }
 
@@ -198,7 +212,7 @@ namespace IDesign.Core
                 foreach (var classElement in entityNodes)
                 {
                     classElement.Value.PropertyDeclarationSyntaxList =
-                           GetAllPropertiesOfAClass(classElement.Value.InterfaceOrClassNode);
+                        GetAllPropertiesOfAClass(classElement.Value.InterfaceOrClassNode);
                 }
             }
         }
@@ -208,11 +222,14 @@ namespace IDesign.Core
             PropertyDeclarationSyntaxList = new List<PropertyDeclarationSyntax>();
             if (node.ChildNodes() != null)
             {
-                PropertyDeclarationSyntaxList.AddRange(from childNode in node.ChildNodes()
-                                                       where childNode.Kind() == SyntaxKind.PropertyDeclaration
-                                                       let propertyNode = (PropertyDeclarationSyntax)childNode
-                                                       select propertyNode);
+                PropertyDeclarationSyntaxList.AddRange(
+                    from childNode in node.ChildNodes()
+                    where childNode.Kind() == SyntaxKind.PropertyDeclaration
+                    let propertyNode = (PropertyDeclarationSyntax)childNode
+                    select propertyNode
+                );
             }
+
             return PropertyDeclarationSyntaxList;
         }
 
@@ -223,7 +240,7 @@ namespace IDesign.Core
                 foreach (var classElement in entityNodes)
                 {
                     classElement.Value.FieldDeclarationSyntaxList =
-                           GetAllFieldsOfAClass(classElement.Value.InterfaceOrClassNode);
+                        GetAllFieldsOfAClass(classElement.Value.InterfaceOrClassNode);
                 }
             }
         }
@@ -233,11 +250,14 @@ namespace IDesign.Core
             FieldDeclarationSyntaxList = new List<FieldDeclarationSyntax>();
             if (node.ChildNodes() != null)
             {
-                FieldDeclarationSyntaxList.AddRange(from childNode in node.ChildNodes()
-                                                    where childNode.Kind() == SyntaxKind.FieldDeclaration
-                                                    let fieldNode = (FieldDeclarationSyntax)childNode
-                                                    select fieldNode);
+                FieldDeclarationSyntaxList.AddRange(
+                    from childNode in node.ChildNodes()
+                    where childNode.Kind() == SyntaxKind.FieldDeclaration
+                    let fieldNode = (FieldDeclarationSyntax)childNode
+                    select fieldNode
+                );
             }
+
             return FieldDeclarationSyntaxList;
         }
     }

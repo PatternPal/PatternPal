@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses.DecoratorTest3
+﻿namespace IDesign.Tests.TestClasses.DecoratorTest3
 {
-    interface IComponent
+    internal interface IComponent
     {
     }
 }

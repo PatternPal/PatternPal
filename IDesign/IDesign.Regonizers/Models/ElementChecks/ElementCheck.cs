@@ -10,12 +10,10 @@ namespace IDesign.Recognizers.Models.ElementChecks
     /// <typeparam name="T">Type of the element to be checked</typeparam>
     public class ElementCheck<T> : ICheck<T> where T : class, ICheckable
     {
+        private readonly IResourceMessage _feedback;
         private readonly Predicate<T> _predicate;
 
-        private readonly IResourceMessage _feedback;
-
         private readonly float _score;
-
 
         public ElementCheck(Predicate<T> predicate, string description)
         {
@@ -37,6 +35,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
             _feedback = feedback;
             _score = 1;
         }
+
         public ElementCheck(Predicate<T> predicate, IResourceMessage feedback, float score)
         {
             _predicate = predicate;
@@ -53,6 +52,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
                 var feedback = isValid ? FeedbackType.Correct : FeedbackType.Incorrect;
                 return new CheckResult(_feedback, feedback, elementToCheck, _score);
             }
+
             return new CheckResult(_feedback, FeedbackType.Incorrect, null, _score);
         }
     }

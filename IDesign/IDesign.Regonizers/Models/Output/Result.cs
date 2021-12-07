@@ -6,13 +6,12 @@ namespace IDesign.Recognizers.Models.Output
 {
     public class Result : IResult
     {
-        public List<ICheckResult> Results { get; set; } = new List<ICheckResult>();
-
         public Dictionary<IEntityNode, string> RelatedSubTypes = new Dictionary<IEntityNode, string>();
+        public List<ICheckResult> Results { get; set; } = new List<ICheckResult>();
 
         public int GetScore()
         {
-            var total = (float)Results.Sum(x => x.GetTotalChecks());
+            var total = Results.Sum(x => x.GetTotalChecks());
             var green = Results.Sum(x => x.GetScore());
             return total <= 0 ? 0 : (int)(green / total * 100f);
         }

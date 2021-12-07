@@ -1,9 +1,9 @@
-﻿using IDesign.Recognizers.Checks;
+﻿using System.Collections.Generic;
+using IDesign.Recognizers.Checks;
 using IDesign.Recognizers.Models;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
-using System.Collections.Generic;
 
 namespace IDesign.Tests.Checks
 {
@@ -27,8 +27,10 @@ namespace IDesign.Tests.Checks
                 Assert.Fail();
             }
 
-            Assert.AreEqual(shouldBeValid,
-                new Field(field, field.Declaration.Variables.FirstOrDefault()).CheckMemberModifier(modifier));
+            Assert.AreEqual(
+                shouldBeValid,
+                new Field(field, field.Declaration.Variables.FirstOrDefault()).CheckMemberModifier(modifier)
+            );
         }
 
         [Test]
@@ -49,8 +51,10 @@ namespace IDesign.Tests.Checks
                 Assert.Fail();
             }
 
-            Assert.AreEqual(shouldBeValid,
-                new Field(field, field.Declaration.Variables.FirstOrDefault()).CheckFieldType(new List<string>() { type }));
+            Assert.AreEqual(
+                shouldBeValid,
+                new Field(field, field.Declaration.Variables.FirstOrDefault()).CheckFieldType(new List<string> { type })
+            );
         }
     }
 }

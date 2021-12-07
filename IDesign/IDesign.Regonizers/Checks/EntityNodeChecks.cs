@@ -1,9 +1,8 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace IDesign.Recognizers.Checks
 {
@@ -13,34 +12,41 @@ namespace IDesign.Recognizers.Checks
         {
             return ClassImlementsInterface(node, name)
                 ? true
-                : CheckMinimalAmountOfRelationTypes(node, RelationType.Extends, 1) ? ImplementsInterface(GetExtends(node), name) : false;
+                : CheckMinimalAmountOfRelationTypes(node, RelationType.Extends, 1)
+                    ? ImplementsInterface(GetExtends(node), name)
+                    : false;
         }
 
         public static bool ClassImlementsInterfaceMethod(this IEntityNode node, IMethod method)
         {
             foreach (var _ in from interFace in node.GetRelations()
-                                                    .Where(x => x.GetRelationType() == RelationType.Implements)
-                              where InterfaceImplementsMethod(interFace.GetDestination(), method)
-                              select new { })
+                    .Where(x => x.GetRelationType() == RelationType.Implements)
+                where InterfaceImplementsMethod(interFace.GetDestination(), method)
+                select new { })
             {
                 return true;
             }
+
             return false;
         }
 
         public static bool MethodInEntityNode(this IEntityNode node, string methodName, int amountOfParams)
         {
-            if (node.GetMethodsAndProperties().Any(x => x.CheckMethodIdentifier(methodName) &&
-            x.GetParameter().Parameters.Count == amountOfParams))
+            if (node.GetMethodsAndProperties().Any(
+                x => x.CheckMethodIdentifier(methodName) &&
+                     x.GetParameter().Parameters.Count == amountOfParams
+            ))
             {
                 return true;
             }
 
-            foreach (var _ in from relation in node.GetRelations().Where(x => x.GetRelationType() == RelationType.Extends ||
-                              x.GetRelationType() == RelationType.Implements)
-                              where relation.GetDestination()
-                                            .MethodInEntityNode(methodName, amountOfParams)
-                              select new { })
+            foreach (var _ in from relation in node.GetRelations().Where(
+                    x => x.GetRelationType() == RelationType.Extends ||
+                         x.GetRelationType() == RelationType.Implements
+                )
+                where relation.GetDestination()
+                    .MethodInEntityNode(methodName, amountOfParams)
+                select new { })
             {
                 return true;
             }
@@ -59,21 +65,22 @@ namespace IDesign.Recognizers.Checks
             {
                 return GetExtends(node).GetName() == name ? true : ExtendsClass(GetExtends(node), name);
             }
+
             return false;
         }
 
         public static bool ClassImlementsInterface(this IEntityNode node, string name)
         {
             return node.GetRelations()
-                       .Any(x => x.GetRelationType() == RelationType.Implements && x.GetDestination().GetName() == name);
+                .Any(x => x.GetRelationType() == RelationType.Implements && x.GetDestination().GetName() == name);
         }
 
         public static IEntityNode GetExtends(this IEntityNode node)
         {
             return node.GetRelations()
-                       .Where(x => x.GetRelationType() == RelationType.Extends)
-                       .FirstOrDefault()
-                       .GetDestination();
+                .Where(x => x.GetRelationType() == RelationType.Extends)
+                .FirstOrDefault()
+                .GetDestination();
         }
 
         public static bool Extends(this IEntityNode node)
@@ -86,14 +93,15 @@ namespace IDesign.Recognizers.Checks
             try
             {
                 node = node.GetRelations()
-                           .Where(x => x.GetDestination().GetName() == name)
-                           .FirstOrDefault()
-                           .GetDestination();
+                    .Where(x => x.GetDestination().GetName() == name)
+                    .FirstOrDefault()
+                    .GetDestination();
             }
             catch (Exception e)
             {
                 _ = e.Message;
             }
+
             return node;
         }
 
@@ -114,7 +122,8 @@ namespace IDesign.Recognizers.Checks
 
         public static bool CheckEntityNodeModifier(this IEntityNode entityNode, string modifier)
         {
-            return entityNode.GetTypeDeclarationSyntax().Modifiers.Any(x => x.ToString().CheckIfTwoStringsAreEqual(modifier));
+            return entityNode.GetTypeDeclarationSyntax().Modifiers
+                .Any(x => x.ToString().CheckIfTwoStringsAreEqual(modifier));
         }
 
         public static bool CheckRelationType(this IEntityNode entityNode, RelationType relationType)
@@ -122,22 +131,38 @@ namespace IDesign.Recognizers.Checks
             return entityNode.CheckMinimalAmountOfRelationTypes(relationType, 1);
         }
 
-        public static bool CheckMinimalAmountOfRelationTypes(this IEntityNode entityNode, RelationType relationType, int amount)
+        public static bool CheckMinimalAmountOfRelationTypes(
+            this IEntityNode entityNode,
+            RelationType relationType,
+            int amount
+        )
         {
             return entityNode.GetRelations().Where(x => x.GetRelationType().Equals(relationType)).Count() >= amount;
         }
 
-        public static bool CheckMinimalAmountOfMethodsWithParameter(this IEntityNode node, List<string> parameters, int amount)
+        public static bool CheckMinimalAmountOfMethodsWithParameter(
+            this IEntityNode node,
+            List<string> parameters,
+            int amount
+        )
         {
             return node.GetMethodsAndProperties().Where(x => x.CheckParameters(parameters)).Count() >= amount;
         }
 
-        public static bool CheckMaximumAmountOfMethodsWithParameter(this IEntityNode node, List<string> parameters, int amount)
+        public static bool CheckMaximumAmountOfMethodsWithParameter(
+            this IEntityNode node,
+            List<string> parameters,
+            int amount
+        )
         {
             return node.GetMethodsAndProperties().Where(x => x.CheckParameters(parameters)).Count() < amount;
         }
 
-        public static bool CheckMaximumAmountOfRelationTypes(this IEntityNode entityNode, RelationType relationType, int amount)
+        public static bool CheckMaximumAmountOfRelationTypes(
+            this IEntityNode entityNode,
+            RelationType relationType,
+            int amount
+        )
         {
             return entityNode.GetRelations().Where(x => x.GetRelationType().Equals(relationType)).Count() <= amount;
         }
@@ -148,4 +173,3 @@ namespace IDesign.Recognizers.Checks
         }
     }
 }
-

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace IDesign.Tests.TestClasses.StrategyTest3
 {
@@ -9,12 +7,13 @@ namespace IDesign.Tests.TestClasses.StrategyTest3
     /// <summary>
     ///     A 'ConcreteStrategy' class
     /// </summary>
-    class ConcreteStrategyA : Strategy
+    internal class ConcreteStrategyA : Strategy
     {
         public override void AlgorithmInterface()
         {
             Console.WriteLine(
-              "Called ConcreteStrategyA.AlgorithmInterface()");
+                "Called ConcreteStrategyA.AlgorithmInterface()"
+            );
         }
     }
 }

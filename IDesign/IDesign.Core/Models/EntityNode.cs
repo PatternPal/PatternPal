@@ -12,6 +12,7 @@ namespace IDesign.Core.Models
     {
         public List<ConstructorDeclarationSyntax> ConstructorDeclarationSyntaxList =
             new List<ConstructorDeclarationSyntax>();
+
         public List<FieldDeclarationSyntax> FieldDeclarationSyntaxList = new List<FieldDeclarationSyntax>();
         public List<MethodDeclarationSyntax> MethodDeclarationSyntaxList = new List<MethodDeclarationSyntax>();
         public List<PropertyDeclarationSyntax> PropertyDeclarationSyntaxList = new List<PropertyDeclarationSyntax>();
@@ -42,22 +43,26 @@ namespace IDesign.Core.Models
             var list = new List<IMethod>();
             list.AddRange(MethodDeclarationSyntaxList.Select(x => new Method(x)));
             foreach (var property in PropertyDeclarationSyntaxList.Where(property => property.AccessorList != null)
-                                                                  .Select(property => property))
+                .Select(property => property))
             {
                 var accessors = property.AccessorList.Accessors;
                 var getters = accessors.Where(x => x.Kind() == SyntaxKind.GetAccessorDeclaration);
                 getters = getters.Where(x => x.Body != null || x.ExpressionBody != null);
                 list.AddRange(getters.Select(x => new PropertyMethod(property, x)));
             }
+
             return list;
         }
 
         public IEnumerable<IField> GetFields()
         {
             var listGetters = new List<IField>();
-            foreach (var property in PropertyDeclarationSyntaxList.Where(property => property.AccessorList != null).Select(property => property))
+            foreach (var property in PropertyDeclarationSyntaxList.Where(property => property.AccessorList != null)
+                .Select(property => property))
             {
-                var getters = property.AccessorList.Accessors.Where(x => x.Kind() == SyntaxKind.GetAccessorDeclaration && x.Body == null && x.ExpressionBody == null);
+                var getters = property.AccessorList.Accessors.Where(
+                    x => x.Kind() == SyntaxKind.GetAccessorDeclaration && x.Body == null && x.ExpressionBody == null
+                );
                 listGetters.AddRange(getters.Select(x => new PropertyField(property)));
             }
 
@@ -65,6 +70,7 @@ namespace IDesign.Core.Models
             {
                 listGetters.AddRange(field.Declaration.Variables.Select(x => new Field(field, x)));
             }
+
             return listGetters;
         }
 
@@ -97,11 +103,19 @@ namespace IDesign.Core.Models
             return EntityNodeType.Class;
         }
 
-        public string GetSuggestionName() => Name;
+        public string GetSuggestionName()
+        {
+            return Name;
+        }
 
         public SyntaxNode GetSuggestionNode()
         {
             return GetTypeDeclarationSyntax();
+        }
+
+        public SyntaxTokenList GetModifiers()
+        {
+            return InterfaceOrClassNode.Modifiers;
         }
 
         public IEnumerable<ConstructorDeclarationSyntax> GetCostructorDeclarationSyntaxList()
@@ -112,11 +126,6 @@ namespace IDesign.Core.Models
         public List<UsingDirectiveSyntax> GetUsingDeclarationSyntaxList()
         {
             return UsingDeclarationSyntaxList;
-        }
-
-        public SyntaxTokenList GetModifiers()
-        {
-            return InterfaceOrClassNode.Modifiers;
         }
     }
 }

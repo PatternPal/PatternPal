@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using IDesign.CommonResources;
 using IDesign.Recognizers.Abstractions;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
-using IDesign.CommonResources;
 
 namespace IDesign.Extension.ViewModels
 {
     public class CheckResultViewModel
     {
+        public FeedbackType type;
+
         public CheckResultViewModel(ICheckResult result)
         {
             Result = result;
@@ -26,31 +28,24 @@ namespace IDesign.Extension.ViewModels
         public ICheckResult Result { get; set; }
         public string Message { get; set; }
         public float Score => Result.GetScore();
-        public FeedbackType type;
-        public FeedbackType Type 
+
+        public FeedbackType Type
         {
-            get
-            {
-                return type;
-            }
-            set
-            {
-                type = value; 
-            }
+            get => type;
+            set => type = value;
         }
+
         public ImageMoniker Icon
         {
             get
             {
                 switch (Type)
                 {
-                    case FeedbackType.Correct:
-                        return KnownMonikers.OnlineStatusAvailable;
-                    case FeedbackType.SemiCorrect:
-                        return KnownMonikers.OnlineStatusAway;
-                    case FeedbackType.Incorrect:
-                        return KnownMonikers.OnlineStatusBusy;
+                    case FeedbackType.Correct: return KnownMonikers.OnlineStatusAvailable;
+                    case FeedbackType.SemiCorrect: return KnownMonikers.OnlineStatusAway;
+                    case FeedbackType.Incorrect: return KnownMonikers.OnlineStatusBusy;
                 }
+
                 return KnownMonikers.StatusHelp;
             }
         }

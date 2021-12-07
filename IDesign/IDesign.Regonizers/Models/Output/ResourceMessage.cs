@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using IDesign.Recognizers.Abstractions;
+﻿using IDesign.Recognizers.Abstractions;
 
 namespace IDesign.Recognizers.Models.Output
 {
-   public class ResourceMessage : IResourceMessage
+    public class ResourceMessage : IResourceMessage
     {
         public string Key;
         public string[] Parameters;
@@ -15,10 +12,12 @@ namespace IDesign.Recognizers.Models.Output
             Key = key;
             Parameters = parameters;
         }
+
         public ResourceMessage(string key)
         {
             Key = key;
         }
+
         public string GetKey()
         {
             return Key;

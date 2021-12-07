@@ -9,6 +9,7 @@ namespace IDesign.Recognizers.Abstractions
         SemiCorrect,
         Incorrect
     }
+
     public interface ICheckResult
     {
         /// <summary>
@@ -22,7 +23,6 @@ namespace IDesign.Recognizers.Abstractions
         /// </summary>
         /// <returns>The suggestion message</returns>
         float GetScore();
-
 
         /// <summary>
         ///     Get the score in percentage

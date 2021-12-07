@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using System.Collections.Generic;
 using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace IDesign.Recognizers.Checks
 {
@@ -12,21 +11,21 @@ namespace IDesign.Recognizers.Checks
         public static bool CheckReturnType(this IMethod methodSyntax, string returnType)
         {
             return methodSyntax.GetReturnType()
-                               .CheckIfTwoStringsAreEqual(returnType);
+                .CheckIfTwoStringsAreEqual(returnType);
         }
 
         public static bool CheckCreationalFunction(this IMethod methodSyntax)
         {
             return methodSyntax.GetBody()
-                               .DescendantNodes()
-                               .OfType<ObjectCreationExpressionSyntax>()
-                               .Any();
+                .DescendantNodes()
+                .OfType<ObjectCreationExpressionSyntax>()
+                .Any();
         }
 
         public static bool CheckModifier(this IMethod methodSyntax, string modifier)
         {
             return methodSyntax.GetModifiers()
-                               .Any(x => x.ToString().CheckIfTwoStringsAreEqual(modifier));
+                .Any(x => x.ToString().CheckIfTwoStringsAreEqual(modifier));
         }
 
         public static bool CheckCreationType(this IMethod methodSyntax, string creationType)
@@ -37,12 +36,14 @@ namespace IDesign.Recognizers.Checks
             {
                 var creations = body.DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
                 foreach (var _ in from creationExpression in creations
-                                  where creationExpression.Type is IdentifierNameSyntax name && name.Identifier.ToString().CheckIfTwoStringsAreEqual(creationType)
-                                  select new { })
+                    where creationExpression.Type is IdentifierNameSyntax name &&
+                          name.Identifier.ToString().CheckIfTwoStringsAreEqual(creationType)
+                    select new { })
                 {
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -63,12 +64,13 @@ namespace IDesign.Recognizers.Checks
             {
                 var creations = methodSyntax.GetBody().DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
                 foreach (var identifiers in from creation in creations
-                                            let identifiers = creation.DescendantNodes().OfType<IdentifierNameSyntax>()
-                                            select identifiers)
+                    let identifiers = creation.DescendantNodes().OfType<IdentifierNameSyntax>()
+                    select identifiers)
                 {
                     result.AddRange(identifiers.Select(y => y.Identifier.ToString()));
                 }
             }
+
             return result;
         }
 
@@ -78,29 +80,33 @@ namespace IDesign.Recognizers.Checks
             {
                 var invocations = method.GetBody().DescendantNodes().OfType<InvocationExpressionSyntax>();
                 foreach (var _ in from invocation in invocations
-                                  let identifier = invocation.Expression.DescendantNodesAndSelf()
-                                                                        .OfType<IdentifierNameSyntax>()
-                                                                        .FirstOrDefault()
-                                  let arguments = invocation.ArgumentList.Arguments.Count
-                                  where identifier != null && node.MethodInEntityNode(identifier.ToString(), arguments)
-                                  select new { })
+                    let identifier = invocation.Expression.DescendantNodesAndSelf()
+                        .OfType<IdentifierNameSyntax>()
+                        .FirstOrDefault()
+                    let arguments = invocation.ArgumentList.Arguments.Count
+                    where identifier != null && node.MethodInEntityNode(identifier.ToString(), arguments)
+                    select new { })
                 {
                     return true;
                 }
             }
+
             return false;
         }
 
         public static bool CheckIfMethodCallsBase(this IMethod method)
         {
-            return method.GetBody() != null ? method.GetBody().DescendantNodes().OfType<BaseExpressionSyntax>().Any() : false;
+            return method.GetBody() != null
+                ? method.GetBody().DescendantNodes().OfType<BaseExpressionSyntax>().Any()
+                : false;
         }
-
 
         public static bool CheckParameters(this IMethod methodSyntax, IEnumerable<string> parameters)
         {
-            return parameters.Any(x => methodSyntax.GetParameterTypes()
-                                                   .Any(y => x.Equals(y)));
+            return parameters.Any(
+                x => methodSyntax.GetParameterTypes()
+                    .Any(y => x.Equals(y))
+            );
         }
 
         public static bool CheckIfNameExists(this IMethod methodSyntax, IEnumerable<IMethod> methods)
@@ -112,12 +118,14 @@ namespace IDesign.Recognizers.Checks
         {
             var parameters = methodSyntax.GetParameters().Where(y => y.Type.ToString().Equals(argument));
 
-            return parameters.Count() < 1 ? false : methodSyntax.GetArguments().Any(x => parameters.Any(y => x.Equals(y.Identifier.ToString())));
+            return parameters.Count() < 1
+                ? false
+                : methodSyntax.GetArguments().Any(x => parameters.Any(y => x.Equals(y.Identifier.ToString())));
         }
 
         public static bool CheckMethodIdentifier(this IMethod methodSyntax, string name)
         {
-            return (methodSyntax.GetName().Equals(name) && methodSyntax.GetType() == typeof(Method));
+            return methodSyntax.GetName().Equals(name) && methodSyntax.GetType() == typeof(Method);
         }
 
         public static bool CheckFieldIsUsed(this IMethod method, string fieldName)
@@ -125,16 +133,16 @@ namespace IDesign.Recognizers.Checks
             return method.GetBody() == null
                 ? false
                 : method.GetBody()
-                         .DescendantNodes()
-                         .OfType<IdentifierNameSyntax>()
-                         .Any(x => x.Identifier.ToString().CheckIfTwoStringsAreEqual(fieldName));
+                    .DescendantNodes()
+                    .OfType<IdentifierNameSyntax>()
+                    .Any(x => x.Identifier.ToString().CheckIfTwoStringsAreEqual(fieldName));
         }
 
         public static bool CheckMethodParameterTypes(this IMethod methodSyntax, string parameters)
         {
             return methodSyntax.GetParameter()
-                               .ToString()
-                               .Equals(parameters);
+                .ToString()
+                .Equals(parameters);
         }
 
         public static bool IsEquals(this IMethod methodSyntax, IMethod compareMethod)

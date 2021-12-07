@@ -1,6 +1,6 @@
 ﻿namespace IDesign.Tests.TestClasses.ObserverTest3
 {
-    interface IObserver
+    internal interface IObserver
     {
         void Update();
     }

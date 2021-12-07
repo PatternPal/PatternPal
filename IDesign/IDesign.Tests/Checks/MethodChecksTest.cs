@@ -1,10 +1,11 @@
+using System.Collections.Generic;
+using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Checks;
 using IDesign.Recognizers.Models;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
-using System.Collections.Generic;
-using IDesign.Recognizers.Abstractions;
+
 namespace IDesign.Tests.Checks
 {
     public class MethodTest
@@ -27,6 +28,7 @@ namespace IDesign.Tests.Checks
             {
                 Assert.Fail();
             }
+
             var method = new Method(methodSyntax);
 
             Assert.AreEqual(shouldBeValid, method.CheckReturnType(returnType));
@@ -42,7 +44,6 @@ namespace IDesign.Tests.Checks
         [TestCase("public", @"private static void TestMethod(){}", false)]
         public void ModifierCheck_Should_Return_CorrectResponse(string modifier, string code, bool shouldBeValid)
         {
-
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
             var method = root.Members[0] as MethodDeclarationSyntax;
 
@@ -98,7 +99,11 @@ namespace IDesign.Tests.Checks
         [TestCase(@"public void TestMethod(int i){ }", true, "string", "int")]
         [TestCase(@"public void TestMethod(){ }", false, "string", "int")]
         [TestCase(@"public void TestMethod(IComponent1 comp1){ }", true, "IComponent1")]
-        public void ParameterCheck_Should_Return_CorrectResponse(string code, bool shouldBeVaild, params string[] parameters)
+        public void ParameterCheck_Should_Return_CorrectResponse(
+            string code,
+            bool shouldBeVaild,
+            params string[] parameters
+        )
         {
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
             var method = root.Members[0] as MethodDeclarationSyntax;
@@ -113,13 +118,21 @@ namespace IDesign.Tests.Checks
 
         [Test]
         [TestCase(@"public void TestMethod(){ }", true, @"public void TestMethod(){ }")]
-        [TestCase(@"public void TestMethod(){ }", true, @"public void TestMethod(){ }", @"public void TestMethod1(){ }")]
-        [TestCase(@"public void TestMethod(){ }", false, @"public void TestMethod2(){ }", @"public void TestMethod1(){ }")]
-        public void NameCheck_Should_Return_CorrectResponse(string code, bool shouldBeVaild, params string[] methodStrings)
+        [TestCase(
+            @"public void TestMethod(){ }", true, @"public void TestMethod(){ }", @"public void TestMethod1(){ }"
+        )]
+        [TestCase(
+            @"public void TestMethod(){ }", false, @"public void TestMethod2(){ }", @"public void TestMethod1(){ }"
+        )]
+        public void NameCheck_Should_Return_CorrectResponse(
+            string code,
+            bool shouldBeVaild,
+            params string[] methodStrings
+        )
         {
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
             var method = root.Members[0] as MethodDeclarationSyntax;
-            List<IMethod> methods = new List<IMethod>();
+            var methods = new List<IMethod>();
             foreach (var methodString in methodStrings)
             {
                 var root2 = CSharpSyntaxTree.ParseText(methodString).GetCompilationUnitRoot();

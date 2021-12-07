@@ -1,24 +1,17 @@
 ﻿using IDesign.Core;
 using IDesign.Recognizers;
-using IDesign.Tests.TestClasses.StateTest3;
 using IDesign.Tests.Utils;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace IDesign.Tests.Recognizers
 {
-    class StateRecognizerTest
+    internal class StateRecognizerTest
     {
-        [TestCase("StateTest1","Doneness", 80,100)]
-        [TestCase("StateTest2", "State", 80,100)]
-        [TestCase("StateTest3", "State", 80,100)]
-        [TestCase("StateTest4", "IState", 0,79)]
-        [TestCase("StateFactoryMethodTest1", "IState", 80,100)]
+        [TestCase("StateTest1", "Doneness", 80, 100)]
+        [TestCase("StateTest2", "State", 80, 100)]
+        [TestCase("StateTest3", "State", 80, 100)]
+        [TestCase("StateTest4", "IState", 0, 79)]
+        [TestCase("StateFactoryMethodTest1", "IState", 80, 100)]
         [TestCase("StrategyFactoryMethodTest1", "IStrategy", 0, 79)]
         public void StateRecognizer_Returns_Correct_Score(string directory, string filename, int minScore, int maxScore)
         {

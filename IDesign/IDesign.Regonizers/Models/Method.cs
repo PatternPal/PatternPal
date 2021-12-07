@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-﻿using IDesign.Recognizers.Abstractions;
+using IDesign.Recognizers.Abstractions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -33,7 +33,7 @@ namespace IDesign.Recognizers.Models
         public IEnumerable<string> GetParameterTypes()
         {
             return MethodDeclaration.ParameterList.Parameters
-                .Select(x => (x.Type is TypeSyntax id ? id.ToString() : ""))
+                .Select(x => x.Type is TypeSyntax id ? id.ToString() : "")
                 .ToList();
         }
 
@@ -56,7 +56,6 @@ namespace IDesign.Recognizers.Models
         {
             return MethodDeclaration;
         }
-
 
         public IEnumerable<ParameterSyntax> GetParameters()
         {

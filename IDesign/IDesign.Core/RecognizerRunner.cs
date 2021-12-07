@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using IDesign.Core.Models;
+using IDesign.Core.Resources;
 using IDesign.Recognizers;
 using Microsoft.CodeAnalysis;
-using System.Linq;
 
 namespace IDesign.Core
 {
@@ -12,13 +13,26 @@ namespace IDesign.Core
     {
         public static List<DesignPattern> designPatterns = new List<DesignPattern>
         {
-            new DesignPattern(Resources.DesignPatternNameResources.Singleton, new SingletonRecognizer(), Resources.WikiPageResources.Singleton),
-            new DesignPattern(Resources.DesignPatternNameResources.FactoryMethod, new FactoryMethodRecognizer(), Resources.WikiPageResources.FactoryMethod),
-            new DesignPattern(Resources.DesignPatternNameResources.Decorator, new DecoratorRecognizer(), Resources.WikiPageResources.Decorator),
-            new DesignPattern(Resources.DesignPatternNameResources.State, new StateRecognizer(), Resources.WikiPageResources.State),
-            new DesignPattern(Resources.DesignPatternNameResources.Strategy, new StrategyRecognizer(), Resources.WikiPageResources.Strategy),
-            new DesignPattern(Resources.DesignPatternNameResources.Adapter, new AdapterRecognizer(), Resources.WikiPageResources.Adapter),
-            new DesignPattern(Resources.DesignPatternNameResources.Observer, new ObserverRecognizer(), Resources.WikiPageResources.Observer),
+            new DesignPattern(
+                DesignPatternNameResources.Singleton, new SingletonRecognizer(), WikiPageResources.Singleton
+            ),
+            new DesignPattern(
+                DesignPatternNameResources.FactoryMethod, new FactoryMethodRecognizer(),
+                WikiPageResources.FactoryMethod
+            ),
+            new DesignPattern(
+                DesignPatternNameResources.Decorator, new DecoratorRecognizer(), WikiPageResources.Decorator
+            ),
+            new DesignPattern(DesignPatternNameResources.State, new StateRecognizer(), WikiPageResources.State),
+            new DesignPattern(
+                DesignPatternNameResources.Strategy, new StrategyRecognizer(), WikiPageResources.Strategy
+            ),
+            new DesignPattern(
+                DesignPatternNameResources.Adapter, new AdapterRecognizer(), WikiPageResources.Adapter
+            ),
+            new DesignPattern(
+                DesignPatternNameResources.Observer, new ObserverRecognizer(), WikiPageResources.Observer
+            )
         };
 
         public Dictionary<string, EntityNode> EntityNodes =
@@ -57,26 +71,25 @@ namespace IDesign.Core
             foreach (var node in EntityNodes.Values)
             {
                 j++;
-                ProgressUpdate((int)(j / (float)EntityNodes.Count * 50f + 50), "Scanning class: " + node.GetName());
-                results.AddRange(from pattern in patterns
-                                 select new RecognitionResult
-                                 {
-                                     Result = pattern.Recognizer.Recognize(node),
-                                     EntityNode = node,
-                                     FilePath = node.SourceFile,
-                                     Pattern = pattern
-                                 });
+                ProgressUpdate((int)((j / (float)EntityNodes.Count * 50f) + 50), "Scanning class: " + node.GetName());
+                results.AddRange(
+                    from pattern in patterns
+                    select new RecognitionResult
+                    {
+                        Result = pattern.Recognizer.Recognize(node),
+                        EntityNode = node,
+                        FilePath = node.SourceFile,
+                        Pattern = pattern
+                    }
+                );
             }
+
             return results;
         }
 
         private void ProgressUpdate(int percentage, string status)
         {
-            OnProgressUpdate?.Invoke(this, new RecognizerProgress
-            {
-                CurrentPercentage = percentage,
-                Status = status
-            });
+            OnProgressUpdate?.Invoke(this, new RecognizerProgress { CurrentPercentage = percentage, Status = status });
         }
     }
 }

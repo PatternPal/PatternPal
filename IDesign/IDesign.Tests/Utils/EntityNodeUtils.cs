@@ -16,7 +16,11 @@ namespace IDesign.Tests.Utils
         public static EntityNode CreateTestEntityNode(TypeDeclarationSyntax testNode)
         {
             var nameSpaceKey = "";
-            if (testNode.Parent is NamespaceDeclarationSyntax nameSpace) nameSpaceKey += nameSpace.Name.ToString();
+            if (testNode.Parent is NamespaceDeclarationSyntax nameSpace)
+            {
+                nameSpaceKey += nameSpace.Name.ToString();
+            }
+
             var entityNode = new EntityNode
             {
                 Name = testNode.Identifier.ToString(),
@@ -49,13 +53,16 @@ namespace IDesign.Tests.Utils
                 var nameSpaceIdentifier = nameSpace.Name.ToString();
                 var nodes = nameSpace.DescendantNodes().OfType<TypeDeclarationSyntax>();
                 foreach (var node in nodes)
+                {
                     graph.Add(nameSpaceIdentifier + "." + node.Identifier, CreateTestEntityNode(node));
+                }
             }
+
             return graph;
         }
 
         /// <summary>
-        /// Makes a dictionary of entityNodes based on foldercontents
+        ///     Makes a dictionary of entityNodes based on foldercontents
         /// </summary>
         /// <param name="projectCode">contents of the folder/project that needs to be converted</param>
         /// <returns>Dictionary of the whole folder/project</returns>
@@ -67,6 +74,7 @@ namespace IDesign.Tests.Utils
                 var partialGraph = CreateEntityNodeGraphFromOneFile(fileCode);
                 graph = graph.Union(partialGraph).ToDictionary(k => k.Key, v => v.Value);
             }
+
             return graph;
         }
     }

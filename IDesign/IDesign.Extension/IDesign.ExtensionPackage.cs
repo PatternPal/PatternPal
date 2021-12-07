@@ -2,7 +2,6 @@
 using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 using Task = System.Threading.Tasks.Task;
 
 namespace IDesign.Extension
@@ -49,13 +48,14 @@ namespace IDesign.Extension
         ///     A task representing the async work of package initialization, or an already completed task if there is none.
         ///     Do not return null from this method.
         /// </returns>
-        protected override async Task InitializeAsync(CancellationToken cancellationToken,
-            IProgress<ServiceProgressData> progress)
+        protected override async Task InitializeAsync(
+            CancellationToken cancellationToken,
+            IProgress<ServiceProgressData> progress
+        )
         {
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-
         }
 
         #endregion

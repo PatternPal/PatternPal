@@ -12,6 +12,7 @@ namespace IDesign.Extension
             {
                 return GetDepth(parent) + 1;
             }
+
             return 0;
         }
 
@@ -22,6 +23,7 @@ namespace IDesign.Extension
             {
                 parent = VisualTreeHelper.GetParent(parent);
             }
+
             return parent as TreeViewItem;
         }
     }

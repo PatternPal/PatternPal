@@ -1,6 +1,6 @@
 ﻿namespace IDesign.Tests.TestClasses.FactoryMethodTest3
 {
-    abstract class Creator
+    internal abstract class Creator
     {
         public abstract IProduct FactoryMethod();
 
@@ -8,7 +8,7 @@
         {
             var product = FactoryMethod();
             var result = "Creator: The same creator's code has just worked with "
-                + product.Operation();
+                         + product.Operation();
 
             return result;
         }

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses.Relation 
-{ 
-   public  class RelationTestCase2
+﻿namespace IDesign.Tests.TestClasses.Relation
+{
+    public class RelationTestCase2
     {
         public void Create()
         {
@@ -14,8 +10,5 @@ namespace IDesign.Tests.TestClasses.Relation
 
     internal class CRelationTestCase2
     {
-        public CRelationTestCase2()
-        {
-        }
     }
 }

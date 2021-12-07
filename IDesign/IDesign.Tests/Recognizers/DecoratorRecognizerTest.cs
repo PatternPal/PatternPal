@@ -1,12 +1,7 @@
 ﻿using IDesign.Core;
-using IDesign.Core.Models;
 using IDesign.Recognizers;
 using IDesign.Tests.Utils;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace IDesign.Tests.Recognizers
 {
@@ -17,7 +12,12 @@ namespace IDesign.Tests.Recognizers
         [TestCase("DecoratorTest3", "Decorator", 0, 79)]
         [TestCase("DecoratorTest4", "Decorator", 0, 79)]
         [TestCase("DecoratorTest5", "Decorator", 0, 79)]
-        public void DecoratorRecognizer_Returns_Correct_Score(string directory, string filename ,int minScore, int maxScore)
+        public void DecoratorRecognizer_Returns_Correct_Score(
+            string directory,
+            string filename,
+            int minScore,
+            int maxScore
+        )
         {
             var decorator = new DecoratorRecognizer();
             var filesAsString = FileUtils.FilesToString($"{directory}\\");

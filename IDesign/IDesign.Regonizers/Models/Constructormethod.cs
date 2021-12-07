@@ -1,8 +1,8 @@
-﻿using IDesign.Recognizers.Abstractions;
+﻿using System.Collections.Generic;
+using System.Linq;
+using IDesign.Recognizers.Abstractions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace IDesign.Recognizers.Models
 {
@@ -13,13 +13,13 @@ namespace IDesign.Recognizers.Models
             Constructor = constructor;
         }
 
+        public ConstructorDeclarationSyntax Constructor { get; set; }
+
         public IEnumerable<string> GetParameterTypes()
         {
             return Constructor.ParameterList.Parameters.Select(x => x.Type is TypeSyntax id ? id.ToString() : "")
                 .ToList();
         }
-
-        public ConstructorDeclarationSyntax Constructor { get; set; }
 
         public BlockSyntax GetBody()
         {
@@ -64,7 +64,7 @@ namespace IDesign.Recognizers.Models
         public IEnumerable<string> GetArguments()
         {
             return Constructor.Initializer?.ArgumentList.Arguments.ToList()
-                                                                  .Select(x => x.ToString());
+                .Select(x => x.ToString());
         }
     }
 }

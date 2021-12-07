@@ -4,8 +4,8 @@
     {
         public TestClass1(int x, int y)
         {
-            this.X = x;
-            this.Y = y;
+            X = x;
+            Y = y;
         }
 
         public int X { get; set; }

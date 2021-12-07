@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Recognizers.Abstractions
+﻿namespace IDesign.Recognizers.Abstractions
 {
-   public interface IResourceMessage
+    public interface IResourceMessage
     {
-         string GetKey();
+        string GetKey();
         string[] GetParameters();
     }
 }

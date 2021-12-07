@@ -13,7 +13,12 @@ namespace IDesign.Tests.Recognizers
         [TestCase("FactoryMethodTest4", "Sandwich", 0, 79)]
         [TestCase("StateFactoryMethodTest1", "BeerFactory", 80, 100)]
         [TestCase("StrategyFactoryMethodTest1", "BeerFactory", 80, 100)]
-        public void FactoryMethodRecognizer_Returns_Correct_Score(string directory, string filename, int minScore, int maxScore)
+        public void FactoryMethodRecognizer_Returns_Correct_Score(
+            string directory,
+            string filename,
+            int minScore,
+            int maxScore
+        )
         {
             var factoryMethodRecognizer = new FactoryMethodRecognizer();
             var filesAsString = FileUtils.FilesToString($"{directory}\\");

@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-
 namespace IDesign.Tests.TestClasses.AdapterTest2
 {
     /// <summary>
-    /// The 'Client' class
+    ///     The 'Client' class
     /// </summary>
     public class ThirdPartyBillingSystem
     {
-        private ITarget employeeSource;
+        private readonly ITarget employeeSource;
 
         public ThirdPartyBillingSystem(ITarget employeeSource)
         {
@@ -18,7 +17,7 @@ namespace IDesign.Tests.TestClasses.AdapterTest2
 
         public void ShowEmployeeList()
         {
-            List<string> employee = employeeSource.GetEmployeeList();
+            var employee = employeeSource.GetEmployeeList();
             //To DO: Implement you business logic
 
             Console.WriteLine("######### Employee List ##########");
@@ -30,7 +29,7 @@ namespace IDesign.Tests.TestClasses.AdapterTest2
     }
 
     /// <summary>
-    /// The 'ITarget' interface
+    ///     The 'ITarget' interface
     /// </summary>
     public interface ITarget
     {
@@ -38,13 +37,13 @@ namespace IDesign.Tests.TestClasses.AdapterTest2
     }
 
     /// <summary>
-    /// The 'Adaptee' class
+    ///     The 'Adaptee' class
     /// </summary>
     public class HRSystem
     {
         public string[][] GetEmployees()
         {
-            string[][] employees = new string[4][];
+            var employees = new string[4][];
 
             employees[0] = new[] { "100", "Deepak", "Team Leader" };
             employees[1] = new[] { "101", "Rohit", "Developer" };
@@ -56,15 +55,15 @@ namespace IDesign.Tests.TestClasses.AdapterTest2
     }
 
     /// <summary>
-    /// The 'Adapter' class
+    ///     The 'Adapter' class
     /// </summary>
     public class EmployeeAdapter : HRSystem, ITarget
     {
         public List<string> GetEmployeeList()
         {
-            List<string> employeeList = new List<string>();
-            string[][] employees = GetEmployees();
-            foreach (string[] employee in employees)
+            var employeeList = new List<string>();
+            var employees = GetEmployees();
+            foreach (var employee in employees)
             {
                 employeeList.Add(employee[0]);
                 employeeList.Add(",");
@@ -73,6 +72,7 @@ namespace IDesign.Tests.TestClasses.AdapterTest2
                 employeeList.Add(employee[2]);
                 employeeList.Add("\n");
             }
+
             return employeeList;
         }
     }

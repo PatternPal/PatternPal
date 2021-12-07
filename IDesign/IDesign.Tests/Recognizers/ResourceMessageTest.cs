@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using IDesign.CommonResources;
+﻿using IDesign.CommonResources;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models.Output;
 using NUnit.Framework;
@@ -17,7 +14,7 @@ namespace IDesign.Tests.Recognizers
         [TestCase("NodeAbstractOrInterface", "BeerFactory", "Class should be abstract or an interface.")]
         public void ResourceMessage_Should_Be_Correct_String(string key, string parameter, string resourceMessage)
         {
-          var rs =   new ResourceMessage(key, new[] { parameter });
+            var rs = new ResourceMessage(key, new[] { parameter });
             var checkr = new CheckResult(rs, FeedbackType.Correct, null, 1f);
             Assert.AreEqual(resourceMessage, ResourceUtils.ResultToString(checkr));
         }

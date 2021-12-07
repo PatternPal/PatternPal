@@ -1,38 +1,38 @@
 stages:
-    - build
-    - test
+  - build
+  - test
 
 variables:
-    test: "IDesign.Regonizers.Tests"
-    
+  test: "IDesign.Regonizers.Tests"
+
 before_script:
-    - "cd IDesign"
-    - "dotnet restore"
-    - "dotnet sln IDesign.sln remove IDesign.Extension/IDesign.Extension.csproj"
-    - "nuget restore IDesign.sln"
-    - "cd ..\\"
+  - "cd IDesign"
+  - "dotnet restore"
+  - "dotnet sln IDesign.sln remove IDesign.Extension/IDesign.Extension.csproj"
+  - "nuget restore IDesign.sln"
+  - "cd ..\\"
 
 build:
-    stage: build
-    script:
-        - "cd IDesign"
-        - "dotnet build"
-    only:
-        - master
-        - develop
-        - merge_requests
+  stage: build
+  script:
+    - "cd IDesign"
+    - "dotnet build"
+  only:
+    - master
+    - develop
+    - merge_requests
 
 test:
-    stage: test
-    script: 
-        - "cd IDesign"
-        - "dotnet build IDesign.sln"
-        - "cd ..\\"
-        - ".\\test_script.bat" 
-    only:
-        - master
-        - develop
-        - merge_requests
-    artifacts:
-        paths:
-            - coverage.xml
+  stage: test
+  script:
+    - "cd IDesign"
+    - "dotnet build IDesign.sln"
+    - "cd ..\\"
+    - ".\\test_script.bat"
+  only:
+    - master
+    - develop
+    - merge_requests
+  artifacts:
+    paths:
+      - coverage.xml

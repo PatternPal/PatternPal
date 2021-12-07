@@ -1,18 +1,15 @@
-
-﻿using IDesign.Core;
+using IDesign.Core;
 using IDesign.Core.Models;
-using IDesign.Recognizers;
 using IDesign.Recognizers.Checks;
 using IDesign.Recognizers.Models;
 using IDesign.Tests.Utils;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
-using System.Linq;
 
 namespace IDesign.Tests.Checks
 {
-    class EntityNodeChecksTest
+    internal class EntityNodeChecksTest
     {
         [TestCase("Abstract", @"abstract class TestClass1 { }", true)]
         [TestCase("Abstract", @"class TestClass1 { }", false)]
@@ -31,10 +28,7 @@ namespace IDesign.Tests.Checks
                 Assert.Fail();
             }
 
-            var entityNode = new EntityNode
-            {
-                InterfaceOrClassNode = typeDeclarationSyntax
-            };
+            var entityNode = new EntityNode { InterfaceOrClassNode = typeDeclarationSyntax };
 
             Assert.AreEqual(shouldBeValid, entityNode.CheckModifier(modifier));
         }
@@ -49,7 +43,12 @@ namespace IDesign.Tests.Checks
         [TestCase("IComponent", RelationType.Implements, 1, false)]
         [TestCase("IComponent", RelationType.ImplementedBy, 1, true)]
         [TestCase("IComponent", RelationType.ImplementedBy, 2, true)]
-        public void MinimalAmountOfRelationTypesCheck_Should_Return_Correct_RelationType(string className, RelationType relation, int amount, bool shouldBeValid)
+        public void MinimalAmountOfRelationTypesCheck_Should_Return_Correct_RelationType(
+            string className,
+            RelationType relation,
+            int amount,
+            bool shouldBeValid
+        )
         {
             var filesAsString = FileUtils.FilesToString("../../../../TestClasses/Decorator/DecoratorTestCase1");
             var nameSpace = "IDesign.Tests.TestClasses.Decorator.DecoratorTestCase1";
@@ -60,6 +59,7 @@ namespace IDesign.Tests.Checks
 
             Assert.AreEqual(shouldBeValid, entityNode.CheckMinimalAmountOfRelationTypes(relation, amount));
         }
+
         [TestCase("Class1", "IClass1", true)]
         [TestCase("Class2", "IClass2", true)]
         [TestCase("Class3", "IClass3", false)]

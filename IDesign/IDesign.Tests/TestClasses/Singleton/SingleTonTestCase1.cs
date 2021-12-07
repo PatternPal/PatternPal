@@ -12,7 +12,11 @@
         {
             get
             {
-                if (instance == null) instance = new SingleTonTestCase1();
+                if (instance == null)
+                {
+                    instance = new SingleTonTestCase1();
+                }
+
                 return instance;
             }
         }

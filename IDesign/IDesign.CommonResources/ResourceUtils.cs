@@ -1,25 +1,31 @@
-﻿using IDesign.Recognizers.Abstractions;
+﻿using System.Globalization;
+using System.Resources;
+using IDesign.Recognizers.Abstractions;
 
 namespace IDesign.CommonResources
 {
     public static class ResourceUtils
     {
-        private static System.Resources.ResourceManager resourceMan;
+        private static ResourceManager resourceMan;
 
-        public static System.Resources.ResourceManager ResourceManager
+        public static ResourceManager ResourceManager
         {
             get
             {
                 if (resourceMan is null)
                 {
-                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("IDesign.CommonResources.ClassFeedbackRes", typeof(ClassFeedbackRes).Assembly);
+                    var temp = new ResourceManager(
+                        "IDesign.CommonResources.ClassFeedbackRes", typeof(ClassFeedbackRes).Assembly
+                    );
                     resourceMan = temp;
                 }
+
                 return resourceMan;
             }
         }
 
-        public static System.Globalization.CultureInfo Culture { get; set; }
+        public static CultureInfo Culture { get; set; }
+
         public static string GetResourceFromString(string name)
         {
             return ResourceManager.GetString(name, Culture);
@@ -27,7 +33,7 @@ namespace IDesign.CommonResources
 
         public static string ResourceMessageToString(IResourceMessage ResMessage)
         {
-            string message = "";
+            var message = "";
             if (ResMessage != null)
             {
                 message = GetResourceFromString(ResMessage.GetKey());
@@ -35,8 +41,10 @@ namespace IDesign.CommonResources
                 {
                     message = string.Format(message, ResMessage.GetParameters());
                 }
+
                 return message;
             }
+
             return message;
         }
 
@@ -47,10 +55,12 @@ namespace IDesign.CommonResources
             {
                 res += result.GetElement().GetSuggestionName() + " | ";
             }
+
             if (result.GetFeedback() != null)
             {
                 res += ResourceMessageToString(result.GetFeedback());
             }
+
             return res;
         }
     }
