@@ -53,7 +53,7 @@ namespace IDesign.Recognizers.Checks
 
         public static bool IsInterfaceMethod(this IMethod methodSyntax, IEntityNode currentClass)
         {
-            return currentClass.ClassImlementsInterfaceMethod(methodSyntax);
+            return currentClass.ClassImplementsInterfaceMethod(methodSyntax);
         }
 
         public static IEnumerable<string> GetCreatedTypes(this IMethod methodSyntax)
