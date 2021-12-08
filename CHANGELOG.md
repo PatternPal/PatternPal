@@ -7,6 +7,11 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Improved
+
+- Singleton Pattern Detector
+  - Looks at generics so `Lazy<Singleton>` works now 
+
 ### Changed
 
 - Use GitHub actions instead of GitLab runner #42

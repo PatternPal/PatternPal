@@ -24,7 +24,7 @@ namespace IDesign.Recognizers
 
             var propertyChecks = new List<ICheck<IField>>
             {
-                new ElementCheck<IField>(x => x.CheckFieldType(new List<string>(){ entityNode.GetName() }), new ResourceMessage("FieldType", new []{ entityNode.GetName()}), 1),
+                new ElementCheck<IField>(x => x.CheckFieldTypeGeneric(new List<string>(){ entityNode.GetName() }), new ResourceMessage("FieldType", new []{ entityNode.GetName()}), 1),
                 new ElementCheck<IField>(x => x.CheckMemberModifier("static"), "FieldModifierStatic", 1),
                 new ElementCheck<IField>(x => !x.CheckMemberModifier("public"), "FieldModifierNotPublic", 1)
             };

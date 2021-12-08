@@ -331,7 +331,7 @@
     <value>Should be product class.</value>
   </data>
   <data name="SingletonConstructor" xml:space="preserve">
-    <value>Private constructor</value>
+    <value>Non public constructor</value>
   </data>
   <data name="SingletonField" xml:space="preserve">
     <value>Should have an instance of itself.</value>
