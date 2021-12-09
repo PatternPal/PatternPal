@@ -3,12 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:UIResources="clr-namespace:IDesign.Extension.Resources"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:IDesign.Extension"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="300">
-
+             d:DesignHeight="360" d:DesignWidth="300"
+             SizeChanged="HomeWindowControl_OnSizeChanged">
     <UserControl.Resources>
         <ResourceDictionary>
             <Style x:Key="CheckboxStyle2"  TargetType="{x:Type CheckBox}">
@@ -181,38 +180,31 @@
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid x:Name="Grid">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="80" />
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Image Source="Resources/logo.png" HorizontalAlignment="Center" Height="80" Grid.Row="0"
-                   VerticalAlignment="Top" />
-            <TextBlock Text="{x:Static UIResources:ExtensionUIResources.ExtensionName}" VerticalAlignment="Center" FontSize="50" />
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" MaxWidth="300">
+            <Image Source="Resources/logo.png" HorizontalAlignment="Center" MaxHeight="80" VerticalAlignment="Top" />
+            <Viewbox>
+                <TextBlock Text="{x:Static UIResources:ExtensionUIResources.ExtensionName}" VerticalAlignment="Center" FontSize="50"/>
+            </Viewbox>
         </StackPanel>
-
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Width="300">
-            <Grid Margin="20,0,20,0">
-                <Button Content="Exercises" Height="40"></Button>
-            </Grid>
-
-            <Grid Margin="20,0,20,0">
-                <Border x:Name="StepByStepButtonBorder" Background="Transparent" BorderThickness="0 0"
-                    Style="{StaticResource ButtonBorder}">
-                    <Button Content="Step-by-Step" Height="40">
-                    </Button>
-                </Border>
-            </Grid>
-
-            <Grid Margin="20,0,20,0">
-                <Border x:Name="HintsButtonBorder" Background="Transparent" BorderThickness="0 0"
-                    Style="{StaticResource ButtonBorder}">
-                    <Button Content="Hints" Height="40">
-                    </Button>
-                </Border>
-            </Grid>
+        <StackPanel Name="ButtonsPanel" Grid.Row="1" HorizontalAlignment="Center" MaxWidth="300">
+            <StackPanel Margin="20,20,20,0">
+                <Button Content="Exercises" Height="40" FontSize="15"/>
+                <TextBlock TextWrapping="Wrap" Text="Practice and learn using exercises"/>
+            </StackPanel>
+            <StackPanel Margin="20,20,20,0">
+                <Button Content="Step-by-Step" Height="40" FontSize="15"/>
+                <TextBlock TextWrapping="Wrap" Text="Implement a pattern using step-by-step instructions"/>
+            </StackPanel>
+            <StackPanel Margin="20,20,20,0">
+                <Button Content="Hints" Height="40" FontSize="15"/>
+                <TextBlock TextWrapping="Wrap" Text="Work on Design Patterns yourself and get occasional hint-based feedback"/>
+            </StackPanel>
 
         </StackPanel>
     </Grid>

@@ -24,5 +24,10 @@ namespace IDesign.Extension
         {
             InitializeComponent();
         }
+
+        private void HomeWindowControl_OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            ButtonsPanel.Orientation = e.NewSize.Height >= e.NewSize.Width ? Orientation.Vertical : Orientation.Horizontal;
+        }
     }
 }
