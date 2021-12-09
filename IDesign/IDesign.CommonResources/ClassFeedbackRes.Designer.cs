@@ -142,7 +142,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bridge Abstraction.
+        ///   Looks up a localized string similar to Bridge.
         /// </summary>
         public static string Bridge {
             get {
@@ -151,11 +151,20 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Abstraction should have a reference to the implementor.
+        ///   Looks up a localized string similar to Bridge Abstraction.
         /// </summary>
-        public static string BridgeAbstractionHasReferenceToImplementor {
+        public static string BridgeAbstraction {
             get {
-                return ResourceManager.GetString("BridgeAbstractionHasReferenceToImplementor", resourceCulture);
+                return ResourceManager.GetString("BridgeAbstraction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bridge Implementer.
+        /// </summary>
+        public static string BridgeImplementer {
+            get {
+                return ResourceManager.GetString("BridgeImplementer", resourceCulture);
             }
         }
         
@@ -435,6 +444,15 @@ namespace IDesign.CommonResources {
         public static string ImplementerAbstractOrInterface {
             get {
                 return ResourceManager.GetString("ImplementerAbstractOrInterface", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implementer should be used by the abstraction.
+        /// </summary>
+        public static string ImplementerUsedByAbstraction {
+            get {
+                return ResourceManager.GetString("ImplementerUsedByAbstraction", resourceCulture);
             }
         }
         

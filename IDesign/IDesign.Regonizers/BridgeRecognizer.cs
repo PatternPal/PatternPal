@@ -39,15 +39,22 @@ namespace IDesign.Recognizers
                 // Implementer is used by another node
                 new ElementCheck<IEntityNode>(
                     x => x.CheckRelationType(RelationType.UsedBy),
-                    "NodeUsedByAny",
+                    "ImplementerUsedByAbstraction",
                     2f
                 ),
             };
 
-            GroupCheck<IEntityNode, IEntityNode> abstractionChecks = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
+            // Implementer checks
+            var implementerGroupCheck = new GroupCheck<IEntityNode, IEntityNode>(
+                implementerChecks,
+                x => entityNode.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Uses)).Select(y => y.GetDestination()),
+                "BridgeImplementer"
+            );
+
+            GroupCheck<IEntityNode, IEntityNode> abstractionGroupCheck = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
             {
                 // The abstraction should be an abstract class
-                new ElementCheck<IEntityNode>(x => x.CheckIsAbstractClass(), "NodeModifierAbstract", 1f),
+                new ElementCheck<IEntityNode>(x => x.CheckIsAbstractClass(), "NodeModifierAbstract", 0.5f),
 
                 // Abstraction should be inherited
                 new ElementCheck<IEntityNode>(
@@ -63,17 +70,20 @@ namespace IDesign.Recognizers
                     3f
                 ),
 
-                // Implementer checks
-                new GroupCheck<IEntityNode, IEntityNode>(
-                    implementerChecks,
-                    x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Uses)).Select(y => y.GetDestination()),
-                    "BridgeAbstractionHasReferenceToImplementor",
-                    GroupCheckType.All
-                )
+            }, x => new List<IEntityNode> { entityNode }, "BridgeAbstraction");
 
-            }, x => new List<IEntityNode> { entityNode }, "Bridge", GroupCheckType.All);
 
-            result.Results.Add(abstractionChecks.Check(entityNode));
+            var bridgeGroupCheck = new GroupCheck<IEntityNode, IEntityNode>(
+                new List<ICheck<IEntityNode>>
+                {
+                    abstractionGroupCheck,
+                    implementerGroupCheck
+                },
+                x => new List<IEntityNode> { entityNode },
+                "Bridge"
+            );
+
+            result.Results.Add(bridgeGroupCheck.Check(entityNode));
 
             return result;
         }
