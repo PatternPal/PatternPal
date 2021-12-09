@@ -42,6 +42,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DeployExtension>True</DeployExtension>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -52,6 +53,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="HomeWindowControl.xaml.cs">
+      <DependentUpon>HomeWindowControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LeftMarginMultiplierConverter.cs" />
     <Compile Include="Resources\ExtensionUIResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -125,6 +129,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="HomeWindowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\PatternCheckbox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -153,6 +161,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ExtensionUIResources.Designer.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\SummaryRescources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
