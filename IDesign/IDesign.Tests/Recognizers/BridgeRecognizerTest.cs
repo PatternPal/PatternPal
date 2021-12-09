@@ -5,7 +5,20 @@ using NUnit.Framework;
 
 namespace IDesign.Tests.Recognizers
 {
-    class BridgeRecognizerTest
+    public class BridgeRecognizerTest
     {
+        [TestCase("BridgeTest1", "Bridge", 80, 100)]
+        public void BridgeRecognizer_Returns_Correct_Score(string directory, string filename, int minScore, int maxScore)
+        {
+            var bridge = new BridgeRecognizer();
+            var filesAsString = FileUtils.FilesToString($"{directory}\\");
+            var nameSpaceName = $"IDesign.Tests.TestClasses.{directory}";
+            var entityNodes = EntityNodeUtils.CreateEntityNodeGraph(filesAsString);
+            var createRelation = new DetermineRelations(entityNodes);
+            createRelation.CreateEdgesOfEntityNode();
+            var result = bridge.Recognize(entityNodes[nameSpaceName + "." + filename]);
+
+            Assert.That(result.GetScore(), Is.InRange(minScore, maxScore));
+        }
     }
 }

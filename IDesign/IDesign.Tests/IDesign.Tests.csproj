@@ -92,6 +92,9 @@
     <Compile Update="TestClasses\AdapterTest1\BaseCase.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Update="TestClasses\BridgeTest1\Bridge.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Update="TestClasses\ClassChecks\Class1.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
