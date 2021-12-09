@@ -145,10 +145,13 @@
     <value>Adapter method should use adaptee.</value>
   </data>
   <data name="Bridge" xml:space="preserve">
+    <value>Bridge</value>
+  </data>
+  <data name="BridgeAbstraction" xml:space="preserve">
     <value>Bridge Abstraction</value>
   </data>
-  <data name="BridgeAbstractionHasReferenceToImplementor" xml:space="preserve">
-    <value>Abstraction should have a reference to the implementor</value>
+  <data name="BridgeImplementer" xml:space="preserve">
+    <value>Bridge Implementer</value>
   </data>
   <data name="BridgeImplementor" xml:space="preserve">
     <value>Bridge Implementor</value>
