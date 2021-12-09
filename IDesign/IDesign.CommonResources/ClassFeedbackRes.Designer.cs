@@ -142,6 +142,33 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bridge Abstraction.
+        /// </summary>
+        public static string Bridge {
+            get {
+                return ResourceManager.GetString("Bridge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Abstraction should have a reference to the implementor.
+        /// </summary>
+        public static string BridgeAbstractionHasReferenceToImplementor {
+            get {
+                return ResourceManager.GetString("BridgeAbstractionHasReferenceToImplementor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bridge Implementor.
+        /// </summary>
+        public static string BridgeImplementor {
+            get {
+                return ResourceManager.GetString("BridgeImplementor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Should be extended by a class..
         /// </summary>
         public static string Child {
@@ -403,6 +430,15 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Implementer should be an abstract class or an interface.
+        /// </summary>
+        public static string ImplementerAbstractOrInterface {
+            get {
+                return ResourceManager.GetString("ImplementerAbstractOrInterface", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There should be at least 3 methods: add, remove and notify..
         /// </summary>
         public static string MethodAmountThree {
@@ -583,6 +619,24 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Node should be implemented or inherited.
+        /// </summary>
+        public static string NodeImplementedOrInherited {
+            get {
+                return ResourceManager.GetString("NodeImplementedOrInherited", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Class should be inherited.
+        /// </summary>
+        public static string NodeInherited {
+            get {
+                return ResourceManager.GetString("NodeInherited", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Class should be abstract..
         /// </summary>
         public static string NodeModifierAbstract {
@@ -610,7 +664,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This class should be used by other classes..
+        ///   Looks up a localized string similar to Node should be used by other classes..
         /// </summary>
         public static string NodeUsedByAny {
             get {
@@ -619,7 +673,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should have at least 1 uses relation..
+        ///   Looks up a localized string similar to Should use at least 1 other node.
         /// </summary>
         public static string NodeUses1 {
             get {
