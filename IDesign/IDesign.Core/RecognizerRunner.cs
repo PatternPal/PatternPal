@@ -5,6 +5,7 @@ using IDesign.Core.Models;
 using IDesign.Recognizers;
 using Microsoft.CodeAnalysis;
 using System.Linq;
+using SyntaxTree.Models;
 
 namespace IDesign.Core
 {

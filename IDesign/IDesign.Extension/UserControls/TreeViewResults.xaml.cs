@@ -7,17 +7,8 @@ using Microsoft.VisualStudio.TextManager.Interop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace IDesign.Extension.UserControls
 {
@@ -30,30 +21,26 @@ namespace IDesign.Extension.UserControls
 
         public TreeViewResults()
         {
-InitializeComponent();
+            InitializeComponent();
         }
 
         private void EventSetter_OnHandler(object sender, MouseButtonEventArgs e)
         {
             var viewItem = sender as TreeViewItem;
 
-            if (viewItem?.DataContext is CheckResultViewModel viewModel)
-            {
-                if (viewModel.Result.GetElement() != null)
-                {
-                    var node = viewModel.Result.GetElement().GetSuggestionNode();
-                    if (node != null)
-                    {
-                        SelectNodeInEditor(node, SyntaxTreeSources[node.SyntaxTree]);
-                    }
-                }
-            }
+            if (!(viewItem?.DataContext is CheckResultViewModel viewModel)) return;
+            if (viewModel.Result.GetElement() == null) return;
+
+            var node = viewModel.Result.GetElement().GetSuggestionNode();
+            if (node == null) return;
+
+            SelectNodeInEditor(node, SyntaxTreeSources[node.SyntaxTree]);
         }
 
         /// <summary>
         ///     Clicking on the node brings you to the right document.
         /// </summary>
-        private void SelectNodeInEditor(SyntaxNode n, string file)
+        private void SelectNodeInEditor(SyntaxNode node, string file)
         {
             try
             {
@@ -63,8 +50,8 @@ InitializeComponent();
                 var did = ws.CurrentSolution.GetDocumentIdsWithFilePath(file);
                 ws.OpenDocument(did.FirstOrDefault());
                 tm.GetActiveView(1, null, out var av);
-                var sp = n.GetLocation().GetMappedLineSpan().StartLinePosition;
-                var ep = n.GetLocation().GetMappedLineSpan().EndLinePosition;
+                var sp = node.GetLocation().GetMappedLineSpan().StartLinePosition;
+                var ep = node.GetLocation().GetMappedLineSpan().EndLinePosition;
                 av.SetSelection(sp.Line, sp.Character, ep.Line, ep.Character);
             }
             catch (Exception e)

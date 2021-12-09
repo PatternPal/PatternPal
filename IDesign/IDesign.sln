@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDesign.Extension", "IDesig
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IDesign.CommonResources", "IDesign.CommonResources\IDesign.CommonResources.csproj", "{68B3C66E-D837-4B67-B674-C994BC4E207B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxTree", "SyntaxTree\SyntaxTree.csproj", "{86E26B75-AEA1-43FA-AEC5-A81131606D13}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +56,10 @@ Global
 		{68B3C66E-D837-4B67-B674-C994BC4E207B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68B3C66E-D837-4B67-B674-C994BC4E207B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68B3C66E-D837-4B67-B674-C994BC4E207B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86E26B75-AEA1-43FA-AEC5-A81131606D13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86E26B75-AEA1-43FA-AEC5-A81131606D13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86E26B75-AEA1-43FA-AEC5-A81131606D13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86E26B75-AEA1-43FA-AEC5-A81131606D13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,6 +71,7 @@ Global
 		{026711C4-E66B-4553-8EA4-F7FE89A70C85} = {42465826-0737-421D-9D08-30F8C43D7912}
 		{6D62168E-3F32-47F9-8BC0-514BF633F903} = {D8082781-8981-4B17-9E4A-5C25EF7E3892}
 		{68B3C66E-D837-4B67-B674-C994BC4E207B} = {D8082781-8981-4B17-9E4A-5C25EF7E3892}
+		{86E26B75-AEA1-43FA-AEC5-A81131606D13} = {25C2E758-AC65-4A3A-A11A-2D3510C01BB8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {31FB6D39-7D9F-44BC-AF8B-3AA700C8C087}

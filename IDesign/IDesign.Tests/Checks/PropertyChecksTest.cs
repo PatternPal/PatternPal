@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 using IDesign.Recognizers;
 using System.Collections.Generic;
+using SyntaxTree.Models.Property;
 
 namespace IDesign.Tests.Checks
 {

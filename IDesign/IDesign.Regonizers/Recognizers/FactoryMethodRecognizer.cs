@@ -7,6 +7,8 @@ using IDesign.Recognizers.Models;
 using IDesign.Recognizers.Models.ElementChecks;
 using IDesign.Recognizers.Models.Output;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SyntaxTree.Abstractions;
+using SyntaxTree.Models;
 
 namespace IDesign.Recognizers
 {

@@ -1,5 +1,5 @@
 
-﻿using IDesign.Core;
+ using IDesign.Core;
 using IDesign.Core.Models;
 using IDesign.Recognizers;
 using IDesign.Recognizers.Checks;
@@ -9,8 +9,9 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 using System.Linq;
+ using SyntaxTree.Models;
 
-namespace IDesign.Tests.Checks
+ namespace IDesign.Tests.Checks
 {
     class EntityNodeChecksTest
     {

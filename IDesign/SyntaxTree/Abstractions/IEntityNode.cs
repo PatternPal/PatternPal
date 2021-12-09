@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
-using IDesign.Recognizers.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SyntaxTree.Models;
 
-namespace IDesign.Recognizers.Abstractions
-{
-    public interface IEntityNode : ICheckable
-    {
+namespace SyntaxTree.Abstractions {
+    public interface IEntityNode : INode {
         /// <summary>
         ///     Get the declaration syntax of the node.
         ///     Possible syntax types: ClassDeclarationSyntax, InterfaceDeclarationSyntax.

@@ -21,17 +21,9 @@ namespace CreationalPatterns.Singleton {
             _logger = logger;
         }
 
+        public string t { internal get { return "";}; set { Console.WriteLine(value); }; }
 
         public static IngredientsDbConnectionPool Instance => _instance.Value;
-        public static IngredientsDbConnectionPool Instance2 { get; set; };
-        public static IngredientsDbConnectionPool Instance3 { get => _instance.Value; set => _ins = value; };
-        public static IngredientsDbConnectionPool Instance4 {
-            get {
-                return _ins;
-            }
-            set => _ins = value;
-        };
-    };
 
         public async Task Connect(string client) {
             if (_openConnections >= Configuration.MaxConnections) {

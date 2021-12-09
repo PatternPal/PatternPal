@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using IDesign.Recognizers.Abstractions;
+using SyntaxTree.Abstractions;
 
 namespace IDesign.Recognizers.Models.Output
 {

@@ -5,6 +5,7 @@ using IDesign.Recognizers.Checks;
 using IDesign.Recognizers.Models;
 using IDesign.Recognizers.Models.ElementChecks;
 using IDesign.Recognizers.Models.Output;
+using SyntaxTree.Abstractions;
 
 namespace IDesign.Recognizers
 {

@@ -4,6 +4,8 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models;
+using SyntaxTree.Abstractions;
+using SyntaxTree.Models.Method;
 
 namespace IDesign.Recognizers.Checks
 {

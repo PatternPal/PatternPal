@@ -4,6 +4,8 @@ using IDesign.Recognizers.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using SyntaxTree.Abstractions;
+using SyntaxTree.Models;
 
 namespace IDesign.Recognizers.Checks
 {

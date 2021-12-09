@@ -1,4 +1,6 @@
-﻿namespace IDesign.Recognizers.Abstractions
+﻿using SyntaxTree.Abstractions;
+
+namespace IDesign.Recognizers.Abstractions
 {
     public interface IRecognizer
     {

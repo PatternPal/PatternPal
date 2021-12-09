@@ -5,6 +5,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 using System.Collections.Generic;
 using IDesign.Recognizers.Abstractions;
+using SyntaxTree.Abstractions;
+using SyntaxTree.Models.Method;
+
 namespace IDesign.Tests.Checks
 {
     public class MethodTest

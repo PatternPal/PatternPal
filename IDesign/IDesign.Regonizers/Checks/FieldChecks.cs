@@ -2,6 +2,7 @@
 using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SyntaxTree.Abstractions;
 
 namespace IDesign.Recognizers.Checks
 {

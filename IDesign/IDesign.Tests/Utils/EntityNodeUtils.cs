@@ -3,6 +3,7 @@ using System.Linq;
 using IDesign.Core.Models;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SyntaxTree.Models;
 
 namespace IDesign.Tests.Utils
 {
