@@ -144,6 +144,15 @@
   <data name="AdapterMethodUses" xml:space="preserve">
     <value>Adapter method should use adaptee.</value>
   </data>
+  <data name="Bridge" xml:space="preserve">
+    <value>Bridge Abstraction</value>
+  </data>
+  <data name="BridgeAbstractionHasReferenceToImplementor" xml:space="preserve">
+    <value>Abstraction should have a reference to the implementor</value>
+  </data>
+  <data name="BridgeImplementor" xml:space="preserve">
+    <value>Bridge Implementor</value>
+  </data>
   <data name="Child" xml:space="preserve">
     <value>Should be extended by a class.</value>
   </data>
@@ -231,6 +240,9 @@
   <data name="FieldType" xml:space="preserve">
     <value>Field type should be {0}.</value>
   </data>
+  <data name="ImplementerAbstractOrInterface" xml:space="preserve">
+    <value>Implementer should be an abstract class or an interface</value>
+  </data>
   <data name="MethodAmountThree" xml:space="preserve">
     <value>There should be at least 3 methods: add, remove and notify.</value>
   </data>
@@ -291,6 +303,12 @@
   <data name="NodeImplementedByAny" xml:space="preserve">
     <value>Should be implemented by an interface</value>
   </data>
+  <data name="NodeImplementedOrInherited" xml:space="preserve">
+    <value>Node should be implemented or inherited</value>
+  </data>
+  <data name="NodeInherited" xml:space="preserve">
+    <value>Class should be inherited</value>
+  </data>
   <data name="NodeModifierAbstract" xml:space="preserve">
     <value>Class should be abstract.</value>
   </data>
@@ -301,10 +319,10 @@
     <value>Should be a class.</value>
   </data>
   <data name="NodeUsedByAny" xml:space="preserve">
-    <value>This class should be used by other classes.</value>
+    <value>Node should be used by other classes.</value>
   </data>
   <data name="NodeUses1" xml:space="preserve">
-    <value>Should have at least 1 uses relation.</value>
+    <value>Should use at least 1 other node</value>
   </data>
   <data name="ObjectAdapter" xml:space="preserve">
     <value>Object adapter</value>
