@@ -41,13 +41,11 @@ namespace IDesign.Core.Models
         {
             var list = new List<IMethod>();
             list.AddRange(MethodDeclarationSyntaxList.Select(x => new Method(x)));
-            foreach (var property in PropertyDeclarationSyntaxList.Where(property => property.AccessorList != null)
-                                                                  .Select(property => property))
+            foreach (var property in PropertyDeclarationSyntaxList)
             {
-                var accessors = property.AccessorList.Accessors;
-                var getters = accessors.Where(x => x.Kind() == SyntaxKind.GetAccessorDeclaration);
-                getters = getters.Where(x => x.Body != null || x.ExpressionBody != null);
-                list.AddRange(getters.Select(x => new PropertyMethod(property, x)));
+                if (!property.HasGetter()) continue;
+                
+                list.Add(new PropertyMethod(property));
             }
             return list;
         }
@@ -117,6 +115,28 @@ namespace IDesign.Core.Models
         public SyntaxTokenList GetModifiers()
         {
             return InterfaceOrClassNode.Modifiers;
+        }
+    }
+    
+    public static class PropertyExtensions {
+        /// <summary>
+        /// Check if a property has a getter
+        /// <br/><br/>
+        /// This is any of the following style:
+        /// <code>
+        /// public bool expression_style => true;
+        /// //Setter can be included
+        /// public bool inline_expression_style { get => true };
+        /// public bool normal_style { get; };
+        /// </code>
+        /// </summary>
+        /// <param name="property"></param>
+        /// <returns>true if the property has a getter</returns>
+        public static bool HasGetter(this PropertyDeclarationSyntax property) {
+            if (property.ExpressionBody != null) return true;
+            return property.AccessorList != null && 
+                   property.AccessorList.Accessors
+                       .Any(a => a.Kind() == SyntaxKind.GetAccessorDeclaration);
         }
     }
 }

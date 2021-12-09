@@ -1,24 +1,25 @@
 ﻿using System.Collections.Generic;
-﻿using IDesign.Recognizers.Abstractions;
+using System.Linq;
+using IDesign.Recognizers.Abstractions;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace IDesign.Recognizers.Models
 {
     public class PropertyMethod : IMethod
     {
-        public PropertyMethod(PropertyDeclarationSyntax property, AccessorDeclarationSyntax accesor)
+        public PropertyMethod(PropertyDeclarationSyntax property)
         {
             Property = property;
-            Accesor = accesor;
         }
 
         public PropertyDeclarationSyntax Property { get; set; }
-        public AccessorDeclarationSyntax Accesor { get; set; }
-
-        public BlockSyntax GetBody()
-        {
-            return Accesor.Body;
+        public BlockSyntax GetBody() {
+            return Property.AccessorList?.Accessors
+                .Where(s => s.Kind() == SyntaxKind.GetAccessorDeclaration)
+                .Select(s => s.Body)
+                .First();
         }
 
         public SyntaxTokenList GetModifiers()
