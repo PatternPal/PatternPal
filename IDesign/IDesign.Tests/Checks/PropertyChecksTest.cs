@@ -1,16 +1,12 @@
-﻿using IDesign.Recognizers.Checks;
-using IDesign.Recognizers.Models;
+﻿using System.Collections.Generic;
+using IDesign.Recognizers.Checks;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
-using IDesign.Recognizers;
-using System.Collections.Generic;
 using SyntaxTree.Models.Members.Property;
 
-namespace IDesign.Tests.Checks
-{
-    public class PropertyTest
-    {
+namespace IDesign.Tests.Checks {
+    public class PropertyTest {
         [Test]
         [TestCase("public", @"public string TestProperty{get; set;}", true)]
         [TestCase("private", @"private int TestProperty{get; set;}", true)]
@@ -19,17 +15,15 @@ namespace IDesign.Tests.Checks
         [TestCase("private", @"static Class[] TestProperty{get; set;}", false)]
         [TestCase("public", @"private var TestProperty{get; set;}", false)]
         [TestCase("static", @"public bool TestProperty{get; set;}", false)]
-        public void ModifierCheck_Should_Return_CorrectResponse(string modifier, string code, bool shouldBeValid)
-        {
+        public void ModifierCheck_Should_Return_CorrectResponse(string modifier, string code, bool shouldBeValid) {
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
             var property = root.Members[0] as PropertyDeclarationSyntax;
 
-            if (property == null)
-            {
+            if (property == null) {
                 Assert.Fail();
             }
 
-            Assert.AreEqual(shouldBeValid, new PropertyField(property).CheckMemberModifier(modifier));
+            Assert.AreEqual(shouldBeValid, new Property(property, null).GetField().CheckMemberModifier(modifier));
         }
 
         [Test]
@@ -40,20 +34,22 @@ namespace IDesign.Tests.Checks
         [TestCase("var", @"static var TestProperty{get; set;}", true)]
         [TestCase("T", @"private var TestProperty{get; set;}", false)]
         [TestCase("int", @"public bool TestProperty{get; set;}", false)]
-        [TestCase("int",
+        [TestCase(
+            "int",
             @"public static Singleton Instance { get { if (instance==null) { instance = new Singleton(); } return instance; } } }",
-            false)]
-        public void TypeCheck_Should_Return_CorrectResponse(string type, string code, bool shouldBeValid)
-        {
+            false
+        )]
+        public void TypeCheck_Should_Return_CorrectResponse(string type, string code, bool shouldBeValid) {
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
             var property = root.Members[0] as PropertyDeclarationSyntax;
 
-            if (property == null)
-            {
+            if (property == null) {
                 Assert.Fail();
             }
 
-            Assert.AreEqual(shouldBeValid, new PropertyField(property).CheckFieldType(new List<string>() { type }));
+            Assert.AreEqual(
+                shouldBeValid, new Property(property, null).GetField().CheckFieldType(new List<string>() { type })
+            );
         }
     }
 }

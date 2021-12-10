@@ -13,7 +13,7 @@ namespace SyntaxTree.Models.Members.Property {
         internal readonly PropertyDeclarationSyntax propertyDeclarationSyntax;
         private readonly IEntity _parent;
 
-        public Property(PropertyDeclarationSyntax node, IEntity parent) : base(node, parent.GetRoot()) {
+        public Property(PropertyDeclarationSyntax node, IEntity parent) : base(node, parent?.GetRoot()) {
             propertyDeclarationSyntax = node;
             _parent = parent;
         }

@@ -12,7 +12,7 @@ namespace SyntaxTree.Models.Members.Field {
         private readonly VariableDeclarationSyntax _variable;
         private readonly IEntity _parent;
 
-        public Field(FieldDeclarationSyntax node, IEntity parent) : base(node, parent.GetRoot()) {
+        public Field(FieldDeclarationSyntax node, IEntity parent) : base(node, parent?.GetRoot()) {
             _fieldDeclaration = node;
             _variable = node.Declaration;
             _parent = parent;

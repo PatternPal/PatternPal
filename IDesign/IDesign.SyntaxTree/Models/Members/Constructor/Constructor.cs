@@ -12,7 +12,7 @@ namespace SyntaxTree.Models.Members.Constructor {
         private readonly ConstructorDeclarationSyntax _constructor;
         private readonly IClass _parent;
 
-        public Constructor(ConstructorDeclarationSyntax node, IClass parent) : base(node, parent.GetRoot()) {
+        public Constructor(ConstructorDeclarationSyntax node, IClass parent) : base(node, parent?.GetRoot()) {
             _constructor = node;
             _parent = parent;
         }
@@ -32,7 +32,7 @@ namespace SyntaxTree.Models.Members.Constructor {
 
         public IMethod AsMethod() => new ConstructorMethod(this);
 
-        public CSharpSyntaxNode GetBody() => (CSharpSyntaxNode) _constructor.Body ?? _constructor.ExpressionBody;
+        public CSharpSyntaxNode GetBody() => (CSharpSyntaxNode)_constructor.Body ?? _constructor.ExpressionBody;
 
         public IClass GetParent() => _parent;
 

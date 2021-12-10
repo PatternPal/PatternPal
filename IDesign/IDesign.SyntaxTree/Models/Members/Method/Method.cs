@@ -11,7 +11,7 @@ namespace SyntaxTree.Models.Members.Method {
         private readonly MethodDeclarationSyntax _methodDeclaration;
         private readonly IEntity _parent;
 
-        public Method(MethodDeclarationSyntax node, IEntity parent) : base(node, parent.GetRoot()) {
+        public Method(MethodDeclarationSyntax node, IEntity parent) : base(node, parent?.GetRoot()) {
             _methodDeclaration = node;
             _parent = parent;
         }

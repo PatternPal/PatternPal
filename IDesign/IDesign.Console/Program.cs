@@ -8,16 +8,13 @@ using IDesign.Core.Models;
 using IDesign.Recognizers.Abstractions;
 using NDesk.Options;
 
-namespace IDesign.ConsoleApp
-{
-    internal static class Program
-    {
+namespace IDesign.ConsoleApp {
+    internal static class Program {
         /// <summary>
         ///     Prints the parses commandline input and starts the runner
         /// </summary>
         /// <param name="args">Takes in commandline options and .cs files</param>
-        private static void Main(string[] args)
-        {
+        private static void Main(string[] args) {
             var designPatternsList = RecognizerRunner.DesignPatterns;
             var showHelp = false;
             var selectedFiles = new List<string>();
@@ -26,33 +23,29 @@ namespace IDesign.ConsoleApp
             var fileManager = new FileManager();
             var recognizerRunner = new RecognizerRunner();
 
-            var options = new OptionSet
-            {
-                {"h|help", "shows this message and exit", v => showHelp = v != null}
-            };
+            var options = new OptionSet { { "h|help", "shows this message and exit", v => showHelp = v != null } };
 
             //Add design patterns as specifiable option
-            foreach (var pattern in designPatternsList)
-            {
-                options.Add(pattern.Name.Replace(" ", "_"), "includes " + pattern.Name, v => selectedPatterns.Add(pattern));
+            foreach (var pattern in designPatternsList) {
+                options.Add(
+                    pattern.Name.Replace(" ", "_"), "includes " + pattern.Name, v => selectedPatterns.Add(pattern)
+                );
             }
-            
-            if (args.Length <= 0)
-            {
+
+            if (args.Length <= 0) {
                 Console.WriteLine("No arguments or files specified\n");
-                ShowHelpMessage(options); 
+                ShowHelpMessage(options);
                 Console.WriteLine("\nYou can write the argument in the console:");
                 string input = Console.ReadLine();
                 if (input == null) return;
-                
+
                 args = SplitCommandLine(input).ToArray();
                 if (args.Length <= 0) return;
             }
 
             var arguments = options.Parse(args);
 
-            if (showHelp)
-            {
+            if (showHelp) {
                 ShowHelpMessage(options);
                 return;
             }
@@ -60,42 +53,38 @@ namespace IDesign.ConsoleApp
             selectedFiles = (from a in arguments where a.EndsWith(".cs") && a.Length > 3 select a).ToList();
 
             foreach (var arg in from arg in arguments
-                                where Directory.Exists(arg)
-                                select arg)
-            {
+                     where Directory.Exists(arg)
+                     select arg) {
                 selectedFiles.AddRange(fileManager.GetAllCSharpFilesFromDirectory(arg));
             }
+
             selectedDirectories = (from dir in arguments where Directory.Exists(dir) select dir).ToList();
 
-            if (selectedFiles.Count == 0)
-            {
+            if (selectedFiles.Count == 0) {
                 Console.WriteLine("No files specified!");
                 Console.ReadKey();
                 return;
             }
 
             //When no specific pattern is chosen, select all
-            if (selectedPatterns.Count == 0)
-            {
+            if (selectedPatterns.Count == 0) {
                 selectedPatterns = designPatternsList;
             }
 
             Console.WriteLine("Selected files:");
 
-            foreach (var file in selectedFiles)
-            {
+            foreach (var file in selectedFiles) {
                 Console.WriteLine(" - " + file);
             }
 
             Console.WriteLine("\nSelected patterns:");
 
-            foreach (var pattern in selectedPatterns)
-            {
+            foreach (var pattern in selectedPatterns) {
                 Console.WriteLine(" - " + pattern.Name);
             }
 
             recognizerRunner.OnProgressUpdate += (sender, progress) =>
-             DrawTextProgressBar(progress.Status, progress.CurrentPercentage, 100);
+                DrawTextProgressBar(progress.Status, progress.CurrentPercentage, 100);
 
             recognizerRunner.CreateGraph(selectedFiles);
             var results = recognizerRunner.Run(selectedPatterns);
@@ -105,30 +94,24 @@ namespace IDesign.ConsoleApp
             Console.ReadKey();
         }
 
-        private static void ShowHelpMessage(OptionSet options)
-        {
+        private static void ShowHelpMessage(OptionSet options) {
             Console.WriteLine("Usage: idesign [INPUT] [OPTIONS]");
             Console.WriteLine("Options:");
             options.WriteOptionDescriptions(Console.Out);
         }
 
-        private static void PrintResults(List<RecognitionResult> results, List<string> selectedDirectories)
-        {
+        private static void PrintResults(List<RecognitionResult> results, List<string> selectedDirectories) {
             Console.WriteLine("\nResults:");
 
-            results = results.Where(x => x.Result.GetScore() >= 0).ToList();
+            results = results.Where(x => x.Result.GetScore() >= 80).ToList();
 
-            for (var i = 0; i < results.Count; i++)
-            {
+            for (var i = 0; i < results.Count; i++) {
                 var name = results[i].EntityNode.GetName();
 
                 //If a directory was selected, show from which subdirectories the entitynode originated
-                if (selectedDirectories.Count > 0)
-                {
-                    foreach (var item in selectedDirectories)
-                    {
-                        if (results[i].EntityNode.GetRoot().GetSource().Contains(item))
-                        {
+                if (selectedDirectories.Count > 0) {
+                    foreach (var item in selectedDirectories) {
+                        if (results[i].EntityNode.GetRoot().GetSource().Contains(item)) {
                             name = results[i].EntityNode.GetRoot().GetSource().Replace(item, "");
                             break;
                         }
@@ -141,8 +124,7 @@ namespace IDesign.ConsoleApp
 
                 Console.ForegroundColor = ConsoleColor.Red;
 
-                foreach (var result in results[i].Result.GetResults())
-                {
+                foreach (var result in results[i].Result.GetResults()) {
                     PrintResult(result, 1);
                 }
 
@@ -150,13 +132,11 @@ namespace IDesign.ConsoleApp
             }
         }
 
-        public static void PrintResult(ICheckResult result, int depth)
-        {
+        public static void PrintResult(ICheckResult result, int depth) {
             Console.ForegroundColor = ConsoleColor.Red;
             var symbol = "X";
 
-            switch (result.GetFeedbackType())
-            {
+            switch (result.GetFeedbackType()) {
                 case FeedbackType.SemiCorrect:
                     Console.ForegroundColor = ConsoleColor.DarkRed;
                     symbol = "-";
@@ -167,23 +147,24 @@ namespace IDesign.ConsoleApp
                     break;
             }
 
-            Console.WriteLine(new string('\t', depth) + symbol + $"{ResourceUtils.ResultToString(result)} | {result.GetScore()}p / {result.GetTotalChecks()}p");
+            Console.WriteLine(
+                new string('\t', depth) + symbol +
+                $"{ResourceUtils.ResultToString(result)} | {result.GetScore()}p / {result.GetTotalChecks()}p"
+            );
 
-            foreach (var child in result.GetChildFeedback())
-            {
+            foreach (var child in result.GetChildFeedback()) {
                 PrintResult(child, depth + 1);
             }
         }
 
-        private static void PrintScore(int score)
-        {
-            Console.ForegroundColor = score < 40 ? ConsoleColor.Red : score < 80 ? ConsoleColor.Yellow : ConsoleColor.Green;
+        private static void PrintScore(int score) {
+            Console.ForegroundColor =
+                score < 40 ? ConsoleColor.Red : score < 80 ? ConsoleColor.Yellow : ConsoleColor.Green;
             Console.WriteLine(score);
             Console.ForegroundColor = ConsoleColor.White;
         }
 
-        public static void DrawTextProgressBar(string stepDescription, int progress, int total)
-        {
+        public static void DrawTextProgressBar(string stepDescription, int progress, int total) {
             int totalChunks = 30;
 
             //draw empty progress bar
@@ -213,30 +194,28 @@ namespace IDesign.ConsoleApp
             Console.Write(output.PadRight(15) + stepDescription);
         }
 
-        public static IEnumerable<string> SplitCommandLine(string commandLine)
-        {
+        public static IEnumerable<string> SplitCommandLine(string commandLine) {
             bool inQuotes = false;
 
-            return commandLine.Split(c =>
-                {
-                    if (c == '\"')
-                        inQuotes = !inQuotes;
+            return commandLine.Split(
+                    c => {
+                        if (c == '\"') inQuotes = !inQuotes;
 
-                    return !inQuotes && c == ' ';
-                })
+                        return !inQuotes && c == ' ';
+                    }
+                )
                 .Select(arg => arg.Trim().TrimMatchingQuotes('\"'))
                 .Where(arg => !string.IsNullOrEmpty(arg));
         }
-        
-        public static IEnumerable<string> Split(this string str, 
-            Func<char, bool> controller)
-        {
+
+        public static IEnumerable<string> Split(
+            this string str,
+            Func<char, bool> controller
+        ) {
             int nextPiece = 0;
 
-            for (int c = 0; c < str.Length; c++)
-            {
-                if (controller(str[c]))
-                {
+            for (int c = 0; c < str.Length; c++) {
+                if (controller(str[c])) {
                     yield return str.Substring(nextPiece, c - nextPiece);
                     nextPiece = c + 1;
                 }
@@ -244,12 +223,10 @@ namespace IDesign.ConsoleApp
 
             yield return str.Substring(nextPiece);
         }
-        
-        public static string TrimMatchingQuotes(this string input, char quote)
-        {
-            if ((input.Length >= 2) && 
-                (input[0] == quote) && (input[input.Length - 1] == quote))
-                return input.Substring(1, input.Length - 2);
+
+        public static string TrimMatchingQuotes(this string input, char quote) {
+            if ((input.Length >= 2) &&
+                (input[0] == quote) && (input[input.Length - 1] == quote)) return input.Substring(1, input.Length - 2);
 
             return input;
         }
