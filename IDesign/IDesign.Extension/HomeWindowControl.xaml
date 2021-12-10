@@ -10,133 +10,8 @@
              SizeChanged="HomeWindowControl_OnSizeChanged">
     <UserControl.Resources>
         <ResourceDictionary>
-            <Style x:Key="CheckboxStyle2"  TargetType="{x:Type CheckBox}">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="CheckBox">
-                            <BulletDecorator Background="Transparent">
-                                <BulletDecorator.Bullet>
-                                    <Border x:Name="Border"
-                                            Width="16"
-                                            Height="16"
-                                            Background="Transparent"
-                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                            BorderThickness="1">
-                                        <Path x:Name="CheckMark"
-                                              Width="10"
-                                              Height="10"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Data="M 30,100 L 80,140 L 160,60"
-                                              Stretch="Fill"
-                                              Stroke="{TemplateBinding BorderBrush}"
-                                              StrokeThickness="2" />
-                                    </Border>
-                                </BulletDecorator.Bullet>
-                                <ContentPresenter Margin="5 0"
-                                                  HorizontalAlignment="Left"
-                                                  VerticalAlignment="Center"
-                                                  RecognizesAccessKey="True" />
-                            </BulletDecorator>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsChecked" Value="false">
-                                    <Setter TargetName="CheckMark" Property="Visibility" Value="Collapsed" />
-                                </Trigger>
-                                <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter TargetName="Border" Property="BorderBrush"
-                                            Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <Style x:Key="CheckboxStyle" TargetType="{x:Type CheckBox}">
-                <Setter Property="Foreground" Value="#4496F3" />
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="CheckBox">
-                            <DockPanel>
-                                <BulletDecorator Background="Transparent">
-                                    <BulletDecorator.Bullet>
-                                        <Border x:Name="Border"
-                                            Margin="0 8 0 0"
-                                            Width="40"
-                                            Height="16"
-                                            Background="Transparent"
-                                            BorderBrush="#4496F3"
-                                            BorderThickness="2">
-                                            <Rectangle x:Name="CheckMark" Stroke="#4496F3"  HorizontalAlignment="Right" Height="16" Width="18" Fill="#4496F3"/>
-                                        </Border>
-                                    </BulletDecorator.Bullet>
-                                    <ContentPresenter Margin="5 0"
-                                                  HorizontalAlignment="Left"
-                                                  VerticalAlignment="Center"
-                                                  RecognizesAccessKey="True" />
-                                </BulletDecorator>
-                            </DockPanel>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsChecked" Value="false">
-                                    <Setter TargetName="CheckMark" Property="HorizontalAlignment" Value="Left" />
-                                    <Setter TargetName="CheckMark" Property="Fill" Value="DarkGray" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <Style TargetType="CheckBox">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="CheckBox">
-                            <BulletDecorator Background="Transparent">
-                                <BulletDecorator.Bullet>
-                                    <Border x:Name="Border"
-                                            Width="16"
-                                            Height="16"
-                                            Background="Transparent"
-                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                            BorderThickness="1">
-                                        <Path x:Name="CheckMark"
-                                              Width="10"
-                                              Height="10"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Data="M 30,100 L 80,140 L 160,60"
-                                              Stretch="Fill"
-                                              Stroke="{TemplateBinding BorderBrush}"
-                                              StrokeThickness="2" />
-                                    </Border>
-                                </BulletDecorator.Bullet>
-                                <ContentPresenter Margin="5 0"
-                                                  HorizontalAlignment="Left"
-                                                  VerticalAlignment="Center"
-                                                  RecognizesAccessKey="True" />
-                            </BulletDecorator>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsChecked" Value="false">
-                                    <Setter TargetName="CheckMark" Property="Visibility" Value="Collapsed" />
-                                </Trigger>
-                                <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter TargetName="Border" Property="BorderBrush"
-                                            Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
             <Style TargetType="TextBlock">
                 <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
-            </Style>
-            <Style x:Key="ButtonBorder" TargetType="Border">
-                <Setter Property="BorderBrush"
-                        Value="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowBorderKey}}" />
             </Style>
             <Style TargetType="Button">
                 <Setter Property="Background">
@@ -172,28 +47,22 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
-            <Style TargetType="ProgressBar">
-                <Setter Property="Background" Value="{DynamicResource {x:Static vsshell:VsColors.BrandedUITextKey}}" />
-                <Setter Property="BorderBrush"
-                        Value="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowBorderKey}}" />
-                <Setter Property="BorderThickness" Value="0" />
-            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" MaxWidth="300">
-            <Image Source="Resources/logo.png" HorizontalAlignment="Center" MaxHeight="80" VerticalAlignment="Top" />
-            <Viewbox>
-                <TextBlock Text="{x:Static UIResources:ExtensionUIResources.ExtensionName}" VerticalAlignment="Center" FontSize="50"/>
-            </Viewbox>
-        </StackPanel>
-        <StackPanel Grid.Row="1" Name="ButtonsPanel" HorizontalAlignment="Center" Orientation="Vertical">
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" MaxWidth="300">
+                <Image Source="Resources/logo.png" HorizontalAlignment="Center" MaxHeight="80" VerticalAlignment="Top" />
+                <Viewbox>
+                    <TextBlock Text="{x:Static UIResources:ExtensionUIResources.ExtensionName}" VerticalAlignment="Center" FontSize="50"/>
+                </Viewbox>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Name="ButtonsPanel" HorizontalAlignment="Center" Orientation="Vertical">
                 <StackPanel Margin="20,20,20,0">
                     <Button Content="Exercises" Height="40" FontSize="15"/>
                     <TextBlock TextWrapping="Wrap" Text="Practice and learn using exercises" Width="150"/>
@@ -207,6 +76,6 @@
                     <TextBlock TextWrapping="Wrap" Text="Work on Design Patterns yourself and get occasional hint-based feedback" Width="150"/>
                 </StackPanel>
             </StackPanel>
-    </Grid>
+        </Grid>
     </ScrollViewer>
 </UserControl>
