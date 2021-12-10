@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using IDesign.Recognizers.Abstractions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SyntaxTree.Abstractions;
+using SyntaxTree.Abstractions.Members;
 
 namespace IDesign.Recognizers.Checks
 {

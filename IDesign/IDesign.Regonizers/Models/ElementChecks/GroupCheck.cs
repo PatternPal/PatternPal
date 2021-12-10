@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models.Output;
+using SyntaxTree.Abstractions;
 
 namespace IDesign.Recognizers.Models.ElementChecks
 {
@@ -19,7 +20,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
     /// <typeparam name="TParent">Type of the element with sub elements</typeparam>
     /// <typeparam name="TChild">Type of the elements that are checked</typeparam>
     public class GroupCheck<TParent, TChild> : ICheck<TParent>
-        where TParent : class, ICheckable where TChild : class, ICheckable
+        where TParent : INode where TChild : INode
     {
         private readonly List<ICheck<TChild>> _checks;
         private readonly IResourceMessage _resourcemessage;
@@ -118,7 +119,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
             var childResults = new List<ICheckResult>();
             foreach (var valueTuple in allChildFeedback)
             {
-                childResults.Add(new CheckResult(valueTuple.Key.GetSuggestionName(), feedback, elementToCheck)
+                childResults.Add(new CheckResult(valueTuple.Key.ToString(), feedback, elementToCheck)
                 {
                     ChildFeedback = valueTuple.Value.childFeedback.ToList()
                 });
@@ -148,7 +149,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
             {
                 var (score, childFeedback) = valueTuple.Value;
                
-                childResults.Add(new CheckResult(valueTuple.Key.GetSuggestionName(), feedback, valueTuple.Key)
+                childResults.Add(new CheckResult(valueTuple.Key.ToString(), feedback, valueTuple.Key)
                 {
                     _feedback = _resourcemessage,
                     ChildFeedback = valueTuple.Value.childFeedback.ToList()
@@ -166,7 +167,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
         {
             return new CheckResult(_resourcemessage, FeedbackType.Incorrect, null)
             {
-                ChildFeedback = _checks.Select(x => x.Check(null)).ToList()
+                ChildFeedback = _checks.Select(x => x.Check(default)).ToList()
             };
         }
     }

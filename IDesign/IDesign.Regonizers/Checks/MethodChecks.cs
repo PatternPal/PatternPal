@@ -5,145 +5,137 @@ using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models;
 using SyntaxTree.Abstractions;
-using SyntaxTree.Models.Method;
+using SyntaxTree.Abstractions.Entities;
+using SyntaxTree.Abstractions.Members;
+using SyntaxTree.Models.Members.Constructor;
+using SyntaxTree.Models.Members.Method;
 
-namespace IDesign.Recognizers.Checks
-{
-    public static class MethodChecks
-    {
-        public static bool CheckReturnType(this IMethod methodSyntax, string returnType)
-        {
+namespace IDesign.Recognizers.Checks {
+    public static class MethodChecks {
+        public static bool CheckReturnType(this IMethod methodSyntax, string returnType) {
             return methodSyntax.GetReturnType()
-                               .CheckIfTwoStringsAreEqual(returnType);
+                .ToString()
+                .CheckIfTwoStringsAreEqual(returnType);
         }
 
-        public static bool CheckCreationalFunction(this IMethod methodSyntax)
-        {
+        public static bool CheckCreationalFunction(this IMethod methodSyntax) {
             return methodSyntax.GetBody()
-                               .DescendantNodes()
-                               .OfType<ObjectCreationExpressionSyntax>()
-                               .Any();
+                .DescendantNodes()
+                .OfType<ObjectCreationExpressionSyntax>()
+                .Any();
         }
 
-        public static bool CheckModifier(this IMethod methodSyntax, string modifier)
-        {
+        public static bool CheckModifier(this IModified methodSyntax, string modifier) {
             return methodSyntax.GetModifiers()
-                               .Any(x => x.ToString().CheckIfTwoStringsAreEqual(modifier));
+                .Any(x => x.ToString().CheckIfTwoStringsAreEqual(modifier));
         }
 
-        public static bool CheckCreationType(this IMethod methodSyntax, string creationType)
-        {
+        public static bool CheckCreationType(this IMethod methodSyntax, string creationType) {
             var body = methodSyntax.GetBody();
 
-            if (body != null)
-            {
+            if (body != null) {
                 var creations = body.DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
                 foreach (var _ in from creationExpression in creations
-                                  where creationExpression.Type is IdentifierNameSyntax name && name.Identifier.ToString().CheckIfTwoStringsAreEqual(creationType)
-                                  select new { })
-                {
+                         where creationExpression.Type is IdentifierNameSyntax name &&
+                               name.Identifier.ToString().CheckIfTwoStringsAreEqual(creationType)
+                         select new { }) {
                     return true;
                 }
             }
+
             return false;
         }
 
-        public static bool CheckReturnTypeSameAsCreation(this IMethod methodSyntax)
-        {
-            return methodSyntax.CheckCreationType(methodSyntax.GetReturnType());
+        public static bool CheckReturnTypeSameAsCreation(this IMethod methodSyntax) {
+            return methodSyntax.CheckCreationType(methodSyntax.GetReturnType().ToString());
         }
 
-        public static bool IsInterfaceMethod(this IMethod methodSyntax, IEntityNode currentClass)
-        {
-            return currentClass.ClassImlementsInterfaceMethod(methodSyntax);
+        public static bool IsInterfaceMethod(this IMethod methodSyntax, IEntity currentClass) {
+            return currentClass.ClassImplementsInterfaceMethod(methodSyntax);
         }
 
-        public static IEnumerable<string> GetCreatedTypes(this IMethod methodSyntax)
-        {
+        public static IEnumerable<string> GetCreatedTypes(this IMethod methodSyntax) {
             var result = new List<string>();
-            if (methodSyntax.GetBody() != null)
-            {
+            if (methodSyntax.GetBody() != null) {
                 var creations = methodSyntax.GetBody().DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
                 foreach (var identifiers in from creation in creations
-                                            let identifiers = creation.DescendantNodes().OfType<IdentifierNameSyntax>()
-                                            select identifiers)
-                {
+                         let identifiers = creation.DescendantNodes().OfType<IdentifierNameSyntax>()
+                         select identifiers) {
                     result.AddRange(identifiers.Select(y => y.Identifier.ToString()));
                 }
             }
+
             return result;
         }
 
-        public static bool CheckIfMethodCallsMethodInNode(this IMethod method, IEntityNode node)
-        {
-            if (method.GetBody() != null)
-            {
+        public static bool CheckIfMethodCallsMethodInNode(this IMethod method, IEntity node) {
+            if (method.GetBody() != null) {
                 var invocations = method.GetBody().DescendantNodes().OfType<InvocationExpressionSyntax>();
                 foreach (var _ in from invocation in invocations
-                                  let identifier = invocation.Expression.DescendantNodesAndSelf()
-                                                                        .OfType<IdentifierNameSyntax>()
-                                                                        .FirstOrDefault()
-                                  let arguments = invocation.ArgumentList.Arguments.Count
-                                  where identifier != null && node.MethodInEntityNode(identifier.ToString(), arguments)
-                                  select new { })
-                {
+                         let identifier = invocation.Expression.DescendantNodesAndSelf()
+                             .OfType<IdentifierNameSyntax>()
+                             .FirstOrDefault()
+                         let arguments = invocation.ArgumentList.Arguments.Count
+                         where identifier != null && node.MethodInEntityNode(identifier.ToString(), arguments)
+                         select new { }) {
                     return true;
                 }
             }
+
             return false;
         }
 
-        public static bool CheckIfMethodCallsBase(this IMethod method)
-        {
-            return method.GetBody() != null ? method.GetBody().DescendantNodes().OfType<BaseExpressionSyntax>().Any() : false;
+        public static bool CheckIfMethodCallsBase(this IMethod method) {
+            return method.GetBody() != null
+                ? method.GetBody().DescendantNodes().OfType<BaseExpressionSyntax>().Any()
+                : false;
         }
 
-
-        public static bool CheckParameters(this IMethod methodSyntax, IEnumerable<string> parameters)
-        {
-            return parameters.Any(x => methodSyntax.GetParameterTypes()
-                                                   .Any(y => x.Equals(y)));
+        public static bool CheckParameters(this IMethod methodSyntax, IEnumerable<string> parameters) {
+            return parameters.Any(
+                x => methodSyntax.GetParameters()
+                    .Select(y => y.ToString())
+                    .Any(y => x.Equals(y))
+            );
         }
 
-        public static bool CheckIfNameExists(this IMethod methodSyntax, IEnumerable<IMethod> methods)
-        {
+        public static bool CheckIfNameExists(this IMethod methodSyntax, IEnumerable<IMethod> methods) {
             return methods.Any(x => x.GetName().Equals(methodSyntax.GetName()));
         }
 
-        public static bool CheckIfArgumentsExists(this IMethod methodSyntax, string argument)
-        {
-            var parameters = methodSyntax.GetParameters().Where(y => y.Type.ToString().Equals(argument));
+        public static bool CheckIfArgumentsExists(this IMethod methodSyntax, string argument) {
+            if (!(methodSyntax is ConstructorMethod constructorMethod)) return false;
+            IConstructor constructor = constructorMethod.constructor;
 
-            return parameters.Count() < 1 ? false : methodSyntax.GetArguments().Any(x => parameters.Any(y => x.Equals(y.Identifier.ToString())));
+            var parameters = constructor.GetParameters()
+                .Where(y => y.ToString().Equals(argument))
+                .ToList();
+
+            return parameters.Any() && constructor.GetArguments().Any(x => parameters.Any(y => x.Equals(y.ToString())));
         }
 
-        public static bool CheckMethodIdentifier(this IMethod methodSyntax, string name)
-        {
+        public static bool CheckMethodIdentifier(this IMethod methodSyntax, string name) {
             return (methodSyntax.GetName().Equals(name) && methodSyntax.GetType() == typeof(Method));
         }
 
-        public static bool CheckFieldIsUsed(this IMethod method, string fieldName)
-        {
-            return method.GetBody() == null
-                ? false
-                : method.GetBody()
-                         .DescendantNodes()
-                         .OfType<IdentifierNameSyntax>()
-                         .Any(x => x.Identifier.ToString().CheckIfTwoStringsAreEqual(fieldName));
+        public static bool CheckFieldIsUsed(this IMethod method, string fieldName) {
+            return method.GetBody() != null && method.GetBody()
+                .DescendantNodes()
+                .OfType<IdentifierNameSyntax>()
+                .Any(x => x.Identifier.ToString().CheckIfTwoStringsAreEqual(fieldName));
         }
 
-        public static bool CheckMethodParameterTypes(this IMethod methodSyntax, string parameters)
-        {
-            return methodSyntax.GetParameter()
-                               .ToString()
-                               .Equals(parameters);
+        public static bool CheckMethodParameterTypes(this IMethod methodSyntax, IEnumerable<TypeSyntax> types) {
+            return methodSyntax.GetParameters()
+                .Select(t => t.ToString())
+                .Zip(types, (s, t) => s.Equals(t.ToString()))
+                .All(b => b);
         }
 
-        public static bool IsEquals(this IMethod methodSyntax, IMethod compareMethod)
-        {
+        public static bool IsEquals(this IMethod methodSyntax, IMethod compareMethod) {
             return methodSyntax.CheckMethodIdentifier(compareMethod.GetName())
-                   && methodSyntax.CheckMethodParameterTypes(compareMethod.GetParameter().ToString())
-                   && methodSyntax.CheckReturnType(compareMethod.GetReturnType());
+                   && methodSyntax.CheckMethodParameterTypes(compareMethod.GetParameters())
+                   && methodSyntax.CheckReturnType(compareMethod.GetReturnType().ToString());
         }
     }
 }

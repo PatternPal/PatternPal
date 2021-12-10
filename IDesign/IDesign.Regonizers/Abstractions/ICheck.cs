@@ -1,4 +1,4 @@
-﻿using IDesign.Recognizers.Models;
+﻿using SyntaxTree.Abstractions;
 
 namespace IDesign.Recognizers.Abstractions
 {
@@ -6,7 +6,7 @@ namespace IDesign.Recognizers.Abstractions
     ///     An interface for a check that could be evaluated on an element
     /// </summary>
     /// <typeparam name="T">Type of the element to be checked</typeparam>
-    public interface ICheck<T> where T : class, ICheckable
+    public interface ICheck<in T> where T : INode
     {
         /// <summary>
         ///     Evaluates the check for the given element

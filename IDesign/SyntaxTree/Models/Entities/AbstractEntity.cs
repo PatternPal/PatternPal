@@ -55,7 +55,7 @@ namespace SyntaxTree.Models.Entities {
 
         public IEnumerable<IRelation> GetRelations() => _parent.GetRelations(this);
 
-        public IEnumerable<IMethod> GetMethodsAndProperties() {
+        public virtual IEnumerable<IMethod> GetAllMethods() {
             List<IMethod> methods = new List<IMethod>(GetMethods());
             foreach (var property in GetProperties()) {
                 if (property.HasGetter()) methods.Add(property.GetGetter());

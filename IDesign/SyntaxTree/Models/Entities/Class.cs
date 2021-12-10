@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SyntaxTree.Abstractions.Entities;
 using SyntaxTree.Abstractions.Members;
@@ -31,5 +32,11 @@ namespace SyntaxTree.Models.Entities {
         public override EntityType GetEntityType() => EntityType.Class;
         public IEnumerable<IConstructor> GetConstructors() => _constructors.AsReadOnly();
         public IEnumerable<IField> GetFields() => _fields.AsReadOnly();
+
+        public override IEnumerable<IMethod> GetAllMethods() {
+            List<IMethod> methods = new List<IMethod>(base.GetAllMethods());
+            methods.AddRange(_constructors.Select(c => c.AsMethod()));
+            return methods.AsReadOnly();
+        }
     }
 }

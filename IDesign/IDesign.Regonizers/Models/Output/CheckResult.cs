@@ -2,41 +2,37 @@
 using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using Microsoft.CodeAnalysis;
+using SyntaxTree.Abstractions;
 
-namespace IDesign.Recognizers.Models.Output
-{
-    public enum CheckCalculationType
-    {
+namespace IDesign.Recognizers.Models.Output {
+    public enum CheckCalculationType {
         Sum,
         Average
     }
-    public class CheckResult : ICheckResult
-    {
+
+    public class CheckResult : ICheckResult {
         public CheckCalculationType CalculationType { get; set; } = CheckCalculationType.Sum;
-        public CheckResult(string message, FeedbackType feedbackType, ICheckable element)
-        {
+
+        public CheckResult(string message, FeedbackType feedbackType, INode element) {
             Message = message;
             FeedbackType = feedbackType;
             Element = element;
         }
 
-
-        public CheckResult(IResourceMessage feedback, FeedbackType feedbackType, ICheckable element)
-        {
+        public CheckResult(IResourceMessage feedback, FeedbackType feedbackType, INode element) {
             _feedback = feedback;
             FeedbackType = feedbackType;
             Element = element;
         }
 
-        public CheckResult(IResourceMessage feedback, FeedbackType feedbackType, ICheckable element, float score)
-        {
+        public CheckResult(IResourceMessage feedback, FeedbackType feedbackType, INode element, float score) {
             _feedback = feedback;
             FeedbackType = feedbackType;
             Element = element;
             Score = score;
         }
-        public CheckResult(string message, FeedbackType feedbackType, ICheckable element, float score)
-        {
+
+        public CheckResult(string message, FeedbackType feedbackType, INode element, float score) {
             Message = message;
             FeedbackType = feedbackType;
             Element = element;
@@ -45,66 +41,57 @@ namespace IDesign.Recognizers.Models.Output
 
         public string Message { get; set; }
         public FeedbackType FeedbackType { get; set; }
-        public ICheckable Element { get; set; }
+        public INode Element { get; set; }
         public List<ICheckResult> ChildFeedback { get; set; } = new List<ICheckResult>();
         public IResourceMessage _feedback { get; set; }
         public float Score { get; set; }
 
-        public IEnumerable<ICheckResult> GetChildFeedback()
-        {
+        public IEnumerable<ICheckResult> GetChildFeedback() {
             return ChildFeedback;
         }
 
-        public float GetScore()
-        {
+        public float GetScore() {
             return !ChildFeedback.Any()
                 ? FeedbackType == FeedbackType.Correct ? Score : 0
                 : CalculationType == CheckCalculationType.Average
-                ? ChildFeedback.Average(x => x.GetScore())
-                : ChildFeedback.Sum(x => x.GetScore());
+                    ? ChildFeedback.Average(x => x.GetScore())
+                    : ChildFeedback.Sum(x => x.GetScore());
         }
 
-        public float GetTotalChecks()
-        {
+        public float GetTotalChecks() {
             return ChildFeedback.Count == 0
                 ? Score
                 : CalculationType == CheckCalculationType.Average
-                ? ChildFeedback.Average(x => x.GetTotalChecks())
-                : ChildFeedback.Sum(x => x.GetTotalChecks());
+                    ? ChildFeedback.Average(x => x.GetTotalChecks())
+                    : ChildFeedback.Sum(x => x.GetTotalChecks());
         }
 
-        public FeedbackType GetFeedbackType()
-        {
-            if (ChildFeedback.Count == 0)
-            {
+        public FeedbackType GetFeedbackType() {
+            if (ChildFeedback.Count == 0) {
                 return FeedbackType;
             }
 
             var feedback = FeedbackType.Incorrect;
 
-            if (ChildFeedback.All(x => x.GetFeedbackType() == FeedbackType.Correct))
-            {
+            if (ChildFeedback.All(x => x.GetFeedbackType() == FeedbackType.Correct)) {
                 feedback = FeedbackType.Correct;
             }
-            else if (ChildFeedback.Any(x => x.GetFeedbackType() == FeedbackType.Correct))
-            {
+            else if (ChildFeedback.Any(x => x.GetFeedbackType() == FeedbackType.Correct)) {
                 feedback = FeedbackType.SemiCorrect;
             }
+
             return feedback;
         }
 
-        public ICheckable GetElement()
-        {
+        public INode GetElement() {
             return Element;
         }
 
-        public IResourceMessage GetFeedback()
-        {
+        public IResourceMessage GetFeedback() {
             return _feedback;
         }
 
-        public void ChangeScore(float score)
-        {
+        public void ChangeScore(float score) {
             Score = score;
         }
     }

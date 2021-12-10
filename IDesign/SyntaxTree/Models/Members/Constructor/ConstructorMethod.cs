@@ -9,22 +9,22 @@ using SyntaxTree.Abstractions.Root;
 
 namespace SyntaxTree.Models.Members.Constructor {
     public class ConstructorMethod: IMethod {
-        private readonly Constructor _constructor;
+        public readonly IConstructor constructor;
         
-        public ConstructorMethod(Constructor constructor) { _constructor = constructor; }
+        public ConstructorMethod(IConstructor constructor) { this.constructor = constructor; }
         
-        public string GetName() => _constructor.GetName();
+        public string GetName() => constructor.GetName();
 
-        public SyntaxNode GetSyntaxNode() => _constructor.GetSyntaxNode();
-        public IRoot GetRoot() => _constructor.GetRoot();
+        public SyntaxNode GetSyntaxNode() => constructor.GetSyntaxNode();
+        public IRoot GetRoot() => constructor.GetRoot();
 
-        public IEnumerable<IModifier> GetModifiers() => _constructor.GetModifiers();
+        public IEnumerable<IModifier> GetModifiers() => constructor.GetModifiers();
 
-        public IEnumerable<TypeSyntax> GetParameters() => _constructor.GetParameters();
+        public IEnumerable<TypeSyntax> GetParameters() => constructor.GetParameters();
 
-        public CSharpSyntaxNode GetBody() => _constructor.GetBody();
+        public CSharpSyntaxNode GetBody() => constructor.GetBody();
 
         public TypeSyntax GetReturnType() => null;
-        public IEntity GetParent() => _constructor.GetParent();
+        public IEntity GetParent() => constructor.GetParent();
     }
 }

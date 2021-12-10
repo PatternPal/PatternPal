@@ -2,6 +2,7 @@
 using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using SyntaxTree.Abstractions;
+using SyntaxTree.Abstractions.Entities;
 
 namespace IDesign.Recognizers.Models.Output
 {
@@ -9,7 +10,7 @@ namespace IDesign.Recognizers.Models.Output
     {
         public List<ICheckResult> Results { get; set; } = new List<ICheckResult>();
 
-        public Dictionary<IEntityNode, string> RelatedSubTypes = new Dictionary<IEntityNode, string>();
+        public Dictionary<IEntity, string> RelatedSubTypes = new Dictionary<IEntity, string>();
 
         public int GetScore()
         {
@@ -23,7 +24,7 @@ namespace IDesign.Recognizers.Models.Output
             return Results;
         }
 
-        public IDictionary<IEntityNode, string> GetRelatedSubTypes()
+        public IDictionary<IEntity, string> GetRelatedSubTypes()
         {
             return RelatedSubTypes;
         }

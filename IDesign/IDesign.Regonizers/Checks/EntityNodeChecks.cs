@@ -1,153 +1,145 @@
 using System.Linq;
-using IDesign.Recognizers.Abstractions;
-using IDesign.Recognizers.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using SyntaxTree.Abstractions;
-using SyntaxTree.Models;
+using SyntaxTree.Abstractions.Entities;
+using SyntaxTree.Abstractions.Members;
 
-namespace IDesign.Recognizers.Checks
-{
-    public static class EntityNodeChecks
-    {
-        public static bool ImplementsInterface(this IEntityNode node, string name)
-        {
-            return ClassImlementsInterface(node, name)
-                ? true
-                : CheckMinimalAmountOfRelationTypes(node, RelationType.Extends, 1) ? ImplementsInterface(GetExtends(node), name) : false;
+namespace IDesign.Recognizers.Checks {
+    public static class EntityNodeChecks {
+        public static bool ImplementsInterface(this IEntity node, string name) {
+            return ClassImplementsInterface(node, name) || (
+                CheckMinimalAmountOfRelationTypes(node, RelationType.Extends, 1) &&
+                ImplementsInterface(GetExtends(node), name)
+            );
         }
 
-        public static bool ClassImlementsInterfaceMethod(this IEntityNode node, IMethod method)
-        {
+        public static bool ClassImplementsInterfaceMethod(this IEntity node, IMethod method) {
             foreach (var _ in from interFace in node.GetRelations()
-                                                    .Where(x => x.GetRelationType() == RelationType.Implements)
-                              where InterfaceImplementsMethod(interFace.GetDestination(), method)
-                              select new { })
-            {
-                return true;
-            }
-            return false;
-        }
-
-        public static bool MethodInEntityNode(this IEntityNode node, string methodName, int amountOfParams)
-        {
-            if (node.GetMethodsAndProperties().Any(x => x.CheckMethodIdentifier(methodName) &&
-            x.GetParameter().Parameters.Count == amountOfParams))
-            {
-                return true;
-            }
-
-            foreach (var _ in from relation in node.GetRelations().Where(x => x.GetRelationType() == RelationType.Extends ||
-                              x.GetRelationType() == RelationType.Implements)
-                              where relation.GetDestination()
-                                            .MethodInEntityNode(methodName, amountOfParams)
-                              select new { })
-            {
+                         .Where(x => x.GetRelationType() == RelationType.Implements)
+                     where InterfaceImplementsMethod(interFace.GetDestination(), method)
+                     select new { }) {
                 return true;
             }
 
             return false;
         }
 
-        public static bool InterfaceImplementsMethod(this IEntityNode node, IMethod method)
-        {
-            return node.GetMethodsAndProperties().Any(x => x.IsEquals(method));
-        }
-
-        public static bool ExtendsClass(this IEntityNode node, string name)
-        {
-            if (CheckMinimalAmountOfRelationTypes(node, RelationType.Extends, 1))
-            {
-                return GetExtends(node).GetName() == name ? true : ExtendsClass(GetExtends(node), name);
+        public static bool MethodInEntityNode(this IEntity node, string methodName, int amountOfParams) {
+            if (node.GetAllMethods().Any(
+                    x => x.CheckMethodIdentifier(methodName) &&
+                         x.GetParameters().Count() == amountOfParams
+                )) {
+                return true;
             }
+
+            foreach (var _ in from relation in node.GetRelations().Where(
+                         x => x.GetRelationType() == RelationType.Extends ||
+                              x.GetRelationType() == RelationType.Implements
+                     )
+                     where relation.GetDestination()
+                         .MethodInEntityNode(methodName, amountOfParams)
+                     select new { }) {
+                return true;
+            }
+
             return false;
         }
 
-        public static bool ClassImlementsInterface(this IEntityNode node, string name)
-        {
+        public static bool InterfaceImplementsMethod(this IEntity node, IMethod method) {
+            return node.GetAllMethods().Any(x => x.IsEquals(method));
+        }
+
+        public static bool ExtendsClass(this IEntity node, string name) {
+            if (CheckMinimalAmountOfRelationTypes(node, RelationType.Extends, 1)) {
+                return GetExtends(node).GetName() == name || ExtendsClass(GetExtends(node), name);
+            }
+
+            return false;
+        }
+
+        public static bool ClassImplementsInterface(this IEntity node, string name) {
             return node.GetRelations()
-                       .Any(x => x.GetRelationType() == RelationType.Implements && x.GetDestination().GetName() == name);
+                .Any(x => x.GetRelationType() == RelationType.Implements && x.GetDestination().GetName() == name);
         }
 
-        public static IEntityNode GetExtends(this IEntityNode node)
-        {
-            return node.GetRelations()
-                       .Where(x => x.GetRelationType() == RelationType.Extends)
-                       .FirstOrDefault()
-                       .GetDestination();
+        public static IEntity GetExtends(this IEntity node) {
+            return node
+                .GetRelations()
+                .FirstOrDefault(x => x.GetRelationType() == RelationType.Extends)
+                ?.GetDestination();
         }
 
-        public static bool Extends(this IEntityNode node)
-        {
+        public static bool Extends(this IEntity node) {
             return node.CheckMinimalAmountOfRelationTypes(RelationType.Extends, 1);
         }
 
-        public static IEntityNode GetEdgeNode(this IEntityNode node, string name)
-        {
-            try
-            {
-                node = node.GetRelations()
-                           .Where(x => x.GetDestination().GetName() == name)
-                           .FirstOrDefault()
-                           .GetDestination();
-            }
-            catch (Exception e)
-            {
-                _ = e.Message;
-            }
-            return node;
+        public static IEntity GetEdgeNode(this IEntity node, string name) {
+            return node = node
+                    .GetRelations()
+                    .FirstOrDefault(x => x.GetDestination().GetName() == name)
+                    ?.GetDestination();
         }
 
-        public static bool CheckModifier(this IEntityNode entityNode, string modifier)
-        {
+        public static bool CheckModifier(this IEntity entityNode, string modifier) {
             return entityNode.GetModifiers().Any(x => x.ToString().CheckIfTwoStringsAreEqual(modifier));
         }
 
-        public static bool CheckTypeDeclaration(this IEntityNode entityNode, EntityNodeType nodeType)
-        {
-            return entityNode.GetEntityNodeType().Equals(nodeType);
+        public static bool CheckTypeDeclaration(this IEntity entityNode, EntityType nodeType) {
+            return entityNode.GetEntityType().Equals(nodeType);
         }
 
-        public static bool CheckEntityNodeType(this IEntityNode entityNode, EntityNodeType nodeType)
-        {
-            return entityNode.GetEntityNodeType().Equals(nodeType);
+        public static bool CheckEntityType(this IEntity entityNode, EntityType nodeType) {
+            return entityNode.GetEntityType().Equals(nodeType);
         }
 
-        public static bool CheckEntityNodeModifier(this IEntityNode entityNode, string modifier)
-        {
-            return entityNode.GetTypeDeclarationSyntax().Modifiers.Any(x => x.ToString().CheckIfTwoStringsAreEqual(modifier));
+        public static bool CheckEntityNodeModifier(this IEntity entityNode, string modifier) {
+            return entityNode.GetModifiers()
+                .Any(x => x.ToString().CheckIfTwoStringsAreEqual(modifier));
         }
 
-        public static bool CheckRelationType(this IEntityNode entityNode, RelationType relationType)
-        {
+        public static bool CheckRelationType(this IEntity entityNode, RelationType relationType) {
             return entityNode.CheckMinimalAmountOfRelationTypes(relationType, 1);
         }
 
-        public static bool CheckMinimalAmountOfRelationTypes(this IEntityNode entityNode, RelationType relationType, int amount)
-        {
-            return entityNode.GetRelations().Where(x => x.GetRelationType().Equals(relationType)).Count() >= amount;
+        public static bool CheckMinimalAmountOfRelationTypes(
+            this IEntity entityNode,
+            RelationType relationType,
+            int amount
+        ) {
+            return entityNode.GetRelations()
+                .Count(x => x.GetRelationType().Equals(relationType)) >= amount;
         }
 
-        public static bool CheckMinimalAmountOfMethodsWithParameter(this IEntityNode node, List<string> parameters, int amount)
-        {
-            return node.GetMethodsAndProperties().Where(x => x.CheckParameters(parameters)).Count() >= amount;
+        public static bool CheckMinimalAmountOfMethodsWithParameter(
+            this IEntity node,
+            List<string> parameters,
+            int amount
+        ) {
+            return node.GetAllMethods()
+                .Count(x => MethodChecks.CheckParameters(x, parameters)) >= amount;
         }
 
-        public static bool CheckMaximumAmountOfMethodsWithParameter(this IEntityNode node, List<string> parameters, int amount)
-        {
-            return node.GetMethodsAndProperties().Where(x => x.CheckParameters(parameters)).Count() < amount;
+        public static bool CheckMaximumAmountOfMethodsWithParameter(
+            this IEntity node,
+            List<string> parameters,
+            int amount
+        ) {
+            return node.GetAllMethods()
+                .Count(x => MethodChecks.CheckParameters(x, parameters)) < amount;
         }
 
-        public static bool CheckMaximumAmountOfRelationTypes(this IEntityNode entityNode, RelationType relationType, int amount)
-        {
-            return entityNode.GetRelations().Where(x => x.GetRelationType().Equals(relationType)).Count() <= amount;
+        public static bool CheckMaximumAmountOfRelationTypes(
+            this IEntity entityNode,
+            RelationType relationType,
+            int amount
+        ) {
+            return entityNode.GetRelations()
+                .Count(x => x.GetRelationType().Equals(relationType)) <= amount;
         }
 
-        public static bool CheckMinimalAmountOfMethods(this IEntityNode node, int amount)
-        {
-            return node.GetMethodsAndProperties().Count() >= amount;
+        public static bool CheckMinimalAmountOfMethods(this IEntity node, int amount) {
+            return node.GetAllMethods().Count() >= amount;
         }
     }
 }
-

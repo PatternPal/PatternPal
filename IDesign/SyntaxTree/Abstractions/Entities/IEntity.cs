@@ -36,7 +36,11 @@ namespace SyntaxTree.Abstractions.Entities {
         
         IEnumerable<IRelation> GetRelations();
 
-        IEnumerable<IMethod> GetMethodsAndProperties();
+        /// <summary>
+        ///     Gets all methods this includes getter and setter from properties and constructors
+        /// </summary>
+        /// <returns>A list of methods</returns>
+        IEnumerable<IMethod> GetAllMethods();
     }
 
     public enum EntityType {
