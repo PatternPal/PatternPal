@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 using System.Collections.Generic;
-using SyntaxTree.Models.Field;
+using SyntaxTree.Models.Members.Field;
 
 namespace IDesign.Tests.Checks
 {

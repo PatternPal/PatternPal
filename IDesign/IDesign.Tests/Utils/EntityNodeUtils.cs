@@ -4,6 +4,7 @@ using IDesign.Core.Models;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SyntaxTree.Models;
+using SyntaxTree.Models.Entities;
 
 namespace IDesign.Tests.Utils
 {

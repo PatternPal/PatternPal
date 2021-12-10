@@ -37,13 +37,14 @@ namespace SyntaxTree {
             return root;
         }
 
-        public IEnumerable<IRoot> GetRoots => _roots.AsReadOnly();
-        public Dictionary<string, IEntity> GetAll => new Dictionary<string, IEntity>(_all);
+        public IEnumerable<IRoot> GetRoots() => _roots.AsReadOnly();
+        public Dictionary<string, IEntity> GetAll() => new Dictionary<string, IEntity>(_all);
 
         /// <summary>
         ///     Creates all relations between classes
         /// </summary>
         public void CreateGraph() {
+            _relations.Reset();
             _relations.CreateEdgesOfEntities();
         }
 

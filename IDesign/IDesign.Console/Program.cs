@@ -19,7 +19,7 @@ namespace IDesign.ConsoleApp
         /// <param name="args">Takes in commandline options and .cs files</param>
         private static void Main(string[] args)
         {
-            var designPatternsList = RecognizerRunner.designPatterns;
+            var designPatternsList = RecognizerRunner.DesignPatterns;
             var showHelp = false;
             var selectedFiles = new List<string>();
             var selectedDirectories = new List<string>();

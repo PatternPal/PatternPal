@@ -6,7 +6,8 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using IDesign.Recognizers.Abstractions;
 using SyntaxTree.Abstractions;
-using SyntaxTree.Models.Method;
+using SyntaxTree.Abstractions.Members;
+using SyntaxTree.Models.Members.Method;
 
 namespace IDesign.Tests.Checks
 {

@@ -19,14 +19,14 @@ namespace SyntaxTree {
 
         private readonly SyntaxGraph _graph;
         private Dictionary<string, IEntity> _entities;
-        internal readonly Dictionary<IEntity, List<Relation>> relations = new Dictionary<IEntity, List<Relation>>();
+        internal Dictionary<IEntity, List<Relation>> relations = new Dictionary<IEntity, List<Relation>>();
 
         public Relations(SyntaxGraph graph) {
             _graph = graph;
         }
 
         public void CreateEdgesOfEntities() {
-            _entities = _graph.GetAll;
+            _entities = _graph.GetAll();
             foreach (var entity in _entities.Values) {
                 CreateParentClasses(entity);
                 CreateCreationalEdges(entity);
@@ -107,6 +107,10 @@ namespace SyntaxTree {
 
                 AddRelation(entity, relationType, edgeNode);
             }
+        }
+
+        public void Reset() {
+            relations = new Dictionary<IEntity, List<Relation>>();
         }
     }
 

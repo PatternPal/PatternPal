@@ -5,10 +5,12 @@ using System.Text;
 using IDesign.Core;
 using IDesign.Core.Models;
 using IDesign.Recognizers;
+using IDesign.Recognizers.Recognizers;
 using IDesign.Tests.Utils;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
+using SyntaxTree;
 
 namespace IDesign.Tests.Recognizers
 {
@@ -25,7 +27,7 @@ namespace IDesign.Tests.Recognizers
             var filesAsString = FileUtils.FilesToString($"{directory}\\");
             var nameSpaceName = $"IDesign.Tests.TestClasses.{directory}";
             var entityNodes = EntityNodeUtils.CreateEntityNodeGraph(filesAsString);
-            var createRelation = new DetermineRelations(entityNodes);
+            var createRelation = new Relations(entityNodes);
             createRelation.CreateEdgesOfEntityNode();
             var result = observer.Recognize(entityNodes[nameSpaceName + "." + filename]);
 

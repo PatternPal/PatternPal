@@ -60,7 +60,7 @@ namespace IDesign.Extension
         /// </summary>
         private void AddViewModels()
         {
-            ViewModels = (from pattern in RecognizerRunner.designPatterns
+            ViewModels = (from pattern in RecognizerRunner.DesignPatterns
                           select new DesignPatternViewModel(pattern.Name, pattern, pattern.WikiPage)).ToList();
 
             PatternCheckbox.listBox.DataContext = ViewModels;
@@ -74,7 +74,7 @@ namespace IDesign.Extension
         private void CreateResultViewModels(IEnumerable<RecognitionResult> results)
         {
             var viewModels = new List<PatternResultViewModel>();
-            foreach (var patterns in from item in RecognizerRunner.designPatterns
+            foreach (var patterns in from item in RecognizerRunner.DesignPatterns
                                      let patterns = results.Where(x => x.Pattern.Equals(item))
                                      where patterns.Count() > 0
                                      select patterns)

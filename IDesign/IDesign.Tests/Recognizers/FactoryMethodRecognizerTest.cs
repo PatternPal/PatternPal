@@ -1,7 +1,9 @@
 ﻿using IDesign.Core;
 using IDesign.Recognizers;
+using IDesign.Recognizers.Recognizers;
 using IDesign.Tests.Utils;
 using NUnit.Framework;
+using SyntaxTree;
 
 namespace IDesign.Tests.Recognizers
 {
@@ -19,7 +21,7 @@ namespace IDesign.Tests.Recognizers
             var filesAsString = FileUtils.FilesToString($"{directory}\\");
             var nameSpaceName = $"IDesign.Tests.TestClasses.{directory}";
             var entityNodes = EntityNodeUtils.CreateEntityNodeGraph(filesAsString);
-            var createRelation = new DetermineRelations(entityNodes);
+            var createRelation = new Relations(entityNodes);
             createRelation.CreateEdgesOfEntityNode();
             var result = factoryMethodRecognizer.Recognize(entityNodes[nameSpaceName + "." + filename]);
 

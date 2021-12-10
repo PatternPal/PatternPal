@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using IDesign.Recognizers.Recognizers;
+using SyntaxTree;
 
 namespace IDesign.Tests.Recognizers
 {
@@ -26,7 +28,7 @@ namespace IDesign.Tests.Recognizers
             var filesAsString = FileUtils.FilesToString($"{directory}\\");
             var nameSpaceName = $"IDesign.Tests.TestClasses.{directory}";
             var entityNodes = EntityNodeUtils.CreateEntityNodeGraph(filesAsString);
-            var createRelation = new DetermineRelations(entityNodes);
+            var createRelation = new Relations(entityNodes);
             createRelation.CreateEdgesOfEntityNode();
             var result = state.Recognize(entityNodes[nameSpaceName + "." + filename]);
 

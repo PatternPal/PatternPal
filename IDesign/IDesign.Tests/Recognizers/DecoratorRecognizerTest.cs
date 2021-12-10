@@ -7,6 +7,8 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
+using IDesign.Recognizers.Recognizers;
+using SyntaxTree;
 
 namespace IDesign.Tests.Recognizers
 {
@@ -23,7 +25,7 @@ namespace IDesign.Tests.Recognizers
             var filesAsString = FileUtils.FilesToString($"{directory}\\");
             var nameSpaceName = $"IDesign.Tests.TestClasses.{directory}";
             var entityNodes = EntityNodeUtils.CreateEntityNodeGraph(filesAsString);
-            var createRelation = new DetermineRelations(entityNodes);
+            var createRelation = new Relations(entityNodes);
             createRelation.CreateEdgesOfEntityNode();
             var result = decorator.Recognize(entityNodes[nameSpaceName + "." + filename]);
 

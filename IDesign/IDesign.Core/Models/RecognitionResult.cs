@@ -1,5 +1,6 @@
 using IDesign.Recognizers.Abstractions;
 using SyntaxTree.Abstractions;
+using SyntaxTree.Abstractions.Entities;
 
 namespace IDesign.Core.Models
 {
@@ -7,7 +8,7 @@ namespace IDesign.Core.Models
     {
         public DesignPattern Pattern;
         public IResult Result { get; set; }
-        public IEntityNode EntityNode { get; set; }
+        public IEntity EntityNode { get; set; }
         public string FilePath { get; set; }
     }
 }

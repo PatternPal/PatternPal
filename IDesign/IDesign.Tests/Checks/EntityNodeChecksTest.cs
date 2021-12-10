@@ -9,7 +9,9 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 using System.Linq;
+ using SyntaxTree;
  using SyntaxTree.Models;
+ using SyntaxTree.Models.Entities;
 
  namespace IDesign.Tests.Checks
 {
@@ -55,7 +57,7 @@ using System.Linq;
             var filesAsString = FileUtils.FilesToString("../../../../TestClasses/Decorator/DecoratorTestCase1");
             var nameSpace = "IDesign.Tests.TestClasses.Decorator.DecoratorTestCase1";
             var entityNodes = EntityNodeUtils.CreateEntityNodeGraph(filesAsString);
-            var createRelation = new DetermineRelations(entityNodes);
+            var createRelation = new Relations(entityNodes);
             createRelation.CreateEdgesOfEntityNode();
             var entityNode = entityNodes[nameSpace + "." + className];
 
@@ -71,7 +73,7 @@ using System.Linq;
             var code = FileUtils.FilesToString("ClassChecks\\");
             var nameSpaceName = "IDesign.Tests.TestClasses.ClassChecks";
             var nodes = EntityNodeUtils.CreateEntityNodeGraph(code);
-            var createRelation = new DetermineRelations(nodes);
+            var createRelation = new Relations(nodes);
             createRelation.CreateEdgesOfEntityNode();
             var checkResult = nodes[nameSpaceName + "." + className].ImplementsInterface(interfaceName);
 
@@ -88,7 +90,7 @@ using System.Linq;
             var code = FileUtils.FilesToString("ClassChecks\\");
             var nameSpaceName = "IDesign.Tests.TestClasses.ClassChecks";
             var nodes = EntityNodeUtils.CreateEntityNodeGraph(code);
-            var createRelation = new DetermineRelations(nodes);
+            var createRelation = new Relations(nodes);
             createRelation.CreateEdgesOfEntityNode();
             var checkResult = nodes[nameSpaceName + "." + className].ExtendsClass(eClassName);
 
@@ -105,7 +107,7 @@ using System.Linq;
             var code = FileUtils.FilesToString("ClassChecks\\");
             var nameSpaceName = "IDesign.Tests.TestClasses.ClassChecks";
             var nodes = EntityNodeUtils.CreateEntityNodeGraph(code);
-            var createRelation = new DetermineRelations(nodes);
+            var createRelation = new Relations(nodes);
             createRelation.CreateEdgesOfEntityNode();
             var checkResult = nodes[nameSpaceName + "." + className].ClassImlementsInterface(interfaceName);
 
