@@ -1,24 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Media;
-using IDesign.Core.Models;
-using IDesign.Recognizers.Abstractions;
+using SyntaxTree.Abstractions.Entities;
 
-namespace IDesign.Extension.ViewModels
-{
-    public class PatternComponentViewModel
-    {
+namespace IDesign.Extension.ViewModels {
+    public class PatternComponentViewModel {
         public string Name { get; set; }
 
-        public List<IEntityNode> EntityNodes { get; set;  } = new List<IEntityNode>();
+        public List<IEntity> EntityNodes { get; set; } = new List<IEntity>();
 
-        public PatternComponentViewModel(string name)
-        {
+        public PatternComponentViewModel(string name) {
             Name = name;
         }
 
-
-        public List<EntityNodeViewModel> EntityNodeViewModels => EntityNodes.Select(x => new EntityNodeViewModel(x)).ToList();
-
+        public List<EntityNodeViewModel> EntityNodeViewModels =>
+            EntityNodes.Select(x => new EntityNodeViewModel(x)).ToList();
     }
 }

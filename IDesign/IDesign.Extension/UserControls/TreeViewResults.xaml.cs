@@ -1,49 +1,41 @@
-﻿using IDesign.Extension.ViewModels;
+﻿using System;
+using System.Linq;
+using System.Windows.Controls;
+using System.Windows.Input;
+using IDesign.Extension.ViewModels;
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TextManager.Interop;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Controls;
-using System.Windows.Input;
 
-namespace IDesign.Extension.UserControls
-{
+namespace IDesign.Extension.UserControls {
     /// <summary>
     /// Interaction logic for TreeViewResults.xaml
     /// </summary>
-    public partial class TreeViewResults : UserControl
-    {
-        public Dictionary<SyntaxTree, string> SyntaxTreeSources { get; set; }
-
-        public TreeViewResults()
-        {
+    public partial class TreeViewResults : UserControl {
+        public TreeViewResults() {
             InitializeComponent();
         }
 
-        private void EventSetter_OnHandler(object sender, MouseButtonEventArgs e)
-        {
+        private void EventSetter_OnHandler(object sender, MouseButtonEventArgs e) {
             var viewItem = sender as TreeViewItem;
 
             if (!(viewItem?.DataContext is CheckResultViewModel viewModel)) return;
-            if (viewModel.Result.GetElement() == null) return;
+            var element = viewModel.Result.GetElement();
+            if (element == null) return;
 
-            var node = viewModel.Result.GetElement().GetSuggestionNode();
+            var node = element.GetSyntaxNode();
             if (node == null) return;
 
-            SelectNodeInEditor(node, SyntaxTreeSources[node.SyntaxTree]);
+            SelectNodeInEditor(node, element.GetRoot().GetSource());
         }
 
         /// <summary>
         ///     Clicking on the node brings you to the right document.
         /// </summary>
-        private void SelectNodeInEditor(SyntaxNode node, string file)
-        {
-            try
-            {
+        private void SelectNodeInEditor(SyntaxNode node, string file) {
+            try {
                 var tm = (IVsTextManager)Package.GetGlobalService(typeof(SVsTextManager));
                 var cm = (IComponentModel)Package.GetGlobalService(typeof(SComponentModel));
                 var ws = (Workspace)cm.GetService<VisualStudioWorkspace>();
@@ -54,8 +46,7 @@ namespace IDesign.Extension.UserControls
                 var ep = node.GetLocation().GetMappedLineSpan().EndLinePosition;
                 av.SetSelection(sp.Line, sp.Character, ep.Line, ep.Character);
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 _ = e.Message;
             }
         }

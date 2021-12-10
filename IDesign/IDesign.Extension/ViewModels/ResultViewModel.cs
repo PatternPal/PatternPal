@@ -3,13 +3,11 @@ using System.Linq;
 using System.Windows.Media;
 using IDesign.Core.Models;
 using IDesign.Recognizers.Abstractions;
+using SyntaxTree.Abstractions.Entities;
 
-namespace IDesign.Extension.ViewModels
-{
-    public class ResultViewModel
-    {
-        public ResultViewModel(RecognitionResult result)
-        {
+namespace IDesign.Extension.ViewModels {
+    public class ResultViewModel {
+        public ResultViewModel(RecognitionResult result) {
             Result = result;
         }
 
@@ -19,24 +17,20 @@ namespace IDesign.Extension.ViewModels
 
         public SolidColorBrush Color => GetColor(Result.Result.GetScore());
 
-        public SolidColorBrush GetColor(int score)
-        {
+        public SolidColorBrush GetColor(int score) {
             return score < 40 ? Brushes.Red : score < 80 ? Brushes.Yellow : Brushes.Green;
         }
 
-        public FeedbackType GetFeedbackType()
-        {
+        public FeedbackType GetFeedbackType() {
             int score = Result.Result.GetScore();
-            if (score < 40)
-                return FeedbackType.Incorrect;
-            if (score < 80)
-                return FeedbackType.SemiCorrect;
+            if (score < 40) return FeedbackType.Incorrect;
+            if (score < 80) return FeedbackType.SemiCorrect;
             return FeedbackType.Correct;
         }
 
         public IEnumerable<CheckResultViewModel> Results =>
             Result.Result.GetResults().Select(x => new CheckResultViewModel(x, GetFeedbackType()));
 
-        public IEntityNode EntityNode { get; internal set; }
+        public IEntity EntityNode { get; internal set; }
     }
 }
