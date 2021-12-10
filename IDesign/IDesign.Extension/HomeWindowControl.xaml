@@ -180,6 +180,7 @@
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -192,20 +193,20 @@
                 <TextBlock Text="{x:Static UIResources:ExtensionUIResources.ExtensionName}" VerticalAlignment="Center" FontSize="50"/>
             </Viewbox>
         </StackPanel>
-        <StackPanel Name="ButtonsPanel" Grid.Row="1" HorizontalAlignment="Center" MaxWidth="300">
-            <StackPanel Margin="20,20,20,0">
-                <Button Content="Exercises" Height="40" FontSize="15"/>
-                <TextBlock TextWrapping="Wrap" Text="Practice and learn using exercises"/>
+        <StackPanel Grid.Row="1" Name="ButtonsPanel" HorizontalAlignment="Center" Orientation="Vertical">
+                <StackPanel Margin="20,20,20,0">
+                    <Button Content="Exercises" Height="40" FontSize="15"/>
+                    <TextBlock TextWrapping="Wrap" Text="Practice and learn using exercises" Width="150"/>
+                </StackPanel>
+                <StackPanel Margin="20,20,20,0">
+                    <Button Content="Step-by-Step" Height="40" FontSize="15"/>
+                    <TextBlock TextWrapping="Wrap" Text="Implement a pattern using step-by-step instructions" Width="150"/>
+                </StackPanel>
+                <StackPanel Margin="20,20,20,0">
+                    <Button Content="Hints" Height="40" FontSize="15"/>
+                    <TextBlock TextWrapping="Wrap" Text="Work on Design Patterns yourself and get occasional hint-based feedback" Width="150"/>
+                </StackPanel>
             </StackPanel>
-            <StackPanel Margin="20,20,20,0">
-                <Button Content="Step-by-Step" Height="40" FontSize="15"/>
-                <TextBlock TextWrapping="Wrap" Text="Implement a pattern using step-by-step instructions"/>
-            </StackPanel>
-            <StackPanel Margin="20,20,20,0">
-                <Button Content="Hints" Height="40" FontSize="15"/>
-                <TextBlock TextWrapping="Wrap" Text="Work on Design Patterns yourself and get occasional hint-based feedback"/>
-            </StackPanel>
-
-        </StackPanel>
     </Grid>
+    </ScrollViewer>
 </UserControl>
