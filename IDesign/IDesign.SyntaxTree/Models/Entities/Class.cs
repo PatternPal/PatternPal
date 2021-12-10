@@ -10,13 +10,15 @@ using SyntaxTree.Models.Members.Field;
 namespace SyntaxTree.Models.Entities {
     public class Class : AbstractEntity, IClass {
         private readonly ClassDeclarationSyntax _typeDeclarationSyntax;
-        
+
         private readonly List<IConstructor> _constructors = new List<IConstructor>();
         private readonly List<IField> _fields = new List<IField>();
-        
-        public Class(ClassDeclarationSyntax typeDeclarationSyntax, IRoot parent) : base(typeDeclarationSyntax, parent) {
+
+        public Class(ClassDeclarationSyntax typeDeclarationSyntax, IEntitiesContainer parent) : base(
+            typeDeclarationSyntax, parent
+        ) {
             _typeDeclarationSyntax = typeDeclarationSyntax;
-            
+
             foreach (var member in typeDeclarationSyntax.Members) {
                 switch (member) {
                     case ConstructorDeclarationSyntax constructor:
@@ -37,6 +39,10 @@ namespace SyntaxTree.Models.Entities {
             List<IMethod> methods = new List<IMethod>(base.GetAllMethods());
             methods.AddRange(_constructors.Select(c => c.AsMethod()));
             return methods.AsReadOnly();
+        }
+
+        public override IEnumerable<IField> GetAllFields() {
+            return base.GetAllFields().Concat(GetFields());
         }
     }
 }

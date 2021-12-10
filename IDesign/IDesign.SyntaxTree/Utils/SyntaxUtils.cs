@@ -19,7 +19,7 @@ namespace SyntaxTree.Utils {
             return list.Parameters.Select(s => s.Type);
         }
 
-        public static IEntity ToEntity(this TypeDeclarationSyntax syntax, IRoot parent) {
+        public static IEntity ToEntity(this TypeDeclarationSyntax syntax, IEntitiesContainer parent) {
             switch (syntax) {
                 case ClassDeclarationSyntax cls: return new Class(cls, parent);
                 case InterfaceDeclarationSyntax inter: return new Interface(inter, parent);

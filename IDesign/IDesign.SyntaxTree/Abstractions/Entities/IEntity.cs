@@ -4,19 +4,19 @@ using SyntaxTree.Abstractions.Members;
 using SyntaxTree.Abstractions.Root;
 
 namespace SyntaxTree.Abstractions.Entities {
-    public interface IEntity: INode, IModified, IChild<IRoot> {
+    public interface IEntity : IModified, IChild<IEntitiesContainer>, INamedEntitiesContainer {
         /// <summary>
         ///     Get a list of methods declared in this node
         /// </summary>
         /// <returns>A list of methods</returns>
         IEnumerable<IMethod> GetMethods();
-        
+
         /// <summary>
         ///     Get a list of properties declared in this node
         /// </summary>
         /// <returns>A list of properties</returns>
         IEnumerable<IProperty> GetProperties();
-        
+
         /// <summary>
         ///     Get a list of bases of this note (overrides / implementations)
         /// </summary>
@@ -33,7 +33,7 @@ namespace SyntaxTree.Abstractions.Entities {
         /// </summary>
         /// <returns></returns>
         string GetFullName();
-        
+
         IEnumerable<IRelation> GetRelations();
 
         /// <summary>
@@ -41,6 +41,12 @@ namespace SyntaxTree.Abstractions.Entities {
         /// </summary>
         /// <returns>A list of methods</returns>
         IEnumerable<IMethod> GetAllMethods();
+
+        /// <summary>
+        ///     Gets all fields this includes getters from properties
+        /// </summary>
+        /// <returns>A list of methods</returns>
+        IEnumerable<IField> GetAllFields();
     }
 
     public enum EntityType {

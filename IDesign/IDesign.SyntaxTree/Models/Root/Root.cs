@@ -22,7 +22,7 @@ namespace SyntaxTree.Models.Root {
             _namespaces = node.Members.OfType<BaseNamespaceDeclarationSyntax>()
                 .Select(name => new Namespace(name, this))
                 .ToList();
-            
+
             _entities = node.Members.OfType<TypeDeclarationSyntax>()
                 .Select(type => type.ToEntity(this))
                 .ToList();
@@ -38,17 +38,13 @@ namespace SyntaxTree.Models.Root {
         public IEnumerable<UsingDirectiveSyntax> GetUsing() { return _using.AsReadOnly(); }
         public IEnumerable<IEntity> GetEntities() { return _entities.AsReadOnly(); }
 
-        public Dictionary<string, IEntity> GetAllEntities() {
-            Dictionary<string, IEntity> dic = GetNamespaces().Select(ns => ns.GetAllEntities())
+        public Dictionary<string, IEntity> GetAllEntities() =>
+            GetNamespaces()
+                .Select(ns => ns.GetAllEntities())
+                .Concat(GetEntities().OfType<IEntitiesContainer>().Select(e => e.GetAllEntities()))
+                .Append(GetEntities().ToDictionary(e => e.GetFullName()))
                 .SelectMany(d => d)
                 .ToDictionary(p => p.Key, p => p.Value);
-
-            foreach (var entity in GetEntities()) {
-                dic.Add(entity.GetFullName(), entity);
-            }
-            
-            return dic;
-        }
 
         public IEnumerable<IRelation> GetRelations(IEntity entity) => _graph.GetRelations(entity);
     }

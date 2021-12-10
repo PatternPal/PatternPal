@@ -1,5 +1,5 @@
 ﻿namespace SyntaxTree.Abstractions.Root {
-    public interface INamespace : IRoot, IChild<IRoot> {
-        string GetNamespace();
+    public interface INamespace
+        : INamespaceContainer, IUsingContainer, INamedEntitiesContainer, IChild<INamespaceContainer> {
     }
 }

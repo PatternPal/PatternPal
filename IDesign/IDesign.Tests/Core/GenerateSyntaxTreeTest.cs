@@ -10,39 +10,101 @@ namespace IDesign.Tests.Core {
             new Dictionary<string, IEntity>();
 
         [TestCase(
-            @"namespace TestNamespace{ class TestClass{ public string Name {get; set;} public TestClass(string name){this.Name = name;}}}",
+            @"namespace TestNamespace {
+                    class TestClass {
+                        public string Name {get; set;} 
+                        public TestClass(string name) {
+                            this.Name = name;
+                        }
+                    }
+                }",
             1
         )]
         [TestCase(
-            @"namespace TestNamespace{ class TestClass{ public string Name {get; set;} public TestClass(string name){this.Name = name;} class InnerClass{}}",
+            @"namespace TestNamespace {
+                    class TestClass {
+                        public string Name {get; set;} 
+                        public TestClass(string name) {this.Name = name;}
+                        class InnerClass{}
+                    } 
+                }",
             2
         )]
         [TestCase(
-            @"namespace TestNamespace{ class TestClass{ public string Name {get; set;} public TestClass(string name){this.Name = name;} class InnerClass{}}}",
+            @"namespace TestNamespace { 
+                    class TestClass{ 
+                        public string Name {get; set;} 
+                        public TestClass(string name){this.Name = name;}
+                        class InnerClass{}
+                    } 
+                }",
             2
         )]
         [TestCase(
-            @"namespace TestNamespace{ class TestClass{ public string Name {get; set;} public TestClass(string name){this.Name = name;}} class TestClass2{}}",
-            2
+            @"namespace TestNamespace { 
+                    class TestClass{ 
+                        public string Name {get; set;} 
+                        public TestClass(string name){this.Name = name;}
+                    } 
+                    class TestClass2{}
+                    class TestClass3{}
+                }",
+            3
         )]
         [TestCase(
-            @"namespace TestNamespace{ class TestClass{ public string Name {get; set;} public TestClass(string name){this.Name = name;} class InnerClass{}} class TestClass2{}} class OuterClass{}",
+            @"namespace TestNamespace { 
+                    class TestClass{ 
+                        public string Name {get; set;} 
+                        public TestClass(string name){this.Name = name;}
+                        class InnerClass{}
+                    } 
+                    class TestClass2{}
+                } 
+                class OuterClass{}",
             4
         )]
         [TestCase(
-            @"namespace TestNamespace{ class TestClass{ public string Name {get; set;} public TestClass(string name){this.Name = name;} class InnerClass{ class ClassInInnerClass{}}} class TestClass2{}} class OuterClass{}",
+            @"namespace TestNamespace{ 
+                    class TestClass{
+                        public string Name {get; set;} 
+                        public TestClass(string name){this.Name = name;} 
+                        class InnerClass{ 
+                            class ClassInInnerClass{}
+                        }
+                    } 
+                    class TestClass2{}
+                } 
+                class OuterClass{}",
             5
         )]
         [TestCase(
-            @"namespace TestNamespace{ interface ITestClass{}class TestClass{ public string Name {get; set;} public TestClass(string name){this.Name = name;}}}",
+            @"namespace TestNamespace{ 
+                    interface ITestClass{}
+                    class TestClass{ 
+                        public string Name {get; set;} 
+                        public TestClass(string name){this.Name = name;}
+                    }
+                }",
             1
         )]
         [TestCase(
-            @"namespace TestNamespace{ class TestClass{ public string Name {get; set;} public TestClass(string name){this.Name = name;} interface ITestClass{}}}",
+            @"namespace TestNamespace{ 
+                    class TestClass{ 
+                        public string Name {get; set;} 
+                        public TestClass(string name){this.Name = name;} 
+                        interface ITestClass{}
+                    }
+                }",
             1
         )]
         [TestCase(
-            @"namespace TestNamespace{ class TestClass{ public string Name {get; set;} public TestClass(string name){this.Name = name;}}} interface ITestClass{}",
+            @"namespace TestNamespace{ 
+                    class TestClass{ 
+                        public string Name {get; set;} 
+                        public TestClass(string name){this.Name = name;}
+                    }
+                } 
+                interface ITestClass{}",
             1
         )]
         public void TestAmountOfClasses(string file, int expectedAmountOfClasses) {

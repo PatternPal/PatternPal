@@ -16,10 +16,11 @@ namespace SyntaxTree.Models.Entities {
         private readonly List<IMethod> _methods = new List<IMethod>();
         private readonly List<IProperty> _properties = new List<IProperty>();
         private readonly List<TypeSyntax> _bases;
+        private readonly List<IEntity> _entities = new List<IEntity>();
 
-        private readonly IRoot _parent;
+        private readonly IEntitiesContainer _parent;
 
-        protected AbstractEntity(TypeDeclarationSyntax node, IRoot parent) : base(
+        protected AbstractEntity(TypeDeclarationSyntax node, IEntitiesContainer parent) : base(
             node, parent.GetRoot()
         ) {
             _typeDeclarationSyntax = node;
@@ -33,6 +34,9 @@ namespace SyntaxTree.Models.Entities {
                     case PropertyDeclarationSyntax property:
                         _properties.Add(new Property(property, this));
                         break;
+                    case TypeDeclarationSyntax type:
+                        _entities.Add(type.ToEntity(this));
+                        break;
                 }
             }
 
@@ -44,16 +48,24 @@ namespace SyntaxTree.Models.Entities {
         public IEnumerable<IModifier> GetModifiers() => _typeDeclarationSyntax.Modifiers.ToModifiers();
         public IEnumerable<IMethod> GetMethods() => _methods.AsReadOnly();
         public IEnumerable<IProperty> GetProperties() => _properties.AsReadOnly();
+        public IEnumerable<IEntity> GetEntities() => _entities.AsReadOnly();
         public IEnumerable<TypeSyntax> GetBases() => _bases;
 
         public abstract EntityType GetEntityType();
+
+        public Dictionary<string, IEntity> GetAllEntities() =>
+            _entities.OfType<IEntitiesContainer>()
+                .Select(e => e.GetAllEntities())
+                .Append(_entities.ToDictionary(e => e.GetFullName()))
+                .SelectMany(d => d)
+                .ToDictionary(p => p.Key, p => p.Value);
 
         public string GetFullName() {
             if (_parent is INamespace names) return $"{names.GetNamespace()}.{GetName()}";
             return GetName();
         }
 
-        public IEnumerable<IRelation> GetRelations() => _parent.GetRelations(this);
+        public IEnumerable<IRelation> GetRelations() => _parent.GetRoot().GetRelations(this);
 
         public virtual IEnumerable<IMethod> GetAllMethods() {
             List<IMethod> methods = new List<IMethod>(GetMethods());
@@ -65,7 +77,18 @@ namespace SyntaxTree.Models.Entities {
             return methods.AsReadOnly();
         }
 
-        public IRoot GetParent() => _parent;
+        public virtual IEnumerable<IField> GetAllFields() {
+            return GetProperties()
+                .Where(p => p.IsField())
+                .Select(p => p.GetField());
+        }
+
+        public string GetNamespace() {
+            if (GetParent() is INamedEntitiesContainer name) return $"{name.GetNamespace()}.{GetName()}";
+            return GetName();
+        }
+
+        public IEntitiesContainer GetParent() => _parent;
 
         public override string ToString() => GetName();
     }

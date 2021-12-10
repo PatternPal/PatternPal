@@ -115,14 +115,17 @@ namespace SyntaxTree {
     }
 
     public static class UsingUtil {
-        public static IEnumerable<string> GetAllAccessNamespaces(this IRoot root) {
+        public static IEnumerable<string> GetAllAccessNamespaces(this IEntitiesContainer root) {
             var namespaces = new List<string>();
             if (root is INamespace names) {
-                namespaces.AddRange(names.GetParent().GetAllAccessNamespaces());
+                namespaces.AddRange(names.GetRoot().GetAllAccessNamespaces());
                 namespaces.Add(names.GetName());
             }
-            
-            namespaces.AddRange(root.GetUsing().Select(x => x.Name.ToString()));
+
+            if (root is IUsingContainer usingContainer) {
+                namespaces.AddRange(usingContainer.GetUsing().Select(x => x.Name.ToString()));
+            }
+
             namespaces.Add("");
 
             return namespaces;

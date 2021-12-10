@@ -6,7 +6,7 @@ namespace SyntaxTree.Models.Entities {
     public class Interface : AbstractEntity, IInterface {
         private readonly InterfaceDeclarationSyntax _typeDeclarationSyntax;
 
-        public Interface(InterfaceDeclarationSyntax typeDeclarationSyntax, IRoot parent) : base(
+        public Interface(InterfaceDeclarationSyntax typeDeclarationSyntax, IEntitiesContainer parent) : base(
             typeDeclarationSyntax, parent
         ) {
             _typeDeclarationSyntax = typeDeclarationSyntax;
