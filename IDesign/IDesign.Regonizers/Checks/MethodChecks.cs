@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
-using IDesign.Recognizers.Abstractions;
-using IDesign.Recognizers.Models;
 using SyntaxTree.Abstractions;
 using SyntaxTree.Abstractions.Entities;
 using SyntaxTree.Abstractions.Members;
@@ -13,6 +11,7 @@ using SyntaxTree.Models.Members.Method;
 namespace IDesign.Recognizers.Checks {
     public static class MethodChecks {
         public static bool CheckReturnType(this IMethod methodSyntax, string returnType) {
+            if (methodSyntax.GetReturnType() == null) return returnType.Equals("void");
             return methodSyntax.GetReturnType()
                 .ToString()
                 .CheckIfTwoStringsAreEqual(returnType);
@@ -47,7 +46,7 @@ namespace IDesign.Recognizers.Checks {
         }
 
         public static bool CheckReturnTypeSameAsCreation(this IMethod methodSyntax) {
-            return methodSyntax.CheckCreationType(methodSyntax.GetReturnType().ToString());
+            return methodSyntax.CheckCreationType(methodSyntax.GetReturnType()?.ToString() ?? "void");
         }
 
         public static bool IsInterfaceMethod(this IMethod methodSyntax, IEntity currentClass) {
@@ -135,7 +134,7 @@ namespace IDesign.Recognizers.Checks {
         public static bool IsEquals(this IMethod methodSyntax, IMethod compareMethod) {
             return methodSyntax.CheckMethodIdentifier(compareMethod.GetName())
                    && methodSyntax.CheckMethodParameterTypes(compareMethod.GetParameters())
-                   && methodSyntax.CheckReturnType(compareMethod.GetReturnType().ToString());
+                   && methodSyntax.CheckReturnType(compareMethod.GetReturnType()?.ToString() ?? "void");
         }
     }
 }

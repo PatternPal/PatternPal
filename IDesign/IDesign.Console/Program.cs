@@ -6,7 +6,6 @@ using IDesign.CommonResources;
 using IDesign.Core;
 using IDesign.Core.Models;
 using IDesign.Recognizers.Abstractions;
-using Microsoft.CodeAnalysis;
 using NDesk.Options;
 
 namespace IDesign.ConsoleApp
@@ -128,9 +127,9 @@ namespace IDesign.ConsoleApp
                 {
                     foreach (var item in selectedDirectories)
                     {
-                        if (results[i].EntityNode.GetSourceFile().Contains(item))
+                        if (results[i].EntityNode.GetRoot().GetSource().Contains(item))
                         {
-                            name = results[i].EntityNode.GetSourceFile().Replace(item, "");
+                            name = results[i].EntityNode.GetRoot().GetSource().Replace(item, "");
                             break;
                         }
                     }

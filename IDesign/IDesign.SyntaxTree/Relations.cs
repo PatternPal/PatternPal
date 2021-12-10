@@ -75,7 +75,7 @@ namespace SyntaxTree {
         private IEntity GetNodeByName(IEntity node, string name) {
             var namespaces = node.GetParent().GetAllAccessNamespaces();
 
-            return namespaces.Select(x => x.Length == 0 ? name : $"${x}.${name}")
+            return namespaces.Select(x => x.Length == 0 ? name : $"{x}.{name}")
                 .Where(x => _entities.ContainsKey(x))
                 .Select(x => _entities[x])
                 .FirstOrDefault();
@@ -100,7 +100,7 @@ namespace SyntaxTree {
                         break;
                     default:
                         Console.Error.WriteLine(
-                            $"EntityType ${edgeNode.GetType()} is not yet supported in DetermineRelations!"
+                            $"EntityType {edgeNode.GetType()} is not yet supported in DetermineRelations!"
                         );
                         continue;
                 }

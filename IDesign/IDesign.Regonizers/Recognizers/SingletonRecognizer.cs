@@ -34,8 +34,8 @@ namespace IDesign.Recognizers.Recognizers {
                 new ElementCheck<IField>(x => !x.CheckMemberModifier("public"), "FieldModifierNotPublic", 1)
             };
 
-            var constructorChecks = new List<ICheck<IConstructor>> {
-                new ElementCheck<IConstructor>(x => !x.CheckModifier("public"), "ConstructorModifierNotPublic", 0.5F)
+            var constructorChecks = new List<ICheck<IMethod>> {
+                new ElementCheck<IMethod>(x => !x.CheckModifier("public"), "ConstructorModifierNotPublic", 0.5F)
             };
 
 
@@ -43,11 +43,11 @@ namespace IDesign.Recognizers.Recognizers {
                 new List<ICheck<IEntity>> {
                     new GroupCheck<IEntity, IMethod>(methodChecks, x => x.GetAllMethods(), "SingletonMethod"),
                     new GroupCheck<IEntity, IField>(
-                        propertyChecks, x => (x is IClass cls) ? cls.GetFields() : Array.Empty<IField>(),
+                        propertyChecks, x => x.GetFields(),
                         "SingletonField"
                     ),
-                    new GroupCheck<IEntity, IConstructor>(
-                        constructorChecks, x => (x is IClass cls) ? cls.GetConstructors() : Array.Empty<IConstructor>(),
+                    new GroupCheck<IEntity, IMethod>(
+                        constructorChecks, x => x.GetConstructors(),
                         "SingletonConstructor"
                     )
                 }, x => new List<IEntity> { entityNode }, "Singleton", GroupCheckType.All

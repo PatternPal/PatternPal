@@ -26,6 +26,6 @@ namespace SyntaxTree.Models.Members.Method {
         public TypeSyntax GetReturnType() => _methodDeclaration.ReturnType;
         public IEntity GetParent() => _parent;
 
-        public override string ToString() => $"${GetName()}()";
+        public override string ToString() => $"{GetName()}()";
     }
 }

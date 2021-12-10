@@ -24,7 +24,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDesign.Extension", "IDesig
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IDesign.CommonResources", "IDesign.CommonResources\IDesign.CommonResources.csproj", "{68B3C66E-D837-4B67-B674-C994BC4E207B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxTree", "SyntaxTree\SyntaxTree.csproj", "{86E26B75-AEA1-43FA-AEC5-A81131606D13}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDesign.SyntaxTree", "IDesign.SyntaxTree\IDesign.SyntaxTree.csproj", "{86E26B75-AEA1-43FA-AEC5-A81131606D13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

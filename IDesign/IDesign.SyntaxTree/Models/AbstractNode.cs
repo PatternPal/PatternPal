@@ -17,5 +17,7 @@ namespace SyntaxTree.Models {
         public SyntaxNode GetSyntaxNode() => _node;
 
         public IRoot GetRoot() => _root;
+
+        public override string ToString() { return GetName(); }
     }
 }

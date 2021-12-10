@@ -49,7 +49,7 @@ namespace SyntaxTree.Models.Entities {
         public abstract EntityType GetEntityType();
 
         public string GetFullName() {
-            if (_parent is INamespace names) return $"${names.GetNamespace()}.${GetName()}";
+            if (_parent is INamespace names) return $"{names.GetNamespace()}.{GetName()}";
             return GetName();
         }
 
@@ -66,5 +66,7 @@ namespace SyntaxTree.Models.Entities {
         }
 
         public IRoot GetParent() => _parent;
+
+        public override string ToString() => GetName();
     }
 }

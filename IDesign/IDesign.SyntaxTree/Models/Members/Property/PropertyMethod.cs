@@ -34,14 +34,14 @@ namespace SyntaxTree.Models.Members.Property {
 
         public IEntity GetParent() => property.GetParent();
 
-        public override string ToString() { return GetName(); }
+        public override string ToString() => GetName();
     }
 
     public class PropertyGetMethod : PropertyMethod {
         public PropertyGetMethod(Property property, AccessorDeclarationSyntax accessor) : base(property, accessor) {
         }
 
-        public override string GetName() { return $"${property.GetName()}_get"; }
+        public override string GetName() { return $"{property.GetName()}_get"; }
 
         public override IEnumerable<TypeSyntax> GetParameters() { return Array.Empty<TypeSyntax>(); }
         public override TypeSyntax GetReturnType() { return property.GetPropertyType(); }
@@ -51,7 +51,7 @@ namespace SyntaxTree.Models.Members.Property {
         public PropertySetMethod(Property property, AccessorDeclarationSyntax accessor) : base(property, accessor) {
         }
 
-        public override string GetName() { return $"${property.GetName()}_set"; }
+        public override string GetName() { return $"{property.GetName()}_set"; }
 
         public override IEnumerable<TypeSyntax> GetParameters() { return new[] { property.GetPropertyType() }; }
         public override TypeSyntax GetReturnType() { return null; }

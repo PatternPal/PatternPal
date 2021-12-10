@@ -26,5 +26,7 @@ namespace SyntaxTree.Models.Members.Constructor {
 
         public TypeSyntax GetReturnType() => null;
         public IEntity GetParent() => constructor.GetParent();
+
+        public override string ToString() => constructor.ToString();
     }
 }

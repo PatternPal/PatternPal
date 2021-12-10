@@ -4,16 +4,16 @@ using SyntaxTree.Abstractions;
 
 namespace SyntaxTree.Models {
     internal class Modifier : IModifier {
-        private readonly string name;
+        private readonly string _name;
 
         public Modifier(string name) {
-            this.name = name;
+            this._name = name;
         }
 
-        public string GetName() { return name.ToLower(); }
+        public string GetName() { return _name.ToLower(); }
 
         private bool Equals(Modifier other) {
-            return name == other.name;
+            return _name == other._name;
         }
 
         public override bool Equals(object obj) {
@@ -33,8 +33,10 @@ namespace SyntaxTree.Models {
         }
 
         public override int GetHashCode() {
-            return name != null ? name.GetHashCode() : 0;
+            return _name != null ? _name.GetHashCode() : 0;
         }
+
+        public override string ToString() => _name;
     }
 
     public static class Modifiers {
@@ -64,10 +66,10 @@ namespace SyntaxTree.Models {
     }
 
     internal class SyntaxModifier : Modifier {
-        internal readonly SyntaxToken _syntaxToken;
+        internal readonly SyntaxToken syntaxToken;
         
         public SyntaxModifier(SyntaxToken token) : base(token.Text) {
-            _syntaxToken = token;
+            syntaxToken = token;
         }
     }
 }

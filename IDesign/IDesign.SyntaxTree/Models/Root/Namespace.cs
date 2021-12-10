@@ -34,7 +34,7 @@ namespace SyntaxTree.Models.Root {
         public IRoot GetParent() => _parent;
 
         public string GetNamespace() {
-            if (_parent is INamespace name) return $"${name}.${_syntax.Name.ToString()}";
+            if (_parent is INamespace name) return $"{name}.{_syntax.Name.ToString()}";
             return _syntax.Name.ToString();
         }
 

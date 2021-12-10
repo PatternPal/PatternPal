@@ -27,7 +27,7 @@ namespace SyntaxTree.Utils {
                     return new Interface(inter, parent);
             }
 
-            Console.Error.WriteLine($"Entity type: ${syntax.Kind()} is not yet supported!");
+            Console.Error.WriteLine($"Entity type: {syntax.Kind()} is not yet supported!");
             return null;
         }
     }
