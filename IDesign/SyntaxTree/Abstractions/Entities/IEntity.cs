@@ -1,0 +1,46 @@
+﻿using System.Collections.Generic;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SyntaxTree.Abstractions.Members;
+using SyntaxTree.Abstractions.Root;
+
+namespace SyntaxTree.Abstractions.Entities {
+    public interface IEntity: INode, IModified, IChild<IRoot> {
+        /// <summary>
+        ///     Get a list of methods declared in this node
+        /// </summary>
+        /// <returns>A list of methods</returns>
+        IEnumerable<IMethod> GetMethods();
+        
+        /// <summary>
+        ///     Get a list of properties declared in this node
+        /// </summary>
+        /// <returns>A list of properties</returns>
+        IEnumerable<IProperty> GetProperties();
+        
+        /// <summary>
+        ///     Get a list of bases of this note (overrides / implementations)
+        /// </summary>
+        /// <returns>A list of types</returns>
+        IEnumerable<TypeSyntax> GetBases();
+
+        /// <summary>
+        ///     Gets the type of this entity
+        /// </summary>
+        EntityType GetEntityType();
+
+        /// <summary>
+        ///     Get the name with included namespace
+        /// </summary>
+        /// <returns></returns>
+        string GetFullName();
+        
+        IEnumerable<IRelation> GetRelations();
+
+        IEnumerable<IMethod> GetMethodsAndProperties();
+    }
+
+    public enum EntityType {
+        Class, Interface
+        //TODO ENUM, STRUCT
+    }
+}

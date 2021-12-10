@@ -4,8 +4,11 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SyntaxTree.Abstractions;
+using SyntaxTree.Abstractions.Entities;
+using SyntaxTree.Abstractions.Members;
+using SyntaxTree.Abstractions.Root;
 
-namespace SyntaxTree.Models.Property {
+namespace SyntaxTree.Models.Members.Property {
     public abstract class PropertyMethod : IMethod {
         protected readonly Property property;
         private readonly AccessorDeclarationSyntax _accessor;
@@ -16,14 +19,12 @@ namespace SyntaxTree.Models.Property {
         }
 
         public abstract string GetName();
-
-        public SyntaxNode GetSyntaxNode() { return _accessor ?? property.GetSyntaxNode(); }
-
-        public IEnumerable<IModifier> GetModifiers() {
-            return property.GetModifiers();
-        }
-
         public abstract IEnumerable<TypeSyntax> GetParameters();
+        public abstract TypeSyntax GetReturnType();
+
+        public SyntaxNode GetSyntaxNode() => _accessor ?? property.GetSyntaxNode();
+        public IRoot GetRoot() => property.GetRoot();
+        public IEnumerable<IModifier> GetModifiers() => property.GetModifiers();
 
         public CSharpSyntaxNode GetBody() {
             return (CSharpSyntaxNode)_accessor?.Body
@@ -31,7 +32,7 @@ namespace SyntaxTree.Models.Property {
                    ?? property.propertyDeclarationSyntax.ExpressionBody;
         }
 
-        public TypeSyntax GetReturnType() { return property.GetPropertyType(); }
+        public IEntity GetParent() => property.GetParent();
 
         public override string ToString() { return GetName(); }
     }
@@ -43,6 +44,7 @@ namespace SyntaxTree.Models.Property {
         public override string GetName() { return $"${property.GetName()}_get"; }
 
         public override IEnumerable<TypeSyntax> GetParameters() { return Array.Empty<TypeSyntax>(); }
+        public override TypeSyntax GetReturnType() { return property.GetPropertyType(); }
     }
 
     public class PropertySetMethod : PropertyMethod {
@@ -52,5 +54,6 @@ namespace SyntaxTree.Models.Property {
         public override string GetName() { return $"${property.GetName()}_set"; }
 
         public override IEnumerable<TypeSyntax> GetParameters() { return new[] { property.GetPropertyType() }; }
+        public override TypeSyntax GetReturnType() { return null; }
     }
 }

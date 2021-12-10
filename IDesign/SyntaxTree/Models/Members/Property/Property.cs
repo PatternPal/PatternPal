@@ -4,27 +4,29 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SyntaxTree.Abstractions;
+using SyntaxTree.Abstractions.Entities;
+using SyntaxTree.Abstractions.Members;
 using SyntaxTree.Utils;
 
-namespace SyntaxTree.Models.Property {
-    public class Property : IProperty {
+namespace SyntaxTree.Models.Members.Property {
+    public class Property : AbstractNode, IProperty {
         internal readonly PropertyDeclarationSyntax propertyDeclarationSyntax;
+        private readonly IEntity _parent;
 
-        public Property(PropertyDeclarationSyntax propertyDeclarationSyntax) {
-            this.propertyDeclarationSyntax = propertyDeclarationSyntax;
+        public Property(PropertyDeclarationSyntax node, IEntity parent) : base(node, parent.GetRoot()) {
+            propertyDeclarationSyntax = node;
+            _parent = parent;
         }
 
-        public string GetName() {
-            return propertyDeclarationSyntax.Identifier.Text;
-        }
+        public override string GetName() => propertyDeclarationSyntax.Identifier.Text;
 
-        public SyntaxNode GetSyntaxNode() {
-            return propertyDeclarationSyntax;
-        }
+        public IEnumerable<IModifier> GetModifiers() => propertyDeclarationSyntax.Modifiers.ToModifiers();
 
-        public IEnumerable<IModifier> GetModifiers() {
-            return propertyDeclarationSyntax.Modifiers.ToModifiers();
-        }
+        public IField GetField() => new PropertyField(this);
+
+        public TypeSyntax GetPropertyType() => propertyDeclarationSyntax.Type;
+
+        public IEntity GetParent() => _parent;
 
         public bool HasGetter() {
             if (propertyDeclarationSyntax.ExpressionBody != null) return true;
@@ -57,9 +59,5 @@ namespace SyntaxTree.Models.Property {
             return accessors.Any(SyntaxKind.GetAccessorDeclaration) &&
                    accessors.All(a => a.Body == null && a.ExpressionBody == null);
         }
-
-        public IField GetField() { return new PropertyField(this); }
-        
-        public TypeSyntax GetPropertyType() { return propertyDeclarationSyntax.Type; }
     }
 }
