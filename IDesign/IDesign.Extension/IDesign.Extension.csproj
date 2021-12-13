@@ -82,7 +82,7 @@
     <Compile Include="ViewModels\CheckResultViewModel.cs" />
     <Compile Include="ViewModels\DesignPatternViewModel.cs" />
     <Compile Include="ExtensionWindow.cs" />
-    <Compile Include="ExtensionWindowCommand.cs" />
+    <Compile Include="Commands\ExtensionWindowCommand.cs" />
     <Compile Include="ExtensionWindowControl.xaml.cs">
       <DependentUpon>ExtensionWindowControl.xaml</DependentUpon>
     </Compile>
