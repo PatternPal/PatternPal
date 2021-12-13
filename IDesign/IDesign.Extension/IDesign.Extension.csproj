@@ -53,8 +53,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Commands\NavigateHomeCommand.cs" />
-    <Compile Include="Commands\NavigateStepByStepListCommand.cs" />
+    <Compile Include="Commands\NavigateCommand.cs" />
     <Compile Include="LeftMarginMultiplierConverter.cs" />
     <Compile Include="Resources\ExtensionUIResources.Designer.cs">
       <AutoGen>True</AutoGen>

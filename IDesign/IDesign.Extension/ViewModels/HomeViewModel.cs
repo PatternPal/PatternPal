@@ -10,7 +10,8 @@ namespace IDesign.Extension.ViewModels
 
         public HomeViewModel(NavigationStore navigationStore)
         {
-            NavigateStepByStepListCommand = new NavigateStepByStepListCommand(navigationStore);
+            var stepByStepListViewModel = new StepByStepListViewModel(navigationStore);
+            NavigateStepByStepListCommand = new NavigateCommand<StepByStepListViewModel>(navigationStore, () => stepByStepListViewModel);
         }
     }
 }

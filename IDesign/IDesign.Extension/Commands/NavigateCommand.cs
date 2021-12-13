@@ -9,15 +9,17 @@ using System.Windows.Input;
 
 namespace IDesign.Extension.Commands
 {
-    public class NavigateHomeCommand : ICommand
+    public class NavigateCommand<T> : ICommand where T : ViewModel
     {
         public event EventHandler CanExecuteChanged;
         
         private NavigationStore _navigationStore { get; }
+        private Func<T> _getViewModel { get; }
 
-        public NavigateHomeCommand(NavigationStore navigationStore)
+        public NavigateCommand(NavigationStore navigationStore, Func<T> getViewModel)
         {
             _navigationStore = navigationStore;
+            _getViewModel = getViewModel;
         }
 
         public bool CanExecute(object parameter)
@@ -27,7 +29,7 @@ namespace IDesign.Extension.Commands
 
         public void Execute(object parameter)
         {
-            _navigationStore.CurrentViewModel = new HomeViewModel(_navigationStore);
+            _navigationStore.CurrentViewModel = _getViewModel();
         }
     }
 }

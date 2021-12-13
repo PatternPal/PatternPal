@@ -15,7 +15,8 @@ namespace IDesign.Extension.ViewModels
         
         public StepByStepListViewModel(NavigationStore navigationStore)
         {
-            NavigateHomeCommand = new NavigateHomeCommand(navigationStore);
+            HomeViewModel homeViewModel = new HomeViewModel(navigationStore);
+            NavigateHomeCommand = new NavigateCommand<HomeViewModel>(navigationStore, () => homeViewModel);
         }
     }
 }
