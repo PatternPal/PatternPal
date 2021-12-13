@@ -16,14 +16,8 @@ namespace IDesign.Extension.ViewModels
         
         public ViewModel CurrentViewModel
         {
-            get
-            {
-                return _navigationStore.CurrentViewModel;
-            }
-            set
-            {
-                _navigationStore.CurrentViewModel = value;
-            }
+            get => _navigationStore.CurrentViewModel;
+            set => _navigationStore.CurrentViewModel = value;
         }
 
         public MainViewModel(NavigationStore navigationStore)
