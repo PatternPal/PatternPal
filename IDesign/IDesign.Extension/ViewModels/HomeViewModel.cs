@@ -7,11 +7,14 @@ namespace IDesign.Extension.ViewModels
     public class HomeViewModel : ViewModel
     {
         public ICommand NavigateStepByStepListCommand { get; }
+        public ICommand NavigateDetectorCommand { get; }
+
+        public override string Title => "IDesign";
 
         public HomeViewModel(NavigationStore navigationStore)
         {
-            var stepByStepListViewModel = new StepByStepListViewModel(navigationStore);
-            NavigateStepByStepListCommand = new NavigateCommand<StepByStepListViewModel>(navigationStore, () => stepByStepListViewModel);
+            NavigateStepByStepListCommand = new NavigateCommand<StepByStepListViewModel>(navigationStore, () => new StepByStepListViewModel(navigationStore));
+            NavigateDetectorCommand = new NavigateCommand<DetectorViewModel>(navigationStore, () => new DetectorViewModel());
         }
     }
 }

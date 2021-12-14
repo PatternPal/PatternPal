@@ -20,6 +20,8 @@ namespace IDesign.Extension.ViewModels
             set => _navigationStore.CurrentViewModel = value;
         }
 
+        public override string Title => "IDesign";
+
         public MainViewModel(NavigationStore navigationStore)
         {
             _navigationStore = navigationStore;

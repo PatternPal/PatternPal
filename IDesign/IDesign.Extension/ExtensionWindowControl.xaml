@@ -25,7 +25,12 @@
                 <views:StepByStepListView/>
             </DataTemplate>
         </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
 
-        <ContentControl Content="{Binding CurrentViewModel}"/>
+        <TextBlock Text="{Binding CurrentViewModel.Title}" Grid.Row="0"/>
+        <ContentControl Content="{Binding CurrentViewModel}" Grid.Row="1" />
     </Grid>
 </UserControl>

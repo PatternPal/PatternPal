@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace IDesign.Extension.ViewModels
 {
-    public class ViewModel : INotifyPropertyChanged
+    public abstract class ViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public abstract string Title { get; }
 
         /// <summary>
         /// Invoke PropertyChanged event for given property name.

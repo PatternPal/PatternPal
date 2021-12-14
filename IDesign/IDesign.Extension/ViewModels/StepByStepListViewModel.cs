@@ -11,12 +11,13 @@ namespace IDesign.Extension.ViewModels
 {
     public class StepByStepListViewModel : ViewModel
     {
+        public override string Title => "Step By Step Instructions";
+
         public ICommand NavigateHomeCommand { get; }
-        
+
         public StepByStepListViewModel(NavigationStore navigationStore)
         {
-            HomeViewModel homeViewModel = new HomeViewModel(navigationStore);
-            NavigateHomeCommand = new NavigateCommand<HomeViewModel>(navigationStore, () => homeViewModel);
+            NavigateHomeCommand = new NavigateCommand<HomeViewModel>(navigationStore, () => new HomeViewModel(navigationStore));
         }
     }
 }
