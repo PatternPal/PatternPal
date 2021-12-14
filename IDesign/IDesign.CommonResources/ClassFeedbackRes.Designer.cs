@@ -655,7 +655,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Class should be abstract or an interface..
+        ///   Looks up a localized string similar to Node should be an abstract class or an interface..
         /// </summary>
         public static string NodeAbstractOrInterface {
             get {
