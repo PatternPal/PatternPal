@@ -13,6 +13,14 @@
              d:DesignHeight="600" d:DesignWidth="300"
              Name="IDesignExtension">
 
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.Resources>
             <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}">
@@ -29,8 +37,10 @@
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-
-        <TextBlock Text="{Binding CurrentViewModel.Title}" Grid.Row="0"/>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" MaxWidth="300">
+            <Image Source="Resources/logo.png" HorizontalAlignment="Center" MaxHeight="80" VerticalAlignment="Top" />
+            <TextBlock Text="{Binding CurrentViewModel.Title}" VerticalAlignment="Center" FontSize="50"/>
+        </StackPanel>
         <ContentControl Content="{Binding CurrentViewModel}" Grid.Row="1" />
     </Grid>
 </UserControl>
