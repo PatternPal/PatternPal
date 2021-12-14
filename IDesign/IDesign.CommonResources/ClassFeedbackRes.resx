@@ -316,7 +316,7 @@
     <value>Method should return {0}.</value>
   </data>
   <data name="NodeAbstractOrInterface" xml:space="preserve">
-    <value>Class should be abstract or an interface.</value>
+    <value>Node should be an abstract class or an interface.</value>
   </data>
   <data name="NodeDoesNotCreate" xml:space="preserve">
     <value>Should not create other classes.</value>

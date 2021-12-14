@@ -18,9 +18,7 @@ namespace IDesign.Recognizers
         public IResult Recognize(IEntityNode entityNode)
         {
             Result result = new Result();
-            IRelation currentRelation = null;
-            string implementerField = null;
-
+            List<ICheck<IEntityNode>> abstractionGroupCheckList = null;
             List<ICheck<IEntityNode>> implementerChecks = new List<ICheck<IEntityNode>>
             {
                 // Implementer is an abstract class or an interface
@@ -52,15 +50,20 @@ namespace IDesign.Recognizers
                 "BridgeImplementer"
             );
 
-            GroupCheck<IEntityNode, IEntityNode> abstractionGroupCheck = new GroupCheck<IEntityNode, IEntityNode>(new List<ICheck<IEntityNode>>
+            abstractionGroupCheckList = new List<ICheck<IEntityNode>>
             {
-                // The abstraction should be an abstract class
-                new ElementCheck<IEntityNode>(x => x.CheckIsAbstractClass(), "NodeModifierAbstract", 0.5f),
-
-                // Abstraction should be inherited
+                // The abstraction should be an abstract class or an interface
                 new ElementCheck<IEntityNode>(
-                    x => x.CheckRelationType(RelationType.ExtendedBy),
-                    "NodeInherited",
+                    x => x.CheckIsAbstractClassOrInterface(),
+                    "NodeAbstractOrInterface",
+                    0.5f
+                ),
+
+                // Abstraction should be inherited or implemented
+                new ElementCheck<IEntityNode>(
+                    x => x.CheckRelationType(RelationType.ExtendedBy) ||
+                         x.CheckRelationType(RelationType.ImplementedBy),
+                    "NodeImplementedOrInherited",
                     6f
                 ),
 
@@ -70,48 +73,35 @@ namespace IDesign.Recognizers
                     "NodeUses1",
                     3f
                 ),
+            };
 
-                new GroupCheck<IEntityNode, IRelation>(new List<ICheck<IRelation>>
-                {
-                    // Abstraction uses the Implementer
-                    new ElementCheck<IRelation>(
-                        x =>
-                        {
-                            currentRelation = x;
-                            return x.GetRelationType() == RelationType.Uses;
-                        }, 
-                        "AbstractionUsesImplementer",
-                        2f
-                    ),
+            var abstractionAsClassGroupcheckList = GetAbstractionGroupCheckList(entityNode, entityNode.GetFields());
 
-                    // Abstraction has a reference to the implementer
-                    new GroupCheck<IRelation, IField>(new List<ICheck<IField>>
-                    {
-                        new ElementCheck<IField>(
-                            x =>
-                            {
-                                implementerField = x.GetName();
-                                return x.CheckFieldType(new List<string>{ currentRelation.GetDestination().GetName() });
-                            },
-                            "AbstractionHasImplementerReference",
-                            7f
-                        ),
+            var abstractionAsInterfaceGroupcheckList = GetAbstractionGroupCheckList(
+                entityNode,
+                entityNode?
+                    .GetRelations()
+                    .Where(y => y.GetRelationType().Equals(RelationType.ImplementedBy))
+                    .FirstOrDefault()?
+                    .GetDestination()
+                    .GetFields()
+            );
 
-                        new GroupCheck<IField, IMethod>(new List<ICheck<IMethod>>
-                        {
-                            new ElementCheck<IMethod>(
-                                x => x.CheckFieldIsUsed(implementerField),
-                                "ImplementerMethodsUsedInAbstraction",
-                                5f
-                            ),
+            if (entityNode.CheckEntityNodeType(EntityNodeType.Interface))
+            {
+                abstractionGroupCheckList.AddRange(abstractionAsInterfaceGroupcheckList);
+            }
+            else
+            {
+                abstractionGroupCheckList.AddRange(abstractionAsClassGroupcheckList);
+            }
 
-                        }, x => entityNode.GetMethodsAndProperties(), "ImplementerMethods")
-
-                    }, x => entityNode.GetFields(), "ImplementerReference")
-
-                }, x => entityNode.GetRelations(), "Abstraction")
-
-            }, x => new List<IEntityNode> { entityNode }, "BridgeAbstraction");
+            GroupCheck<IEntityNode, IEntityNode> abstractionGroupCheck =
+                new GroupCheck<IEntityNode, IEntityNode>(
+                    abstractionGroupCheckList,
+                    x => new List<IEntityNode> { entityNode },
+                    "BridgeAbstraction"
+                );
 
             var bridgeGroupCheck = new GroupCheck<IEntityNode, IEntityNode>(
                 new List<ICheck<IEntityNode>>
@@ -127,5 +117,62 @@ namespace IDesign.Recognizers
 
             return result;
         }
+
+        public List<ICheck<IEntityNode>> GetAbstractionGroupCheckList(IEntityNode entityNode, IEnumerable<IField> fieldsToCheck)
+        {
+            IRelation currentRelation = null;
+            string implementerField = null;
+
+            return new List<ICheck<IEntityNode>>()
+            {
+                new GroupCheck<IEntityNode, IRelation>(new List<ICheck<IRelation>>
+                {
+                    // Abstraction uses the Implementer
+                    new ElementCheck<IRelation>(
+                        x =>
+                        {
+                            currentRelation = x;
+                            return x.GetRelationType() == RelationType.Uses;
+                        },
+                        "AbstractionUsesImplementer",
+                        2f
+                    ),
+
+                    // Abstraction has a reference to the implementer
+                    new GroupCheck<IRelation, IField>(new List<ICheck<IField>>
+                        {
+                            new ElementCheck<IField>(
+                                x =>
+                                {
+                                    implementerField = x.GetName();
+                                    return x.CheckFieldType(new List<string>{ currentRelation.GetDestination().GetName() });
+                                },
+                                "AbstractionHasImplementerReference",
+                                7f
+                            ),
+
+                            new GroupCheck<IField, IMethod>(new List<ICheck<IMethod>>
+                                {
+                                    new ElementCheck<IMethod>(
+                                        x =>
+                                        {
+                                            return x.CheckFieldIsUsed(implementerField);
+                                        },
+                                        "ImplementerMethodsUsedInAbstraction",
+                                        5f
+                                    ),
+                                },
+                                x => entityNode.GetMethodsAndProperties(),
+                                "ImplementerMethods"
+                            ),
+                        },
+                        x => fieldsToCheck,
+                        "ImplementerReference"
+                    )
+
+                }, x => entityNode.GetRelations(), "Abstraction")
+            };
+        }
     }
 }
+    
