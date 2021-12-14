@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Abstraction" xml:space="preserve">
+    <value>Abstraction class</value>
+  </data>
+  <data name="AbstractionHasImplementerReference" xml:space="preserve">
+    <value>Abstraction contains a reference to the Implementer</value>
+  </data>
+  <data name="AbstractionUsesImplementer" xml:space="preserve">
+    <value>Should use the Implementer</value>
+  </data>
   <data name="AbstractState" xml:space="preserve">
     <value>Abstract State</value>
   </data>
@@ -245,6 +254,18 @@
   </data>
   <data name="ImplementerAbstractOrInterface" xml:space="preserve">
     <value>Implementer should be an abstract class or an interface</value>
+  </data>
+  <data name="ImplementerMethods" xml:space="preserve">
+    <value>Implementer methods</value>
+  </data>
+  <data name="ImplementerMethodsUsedInAbstraction" xml:space="preserve">
+    <value>Should be used by Abstraction methods</value>
+  </data>
+  <data name="ImplementerReference" xml:space="preserve">
+    <value>Implementer reference</value>
+  </data>
+  <data name="ImplementerUsedByAbstraction" xml:space="preserve">
+    <value>Implementer should be used by the abstraction</value>
   </data>
   <data name="MethodAmountThree" xml:space="preserve">
     <value>There should be at least 3 methods: add, remove and notify.</value>
