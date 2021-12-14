@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SyntaxTree.Abstractions;
 using SyntaxTree.Abstractions.Entities;
@@ -68,7 +69,11 @@ namespace SyntaxTree {
         }
 
         private void CreateUsingEdges(IEntity entity) {
-            var childNodes = entity.GetSyntaxNode().DescendantNodes(n => true);
+            var childNodes = new List<SyntaxNode>();
+            foreach (var member in entity.GetMembers()) {
+                childNodes.AddRange(member.GetSyntaxNode().DescendantNodes(n => true));
+            }
+
             foreach (var identifier in childNodes.OfType<IdentifierNameSyntax>()) {
                 if (identifier is IdentifierNameSyntax name) {
                     AddRelation(entity, RelationType.Uses, name.ToString());

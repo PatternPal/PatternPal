@@ -48,6 +48,9 @@ namespace SyntaxTree.Models.Entities {
         public IEnumerable<IModifier> GetModifiers() => _typeDeclarationSyntax.Modifiers.ToModifiers();
         public IEnumerable<IMethod> GetMethods() => _methods.AsReadOnly();
         public IEnumerable<IProperty> GetProperties() => _properties.AsReadOnly();
+
+        public virtual IEnumerable<IMember> GetMembers() { return _methods.Cast<IMember>().Concat(_properties); }
+
         public IEnumerable<IEntity> GetEntities() => _entities.AsReadOnly();
         public IEnumerable<TypeSyntax> GetBases() => _bases;
 

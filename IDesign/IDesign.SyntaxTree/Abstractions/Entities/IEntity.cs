@@ -18,6 +18,12 @@ namespace SyntaxTree.Abstractions.Entities {
         IEnumerable<IProperty> GetProperties();
 
         /// <summary>
+        ///     Gets a list of all methods, field, properties and constructors. Maybe more in the futher 
+        /// </summary>
+        /// <returns>A list of Members</returns>
+        IEnumerable<IMember> GetMembers();
+
+        /// <summary>
         ///     Get a list of bases of this note (overrides / implementations)
         /// </summary>
         /// <returns>A list of types</returns>

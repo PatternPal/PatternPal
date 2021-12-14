@@ -1,4 +1,7 @@
-﻿using IDesign.Recognizers.Recognizers;
+﻿using System;
+using IDesign.CommonResources;
+using IDesign.Recognizers.Abstractions;
+using IDesign.Recognizers.Recognizers;
 using IDesign.Tests.Utils;
 using NUnit.Framework;
 using SyntaxTree;
@@ -35,7 +38,36 @@ namespace IDesign.Tests.Recognizers {
             var entityNodes = graph.GetAll();
             var result = strategy.Recognize(entityNodes[nameSpaceName + "." + filename]);
 
+            foreach (var checkResult in result.GetResults()) {
+                PrintResult(checkResult, 1);
+            }
+
             Assert.That(result.GetScore(), Is.InRange(minScore, maxScore));
+        }
+
+        public static void PrintResult(ICheckResult result, int depth) {
+            Console.ForegroundColor = ConsoleColor.Red;
+            var symbol = "X";
+
+            switch (result.GetFeedbackType()) {
+                case FeedbackType.SemiCorrect:
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    symbol = "-";
+                    break;
+                case FeedbackType.Correct:
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    symbol = "✓";
+                    break;
+            }
+
+            Console.WriteLine(
+                new string('\t', depth) + symbol +
+                $"{ResourceUtils.ResultToString(result)} | {result.GetScore()}p / {result.GetTotalChecks()}p"
+            );
+
+            foreach (var child in result.GetChildFeedback()) {
+                PrintResult(child, depth + 1);
+            }
         }
     }
 }

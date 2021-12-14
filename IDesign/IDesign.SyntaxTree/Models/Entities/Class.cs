@@ -44,5 +44,9 @@ namespace SyntaxTree.Models.Entities {
         public override IEnumerable<IField> GetAllFields() {
             return base.GetAllFields().Concat(GetFields());
         }
+
+        public override IEnumerable<IMember> GetMembers() {
+            return base.GetMembers().Concat(_fields).Concat(_constructors);
+        }
     }
 }

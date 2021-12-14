@@ -36,6 +36,8 @@ namespace SyntaxTree.Models.Members.Constructor {
 
         public IClass GetParent() => _parent;
 
+        IEntity IChild<IEntity>.GetParent() { return GetParent(); }
+
         public override string ToString() => $"{GetName()}()";
     }
 }

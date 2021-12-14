@@ -103,7 +103,7 @@ namespace IDesign.ConsoleApp {
         private static void PrintResults(List<RecognitionResult> results, List<string> selectedDirectories) {
             Console.WriteLine("\nResults:");
 
-            results = results.Where(x => x.Result.GetScore() >= 80).ToList();
+            results = results.Where(x => x.Result.GetScore() >= 60).ToList();
 
             for (var i = 0; i < results.Count; i++) {
                 var name = results[i].EntityNode.GetName();
