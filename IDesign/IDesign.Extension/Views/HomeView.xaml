@@ -57,16 +57,16 @@
 
             <StackPanel Grid.Row="0" Name="ButtonsPanel" HorizontalAlignment="Center" Orientation="Vertical">
                 <StackPanel Margin="20,20,20,0">
-                    <Button Content="Exercises" Height="40" FontSize="15"/>
-                    <TextBlock TextWrapping="Wrap" Text="Practice and learn using exercises" Width="150"/>
+                    <Button Content="{x:Static UIResources:ExtensionUIResources.ExercisesTitle}" Height="40" FontSize="15"/>
+                    <TextBlock TextWrapping="Wrap" Text="{x:Static UIResources:ExtensionUIResources.ExercisesDescription}" Width="150"/>
                 </StackPanel>
                 <StackPanel Margin="20,20,20,0">
-                    <Button Content="Step-by-Step" Height="40" FontSize="15"/>
-                    <TextBlock TextWrapping="Wrap" Text="Implement a pattern using step-by-step instructions" Width="150"/>
+                    <Button Content="{x:Static UIResources:ExtensionUIResources.StepByStepTitle}" Height="40" FontSize="15"/>
+                    <TextBlock TextWrapping="Wrap" Text="{x:Static UIResources:ExtensionUIResources.StepByStepDescription}" Width="150"/>
                 </StackPanel>
                 <StackPanel Margin="20,20,20,0">
-                    <Button Content="Detector" Height="40" FontSize="15" Command="{Binding NavigateDetectorCommand}"/>
-                    <TextBlock TextWrapping="Wrap" Text="Analyze your code for design patterns" Width="150"/>
+                    <Button Content="{x:Static UIResources:ExtensionUIResources.DetectorTitle}" Height="40" FontSize="15" Command="{Binding NavigateDetectorCommand}"/>
+                    <TextBlock TextWrapping="Wrap" Text="{x:Static UIResources:ExtensionUIResources.DetectorDescription}" Width="150"/>
                 </StackPanel>
             </StackPanel>
         </Grid>
