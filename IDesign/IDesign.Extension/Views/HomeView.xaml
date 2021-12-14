@@ -11,5 +11,8 @@
         <Button Command="{Binding NavigateStepByStepListCommand}">
             <TextBlock Text="Navigate to Step by Step List" VerticalAlignment="Center" FontSize="48" />
         </Button>
+        <Button Command="{Binding NavigateDetectorCommand}">
+            <TextBlock Text="Navigate to Detector" VerticalAlignment="Center" FontSize="48" />
+        </Button>
     </StackPanel>
 </UserControl>
