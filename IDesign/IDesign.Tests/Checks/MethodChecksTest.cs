@@ -1,10 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using IDesign.Recognizers.Checks;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using IDesign.Tests.Utils;
 using NUnit.Framework;
 using SyntaxTree.Abstractions.Members;
-using SyntaxTree.Models.Members.Method;
 
 namespace IDesign.Tests.Checks {
     public class MethodTest {
@@ -19,13 +18,7 @@ namespace IDesign.Tests.Checks {
         [TestCase("int", @"public bool TestMethod(){}", false)]
         [TestCase("Class", @"public void TestMethod(){}", false)]
         public void ReturnTypeCheck_Should_Return_CorrectRepsonse(string returnType, string code, bool shouldBeValid) {
-            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var methodSyntax = root.Members[0] as MethodDeclarationSyntax;
-            if (methodSyntax == null) {
-                Assert.Fail();
-            }
-
-            var method = new Method(methodSyntax, null);
+            var method = EntityNodeUtils.CreateMethod(code);
 
             Assert.AreEqual(shouldBeValid, method.CheckReturnType(returnType));
         }
@@ -39,14 +32,9 @@ namespace IDesign.Tests.Checks {
         [TestCase("private", @"public Class[] TestMethod(){}", false)]
         [TestCase("public", @"private static void TestMethod(){}", false)]
         public void ModifierCheck_Should_Return_CorrectResponse(string modifier, string code, bool shouldBeValid) {
-            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var method = root.Members[0] as MethodDeclarationSyntax;
+            var method = EntityNodeUtils.CreateMethod(code);
 
-            if (method == null) {
-                Assert.Fail();
-            }
-
-            Assert.AreEqual(shouldBeValid, new Method(method, null).CheckModifier(modifier));
+            Assert.AreEqual(shouldBeValid, method.CheckModifier(modifier));
         }
 
         [Test]
@@ -56,14 +44,9 @@ namespace IDesign.Tests.Checks {
         [TestCase(@"public void TestMethod(){this.x = new int();}", true)]
         [TestCase(@"public void TestMethod(){string x  = new double().parse();}", true)]
         public void CreationalCheck_Should_Return_CorrectResponse(string code, bool shouldBeVaild) {
-            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var method = root.Members[0] as MethodDeclarationSyntax;
+            var method = EntityNodeUtils.CreateMethod(code);
 
-            if (method == null) {
-                Assert.Fail();
-            }
-
-            Assert.AreEqual(shouldBeVaild, new Method(method, null).CheckCreationalFunction());
+            Assert.AreEqual(shouldBeVaild, method.CheckCreationalFunction());
         }
 
         [Test]
@@ -73,14 +56,9 @@ namespace IDesign.Tests.Checks {
         [TestCase(@"public Class TestMethod(){var x = new Class(); return x;}", true)]
         [TestCase(@"public int TestMethod(){var x = new Class(); return new int();}", false)]
         public void ReturnClassCheck_Should_Return_CorrectResponse(string code, bool shouldBeVaild) {
-            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var method = root.Members[0] as MethodDeclarationSyntax;
+            var method = EntityNodeUtils.CreateMethod(code);
 
-            if (method == null) {
-                Assert.Fail();
-            }
-
-            Assert.AreEqual(shouldBeVaild, new Method(method, null).CheckReturnTypeSameAsCreation());
+            Assert.AreEqual(shouldBeVaild, method.CheckReturnTypeSameAsCreation());
         }
 
         [Test]
@@ -94,14 +72,9 @@ namespace IDesign.Tests.Checks {
             bool shouldBeVaild,
             params string[] parameters
         ) {
-            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var method = root.Members[0] as MethodDeclarationSyntax;
+            var method = EntityNodeUtils.CreateMethod(code);
 
-            if (method == null) {
-                Assert.Fail();
-            }
-
-            Assert.AreEqual(shouldBeVaild, new Method(method, null).CheckParameters(parameters));
+            Assert.AreEqual(shouldBeVaild, method.CheckParameters(parameters));
         }
 
         [Test]
@@ -117,33 +90,20 @@ namespace IDesign.Tests.Checks {
             bool shouldBeVaild,
             params string[] methodStrings
         ) {
-            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var method = root.Members[0] as MethodDeclarationSyntax;
-            List<IMethod> methods = new List<IMethod>();
-            foreach (var methodString in methodStrings) {
-                var root2 = CSharpSyntaxTree.ParseText(methodString).GetCompilationUnitRoot();
-                methods.Add(new Method(root2.Members[0] as MethodDeclarationSyntax, null));
-            }
+            var method = EntityNodeUtils.CreateMethod(code);
 
-            if (method == null) {
-                Assert.Fail();
-            }
+            List<IMethod> methods = methodStrings.Select(EntityNodeUtils.CreateMethod).Cast<IMethod>().ToList();
 
-            Assert.AreEqual(shouldBeVaild, new Method(method, null).CheckIfNameExists(methods));
+            Assert.AreEqual(shouldBeVaild, method.CheckIfNameExists(methods));
         }
 
         [Test]
         [TestCase(@"public void TestMethod(Test test) : base(test){ }", false, "test")]
         [TestCase(@"public void TestMethod(){ }", false, "test")]
         public void ArgumentCheck_Should_Return_CorrectResponse(string code, bool shouldBeVaild, string args) {
-            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var method = root.Members[0] as MethodDeclarationSyntax;
+            var method = EntityNodeUtils.CreateMethod(code);
 
-            if (method == null) {
-                Assert.Fail();
-            }
-
-            Assert.AreEqual(shouldBeVaild, new Method(method, null).CheckIfArgumentsExists(args));
+            Assert.AreEqual(shouldBeVaild, method.CheckIfArgumentsExists(args));
         }
     }
 }

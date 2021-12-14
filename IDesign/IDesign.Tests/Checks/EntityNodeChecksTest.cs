@@ -45,7 +45,7 @@ namespace IDesign.Tests.Checks {
             bool shouldBeValid
         ) {
             var filesAsString = FileUtils.FilesToString("../../../../TestClasses/Decorator/DecoratorTestCase1");
-            var nameSpace = "IDesign.Tests.TestClasses.Decorator.DecoratorTestCase1";
+            var nameSpace = $"IDesign.Tests.TestClasses.Decorator.DecoratorTestCase1.{className}";
             var graph = new SyntaxGraph();
             var i = 0;
             foreach (var content in filesAsString) {

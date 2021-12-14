@@ -4,9 +4,13 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using NUnit.Framework;
 using SyntaxTree.Abstractions;
 using SyntaxTree.Abstractions.Entities;
+using SyntaxTree.Abstractions.Members;
 using SyntaxTree.Abstractions.Root;
+using SyntaxTree.Models.Members.Field;
+using SyntaxTree.Models.Members.Method;
 using SyntaxTree.Utils;
 
 namespace IDesign.Tests.Utils {
@@ -53,6 +57,26 @@ namespace IDesign.Tests.Utils {
             }
 
             return graph;
+        }
+
+        public static IMethod CreateMethod(string method) {
+            var root = CSharpSyntaxTree.ParseText($"public class Test {{{method}}}").GetCompilationUnitRoot();
+            var methodSyntax = root.DescendantNodes(n => true).OfType<MethodDeclarationSyntax>().First();
+            if (methodSyntax == null) {
+                Assert.Fail();
+            }
+
+            return new Method(methodSyntax, null);
+        }
+
+        public static IField CreateField(string field) {
+            var root = CSharpSyntaxTree.ParseText($"public class Test {{{field}}}").GetCompilationUnitRoot();
+            var fieldSyntax = root.DescendantNodes(n => true).OfType<FieldDeclarationSyntax>().First();
+            if (fieldSyntax == null) {
+                Assert.Fail();
+            }
+
+            return new Field(fieldSyntax, null);
         }
     }
 
