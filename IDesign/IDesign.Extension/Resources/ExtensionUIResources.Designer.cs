@@ -79,6 +79,15 @@ namespace IDesign.Extension.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Detector.
+        /// </summary>
+        public static string DetectorViewTitle {
+            get {
+                return ResourceManager.GetString("DetectorViewTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to IDesign.
         /// </summary>
         public static string ExtensionName {

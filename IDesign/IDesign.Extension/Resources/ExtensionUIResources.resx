@@ -123,6 +123,9 @@
   <data name="Analyse" xml:space="preserve">
     <value>Analyse</value>
   </data>
+  <data name="DetectorViewTitle" xml:space="preserve">
+    <value>Detector</value>
+  </data>
   <data name="ExtensionName" xml:space="preserve">
     <value>IDesign</value>
   </data>
