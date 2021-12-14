@@ -12,9 +12,13 @@ namespace SyntaxTree {
         private static readonly Dictionary<RelationType, RelationType> ReversedTypes =
             new Dictionary<RelationType, RelationType> {
                 { RelationType.Implements, RelationType.ImplementedBy },
+                { RelationType.ImplementedBy, RelationType.Implements },
                 { RelationType.Creates, RelationType.CreatedBy },
+                { RelationType.CreatedBy, RelationType.Creates },
                 { RelationType.Uses, RelationType.UsedBy },
-                { RelationType.Extends, RelationType.ExtendedBy }
+                { RelationType.UsedBy, RelationType.Uses },
+                { RelationType.Extends, RelationType.ExtendedBy },
+                { RelationType.ExtendedBy, RelationType.Extends },
             };
 
         private readonly SyntaxGraph _graph;
@@ -48,7 +52,7 @@ namespace SyntaxTree {
             var list = relations[node];
 
             //Make sure relation does not already exists
-            if (!list.Any(x => x.GetDestination() == edgeNode && x.GetRelationType() == type)) return;
+            if (list.Any(x => x.GetDestination() == edgeNode && x.GetRelationType() == type)) return;
 
             list.Add(new Relation(edgeNode, type));
             AddRelation(edgeNode, ReversedTypes[type], node);
