@@ -54,9 +54,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Commands\NavigateCommand.cs" />
-    <Compile Include="HomeWindowControl.xaml.cs">
-      <DependentUpon>HomeWindowControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="LeftMarginMultiplierConverter.cs" />
     <Compile Include="Resources\ExtensionUIResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -142,10 +139,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="ExtensionWindowControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="HomeWindowControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
