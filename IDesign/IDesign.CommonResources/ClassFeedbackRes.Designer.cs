@@ -61,6 +61,33 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Abstraction class.
+        /// </summary>
+        public static string Abstraction {
+            get {
+                return ResourceManager.GetString("Abstraction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Abstraction contains a reference to the Implementer.
+        /// </summary>
+        public static string AbstractionHasImplementerReference {
+            get {
+                return ResourceManager.GetString("AbstractionHasImplementerReference", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should use the Implementer.
+        /// </summary>
+        public static string AbstractionUsesImplementer {
+            get {
+                return ResourceManager.GetString("AbstractionUsesImplementer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Abstract State.
         /// </summary>
         public static string AbstractState {
@@ -444,6 +471,33 @@ namespace IDesign.CommonResources {
         public static string ImplementerAbstractOrInterface {
             get {
                 return ResourceManager.GetString("ImplementerAbstractOrInterface", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implementer methods.
+        /// </summary>
+        public static string ImplementerMethods {
+            get {
+                return ResourceManager.GetString("ImplementerMethods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should be used by Abstraction methods.
+        /// </summary>
+        public static string ImplementerMethodsUsedInAbstraction {
+            get {
+                return ResourceManager.GetString("ImplementerMethodsUsedInAbstraction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implementer reference.
+        /// </summary>
+        public static string ImplementerReference {
+            get {
+                return ResourceManager.GetString("ImplementerReference", resourceCulture);
             }
         }
         

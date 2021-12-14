@@ -18,6 +18,8 @@ namespace IDesign.Recognizers
         public IResult Recognize(IEntityNode entityNode)
         {
             Result result = new Result();
+            IRelation currentRelation = null;
+            string implementerField = null;
 
             List<ICheck<IEntityNode>> implementerChecks = new List<ICheck<IEntityNode>>
             {
@@ -25,7 +27,7 @@ namespace IDesign.Recognizers
                 new ElementCheck<IEntityNode>(
                     x => x.CheckIsAbstractClassOrInterface(),
                     "ImplementerAbstractOrInterface",
-                    2f
+                    3.25f
                 ),
 
                 // Implementer is extended or implemented by other classes
@@ -33,7 +35,7 @@ namespace IDesign.Recognizers
                     x => x.CheckRelationType(RelationType.ImplementedBy) ||
                          x.CheckRelationType(RelationType.ExtendedBy),
                     "NodeImplementedOrInherited",
-                    2f
+                    3.25f
                 ),
 
                 // Implementer is used by another node
@@ -44,7 +46,6 @@ namespace IDesign.Recognizers
                 ),
             };
 
-            // Implementer checks
             var implementerGroupCheck = new GroupCheck<IEntityNode, IEntityNode>(
                 implementerChecks,
                 x => entityNode.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Uses)).Select(y => y.GetDestination()),
@@ -60,18 +61,57 @@ namespace IDesign.Recognizers
                 new ElementCheck<IEntityNode>(
                     x => x.CheckRelationType(RelationType.ExtendedBy),
                     "NodeInherited",
-                    2f
+                    6f
                 ),
 
-                // Abstraction uses at least one other node (the implementer)
+                // Abstraction uses at least one other node
                 new ElementCheck<IEntityNode>(
                     x => x.CheckMinimalAmountOfRelationTypes(RelationType.Uses, 1),
                     "NodeUses1",
                     3f
                 ),
 
-            }, x => new List<IEntityNode> { entityNode }, "BridgeAbstraction");
+                new GroupCheck<IEntityNode, IRelation>(new List<ICheck<IRelation>>
+                {
+                    // Abstraction uses the Implementer
+                    new ElementCheck<IRelation>(
+                        x =>
+                        {
+                            currentRelation = x;
+                            return x.GetRelationType() == RelationType.Uses;
+                        }, 
+                        "AbstractionUsesImplementer",
+                        2f
+                    ),
 
+                    // Abstraction has a reference to the implementer
+                    new GroupCheck<IRelation, IField>(new List<ICheck<IField>>
+                    {
+                        new ElementCheck<IField>(
+                            x =>
+                            {
+                                implementerField = x.GetName();
+                                return x.CheckFieldType(new List<string>{ currentRelation.GetDestination().GetName() });
+                            },
+                            "AbstractionHasImplementerReference",
+                            7f
+                        ),
+
+                        new GroupCheck<IField, IMethod>(new List<ICheck<IMethod>>
+                        {
+                            new ElementCheck<IMethod>(
+                                x => x.CheckFieldIsUsed(implementerField),
+                                "ImplementerMethodsUsedInAbstraction",
+                                5f
+                            ),
+
+                        }, x => entityNode.GetMethodsAndProperties(), "ImplementerMethods")
+
+                    }, x => entityNode.GetFields(), "ImplementerReference")
+
+                }, x => entityNode.GetRelations(), "Abstraction")
+
+            }, x => new List<IEntityNode> { entityNode }, "BridgeAbstraction");
 
             var bridgeGroupCheck = new GroupCheck<IEntityNode, IEntityNode>(
                 new List<ICheck<IEntityNode>>
