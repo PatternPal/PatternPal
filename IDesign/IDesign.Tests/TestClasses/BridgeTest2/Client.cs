@@ -9,7 +9,7 @@ namespace IDesign.Tests.TestClasses.BridgeTest2
     /// </summary>
     public class Client
     {
-        public static void Main(string[] args)
+        public void Method(string[] args)
         {
             // Create RefinedAbstraction
             var customers = new Customers();

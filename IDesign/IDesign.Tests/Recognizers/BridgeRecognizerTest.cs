@@ -7,7 +7,9 @@ namespace IDesign.Tests.Recognizers
 {
     public class BridgeRecognizerTest
     {
-        [TestCase("BridgeTest1", "Bridge", 80, 100)]
+        [TestCase("BridgeTest1", "Abstraction", 80, 100)]
+        [TestCase("BridgeTest2", "CustomersBase", 80, 100)]
+        [TestCase("BridgeTest3", "AbstractRemoteControl", 80, 100)]
         public void BridgeRecognizer_Returns_Correct_Score(string directory, string filename, int minScore, int maxScore)
         {
             var bridge = new BridgeRecognizer();
