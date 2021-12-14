@@ -5,7 +5,6 @@ using IDesign.CommonResources;
 using IDesign.Core.Models;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models.Output;
-using Microsoft.VisualStudio.ProjectSystem.VS;
 
 namespace IDesign.Extension.ViewModels
 {
