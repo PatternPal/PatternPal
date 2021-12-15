@@ -39,4 +39,6 @@ The version developed by the previous team.
 
 [Unreleased]: https://github.com/super-idesign/designpatternrecognizer/compare/v2.0.0...HEAD
 
-[2.0.0]: https://github.com/super-idesign/designpatternrecognizer/compare/b954bd6b9f7792c8854d57534c76143177a18a7e...v2.0.0
+[2.0.0]: https://github.com/super-idesign/designpatternrecognizer/compare/v1.0.0...v2.0.0
+
+[1.0.0]: https://github.com/super-idesign/designpatternrecognizer/releases/tag/v1.0.0
