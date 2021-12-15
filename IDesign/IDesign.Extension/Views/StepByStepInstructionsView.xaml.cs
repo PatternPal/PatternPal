@@ -25,9 +25,20 @@ namespace IDesign.Extension.Views
             InitializeComponent();
         }
 
+        public bool firstTime = true;
+
         private void CheckButton_OnClick(object sender, RoutedEventArgs e)
         {
             FeedbackMessage.Visibility = Visibility.Visible;
+            CheckNextButton.Content = "Next";
+            if (!firstTime)
+            {
+                InstructionText.Text = "Maak een klasse aan die de zojuist gemaakte 'behaviour' interface implementeert.";
+                CheckNextButton.Content = "Check";
+                FeedbackMessage.Visibility = Visibility.Hidden;
+            }
+            
+            firstTime = false;
         }
     }
 }
