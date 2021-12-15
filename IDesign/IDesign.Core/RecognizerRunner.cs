@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using IDesign.Core.Models;
 using System.Linq;
+using IDesign.Recognizers;
 using IDesign.Recognizers.Recognizers;
 using SyntaxTree;
 using static IDesign.Core.Resources.DesignPatternNameResources;

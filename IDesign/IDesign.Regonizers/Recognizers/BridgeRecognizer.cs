@@ -1,12 +1,12 @@
 ﻿using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Checks;
-using IDesign.Recognizers.Models;
 using IDesign.Recognizers.Models.ElementChecks;
 using IDesign.Recognizers.Models.Output;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using SyntaxTree.Abstractions;
+using SyntaxTree.Abstractions.Entities;
+using SyntaxTree.Abstractions.Members;
 
 namespace IDesign.Recognizers
 {
@@ -15,20 +15,20 @@ namespace IDesign.Recognizers
     /// </summary>
     public class BridgeRecognizer : IRecognizer
     {
-        public IResult Recognize(IEntityNode entityNode)
+        public IResult Recognize(IEntity entityNode)
         {
             Result result = new Result();
-            List<ICheck<IEntityNode>> implementerChecks = new List<ICheck<IEntityNode>>
+            List<ICheck<IEntity>> implementerChecks = new List<ICheck<IEntity>>
             {
                 // Implementer is an abstract class or an interface
-                new ElementCheck<IEntityNode>(
+                new ElementCheck<IEntity>(
                     x => x.CheckIsAbstractClassOrInterface(),
                     "ImplementerAbstractOrInterface",
                     3.25f
                 ),
 
                 // Implementer is extended or implemented by other classes
-                new ElementCheck<IEntityNode>(
+                new ElementCheck<IEntity>(
                     x => x.CheckRelationType(RelationType.ImplementedBy) ||
                          x.CheckRelationType(RelationType.ExtendedBy),
                     "NodeImplementedOrInherited",
@@ -36,14 +36,14 @@ namespace IDesign.Recognizers
                 ),
 
                 // Implementer is used by another node
-                new ElementCheck<IEntityNode>(
+                new ElementCheck<IEntity>(
                     x => x.CheckRelationType(RelationType.UsedBy),
                     "ImplementerUsedByAbstraction",
                     2f
                 ),
             };
 
-            var implementerGroupCheck = new GroupCheck<IEntityNode, IEntityNode>(
+            var implementerGroupCheck = new GroupCheck<IEntity, IEntity>(
                 implementerChecks,
                 x => entityNode
                         .GetRelations()
@@ -52,17 +52,17 @@ namespace IDesign.Recognizers
                 "BridgeImplementer"
             );
 
-            var abstractionGroupCheckList = new List<ICheck<IEntityNode>>
+            var abstractionGroupCheckList = new List<ICheck<IEntity>>
             {
                 // The abstraction should be an abstract class or an interface
-                new ElementCheck<IEntityNode>(
+                new ElementCheck<IEntity>(
                     x => x.CheckIsAbstractClassOrInterface(),
                     "NodeAbstractOrInterface",
                     0.5f
                 ),
 
                 // Abstraction should be inherited or implemented
-                new ElementCheck<IEntityNode>(
+                new ElementCheck<IEntity>(
                     x => x.CheckRelationType(RelationType.ExtendedBy) ||
                          x.CheckRelationType(RelationType.ImplementedBy),
                     "NodeImplementedOrInherited",
@@ -70,7 +70,7 @@ namespace IDesign.Recognizers
                 ),
 
                 // Abstraction uses at least one other node
-                new ElementCheck<IEntityNode>(
+                new ElementCheck<IEntity>(
                     x => x.CheckMinimalAmountOfRelationTypes(RelationType.Uses, 1),
                     "NodeUses1",
                     3f
@@ -84,15 +84,14 @@ namespace IDesign.Recognizers
 
             var abstractionAsInterfaceGroupcheckList = GetAbstractionGroupCheckList(
                 entityNode,
-                entityNode?
-                    .GetRelations()
-                    .Where(y => y.GetRelationType().Equals(RelationType.ImplementedBy))
-                    .FirstOrDefault()?
+                (entityNode?
+                    .GetRelations())
+                .FirstOrDefault(y => y.GetRelationType().Equals(RelationType.ImplementedBy))?
                     .GetDestination()
                     .GetFields()
             );
 
-            if (entityNode.CheckEntityNodeType(EntityNodeType.Interface))
+            if (entityNode.CheckEntityType(EntityType.Interface))
             {
                 abstractionGroupCheckList.AddRange(abstractionAsInterfaceGroupcheckList);
             }
@@ -101,20 +100,20 @@ namespace IDesign.Recognizers
                 abstractionGroupCheckList.AddRange(abstractionAsClassGroupcheckList);
             }
 
-            GroupCheck<IEntityNode, IEntityNode> abstractionGroupCheck =
-                new GroupCheck<IEntityNode, IEntityNode>(
+            GroupCheck<IEntity, IEntity> abstractionGroupCheck =
+                new GroupCheck<IEntity, IEntity>(
                     abstractionGroupCheckList,
-                    x => new List<IEntityNode> { entityNode },
+                    x => new List<IEntity> { entityNode },
                     "BridgeAbstraction"
                 );
 
-            var bridgeGroupCheck = new GroupCheck<IEntityNode, IEntityNode>(
-                new List<ICheck<IEntityNode>>
+            var bridgeGroupCheck = new GroupCheck<IEntity, IEntity>(
+                new List<ICheck<IEntity>>
                 {
                     abstractionGroupCheck,
                     implementerGroupCheck
                 },
-                x => new List<IEntityNode> { entityNode },
+                x => new List<IEntity> { entityNode },
                 "Bridge"
             );
 
@@ -123,14 +122,14 @@ namespace IDesign.Recognizers
             return result;
         }
 
-        public List<ICheck<IEntityNode>> GetAbstractionGroupCheckList(IEntityNode entityNode, IEnumerable<IField> fieldsToCheck)
+        public List<ICheck<IEntity>> GetAbstractionGroupCheckList(IEntity entityNode, IEnumerable<IField> fieldsToCheck)
         {
             IRelation currentRelation = null;
             string implementerField = null;
 
-            return new List<ICheck<IEntityNode>>()
+            return new List<ICheck<IEntity>>()
             {
-                new GroupCheck<IEntityNode, IRelation>(new List<ICheck<IRelation>>
+                new GroupCheck<IEntity, IRelation>(new List<ICheck<IRelation>>
                 {
                     // Abstraction uses the Implementer
                     new ElementCheck<IRelation>(
@@ -167,7 +166,7 @@ namespace IDesign.Recognizers
                                         5f
                                     ),
                                 },
-                                x => entityNode.GetMethodsAndProperties(),
+                                x => entityNode.GetAllMethods(),
                                 "ImplementerMethods"
                             ),
                         },

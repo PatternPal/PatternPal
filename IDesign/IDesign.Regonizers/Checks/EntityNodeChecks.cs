@@ -102,14 +102,14 @@ namespace IDesign.Recognizers.Checks {
             return entityNode.CheckMinimalAmountOfRelationTypes(relationType, 1);
         }
 
-        public static bool CheckIsAbstractClass(this IEntityNode entityNode)
+        public static bool CheckIsAbstractClass(this IEntity entityNode)
         {
-            return entityNode.CheckTypeDeclaration(EntityNodeType.Class) && entityNode.CheckModifier("abstract");
+            return entityNode.CheckTypeDeclaration(EntityType.Class) && entityNode.CheckModifier("abstract");
         }
 
-        public static bool CheckIsAbstractClassOrInterface(this IEntityNode entityNode)
+        public static bool CheckIsAbstractClassOrInterface(this IEntity entityNode)
         {
-            return entityNode.CheckTypeDeclaration(EntityNodeType.Interface) || entityNode.CheckIsAbstractClass();
+            return entityNode.CheckTypeDeclaration(EntityType.Interface) || entityNode.CheckIsAbstractClass();
         }
 
         public static bool CheckMinimalAmountOfRelationTypes(
