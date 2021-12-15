@@ -40,5 +40,10 @@ namespace SyntaxTree.Models.Entities
         {
             return _entityNode.GetRoot();
         }
+
+        public override string ToString()
+        {
+            return _entityNode.ToString();
+        }
     }
 }
