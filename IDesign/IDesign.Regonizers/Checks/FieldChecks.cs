@@ -20,13 +20,23 @@ namespace IDesign.Recognizers.Checks
         private static bool CheckFieldTypeGeneric(TypeSyntax type, IEnumerable<string> types)
         {
             var list = types.ToList();
-            if (list.Any(x => x.Equals(type.ToString()))) return true;
+            if (list.Any(x => x.Equals(type.ToString())))
+            {
+                return true;
+            }
+
             var genericTypeIfApplicable = type as GenericNameSyntax;
-            if (genericTypeIfApplicable == null) return false;
+            if (genericTypeIfApplicable == null)
+            {
+                return false;
+            }
 
             foreach (var typeSyntax in genericTypeIfApplicable.TypeArgumentList.Arguments)
             {
-                if (CheckFieldTypeGeneric(typeSyntax, list)) return true;
+                if (CheckFieldTypeGeneric(typeSyntax, list))
+                {
+                    return true;
+                }
             }
 
             return false;

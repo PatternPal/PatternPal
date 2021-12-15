@@ -1,6 +1,6 @@
 ﻿namespace IDesign.Tests.TestClasses.FactoryMethodTest3
 {
-    class ConcreteProduct2 : IProduct
+    internal class ConcreteProduct2 : IProduct
     {
         public string Operation()
         {

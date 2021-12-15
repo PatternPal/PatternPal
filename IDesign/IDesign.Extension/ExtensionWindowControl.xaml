@@ -2,10 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:UIResources="clr-namespace:IDesign.Extension.Resources"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
-             xmlns:usercontrol="clr-namespace:IDesign.Extension.UserControls"
              xmlns:viewmodels="clr-namespace:IDesign.Extension.ViewModels"
              xmlns:views="clr-namespace:IDesign.Extension.Views"
              d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
@@ -24,22 +22,22 @@
     <Grid>
         <Grid.Resources>
             <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}">
-                <views:HomeView/>
+                <views:HomeView />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewmodels:DetectorViewModel}">
-                <views:DetectorView/>
+                <views:DetectorView />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewmodels:StepByStepListViewModel}">
-                <views:StepByStepListView/>
+                <views:StepByStepListView />
             </DataTemplate>
         </Grid.Resources>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" MaxWidth="300">
             <Image Source="Resources/logo.png" HorizontalAlignment="Center" MaxHeight="80" VerticalAlignment="Top" />
-            <TextBlock Text="{Binding CurrentViewModel.Title}" VerticalAlignment="Center" FontSize="50"/>
+            <TextBlock Text="{Binding CurrentViewModel.Title}" VerticalAlignment="Center" FontSize="50" />
         </StackPanel>
         <ContentControl Content="{Binding CurrentViewModel}" Grid.Row="1" />
     </Grid>

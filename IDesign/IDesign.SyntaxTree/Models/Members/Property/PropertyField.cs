@@ -6,20 +6,47 @@ using SyntaxTree.Abstractions.Entities;
 using SyntaxTree.Abstractions.Members;
 using SyntaxTree.Abstractions.Root;
 
-namespace SyntaxTree.Models.Members.Property {
-    public class PropertyField : IField {
+namespace SyntaxTree.Models.Members.Property
+{
+    public class PropertyField : IField
+    {
         private readonly Property _property;
 
         public PropertyField(Property property) { _property = property; }
 
-        public SyntaxNode GetSyntaxNode() => _property.GetSyntaxNode();
-        public IRoot GetRoot() => _property.GetRoot();
-        public IEntity GetParent() => _property.GetParent();
+        public SyntaxNode GetSyntaxNode()
+        {
+            return _property.GetSyntaxNode();
+        }
 
-        public IEnumerable<IModifier> GetModifiers() => _property.GetModifiers();
-        public TypeSyntax GetFieldType() => _property.GetPropertyType();
+        public IRoot GetRoot()
+        {
+            return _property.GetRoot();
+        }
 
-        public string GetName() => _property.GetName();
-        public override string ToString() => GetName();
+        public IEntity GetParent()
+        {
+            return _property.GetParent();
+        }
+
+        public IEnumerable<IModifier> GetModifiers()
+        {
+            return _property.GetModifiers();
+        }
+
+        public TypeSyntax GetFieldType()
+        {
+            return _property.GetPropertyType();
+        }
+
+        public string GetName()
+        {
+            return _property.GetName();
+        }
+
+        public override string ToString()
+        {
+            return GetName();
+        }
     }
 }

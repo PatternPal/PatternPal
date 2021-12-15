@@ -30,35 +30,56 @@ namespace IDesign.Recognizers.Recognizers
             var result = new Result();
 
             //Tests for implementation of observer pattern with an subject interface
-            var checks = new GroupCheck<IEntity, IEntity>(new List<ICheck<IEntity>>
-            {
-                new ElementCheck<IEntity>(x => x.CheckMinimalAmountOfMethods(1), "MethodAny", 0.33f),
-                new ElementCheck<IEntity>(x => x.CheckRelationType(RelationType.ImplementedBy), "NodeImplementedByAny", 0.33f),
-                new ElementCheck<IEntity>(x => x.CheckRelationType(RelationType.UsedBy), "NodeUsedByAny", 0.33f),
-
-                new GroupCheck<IEntity, IEntity>(new List<ICheck<IEntity>>
+            var checks = new GroupCheck<IEntity, IEntity>(
+                new List<ICheck<IEntity>>
                 {
-                    new ElementCheck<IEntity>(x => x.CheckMinimalAmountOfMethods(3), "MethodAmountThree",0.66f),
-                    new ElementCheck<IEntity>(x => x.CheckMinimalAmountOfMethodsWithParameter(new List<string> { node.GetName() }, 2), new ResourceMessage("ObserverMethodParameters", new []{node.GetName()}), 1f),
-                    new ElementCheck<IEntity>(x => x.CheckRelationType(RelationType.ImplementedBy), "NodeImplementedByAny",0.33f ),
-
-                    new GroupCheck<IEntity, IEntity>(new List<ICheck<IEntity>>
-                    {
-                        new ElementCheck<IEntity>(x => x.CheckTypeDeclaration(EntityType.Class), "NodeTypeClass"),
-
-                        new GroupCheck<IEntity, IField>(new List<ICheck<IField>>
+                    new ElementCheck<IEntity>(x => x.CheckMinimalAmountOfMethods(1), "MethodAny", 0.33f),
+                    new ElementCheck<IEntity>(x => x.CheckRelationType(RelationType.ImplementedBy),
+                        "NodeImplementedByAny", 0.33f),
+                    new ElementCheck<IEntity>(x => x.CheckRelationType(RelationType.UsedBy), "NodeUsedByAny",
+                        0.33f),
+                    new GroupCheck<IEntity, IEntity>(
+                        new List<ICheck<IEntity>>
                         {
-                            new ElementCheck<IField>(x => x.CheckFieldType(new List<string> { $"List<{ node.GetName() }>" }), new ResourceMessage("FieldType", new []{node.GetName()}), 1f),
-                        }, d => d.GetFields(), "ObserverConcreteSubjectField"),
-                    }, c => c.GetRelations().Where(x => x.GetRelationType() == RelationType.ImplementedBy).Select(x => x.GetDestination()), "ObserverConcreteSubject", GroupCheckType.Median),
-                }, b => node.GetRelations().Where(x => x.GetRelationType() == RelationType.UsedBy).Select(x => x.GetDestination()).ToList(), "ObserverSubjectInterface"),
-            }, a => new List<IEntity> { node }, "Observer");
+                            new ElementCheck<IEntity>(x => x.CheckMinimalAmountOfMethods(3),
+                                "MethodAmountThree", 0.66f),
+                            new ElementCheck<IEntity>(
+                                x => x.CheckMinimalAmountOfMethodsWithParameter(
+                                    new List<string> {node.GetName()}, 2),
+                                new ResourceMessage("ObserverMethodParameters", new[] {node.GetName()}), 1f),
+                            new ElementCheck<IEntity>(x => x.CheckRelationType(RelationType.ImplementedBy),
+                                "NodeImplementedByAny", 0.33f),
+                            new GroupCheck<IEntity, IEntity>(
+                                new List<ICheck<IEntity>>
+                                {
+                                    new ElementCheck<IEntity>(x => x.CheckTypeDeclaration(EntityType.Class),
+                                        "NodeTypeClass"),
+                                    new GroupCheck<IEntity, IField>(
+                                        new List<ICheck<IField>>
+                                        {
+                                            new ElementCheck<IField>(
+                                                x => x.CheckFieldType(new List<string>
+                                                {
+                                                    $"List<{node.GetName()}>"
+                                                }),
+                                                new ResourceMessage("FieldType",
+                                                    new[] {node.GetName()}), 1f)
+                                        }, d => d.GetFields(), "ObserverConcreteSubjectField")
+                                },
+                                c => c.GetRelations()
+                                    .Where(x => x.GetRelationType() == RelationType.ImplementedBy)
+                                    .Select(x => x.GetDestination()), "ObserverConcreteSubject",
+                                GroupCheckType.Median)
+                        },
+                        b => node.GetRelations().Where(x => x.GetRelationType() == RelationType.UsedBy)
+                            .Select(x => x.GetDestination()).ToList(), "ObserverSubjectInterface")
+                }, a => new List<IEntity> {node}, "Observer");
 
             result.Results.Add(checks.Check(node));
             result.RelatedSubTypes.Add(node, "Observer");
             foreach (var concrete in node.GetRelations().Where(x =>
-                     (x.GetRelationType().Equals(RelationType.ImplementedBy))
-                ).Select(x => x.GetDestination()))
+                         x.GetRelationType().Equals(RelationType.ImplementedBy)
+                     ).Select(x => x.GetDestination()))
             {
                 result.RelatedSubTypes.Add(concrete, "ConcreteObserver");
             }
@@ -76,25 +97,39 @@ namespace IDesign.Recognizers.Recognizers
             var result = new Result();
 
             //Tests for implementation of observer pattern without an subject interface
-            var checks = new GroupCheck<IEntity, IEntity>(new List<ICheck<IEntity>>
-            {
-                new ElementCheck<IEntity>(x => x.CheckMinimalAmountOfMethods(1), "MethodAny", 0.33f),
-                new ElementCheck<IEntity>(x => x.CheckRelationType(RelationType.ImplementedBy), "NodeImplementedByAny", 0.33f),
-                new ElementCheck<IEntity>(x => x.CheckRelationType(RelationType.UsedBy), "NodeUsedByAny", 0.33f),
-
-                new GroupCheck<IEntity, IEntity>(new List<ICheck<IEntity>>
+            var checks = new GroupCheck<IEntity, IEntity>(
+                new List<ICheck<IEntity>>
                 {
-                    new ElementCheck<IEntity>(x => x.CheckMinimalAmountOfMethods(3),"MethodAmountThree", 0.33f),
-                    new ElementCheck<IEntity>(x => x.CheckMinimalAmountOfMethodsWithParameter(new List<string> { node.GetName() }, 2), new ResourceMessage("ObserverMethodParameters", new []{node.GetName()}), 1f),
-                    new ElementCheck<IEntity>(x => x.CheckEntityType(EntityType.Class), "NodeTypeClass", 0.33f),
-                    new ElementCheck<IEntity>(x => x.CheckMaximumAmountOfRelationTypes(RelationType.Implements, 0), "NodeNotImplementedAny", 0.33f),
-
-                    new GroupCheck<IEntity, IField>(new List<ICheck<IField>>
-                    {
-                        new ElementCheck<IField>(x => x.CheckFieldType(new List<string> { $"List<{ node.GetName() }>" }), new ResourceMessage("FieldType", new []{node.GetName()}), 1f),
-                    }, d => d.GetFields(), "ObserverConcreteSubjectField"),
-                }, b => node.GetRelations().Where(x => x.GetRelationType() == RelationType.UsedBy).Select(x => x.GetDestination()).ToList(), "Concrete subject"),
-            }, a => new List<IEntity> { node }, "Observer");
+                    new ElementCheck<IEntity>(x => x.CheckMinimalAmountOfMethods(1), "MethodAny", 0.33f),
+                    new ElementCheck<IEntity>(x => x.CheckRelationType(RelationType.ImplementedBy),
+                        "NodeImplementedByAny", 0.33f),
+                    new ElementCheck<IEntity>(x => x.CheckRelationType(RelationType.UsedBy), "NodeUsedByAny",
+                        0.33f),
+                    new GroupCheck<IEntity, IEntity>(
+                        new List<ICheck<IEntity>>
+                        {
+                            new ElementCheck<IEntity>(x => x.CheckMinimalAmountOfMethods(3),
+                                "MethodAmountThree", 0.33f),
+                            new ElementCheck<IEntity>(
+                                x => x.CheckMinimalAmountOfMethodsWithParameter(
+                                    new List<string> {node.GetName()}, 2),
+                                new ResourceMessage("ObserverMethodParameters", new[] {node.GetName()}), 1f),
+                            new ElementCheck<IEntity>(x => x.CheckEntityType(EntityType.Class), "NodeTypeClass",
+                                0.33f),
+                            new ElementCheck<IEntity>(
+                                x => x.CheckMaximumAmountOfRelationTypes(RelationType.Implements, 0),
+                                "NodeNotImplementedAny", 0.33f),
+                            new GroupCheck<IEntity, IField>(
+                                new List<ICheck<IField>>
+                                {
+                                    new ElementCheck<IField>(
+                                        x => x.CheckFieldType(new List<string> {$"List<{node.GetName()}>"}),
+                                        new ResourceMessage("FieldType", new[] {node.GetName()}), 1f)
+                                }, d => d.GetFields(), "ObserverConcreteSubjectField")
+                        },
+                        b => node.GetRelations().Where(x => x.GetRelationType() == RelationType.UsedBy)
+                            .Select(x => x.GetDestination()).ToList(), "Concrete subject")
+                }, a => new List<IEntity> {node}, "Observer");
 
             result.Results.Add(checks.Check(node));
 
@@ -102,8 +137,8 @@ namespace IDesign.Recognizers.Recognizers
             result.Results.Add(checks.Check(node));
             result.RelatedSubTypes.Add(node, "Observer");
             foreach (var concrete in node.GetRelations().Where(x =>
-                     (x.GetRelationType().Equals(RelationType.ImplementedBy))
-                ).Select(x => x.GetDestination()))
+                         x.GetRelationType().Equals(RelationType.ImplementedBy)
+                     ).Select(x => x.GetDestination()))
             {
                 result.RelatedSubTypes.Add(concrete, "ConcreteObserver");
             }

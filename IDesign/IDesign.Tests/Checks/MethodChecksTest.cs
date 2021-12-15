@@ -1,12 +1,12 @@
-using System.Collections.Generic;
 using System.Linq;
 using IDesign.Recognizers.Checks;
 using IDesign.Tests.Utils;
 using NUnit.Framework;
-using SyntaxTree.Abstractions.Members;
 
-namespace IDesign.Tests.Checks {
-    public class MethodTest {
+namespace IDesign.Tests.Checks
+{
+    public class MethodTest
+    {
         [Test]
         [TestCase("void", @"public void TestMethod(){}", true)]
         [TestCase("int", @"public int TestMethod(){}", true)]
@@ -17,7 +17,8 @@ namespace IDesign.Tests.Checks {
         [TestCase("bool", @"public void TestMethod(){}", false)]
         [TestCase("int", @"public bool TestMethod(){}", false)]
         [TestCase("Class", @"public void TestMethod(){}", false)]
-        public void ReturnTypeCheck_Should_Return_CorrectRepsonse(string returnType, string code, bool shouldBeValid) {
+        public void ReturnTypeCheck_Should_Return_CorrectRepsonse(string returnType, string code, bool shouldBeValid)
+        {
             var method = EntityNodeUtils.CreateMethod(code);
 
             Assert.AreEqual(shouldBeValid, method.CheckReturnType(returnType));
@@ -31,7 +32,8 @@ namespace IDesign.Tests.Checks {
         [TestCase("private", @"private static Class<T> TestMethod(){}", true)]
         [TestCase("private", @"public Class[] TestMethod(){}", false)]
         [TestCase("public", @"private static void TestMethod(){}", false)]
-        public void ModifierCheck_Should_Return_CorrectResponse(string modifier, string code, bool shouldBeValid) {
+        public void ModifierCheck_Should_Return_CorrectResponse(string modifier, string code, bool shouldBeValid)
+        {
             var method = EntityNodeUtils.CreateMethod(code);
 
             Assert.AreEqual(shouldBeValid, method.CheckModifier(modifier));
@@ -43,7 +45,8 @@ namespace IDesign.Tests.Checks {
         [TestCase(@"public int TestMethod(){return new int();}", true)]
         [TestCase(@"public void TestMethod(){this.x = new int();}", true)]
         [TestCase(@"public void TestMethod(){string x  = new double().parse();}", true)]
-        public void CreationalCheck_Should_Return_CorrectResponse(string code, bool shouldBeVaild) {
+        public void CreationalCheck_Should_Return_CorrectResponse(string code, bool shouldBeVaild)
+        {
             var method = EntityNodeUtils.CreateMethod(code);
 
             Assert.AreEqual(shouldBeVaild, method.CheckCreationalFunction());
@@ -55,7 +58,8 @@ namespace IDesign.Tests.Checks {
         [TestCase(@"public int TestMethod(){return new int();}", false)]
         [TestCase(@"public Class TestMethod(){var x = new Class(); return x;}", true)]
         [TestCase(@"public int TestMethod(){var x = new Class(); return new int();}", false)]
-        public void ReturnClassCheck_Should_Return_CorrectResponse(string code, bool shouldBeVaild) {
+        public void ReturnClassCheck_Should_Return_CorrectResponse(string code, bool shouldBeVaild)
+        {
             var method = EntityNodeUtils.CreateMethod(code);
 
             Assert.AreEqual(shouldBeVaild, method.CheckReturnTypeSameAsCreation());
@@ -71,7 +75,8 @@ namespace IDesign.Tests.Checks {
             string code,
             bool shouldBeVaild,
             params string[] parameters
-        ) {
+        )
+        {
             var method = EntityNodeUtils.CreateMethod(code);
 
             Assert.AreEqual(shouldBeVaild, method.CheckParameters(parameters));
@@ -89,10 +94,11 @@ namespace IDesign.Tests.Checks {
             string code,
             bool shouldBeVaild,
             params string[] methodStrings
-        ) {
+        )
+        {
             var method = EntityNodeUtils.CreateMethod(code);
 
-            List<IMethod> methods = methodStrings.Select(EntityNodeUtils.CreateMethod).Cast<IMethod>().ToList();
+            var methods = methodStrings.Select(EntityNodeUtils.CreateMethod).ToList();
 
             Assert.AreEqual(shouldBeVaild, method.CheckIfNameExists(methods));
         }
@@ -100,7 +106,8 @@ namespace IDesign.Tests.Checks {
         [Test]
         [TestCase(@"public void TestMethod(Test test) : base(test){ }", false, "test")]
         [TestCase(@"public void TestMethod(){ }", false, "test")]
-        public void ArgumentCheck_Should_Return_CorrectResponse(string code, bool shouldBeVaild, string args) {
+        public void ArgumentCheck_Should_Return_CorrectResponse(string code, bool shouldBeVaild, string args)
+        {
             var method = EntityNodeUtils.CreateMethod(code);
 
             Assert.AreEqual(shouldBeVaild, method.CheckIfArgumentsExists(args));

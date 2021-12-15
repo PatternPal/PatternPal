@@ -2,9 +2,9 @@
 
 namespace IDesign.Tests.TestClasses.DecoratorTest5
 {
-    abstract class Decorator : IComponent
+    internal abstract class Decorator : IComponent
     {
-        IComponent component;
+        private IComponent component;
 
         public Decorator(IComponent component)
         {

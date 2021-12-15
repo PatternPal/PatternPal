@@ -1,7 +1,9 @@
 ﻿using SyntaxTree.Abstractions.Entities;
 
-namespace SyntaxTree.Abstractions {
-    public interface IRelation : INode {
+namespace SyntaxTree.Abstractions
+{
+    public interface IRelation : INode
+    {
         /// <summary>
         ///     Gets the destination node of this relation
         /// </summary>
@@ -13,7 +15,8 @@ namespace SyntaxTree.Abstractions {
         RelationType GetRelationType();
     }
 
-    public enum RelationType {
+    public enum RelationType
+    {
         Implements,
         ImplementedBy,
         Extends,

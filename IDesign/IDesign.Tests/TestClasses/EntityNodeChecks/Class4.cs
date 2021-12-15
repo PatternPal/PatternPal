@@ -1,6 +1,6 @@
 ﻿namespace IDesign.Tests.TestClasses.EntityNodeChecks
 {
-    class Class4
+    internal class Class4
     {
     }
 }

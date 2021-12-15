@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using SyntaxTree.Abstractions;
 using SyntaxTree.Abstractions.Entities;
 
 namespace IDesign.Recognizers.Abstractions

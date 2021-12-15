@@ -1,45 +1,57 @@
-﻿using System.Collections.Generic;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using SyntaxTree.Abstractions;
 
-namespace SyntaxTree.Models {
-    internal class Modifier : IModifier {
+namespace SyntaxTree.Models
+{
+    internal class Modifier : IModifier
+    {
         private readonly string _name;
 
-        public Modifier(string name) {
-            this._name = name;
+        public Modifier(string name)
+        {
+            _name = name;
         }
 
         public string GetName() { return _name.ToLower(); }
 
-        private bool Equals(Modifier other) {
+        private bool Equals(Modifier other)
+        {
             return _name == other._name;
         }
 
-        public override bool Equals(object obj) {
-            if (ReferenceEquals(null, obj)) {
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
                 return false;
             }
 
-            if (ReferenceEquals(this, obj)) {
+            if (ReferenceEquals(this, obj))
+            {
                 return true;
             }
 
-            if (obj.GetType() != GetType()) {
+            if (obj.GetType() != GetType())
+            {
                 return false;
             }
 
             return Equals((Modifier)obj);
         }
 
-        public override int GetHashCode() {
+        public override int GetHashCode()
+        {
             return _name != null ? _name.GetHashCode() : 0;
         }
 
-        public override string ToString() => _name;
+        public override string ToString()
+        {
+            return _name;
+        }
     }
 
-    public static class Modifiers {
+    public static class Modifiers
+    {
         //AccessModifiers
         public static readonly IModifier Public = new Modifier("public");
         public static readonly IModifier Internal = new Modifier("internal");
@@ -60,15 +72,18 @@ namespace SyntaxTree.Models {
         public static readonly IModifier New = new Modifier("new");
         public static readonly IModifier Async = new Modifier("async");
 
-        public static IModifier Custom(string name) {
+        public static IModifier Custom(string name)
+        {
             return new Modifier(name);
         }
     }
 
-    internal class SyntaxModifier : Modifier {
+    internal class SyntaxModifier : Modifier
+    {
         internal readonly SyntaxToken syntaxToken;
-        
-        public SyntaxModifier(SyntaxToken token) : base(token.Text) {
+
+        public SyntaxModifier(SyntaxToken token) : base(token.Text)
+        {
             syntaxToken = token;
         }
     }

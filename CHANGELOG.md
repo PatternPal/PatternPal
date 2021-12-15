@@ -10,7 +10,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Improved
 
 - Singleton Pattern Detector
-  - Looks at generics so `Lazy<Singleton>` works now
+    - Looks at generics so `Lazy<Singleton>` works now
+- Refactored the SyntaxTree representation
+    - Also moved this to a different module
 
 ### Changed
 

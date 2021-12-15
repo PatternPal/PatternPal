@@ -2,8 +2,10 @@
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SyntaxTree.Abstractions.Entities;
 
-namespace SyntaxTree.Abstractions.Root {
-    public interface IRoot : IEntitiesContainer, INamespaceContainer, IUsingContainer {
+namespace SyntaxTree.Abstractions.Root
+{
+    public interface IRoot : IEntitiesContainer, INamespaceContainer, IUsingContainer
+    {
         /// <summary>
         ///     Get the filepath of the source file where this node is found in
         /// </summary>
@@ -13,7 +15,8 @@ namespace SyntaxTree.Abstractions.Root {
         IEnumerable<IRelation> GetRelations(IEntity entity);
     }
 
-    public interface INamespaceContainer : INode {
+    public interface INamespaceContainer : INode
+    {
         /// <summary>
         ///     Get all Namespaces in the current node
         /// </summary>
@@ -21,11 +24,13 @@ namespace SyntaxTree.Abstractions.Root {
         IEnumerable<INamespace> GetNamespaces();
     }
 
-    public interface IUsingContainer : INode {
+    public interface IUsingContainer : INode
+    {
         IEnumerable<UsingDirectiveSyntax> GetUsing();
     }
 
-    public interface IEntitiesContainer : INode {
+    public interface IEntitiesContainer : INode
+    {
         /// <summary>
         ///     Get all entities in the current node, not in sub namespaces!
         /// </summary>
@@ -40,7 +45,8 @@ namespace SyntaxTree.Abstractions.Root {
         Dictionary<string, IEntity> GetAllEntities();
     }
 
-    public interface INamedEntitiesContainer : IEntitiesContainer {
+    public interface INamedEntitiesContainer : IEntitiesContainer
+    {
         string GetNamespace();
     }
 }

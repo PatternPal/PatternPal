@@ -1,5 +1,4 @@
-﻿using IDesign.Core;
-using IDesign.Recognizers;
+﻿using IDesign.Recognizers;
 using IDesign.Tests.Utils;
 using NUnit.Framework;
 using SyntaxTree;
@@ -12,7 +11,8 @@ namespace IDesign.Tests.Recognizers
         [TestCase("BridgeTest2", "CustomersBase", 80, 100)]
         [TestCase("BridgeTest3", "AbstractRemoteControl", 80, 100)]
         [TestCase("BridgeTest4", "IWeapon", 80, 100)]
-        public void BridgeRecognizer_Returns_Correct_Score(string directory, string filename, int minScore, int maxScore)
+        public void BridgeRecognizer_Returns_Correct_Score(string directory, string filename, int minScore,
+            int maxScore)
         {
             var bridge = new BridgeRecognizer();
             var filesAsString = FileUtils.FilesToString($"{directory}\\");
@@ -21,7 +21,8 @@ namespace IDesign.Tests.Recognizers
 
             var graph = new SyntaxGraph();
             var i = 0;
-            foreach (var s in filesAsString) {
+            foreach (var s in filesAsString)
+            {
                 graph.AddFile(s, i++.ToString());
             }
 

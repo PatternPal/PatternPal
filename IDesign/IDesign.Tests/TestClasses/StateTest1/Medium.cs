@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses.StateTest1
+﻿namespace IDesign.Tests.TestClasses.StateTest1
 {
     //this code is from https://exceptionnotfound.net/state-pattern-in-csharp/
 
     /// <summary>
-    /// A Concrete State class
+    ///     A Concrete State class
     /// </summary>
-    class Medium : Doneness
+    internal class Medium : Doneness
     {
         public Medium(Doneness state) : this(state.CurrentTemp, state.Steak)
         {

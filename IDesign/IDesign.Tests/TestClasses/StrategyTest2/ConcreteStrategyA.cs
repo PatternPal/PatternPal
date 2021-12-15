@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace IDesign.Tests.TestClasses.StrategyTest2
 {
@@ -9,7 +7,7 @@ namespace IDesign.Tests.TestClasses.StrategyTest2
     // Concrete Strategies implement the algorithm while following the base
     // Strategy interface. The interface makes them interchangeable in the
     // Context.
-    class ConcreteStrategyA : IStrategy
+    internal class ConcreteStrategyA : IStrategy
     {
         public object DoAlgorithm(object data)
         {

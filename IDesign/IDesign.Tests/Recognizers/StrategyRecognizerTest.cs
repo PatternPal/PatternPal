@@ -6,8 +6,10 @@ using IDesign.Tests.Utils;
 using NUnit.Framework;
 using SyntaxTree;
 
-namespace IDesign.Tests.Recognizers {
-    class StrategyRecognizerTest {
+namespace IDesign.Tests.Recognizers
+{
+    internal class StrategyRecognizerTest
+    {
         [TestCase("StateTest1", "Doneness", 0, 79)]
         [TestCase("StateTest2", "State", 0, 79)]
         [TestCase("StateTest3", "State", 0, 79)]
@@ -21,7 +23,8 @@ namespace IDesign.Tests.Recognizers {
             string filename,
             int minScore,
             int maxScore
-        ) {
+        )
+        {
             var strategy = new StrategyRecognizer();
             var filesAsString = FileUtils.FilesToString($"{directory}\\");
             var nameSpaceName = $"IDesign.Tests.TestClasses.{directory}";
@@ -29,7 +32,8 @@ namespace IDesign.Tests.Recognizers {
 
             var graph = new SyntaxGraph();
             var i = 0;
-            foreach (var s in filesAsString) {
+            foreach (var s in filesAsString)
+            {
                 graph.AddFile(s, i++.ToString());
             }
 
@@ -38,18 +42,21 @@ namespace IDesign.Tests.Recognizers {
             var entityNodes = graph.GetAll();
             var result = strategy.Recognize(entityNodes[nameSpaceName + "." + filename]);
 
-            foreach (var checkResult in result.GetResults()) {
+            foreach (var checkResult in result.GetResults())
+            {
                 PrintResult(checkResult, 1);
             }
 
             Assert.That(result.GetScore(), Is.InRange(minScore, maxScore));
         }
 
-        public static void PrintResult(ICheckResult result, int depth) {
+        public static void PrintResult(ICheckResult result, int depth)
+        {
             Console.ForegroundColor = ConsoleColor.Red;
             var symbol = "X";
 
-            switch (result.GetFeedbackType()) {
+            switch (result.GetFeedbackType())
+            {
                 case FeedbackType.SemiCorrect:
                     Console.ForegroundColor = ConsoleColor.DarkRed;
                     symbol = "-";
@@ -65,7 +72,8 @@ namespace IDesign.Tests.Recognizers {
                 $"{ResourceUtils.ResultToString(result)} | {result.GetScore()}p / {result.GetTotalChecks()}p"
             );
 
-            foreach (var child in result.GetChildFeedback()) {
+            foreach (var child in result.GetChildFeedback())
+            {
                 PrintResult(child, depth + 1);
             }
         }

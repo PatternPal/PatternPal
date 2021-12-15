@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace IDesign.Tests.TestClasses.StrategyTest2
 {
     //this code is from https://refactoring.guru/design-patterns/strategy/csharp/example
 
-    class ConcreteStrategyB : IStrategy
+    internal class ConcreteStrategyB : IStrategy
     {
         public object DoAlgorithm(object data)
         {

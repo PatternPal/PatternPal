@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace IDesign.Tests.TestClasses.FactoryMethodTest1
 {
-    abstract class BeerFactory
+    internal abstract class BeerFactory
     {
-        public abstract IBeer BrewBier();
-        string batchSize;
         public int amount;
+        private string batchSize;
+        public abstract IBeer BrewBier();
 
         public int SetBatch()
         {
@@ -29,6 +27,7 @@ namespace IDesign.Tests.TestClasses.FactoryMethodTest1
                     amount = 0;
                     break;
             }
+
             return amount;
         }
 
@@ -38,10 +37,8 @@ namespace IDesign.Tests.TestClasses.FactoryMethodTest1
             {
                 return $"{amount} bottles are getting filled!";
             }
-            else
-            {
-                throw new Exception("Amount not set!");
-            }
+
+            throw new Exception("Amount not set!");
         }
 
         public string RinseBottle()
@@ -50,10 +47,8 @@ namespace IDesign.Tests.TestClasses.FactoryMethodTest1
             {
                 return $"{amount} bottle is getting cleaned!";
             }
-            else
-            {
-                throw new Exception("Amount not set!");
-            }
+
+            throw new Exception("Amount not set!");
         }
     }
 }

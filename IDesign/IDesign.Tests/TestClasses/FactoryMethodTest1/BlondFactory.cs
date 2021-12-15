@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses.FactoryMethodTest1
+﻿namespace IDesign.Tests.TestClasses.FactoryMethodTest1
 {
-    class BlondFactory : BeerFactory
+    internal class BlondFactory : BeerFactory
     {
         public override IBeer BrewBier()
         {

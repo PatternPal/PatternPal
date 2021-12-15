@@ -1,5 +1,4 @@
 using System.Linq;
-using IDesign.Recognizers;
 using IDesign.Recognizers.Recognizers;
 using IDesign.Tests.Utils;
 using NUnit.Framework;

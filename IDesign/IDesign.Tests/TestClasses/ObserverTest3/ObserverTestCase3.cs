@@ -1,8 +1,8 @@
 ﻿namespace IDesign.Tests.TestClasses.ObserverTest3
 {
-    class ObserverTestCase3
+    internal class ObserverTestCase3
     {
-        SubjectA subject;
+        private readonly SubjectA subject;
 
         public ObserverTestCase3()
         {

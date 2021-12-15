@@ -3,8 +3,10 @@ using IDesign.Tests.Utils;
 using NUnit.Framework;
 using SyntaxTree;
 
-namespace IDesign.Tests.Recognizers {
-    public class FactoryMethodRecognizerTest {
+namespace IDesign.Tests.Recognizers
+{
+    public class FactoryMethodRecognizerTest
+    {
         [TestCase("FactoryMethodTest1", "BeerFactory", 80, 100)]
         [TestCase("FactoryMethodTest2", "CardFactory", 80, 100)]
         [TestCase("FactoryMethodTest3", "Creator", 80, 100)]
@@ -16,7 +18,8 @@ namespace IDesign.Tests.Recognizers {
             string filename,
             int minScore,
             int maxScore
-        ) {
+        )
+        {
             var factoryMethodRecognizer = new FactoryMethodRecognizer();
             var filesAsString = FileUtils.FilesToString($"{directory}\\");
             var nameSpaceName = $"IDesign.Tests.TestClasses.{directory}";
@@ -24,7 +27,8 @@ namespace IDesign.Tests.Recognizers {
 
             var graph = new SyntaxGraph();
             var i = 0;
-            foreach (var s in filesAsString) {
+            foreach (var s in filesAsString)
+            {
                 graph.AddFile(s, i++.ToString());
             }
 

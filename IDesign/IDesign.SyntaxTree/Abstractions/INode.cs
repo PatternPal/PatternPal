@@ -4,8 +4,10 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SyntaxTree.Abstractions.Root;
 
-namespace SyntaxTree.Abstractions {
-    public interface INode {
+namespace SyntaxTree.Abstractions
+{
+    public interface INode
+    {
         /// <summary>
         ///     Get the name of the node.
         /// </summary>
@@ -25,15 +27,18 @@ namespace SyntaxTree.Abstractions {
         IRoot GetRoot();
     }
 
-    public interface IParameterized {
+    public interface IParameterized
+    {
         IEnumerable<TypeSyntax> GetParameters();
     }
 
-    public interface IBodied {
+    public interface IBodied
+    {
         CSharpSyntaxNode GetBody();
     }
 
-    public interface IModified {
+    public interface IModified
+    {
         /// <summary>
         ///     Gets the modifiers of this node
         /// </summary>
@@ -41,7 +46,8 @@ namespace SyntaxTree.Abstractions {
         IEnumerable<IModifier> GetModifiers();
     }
 
-    public interface IChild<out T> where T : INode {
+    public interface IChild<out T> where T : INode
+    {
         /// <summary>
         ///     Gets the parent of this node
         /// </summary>

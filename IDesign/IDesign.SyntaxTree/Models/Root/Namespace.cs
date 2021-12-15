@@ -5,18 +5,21 @@ using SyntaxTree.Abstractions.Entities;
 using SyntaxTree.Abstractions.Root;
 using SyntaxTree.Utils;
 
-namespace SyntaxTree.Models.Root {
-    public class Namespace : AbstractNode, INamespace {
-        private readonly INamespaceContainer _parent;
-        private readonly BaseNamespaceDeclarationSyntax _syntax;
+namespace SyntaxTree.Models.Root
+{
+    public class Namespace : AbstractNode, INamespace
+    {
+        private readonly List<IEntity> _entities;
 
         private readonly List<Namespace> _namespaces;
-        private readonly List<IEntity> _entities;
+        private readonly INamespaceContainer _parent;
+        private readonly BaseNamespaceDeclarationSyntax _syntax;
         private readonly List<UsingDirectiveSyntax> _using;
 
         public Namespace(BaseNamespaceDeclarationSyntax node, INamespaceContainer parent) : base(
             node, parent?.GetRoot()
-        ) {
+        )
+        {
             _syntax = node;
             _parent = parent;
 
@@ -30,11 +33,23 @@ namespace SyntaxTree.Models.Root {
                 .ToList();
         }
 
-        public override string GetName() => GetNamespace();
-        public INamespaceContainer GetParent() => _parent;
+        public override string GetName()
+        {
+            return GetNamespace();
+        }
 
-        public string GetNamespace() {
-            if (_parent is INamedEntitiesContainer name) return $"{name}.{_syntax.Name.ToString()}";
+        public INamespaceContainer GetParent()
+        {
+            return _parent;
+        }
+
+        public string GetNamespace()
+        {
+            if (_parent is INamedEntitiesContainer name)
+            {
+                return $"{name}.{_syntax.Name.ToString()}";
+            }
+
             return _syntax.Name.ToString();
         }
 
@@ -42,12 +57,14 @@ namespace SyntaxTree.Models.Root {
         public IEnumerable<UsingDirectiveSyntax> GetUsing() { return _using.AsReadOnly(); }
         public IEnumerable<IEntity> GetEntities() { return _entities.AsReadOnly(); }
 
-        public Dictionary<string, IEntity> GetAllEntities() =>
-            GetNamespaces()
+        public Dictionary<string, IEntity> GetAllEntities()
+        {
+            return GetNamespaces()
                 .Select(ns => ns.GetAllEntities())
                 .Concat(GetEntities().OfType<IEntitiesContainer>().Select(e => e.GetAllEntities()))
                 .Append(GetEntities().ToDictionary(e => e.GetFullName()))
                 .SelectMany(d => d)
                 .ToDictionary(p => p.Key, p => p.Value);
+        }
     }
 }

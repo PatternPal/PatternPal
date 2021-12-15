@@ -3,8 +3,10 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SyntaxTree.Abstractions.Members;
 using SyntaxTree.Abstractions.Root;
 
-namespace SyntaxTree.Abstractions.Entities {
-    public interface IEntity : IModified, IChild<IEntitiesContainer>, INamedEntitiesContainer {
+namespace SyntaxTree.Abstractions.Entities
+{
+    public interface IEntity : IModified, IChild<IEntitiesContainer>, INamedEntitiesContainer
+    {
         /// <summary>
         ///     Get a list of methods declared in this node
         /// </summary>
@@ -18,7 +20,7 @@ namespace SyntaxTree.Abstractions.Entities {
         IEnumerable<IProperty> GetProperties();
 
         /// <summary>
-        ///     Gets a list of all methods, field, properties and constructors. Maybe more in the futher 
+        ///     Gets a list of all methods, field, properties and constructors. Maybe more in the futher
         /// </summary>
         /// <returns>A list of Members</returns>
         IEnumerable<IMember> GetMembers();
@@ -55,7 +57,8 @@ namespace SyntaxTree.Abstractions.Entities {
         IEnumerable<IField> GetAllFields();
     }
 
-    public enum EntityType {
+    public enum EntityType
+    {
         Class, Interface
         //TODO ENUM, STRUCT
     }

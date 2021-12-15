@@ -3,13 +3,13 @@
     //This code is from https://www.dofactory.com/net/observer-design-pattern
 
     /// <summary>
-    /// The 'ConcreteSubject' class
+    ///     The 'ConcreteSubject' class
     /// </summary>
-    class IBM : Stock
+    internal class IBM : Stock
     {
         // Constructor
         public IBM(string symbol, double price)
-          : base(symbol, price)
+            : base(symbol, price)
         {
         }
     }

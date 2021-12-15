@@ -7,8 +7,6 @@ namespace IDesign.Extension
     /// </summary>
     public partial class ExtensionWindowControl : UserControl
     {
-        
-
         /// <summary>
         ///     Initializes a new instance of the <see cref="ExtensionWindowControl" /> class.
         /// </summary>

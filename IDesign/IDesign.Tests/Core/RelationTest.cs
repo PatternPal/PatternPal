@@ -4,8 +4,10 @@ using NUnit.Framework;
 using SyntaxTree;
 using SyntaxTree.Abstractions;
 
-namespace IDesign.Tests.Core {
-    public class RelationTest {
+namespace IDesign.Tests.Core
+{
+    public class RelationTest
+    {
         [Test]
         [TestCase("RelationTestCase1.cs", "RelationTestCase1", "IRelationTestCase1", true)]
         [TestCase("RelationTestCase2.cs", "RelationTestCase2", "IRelationTestCase2", false)]
@@ -18,7 +20,8 @@ namespace IDesign.Tests.Core {
             string baseClass,
             string relatedClass,
             bool shouldBeValid
-        ) {
+        )
+        {
             var code = FileUtils.FileToString("Relation\\" + filename);
             var NameSpaceNode = "IDesign.Tests.TestClasses.Relation";
 
@@ -48,7 +51,8 @@ namespace IDesign.Tests.Core {
             string baseClass,
             string relatedClass,
             bool shouldBeValid
-        ) {
+        )
+        {
             var code = FileUtils.FileToString("Relation\\" + filename);
             var NameSpaceNode = "IDesign.Tests.TestClasses.Relation";
 
@@ -75,7 +79,8 @@ namespace IDesign.Tests.Core {
             string baseClass,
             string relatedClass,
             bool shouldBeValid
-        ) {
+        )
+        {
             var code = FileUtils.FileToString("Relation\\" + filename);
             var NameSpaceNode = "IDesign.Tests.TestClasses.Relation";
 
@@ -103,7 +108,8 @@ namespace IDesign.Tests.Core {
             string baseClass,
             string relatedClass,
             bool shouldBeValid
-        ) {
+        )
+        {
             var code = FileUtils.FileToString("Relation\\" + filename);
             var NameSpaceNode = "IDesign.Tests.TestClasses.Relation";
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses.BridgeTest1
+﻿namespace IDesign.Tests.TestClasses.BridgeTest1
 {
     // The Implementation defines the interface for all implementation classes.
     // It doesn't have to match the Abstraction's interface. In fact, the two

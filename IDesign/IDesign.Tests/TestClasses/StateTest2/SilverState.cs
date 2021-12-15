@@ -1,26 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses.StateTest2
+﻿namespace IDesign.Tests.TestClasses.StateTest2
 {
     //this code is from https://www.dofactory.com/net/state-design-pattern
 
     /// <summary>
     ///     A 'ConcreteState' class
-    /// <remarks>
-    ///     Silver indicates a non-interest bearing state
-    /// </remarks>
+    ///     <remarks>
+    ///         Silver indicates a non-interest bearing state
+    ///     </remarks>
     /// </summary>
-
-    class SilverState : State
+    internal class SilverState : State
 
     {
         // Overloaded constructors
 
 
         public SilverState(State state) :
-          this(state.Balance, state.Account)
+            this(state.Balance, state.Account)
         {
         }
 

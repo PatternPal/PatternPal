@@ -4,8 +4,10 @@ using NUnit.Framework;
 using SyntaxTree;
 using SyntaxTree.Abstractions.Entities;
 
-namespace IDesign.Tests.Core {
-    internal class GenerateSyntaxTreeTest {
+namespace IDesign.Tests.Core
+{
+    internal class GenerateSyntaxTreeTest
+    {
         private readonly Dictionary<string, IEntity> entityNodes =
             new Dictionary<string, IEntity>();
 
@@ -107,7 +109,8 @@ namespace IDesign.Tests.Core {
                 interface ITestClass{}",
             1
         )]
-        public void TestAmountOfClasses(string file, int expectedAmountOfClasses) {
+        public void TestAmountOfClasses(string file, int expectedAmountOfClasses)
+        {
             var graph = new SyntaxGraph();
             graph.AddFile(file, "testFile");
             var result = graph.GetAll().Values.OfType<IClass>().Count();
@@ -150,7 +153,8 @@ namespace IDesign.Tests.Core {
             @"namespace TestNamespace{ class TestClass{ public string Name {get; set;} public TestClass(string name){this.Name = name;}}} interface ITestClass{interface ITest{}}",
             2
         )]
-        public void TestAmountOfInterfaces(string file, int expectedAmountOfInterfaces) {
+        public void TestAmountOfInterfaces(string file, int expectedAmountOfInterfaces)
+        {
             var graph = new SyntaxGraph();
             graph.AddFile(file, "testFile");
             var result = graph.GetAll().Values.OfType<IInterface>().Count();
@@ -195,7 +199,8 @@ namespace IDesign.Tests.Core {
                     namespace TestNamespace{ class TestClass{ public string Name {get; set;} public TestClass(string name){this.Name = name;}}}",
             6
         )]
-        public void TestIfAmountOfUsingsIsRight(string file, int amountOfUsings) {
+        public void TestIfAmountOfUsingsIsRight(string file, int amountOfUsings)
+        {
             var graph = new SyntaxGraph();
             graph.AddFile(file, "testFile");
             var count = graph.GetRoots().SelectMany(r => r.GetUsing()).Count();

@@ -3,8 +3,10 @@ using IDesign.Tests.Utils;
 using NUnit.Framework;
 using SyntaxTree;
 
-namespace IDesign.Tests.Recognizers {
-    public class ObserverRecognizerTest {
+namespace IDesign.Tests.Recognizers
+{
+    public class ObserverRecognizerTest
+    {
         [TestCase("ObserverTest1", "IObserver", 80, 100)]
         [TestCase("ObserverTest2", "IInvestor", 80, 100)]
         [TestCase("ObserverTest3", "IObserver", 80, 100)]
@@ -15,7 +17,8 @@ namespace IDesign.Tests.Recognizers {
             string filename,
             int minScore,
             int maxScore
-        ) {
+        )
+        {
             var observer = new ObserverRecognizer();
             var filesAsString = FileUtils.FilesToString($"{directory}\\");
             var nameSpaceName = $"IDesign.Tests.TestClasses.{directory}";
@@ -23,7 +26,8 @@ namespace IDesign.Tests.Recognizers {
 
             var graph = new SyntaxGraph();
             var i = 0;
-            foreach (var s in filesAsString) {
+            foreach (var s in filesAsString)
+            {
                 graph.AddFile(s, i++.ToString());
             }
 

@@ -1,43 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses.BridgeTest2
+﻿namespace IDesign.Tests.TestClasses.BridgeTest2
 {
     /// <summary>
-    /// The 'Abstraction' class
+    ///     The 'Abstraction' class
     /// </summary>
     public class CustomersBase
     {
-        private DataObject dataObject;
-        public DataObject Data
-        {
-            set { dataObject = value; }
-            get { return dataObject; }
-        }
+        public DataObject Data { set; get; }
+
         public virtual void Next()
         {
-            dataObject.NextRecord();
+            Data.NextRecord();
         }
+
         public virtual void Prior()
         {
-            dataObject.PriorRecord();
+            Data.PriorRecord();
         }
+
         public virtual void Add(string customer)
         {
-            dataObject.AddRecord(customer);
+            Data.AddRecord(customer);
         }
+
         public virtual void Delete(string customer)
         {
-            dataObject.DeleteRecord(customer);
+            Data.DeleteRecord(customer);
         }
+
         public virtual void Show()
         {
-            dataObject.ShowRecord();
+            Data.ShowRecord();
         }
+
         public virtual void ShowAll()
         {
-            dataObject.ShowAllRecords();
+            Data.ShowAllRecords();
         }
     }
 }

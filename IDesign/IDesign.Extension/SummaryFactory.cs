@@ -5,21 +5,27 @@ using IDesign.Core.Models;
 using IDesign.Extension.Resources;
 using SyntaxTree.Abstractions.Entities;
 
-namespace IDesign.Extension {
-    class SummaryFactory {
+namespace IDesign.Extension
+{
+    internal class SummaryFactory
+    {
         private string CreateFilesAnalysedSummary(
             IEnumerable<string> uniqueFiles,
             IEnumerable<IEntity> uniqueEntityNodes
-        ) {
+        )
+        {
             var result = "";
-            if (uniqueFiles.Count() <= 1) {
+            if (uniqueFiles.Count() <= 1)
+            {
                 result += $"{SummaryRescources.OneFile} ";
             }
-            else {
+            else
+            {
                 result += $"{string.Format(SummaryRescources.MultipleFiles, uniqueFiles.Count())} ";
             }
 
-            switch (uniqueEntityNodes.Count()) {
+            switch (uniqueEntityNodes.Count())
+            {
                 case 1:
                     result += $"{SummaryRescources.OneEntityNodeAnalysed} ";
                     break;
@@ -37,9 +43,11 @@ namespace IDesign.Extension {
             IEnumerable<RecognitionResult> allResults,
             IEnumerable<IEntity> uniqueEntityNodes,
             ref int recognizedPatternsCount
-        ) {
+        )
+        {
             var resultList = "";
-            if (uniqueFiles.Count() == 1) {
+            if (uniqueFiles.Count() == 1)
+            {
                 var allRecognizedPatters =
                     allResults
                         .Where(x => x.Result.GetScore() >= 80)
@@ -48,7 +56,8 @@ namespace IDesign.Extension {
                          let partOfPatterns = allRecognizedPatters
                              .Where(x => x.Result.GetRelatedSubTypes().ContainsKey(entityNode))
                          where partOfPatterns.Count() > 0
-                         select (entityNode, partOfPatterns)) {
+                         select (entityNode, partOfPatterns))
+                {
                     resultList +=
                         $"{Environment.NewLine}{string.Format(SummaryRescources.ClassSeemsPartOf, entityNode.GetName(), partOfPatterns.First().Pattern.Name)}";
                     recognizedPatternsCount++;
@@ -58,12 +67,14 @@ namespace IDesign.Extension {
             return resultList;
         }
 
-        private string CreateNoPatternsFoundSummary(IEnumerable<RecognitionResult> results) {
+        private string CreateNoPatternsFoundSummary(IEnumerable<RecognitionResult> results)
+        {
             var result = SummaryRescources.NoPatternsRecognized + " ";
             var resultsWithScore = results.Where(x => x.Result.GetScore() > 0)
                 .OrderByDescending(x => x.Result.GetScore());
 
-            if (resultsWithScore.Count() > 0) {
+            if (resultsWithScore.Count() > 0)
+            {
                 var highestScored = resultsWithScore.First();
                 result += string.Format(
                     SummaryRescources.ClassScoresHighestOn, highestScored.EntityNode.GetName(),
@@ -74,9 +85,11 @@ namespace IDesign.Extension {
             return result;
         }
 
-        public string CreateSummary(IEnumerable<RecognitionResult> results, IEnumerable<RecognitionResult> allResults) {
+        public string CreateSummary(IEnumerable<RecognitionResult> results, IEnumerable<RecognitionResult> allResults)
+        {
             var result = "";
-            if (results.Count() == 0) {
+            if (results.Count() == 0)
+            {
                 return SummaryRescources.NothingClassesOrInterfacesFound;
             }
 
@@ -93,11 +106,14 @@ namespace IDesign.Extension {
                 uniqueFiles, allResults, uniqueEntityNodes, ref recognizedPatternsCount
             );
 
-            if (resultList.Count() == 0 && recognizedPatternsCount == 0) {
+            if (resultList.Count() == 0 && recognizedPatternsCount == 0)
+            {
                 result += CreateNoPatternsFoundSummary(results);
             }
             else
-                switch (recognizedPatternsCount) {
+            {
+                switch (recognizedPatternsCount)
+                {
                     case 1:
                         result += SummaryRescources.OnePatternRecognized + " ";
                         break;
@@ -106,8 +122,10 @@ namespace IDesign.Extension {
                             $"{string.Format(SummaryRescources.MultiplePatternsRecognized, recognizedPatternsCount)} ";
                         break;
                 }
+            }
 
-            foreach (var recognizedPattern in recognizedPatters) {
+            foreach (var recognizedPattern in recognizedPatters)
+            {
                 result +=
                     $"{Environment.NewLine}{string.Format(SummaryRescources.ClassSeemsPartOf, recognizedPattern.EntityNode.GetName(), recognizedPattern.Pattern.Name)}";
             }

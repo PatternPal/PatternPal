@@ -3,8 +3,10 @@ using IDesign.Tests.Utils;
 using NUnit.Framework;
 using SyntaxTree;
 
-namespace IDesign.Tests.Recognizers {
-    class StateRecognizerTest {
+namespace IDesign.Tests.Recognizers
+{
+    internal class StateRecognizerTest
+    {
         [TestCase("StateTest1", "Doneness", 80, 100)]
         [TestCase("StateTest2", "State", 80, 100)]
         [TestCase("StateTest3", "State", 80, 100)]
@@ -16,7 +18,8 @@ namespace IDesign.Tests.Recognizers {
             string filename,
             int minScore,
             int maxScore
-        ) {
+        )
+        {
             var state = new StateRecognizer();
             var filesAsString = FileUtils.FilesToString($"{directory}\\");
             var nameSpaceName = $"IDesign.Tests.TestClasses.{directory}";
@@ -24,7 +27,8 @@ namespace IDesign.Tests.Recognizers {
 
             var graph = new SyntaxGraph();
             var i = 0;
-            foreach (var s in filesAsString) {
+            foreach (var s in filesAsString)
+            {
                 graph.AddFile(s, i++.ToString());
             }
 

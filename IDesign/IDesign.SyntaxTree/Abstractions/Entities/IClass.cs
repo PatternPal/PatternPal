@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using SyntaxTree.Abstractions.Members;
 
-namespace SyntaxTree.Abstractions.Entities {
-    public interface IClass : IEntity {
+namespace SyntaxTree.Abstractions.Entities
+{
+    public interface IClass : IEntity
+    {
         /// <summary>
         ///     Get a list of constructors declared in this node
         /// </summary>

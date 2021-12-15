@@ -3,8 +3,10 @@ using IDesign.Tests.Utils;
 using NUnit.Framework;
 using SyntaxTree;
 
-namespace IDesign.Tests.Recognizers {
-    class AdapterRecognizerTest {
+namespace IDesign.Tests.Recognizers
+{
+    internal class AdapterRecognizerTest
+    {
         [TestCase("AdapterTest1", "Target", 0, 79)] //Target
         [TestCase("AdapterTest1", "Adaptee", 0, 79)] //Adaptee
         [TestCase("AdapterTest1", "Adapter", 80, 100)] //Adapter
@@ -17,7 +19,8 @@ namespace IDesign.Tests.Recognizers {
             string filename,
             int minscore,
             int maxscore
-        ) {
+        )
+        {
             var state = new AdapterRecognizer();
             var filesAsString = FileUtils.FilesToString($"{directory}\\");
             var nameSpaceName = $"IDesign.Tests.TestClasses.{directory}";
@@ -25,7 +28,8 @@ namespace IDesign.Tests.Recognizers {
 
             var graph = new SyntaxGraph();
             var i = 0;
-            foreach (var s in filesAsString) {
+            foreach (var s in filesAsString)
+            {
                 graph.AddFile(s, i++.ToString());
             }
 

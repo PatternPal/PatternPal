@@ -3,8 +3,10 @@ using IDesign.Tests.Utils;
 using NUnit.Framework;
 using SyntaxTree;
 
-namespace IDesign.Tests.Recognizers {
-    public class DecoratorRecognizerTest {
+namespace IDesign.Tests.Recognizers
+{
+    public class DecoratorRecognizerTest
+    {
         [TestCase("DecoratorTest1", "Decorator", 80, 100)]
         [TestCase("DecoratorTest2", "Decorator", 0, 79)]
         [TestCase("DecoratorTest3", "Decorator", 0, 79)]
@@ -15,7 +17,8 @@ namespace IDesign.Tests.Recognizers {
             string filename,
             int minScore,
             int maxScore
-        ) {
+        )
+        {
             var decorator = new DecoratorRecognizer();
             var filesAsString = FileUtils.FilesToString($"{directory}\\");
             var nameSpaceName = $"IDesign.Tests.TestClasses.{directory}";
@@ -23,7 +26,8 @@ namespace IDesign.Tests.Recognizers {
 
             var graph = new SyntaxGraph();
             var i = 0;
-            foreach (var s in filesAsString) {
+            foreach (var s in filesAsString)
+            {
                 graph.AddFile(s, i++.ToString());
             }
 

@@ -1,5 +1,7 @@
-﻿namespace SyntaxTree.Abstractions {
-    public interface IModifier {
+﻿namespace SyntaxTree.Abstractions
+{
+    public interface IModifier
+    {
         string GetName();
     }
 }

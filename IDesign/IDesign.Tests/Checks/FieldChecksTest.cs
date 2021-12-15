@@ -3,8 +3,10 @@ using IDesign.Recognizers.Checks;
 using IDesign.Tests.Utils;
 using NUnit.Framework;
 
-namespace IDesign.Tests.Checks {
-    public class FieldChecksTest {
+namespace IDesign.Tests.Checks
+{
+    public class FieldChecksTest
+    {
         [Test]
         [TestCase("public", @"public string TestProperty", true)]
         [TestCase("private", @"private int TestProperty", true)]
@@ -13,7 +15,8 @@ namespace IDesign.Tests.Checks {
         [TestCase("private", @"static Class[] TestProperty", false)]
         [TestCase("public", @"private var TestProperty", false)]
         [TestCase("static", @"public bool TestProperty", false)]
-        public void CheckModifier_Should_Return_CorrectResponse(string modifier, string code, bool shouldBeValid) {
+        public void CheckModifier_Should_Return_CorrectResponse(string modifier, string code, bool shouldBeValid)
+        {
             var field = EntityNodeUtils.CreateField(code);
 
             Assert.AreEqual(
@@ -30,12 +33,13 @@ namespace IDesign.Tests.Checks {
         [TestCase("var", @"static var TestProperty", true)]
         [TestCase("T", @"private var TestProperty", false)]
         [TestCase("int", @"public bool TestProperty", false)]
-        public void TypeCheck_Should_Return_CorrectResponse(string type, string code, bool shouldBeValid) {
+        public void TypeCheck_Should_Return_CorrectResponse(string type, string code, bool shouldBeValid)
+        {
             var field = EntityNodeUtils.CreateField(code);
 
             Assert.AreEqual(
                 shouldBeValid,
-                field.CheckFieldType(new List<string>() { type })
+                field.CheckFieldType(new List<string> {type})
             );
         }
     }

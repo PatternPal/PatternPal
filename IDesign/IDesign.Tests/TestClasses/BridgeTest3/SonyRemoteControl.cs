@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses.BridgeTest3
+﻿namespace IDesign.Tests.TestClasses.BridgeTest3
 {
     public class SonyRemoteControl : AbstractRemoteControl
     {

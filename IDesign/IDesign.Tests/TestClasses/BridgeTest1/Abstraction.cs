@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace IDesign.Tests.TestClasses.BridgeTest1
+﻿namespace IDesign.Tests.TestClasses.BridgeTest1
 {
     public class Abstraction
     {
@@ -8,13 +6,13 @@ namespace IDesign.Tests.TestClasses.BridgeTest1
 
         public Abstraction(IImplementation implementation)
         {
-            this._implementation = implementation;
+            _implementation = implementation;
         }
 
         public virtual string Operation()
         {
             return "Abstract: Base operation with:\n" +
-                _implementation.OperationImplementation();
+                   _implementation.OperationImplementation();
         }
     }
 }
