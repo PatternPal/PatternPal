@@ -5,6 +5,7 @@ on:
       - master
     paths:
       - 'IDesign/**'
+  workflow_dispatch: 
 
 defaults:
   run:
