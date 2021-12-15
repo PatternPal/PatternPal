@@ -7,6 +7,13 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Bride design pattern recognizer
+- Home screen for the extension
+- GitHub Ci/Cd
+- Navigation between screen
+
 ### Improved
 
 - Singleton Pattern Detector
@@ -16,11 +23,13 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- Use GitHub actions instead of GitLab runner #42
+- Use GitHub actions instead of GitLab runner
+- All screens have a common title
 
 ### Fixed
 
 - Syntax Tree Generator used outdated syntax
+- Compatibility with visual studio 2022
 
 ## [1.0.0] - 2021-12-01
 
