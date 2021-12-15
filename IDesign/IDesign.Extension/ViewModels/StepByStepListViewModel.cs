@@ -11,7 +11,7 @@ namespace IDesign.Extension.ViewModels
 {
     public class StepByStepListViewModel : ViewModel
     {
-        public override string Title => "Step By Step Instructions";
+        public override string Title => Resources.ExtensionUIResources.StepByStepTitle;
 
         public ICommand NavigateHomeCommand { get; }
 
