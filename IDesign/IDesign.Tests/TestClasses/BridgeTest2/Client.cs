@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace IDesign.Tests.TestClasses.BridgeTest2
 {
     /// <summary>
-    ///     Bridge Design Pattern
+    /// Bridge Design Pattern
     /// </summary>
     public class Client
     {

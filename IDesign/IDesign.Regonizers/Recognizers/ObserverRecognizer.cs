@@ -58,10 +58,7 @@ namespace IDesign.Recognizers.Recognizers
                                         new List<ICheck<IField>>
                                         {
                                             new ElementCheck<IField>(
-                                                x => x.CheckFieldType(new List<string>
-                                                {
-                                                    $"List<{node.GetName()}>"
-                                                }),
+                                                x => x.CheckFieldType(new List<string> {$"List<{node.GetName()}>"}),
                                                 new ResourceMessage("FieldType",
                                                     new[] {node.GetName()}), 1f)
                                         }, d => d.GetFields(), "ObserverConcreteSubjectField")

@@ -8,38 +8,6 @@
              d:DesignHeight="400" d:DesignWidth="400">
     <UserControl.Resources>
         <ResourceDictionary>
-            <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="20" />
-                    </Grid.ColumnDefinitions>
-                    <Border x:Name="Border" Grid.ColumnSpan="2" BorderThickness="1"
-                            BorderBrush="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowBorderKey}}" />
-                    <Border Grid.Column="0" Margin="1">
-                        <Border.Background>
-                            <SolidColorBrush Color="Transparent" />
-                        </Border.Background>
-                    </Border>
-                    <Path x:Name="Arrow"
-                          Grid.Column="1"
-                          HorizontalAlignment="Center"
-                          VerticalAlignment="Center"
-                          Data="M 0 0 L 4 4 L 8 0 Z"
-                          Fill="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
-                </Grid>
-                <ControlTemplate.Triggers>
-                    <Trigger Property="IsMouseOver" Value="true">
-                        <Setter TargetName="Border" Property="BorderBrush"
-                                Value="{DynamicResource {x:Static vsshell:VsBrushes.HighlightKey}}" />
-                        <Setter TargetName="Arrow" Property="Fill"
-                                Value="{DynamicResource {x:Static vsshell:VsBrushes.HighlightKey}}" />
-                    </Trigger>
-                </ControlTemplate.Triggers>
-            </ControlTemplate>
-            <ControlTemplate x:Key="ComboBoxTextBox" TargetType="{x:Type TextBox}">
-                <Border x:Name="PART_ContentHost" Focusable="False" />
-            </ControlTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid x:Name="RadioGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">

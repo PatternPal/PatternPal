@@ -4,13 +4,13 @@ using System.Collections.Generic;
 namespace IDesign.Tests.TestClasses.BridgeTest2
 {
     /// <summary>
-    ///     The 'ConcreteImplementor' class
+    /// The 'ConcreteImplementor' class
     /// </summary>
     public class CustomersData : DataObject
     {
         private readonly List<string> customers = new List<string>();
-        private readonly string city;
-        private int current;
+        private int current = 0;
+        private string city;
 
         public CustomersData(string city)
         {

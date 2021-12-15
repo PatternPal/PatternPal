@@ -3,7 +3,7 @@
 namespace IDesign.Tests.TestClasses.BridgeTest2
 {
     /// <summary>
-    ///     The 'RefinedAbstraction' class
+    /// The 'RefinedAbstraction' class
     /// </summary>
     public class Customers : CustomersBase
     {

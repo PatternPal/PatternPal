@@ -1,7 +1,7 @@
 ﻿namespace IDesign.Tests.TestClasses.BridgeTest2
 {
     /// <summary>
-    ///     The 'Implementor' abstract class
+    /// The 'Implementor' abstract class
     /// </summary>
     public abstract class DataObject
     {
