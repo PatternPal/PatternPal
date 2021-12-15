@@ -54,14 +54,14 @@ namespace IDesign.Recognizers
                         {
                             new ElementCheck<IMethod>(x => x.CheckFieldIsUsed(currentField), "AdapterMethodUses", 2),
                             new ElementCheck<IMethod>(x => !x.CheckReturnType(currentField), "AdapterMethodReturnType", 1),
-                            new ElementCheck<IMethod>(x => x.IsInterfaceMethod(entityNode) || x.CheckModifier("override"),
-
-                                "MethodOverride", 1)
+                            new ElementCheck<IMethod>(x => x.IsInterfaceMethod(entityNode) || x.CheckModifier("override"), "MethodOverride", 1)
 
                         }, x => entityNode.GetMethodsAndProperties(), "AdapterMethod", GroupCheckType.Median)
 
                     }, x => entityNode.GetFields(), "AdapteeField", GroupCheckType.Median)
+
                 }, node => node.GetRelations(),  "AdapterAdaptee")
+
             }, x => new List<IEntityNode> { entityNode }, "ObjectAdapter", GroupCheckType.All);
 
             return adapterCheck;
@@ -84,16 +84,17 @@ namespace IDesign.Recognizers
                             ;
                     }, "AdapteeExtendsApter", 2),
 
-                        new GroupCheck<IRelation, IMethod>(new List<ICheck<IMethod>>
-                        {
-                            new ElementCheck<IMethod>(x => x.CheckIfMethodCallsMethodInNode(currentRelation.GetDestination()), "AdapterMethodUses", 2),
-                            new ElementCheck<IMethod>(x => !x.CheckReturnType(currentRelation.GetDestination().GetName()), "AdapterMethodReturnType", 1),
-                            new ElementCheck<IMethod>(x => x.IsInterfaceMethod(entityNode) || x.CheckModifier("override"),
-                                "MethodOverride", 1),
+                    new GroupCheck<IRelation, IMethod>(new List<ICheck<IMethod>>
+                    {
+                        new ElementCheck<IMethod>(x => x.CheckIfMethodCallsMethodInNode(currentRelation.GetDestination()), "AdapterMethodUses", 2),
+                        new ElementCheck<IMethod>(x => !x.CheckReturnType(currentRelation.GetDestination().GetName()), "AdapterMethodReturnType", 1),
+                        new ElementCheck<IMethod>(x => x.IsInterfaceMethod(entityNode) || x.CheckModifier("override"),
+                            "MethodOverride", 1),
 
-                        }, x => entityNode.GetMethodsAndProperties(), "AdapterMethod", GroupCheckType.Median)
+                    }, x => entityNode.GetMethodsAndProperties(), "AdapterMethod", GroupCheckType.Median)
 
                 }, node => node.GetRelations(), "AdapterAdaptee")
+
             }, x => new List<IEntityNode> { entityNode }, "AdapterClass", GroupCheckType.All);
 
             return adapterCheck;

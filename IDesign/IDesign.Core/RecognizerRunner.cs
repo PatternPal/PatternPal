@@ -19,6 +19,7 @@ namespace IDesign.Core
             new DesignPattern(Resources.DesignPatternNameResources.Strategy, new StrategyRecognizer(), Resources.WikiPageResources.Strategy),
             new DesignPattern(Resources.DesignPatternNameResources.Adapter, new AdapterRecognizer(), Resources.WikiPageResources.Adapter),
             new DesignPattern(Resources.DesignPatternNameResources.Observer, new ObserverRecognizer(), Resources.WikiPageResources.Observer),
+            new DesignPattern(Resources.DesignPatternNameResources.Bridge, new BridgeRecognizer(), Resources.WikiPageResources.Bridge),
         };
 
         public Dictionary<string, EntityNode> EntityNodes =

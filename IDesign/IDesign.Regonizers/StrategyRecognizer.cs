@@ -58,11 +58,9 @@ namespace IDesign.Recognizers
                  },x => x.GetRelations().Where(y => (y.GetRelationType().Equals(RelationType.ExtendedBy)) ||(y.GetRelationType().Equals(RelationType.ImplementedBy))
                 ).Select(y => y.GetDestination()), "StrategyConcrete", GroupCheckType.All),
 
-            }, x => new List<IEntityNode> { node }, "Strategy"); ; ;
+            }, x => new List<IEntityNode> { node }, "Strategy");
+
             result.Results.Add(strategyPatternCheck.Check(node));
-
-
-
             result.RelatedSubTypes.Add(node, "AbstractStrategy");
 
             foreach (var concrete in node.GetRelations().Where(x =>

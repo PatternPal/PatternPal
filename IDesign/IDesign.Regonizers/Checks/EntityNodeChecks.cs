@@ -11,12 +11,12 @@ namespace IDesign.Recognizers.Checks
     {
         public static bool ImplementsInterface(this IEntityNode node, string name)
         {
-            return ClassImlementsInterface(node, name)
+            return ClassImplementsInterface(node, name)
                 ? true
                 : CheckMinimalAmountOfRelationTypes(node, RelationType.Extends, 1) ? ImplementsInterface(GetExtends(node), name) : false;
         }
 
-        public static bool ClassImlementsInterfaceMethod(this IEntityNode node, IMethod method)
+        public static bool ClassImplementsInterfaceMethod(this IEntityNode node, IMethod method)
         {
             foreach (var _ in from interFace in node.GetRelations()
                                                     .Where(x => x.GetRelationType() == RelationType.Implements)
@@ -62,7 +62,7 @@ namespace IDesign.Recognizers.Checks
             return false;
         }
 
-        public static bool ClassImlementsInterface(this IEntityNode node, string name)
+        public static bool ClassImplementsInterface(this IEntityNode node, string name)
         {
             return node.GetRelations()
                        .Any(x => x.GetRelationType() == RelationType.Implements && x.GetDestination().GetName() == name);
@@ -120,6 +120,16 @@ namespace IDesign.Recognizers.Checks
         public static bool CheckRelationType(this IEntityNode entityNode, RelationType relationType)
         {
             return entityNode.CheckMinimalAmountOfRelationTypes(relationType, 1);
+        }
+
+        public static bool CheckIsAbstractClass(this IEntityNode entityNode)
+        {
+            return entityNode.CheckTypeDeclaration(EntityNodeType.Class) && entityNode.CheckModifier("abstract");
+        }
+
+        public static bool CheckIsAbstractClassOrInterface(this IEntityNode entityNode)
+        {
+            return entityNode.CheckTypeDeclaration(EntityNodeType.Interface) || entityNode.CheckIsAbstractClass();
         }
 
         public static bool CheckMinimalAmountOfRelationTypes(this IEntityNode entityNode, RelationType relationType, int amount)
