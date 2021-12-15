@@ -18,7 +18,6 @@ namespace IDesign.Recognizers
         public IResult Recognize(IEntityNode entityNode)
         {
             Result result = new Result();
-            List<ICheck<IEntityNode>> abstractionGroupCheckList = null;
             List<ICheck<IEntityNode>> implementerChecks = new List<ICheck<IEntityNode>>
             {
                 // Implementer is an abstract class or an interface
@@ -46,11 +45,14 @@ namespace IDesign.Recognizers
 
             var implementerGroupCheck = new GroupCheck<IEntityNode, IEntityNode>(
                 implementerChecks,
-                x => entityNode.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Uses)).Select(y => y.GetDestination()),
+                x => entityNode
+                        .GetRelations()
+                        .Where(y => y.GetRelationType().Equals(RelationType.Uses))
+                        .Select(y => y.GetDestination()),
                 "BridgeImplementer"
             );
 
-            abstractionGroupCheckList = new List<ICheck<IEntityNode>>
+            var abstractionGroupCheckList = new List<ICheck<IEntityNode>>
             {
                 // The abstraction should be an abstract class or an interface
                 new ElementCheck<IEntityNode>(
@@ -75,7 +77,10 @@ namespace IDesign.Recognizers
                 ),
             };
 
-            var abstractionAsClassGroupcheckList = GetAbstractionGroupCheckList(entityNode, entityNode.GetFields());
+            var abstractionAsClassGroupcheckList = GetAbstractionGroupCheckList(
+                entityNode, 
+                entityNode.GetFields()
+            );
 
             var abstractionAsInterfaceGroupcheckList = GetAbstractionGroupCheckList(
                 entityNode,
