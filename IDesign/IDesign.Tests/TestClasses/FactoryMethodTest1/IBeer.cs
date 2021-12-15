@@ -2,8 +2,6 @@
 {
     public interface IBeer
     {
-        string GetBeer();
-
         int BatchSize { get; set; }
 
         double AlcoholPercentage
@@ -17,5 +15,7 @@
             get;
             set;
         }
+
+        string GetBeer();
     }
 }

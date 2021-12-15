@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses.StateTest3
+﻿namespace IDesign.Tests.TestClasses.StateTest3
 {
     //this code is from https://www.dofactory.com/net/state-design-pattern
 
     /// <summary>
-    /// A 'ConcreteState' class
+    ///     A 'ConcreteState' class
     /// </summary>
-    class ConcreteStateB : State
+    internal class ConcreteStateB : State
     {
         public override void Handle(Context context)
         {

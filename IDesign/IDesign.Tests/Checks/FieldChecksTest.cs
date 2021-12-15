@@ -1,9 +1,7 @@
-﻿using IDesign.Recognizers.Checks;
-using IDesign.Recognizers.Models;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using System.Collections.Generic;
+using IDesign.Recognizers.Checks;
+using IDesign.Tests.Utils;
 using NUnit.Framework;
-using System.Collections.Generic;
 
 namespace IDesign.Tests.Checks
 {
@@ -19,16 +17,12 @@ namespace IDesign.Tests.Checks
         [TestCase("static", @"public bool TestProperty", false)]
         public void CheckModifier_Should_Return_CorrectResponse(string modifier, string code, bool shouldBeValid)
         {
-            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var field = root.Members[0] as FieldDeclarationSyntax;
+            var field = EntityNodeUtils.CreateField(code);
 
-            if (field == null)
-            {
-                Assert.Fail();
-            }
-
-            Assert.AreEqual(shouldBeValid,
-                new Field(field, field.Declaration.Variables.FirstOrDefault()).CheckMemberModifier(modifier));
+            Assert.AreEqual(
+                shouldBeValid,
+                field.CheckMemberModifier(modifier)
+            );
         }
 
         [Test]
@@ -41,16 +35,12 @@ namespace IDesign.Tests.Checks
         [TestCase("int", @"public bool TestProperty", false)]
         public void TypeCheck_Should_Return_CorrectResponse(string type, string code, bool shouldBeValid)
         {
-            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var field = root.Members[0] as FieldDeclarationSyntax;
+            var field = EntityNodeUtils.CreateField(code);
 
-            if (field == null)
-            {
-                Assert.Fail();
-            }
-
-            Assert.AreEqual(shouldBeValid,
-                new Field(field, field.Declaration.Variables.FirstOrDefault()).CheckFieldType(new List<string>() { type }));
+            Assert.AreEqual(
+                shouldBeValid,
+                field.CheckFieldType(new List<string> {type})
+            );
         }
     }
 }

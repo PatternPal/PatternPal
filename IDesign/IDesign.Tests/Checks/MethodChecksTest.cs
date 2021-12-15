@@ -1,10 +1,8 @@
+using System.Linq;
 using IDesign.Recognizers.Checks;
-using IDesign.Recognizers.Models;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using IDesign.Tests.Utils;
 using NUnit.Framework;
-using System.Collections.Generic;
-using IDesign.Recognizers.Abstractions;
+
 namespace IDesign.Tests.Checks
 {
     public class MethodTest
@@ -21,13 +19,7 @@ namespace IDesign.Tests.Checks
         [TestCase("Class", @"public void TestMethod(){}", false)]
         public void ReturnTypeCheck_Should_Return_CorrectRepsonse(string returnType, string code, bool shouldBeValid)
         {
-            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var methodSyntax = root.Members[0] as MethodDeclarationSyntax;
-            if (methodSyntax == null)
-            {
-                Assert.Fail();
-            }
-            var method = new Method(methodSyntax);
+            var method = EntityNodeUtils.CreateMethod(code);
 
             Assert.AreEqual(shouldBeValid, method.CheckReturnType(returnType));
         }
@@ -42,16 +34,9 @@ namespace IDesign.Tests.Checks
         [TestCase("public", @"private static void TestMethod(){}", false)]
         public void ModifierCheck_Should_Return_CorrectResponse(string modifier, string code, bool shouldBeValid)
         {
+            var method = EntityNodeUtils.CreateMethod(code);
 
-            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var method = root.Members[0] as MethodDeclarationSyntax;
-
-            if (method == null)
-            {
-                Assert.Fail();
-            }
-
-            Assert.AreEqual(shouldBeValid, new Method(method).CheckModifier(modifier));
+            Assert.AreEqual(shouldBeValid, method.CheckModifier(modifier));
         }
 
         [Test]
@@ -62,15 +47,9 @@ namespace IDesign.Tests.Checks
         [TestCase(@"public void TestMethod(){string x  = new double().parse();}", true)]
         public void CreationalCheck_Should_Return_CorrectResponse(string code, bool shouldBeVaild)
         {
-            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var method = root.Members[0] as MethodDeclarationSyntax;
+            var method = EntityNodeUtils.CreateMethod(code);
 
-            if (method == null)
-            {
-                Assert.Fail();
-            }
-
-            Assert.AreEqual(shouldBeVaild, new Method(method).CheckCreationalFunction());
+            Assert.AreEqual(shouldBeVaild, method.CheckCreationalFunction());
         }
 
         [Test]
@@ -81,15 +60,9 @@ namespace IDesign.Tests.Checks
         [TestCase(@"public int TestMethod(){var x = new Class(); return new int();}", false)]
         public void ReturnClassCheck_Should_Return_CorrectResponse(string code, bool shouldBeVaild)
         {
-            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var method = root.Members[0] as MethodDeclarationSyntax;
+            var method = EntityNodeUtils.CreateMethod(code);
 
-            if (method == null)
-            {
-                Assert.Fail();
-            }
-
-            Assert.AreEqual(shouldBeVaild, new Method(method).CheckReturnTypeSameAsCreation());
+            Assert.AreEqual(shouldBeVaild, method.CheckReturnTypeSameAsCreation());
         }
 
         [Test]
@@ -98,40 +71,36 @@ namespace IDesign.Tests.Checks
         [TestCase(@"public void TestMethod(int i){ }", true, "string", "int")]
         [TestCase(@"public void TestMethod(){ }", false, "string", "int")]
         [TestCase(@"public void TestMethod(IComponent1 comp1){ }", true, "IComponent1")]
-        public void ParameterCheck_Should_Return_CorrectResponse(string code, bool shouldBeVaild, params string[] parameters)
+        public void ParameterCheck_Should_Return_CorrectResponse(
+            string code,
+            bool shouldBeVaild,
+            params string[] parameters
+        )
         {
-            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var method = root.Members[0] as MethodDeclarationSyntax;
+            var method = EntityNodeUtils.CreateMethod(code);
 
-            if (method == null)
-            {
-                Assert.Fail();
-            }
-
-            Assert.AreEqual(shouldBeVaild, new Method(method).CheckParameters(parameters));
+            Assert.AreEqual(shouldBeVaild, method.CheckParameters(parameters));
         }
 
         [Test]
         [TestCase(@"public void TestMethod(){ }", true, @"public void TestMethod(){ }")]
-        [TestCase(@"public void TestMethod(){ }", true, @"public void TestMethod(){ }", @"public void TestMethod1(){ }")]
-        [TestCase(@"public void TestMethod(){ }", false, @"public void TestMethod2(){ }", @"public void TestMethod1(){ }")]
-        public void NameCheck_Should_Return_CorrectResponse(string code, bool shouldBeVaild, params string[] methodStrings)
+        [TestCase(
+            @"public void TestMethod(){ }", true, @"public void TestMethod(){ }", @"public void TestMethod1(){ }"
+        )]
+        [TestCase(
+            @"public void TestMethod(){ }", false, @"public void TestMethod2(){ }", @"public void TestMethod1(){ }"
+        )]
+        public void NameCheck_Should_Return_CorrectResponse(
+            string code,
+            bool shouldBeVaild,
+            params string[] methodStrings
+        )
         {
-            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var method = root.Members[0] as MethodDeclarationSyntax;
-            List<IMethod> methods = new List<IMethod>();
-            foreach (var methodString in methodStrings)
-            {
-                var root2 = CSharpSyntaxTree.ParseText(methodString).GetCompilationUnitRoot();
-                methods.Add(new Method(root2.Members[0] as MethodDeclarationSyntax));
-            }
+            var method = EntityNodeUtils.CreateMethod(code);
 
-            if (method == null)
-            {
-                Assert.Fail();
-            }
+            var methods = methodStrings.Select(EntityNodeUtils.CreateMethod).ToList();
 
-            Assert.AreEqual(shouldBeVaild, new Method(method).CheckIfNameExists(methods));
+            Assert.AreEqual(shouldBeVaild, method.CheckIfNameExists(methods));
         }
 
         [Test]
@@ -139,15 +108,9 @@ namespace IDesign.Tests.Checks
         [TestCase(@"public void TestMethod(){ }", false, "test")]
         public void ArgumentCheck_Should_Return_CorrectResponse(string code, bool shouldBeVaild, string args)
         {
-            var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
-            var method = root.Members[0] as MethodDeclarationSyntax;
+            var method = EntityNodeUtils.CreateMethod(code);
 
-            if (method == null)
-            {
-                Assert.Fail();
-            }
-
-            Assert.AreEqual(shouldBeVaild, new Method(method).CheckIfArgumentsExists(args));
+            Assert.AreEqual(shouldBeVaild, method.CheckIfArgumentsExists(args));
         }
     }
 }

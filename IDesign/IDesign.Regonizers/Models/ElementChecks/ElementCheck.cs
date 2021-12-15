@@ -1,6 +1,7 @@
 ﻿using System;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models.Output;
+using SyntaxTree.Abstractions;
 
 namespace IDesign.Recognizers.Models.ElementChecks
 {
@@ -8,11 +9,10 @@ namespace IDesign.Recognizers.Models.ElementChecks
     ///     A class for defining a check on an element with a predicate
     /// </summary>
     /// <typeparam name="T">Type of the element to be checked</typeparam>
-    public class ElementCheck<T> : ICheck<T> where T : class, ICheckable
+    public class ElementCheck<T> : ICheck<T> where T : INode
     {
-        private readonly Predicate<T> _predicate;
-
         private readonly IResourceMessage _feedback;
+        private readonly Predicate<T> _predicate;
 
         private readonly float _score;
 
@@ -37,6 +37,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
             _feedback = feedback;
             _score = 1;
         }
+
         public ElementCheck(Predicate<T> predicate, IResourceMessage feedback, float score)
         {
             _predicate = predicate;
@@ -53,6 +54,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
                 var feedback = isValid ? FeedbackType.Correct : FeedbackType.Incorrect;
                 return new CheckResult(_feedback, feedback, elementToCheck, _score);
             }
+
             return new CheckResult(_feedback, FeedbackType.Incorrect, null, _score);
         }
     }

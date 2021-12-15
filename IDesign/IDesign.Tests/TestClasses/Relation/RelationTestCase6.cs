@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses.Relation
+﻿namespace IDesign.Tests.TestClasses.Relation
 {
     public class RelationTestCase6 : ERelationTestCase6
     {
@@ -13,5 +9,3 @@ namespace IDesign.Tests.TestClasses.Relation
     {
     }
 }
-
-

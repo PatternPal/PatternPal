@@ -6,6 +6,7 @@ namespace IDesign.Extension.ViewModels
     public class DesignPatternViewModel : INotifyPropertyChanged
     {
         private bool isChecked;
+
         public DesignPatternViewModel(string name, DesignPattern pattern, string wikiPage)
         {
             WikiPage = wikiPage;

@@ -2,8 +2,18 @@
 {
     public class Dubbel : IBeer
     {
-        public double AlcoholPercentage { get { return 6.8; } set { } }
-        public string Name { get { return "Dubbel biertje"; } set { } }
+        public double AlcoholPercentage
+        {
+            get => 6.8;
+            set { }
+        }
+
+        public string Name
+        {
+            get => "Dubbel biertje";
+            set { }
+        }
+
         public int BatchSize { get; set; }
 
         public string GetBeer()

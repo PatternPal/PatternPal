@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses.StateTest2
+﻿namespace IDesign.Tests.TestClasses.StateTest2
 {
     //this code is from https://www.dofactory.com/net/state-design-pattern
 
     /// <summary>
-    /// The 'State' abstract class
+    ///     The 'State' abstract class
     /// </summary>
-    abstract class State
+    internal abstract class State
     {
         protected Account account;
         protected double balance;
@@ -22,14 +18,14 @@ namespace IDesign.Tests.TestClasses.StateTest2
 
         public Account Account
         {
-            get { return account; }
-            set { account = value; }
+            get => account;
+            set => account = value;
         }
 
         public double Balance
         {
-            get { return balance; }
-            set { balance = value; }
+            get => balance;
+            set => balance = value;
         }
 
         public abstract void Deposit(double amount);

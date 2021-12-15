@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses.FactoryMethodTest2
+﻿namespace IDesign.Tests.TestClasses.FactoryMethodTest2
 {
-    /// <summary>  
-    /// A 'ConcreteCreator' class  
-    /// </summary>  
-    class MoneyBackFactory : CardFactory
+    /// <summary>
+    ///     A 'ConcreteCreator' class
+    /// </summary>
+    internal class MoneyBackFactory : CardFactory
     {
-        private int _creditLimit;
-        private int _annualCharge;
+        private readonly int _annualCharge;
+        private readonly int _creditLimit;
 
         public MoneyBackFactory(int creditLimit, int annualCharge)
         {

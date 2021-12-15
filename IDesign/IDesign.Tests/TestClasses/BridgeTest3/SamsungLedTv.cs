@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace IDesign.Tests.TestClasses.BridgeTest3
 {
@@ -10,10 +8,12 @@ namespace IDesign.Tests.TestClasses.BridgeTest3
         {
             Console.WriteLine("Turning ON : Samsung TV");
         }
+
         public void SwitchOff()
         {
             Console.WriteLine("Turning OFF : Samsung TV");
         }
+
         public void SetChannel(int channelNumber)
         {
             Console.WriteLine("Setting channel Number " + channelNumber + " on Samsung TV");

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses.DecoratorTest2
+﻿namespace IDesign.Tests.TestClasses.DecoratorTest2
 {
-    class Decorator
+    internal class Decorator
     {
     }
 }

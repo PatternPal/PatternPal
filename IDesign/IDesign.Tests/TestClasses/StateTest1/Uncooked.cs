@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses.StateTest1
+﻿namespace IDesign.Tests.TestClasses.StateTest1
 {
     //this code is from https://exceptionnotfound.net/state-pattern-in-csharp/
 
     /// <summary>
-    /// A Concrete State class.
+    ///     A Concrete State class.
     /// </summary>
-    class Uncooked : Doneness
+    internal class Uncooked : Doneness
     {
         public Uncooked(Doneness state)
         {
@@ -17,6 +13,7 @@ namespace IDesign.Tests.TestClasses.StateTest1
             steak = state.Steak;
             Initialize();
         }
+
         private void Initialize()
         {
             lowerTemp = 0;

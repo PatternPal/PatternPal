@@ -30,7 +30,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget
       - name: Restore dependencies
-        run: nuget restore
+        run: dotnet restore & nuget restore
       - name: Build
         run: dotnet build
       - name: Test

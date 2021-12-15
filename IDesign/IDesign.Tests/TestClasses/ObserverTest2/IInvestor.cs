@@ -3,9 +3,9 @@
     //This code is from https://www.dofactory.com/net/observer-design-pattern
 
     /// <summary>
-    /// The 'Observer' interface
+    ///     The 'Observer' interface
     /// </summary>
-    interface IInvestor
+    internal interface IInvestor
     {
         void Update(Stock stock);
     }

@@ -1,6 +1,6 @@
 ﻿namespace IDesign.Tests.TestClasses.DecoratorTest5
 {
-    interface IComponent
+    internal interface IComponent
     {
         public int Operation();
     }

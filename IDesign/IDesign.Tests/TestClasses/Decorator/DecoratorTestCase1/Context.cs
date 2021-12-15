@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses.Decorator.DecoratorTestCase1
+﻿namespace IDesign.Tests.TestClasses.Decorator.DecoratorTestCase1
 {
-    class Context
+    internal class Context
     {
-        void Main()
+        private void Main()
         {
             IComponent component = new ConcreteComponent();
-            ConcreteDecorator1 decorator = new ConcreteDecorator1(component);
+            var decorator = new ConcreteDecorator1(component);
             Decorator d = new ConcreteDecorator1(decorator);
         }
     }

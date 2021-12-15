@@ -7,9 +7,20 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Improved
+
+- Singleton Pattern Detector
+    - Looks at generics so `Lazy<Singleton>` works now
+- Refactored the SyntaxTree representation
+    - Also moved this to a different module
+
 ### Changed
 
 - Use GitHub actions instead of GitLab runner #42
+
+### Fixed
+
+- Syntax Tree Generator used outdated syntax
 
 ## [1.0.0] - 2021-12-01
 

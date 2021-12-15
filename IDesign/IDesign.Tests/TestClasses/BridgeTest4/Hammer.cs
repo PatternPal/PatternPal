@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace IDesign.Tests.TestClasses.BridgeTest4
 {
     public class Hammer : IWeapon
     {
         private readonly IEnchantment _enchantment;
+
         public Hammer(IEnchantment enchantment)
         {
             _enchantment = enchantment;

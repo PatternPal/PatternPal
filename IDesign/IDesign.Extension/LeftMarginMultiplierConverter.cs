@@ -12,7 +12,9 @@ namespace IDesign.Extension
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return !(value is TreeViewItem item) ? new Thickness(0) : (object)new Thickness(Length * item.GetDepth(), 0, 0, 0);
+            return !(value is TreeViewItem item)
+                ? new Thickness(0)
+                : (object)new Thickness(Length * item.GetDepth(), 0, 0, 0);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

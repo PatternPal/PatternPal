@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses.BridgeTest1
+﻿namespace IDesign.Tests.TestClasses.BridgeTest1
 {
     // You can extend the Abstraction without changing the Implementation
     // classes.
@@ -15,7 +11,7 @@ namespace IDesign.Tests.TestClasses.BridgeTest1
         public override string Operation()
         {
             return "ExtendedAbstraction: Extended operation with:\n" +
-                base._implementation.OperationImplementation();
+                   _implementation.OperationImplementation();
         }
     }
 }

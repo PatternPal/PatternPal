@@ -1,18 +1,14 @@
-
-﻿using IDesign.Core;
-using IDesign.Core.Models;
-using IDesign.Recognizers;
 using IDesign.Recognizers.Checks;
-using IDesign.Recognizers.Models;
 using IDesign.Tests.Utils;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
-using System.Linq;
+using SyntaxTree;
+using SyntaxTree.Abstractions;
 
 namespace IDesign.Tests.Checks
 {
-    class EntityNodeChecksTest
+    internal class EntityNodeChecksTest
     {
         [TestCase("Abstract", @"abstract class TestClass1 { }", true)]
         [TestCase("Abstract", @"class TestClass1 { }", false)]
@@ -31,12 +27,9 @@ namespace IDesign.Tests.Checks
                 Assert.Fail();
             }
 
-            var entityNode = new EntityNode
-            {
-                InterfaceOrClassNode = typeDeclarationSyntax
-            };
+            var entity = EntityNodeUtils.CreateTestEntityNode(typeDeclarationSyntax);
 
-            Assert.AreEqual(shouldBeValid, entityNode.CheckModifier(modifier));
+            Assert.AreEqual(shouldBeValid, entity.CheckModifier(modifier));
         }
 
         [TestCase("Decorator", RelationType.Implements, 1, true)]
@@ -49,17 +42,28 @@ namespace IDesign.Tests.Checks
         [TestCase("IComponent", RelationType.Implements, 1, false)]
         [TestCase("IComponent", RelationType.ImplementedBy, 1, true)]
         [TestCase("IComponent", RelationType.ImplementedBy, 2, true)]
-        public void MinimalAmountOfRelationTypesCheck_Should_Return_Correct_RelationType(string className, RelationType relation, int amount, bool shouldBeValid)
+        public void MinimalAmountOfRelationTypesCheck_Should_Return_Correct_RelationType(
+            string className,
+            RelationType relation,
+            int amount,
+            bool shouldBeValid
+        )
         {
             var filesAsString = FileUtils.FilesToString("../../../../TestClasses/Decorator/DecoratorTestCase1");
-            var nameSpace = "IDesign.Tests.TestClasses.Decorator.DecoratorTestCase1";
-            var entityNodes = EntityNodeUtils.CreateEntityNodeGraph(filesAsString);
-            var createRelation = new DetermineRelations(entityNodes);
-            createRelation.CreateEdgesOfEntityNode();
-            var entityNode = entityNodes[nameSpace + "." + className];
+            var nameSpace = $"IDesign.Tests.TestClasses.Decorator.DecoratorTestCase1.{className}";
+            var graph = new SyntaxGraph();
+            var i = 0;
+            foreach (var content in filesAsString)
+            {
+                graph.AddFile(content, i++.ToString());
+            }
 
-            Assert.AreEqual(shouldBeValid, entityNode.CheckMinimalAmountOfRelationTypes(relation, amount));
+            graph.CreateGraph();
+            var nodes = graph.GetAll();
+
+            Assert.AreEqual(shouldBeValid, nodes[nameSpace].CheckMinimalAmountOfRelationTypes(relation, amount));
         }
+
         [TestCase("Class1", "IClass1", true)]
         [TestCase("Class2", "IClass2", true)]
         [TestCase("Class3", "IClass3", false)]
@@ -69,9 +73,16 @@ namespace IDesign.Tests.Checks
         {
             var code = FileUtils.FilesToString("ClassChecks\\");
             var nameSpaceName = "IDesign.Tests.TestClasses.ClassChecks";
-            var nodes = EntityNodeUtils.CreateEntityNodeGraph(code);
-            var createRelation = new DetermineRelations(nodes);
-            createRelation.CreateEdgesOfEntityNode();
+            var graph = new SyntaxGraph();
+            var i = 0;
+            foreach (var content in code)
+            {
+                graph.AddFile(content, i++.ToString());
+            }
+
+            graph.CreateGraph();
+            var nodes = graph.GetAll();
+
             var checkResult = nodes[nameSpaceName + "." + className].ImplementsInterface(interfaceName);
 
             Assert.AreEqual(shouldBeValid, checkResult);
@@ -86,9 +97,16 @@ namespace IDesign.Tests.Checks
         {
             var code = FileUtils.FilesToString("ClassChecks\\");
             var nameSpaceName = "IDesign.Tests.TestClasses.ClassChecks";
-            var nodes = EntityNodeUtils.CreateEntityNodeGraph(code);
-            var createRelation = new DetermineRelations(nodes);
-            createRelation.CreateEdgesOfEntityNode();
+            var graph = new SyntaxGraph();
+            var i = 0;
+            foreach (var content in code)
+            {
+                graph.AddFile(content, i++.ToString());
+            }
+
+            graph.CreateGraph();
+            var nodes = graph.GetAll();
+
             var checkResult = nodes[nameSpaceName + "." + className].ExtendsClass(eClassName);
 
             Assert.AreEqual(shouldBeValid, checkResult);
@@ -103,9 +121,15 @@ namespace IDesign.Tests.Checks
         {
             var code = FileUtils.FilesToString("ClassChecks\\");
             var nameSpaceName = "IDesign.Tests.TestClasses.ClassChecks";
-            var nodes = EntityNodeUtils.CreateEntityNodeGraph(code);
-            var createRelation = new DetermineRelations(nodes);
-            createRelation.CreateEdgesOfEntityNode();
+            var graph = new SyntaxGraph();
+            var i = 0;
+            foreach (var content in code)
+            {
+                graph.AddFile(content, i++.ToString());
+            }
+
+            graph.CreateGraph();
+            var nodes = graph.GetAll();
             var checkResult = nodes[nameSpaceName + "." + className].ClassImplementsInterface(interfaceName);
 
             Assert.AreEqual(shouldBeValid, checkResult);

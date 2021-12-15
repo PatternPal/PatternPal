@@ -826,7 +826,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Private constructor.
+        ///   Looks up a localized string similar to Non public constructor.
         /// </summary>
         public static string SingletonConstructor {
             get {

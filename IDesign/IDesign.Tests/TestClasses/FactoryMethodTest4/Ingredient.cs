@@ -1,29 +1,37 @@
 ﻿namespace IDesign.Tests.TestClasses.FactoryMethodTest4
 {
     /// <summary>
-    /// Product
+    ///     Product
     /// </summary>
-    abstract class Ingredient
+    internal abstract class Ingredient
     {
     }
 
     /// <summary>
-    /// Concrete Product
+    ///     Concrete Product
     /// </summary>
-    class Lettuce : Ingredient { }
+    internal class Lettuce : Ingredient
+    {
+    }
 
     /// <summary>
-    /// Concrete Product
+    ///     Concrete Product
     /// </summary>
-    class Bread : Ingredient { }
+    internal class Bread : Ingredient
+    {
+    }
 
     /// <summary>
-    /// Concrete Product
+    ///     Concrete Product
     /// </summary>
-    class Mayonnaise : Ingredient { }
+    internal class Mayonnaise : Ingredient
+    {
+    }
 
     /// <summary>
-    /// Concrete Product
+    ///     Concrete Product
     /// </summary>
-    class Turkey : Ingredient { }
+    internal class Turkey : Ingredient
+    {
+    }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models.Output;
+using SyntaxTree.Abstractions;
 
 namespace IDesign.Recognizers.Models.ElementChecks
 {
@@ -19,15 +20,14 @@ namespace IDesign.Recognizers.Models.ElementChecks
     /// <typeparam name="TParent">Type of the element with sub elements</typeparam>
     /// <typeparam name="TChild">Type of the elements that are checked</typeparam>
     public class GroupCheck<TParent, TChild> : ICheck<TParent>
-        where TParent : class, ICheckable where TChild : class, ICheckable
+        where TParent : INode where TChild : INode
     {
         private readonly List<ICheck<TChild>> _checks;
-        private readonly IResourceMessage _resourcemessage;
         private readonly Func<TParent, IEnumerable<TChild>> _elements;
-        public GroupCheckType Type { get; set; }
+        private readonly IResourceMessage _resourcemessage;
 
         public GroupCheck(List<ICheck<TChild>> checks, Func<TParent, IEnumerable<TChild>> elements,
-                          string resourcemessage, GroupCheckType type = GroupCheckType.Any)
+            string resourcemessage, GroupCheckType type = GroupCheckType.Any)
         {
             _checks = checks;
             _resourcemessage = new ResourceMessage(resourcemessage);
@@ -36,13 +36,15 @@ namespace IDesign.Recognizers.Models.ElementChecks
         }
 
         public GroupCheck(List<ICheck<TChild>> checks, Func<TParent, IEnumerable<TChild>> elements,
-                          IResourceMessage resourcemessage, GroupCheckType type = GroupCheckType.Any)
+            IResourceMessage resourcemessage, GroupCheckType type = GroupCheckType.Any)
         {
             _checks = checks;
             _resourcemessage = resourcemessage;
             _elements = elements;
             Type = type;
         }
+
+        public GroupCheckType Type { get; set; }
 
         public ICheckResult Check(TParent elementToCheck)
         {
@@ -60,9 +62,9 @@ namespace IDesign.Recognizers.Models.ElementChecks
 
             var allChildFeedback = new Dictionary<TChild, (float score, IEnumerable<ICheckResult> childFeedback)>();
             foreach (var (element, childFeedback, score) in from element in elements
-                                                            let childFeedback = _checks.Select(x => x.Check(element))
-                                                            let score = childFeedback.Sum(x => x.GetScore())
-                                                            select (element, childFeedback, score))
+                     let childFeedback = _checks.Select(x => x.Check(element))
+                     let score = childFeedback.Sum(x => x.GetScore())
+                     select (element, childFeedback, score))
             {
                 allChildFeedback.Add(element, (score, childFeedback));
             }
@@ -75,9 +77,8 @@ namespace IDesign.Recognizers.Models.ElementChecks
                     return CheckAny(elementToCheck, allChildFeedback);
                 case GroupCheckType.Median:
                     return CheckMedian(elementToCheck, allChildFeedback);
-                default:
-                    break;
             }
+
             return null;
         }
 
@@ -91,6 +92,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
             {
                 feedback = FeedbackType.SemiCorrect;
             }
+
             if (highestScored.Value.childFeedback.All(x => x.GetFeedbackType() == FeedbackType.Correct))
             {
                 feedback = FeedbackType.Correct;
@@ -110,6 +112,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
             {
                 feedback = FeedbackType.Incorrect;
             }
+
             if (allChildFeedback.Values.Any(x => x.score != 0))
             {
                 feedback = FeedbackType.SemiCorrect;
@@ -118,19 +121,17 @@ namespace IDesign.Recognizers.Models.ElementChecks
             var childResults = new List<ICheckResult>();
             foreach (var valueTuple in allChildFeedback)
             {
-                childResults.Add(new CheckResult(valueTuple.Key.GetSuggestionName(), feedback, elementToCheck)
+                childResults.Add(new CheckResult(valueTuple.Key.ToString(), feedback, elementToCheck)
                 {
                     ChildFeedback = valueTuple.Value.childFeedback.ToList()
                 });
             }
 
-            return new CheckResult(_resourcemessage, feedback, elementToCheck)
-            {
-                ChildFeedback = childResults
-            };
+            return new CheckResult(_resourcemessage, feedback, elementToCheck) {ChildFeedback = childResults};
         }
 
-        private ICheckResult CheckMedian(TParent elementToCheck, Dictionary<TChild, (float score, IEnumerable<ICheckResult> childFeedback)> allChildFeedback)
+        private ICheckResult CheckMedian(TParent elementToCheck,
+            Dictionary<TChild, (float score, IEnumerable<ICheckResult> childFeedback)> allChildFeedback)
         {
             var feedback = FeedbackType.Correct;
             if (allChildFeedback.Values.All(x => x.score != 0))
@@ -147,18 +148,16 @@ namespace IDesign.Recognizers.Models.ElementChecks
             foreach (var valueTuple in allChildFeedback)
             {
                 var (score, childFeedback) = valueTuple.Value;
-               
-                childResults.Add(new CheckResult(valueTuple.Key.GetSuggestionName(), feedback, valueTuple.Key)
+
+                childResults.Add(new CheckResult(valueTuple.Key.ToString(), feedback, valueTuple.Key)
                 {
-                    _feedback = _resourcemessage,
-                    ChildFeedback = valueTuple.Value.childFeedback.ToList()
+                    _feedback = _resourcemessage, ChildFeedback = valueTuple.Value.childFeedback.ToList()
                 });
             }
 
             return new CheckResult(_resourcemessage, feedback, elementToCheck)
             {
-                ChildFeedback = childResults,
-                CalculationType = CheckCalculationType.Average
+                ChildFeedback = childResults, CalculationType = CheckCalculationType.Average
             };
         }
 
@@ -166,7 +165,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
         {
             return new CheckResult(_resourcemessage, FeedbackType.Incorrect, null)
             {
-                ChildFeedback = _checks.Select(x => x.Check(null)).ToList()
+                ChildFeedback = _checks.Select(x => x.Check(default)).ToList()
             };
         }
     }
