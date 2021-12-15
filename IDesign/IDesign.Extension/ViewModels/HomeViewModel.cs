@@ -1,4 +1,5 @@
-﻿using IDesign.Extension.Commands;
+﻿using System.Resources;
+using IDesign.Extension.Commands;
 using IDesign.Extension.Stores;
 using System.Windows.Input;
 
@@ -9,7 +10,7 @@ namespace IDesign.Extension.ViewModels
         public ICommand NavigateStepByStepListCommand { get; }
         public ICommand NavigateDetectorCommand { get; }
 
-        public override string Title => "IDesign";
+        public override string Title => Resources.ExtensionUIResources.ExtensionName;
 
         public HomeViewModel(NavigationStore navigationStore)
         {

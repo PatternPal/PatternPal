@@ -206,6 +206,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ExtensionUIResources.Designer.cs</LastGenOutput>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\SummaryRescources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

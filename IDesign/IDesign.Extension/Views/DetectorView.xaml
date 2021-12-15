@@ -184,7 +184,7 @@
     </UserControl.Resources>
     <Grid x:Name="Grid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="80" />
+            <RowDefinition Height="0" />
             <RowDefinition Height="30" />
             <RowDefinition Height="30" />
             <RowDefinition Height="30" />
@@ -195,11 +195,6 @@
             <RowDefinition Height="1*" />
             <RowDefinition Height="20" />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Image Source="../Resources/logo.png" HorizontalAlignment="Center" Height="80" Grid.Row="0"
-                   VerticalAlignment="Top" />
-            <TextBlock Text="{x:Static UIResources:ExtensionUIResources.ExtensionName}" VerticalAlignment="Center" FontSize="50" />
-        </StackPanel>
         <StackPanel Margin="5 0 0 0" Orientation="Horizontal" Grid.Row="1" >
             <Rectangle Width="15" Height="15" Fill="#4496F3" Margin="0,0,2,0"/>
             <TextBlock Text="Settings" Foreground="#4496F3" VerticalAlignment="Top" FontSize="15" FontWeight="Bold" Margin="5" />
