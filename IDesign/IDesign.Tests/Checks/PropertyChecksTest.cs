@@ -1,10 +1,9 @@
-﻿using IDesign.Recognizers.Checks;
-using IDesign.Recognizers.Models;
+﻿using System.Collections.Generic;
+using IDesign.Recognizers.Checks;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
-using IDesign.Recognizers;
-using System.Collections.Generic;
+using SyntaxTree.Models.Members.Property;
 
 namespace IDesign.Tests.Checks
 {
@@ -28,7 +27,7 @@ namespace IDesign.Tests.Checks
                 Assert.Fail();
             }
 
-            Assert.AreEqual(shouldBeValid, new PropertyField(property).CheckMemberModifier(modifier));
+            Assert.AreEqual(shouldBeValid, new Property(property, null).GetField().CheckMemberModifier(modifier));
         }
 
         [Test]
@@ -39,9 +38,11 @@ namespace IDesign.Tests.Checks
         [TestCase("var", @"static var TestProperty{get; set;}", true)]
         [TestCase("T", @"private var TestProperty{get; set;}", false)]
         [TestCase("int", @"public bool TestProperty{get; set;}", false)]
-        [TestCase("int",
+        [TestCase(
+            "int",
             @"public static Singleton Instance { get { if (instance==null) { instance = new Singleton(); } return instance; } } }",
-            false)]
+            false
+        )]
         public void TypeCheck_Should_Return_CorrectResponse(string type, string code, bool shouldBeValid)
         {
             var root = CSharpSyntaxTree.ParseText(code).GetCompilationUnitRoot();
@@ -52,7 +53,9 @@ namespace IDesign.Tests.Checks
                 Assert.Fail();
             }
 
-            Assert.AreEqual(shouldBeValid, new PropertyField(property).CheckFieldType(new List<string>() { type }));
+            Assert.AreEqual(
+                shouldBeValid, new Property(property, null).GetField().CheckFieldType(new List<string> {type})
+            );
         }
     }
 }

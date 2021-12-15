@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace IDesign.Tests.TestClasses.DecoratorTest4
 {
-    abstract class Decorator : IComponent
+    internal abstract class Decorator : IComponent
     {
-        IComponent component;
+        private IComponent component;
 
         public Decorator(IComponent component)
         {

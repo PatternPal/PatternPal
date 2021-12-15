@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace IDesign.Tests.TestClasses.ObserverTest3
+﻿namespace IDesign.Tests.TestClasses.ObserverTest3
 {
-    class SubjectB : ISubject
+    internal class SubjectB : ISubject
     {
-
         public void Add(IObserver observer)
         {
         }

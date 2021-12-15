@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace IDesign.Tests.TestClasses.StrategyFactoryMethodTest1
 {
-    class ConcreteStrategyA : IStrategy
+    internal class ConcreteStrategyA : IStrategy
     {
         public object DoAlgorithm(object data)
         {

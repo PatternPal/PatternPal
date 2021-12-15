@@ -1,7 +1,8 @@
 ﻿using System;
 
-namespace IDesign.Tests.TestClasses.ObserverTest5 { 
-    class ObserverA : IObserver
+namespace IDesign.Tests.TestClasses.ObserverTest5
+{
+    internal class ObserverA : IObserver
     {
         public void Update()
         {

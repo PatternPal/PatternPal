@@ -79,6 +79,42 @@ namespace IDesign.Extension.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Analyze your code for design patterns.
+        /// </summary>
+        public static string DetectorDescription {
+            get {
+                return ResourceManager.GetString("DetectorDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Detector.
+        /// </summary>
+        public static string DetectorTitle {
+            get {
+                return ResourceManager.GetString("DetectorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Practice and learn using exercises.
+        /// </summary>
+        public static string ExercisesDescription {
+            get {
+                return ResourceManager.GetString("ExercisesDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exercises.
+        /// </summary>
+        public static string ExercisesTitle {
+            get {
+                return ResourceManager.GetString("ExercisesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to IDesign.
         /// </summary>
         public static string ExtensionName {
@@ -111,6 +147,24 @@ namespace IDesign.Extension.Resources {
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implement a pattern using step-by-step instructions.
+        /// </summary>
+        public static string StepByStepDescription {
+            get {
+                return ResourceManager.GetString("StepByStepDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Step-By-Step.
+        /// </summary>
+        public static string StepByStepTitle {
+            get {
+                return ResourceManager.GetString("StepByStepTitle", resourceCulture);
             }
         }
     }

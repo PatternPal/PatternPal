@@ -10,7 +10,11 @@
 
         public static SingleTonTestCase5 GetInstance()
         {
-            if (_instance == null) _instance = new SingleTonTestCase5();
+            if (_instance == null)
+            {
+                _instance = new SingleTonTestCase5();
+            }
+
             return _instance;
         }
     }

@@ -1,24 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses.StateTest2
+﻿namespace IDesign.Tests.TestClasses.StateTest2
 {
     //this code is from https://www.dofactory.com/net/state-design-pattern
 
     /// <summary>
-    /// A 'ConcreteState' class
-    /// <remarks>
-    /// Gold indicates an interest bearing state
-    /// </remarks>
+    ///     A 'ConcreteState' class
+    ///     <remarks>
+    ///         Gold indicates an interest bearing state
+    ///     </remarks>
     /// </summary>
-    class GoldState : State
+    internal class GoldState : State
 
     {
         // Overloaded constructors
 
         public GoldState(State state)
-          : this(state.Balance, state.Account)
+            : this(state.Balance, state.Account)
         {
         }
 

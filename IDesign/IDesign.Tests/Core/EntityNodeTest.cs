@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using IDesign.Recognizers;
 using IDesign.Tests.Utils;
 using NUnit.Framework;
 
@@ -14,7 +15,7 @@ namespace IDesign.Tests.Core
             var code = FileUtils.FileToString(filename);
             var testGraph = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
             var testNode = testGraph.Values.First();
-            var fields = string.Join(";", testNode.GetFields().Select(x => x.GetName()));
+            var fields = string.Join(";", testNode.GetAllFields().Select(x => x.GetName()));
             Assert.AreEqual(expected, fields);
         }
 
@@ -26,7 +27,7 @@ namespace IDesign.Tests.Core
             var code = FileUtils.FileToString(filename);
             var testGraph = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
             var testNode = testGraph.Values.First();
-            var fields = string.Join(";", testNode.GetMethodsAndProperties().Select(x => x.GetName()));
+            var fields = string.Join(";", testNode.GetMethods().Select(x => x.GetName()));
             Assert.AreEqual(expected, fields);
         }
 

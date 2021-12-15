@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses.FactoryMethodTest2
+﻿namespace IDesign.Tests.TestClasses.FactoryMethodTest2
 {
-    class TitaniumFactory : CardFactory
+    internal class TitaniumFactory : CardFactory
     {
-        private int _creditLimit;
-        private int _annualCharge;
+        private readonly int _annualCharge;
+        private readonly int _creditLimit;
 
         public TitaniumFactory(int creditLimit, int annualCharge)
         {

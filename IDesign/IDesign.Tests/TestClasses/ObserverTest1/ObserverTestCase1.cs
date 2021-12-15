@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses.ObserverTest1
+﻿namespace IDesign.Tests.TestClasses.ObserverTest1
 {
-    class ObserverTestCase1
+    internal class ObserverTestCase1
     {
-        SubjectA subject;
+        private readonly SubjectA subject;
 
         public ObserverTestCase1()
         {

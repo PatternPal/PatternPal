@@ -61,6 +61,33 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Abstraction class.
+        /// </summary>
+        public static string Abstraction {
+            get {
+                return ResourceManager.GetString("Abstraction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Abstraction contains a reference to the Implementer.
+        /// </summary>
+        public static string AbstractionHasImplementerReference {
+            get {
+                return ResourceManager.GetString("AbstractionHasImplementerReference", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should use the Implementer.
+        /// </summary>
+        public static string AbstractionUsesImplementer {
+            get {
+                return ResourceManager.GetString("AbstractionUsesImplementer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Abstract State.
         /// </summary>
         public static string AbstractState {
@@ -138,6 +165,42 @@ namespace IDesign.CommonResources {
         public static string AdapterMethodUses {
             get {
                 return ResourceManager.GetString("AdapterMethodUses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bridge.
+        /// </summary>
+        public static string Bridge {
+            get {
+                return ResourceManager.GetString("Bridge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bridge Abstraction.
+        /// </summary>
+        public static string BridgeAbstraction {
+            get {
+                return ResourceManager.GetString("BridgeAbstraction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bridge Implementer.
+        /// </summary>
+        public static string BridgeImplementer {
+            get {
+                return ResourceManager.GetString("BridgeImplementer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bridge Implementor.
+        /// </summary>
+        public static string BridgeImplementor {
+            get {
+                return ResourceManager.GetString("BridgeImplementor", resourceCulture);
             }
         }
         
@@ -403,6 +466,51 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Implementer should be an abstract class or an interface.
+        /// </summary>
+        public static string ImplementerAbstractOrInterface {
+            get {
+                return ResourceManager.GetString("ImplementerAbstractOrInterface", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implementer methods.
+        /// </summary>
+        public static string ImplementerMethods {
+            get {
+                return ResourceManager.GetString("ImplementerMethods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should be used by Abstraction methods.
+        /// </summary>
+        public static string ImplementerMethodsUsedInAbstraction {
+            get {
+                return ResourceManager.GetString("ImplementerMethodsUsedInAbstraction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implementer reference.
+        /// </summary>
+        public static string ImplementerReference {
+            get {
+                return ResourceManager.GetString("ImplementerReference", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Implementer should be used by the abstraction.
+        /// </summary>
+        public static string ImplementerUsedByAbstraction {
+            get {
+                return ResourceManager.GetString("ImplementerUsedByAbstraction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There should be at least 3 methods: add, remove and notify..
         /// </summary>
         public static string MethodAmountThree {
@@ -547,7 +655,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Class should be abstract or an interface..
+        ///   Looks up a localized string similar to Node should be an abstract class or an interface..
         /// </summary>
         public static string NodeAbstractOrInterface {
             get {
@@ -583,6 +691,24 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Node should be implemented or inherited.
+        /// </summary>
+        public static string NodeImplementedOrInherited {
+            get {
+                return ResourceManager.GetString("NodeImplementedOrInherited", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Class should be inherited.
+        /// </summary>
+        public static string NodeInherited {
+            get {
+                return ResourceManager.GetString("NodeInherited", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Class should be abstract..
         /// </summary>
         public static string NodeModifierAbstract {
@@ -610,7 +736,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This class should be used by other classes..
+        ///   Looks up a localized string similar to Node should be used by other classes..
         /// </summary>
         public static string NodeUsedByAny {
             get {
@@ -619,7 +745,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should have at least 1 uses relation..
+        ///   Looks up a localized string similar to Should use at least 1 other node.
         /// </summary>
         public static string NodeUses1 {
             get {
@@ -700,7 +826,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Private constructor.
+        ///   Looks up a localized string similar to Non public constructor.
         /// </summary>
         public static string SingletonConstructor {
             get {

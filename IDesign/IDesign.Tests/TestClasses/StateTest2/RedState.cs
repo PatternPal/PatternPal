@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace IDesign.Tests.TestClasses.StateTest2
 {
     //this code is from https://www.dofactory.com/net/state-design-pattern
 
     /// <summary>
-    /// A 'ConcreteState' class
-    /// <remarks>
-    /// Red indicates that account is overdrawn 
-    /// </remarks>
+    ///     A 'ConcreteState' class
+    ///     <remarks>
+    ///         Red indicates that account is overdrawn
+    ///     </remarks>
     /// </summary>
-    class RedState : State
+    internal class RedState : State
     {
         private double _serviceFee;
 
@@ -20,8 +18,8 @@ namespace IDesign.Tests.TestClasses.StateTest2
 
         public RedState(State state)
         {
-            this.balance = state.Balance;
-            this.account = state.Account;
+            balance = state.Balance;
+            account = state.Account;
             Initialize();
         }
 
@@ -50,7 +48,6 @@ namespace IDesign.Tests.TestClasses.StateTest2
         public override void PayInterest()
         {
             // No interest is paid
-
         }
 
         private void StateChangeCheck()

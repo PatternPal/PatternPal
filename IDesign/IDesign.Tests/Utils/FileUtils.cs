@@ -33,7 +33,10 @@ namespace IDesign.Tests.Utils
         {
             var filesContents = new List<string>();
             foreach (var file in Directory.EnumerateFiles("TestClasses\\" + folderPath, "*.cs"))
+            {
                 filesContents.Add(File.ReadAllText(file));
+            }
+
             return filesContents;
         }
     }

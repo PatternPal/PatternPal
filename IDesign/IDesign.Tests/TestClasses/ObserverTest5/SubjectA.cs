@@ -2,9 +2,9 @@
 
 namespace IDesign.Tests.TestClasses.ObserverTest5
 {
-    class SubjectA : ISubject
+    internal class SubjectA : ISubject
     {
-        private List<IObserver> observers;
+        private readonly List<IObserver> observers;
 
         public SubjectA()
         {
@@ -18,8 +18,10 @@ namespace IDesign.Tests.TestClasses.ObserverTest5
 
         public void Notify()
         {
-            foreach(var observer in observers)
+            foreach (var observer in observers)
+            {
                 observer.Update();
+            }
         }
     }
 }

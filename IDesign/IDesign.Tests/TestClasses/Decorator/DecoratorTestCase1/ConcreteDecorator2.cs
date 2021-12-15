@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace IDesign.Tests.TestClasses.Decorator.DecoratorTestCase1
+﻿namespace IDesign.Tests.TestClasses.Decorator.DecoratorTestCase1
 {
-    class ConcreteDecorator2 : Decorator
+    internal class ConcreteDecorator2 : Decorator
     {
         public ConcreteDecorator2(IComponent component) : base(component) { }
 

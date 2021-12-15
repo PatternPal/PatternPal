@@ -2,7 +2,7 @@
 
 namespace IDesign.Tests.TestClasses.ObserverTest3
 {
-    class ObserverA : IObserver
+    internal class ObserverA : IObserver
     {
         public void Update()
         {

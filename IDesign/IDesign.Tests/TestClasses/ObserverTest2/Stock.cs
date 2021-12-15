@@ -6,20 +6,37 @@ namespace IDesign.Tests.TestClasses.ObserverTest2
     //This code is from https://www.dofactory.com/net/observer-design-pattern
 
     /// <summary>
-    /// The 'Subject' abstract class
+    ///     The 'Subject' abstract class
     /// </summary>
-    abstract class Stock
+    internal abstract class Stock
     {
-        private string _symbol;
+        private readonly List<IInvestor> _investors = new List<IInvestor>();
         private double _price;
-        private List<IInvestor> _investors = new List<IInvestor>();
 
         // Constructor
         public Stock(string symbol, double price)
         {
-            this._symbol = symbol;
-            this._price = price;
+            Symbol = symbol;
+            _price = price;
         }
+
+        // Gets or sets the price
+        public double Price
+        {
+            get => _price;
+
+            set
+            {
+                if (_price != value)
+                {
+                    _price = value;
+                    Notify();
+                }
+            }
+        }
+
+        // Gets the symbol
+        public string Symbol { get; }
 
         public void Attach(IInvestor investor)
         {
@@ -33,33 +50,12 @@ namespace IDesign.Tests.TestClasses.ObserverTest2
 
         public void Notify()
         {
-            foreach (IInvestor investor in _investors)
+            foreach (var investor in _investors)
             {
                 investor.Update(this);
             }
 
             Console.WriteLine("");
-        }
-
-        // Gets or sets the price
-        public double Price
-        {
-            get { return _price; }
-
-            set
-            {
-                if (_price != value)
-                {
-                    _price = value;
-                    Notify();
-                }
-            }
-        }
-
-        // Gets the symbol
-        public string Symbol
-        {
-            get { return _symbol; }
         }
     }
 }

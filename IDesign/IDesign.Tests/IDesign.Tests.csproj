@@ -6,28 +6,28 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="TestClasses\Decorator\DecoratorTestCase1.cs" />
-    <Compile Remove="TestClasses\Decorator\DecoratorTestCase2.cs" />
-    <Compile Remove="TestClasses\Decorator\DecoratorTestCase3.cs" />
-    <Compile Remove="TestClasses\Decorator\DecoratorTestCase4.cs" />
-    <Compile Remove="TestClasses\Decorator\DecoratorTestCase5.cs" />
-    <Compile Remove="TestClasses\Decorator\DecoratorTestCase6.cs" />
-    <Compile Remove="TestClasses\Decorator\DecoratorTestCase7.cs" />
-    <Compile Remove="TestClasses\FactoryTestClasses\**" />
-    <Compile Remove="TestClasses\SingletonTestClasses\**" />
-    <EmbeddedResource Remove="TestClasses\FactoryTestClasses\**" />
-    <EmbeddedResource Remove="TestClasses\SingletonTestClasses\**" />
-    <None Remove="TestClasses\FactoryTestClasses\**" />
-    <None Remove="TestClasses\SingletonTestClasses\**" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase1.cs"/>
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase2.cs"/>
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase3.cs"/>
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase4.cs"/>
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase5.cs"/>
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase6.cs"/>
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase7.cs"/>
+    <Compile Remove="TestClasses\FactoryTestClasses\**"/>
+    <Compile Remove="TestClasses\SingletonTestClasses\**"/>
+    <EmbeddedResource Remove="TestClasses\FactoryTestClasses\**"/>
+    <EmbeddedResource Remove="TestClasses\SingletonTestClasses\**"/>
+    <None Remove="TestClasses\FactoryTestClasses\**"/>
+    <None Remove="TestClasses\SingletonTestClasses\**"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="TestClasses\SingleTonTestCase1.cs" />
-    <Compile Remove="TestClasses\SingleTonTestCase2.cs" />
-    <Compile Remove="TestClasses\SingleTonTestCase3.cs" />
-    <Compile Remove="TestClasses\SingleTonTestCase4.cs" />
-    <Compile Remove="TestClasses\SingleTonTestCase6.cs" />
-    <Compile Remove="TestClasses\SingleTonTestCase7.cs" />
+    <Compile Remove="TestClasses\SingleTonTestCase1.cs"/>
+    <Compile Remove="TestClasses\SingleTonTestCase2.cs"/>
+    <Compile Remove="TestClasses\SingleTonTestCase3.cs"/>
+    <Compile Remove="TestClasses\SingleTonTestCase4.cs"/>
+    <Compile Remove="TestClasses\SingleTonTestCase6.cs"/>
+    <Compile Remove="TestClasses\SingleTonTestCase7.cs"/>
   </ItemGroup>
 
   <ItemGroup>
@@ -70,16 +70,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="nunit" Version="3.12.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
-    <PackageReference Include="System.Collections" Version="4.3.0" />
+    <PackageReference Include="coverlet.msbuild" Version="3.1.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="nunit" Version="3.12.0"/>
+    <PackageReference Include="NUnit3TestAdapter" Version="3.13.0"/>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0"/>
+    <PackageReference Include="System.Collections" Version="4.3.0"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IDesign.CommonResources\IDesign.CommonResources.csproj" />
-    <ProjectReference Include="..\IDesign.Core\IDesign.Core.csproj" />
-    <ProjectReference Include="..\IDesign.Regonizers\IDesign.Recognizers.csproj" />
+    <ProjectReference Include="..\IDesign.CommonResources\IDesign.CommonResources.csproj"/>
+    <ProjectReference Include="..\IDesign.Core\IDesign.Core.csproj"/>
+    <ProjectReference Include="..\IDesign.Regonizers\IDesign.Recognizers.csproj"/>
   </ItemGroup>
 
   <ItemGroup>
@@ -90,6 +94,72 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Update="TestClasses\AdapterTest1\BaseCase.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\BridgeTest1\Abstraction.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\BridgeTest1\ConcreteImplementationA.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\BridgeTest1\ConcreteImplementationB.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\BridgeTest1\ExtendedAbstraction.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\BridgeTest1\IImplementation.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\BridgeTest2\Client.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\BridgeTest2\Customers.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\BridgeTest2\CustomersBase.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\BridgeTest2\CustomersData.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\BridgeTest2\DataObject.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\BridgeTest3\AbstractRemoteControl.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\BridgeTest3\LEDTV.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\BridgeTest3\SamsungLedTv.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\BridgeTest3\SamsungRemoteControl.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\BridgeTest3\SonyLedTv.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\BridgeTest3\SonyRemoteControl.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\BridgeTest4\FlyingEnchantment.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\BridgeTest4\Hammer.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\BridgeTest4\IEnchantment.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\BridgeTest4\IWeapon.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\BridgeTest4\SoulEatingEnchantment.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\BridgeTest4\Sword.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Update="TestClasses\ClassChecks\Class1.cs">

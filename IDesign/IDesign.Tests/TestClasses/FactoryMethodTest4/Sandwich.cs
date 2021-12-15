@@ -1,36 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 //code is from https://github.com/exceptionnotfound/DesignPatterns/blob/master/FactoryMethodPattern/Ingredients.cs
 
 namespace IDesign.Tests.TestClasses.FactoryMethodTest4
 {
     /// <summary>
-    /// Creator
+    ///     Creator
     /// </summary>
-    abstract class Sandwich
+    internal abstract class Sandwich
     {
-        private List<Ingredient> _ingredients = new List<Ingredient>();
-
         public Sandwich()
         {
             CreateIngredients();
         }
 
+        public List<Ingredient> Ingredients { get; } = new List<Ingredient>();
+
         //Factory method
         public abstract void CreateIngredients();
-
-        public List<Ingredient> Ingredients
-        {
-            get { return _ingredients; }
-        }
     }
 
     /// <summary>
-    /// Concrete Creator
+    ///     Concrete Creator
     /// </summary>
-    class TurkeySandwich : Sandwich
+    internal class TurkeySandwich : Sandwich
     {
         public override void CreateIngredients()
         {
@@ -44,9 +37,9 @@ namespace IDesign.Tests.TestClasses.FactoryMethodTest4
     }
 
     /// <summary>
-    /// Concrete Creator
+    ///     Concrete Creator
     /// </summary>
-    class Dagwood : Sandwich //OM NOM NOM
+    internal class Dagwood : Sandwich //OM NOM NOM
     {
         public override void CreateIngredients()
         {

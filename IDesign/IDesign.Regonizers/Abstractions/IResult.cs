@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SyntaxTree.Abstractions.Entities;
 
 namespace IDesign.Recognizers.Abstractions
 {
@@ -17,6 +18,6 @@ namespace IDesign.Recognizers.Abstractions
         /// <returns>A list of suggestions</returns>
         IList<ICheckResult> GetResults();
 
-        IDictionary<IEntityNode, string> GetRelatedSubTypes();
+        IDictionary<IEntity, string> GetRelatedSubTypes();
     }
 }

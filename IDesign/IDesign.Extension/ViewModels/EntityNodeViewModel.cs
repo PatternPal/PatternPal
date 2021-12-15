@@ -1,18 +1,15 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Media;
-using IDesign.Core.Models;
-using IDesign.Recognizers.Abstractions;
+﻿using SyntaxTree.Abstractions.Entities;
 
 namespace IDesign.Extension.ViewModels
 {
     public class EntityNodeViewModel
     {
-        public IEntityNode EntityNode { get; internal set; }
-        public EntityNodeViewModel(IEntityNode entityNode)
+        public EntityNodeViewModel(IEntity entityNode)
         {
             EntityNode = entityNode;
         }
+
+        public IEntity EntityNode { get; internal set; }
 
         public string Name => EntityNode.GetName();
     }

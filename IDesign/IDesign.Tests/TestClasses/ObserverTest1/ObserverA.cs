@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace IDesign.Tests.TestClasses.ObserverTest1
 {
-    class ObserverA : IObserver
+    internal class ObserverA : IObserver
     {
         public void Update()
         {

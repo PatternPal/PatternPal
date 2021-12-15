@@ -3,9 +3,9 @@
 namespace IDesign.Tests.TestClasses.AdapterTest1
 {
     /// <summary>
-    /// The 'Target' class
+    ///     The 'Target' class
     /// </summary>
-    class Target
+    internal class Target
     {
         public virtual void Request()
         {
@@ -14,12 +14,12 @@ namespace IDesign.Tests.TestClasses.AdapterTest1
     }
 
     /// <summary>
-    /// The 'Adapter' class
+    ///     The 'Adapter' class
     /// </summary>
-    class Adapter : Target
+    internal class Adapter : Target
 
     {
-        private Adaptee _adaptee = new Adaptee();
+        private readonly Adaptee _adaptee = new Adaptee();
 
         public override void Request()
         {
@@ -30,9 +30,9 @@ namespace IDesign.Tests.TestClasses.AdapterTest1
     }
 
     /// <summary>
-    /// The 'Adaptee' class
+    ///     The 'Adaptee' class
     /// </summary>
-    class Adaptee
+    internal class Adaptee
 
     {
         public void SpecificRequest()
