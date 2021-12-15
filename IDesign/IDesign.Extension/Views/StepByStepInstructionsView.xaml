@@ -57,9 +57,9 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Name="InstructionText" Grid.Row="0" TextWrapping="Wrap" Text="Add a property to the Duck class. Make sure to follow the C# naming conventions." FontSize="15" HorizontalAlignment="Left" Margin="20,0,20,10" MaxWidth="250"/>
-            <Button Grid.Row="2" Height="40" Width="200" FontSize="15" Margin="20,0,20,10" HorizontalAlignment="Left" Click="CheckButton_OnClick">Check</Button>
-            <TextBlock Name="FeedbackMessage" Grid.Row="2" TextWrapping="Wrap" Text="Well done!" FontSize="15" HorizontalAlignment="Left" Margin="20,0,20,10" MaxWidth="250" Visibility="Hidden"/>
+            <TextBlock Name="InstructionText" Grid.Row="0" TextWrapping="Wrap" Text="Add a property to the Duck class. Make sure to follow the C# naming conventions." FontSize="15" HorizontalAlignment="Center" Margin="20,0,20,10" MaxWidth="250"/>
+            <Button Grid.Row="1" Height="40" Width="200" FontSize="15" Margin="20,0,20,10" HorizontalAlignment="Center" Click="CheckButton_OnClick">Check</Button>
+            <TextBlock Name="FeedbackMessage" Grid.Row="2" TextWrapping="Wrap" Text="Well done!" FontSize="15" HorizontalAlignment="Center" Margin="0,0,0,0" MaxWidth="250" Visibility="Hidden"/>
         </Grid>
     </ScrollViewer>
 </UserControl>

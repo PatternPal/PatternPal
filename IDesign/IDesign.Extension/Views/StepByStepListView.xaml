@@ -57,9 +57,9 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0" TextWrapping="Wrap" Text="Choose a design pattern to implement:" FontSize="15" HorizontalAlignment="Left" Margin="20,0,20,10"/>
+            <TextBlock Grid.Row="0" TextWrapping="Wrap" Text="Choose a design pattern to implement:" FontSize="15" HorizontalAlignment="Center" Margin="20,0,20,10"/>
 
-            <ComboBox Grid.Row="1" Margin="20,0,20,10" Width="200" HorizontalAlignment="Left">
+            <ComboBox Grid.Row="1" Margin="20,0,20,10" Width="200" HorizontalAlignment="Center">
                 <ComboBoxItem>Adapter</ComboBoxItem>
                 <ComboBoxItem>Bridge</ComboBoxItem>
                 <ComboBoxItem>Decorator</ComboBoxItem>
@@ -69,7 +69,7 @@
                 <ComboBoxItem>State</ComboBoxItem>
                 <ComboBoxItem>Strategy</ComboBoxItem>
             </ComboBox>
-            <Button Grid.Row="2" Height="40" Width="200" FontSize="15" Margin="20,0,20,0" HorizontalAlignment="Left" Command="{Binding NavigateStepByStepInstructionsCommand}">Next</Button>
+            <Button Grid.Row="2" Height="40" Width="200" FontSize="15" Margin="20,0,20,0" HorizontalAlignment="Center" Command="{Binding NavigateStepByStepInstructionsCommand}">Next</Button>
         </Grid>
     </ScrollViewer>
 </UserControl>
