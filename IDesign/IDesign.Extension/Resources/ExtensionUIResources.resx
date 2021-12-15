@@ -123,6 +123,18 @@
   <data name="Analyse" xml:space="preserve">
     <value>Analyse</value>
   </data>
+  <data name="DetectorDescription" xml:space="preserve">
+    <value>Analyze your code for design patterns</value>
+  </data>
+  <data name="DetectorTitle" xml:space="preserve">
+    <value>Detector</value>
+  </data>
+  <data name="ExercisesDescription" xml:space="preserve">
+    <value>Practice and learn using exercises</value>
+  </data>
+  <data name="ExercisesTitle" xml:space="preserve">
+    <value>Exercises</value>
+  </data>
   <data name="ExtensionName" xml:space="preserve">
     <value>IDesign</value>
   </data>
@@ -134,5 +146,11 @@
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
+  </data>
+  <data name="StepByStepDescription" xml:space="preserve">
+    <value>Implement a pattern using step-by-step instructions</value>
+  </data>
+  <data name="StepByStepTitle" xml:space="preserve">
+    <value>Step-By-Step</value>
   </data>
 </root>

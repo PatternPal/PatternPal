@@ -17,6 +17,7 @@ namespace IDesign.Core {
             new DesignPattern(Strategy, new StrategyRecognizer(), Resources.WikiPageResources.Strategy),
             new DesignPattern(Adapter, new AdapterRecognizer(), Resources.WikiPageResources.Adapter),
             new DesignPattern(Observer, new ObserverRecognizer(), Resources.WikiPageResources.Observer),
+            new DesignPattern(Bridge, new BridgeRecognizer(), Resources.WikiPageResources.Bridge),
         };
 
         public SyntaxGraph Graph;

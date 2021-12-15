@@ -117,6 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Abstraction" xml:space="preserve">
+    <value>Abstraction class</value>
+  </data>
+  <data name="AbstractionHasImplementerReference" xml:space="preserve">
+    <value>Abstraction contains a reference to the Implementer</value>
+  </data>
+  <data name="AbstractionUsesImplementer" xml:space="preserve">
+    <value>Should use the Implementer</value>
+  </data>
   <data name="AbstractState" xml:space="preserve">
     <value>Abstract State</value>
   </data>
@@ -143,6 +152,18 @@
   </data>
   <data name="AdapterMethodUses" xml:space="preserve">
     <value>Adapter method should use adaptee.</value>
+  </data>
+  <data name="Bridge" xml:space="preserve">
+    <value>Bridge</value>
+  </data>
+  <data name="BridgeAbstraction" xml:space="preserve">
+    <value>Bridge Abstraction</value>
+  </data>
+  <data name="BridgeImplementer" xml:space="preserve">
+    <value>Bridge Implementer</value>
+  </data>
+  <data name="BridgeImplementor" xml:space="preserve">
+    <value>Bridge Implementor</value>
   </data>
   <data name="Child" xml:space="preserve">
     <value>Should be extended by a class.</value>
@@ -231,6 +252,21 @@
   <data name="FieldType" xml:space="preserve">
     <value>Field type should be {0}.</value>
   </data>
+  <data name="ImplementerAbstractOrInterface" xml:space="preserve">
+    <value>Implementer should be an abstract class or an interface</value>
+  </data>
+  <data name="ImplementerMethods" xml:space="preserve">
+    <value>Implementer methods</value>
+  </data>
+  <data name="ImplementerMethodsUsedInAbstraction" xml:space="preserve">
+    <value>Should be used by Abstraction methods</value>
+  </data>
+  <data name="ImplementerReference" xml:space="preserve">
+    <value>Implementer reference</value>
+  </data>
+  <data name="ImplementerUsedByAbstraction" xml:space="preserve">
+    <value>Implementer should be used by the abstraction</value>
+  </data>
   <data name="MethodAmountThree" xml:space="preserve">
     <value>There should be at least 3 methods: add, remove and notify.</value>
   </data>
@@ -280,7 +316,7 @@
     <value>Method should return {0}.</value>
   </data>
   <data name="NodeAbstractOrInterface" xml:space="preserve">
-    <value>Class should be abstract or an interface.</value>
+    <value>Node should be an abstract class or an interface.</value>
   </data>
   <data name="NodeDoesNotCreate" xml:space="preserve">
     <value>Should not create other classes.</value>
@@ -290,6 +326,12 @@
   </data>
   <data name="NodeImplementedByAny" xml:space="preserve">
     <value>Should be implemented by an interface</value>
+  </data>
+  <data name="NodeImplementedOrInherited" xml:space="preserve">
+    <value>Node should be implemented or inherited</value>
+  </data>
+  <data name="NodeInherited" xml:space="preserve">
+    <value>Class should be inherited</value>
   </data>
   <data name="NodeModifierAbstract" xml:space="preserve">
     <value>Class should be abstract.</value>
@@ -301,10 +343,10 @@
     <value>Should be a class.</value>
   </data>
   <data name="NodeUsedByAny" xml:space="preserve">
-    <value>This class should be used by other classes.</value>
+    <value>Node should be used by other classes.</value>
   </data>
   <data name="NodeUses1" xml:space="preserve">
-    <value>Should have at least 1 uses relation.</value>
+    <value>Should use at least 1 other node</value>
   </data>
   <data name="ObjectAdapter" xml:space="preserve">
     <value>Object adapter</value>

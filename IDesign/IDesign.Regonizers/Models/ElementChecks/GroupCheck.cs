@@ -52,9 +52,9 @@ namespace IDesign.Recognizers.Models.ElementChecks
                 return CreateFalseResult();
             }
 
-            var elements = _elements(elementToCheck).ToList();
+            var elements = _elements(elementToCheck)?.ToList();
 
-            if (!elements.Any())
+            if (elements == null || !elements.Any())
             {
                 return CreateFalseResult();
             }

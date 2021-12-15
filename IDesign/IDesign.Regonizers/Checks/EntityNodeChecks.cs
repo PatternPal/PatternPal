@@ -102,6 +102,16 @@ namespace IDesign.Recognizers.Checks {
             return entityNode.CheckMinimalAmountOfRelationTypes(relationType, 1);
         }
 
+        public static bool CheckIsAbstractClass(this IEntityNode entityNode)
+        {
+            return entityNode.CheckTypeDeclaration(EntityNodeType.Class) && entityNode.CheckModifier("abstract");
+        }
+
+        public static bool CheckIsAbstractClassOrInterface(this IEntityNode entityNode)
+        {
+            return entityNode.CheckTypeDeclaration(EntityNodeType.Interface) || entityNode.CheckIsAbstractClass();
+        }
+
         public static bool CheckMinimalAmountOfRelationTypes(
             this IEntity entityNode,
             RelationType relationType,

@@ -3,7 +3,7 @@ using System.ComponentModel.Design;
 using Microsoft.VisualStudio.Shell;
 using Task = System.Threading.Tasks.Task;
 
-namespace IDesign.Extension
+namespace IDesign.Extension.Commands
 {
     /// <summary>
     ///     Command handler
