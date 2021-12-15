@@ -9,19 +9,15 @@ using System.Windows.Input;
 
 namespace IDesign.Extension.ViewModels
 {
-    public class StepByStepListViewModel : ViewModel
+    public class StepByStepInstructionsViewModel : ViewModel
     {
-        public override string Title => Resources.ExtensionUIResources.StepByStepTitle;
+        public override string Title => "Strategy 1/15";
 
         public ICommand NavigateHomeCommand { get; }
-        public ICommand NavigateStepByStepInstructionsCommand { get; }
 
-
-        public StepByStepListViewModel(NavigationStore navigationStore)
+        public StepByStepInstructionsViewModel(NavigationStore navigationStore)
         {
             NavigateHomeCommand = new NavigateCommand<HomeViewModel>(navigationStore, () => new HomeViewModel(navigationStore));
-            NavigateStepByStepInstructionsCommand = new NavigateCommand<StepByStepInstructionsViewModel>(navigationStore, () => new StepByStepInstructionsViewModel(navigationStore));
-
         }
     }
 }

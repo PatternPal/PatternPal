@@ -95,6 +95,7 @@
     <Compile Include="ViewModels\PatternResultViewModel.cs" />
     <Compile Include="ViewModels\EntityNodeViewModel.cs" />
     <Compile Include="ViewModels\ResultViewModel.cs" />
+    <Compile Include="ViewModels\StepByStepInstructionsViewModel.cs" />
     <Compile Include="ViewModels\StepByStepListViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Views\DetectorView.xaml.cs">
@@ -102,6 +103,9 @@
     </Compile>
     <Compile Include="Views\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StepByStepInstructionsView.xaml.cs">
+      <DependentUpon>StepByStepInstructionsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\StepByStepListView.xaml.cs">
       <DependentUpon>StepByStepListView.xaml</DependentUpon>
@@ -159,6 +163,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\HomeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StepByStepInstructionsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
