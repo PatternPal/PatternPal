@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>16E9F4AA-DCB4-4490-B05A-B26F71DFBAEE</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>IDesign.SharedExtension</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\ExtensionWindowCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\NavigateCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExtensionWindow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExtensionWindowControl.xaml.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExtensionWindowPackage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IDesign.ExtensionPackage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LeftMarginMultiplierConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Resources\ExtensionUIResources.Designer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Resources\SummaryRescources.Designer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Stores\NavigationStore.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SummaryFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TreeViewItemExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UserControls\Collapsable.xaml.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UserControls\DesignPatternResult.xaml.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UserControls\PatternCheckbox.xaml.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UserControls\SelectPaths.xaml.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UserControls\TreeViewResults.xaml.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\CheckResultViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\DesignPatternViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\DetectorViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\EntityNodeViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\HomeViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MainViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\PatternComponentViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\PatternResultViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ResultViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\StepByStepListViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\DetectorView.xaml.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\HomeView.xaml.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\StepByStepListView.xaml.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\ExtensionUIResources.resx" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Resources\SummaryRescources.resx" />
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)VSPackage.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)ExtensionWindowPackage.vsct" />
+    <Content Include="$(MSBuildThisFileDirectory)Key.snk" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\ExtensionWindowCommand.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\ExtensionWindowPackage.ico" />
+    <Content Include="$(MSBuildThisFileDirectory)Resources\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)ExtensionWindowControl.xaml" />
+    <Page Include="$(MSBuildThisFileDirectory)UserControls\Collapsable.xaml" />
+    <Page Include="$(MSBuildThisFileDirectory)UserControls\DesignPatternResult.xaml" />
+    <Page Include="$(MSBuildThisFileDirectory)UserControls\PatternCheckbox.xaml" />
+    <Page Include="$(MSBuildThisFileDirectory)UserControls\SelectPaths.xaml" />
+    <Page Include="$(MSBuildThisFileDirectory)UserControls\TreeViewResults.xaml" />
+    <Page Include="$(MSBuildThisFileDirectory)Views\DetectorView.xaml" />
+    <Page Include="$(MSBuildThisFileDirectory)Views\HomeView.xaml" />
+    <Page Include="$(MSBuildThisFileDirectory)Views\StepByStepListView.xaml" />
+  </ItemGroup>
+</Project>
