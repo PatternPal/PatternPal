@@ -247,7 +247,7 @@ namespace IDesign.Extension.Views
                 {
                     try
                     {
-                        // TreeViewResults.SyntaxTreeSources = runner.CreateGraph(Paths);
+                        runner.CreateGraph(Paths);
                         Results = runner.Run(SelectedPatterns);
 
                         //Here you signal the UI thread to execute the action:
