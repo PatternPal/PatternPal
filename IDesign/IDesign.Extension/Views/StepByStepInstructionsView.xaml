@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="IDesign.Extension.Views.StepByStepListView"
+﻿<UserControl x:Class="IDesign.Extension.Views.StepByStepInstructionsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -55,21 +55,13 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0" TextWrapping="Wrap" Text="Choose a design pattern to implement:" FontSize="15" HorizontalAlignment="Center" Margin="20,0,20,10"/>
-
-            <ComboBox Grid.Row="1" Margin="20,0,20,10" Width="200" HorizontalAlignment="Center">
-                <ComboBoxItem>Adapter</ComboBoxItem>
-                <ComboBoxItem>Bridge</ComboBoxItem>
-                <ComboBoxItem>Decorator</ComboBoxItem>
-                <ComboBoxItem>Factory Method</ComboBoxItem>
-                <ComboBoxItem>Observer</ComboBoxItem>
-                <ComboBoxItem>Singleton</ComboBoxItem>
-                <ComboBoxItem>State</ComboBoxItem>
-                <ComboBoxItem>Strategy</ComboBoxItem>
-            </ComboBox>
-            <Button Grid.Row="2" Height="40" Width="200" FontSize="15" Margin="20,0,20,0" HorizontalAlignment="Center" Command="{Binding NavigateStepByStepInstructionsCommand}">Next</Button>
+            <TextBlock Name="InstructionText" Grid.Row="0" TextWrapping="Wrap" Text="Maak een interface aan die het woord behaviour bevat." FontSize="15" HorizontalAlignment="Center" Margin="20,0,20,10" MaxWidth="250"/>
+            <Button Name="CheckNextButton"  Grid.Row="1" Height="40" Width="200" FontSize="15" Margin="20,0,20,10" HorizontalAlignment="Center" Click="CheckButton_OnClick">Check</Button>
+            <TextBlock Name="FeedbackMessage" Grid.Row="2" TextWrapping="Wrap" Text="Well done!" FontSize="15" HorizontalAlignment="Center" Margin="0,0,0,0" MaxWidth="250" Visibility="Hidden"/>
+            <Button Grid.Row="3" Command="{Binding NavigateHomeCommand}">Home (temporary)</Button>
         </Grid>
     </ScrollViewer>
 </UserControl>

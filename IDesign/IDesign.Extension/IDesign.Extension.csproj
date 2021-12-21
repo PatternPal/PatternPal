@@ -86,23 +86,27 @@
     <Compile Include="ExtensionWindowControl.xaml.cs">
       <DependentUpon>ExtensionWindowControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ExtensionWindowPackage.cs"/>
-    <Compile Include="Properties\AssemblyInfo.cs"/>
-    <Compile Include="IDesign.ExtensionPackage.cs"/>
-    <Compile Include="ViewModels\DetectorViewModel.cs"/>
-    <Compile Include="ViewModels\HomeViewModel.cs"/>
-    <Compile Include="ViewModels\MainViewModel.cs"/>
-    <Compile Include="ViewModels\PatternComponentViewModel.cs"/>
-    <Compile Include="ViewModels\PatternResultViewModel.cs"/>
-    <Compile Include="ViewModels\EntityNodeViewModel.cs"/>
-    <Compile Include="ViewModels\ResultViewModel.cs"/>
-    <Compile Include="ViewModels\StepByStepListViewModel.cs"/>
-    <Compile Include="ViewModels\ViewModel.cs"/>
+    <Compile Include="ExtensionWindowPackage.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="IDesign.ExtensionPackage.cs" />
+    <Compile Include="ViewModels\DetectorViewModel.cs" />
+    <Compile Include="ViewModels\HomeViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\PatternComponentViewModel.cs" />
+    <Compile Include="ViewModels\PatternResultViewModel.cs" />
+    <Compile Include="ViewModels\EntityNodeViewModel.cs" />
+    <Compile Include="ViewModels\ResultViewModel.cs" />
+    <Compile Include="ViewModels\StepByStepInstructionsViewModel.cs" />
+    <Compile Include="ViewModels\StepByStepListViewModel.cs" />
+    <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Views\DetectorView.xaml.cs">
       <DependentUpon>DetectorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StepByStepInstructionsView.xaml.cs">
+      <DependentUpon>StepByStepInstructionsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\StepByStepListView.xaml.cs">
       <DependentUpon>StepByStepListView.xaml</DependentUpon>
@@ -183,6 +187,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\HomeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StepByStepInstructionsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

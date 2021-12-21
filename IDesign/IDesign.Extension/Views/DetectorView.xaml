@@ -151,6 +151,7 @@
             <RowDefinition x:Name="SummaryRow" Height="0" />
             <RowDefinition Height="1*" />
             <RowDefinition Height="20" />
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <StackPanel Margin="5 0 0 0" Orientation="Horizontal" Grid.Row="1">
             <Rectangle Width="15" Height="15" Fill="#4496F3" Margin="0,0,2,0" />
@@ -184,7 +185,7 @@
         <TextBlock Grid.Row="7" x:Name="SummaryControl" TextWrapping="Wrap" Margin="20,8,20,8" />
         <usercontrol:TreeViewResults x:Name="TreeViewResults" Grid.Row="8" Margin="20,0,20,0" />
         <ProgressBar Grid.Row="9" Height="20" VerticalAlignment="Bottom" Minimum="0" Maximum="100" Name="statusBar" />
-        <TextBlock Grid.Row="9" x:Name="ProgressStatusBlock" Height="20" HorizontalAlignment="Left" FontWeight="Bold"
-                   Margin="150,0,0,0" />
+        <TextBlock Grid.Row="9" x:Name="ProgressStatusBlock" Height="20" HorizontalAlignment="Left" FontWeight="Bold" Margin="150,0,0,0" />
+        <Button Grid.Row="10" Command="{Binding NavigateHomeCommand}">Home (temporary)</Button>
     </Grid>
 </UserControl>

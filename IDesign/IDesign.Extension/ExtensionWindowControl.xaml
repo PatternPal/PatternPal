@@ -30,12 +30,15 @@
             <DataTemplate DataType="{x:Type viewmodels:StepByStepListViewModel}">
                 <views:StepByStepListView />
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:StepByStepInstructionsViewModel}">
+                <views:StepByStepInstructionsView/>
+            </DataTemplate>
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" MaxWidth="300">
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
             <Image Source="Resources/logo.png" HorizontalAlignment="Center" MaxHeight="80" VerticalAlignment="Top" />
             <TextBlock Text="{Binding CurrentViewModel.Title}" VerticalAlignment="Center" FontSize="50" />
         </StackPanel>
