@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.Shell;
+using Task = System.Threading.Tasks.Task;
 
 namespace IDesign.Extension.Commands
 {

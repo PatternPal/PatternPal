@@ -54,14 +54,32 @@
     <Content Include="$(MSBuildThisFileDirectory)Resources\logo.png" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="$(MSBuildThisFileDirectory)ExtensionWindowControl.xaml" />
-    <Page Include="$(MSBuildThisFileDirectory)UserControls\Collapsable.xaml" />
-    <Page Include="$(MSBuildThisFileDirectory)UserControls\DesignPatternResult.xaml" />
-    <Page Include="$(MSBuildThisFileDirectory)UserControls\PatternCheckbox.xaml" />
-    <Page Include="$(MSBuildThisFileDirectory)UserControls\SelectPaths.xaml" />
-    <Page Include="$(MSBuildThisFileDirectory)UserControls\TreeViewResults.xaml" />
-    <Page Include="$(MSBuildThisFileDirectory)Views\DetectorView.xaml" />
-    <Page Include="$(MSBuildThisFileDirectory)Views\HomeView.xaml" />
-    <Page Include="$(MSBuildThisFileDirectory)Views\StepByStepListView.xaml" />
+    <Page Include="$(MSBuildThisFileDirectory)ExtensionWindowControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)UserControls\Collapsable.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)UserControls\DesignPatternResult.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)UserControls\PatternCheckbox.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)UserControls\SelectPaths.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)UserControls\TreeViewResults.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\DetectorView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\HomeView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\StepByStepListView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 </Project>

@@ -16,6 +16,7 @@ using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Project = Microsoft.CodeAnalysis.Project;
+using Task = System.Threading.Tasks.Task;
 
 namespace IDesign.Extension.Views
 {
