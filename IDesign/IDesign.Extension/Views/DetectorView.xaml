@@ -184,7 +184,6 @@
         <TextBlock Grid.Row="7" x:Name="SummaryControl" TextWrapping="Wrap" Margin="20,8,20,8" />
         <usercontrol:TreeViewResults x:Name="TreeViewResults" Grid.Row="8" Margin="20,0,20,0" />
         <ProgressBar Grid.Row="9" Height="20" VerticalAlignment="Bottom" Minimum="0" Maximum="100" Name="statusBar" />
-        <TextBlock Grid.Row="9" x:Name="ProgressStatusBlock" Height="20" HorizontalAlignment="Left" FontWeight="Bold"
-                   Margin="150,0,0,0" />
+        <TextBlock Grid.Row="9" x:Name="ProgressStatusBlock" Height="20" HorizontalAlignment="Left" FontWeight="Bold" Margin="150,0,0,0" />
     </Grid>
 </UserControl>

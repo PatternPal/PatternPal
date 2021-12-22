@@ -3,12 +3,95 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:IDesign.Extension"
+             xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
+             xmlns:UIResources="clr-namespace:IDesign.Extension.Resources"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel>
-        <TextBlock FontSize="32" FontWeight="Bold" TextDecorations="Underline">StepByStep List</TextBlock>
-        <Button Command="{Binding NavigateHomeCommand}">
-            <TextBlock Text="Navigate to Home" VerticalAlignment="Center" FontSize="48" />
-        </Button>
-    </StackPanel>
+             d:DesignHeight="360"
+             d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground"
+                        Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
+            </Style>
+            <Style TargetType="Button">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush  StartPoint="0,0"
+                                              EndPoint="1,1">
+                            <GradientStop Color="#4573EF"
+                                          Offset="0" />
+                            <GradientStop Color="#4496F3"
+                                          Offset="0.53" />
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Foreground"
+                        Value="#ffffff" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowTabMouseOverBackgroundBeginKey}}"
+                                    BorderThickness="1">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver"
+                             Value="True">
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <LinearGradientBrush  StartPoint="0,0"
+                                                      EndPoint="1,1">
+                                    <GradientStop Color="#4496F3"
+                                                  Offset="0" />
+                                    <GradientStop Color="#4573EF"
+                                                  Offset="0.53" />
+                                </LinearGradientBrush>
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                  VerticalScrollBarVisibility="Auto">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0"
+                       TextWrapping="Wrap"
+                       Text="Choose a design pattern to implement:"
+                       FontSize="15"
+                       HorizontalAlignment="Center"
+                       Margin="20,0,20,10" />
+
+            <ComboBox Name="InstructionSetList"
+                      Grid.Row="1"
+                      Margin="20,0,20,10"
+                      Width="200"
+                      HorizontalAlignment="Center"
+                      ItemsSource="{Binding InstructionSetList}"
+                      SelectedItem="{Binding FirstInstructionSet}"
+                      DisplayMemberPath="InstructionSetName"></ComboBox>
+            <Button Grid.Row="2"
+                    Height="40"
+                    Width="200"
+                    FontSize="15"
+                    Margin="20,0,20,0"
+                    HorizontalAlignment="Center"
+                    Visibility="Hidden"
+                    Command="{Binding NavigateStepByStepInstructionsCommand}">Next</Button>
+        </Grid>
+    </ScrollViewer>
 </UserControl>

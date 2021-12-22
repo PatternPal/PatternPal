@@ -7,6 +7,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+-   New view for selecting a design pattern to implement using step-by-step instructions
+
 ### Improved
 
 - Github Ci/Cd, build extension also in develop and only test when code changed
@@ -15,7 +18,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
--   Bride design pattern recognizer
+-   Bridge design pattern recognizer
 -   Home screen for the extension
 -   GitHub Ci/Cd
 -   Navigation between screen
