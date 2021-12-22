@@ -1,6 +1,12 @@
-﻿using System.Windows.Input;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows.Input;
 using IDesign.Extension.Commands;
 using IDesign.Extension.Stores;
+using IDesign.StepByStep;
+using IDesign.StepByStep.Abstractions;
+
 
 namespace IDesign.Extension.ViewModels
 {
@@ -10,13 +16,15 @@ namespace IDesign.Extension.ViewModels
 
         public ICommand NavigateHomeCommand { get; }
         public ICommand NavigateStepByStepInstructionsCommand { get; }
-
+        public List<IInstructionSet> InstructionSetList { get; set; }
+        public IInstructionSet FirstInstructionSet { get; set; }
 
         public StepByStepListViewModel(NavigationStore navigationStore)
         {
             NavigateHomeCommand = new NavigateCommand<HomeViewModel>(navigationStore, () => new HomeViewModel(navigationStore));
             NavigateStepByStepInstructionsCommand = new NavigateCommand<StepByStepInstructionsViewModel>(navigationStore, () => new StepByStepInstructionsViewModel(navigationStore));
-
+            InstructionSetList = InstructionSetsCreator.InstructionSets;
+            FirstInstructionSet = InstructionSetList?.FirstOrDefault();
         }
     }
 }

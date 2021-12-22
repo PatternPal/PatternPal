@@ -241,6 +241,10 @@
       <Project>{1f20d376-aa08-45be-9589-cfd70932c170}</Project>
       <Name>IDesign.Recognizers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\IDesign.StepByStep\IDesign.StepByStep.csproj">
+      <Project>{206f6058-7dfb-4676-aaca-cfaaf56e6936}</Project>
+      <Name>IDesign.StepByStep</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IDesign.SyntaxTree\IDesign.SyntaxTree.csproj">
       <Project>{86e26b75-aea1-43fa-aec5-a81131606d13}</Project>
       <Name>IDesign.SyntaxTree</Name>
