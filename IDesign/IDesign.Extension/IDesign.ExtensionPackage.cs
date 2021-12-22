@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using System.ComponentModel;
 using Microsoft.VisualStudio.Shell;
 
 namespace IDesign.Extension
@@ -26,6 +27,8 @@ namespace IDesign.Extension
     /// </remarks>
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [Guid(PackageGuidString)]
+    [ProvideOptionPage(typeof(OptionPageGrid),
+    "IDesign", "Logging", 0, 0, true)]
     public sealed class IDesignExtensionPackage : AsyncPackage
     {
         /// <summary>
@@ -57,5 +60,18 @@ namespace IDesign.Extension
         }
 
         #endregion
+    }
+    public class OptionPageGrid : DialogPage
+    {
+        private bool _doLogData = false;
+
+        [Category("Logging")]
+        [DisplayName("Log data")] 
+        [Description("Whether IDesign can log your data. The data which gets logged are your actions and your source code. This is used for research. This option is turned off by default.")]
+        public bool DoLogData
+        {
+            get { return _doLogData; }
+            set { _doLogData = value; }
+        }
     }
 }
