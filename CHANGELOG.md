@@ -7,6 +7,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Improved
+
+- Github Ci/Cd, build extension also in develop and only test when code changed
+
 ## [2.0.0] - 2021-12-15
 
 ### Added
