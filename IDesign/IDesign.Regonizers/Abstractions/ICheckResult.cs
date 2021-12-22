@@ -10,6 +10,12 @@ namespace IDesign.Recognizers.Abstractions
         Incorrect
     }
 
+    public enum CheckType
+    {
+        Optional,
+        KnockOut
+    }
+
     public interface ICheckResult
     {
         /// <summary>
