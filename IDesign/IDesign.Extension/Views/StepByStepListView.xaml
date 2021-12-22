@@ -83,7 +83,7 @@
                       HorizontalAlignment="Center"
                       ItemsSource="{Binding InstructionSetList}"
                       SelectedItem="{Binding FirstInstructionSet}"
-                      DisplayMemberPath="InstructionName"></ComboBox>
+                      DisplayMemberPath="InstructionSetName"></ComboBox>
             <Button Grid.Row="2"
                     Height="40"
                     Width="200"

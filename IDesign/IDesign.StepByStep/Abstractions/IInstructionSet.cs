@@ -10,8 +10,8 @@ namespace IDesign.StepByStep.Abstractions
     public interface IInstructionSet
     {
         /// <summary>
-        /// The name of the instruction
+        /// The name of the instruction set
         /// </summary>
-        string InstructionName { get; }
+        string InstructionSetName { get; }
     }
 }

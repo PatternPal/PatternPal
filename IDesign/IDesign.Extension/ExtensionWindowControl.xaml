@@ -30,9 +30,6 @@
             <DataTemplate DataType="{x:Type viewmodels:StepByStepListViewModel}">
                 <views:StepByStepListView />
             </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodels:StepByStepInstructionsViewModel}">
-                <views:StepByStepInstructionsView/>
-            </DataTemplate>
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />

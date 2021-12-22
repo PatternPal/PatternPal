@@ -9,6 +9,6 @@ namespace IDesign.StepByStep.InstructionSets
 {
     internal class StrategyInstructionSet : IInstructionSet
     {
-        public string InstructionName => Strategy;
+        public string InstructionSetName => Strategy;
     }
 }

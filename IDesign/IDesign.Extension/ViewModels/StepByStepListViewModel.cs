@@ -15,14 +15,12 @@ namespace IDesign.Extension.ViewModels
         public override string Title => Resources.ExtensionUIResources.StepByStepTitle;
 
         public ICommand NavigateHomeCommand { get; }
-        public ICommand NavigateStepByStepInstructionsCommand { get; }
         public List<IInstructionSet> InstructionSetList { get; set; }
         public IInstructionSet FirstInstructionSet { get; set; }
 
         public StepByStepListViewModel(NavigationStore navigationStore)
         {
             NavigateHomeCommand = new NavigateCommand<HomeViewModel>(navigationStore, () => new HomeViewModel(navigationStore));
-            NavigateStepByStepInstructionsCommand = new NavigateCommand<StepByStepInstructionsViewModel>(navigationStore, () => new StepByStepInstructionsViewModel(navigationStore));
             InstructionSetList = InstructionSetsCreator.InstructionSets;
             FirstInstructionSet = InstructionSetList?.FirstOrDefault();
         }
