@@ -28,7 +28,7 @@ namespace IDesign.Extension
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [Guid(PackageGuidString)]
     [ProvideOptionPage(typeof(OptionPageGrid),
-    "IDesign", "Logging", 0, 0, true)]
+    "IDesign", "Privacy", 0, 0, true)]
     public sealed class IDesignExtensionPackage : AsyncPackage
     {
         /// <summary>
@@ -65,7 +65,7 @@ namespace IDesign.Extension
     {
         private bool _doLogData = false;
 
-        [Category("Logging")]
+        [Category("Privacy")]
         [DisplayName("Log data")] 
         [Description("Whether IDesign can log your data. The data which gets logged are your actions and your source code. This is used for research. This option is turned off by default.")]
         public bool DoLogData
