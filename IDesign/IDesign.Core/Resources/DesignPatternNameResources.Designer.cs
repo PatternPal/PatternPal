@@ -19,10 +19,10 @@ namespace IDesign.Core.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class DesignPatternNameResources {
+    public class DesignPatternNameResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace IDesign.Core.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IDesign.Core.Resources.DesignPatternNameResources", typeof(DesignPatternNameResources).Assembly);
@@ -51,7 +51,7 @@ namespace IDesign.Core.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace IDesign.Core.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Adapter.
         /// </summary>
-        internal static string Adapter {
+        public static string Adapter {
             get {
                 return ResourceManager.GetString("Adapter", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace IDesign.Core.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Bridge.
         /// </summary>
-        internal static string Bridge {
+        public static string Bridge {
             get {
                 return ResourceManager.GetString("Bridge", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace IDesign.Core.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Decorator.
         /// </summary>
-        internal static string Decorator {
+        public static string Decorator {
             get {
                 return ResourceManager.GetString("Decorator", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace IDesign.Core.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Factory Method.
         /// </summary>
-        internal static string FactoryMethod {
+        public static string FactoryMethod {
             get {
                 return ResourceManager.GetString("FactoryMethod", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace IDesign.Core.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Observer.
         /// </summary>
-        internal static string Observer {
+        public static string Observer {
             get {
                 return ResourceManager.GetString("Observer", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace IDesign.Core.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Singleton.
         /// </summary>
-        internal static string Singleton {
+        public static string Singleton {
             get {
                 return ResourceManager.GetString("Singleton", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace IDesign.Core.Resources {
         /// <summary>
         ///   Looks up a localized string similar to State.
         /// </summary>
-        internal static string State {
+        public static string State {
             get {
                 return ResourceManager.GetString("State", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace IDesign.Core.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Strategy.
         /// </summary>
-        internal static string Strategy {
+        public static string Strategy {
             get {
                 return ResourceManager.GetString("Strategy", resourceCulture);
             }
