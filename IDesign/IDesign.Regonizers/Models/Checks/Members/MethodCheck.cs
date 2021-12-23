@@ -1,42 +1,26 @@
-﻿using System;
-using IDesign.Recognizers.Checks;
-using IDesign.Recognizers.Models.ElementChecks;
-using IDesign.Recognizers.Models.Output;
-using SyntaxTree.Abstractions;
-using SyntaxTree.Abstractions.Entities;
+﻿using SyntaxTree.Abstractions.Entities;
 using SyntaxTree.Abstractions.Members;
 
 namespace IDesign.Recognizers.Models.Checks.Members
 {
-    public class MethodCheck : AbstractListCheck<IMethod>
+    public class MethodCheck : AbstractMemberListCheck<IMethod, MethodCheck>
     {
-        public MethodCheck Modifiers(params IModifier[] modifiers)
-        {
-            _checks.Add(new ModifierCheck(modifiers));
-            return this;
-        }
-
+        /// <summary>
+        ///     Exactly the same as <see cref="AbstractMemberListCheck{T,R}.Type(SyntaxTree.Abstractions.Entities.IEntity)"/>
+        /// </summary>
         public MethodCheck ReturnType(IEntity entity)
         {
-            return ReturnType(entity.GetName());
+            return Type(entity);
         }
 
+        /// <summary>
+        ///     Exactly the same as <see cref="AbstractMemberListCheck{T,R}.Type(string)"/>
+        /// </summary>
         public MethodCheck ReturnType(string entity)
         {
-            return Custom(
-                x => x.CheckReturnType(entity), new ResourceMessage("MethodReturnType", entity)
-            );
+            return Type(entity);
         }
 
-        public MethodCheck Custom(Predicate<IMethod> predicate, ResourceMessage message)
-        {
-            _checks.Add(
-                new ElementCheck<IMethod>(
-                    predicate,
-                    message
-                )
-            );
-            return this;
-        }
+        protected override MethodCheck This() => this;
     }
 }

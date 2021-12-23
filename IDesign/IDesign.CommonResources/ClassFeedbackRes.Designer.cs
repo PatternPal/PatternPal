@@ -1004,5 +1004,14 @@ namespace IDesign.CommonResources {
                 return ResourceManager.GetString("StrategyNodeMethods", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} type should be {1}.
+        /// </summary>
+        public static string Type {
+            get {
+                return ResourceManager.GetString("Type", resourceCulture);
+            }
+        }
     }
 }
