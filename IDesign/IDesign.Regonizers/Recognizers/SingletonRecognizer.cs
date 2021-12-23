@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Checks;
+using IDesign.Recognizers.Models.Checks;
+using IDesign.Recognizers.Models.Checks.Members;
 using IDesign.Recognizers.Models.ElementChecks;
 using IDesign.Recognizers.Models.Output;
 using SyntaxTree.Abstractions.Entities;
@@ -24,19 +26,12 @@ namespace IDesign.Recognizers.Recognizers
                     new ResourceMessage("SingletonMethodReturnCreationType")
                 );
 
-            var propertyChecks = new List<ICheck<IField>>
-            {
-                new ElementCheck<IField>(
-                    x => x.CheckFieldTypeGeneric(new List<string> { entityNode.GetName() }),
-                    new ResourceMessage("FieldType", entityNode.GetName()), 1
-                ),
-                new ModifierCheck(Modifiers.Private.Not(), Modifiers.Static),
-            };
+            var propertyChecks = new FieldCheck()
+                .Modifiers(Modifiers.Private.Not(), Modifiers.Static)
+                .Type(entityNode);
 
-            var constructorChecks = new List<ICheck<IMethod>>
-            {
-                new ElementCheck<IMethod>(x => !x.CheckModifier("public"), "ConstructorModifierNotPublic", 0.5F)
-            };
+            var constructorChecks = new MethodCheck()
+                .Modifiers(Modifiers.Private.Not());
 
 
             var singletonCheck = new GroupCheck<IEntity, IEntity>(
@@ -44,11 +39,11 @@ namespace IDesign.Recognizers.Recognizers
                 {
                     new GroupCheck<IEntity, IMethod>(methodChecks.ToList(), x => x.GetAllMethods(), "SingletonMethod"),
                     new GroupCheck<IEntity, IField>(
-                        propertyChecks, x => x.GetFields(),
+                        propertyChecks.ToList(), x => x.GetFields(),
                         "SingletonField"
                     ),
                     new GroupCheck<IEntity, IMethod>(
-                        constructorChecks, x => x.GetConstructors(),
+                        constructorChecks.ToList(), x => x.GetConstructors(),
                         "SingletonConstructor"
                     )
                 }, x => new List<IEntity> { entityNode }, "Singleton", GroupCheckType.All

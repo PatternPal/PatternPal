@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Checks;
+using IDesign.Recognizers.Models.ElementChecks;
 using IDesign.Recognizers.Models.Output;
 using SyntaxTree.Abstractions;
 using SyntaxTree.Abstractions.Entities;
 using SyntaxTree.Abstractions.Members;
 
-namespace IDesign.Recognizers.Models.ElementChecks
+namespace IDesign.Recognizers.Models.Checks.Members
 {
-    public class MethodCheck : IEnumerable<ICheck<IMethod>>
+    public class MethodCheck : AbstractListCheck<IMethod>
     {
-        private readonly List<ICheck<IMethod>> _checks = new List<ICheck<IMethod>>();
-
         public MethodCheck Modifiers(params IModifier[] modifiers)
         {
             _checks.Add(new ModifierCheck(modifiers));
@@ -22,8 +18,13 @@ namespace IDesign.Recognizers.Models.ElementChecks
 
         public MethodCheck ReturnType(IEntity entity)
         {
+            return ReturnType(entity.GetName());
+        }
+
+        public MethodCheck ReturnType(string entity)
+        {
             return Custom(
-                x => x.CheckReturnType(entity.GetName()), new ResourceMessage("MethodReturnType", entity.GetName())
+                x => x.CheckReturnType(entity), new ResourceMessage("MethodReturnType", entity)
             );
         }
 
@@ -37,9 +38,5 @@ namespace IDesign.Recognizers.Models.ElementChecks
             );
             return this;
         }
-
-        public IEnumerator<ICheck<IMethod>> GetEnumerator() { return _checks.GetEnumerator(); }
-
-        IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
     }
 }

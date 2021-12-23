@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models.Output;
 using SyntaxTree.Abstractions;
-using SyntaxTree.Abstractions.Members;
 using static IDesign.Recognizers.Abstractions.FeedbackType;
 
-namespace IDesign.Recognizers.Models.ElementChecks
+namespace IDesign.Recognizers.Models.Checks
 {
     public class ModifierCheck : ICheck<IModified>
     {

@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using IDesign.Recognizers.Abstractions;
+using IDesign.Recognizers.Models.Checks;
+using IDesign.Recognizers.Models.Checks.Members;
 using IDesign.Recognizers.Models.ElementChecks;
 using IDesign.Recognizers.Models.Output;
 using SyntaxTree.Abstractions.Entities;
