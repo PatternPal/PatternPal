@@ -1,17 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using IDesign.StepByStep.Models;
 
 namespace IDesign.StepByStep.Abstractions
 {
     /// <summary>
-    /// An interface which should be implemented by the pattern instruction sets
+    /// Interface which should be implemented by the pattern instruction sets
     /// </summary>
     public interface IInstructionSet
     {
         /// <summary>
         /// The name of the instruction set
         /// </summary>
-        string InstructionSetName { get; }
+        string Name { get; }
+
+        /// <summary>
+        /// List that contains all instructions for this instruction set
+        /// </summary>
+        List<Instruction> Instructions { get; }
+
+        /// <summary>
+        /// Retrieves instructions from the corresponding .resx file and loads them into the Instructions list
+        /// </summary>
+        void SetInstructions();
+
     }
 }
