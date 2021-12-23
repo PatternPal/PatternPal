@@ -109,7 +109,7 @@
                        HorizontalAlignment="Center"
                        Margin="0,0,0,10"
                        MaxWidth="380"
-                       Visibility="Visible">
+                       Visibility="Hidden">
                 <Run Name="FeedbackTextCorrect"
                      Foreground="Green"
                      Text="The class is abstract&#x0a;"></Run>

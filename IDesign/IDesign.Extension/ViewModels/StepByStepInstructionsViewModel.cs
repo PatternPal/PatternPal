@@ -16,7 +16,20 @@ namespace IDesign.Extension.ViewModels
         public IInstructionSet InstructionSet { get; }
 
         public Instruction CurrentInstruction => InstructionSet.Instructions.FirstOrDefault();
-        public string CurrentInstructionText => CurrentInstruction.InstructionText;
+        public string CurrentInstructionText
+        {
+            get
+            {
+                var ins = CurrentInstruction;
+                if (ins != null)
+                {
+                    return ins.InstructionText;
+                }
+
+                return "Instruction unavailable";
+            }
+        }
+
         public override string Title => InstructionSet.Name;
 
         public ICommand NavigateHomeCommand { get;  }
