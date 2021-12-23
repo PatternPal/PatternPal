@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace IDesign.Extension
 {
@@ -25,9 +26,10 @@ namespace IDesign.Extension
     ///         &gt; in .vsixmanifest file.
     ///     </para>
     /// </remarks>
+    [ProvideAutoLoad(UIContextGuids80.SolutionExists, PackageAutoLoadFlags.BackgroundLoad)]
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [Guid(PackageGuidString)]
-    [ProvideOptionPage(typeof(OptionPageGrid),
+    [ProvideOptionPage(typeof(IDesignOptionPageGrid),
     "IDesign", "Privacy", 0, 0, true)]
     public sealed class IDesignExtensionPackage : AsyncPackage
     {
@@ -61,7 +63,7 @@ namespace IDesign.Extension
 
         #endregion
     }
-    public class OptionPageGrid : DialogPage
+    public class IDesignOptionPageGrid : DialogPage
     {
         private bool _doLogData = false;
 
