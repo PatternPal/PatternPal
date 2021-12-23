@@ -76,7 +76,6 @@ namespace IDesign.ConsoleApp
             if (selectedFiles.Count == 0)
             {
                 Console.WriteLine("No files specified!");
-                Console.ReadKey();
                 return;
             }
 
@@ -107,8 +106,6 @@ namespace IDesign.ConsoleApp
             var results = recognizerRunner.Run(selectedPatterns);
 
             PrintResults(results, selectedDirectories);
-
-            Console.ReadKey();
         }
 
         private static void ShowHelpMessage(OptionSet options)
@@ -122,7 +119,7 @@ namespace IDesign.ConsoleApp
         {
             Console.WriteLine("\nResults:");
 
-            results = results.Where(x => x.Result.GetScore() >= 80).ToList();
+            results = results.Where(x => x.Result.GetScore() >= 0).ToList();
 
             for (var i = 0; i < results.Count; i++)
             {

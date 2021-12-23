@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SyntaxTree.Abstractions;
 using SyntaxTree.Abstractions.Entities;
 using SyntaxTree.Abstractions.Members;
 using SyntaxTree.Abstractions.Root;
@@ -65,6 +66,13 @@ namespace SyntaxTree.Models.Entities
         public override IEnumerable<IMember> GetMembers()
         {
             return base.GetMembers().Concat(_fields).Concat(_constructors);
+        }
+
+        public override IEnumerable<INode> GetChildren()
+        {
+            return base.GetChildren()
+                .Concat(_constructors)
+                .Concat(_fields);
         }
     }
 }

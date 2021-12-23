@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SyntaxTree.Abstractions;
 using SyntaxTree.Abstractions.Entities;
 using SyntaxTree.Abstractions.Root;
 using SyntaxTree.Utils;
@@ -65,6 +66,13 @@ namespace SyntaxTree.Models.Root
                 .Append(GetEntities().ToDictionary(e => e.GetFullName()))
                 .SelectMany(d => d)
                 .ToDictionary(p => p.Key, p => p.Value);
+        }
+
+        public IEnumerable<INode> GetChildren()
+        {
+            return _entities
+                .Cast<INode>()
+                .Concat(_namespaces);
         }
     }
 }

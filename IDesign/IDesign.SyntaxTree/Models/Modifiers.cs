@@ -14,34 +14,16 @@ namespace SyntaxTree.Models
 
         public string GetName() { return _name.ToLower(); }
 
-        private bool Equals(Modifier other)
-        {
-            return _name == other._name;
+        protected bool Equals(IModifier other) {
+            return _name == other.GetName();
         }
 
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-
-            if (obj.GetType() != GetType())
-            {
-                return false;
-            }
-
-            return Equals((Modifier)obj);
+        public override bool Equals(object obj) {
+            return ReferenceEquals(this, obj) || obj is IModifier other && Equals(other);
         }
 
-        public override int GetHashCode()
-        {
-            return _name != null ? _name.GetHashCode() : 0;
+        public override int GetHashCode() {
+            return (_name != null ? _name.GetHashCode() : 0);
         }
 
         public override string ToString()

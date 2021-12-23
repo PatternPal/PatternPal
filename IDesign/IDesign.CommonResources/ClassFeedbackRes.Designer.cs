@@ -655,6 +655,15 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} should be {1}.
+        /// </summary>
+        public static string Modifier {
+            get {
+                return ResourceManager.GetString("Modifier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Node should be an abstract class or an interface..
         /// </summary>
         public static string NodeAbstractOrInterface {

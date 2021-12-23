@@ -22,7 +22,8 @@ namespace IDesign.Core
             new DesignPattern(Strategy, new StrategyRecognizer(), WikiPageResources.Strategy),
             new DesignPattern(Adapter, new AdapterRecognizer(), WikiPageResources.Adapter),
             new DesignPattern(Observer, new ObserverRecognizer(), WikiPageResources.Observer),
-            new DesignPattern(Bridge, new BridgeRecognizer(), WikiPageResources.Bridge)
+            new DesignPattern(Bridge, new BridgeRecognizer(), WikiPageResources.Bridge),
+            new DesignPattern("Test", new TestRecognizer(), "")
         };
 
         public SyntaxGraph Graph;

@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Members"/>
+    <Folder Include="Models\Members" />
   </ItemGroup>
 
 </Project>

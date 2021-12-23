@@ -151,5 +151,12 @@ namespace SyntaxTree.Models.Entities
         {
             return GetName();
         }
+
+        public virtual IEnumerable<INode> GetChildren()
+        {
+            return _entities.Cast<INode>()
+                .Concat(_methods)
+                .Concat(_properties);
+        }
     }
 }
