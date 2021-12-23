@@ -44,7 +44,14 @@ namespace IDesign.Recognizers.Models.ElementChecks
             {
                 var isValid = _predicate(elementToCheck);
                 var feedback = isValid ? FeedbackType.Correct : FeedbackType.Incorrect;
-                return new CheckResult(_feedback, feedback, elementToCheck, _score);
+                var checkResult = new CheckResult(_feedback, feedback, elementToCheck, _score);
+
+                if (feedback == FeedbackType.Incorrect && _checkType == CheckType.KnockOut)
+                {
+                    checkResult.HasIncorrectKnockOutCheck = true;
+                }
+
+                return checkResult;
             }
 
             return new CheckResult(_feedback, FeedbackType.Incorrect, null, _score);
