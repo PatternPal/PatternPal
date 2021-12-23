@@ -13,6 +13,15 @@ namespace IDesign.Recognizers.Models.Output
 
     public class CheckResult : ICheckResult
     {
+        public CheckCalculationType CalculationType { get; set; } = CheckCalculationType.Sum;
+        public string Message { get; set; }
+        public FeedbackType FeedbackType { get; set; }
+        public INode Element { get; set; }
+        public List<ICheckResult> ChildFeedback { get; set; } = new List<ICheckResult>();
+        public IResourceMessage Feedback { get; set; }
+        public float Score { get; set; }
+        public bool HasIncorrectKnockOutCheck { get; set; }
+
         public CheckResult(string message, FeedbackType feedbackType, INode element)
         {
             Message = message;
@@ -22,14 +31,14 @@ namespace IDesign.Recognizers.Models.Output
 
         public CheckResult(IResourceMessage feedback, FeedbackType feedbackType, INode element)
         {
-            _feedback = feedback;
+            Feedback = feedback;
             FeedbackType = feedbackType;
             Element = element;
         }
 
         public CheckResult(IResourceMessage feedback, FeedbackType feedbackType, INode element, float score)
         {
-            _feedback = feedback;
+            Feedback = feedback;
             FeedbackType = feedbackType;
             Element = element;
             Score = score;
@@ -42,15 +51,6 @@ namespace IDesign.Recognizers.Models.Output
             Element = element;
             Score = score;
         }
-
-        public CheckCalculationType CalculationType { get; set; } = CheckCalculationType.Sum;
-
-        public string Message { get; set; }
-        public FeedbackType FeedbackType { get; set; }
-        public INode Element { get; set; }
-        public List<ICheckResult> ChildFeedback { get; set; } = new List<ICheckResult>();
-        public IResourceMessage _feedback { get; set; }
-        public float Score { get; set; }
 
         public IEnumerable<ICheckResult> GetChildFeedback()
         {
@@ -103,7 +103,7 @@ namespace IDesign.Recognizers.Models.Output
 
         public IResourceMessage GetFeedback()
         {
-            return _feedback;
+            return Feedback;
         }
 
         public void ChangeScore(float score)
