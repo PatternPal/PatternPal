@@ -101,11 +101,6 @@ namespace IDesign.Recognizers.Models.ElementChecks
 
             var incorrectKnockOut = highestScored.Value.childFeedback.Any(x => x.HasIncorrectKnockOutCheck);
 
-            if (incorrectKnockOut)
-            {
-                highestScored.Value.childFeedback.ToList().ForEach(x => x.ChangeScore(0));
-            }
-
             return new CheckResult(_resourcemessage, feedback, elementToCheck)
             {
                 ChildFeedback = highestScored.Value.childFeedback.ToList(),
@@ -138,11 +133,6 @@ namespace IDesign.Recognizers.Models.ElementChecks
 
             foreach (var valueTuple in allChildFeedback)
             {
-                if (incorrectKnockOut)
-                {
-                    valueTuple.Value.childFeedback.ToList().ForEach(x => x.ChangeScore(0));
-                }
-
                 var childHasIncorrectKnockOut = valueTuple.Value.childFeedback.Any(x => x.HasIncorrectKnockOutCheck);
 
                 childResults.Add(new CheckResult(valueTuple.Key.ToString(), feedback, elementToCheck)
@@ -183,11 +173,6 @@ namespace IDesign.Recognizers.Models.ElementChecks
 
             foreach (var valueTuple in allChildFeedback)
             {
-                if (incorrectKnockOut)
-                {
-                    valueTuple.Value.childFeedback.ToList().ForEach(x => x.ChangeScore(0));
-                }
-
                 var childHasIncorrectKnockOut = valueTuple.Value.childFeedback.Any(x => x.HasIncorrectKnockOutCheck);
 
                 childResults.Add(new CheckResult(valueTuple.Key.ToString(), feedback, valueTuple.Key)

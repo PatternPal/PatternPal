@@ -19,8 +19,9 @@ namespace IDesign.Recognizers.Models.Output
         public INode Element { get; set; }
         public List<ICheckResult> ChildFeedback { get; set; } = new List<ICheckResult>();
         public IResourceMessage Feedback { get; set; }
-        public float Score { get; set; }
         public bool HasIncorrectKnockOutCheck { get; set; }
+
+        private float _score;
 
         public CheckResult(string message, FeedbackType feedbackType, INode element)
         {
@@ -41,7 +42,7 @@ namespace IDesign.Recognizers.Models.Output
             Feedback = feedback;
             FeedbackType = feedbackType;
             Element = element;
-            Score = score;
+            _score = score;
         }
 
         public CheckResult(string message, FeedbackType feedbackType, INode element, float score)
@@ -49,7 +50,7 @@ namespace IDesign.Recognizers.Models.Output
             Message = message;
             FeedbackType = feedbackType;
             Element = element;
-            Score = score;
+            _score = score;
         }
 
         public IEnumerable<ICheckResult> GetChildFeedback()
@@ -59,8 +60,10 @@ namespace IDesign.Recognizers.Models.Output
 
         public float GetScore()
         {
-            return !ChildFeedback.Any()
-                ? FeedbackType == FeedbackType.Correct ? Score : 0
+            if (HasIncorrectKnockOutCheck) return 0;
+
+            return ChildFeedback.Count == 0
+                ? FeedbackType == FeedbackType.Correct ? _score : 0
                 : CalculationType == CheckCalculationType.Average
                     ? ChildFeedback.Average(x => x.GetScore())
                     : ChildFeedback.Sum(x => x.GetScore());
@@ -69,7 +72,7 @@ namespace IDesign.Recognizers.Models.Output
         public float GetTotalChecks()
         {
             return ChildFeedback.Count == 0
-                ? Score
+                ? _score
                 : CalculationType == CheckCalculationType.Average
                     ? ChildFeedback.Average(x => x.GetTotalChecks())
                     : ChildFeedback.Sum(x => x.GetTotalChecks());
@@ -108,7 +111,7 @@ namespace IDesign.Recognizers.Models.Output
 
         public void ChangeScore(float score)
         {
-            Score = score;
+            _score = score;
         }
     }
 }
