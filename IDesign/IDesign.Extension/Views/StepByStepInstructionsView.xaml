@@ -67,7 +67,6 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0"
@@ -119,9 +118,6 @@
                      Foreground="Red"
                      Text="The class doesn't have an abstract method"></Run>
             </TextBlock>
-
-            <Button Grid.Row="3"
-                    Command="{Binding NavigateHomeCommand}">Home (temporary)</Button>
         </Grid>
     </ScrollViewer>
 </UserControl>
