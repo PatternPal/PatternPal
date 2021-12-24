@@ -18,9 +18,8 @@ namespace IDesign.Extension
 
         private static async void BuildEvents_OnBuildDone(EnvDTE.vsBuildScope Scope, EnvDTE.vsBuildAction Action)
         {
-            Debug.WriteLine("OnBuildDone");
-            await LoggingApiClient.PostActionAsync(Action);
+            try { await LoggingApiClient.PostActionAsync(Action); }
+            catch (Exception ex) { }
         }
-
     }
 }
