@@ -2,7 +2,9 @@
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using System.ComponentModel;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace IDesign.Extension
 {
@@ -24,8 +26,11 @@ namespace IDesign.Extension
     ///         &gt; in .vsixmanifest file.
     ///     </para>
     /// </remarks>
+    [ProvideAutoLoad(UIContextGuids80.SolutionExists, PackageAutoLoadFlags.BackgroundLoad)]
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [Guid(PackageGuidString)]
+    [ProvideOptionPage(typeof(IDesignOptionPageGrid),
+    "IDesign", "Privacy", 0, 0, true)]
     public sealed class IDesignExtensionPackage : AsyncPackage
     {
         /// <summary>
@@ -57,5 +62,18 @@ namespace IDesign.Extension
         }
 
         #endregion
+    }
+    public class IDesignOptionPageGrid : DialogPage
+    {
+        private bool _doLogData = false;
+
+        [Category("Privacy")]
+        [DisplayName("Log data")] 
+        [Description("Whether IDesign can log your data. The data which gets logged are your actions and your source code. This is used for research. This option is turned off by default.")]
+        public bool DoLogData
+        {
+            get { return _doLogData; }
+            set { _doLogData = value; }
+        }
     }
 }
