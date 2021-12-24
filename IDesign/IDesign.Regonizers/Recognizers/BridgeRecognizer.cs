@@ -32,14 +32,16 @@ namespace IDesign.Recognizers
                     x => x.CheckRelationType(RelationType.ImplementedBy) ||
                          x.CheckRelationType(RelationType.ExtendedBy),
                     "NodeImplementedOrInherited",
-                    3.25f
+                    3.25f,
+                    CheckType.KnockOut
                 ),
 
                 // Implementer is used by another node
                 new ElementCheck<IEntity>(
                     x => x.CheckRelationType(RelationType.UsedBy),
                     "ImplementerUsedByAbstraction",
-                    2f
+                    2f,
+                    CheckType.KnockOut
                 )
             };
 
@@ -66,14 +68,16 @@ namespace IDesign.Recognizers
                     x => x.CheckRelationType(RelationType.ExtendedBy) ||
                          x.CheckRelationType(RelationType.ImplementedBy),
                     "NodeImplementedOrInherited",
-                    6f
+                    6f,
+                    CheckType.KnockOut
                 ),
 
                 // Abstraction uses at least one other node
                 new ElementCheck<IEntity>(
                     x => x.CheckMinimalAmountOfRelationTypes(RelationType.Uses, 1),
                     "NodeUses1",
-                    3f
+                    3f,
+                    CheckType.KnockOut
                 )
             };
 
@@ -135,7 +139,8 @@ namespace IDesign.Recognizers
                             return x.GetRelationType() == RelationType.Uses;
                         },
                         "AbstractionUsesImplementer",
-                        2f
+                        2f,
+                        CheckType.KnockOut
                     ),
 
                     // Abstraction has a reference to the implementer
@@ -151,7 +156,8 @@ namespace IDesign.Recognizers
                                     });
                                 },
                                 "AbstractionHasImplementerReference",
-                                7f
+                                7f,
+                                CheckType.KnockOut
                             ),
                             new GroupCheck<IField, IMethod>(new List<ICheck<IMethod>>
                                 {

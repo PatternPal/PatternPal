@@ -45,7 +45,7 @@ namespace IDesign.Recognizers.Recognizers
                                 x => x.CheckMinimalAmountOfRelationTypes(RelationType.UsedBy, 1), "NodeUses1", 1
                             ),
 
-                            //check if field has stratgey as type
+                            //check if field has strategy as type
                             new GroupCheck<IEntity, IEntity>(
                                 new List<ICheck<IEntity>>
                                 {
