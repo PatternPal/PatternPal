@@ -82,6 +82,7 @@
                         HorizontalAlignment="Center"
                         Margin="0,0,0,10">
                 <Button Name="CheckButton"
+                        Visibility="Hidden"
                         Height="40"
                         Width="100"
                         FontSize="15"
