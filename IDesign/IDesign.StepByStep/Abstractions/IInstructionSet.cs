@@ -18,7 +18,7 @@ namespace IDesign.StepByStep.Abstractions
         /// <summary>
         /// List that contains all instructions for this instruction set
         /// </summary>
-        List<Instruction> Instructions { get; }
+        LinkedList<Instruction> Instructions { get; set; }
 
         /// <summary>
         /// Retrieves instructions from the corresponding .resx file and loads them into the Instructions list

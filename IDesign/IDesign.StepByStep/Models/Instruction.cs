@@ -6,7 +6,21 @@ namespace IDesign.StepByStep.Models
 {
     public class Instruction
     {
-        public string InstructionText { get; }
+        private string _instructionText;
+        /// <summary>
+        /// Text that contains the instruction
+        /// </summary>
+        public string InstructionText
+        {
+            get
+            {
+                return _instructionText ?? "Instruction unavailable";
+            }
+            set
+            {
+                _instructionText = value;
+            }
+        }
 
         public Instruction(string instructionText)
         {

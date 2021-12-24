@@ -11,6 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Resources\Instructions\SingletonInstructions.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SingletonInstructions.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\Instructions\StrategyInstructions.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -19,6 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\Instructions\SingletonInstructions.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SingletonInstructions.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Instructions\StrategyInstructions.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>StrategyInstructions.Designer.cs</LastGenOutput>

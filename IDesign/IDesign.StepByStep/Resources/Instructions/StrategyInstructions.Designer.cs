@@ -61,7 +61,7 @@ namespace IDesign.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a new abstract class..
+        ///   Looks up a localized string similar to Test instruction 1.
         /// </summary>
         public static string Instruction1 {
             get {
@@ -70,11 +70,29 @@ namespace IDesign.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don&apos;t care what humans think is impossible..
+        ///   Looks up a localized string similar to Test instruction 2.
         /// </summary>
         public static string Instruction2 {
             get {
                 return ResourceManager.GetString("Instruction2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test instruction 3.
+        /// </summary>
+        public static string Instruction3 {
+            get {
+                return ResourceManager.GetString("Instruction3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test instruction 4.
+        /// </summary>
+        public static string Instruction4 {
+            get {
+                return ResourceManager.GetString("Instruction4", resourceCulture);
             }
         }
     }

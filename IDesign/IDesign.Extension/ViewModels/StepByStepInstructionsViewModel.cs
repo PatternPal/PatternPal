@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using IDesign.Extension.Commands;
 using IDesign.Extension.Stores;
@@ -13,31 +10,46 @@ namespace IDesign.Extension.ViewModels
 {
     public class StepByStepInstructionsViewModel : ViewModel
     {
+        public ICommand NavigateHomeCommand { get; }
+
         public IInstructionSet InstructionSet { get; }
 
-        public Instruction CurrentInstruction => InstructionSet.Instructions.FirstOrDefault();
-        public string CurrentInstructionText
-        {
-            get
-            {
-                var ins = CurrentInstruction;
-                if (ins != null)
-                {
-                    return ins.InstructionText;
-                }
+        private LinkedListNode<Instruction> _currentInstruction;
+        
 
-                return "Instruction unavailable";
+        public LinkedListNode<Instruction> CurrentInstruction
+        {
+            get => _currentInstruction;
+            set
+            {
+                _currentInstruction = value;
+                OnPropertyChanged(nameof(CurrentInstruction));
             }
         }
 
-        public override string Title => InstructionSet.Name;
+        private int _currentInstructionNumber;
+        public int CurrentInstructionNumber
+        {
+            get => _currentInstructionNumber;
+            set
+            {
+                _currentInstructionNumber = value;
+                OnPropertyChanged(nameof(Title));
+            }
+        }
 
-        public ICommand NavigateHomeCommand { get;  }
+        /// <summary>
+        /// Title that is shown on the top of the screen. Contains the current instruction number out of the number of total instructions
+        /// </summary>
+        public override string Title => $"{InstructionSet.Name} {CurrentInstructionNumber}/{InstructionSet.Instructions.Count}";
 
         public StepByStepInstructionsViewModel(NavigationStore navigationStore, IInstructionSet instructionSet)
         {
             NavigateHomeCommand = new NavigateCommand<HomeViewModel>(navigationStore, () => new HomeViewModel(navigationStore));
             InstructionSet = instructionSet;
+
+            CurrentInstruction = InstructionSet.Instructions.First;
+            CurrentInstructionNumber = 1;
         }
     }
 }

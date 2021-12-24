@@ -10,20 +10,19 @@ using static IDesign.Core.Resources.DesignPatternNameResources;
 
 namespace IDesign.StepByStep.InstructionSets
 {
-    public class StrategyInstructionSet : IInstructionSet
+    public class SingletonInstructionSet : IInstructionSet
     {
-        public string Name => Strategy;
+        public string Name => Singleton;
         public LinkedList<Instruction> Instructions { get; set; }
 
-        public StrategyInstructionSet()
+        public SingletonInstructionSet()
         {
             SetInstructions();
         }
-
         public void SetInstructions()
         {
             Instructions = new LinkedList<Instruction>();
-            var resourceSet = StrategyInstructions.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>()
+            var resourceSet = SingletonInstructions.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>()
                 .OrderBy(i => i.Key.ToString().Length).ThenBy(i => i.Key);
 
             foreach (DictionaryEntry entry in resourceSet)
