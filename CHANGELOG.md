@@ -9,6 +9,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 -   New view for selecting a design pattern to implement using step-by-step instructions
+-   New view for implementing a pattern using step-by-step instructions.
 
 ### Improved
 
