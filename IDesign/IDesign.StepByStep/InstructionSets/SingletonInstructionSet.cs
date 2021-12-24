@@ -19,11 +19,15 @@ namespace IDesign.StepByStep.InstructionSets
         {
             SetInstructions();
         }
+
         public void SetInstructions()
         {
             Instructions = new LinkedList<Instruction>();
-            var resourceSet = SingletonInstructions.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true).OfType<DictionaryEntry>()
-                .OrderBy(i => i.Key.ToString().Length).ThenBy(i => i.Key);
+            var resourceSet = 
+                SingletonInstructions.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true)
+                    .OfType<DictionaryEntry>()
+                    .OrderBy(i => i.Key.ToString().Length)
+                    .ThenBy(i => i.Key);
 
             foreach (DictionaryEntry entry in resourceSet)
                 Instructions.AddLast(new Instruction((string)entry.Value));
