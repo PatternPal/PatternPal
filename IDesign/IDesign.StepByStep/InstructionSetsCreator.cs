@@ -9,8 +9,7 @@ namespace IDesign.StepByStep
     {
         public static readonly List<IInstructionSet> InstructionSets = new List<IInstructionSet>
         {
-            new StrategyInstructionSet(),
-            new SingletonInstructionSet()
+            new StrategyInstructionSet()
         };
     }
 }

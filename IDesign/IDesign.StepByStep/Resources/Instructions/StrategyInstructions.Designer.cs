@@ -61,38 +61,38 @@ namespace IDesign.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test instruction 1.
+        ///   Looks up a localized string similar to Create an interface or abstract class (TIP: Use &apos;Behaviour&apos; in the interface/class name)..
         /// </summary>
-        public static string Instruction1 {
+        public static string _1 {
             get {
-                return ResourceManager.GetString("Instruction1", resourceCulture);
+                return ResourceManager.GetString("1", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test instruction 2.
+        ///   Looks up a localized string similar to Create a class that implements the interface/abstract class you&apos;ve just created (It is preferred to also use the word &apos;Behaviour&apos; in the name)..
         /// </summary>
-        public static string Instruction2 {
+        public static string _2 {
             get {
-                return ResourceManager.GetString("Instruction2", resourceCulture);
+                return ResourceManager.GetString("2", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test instruction 3.
+        ///   Looks up a localized string similar to Create a class that is going to be using the interface as a variable..
         /// </summary>
-        public static string Instruction3 {
+        public static string _3 {
             get {
-                return ResourceManager.GetString("Instruction3", resourceCulture);
+                return ResourceManager.GetString("3", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test instruction 4.
+        ///   Looks up a localized string similar to Add the interface you created in step 1 as a variable to the class you just created..
         /// </summary>
-        public static string Instruction4 {
+        public static string _4 {
             get {
-                return ResourceManager.GetString("Instruction4", resourceCulture);
+                return ResourceManager.GetString("4", resourceCulture);
             }
         }
     }

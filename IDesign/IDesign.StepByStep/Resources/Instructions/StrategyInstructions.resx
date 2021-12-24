@@ -117,16 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Instruction1" xml:space="preserve">
-    <value>Test instruction 1</value>
+  <data name="1" xml:space="preserve">
+    <value>Create an interface or abstract class (TIP: Use 'Behaviour' in the interface/class name).</value>
   </data>
-  <data name="Instruction2" xml:space="preserve">
-    <value>Test instruction 2</value>
+  <data name="2" xml:space="preserve">
+    <value>Create a class that implements the interface/abstract class you've just created (It is preferred to also use the word 'Behaviour' in the name).</value>
   </data>
-  <data name="Instruction3" xml:space="preserve">
-    <value>Test instruction 3</value>
+  <data name="3" xml:space="preserve">
+    <value>Create a class that is going to be using the interface as a variable.</value>
   </data>
-  <data name="Instruction4" xml:space="preserve">
-    <value>Test instruction 4</value>
+  <data name="4" xml:space="preserve">
+    <value>Add the interface you created in step 1 as a variable to the class you just created.</value>
   </data>
 </root>
