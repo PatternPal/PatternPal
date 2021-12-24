@@ -54,8 +54,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Commands\LoggingApiClient.cs" />
     <Compile Include="Commands\NavigateCommand.cs" />
     <Compile Include="LeftMarginMultiplierConverter.cs" />
+    <Compile Include="Model\Action.cs" />
     <Compile Include="Resources\ExtensionUIResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -68,6 +70,7 @@
       <DependentUpon>SummaryRescources.resx</DependentUpon>
     </Compile>
     <Compile Include="Stores\NavigationStore.cs" />
+    <Compile Include="Commands\SubscribeBuildEvents.cs" />
     <Compile Include="SummaryFactory.cs" />
     <Compile Include="TreeViewItemExtensions.cs" />
     <Compile Include="UserControls\PatternCheckbox.xaml.cs">
