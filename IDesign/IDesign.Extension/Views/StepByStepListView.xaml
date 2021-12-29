@@ -60,8 +60,7 @@
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
-    <ScrollViewer HorizontalScrollBarVisibility="Auto"
-                  VerticalScrollBarVisibility="Auto">
+
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -93,5 +92,4 @@
                     Visibility="Hidden"
                     Command="{Binding NavigateStepByStepInstructionsCommand}">Next</Button>
         </Grid>
-    </ScrollViewer>
 </UserControl>

@@ -63,51 +63,54 @@
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
+    <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                  VerticalScrollBarVisibility="Auto">
+        <Grid>
+            <Grid.Resources>
+                <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}">
+                    <views:HomeView />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:DetectorViewModel}">
+                    <views:DetectorView />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:StepByStepListViewModel}">
+                    <views:StepByStepListView />
+                </DataTemplate>
+            </Grid.Resources>
 
-    <Grid>
-        <Grid.Resources>
-            <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}">
-                <views:HomeView />
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodels:DetectorViewModel}">
-                <views:DetectorView />
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewmodels:StepByStepListViewModel}">
-                <views:StepByStepListView />
-            </DataTemplate>
-        </Grid.Resources>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition />
-        </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Center">
-            <!-- Back button -->
-            <Button Name="BackButton"
-                    Visibility="{Binding BackButtonVisibility}"
-                    Content="&#129060;"
-                    FontSize="20"
-                    Width="30"
-                    Height="30"
-                    Margin="10,10,35,10"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Top"
-                    Command="{Binding BackCommand}">
-            </Button>
-            <Image Source="Resources/logo.png"
-                   HorizontalAlignment="Center"
-                   MaxHeight="80"
-                   VerticalAlignment="Top" />
-            <TextBlock Text="{Binding CurrentViewModel.Title}"
-                       VerticalAlignment="Center"
-                       FontSize="50" />
-        </StackPanel>
+            <StackPanel Grid.Row="0"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <!-- Back button -->
+                <Button Name="BackButton"
+                        Visibility="{Binding BackButtonVisibility}"
+                        Content="&#129060;"
+                        FontSize="20"
+                        Width="30"
+                        Height="30"
+                        Margin="10,10,35,10"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Command="{Binding BackCommand}">
+                </Button>
+                <Image Source="Resources/logo.png"
+                       HorizontalAlignment="Center"
+                       MaxHeight="80"
+                       VerticalAlignment="Top" />
+                <TextBlock Text="{Binding CurrentViewModel.Title}"
+                           VerticalAlignment="Center"
+                           FontSize="50" />
+            </StackPanel>
 
-        <ContentControl Content="{Binding CurrentViewModel}"
-                        Grid.Row="1" />
+            <ContentControl Content="{Binding CurrentViewModel}"
+                            Grid.Row="1" />
 
-    </Grid>
+        </Grid>
+    </ScrollViewer>
 </UserControl>
