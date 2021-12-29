@@ -54,6 +54,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Commands\BackCommand.cs" />
     <Compile Include="Commands\LoggingApiClient.cs" />
     <Compile Include="Commands\NavigateCommand.cs" />
     <Compile Include="LeftMarginMultiplierConverter.cs" />
