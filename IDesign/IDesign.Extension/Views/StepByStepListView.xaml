@@ -75,21 +75,20 @@
                        HorizontalAlignment="Center"
                        Margin="20,0,20,10" />
 
-            <ComboBox Name="InstructionSetList"
-                      Grid.Row="1"
+            <ComboBox Grid.Row="1"
                       Margin="20,0,20,10"
                       Width="200"
                       HorizontalAlignment="Center"
                       ItemsSource="{Binding InstructionSetList}"
-                      SelectedItem="{Binding FirstInstructionSet}"
-                      DisplayMemberPath="InstructionSetName"></ComboBox>
+                      SelectedItem="{Binding SelectedInstructionSet}"
+                      DisplayMemberPath="Name"></ComboBox>
             <Button Grid.Row="2"
                     Height="40"
                     Width="200"
                     FontSize="15"
                     Margin="20,0,20,0"
                     HorizontalAlignment="Center"
-                    Visibility="Hidden"
+                    Visibility="Visible"
                     Command="{Binding NavigateStepByStepInstructionsCommand}">Next</Button>
         </Grid>
 </UserControl>
