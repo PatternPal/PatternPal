@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="IDesign.Extension.Views.StepByStepListView"
+﻿<UserControl x:Class="IDesign.Extension.Views.StepByStepInstructionsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -71,26 +71,54 @@
 
             <TextBlock Grid.Row="0"
                        TextWrapping="Wrap"
-                       Text="Choose a design pattern to implement:"
+                       TextAlignment="Left"
+                       Text="{Binding CurrentInstruction.Value.InstructionText}"
                        FontSize="15"
                        HorizontalAlignment="Center"
-                       Margin="20,0,20,10" />
-
-            <ComboBox Grid.Row="1"
-                      Margin="20,0,20,10"
-                      Width="200"
-                      HorizontalAlignment="Center"
-                      ItemsSource="{Binding InstructionSetList}"
-                      SelectedItem="{Binding SelectedInstructionSet}"
-                      DisplayMemberPath="Name"></ComboBox>
-            <Button Grid.Row="2"
-                    Height="40"
-                    Width="200"
-                    FontSize="15"
-                    Margin="20,0,20,0"
-                    HorizontalAlignment="Center"
-                    Visibility="Visible"
-                    Command="{Binding NavigateStepByStepInstructionsCommand}">Next</Button>
+                       Margin="20,0,20,10"
+                       MaxWidth="380" />
+            <StackPanel Grid.Row="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Margin="0,0,0,10">
+                <Button Name="CheckButton"
+                        Visibility="Hidden"
+                        Height="40"
+                        Width="100"
+                        FontSize="15"
+                        Margin="0,0,10,0"
+                        HorizontalAlignment="Center">Check</Button>
+                <Button Name="PreviousInstructionButton"
+                        Click="PreviousInstructionButton_OnClick"
+                        Height="40"
+                        Width="30"
+                        FontSize="15"
+                        Margin="10,0,10,0"
+                        HorizontalAlignment="Center">&lt;&lt;</Button>
+                <Button Name="NextInstructionButton"
+                        Click="NextInstructionButton_OnClick"
+                        Height="40"
+                        Width="30"
+                        FontSize="15"
+                        Margin="10,0,0,0"
+                        HorizontalAlignment="Center">&gt;&gt;</Button>
+            </StackPanel>
+            <TextBlock Grid.Row="2"
+                       TextWrapping="Wrap"
+                       TextAlignment="Left"
+                       FontSize="15"
+                       Foreground="Green"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,10"
+                       MaxWidth="380"
+                       Visibility="Hidden">
+                <Run Name="FeedbackTextCorrect"
+                     Foreground="Green"
+                     Text="The class is abstract&#x0a;"></Run>
+                <Run Name="FeedbackTextIncorrect"
+                     Foreground="Red"
+                     Text="The class doesn't have an abstract method"></Run>
+            </TextBlock>
         </Grid>
     </ScrollViewer>
 </UserControl>
