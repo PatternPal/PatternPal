@@ -74,16 +74,17 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="nunit" Version="3.12.0"/>
-    <PackageReference Include="NUnit3TestAdapter" Version="3.13.0"/>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0"/>
-    <PackageReference Include="System.Collections" Version="4.3.0"/>
+    <PackageReference Include="nunit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
+    <PackageReference Include="System.Collections" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IDesign.CommonResources\IDesign.CommonResources.csproj"/>
-    <ProjectReference Include="..\IDesign.Core\IDesign.Core.csproj"/>
-    <ProjectReference Include="..\IDesign.Regonizers\IDesign.Recognizers.csproj"/>
+    <ProjectReference Include="..\IDesign.CommonResources\IDesign.CommonResources.csproj" />
+    <ProjectReference Include="..\IDesign.Core\IDesign.Core.csproj" />
+    <ProjectReference Include="..\IDesign.Extension\IDesign.Extension.csproj" />
+    <ProjectReference Include="..\IDesign.Regonizers\IDesign.Recognizers.csproj" />
   </ItemGroup>
 
   <ItemGroup>
