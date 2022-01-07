@@ -79,13 +79,6 @@
                     Orientation="Horizontal"
                     HorizontalAlignment="Center"
                     Margin="0,0,0,10">
-            <Button Name="CheckButton"
-                    Visibility="Hidden"
-                    Height="40"
-                    Width="100"
-                    FontSize="15"
-                    Margin="0,0,10,0"
-                    HorizontalAlignment="Center">Check</Button>
             <Button Name="PreviousInstructionButton"
                     Click="PreviousInstructionButton_OnClick"
                     Height="40"
