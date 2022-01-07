@@ -23,7 +23,7 @@ namespace IDesign.Extension.Commands
 
         public void Execute(object parameter)
         {
-            _navigationStore.CurrentViewModel = _navigationStore.Back();
+            _navigationStore.Back();
         }
     }
 }

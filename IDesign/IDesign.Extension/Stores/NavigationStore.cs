@@ -46,11 +46,10 @@ namespace IDesign.Extension.Stores
             if (ViewModelHistory.Count > 0)
             {
                 _currentViewModel = ViewModelHistory.Pop();
-                return CurrentViewModel;
+                CurrentViewModelChanged?.Invoke();
+                return _currentViewModel;
             }
-
             return null;
         }
-
     }
 }
