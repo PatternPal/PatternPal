@@ -171,6 +171,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.0.1">
     </PackageReference>
+    <PackageReference Include="System.Resources.Extensions">
+      <Version>6.0.0</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="ExtensionWindowControl.xaml">
