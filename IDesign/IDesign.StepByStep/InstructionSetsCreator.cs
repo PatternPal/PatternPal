@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using IDesign.StepByStep.Abstractions;
 using IDesign.StepByStep.InstructionSets;
 

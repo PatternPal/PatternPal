@@ -7,15 +7,15 @@ namespace IDesign.Extension.Commands
 {
     public class NavigateCommand<T> : ICommand where T : ViewModel
     {
+        private NavigationStore _navigationStore { get; }
+        private Func<T> _getViewModel { get; }
+        public event EventHandler CanExecuteChanged;
+
         public NavigateCommand(NavigationStore navigationStore, Func<T> getViewModel)
         {
             _navigationStore = navigationStore;
             _getViewModel = getViewModel;
         }
-
-        private NavigationStore _navigationStore { get; }
-        private Func<T> _getViewModel { get; }
-        public event EventHandler CanExecuteChanged;
 
         public bool CanExecute(object parameter)
         {
