@@ -142,8 +142,7 @@ namespace IDesign.ConsoleApp
                 }
 
                 Console.Write($"{i}) {name} | {results[i].Pattern.Name}: ");
-
-                PrintScore(results[i].Result.GetScore());
+                Console.WriteLine();
 
                 Console.ForegroundColor = ConsoleColor.Red;
 
@@ -175,7 +174,7 @@ namespace IDesign.ConsoleApp
 
             Console.WriteLine(
                 new string('\t', depth) + symbol +
-                $"{ResourceUtils.ResultToString(result)} | {result.GetScore()}p / {result.GetTotalChecks()}p"
+                $"{ResourceUtils.ResultToString(result)}"
             );
 
             foreach (var child in result.GetChildFeedback())
