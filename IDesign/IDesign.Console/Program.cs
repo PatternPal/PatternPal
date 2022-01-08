@@ -174,7 +174,7 @@ namespace IDesign.ConsoleApp
 
             Console.WriteLine(
                 new string('\t', depth) + symbol +
-                $"{ResourceUtils.ResultToString(result)}"
+                $" {ResourceUtils.ResultToString(result)}"
             );
 
             foreach (var child in result.GetChildFeedback())
