@@ -60,65 +60,55 @@
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
-    <ScrollViewer HorizontalScrollBarVisibility="Auto"
-                  VerticalScrollBarVisibility="Auto">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0"
-                       TextWrapping="Wrap"
-                       TextAlignment="Left"
-                       Text="{Binding CurrentInstruction.Value.InstructionText}"
-                       FontSize="15"
-                       HorizontalAlignment="Center"
-                       Margin="20,0,20,10"
-                       MaxWidth="380" />
-            <StackPanel Grid.Row="1"
-                        Orientation="Horizontal"
-                        HorizontalAlignment="Center"
-                        Margin="0,0,0,10">
-                <Button Name="CheckButton"
-                        Visibility="Hidden"
-                        Height="40"
-                        Width="100"
-                        FontSize="15"
-                        Margin="0,0,10,0"
-                        HorizontalAlignment="Center">Check</Button>
-                <Button Name="PreviousInstructionButton"
-                        Click="PreviousInstructionButton_OnClick"
-                        Height="40"
-                        Width="30"
-                        FontSize="15"
-                        Margin="10,0,10,0"
-                        HorizontalAlignment="Center">&lt;&lt;</Button>
-                <Button Name="NextInstructionButton"
-                        Click="NextInstructionButton_OnClick"
-                        Height="40"
-                        Width="30"
-                        FontSize="15"
-                        Margin="10,0,0,0"
-                        HorizontalAlignment="Center">&gt;&gt;</Button>
-            </StackPanel>
-            <TextBlock Grid.Row="2"
-                       TextWrapping="Wrap"
-                       TextAlignment="Left"
-                       FontSize="15"
-                       Foreground="Green"
-                       HorizontalAlignment="Center"
-                       Margin="0,0,0,10"
-                       MaxWidth="380"
-                       Visibility="Hidden">
+        <TextBlock Grid.Row="0"
+                   TextWrapping="Wrap"
+                   TextAlignment="Left"
+                   Text="{Binding CurrentInstruction.Value.InstructionText}"
+                   FontSize="15"
+                   HorizontalAlignment="Center"
+                   Margin="20,0,20,10"
+                   MaxWidth="380" />
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Margin="0,0,0,10">
+            <Button Name="PreviousInstructionButton"
+                    Click="PreviousInstructionButton_OnClick"
+                    Height="40"
+                    Width="30"
+                    FontSize="15"
+                    Margin="10,0,10,0"
+                    HorizontalAlignment="Center">&lt;&lt;</Button>
+            <Button Name="NextInstructionButton"
+                    Click="NextInstructionButton_OnClick"
+                    Height="40"
+                    Width="30"
+                    FontSize="15"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Center">&gt;&gt;</Button>
+        </StackPanel>
+        <TextBlock Grid.Row="2"
+                   TextWrapping="Wrap"
+                   TextAlignment="Left"
+                   FontSize="15"
+                   Foreground="Green"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,10"
+                   MaxWidth="380"
+                   Visibility="Hidden">
                 <Run Name="FeedbackTextCorrect"
                      Foreground="Green"
                      Text="The class is abstract&#x0a;"></Run>
                 <Run Name="FeedbackTextIncorrect"
                      Foreground="Red"
                      Text="The class doesn't have an abstract method"></Run>
-            </TextBlock>
-        </Grid>
-    </ScrollViewer>
+        </TextBlock>
+    </Grid>
 </UserControl>

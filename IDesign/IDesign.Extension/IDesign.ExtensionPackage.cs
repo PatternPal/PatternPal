@@ -41,6 +41,15 @@ namespace IDesign.Extension
 
         #region Package Members
 
+        public bool DoLogData
+        {
+            get
+            {
+                IDesignOptionPageGrid page = (IDesignOptionPageGrid)GetDialogPage(typeof(IDesignOptionPageGrid));
+                return page.DoLogData;
+            }
+        }
+
         /// <summary>
         ///     Initialization of the package; this method is called right after the package is sited, so this is the place
         ///     where you can put all the initialization code that rely on services provided by VisualStudio.
@@ -61,7 +70,7 @@ namespace IDesign.Extension
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
             var dte = (DTE)GetService(typeof(DTE));
-            SubscribeBuildEvents.Initialize(dte);
+            SubscribeBuildEvents.Initialize(dte, this);
         }
 
         #endregion
