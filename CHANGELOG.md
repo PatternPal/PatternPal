@@ -12,6 +12,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 -   New view for implementing a pattern using step-by-step instructions
 -   IDesign option page with option to turn logging data off
 -   Settings button on homescreen, which leads to the IDesign option page
+-   Back button that is used for going back to the previous page
 
 ### Improved
 
