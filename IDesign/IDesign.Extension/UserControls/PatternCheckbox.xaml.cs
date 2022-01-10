@@ -34,13 +34,15 @@ namespace IDesign.Extension.UserControls
         {
             var designPatternViewModels = listBox.Items.OfType<DesignPatternViewModel>().ToList();
 
+            var checkbox = ((Parent as Grid).Children[1] as Border).Child as CheckBox;
+
             if (designPatternViewModels.All(x => x.IsChecked))
             {
-                (((Parent as Grid).Children[2] as Border).Child as CheckBox).IsChecked = true;
+                checkbox.IsChecked = true;
             }
             else if (designPatternViewModels.All(x => !x.IsChecked))
             {
-                (((Parent as Grid).Children[2] as Border).Child as CheckBox).IsChecked = false;
+                checkbox.IsChecked = false;
             }
         }
     }
