@@ -61,6 +61,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
             }
 
             var allChildFeedback = new Dictionary<TChild, (float score, IEnumerable<ICheckResult> childFeedback)>();
+
             foreach (var (element, childFeedback, score) in from element in elements
                      let childFeedback = _checks.Select(x => x.Check(element))
                      let score = childFeedback.Sum(x => x.GetScore())
@@ -98,9 +99,12 @@ namespace IDesign.Recognizers.Models.ElementChecks
                 feedback = FeedbackType.Correct;
             }
 
+            var incorrectKnockOut = highestScored.Value.childFeedback.Any(x => x.HasIncorrectKnockOutCheck);
+
             return new CheckResult(_resourcemessage, feedback, elementToCheck)
             {
-                ChildFeedback = highestScored.Value.childFeedback.ToList()
+                ChildFeedback = highestScored.Value.childFeedback.ToList(),
+                HasIncorrectKnockOutCheck = incorrectKnockOut,
             };
         }
 
@@ -108,6 +112,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
             (float score, IEnumerable<ICheckResult> childFeedback)> allChildFeedback)
         {
             var feedback = FeedbackType.Correct;
+
             if (allChildFeedback.Values.All(x => x.score != 0))
             {
                 feedback = FeedbackType.Incorrect;
@@ -119,15 +124,29 @@ namespace IDesign.Recognizers.Models.ElementChecks
             }
 
             var childResults = new List<ICheckResult>();
+
+            var incorrectKnockOut = allChildFeedback.Any(
+                x => x.Value.childFeedback.Any(
+                    y => y.HasIncorrectKnockOutCheck
+                )
+            );
+
             foreach (var valueTuple in allChildFeedback)
             {
+                var childHasIncorrectKnockOut = valueTuple.Value.childFeedback.Any(x => x.HasIncorrectKnockOutCheck);
+
                 childResults.Add(new CheckResult(valueTuple.Key.ToString(), feedback, elementToCheck)
                 {
-                    ChildFeedback = valueTuple.Value.childFeedback.ToList()
+                    ChildFeedback = valueTuple.Value.childFeedback.ToList(),
+                    HasIncorrectKnockOutCheck = childHasIncorrectKnockOut,
                 });
             }
 
-            return new CheckResult(_resourcemessage, feedback, elementToCheck) {ChildFeedback = childResults};
+            return new CheckResult(_resourcemessage, feedback, elementToCheck)
+            {
+                ChildFeedback = childResults,
+                HasIncorrectKnockOutCheck = incorrectKnockOut,
+            };
         }
 
         private ICheckResult CheckMedian(TParent elementToCheck,
@@ -145,19 +164,30 @@ namespace IDesign.Recognizers.Models.ElementChecks
             }
 
             var childResults = new List<ICheckResult>();
+
+            var incorrectKnockOut = allChildFeedback.Any(
+                x => x.Value.childFeedback.Any(
+                    y => y.HasIncorrectKnockOutCheck
+                )
+            );
+
             foreach (var valueTuple in allChildFeedback)
             {
-                var (score, childFeedback) = valueTuple.Value;
+                var childHasIncorrectKnockOut = valueTuple.Value.childFeedback.Any(x => x.HasIncorrectKnockOutCheck);
 
                 childResults.Add(new CheckResult(valueTuple.Key.ToString(), feedback, valueTuple.Key)
                 {
-                    _feedback = _resourcemessage, ChildFeedback = valueTuple.Value.childFeedback.ToList()
+                    Feedback = _resourcemessage, 
+                    ChildFeedback = valueTuple.Value.childFeedback.ToList(),
+                    HasIncorrectKnockOutCheck = childHasIncorrectKnockOut
                 });
             }
 
             return new CheckResult(_resourcemessage, feedback, elementToCheck)
             {
-                ChildFeedback = childResults, CalculationType = CheckCalculationType.Average
+                ChildFeedback = childResults, 
+                CalculationType = CheckCalculationType.Average,
+                HasIncorrectKnockOutCheck = incorrectKnockOut
             };
         }
 

@@ -6,28 +6,28 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="TestClasses\Decorator\DecoratorTestCase1.cs"/>
-    <Compile Remove="TestClasses\Decorator\DecoratorTestCase2.cs"/>
-    <Compile Remove="TestClasses\Decorator\DecoratorTestCase3.cs"/>
-    <Compile Remove="TestClasses\Decorator\DecoratorTestCase4.cs"/>
-    <Compile Remove="TestClasses\Decorator\DecoratorTestCase5.cs"/>
-    <Compile Remove="TestClasses\Decorator\DecoratorTestCase6.cs"/>
-    <Compile Remove="TestClasses\Decorator\DecoratorTestCase7.cs"/>
-    <Compile Remove="TestClasses\FactoryTestClasses\**"/>
-    <Compile Remove="TestClasses\SingletonTestClasses\**"/>
-    <EmbeddedResource Remove="TestClasses\FactoryTestClasses\**"/>
-    <EmbeddedResource Remove="TestClasses\SingletonTestClasses\**"/>
-    <None Remove="TestClasses\FactoryTestClasses\**"/>
-    <None Remove="TestClasses\SingletonTestClasses\**"/>
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase1.cs" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase2.cs" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase3.cs" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase4.cs" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase5.cs" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase6.cs" />
+    <Compile Remove="TestClasses\Decorator\DecoratorTestCase7.cs" />
+    <Compile Remove="TestClasses\FactoryTestClasses\**" />
+    <Compile Remove="TestClasses\SingletonTestClasses\**" />
+    <EmbeddedResource Remove="TestClasses\FactoryTestClasses\**" />
+    <EmbeddedResource Remove="TestClasses\SingletonTestClasses\**" />
+    <None Remove="TestClasses\FactoryTestClasses\**" />
+    <None Remove="TestClasses\SingletonTestClasses\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="TestClasses\SingleTonTestCase1.cs"/>
-    <Compile Remove="TestClasses\SingleTonTestCase2.cs"/>
-    <Compile Remove="TestClasses\SingleTonTestCase3.cs"/>
-    <Compile Remove="TestClasses\SingleTonTestCase4.cs"/>
-    <Compile Remove="TestClasses\SingleTonTestCase6.cs"/>
-    <Compile Remove="TestClasses\SingleTonTestCase7.cs"/>
+    <Compile Remove="TestClasses\SingleTonTestCase1.cs" />
+    <Compile Remove="TestClasses\SingleTonTestCase2.cs" />
+    <Compile Remove="TestClasses\SingleTonTestCase3.cs" />
+    <Compile Remove="TestClasses\SingleTonTestCase4.cs" />
+    <Compile Remove="TestClasses\SingleTonTestCase6.cs" />
+    <Compile Remove="TestClasses\SingleTonTestCase7.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -89,6 +89,9 @@
   <ItemGroup>
     <Compile Update="Checks\MethodChecksTest.cs">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Recognizers\TestRecognizers\TestRecognizer1.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Update="TestClasses\AdapterTest2\BaseCase1.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -583,6 +586,21 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Update="TestClasses\TestClass2.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\TestRecognizerTest1\Class1.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\TestRecognizerTest1\Class2.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\TestRecognizerTest2\Class1.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\TestRecognizerTest2\Class2.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="TestClasses\TestRecognizerTest3\Class1.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
   </ItemGroup>
