@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using IDesign.Recognizers.Abstractions;
+using IDesign.Recognizers.Models.Checks.Entities.GroupChecks;
 using IDesign.Recognizers.Models.Output;
 using SyntaxTree.Abstractions;
 using SyntaxTree.Abstractions.Entities;

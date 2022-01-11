@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using IDesign.Recognizers.Abstractions;
+using IDesign.Recognizers.Models.Checks.Entities.GroupChecks;
 using IDesign.Recognizers.Models.Checks.Members;
+using IDesign.Recognizers.Models.Output;
 using SyntaxTree.Abstractions;
 using SyntaxTree.Abstractions.Entities;
 using SyntaxTree.Abstractions.Members;
@@ -13,6 +16,8 @@ namespace IDesign.Recognizers.Models.Checks.Entities
         IEnumerable<IMember> GetCheckable(IEntity entity);
 
         IEnumerable<ICheck<IMember>> Checks();
+
+        ResourceMessage GetMessage();
     }
 
     public abstract partial class AbstractMemberCheckBuilder<T, R, C> : IMemberCheckBuilder
@@ -22,11 +27,13 @@ namespace IDesign.Recognizers.Models.Checks.Entities
     {
         protected readonly ICheckBuilder<IEntity> Root;
         protected readonly C Check;
+        protected readonly ResourceMessage Message;
 
-        protected AbstractMemberCheckBuilder(ICheckBuilder<IEntity> root, C check)
+        protected AbstractMemberCheckBuilder(ICheckBuilder<IEntity> root, C check, ResourceMessage message)
         {
             Root = root;
             Check = check;
+            Message = message;
         }
 
         public AnyMemberGroupCheck Any => Root.Any;
@@ -35,6 +42,7 @@ namespace IDesign.Recognizers.Models.Checks.Entities
 
         public virtual IEnumerable<IMember> GetCheckable(IEntity entity) => entity.GetMembers().OfType<T>().Cast<IMember>();
         public IEnumerable<ICheck<IMember>> Checks() => Check.Select(Convert);
+        public ResourceMessage GetMessage() => Message;
 
         private static ICheck<IMember> Convert(ICheck<T> check) => new CheckWrapper<T, IMember>(check);
 
@@ -51,7 +59,7 @@ namespace IDesign.Recognizers.Models.Checks.Entities
         public ICheckResult Check(T element)
         {
             if (element is F node) return _from.Check(node);
-            return null;
+            throw new InvalidCastException();
         }
     }
 }

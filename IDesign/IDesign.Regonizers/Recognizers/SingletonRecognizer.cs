@@ -13,17 +13,17 @@ namespace IDesign.Recognizers.Recognizers
         public IResult Recognize(IEntity entityNode)
         {
             var result = new EntityCheck()
-                .Any.Method(true)
+                .Any.Method("SingletonMethod", true)
                     .Modifiers(Modifiers.Static, Modifiers.Private.Not())
                     .ReturnType(entityNode)
                     .Custom(
                         m => m.CheckReturnTypeSameAsCreation(),
                         new ResourceMessage("SingletonMethodReturnCreationType")
                     )
-                .Any.Field(true)
-                    .Modifiers(Modifiers.Private.Not(), Modifiers.Static)
+                .Any.Field("SingletonField", true)
+                    .Modifiers(Modifiers.Public.Not(), Modifiers.Static)
                     .Type(entityNode)
-                .Any.Constructor()
+                .Any.Constructor("SingletonConstructor")
                     .Modifiers(Modifiers.Public.Not())
                 .Build()
                 .ToResult(entityNode);
