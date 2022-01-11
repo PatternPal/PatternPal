@@ -21,6 +21,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Improved
 
 - Github Ci/Cd, build extension also in develop and only test when code changed
+- Design Pattern readability currently only improved Singleton
 
 ## [2.0.0] - 2021-12-15
 
