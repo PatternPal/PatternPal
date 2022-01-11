@@ -7,8 +7,7 @@
              xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
              mc:Ignorable="d"
              d:DesignHeight="360"
-             d:DesignWidth="300"
-             SizeChanged="HomeView_OnSizeChanged">
+             d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
             <Style TargetType="TextBlock">
@@ -66,7 +65,6 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0"
-                    Name="ButtonsPanel"
                     HorizontalAlignment="Center"
                     Orientation="Vertical">
             <StackPanel Margin="20,20,20,0">
