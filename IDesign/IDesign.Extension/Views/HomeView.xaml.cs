@@ -17,10 +17,6 @@ namespace IDesign.Extension.Views
             InitializeComponent();
         }
 
-        private void HomeView_OnSizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            ButtonsPanel.Orientation = e.NewSize.Width >= ButtonsPanel.Children.Count*190 ? Orientation.Horizontal : Orientation.Vertical;
-        }
         public void OnSettingsClickEvent(object sender, RoutedEventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
