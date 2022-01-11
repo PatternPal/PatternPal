@@ -53,7 +53,34 @@ namespace IDesign.Extension.ViewModels
             }
         }
 
-        public IEnumerable<CheckResultViewModel> SubResults =>
-            Result.GetChildFeedback().Select(x => new CheckResultViewModel(x));
+        public IEnumerable<CheckResultViewModel> SubResults => GetSubResults();
+
+        private IEnumerable<CheckResultViewModel> GetSubResults()
+        {
+            var toReturn = new List<CheckResultViewModel>();
+            var allSubResults = Result.GetChildFeedback();
+
+            foreach (ICheckResult result in allSubResults)
+            {
+                RecursiveFunction(toReturn, result);
+            }
+
+            return toReturn;
+        }
+
+        private void RecursiveFunction(List<CheckResultViewModel> toReturn, ICheckResult result)
+        {
+            if (result.IsHidden)
+            {
+                foreach (var sub in result.GetChildFeedback())
+                {
+                    RecursiveFunction(toReturn, sub);
+                }
+            }
+            else
+            {
+                toReturn.Add(new CheckResultViewModel(result));
+            }
+        }
     }
 }
