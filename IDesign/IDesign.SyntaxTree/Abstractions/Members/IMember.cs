@@ -26,7 +26,7 @@ namespace SyntaxTree.Abstractions.Members
         private static string GetMemberTypeT(IMember member)
         {
             switch (member) {
-                case IMethod method: return method.GetReturnType().ToString();
+                case IMethod method: return method.GetReturnType()?.ToString();
                 case IConstructor constructor: return constructor.GetConstructorType();
                 case IField field: return field.GetFieldType().ToString();
                 case IProperty property: return property.GetPropertyType().ToString();

@@ -11,8 +11,4 @@
     <ProjectReference Include="..\IDesign.SyntaxTree\IDesign.SyntaxTree.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\Checks\Entities" />
-  </ItemGroup>
-
 </Project>

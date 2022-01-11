@@ -68,7 +68,7 @@ namespace IDesign.Recognizers.Models.Output
 
         public float GetTotalChecks()
         {
-            return ChildFeedback.Count == 0
+            return ChildFeedback == null || ChildFeedback.Count == 0
                 ? Score
                 : CalculationType == CheckCalculationType.Average
                     ? ChildFeedback.Average(x => x.GetTotalChecks())

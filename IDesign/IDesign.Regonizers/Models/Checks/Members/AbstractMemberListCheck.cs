@@ -9,6 +9,12 @@ namespace IDesign.Recognizers.Models.Checks.Members
     public abstract class AbstractMemberListCheck<T, R> : AbstractListCheck<T, R>
         where T : IMember where R : AbstractMemberListCheck<T, R>
     {
+        /// <summary>
+        ///     Checks if the current member has all the modifiers
+        ///     Use `Modifiers.Private.Not()` for when you want a modifier to be not there
+        /// </summary>
+        /// <param name="modifiers">The modifiers to match</param>
+        /// <returns>The original check</returns>
         public R Modifiers(params IModifier[] modifiers)
         {
             _checks.Add((ICheck<T>)new ModifierCheck(modifiers));
