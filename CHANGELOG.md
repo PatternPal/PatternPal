@@ -14,6 +14,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 -   Settings button on homescreen, which leads to the IDesign option page
 -   The possibility to define knock-out criteria in pattern recognizers
 -   Back button that is used for going back to the previous page
+-   OnBuildDone event to recognize build, rebuild, clean and deploy actions
+-   API client for the LoggingAPI
 
 
 ### Improved
