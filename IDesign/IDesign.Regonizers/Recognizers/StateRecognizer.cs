@@ -21,82 +21,113 @@ namespace IDesign.Recognizers.Recognizers
 
             IEntity entityNode = null;
 
-            var statePatternCheck = new GroupCheck<IEntity, IEntity>(new List<ICheck<IEntity>>
-            {
-                //check if node is abstract class or interface
-                new ElementCheck<IEntity>(x => x.CheckTypeDeclaration(EntityType.Interface) |
-                                               (x.CheckTypeDeclaration(EntityType.Class) &&
-                                                x.CheckModifier("abstract")), "NodeAbstractOrInterface", 2),
-
-                //check state node methods
-                new GroupCheck<IEntity, IMethod>(
-                    new List<ICheck<IMethod>>
-                    {
-                        new ElementCheck<IMethod>(x => x.CheckReturnType("void"),
-                            new ResourceMessage("MethodReturnType", new[] {"void"}), 1),
-                        new ElementCheck<IMethod>(x => x.GetBody() == null, "MethodBodyEmpty", 1)
-                    }, x => x.GetAllMethods(), "StateNodeMethods"),
-
-                //check state node used by relations
-                new GroupCheck<IEntity, IEntity>(new List<ICheck<IEntity>>
-                    {
-                        new ElementCheck<IEntity>(x => x.CheckMinimalAmountOfRelationTypes(RelationType.UsedBy, 1),
-                            "NodeUses1", 0.5f),
-
-                        //check if field has state as type
-                        new GroupCheck<IEntity, IEntity>(new List<ICheck<IEntity>>
-                        {
-                            new ElementCheck<IEntity>(x => x.CheckTypeDeclaration(EntityType.Interface) |
-                                                           (x.CheckTypeDeclaration(EntityType.Class) &&
-                                                            x.CheckModifier("abstract")), "NodeAbstractOrInterface", 2)
-                        }, x => new List<IEntity> {node}, "StateFieldStateType"),
-
-                        //check context class fields
-                        new GroupCheck<IEntity, IField>(new List<ICheck<IField>>
-                        {
-                            //TO DO: check name
-
-                            new ElementCheck<IField>(x => x.CheckMemberModifier("private"), "FieldModifierPrivate",
-                                0.5f)
-                        }, x => x.GetFields(), "StateContextField", GroupCheckType.All)
-                    },
-                    x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.UsedBy))
-                        .Select(y => y.GetDestination()), "StateContext"),
-
-                //check inheritance
-                new GroupCheck<IEntity, IEntity>(new List<ICheck<IEntity>>
+            var statePatternCheck = new GroupCheck<IEntity, IEntity>(
+                new List<ICheck<IEntity>>
                 {
-                    new ElementCheck<IEntity>(x =>
-                    {
-                        entityNode = x;
-                        return x.GetAllMethods().Any();
-                    }, "MethodAny"),
+                    //check if node is abstract class or interface
+                    new ElementCheck<IEntity>(
+                        x => x.CheckTypeDeclaration(EntityType.Interface) |
+                             (x.CheckTypeDeclaration(EntityType.Class) &&
+                              x.CheckModifier("abstract")), "NodeAbstractOrInterface", 2
+                    ),
+
+                    //check state node methods
+                    new GroupCheck<IEntity, IMethod>(
+                        new List<ICheck<IMethod>>
+                        {
+                            new ElementCheck<IMethod>(
+                                x => x.CheckReturnType("void"),
+                                new ResourceMessage("MethodReturnType", new[] { "void" }), 1
+                            ),
+                            new ElementCheck<IMethod>(x => x.GetBody() == null, "MethodBodyEmpty", 1)
+                        }, x => x.GetAllMethods(), "StateNodeMethods"
+                    ),
+
+                    //check state node used by relations
                     new GroupCheck<IEntity, IEntity>(
                         new List<ICheck<IEntity>>
                         {
-                            new GroupCheck<IEntity, IMethod>(
-                                new List<ICheck<IMethod>>
+                            new ElementCheck<IEntity>(
+                                x => x.CheckMinimalAmountOfRelationTypes(RelationType.UsedBy, 1),
+                                "NodeUses1", 0.5f
+                            ),
+
+                            //check if field has state as type
+                            new GroupCheck<IEntity, IEntity>(
+                                new List<ICheck<IEntity>>
                                 {
-                                    new ElementCheck<IMethod>(x => x.CheckReturnType("void"),
-                                        new ResourceMessage("MethodReturnType", new[] {"void"}), 1),
-                                    new ElementCheck<IMethod>(
-                                        x => x.CheckCreationType(entityNode.GetName()) &&
-                                             !x.CheckCreationType(node.GetName()),
-                                        new ResourceMessage("MethodCreateSameInterface"), 2)
-                                }, x => x.GetAllMethods(), "StateClassChangeState")
+                                    new ElementCheck<IEntity>(
+                                        x => x.CheckTypeDeclaration(EntityType.Interface) |
+                                             (x.CheckTypeDeclaration(EntityType.Class) &&
+                                              x.CheckModifier("abstract")), "NodeAbstractOrInterface", 2
+                                    )
+                                }, x => new List<IEntity> { node }, "StateFieldStateType"
+                            ),
+
+                            //check context class fields
+                            new GroupCheck<IEntity, IField>(
+                                new List<ICheck<IField>>
+                                {
+                                    //TO DO: check name
+
+                                    new ElementCheck<IField>(
+                                        x => x.CheckMemberModifier("private"), "FieldModifierPrivate",
+                                        0.5f
+                                    )
+                                }, x => x.GetFields(), "StateContextField", GroupCheckType.All
+                            )
                         },
-                        x => entityNode.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Creates))
-                            .Select(y => y.GetDestination()), "StateCreatesOtherState")
-                }, x => x.GetRelations().Where(y =>
-                    y.GetRelationType().Equals(RelationType.ExtendedBy) ||
-                    y.GetRelationType().Equals(RelationType.ImplementedBy)
-                ).Select(y => y.GetDestination()), "StateConcrete", GroupCheckType.All)
-            }, x => new List<IEntity> {node}, "State");
+                        x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.UsedBy))
+                            .Select(y => y.GetDestination()), "StateContext"
+                    ),
+
+                    //check inheritance
+                    new GroupCheck<IEntity, IEntity>(
+                        new List<ICheck<IEntity>>
+                        {
+                            new ElementCheck<IEntity>(
+                                x =>
+                                {
+                                    entityNode = x;
+                                    return x.GetAllMethods().Any();
+                                }, "MethodAny"
+                            ),
+                            new GroupCheck<IEntity, IEntity>(
+                                new List<ICheck<IEntity>>
+                                {
+                                    new GroupCheck<IEntity, IMethod>(
+                                        new List<ICheck<IMethod>>
+                                        {
+                                            new ElementCheck<IMethod>(
+                                                x => x.CheckReturnType("void"),
+                                                new ResourceMessage("MethodReturnType", new[] { "void" }), 1
+                                            ),
+                                            new ElementCheck<IMethod>(
+                                                x => x.CheckCreationType(entityNode.GetName()) &&
+                                                     !x.CheckCreationType(node.GetName()),
+                                                new ResourceMessage("MethodCreateSameInterface"), 2
+                                            )
+                                        }, x => x.GetAllMethods(), "StateClassChangeState"
+                                    )
+                                },
+                                x => entityNode.GetRelations()
+                                    .Where(y => y.GetRelationType().Equals(RelationType.Creates))
+                                    .Select(y => y.GetDestination()), "StateCreatesOtherState"
+                            )
+                        }, x => x.GetRelations().Where(
+                            y =>
+                                y.GetRelationType().Equals(RelationType.ExtendedBy) ||
+                                y.GetRelationType().Equals(RelationType.ImplementedBy)
+                        ).Select(y => y.GetDestination()), "StateConcrete", GroupCheckType.All
+                    )
+                }, x => new List<IEntity> { node }, "State"
+            );
 
             result.Results.Add(statePatternCheck.Check(node));
-            foreach (var concrete in node.GetRelations().Where(x =>
-                         x.GetRelationType().Equals(RelationType.ExtendedBy) ||
-                         x.GetRelationType().Equals(RelationType.ImplementedBy)
+            foreach (var concrete in node.GetRelations().Where(
+                         x =>
+                             x.GetRelationType().Equals(RelationType.ExtendedBy) ||
+                             x.GetRelationType().Equals(RelationType.ImplementedBy)
                      ).Select(x => x.GetDestination()))
             {
                 result.RelatedSubTypes.Add(concrete, "ConcreteState");

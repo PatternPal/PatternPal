@@ -58,6 +58,7 @@ namespace IDesign.Recognizers.Models.Checks.Entities
 
         public ICheckResult Check(T element)
         {
+            if (element == null) return _from.Check(default);
             if (element is F node) return _from.Check(node);
             throw new InvalidCastException();
         }

@@ -24,7 +24,7 @@ namespace IDesign.Recognizers.Models.Checks.Entities.GroupChecks
 
                 var result = new CheckResult(check.GetMessage(), FeedbackType.Incorrect, best.Key)
                 {
-                    ChildFeedback = best.Value ?? new List<ICheckResult>()
+                    ChildFeedback = best.Value ?? check.Checks().Select(c => c.Check(default)).ToList()
                 };
                 return result;
             }

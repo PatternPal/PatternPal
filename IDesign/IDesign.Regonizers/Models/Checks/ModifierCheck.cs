@@ -29,7 +29,7 @@ namespace IDesign.Recognizers.Models.Checks
 
         public ICheckResult Check(IModified modified)
         {
-            if (modified == null) return new CheckResult(_modifiersFeedback, Incorrect, null, 0f);
+            if (modified == null) return new CheckResult(_modifiersFeedback, Incorrect, null, 1f);
 
             return new CheckResult(_modifiersFeedback, CheckModifiers(modified) ? Correct : Incorrect, modified, 1f);
         }
