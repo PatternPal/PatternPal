@@ -13,6 +13,16 @@ namespace IDesign.Recognizers.Models.Output
 
     public class CheckResult : ICheckResult
     {
+        public CheckCalculationType CalculationType { get; set; } = CheckCalculationType.Sum;
+        public string Message { get; set; }
+        public FeedbackType FeedbackType { get; set; }
+        public INode Element { get; set; }
+        public List<ICheckResult> ChildFeedback { get; set; } = new List<ICheckResult>();
+        public IResourceMessage Feedback { get; set; }
+        public bool HasIncorrectKnockOutCheck { get; set; }
+
+        private float _score;
+
         public CheckResult(string message, FeedbackType feedbackType, INode element)
         {
             Message = message;
@@ -22,17 +32,17 @@ namespace IDesign.Recognizers.Models.Output
 
         public CheckResult(IResourceMessage feedback, FeedbackType feedbackType, INode element)
         {
-            _feedback = feedback;
+            Feedback = feedback;
             FeedbackType = feedbackType;
             Element = element;
         }
 
         public CheckResult(IResourceMessage feedback, FeedbackType feedbackType, INode element, float score)
         {
-            _feedback = feedback;
+            Feedback = feedback;
             FeedbackType = feedbackType;
             Element = element;
-            Score = score;
+            _score = score;
         }
 
         public CheckResult(string message, FeedbackType feedbackType, INode element, float score)
@@ -40,17 +50,8 @@ namespace IDesign.Recognizers.Models.Output
             Message = message;
             FeedbackType = feedbackType;
             Element = element;
-            Score = score;
+            _score = score;
         }
-
-        public CheckCalculationType CalculationType { get; set; } = CheckCalculationType.Sum;
-
-        public string Message { get; set; }
-        public FeedbackType FeedbackType { get; set; }
-        public INode Element { get; set; }
-        public List<ICheckResult> ChildFeedback { get; set; } = new List<ICheckResult>();
-        public IResourceMessage _feedback { get; set; }
-        public float Score { get; set; }
 
         public IEnumerable<ICheckResult> GetChildFeedback()
         {
@@ -59,8 +60,10 @@ namespace IDesign.Recognizers.Models.Output
 
         public float GetScore()
         {
-            return !ChildFeedback.Any()
-                ? FeedbackType == FeedbackType.Correct ? Score : 0
+            if (HasIncorrectKnockOutCheck) return 0;
+
+            return ChildFeedback.Count == 0
+                ? FeedbackType == FeedbackType.Correct ? _score : 0
                 : CalculationType == CheckCalculationType.Average
                     ? ChildFeedback.Average(x => x.GetScore())
                     : ChildFeedback.Sum(x => x.GetScore());
@@ -69,7 +72,7 @@ namespace IDesign.Recognizers.Models.Output
         public float GetTotalChecks()
         {
             return ChildFeedback == null || ChildFeedback.Count == 0
-                ? Score
+                ? _score
                 : CalculationType == CheckCalculationType.Average
                     ? ChildFeedback.Average(x => x.GetTotalChecks())
                     : ChildFeedback.Sum(x => x.GetTotalChecks());
@@ -103,12 +106,12 @@ namespace IDesign.Recognizers.Models.Output
 
         public IResourceMessage GetFeedback()
         {
-            return _feedback;
+            return Feedback;
         }
 
         public void ChangeScore(float score)
         {
-            Score = score;
+            _score = score;
         }
     }
 }

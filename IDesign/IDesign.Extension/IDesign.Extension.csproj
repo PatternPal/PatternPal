@@ -54,8 +54,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Commands\BackCommand.cs" />
+    <Compile Include="Commands\LoggingApiClient.cs" />
     <Compile Include="Commands\NavigateCommand.cs" />
     <Compile Include="LeftMarginMultiplierConverter.cs" />
+    <Compile Include="Model\Action.cs" />
     <Compile Include="Resources\ExtensionUIResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -68,6 +71,7 @@
       <DependentUpon>SummaryRescources.resx</DependentUpon>
     </Compile>
     <Compile Include="Stores\NavigationStore.cs" />
+    <Compile Include="Commands\SubscribeBuildEvents.cs" />
     <Compile Include="SummaryFactory.cs" />
     <Compile Include="TreeViewItemExtensions.cs" />
     <Compile Include="UserControls\PatternCheckbox.xaml.cs">
@@ -96,6 +100,7 @@
     <Compile Include="ViewModels\PatternResultViewModel.cs" />
     <Compile Include="ViewModels\EntityNodeViewModel.cs" />
     <Compile Include="ViewModels\ResultViewModel.cs" />
+    <Compile Include="ViewModels\StepByStepInstructionsViewModel.cs" />
     <Compile Include="ViewModels\StepByStepListViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Views\DetectorView.xaml.cs">
@@ -103,6 +108,9 @@
     </Compile>
     <Compile Include="Views\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StepByStepInstructionsView.xaml.cs">
+      <DependentUpon>StepByStepInstructionsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\StepByStepListView.xaml.cs">
       <DependentUpon>StepByStepListView.xaml</DependentUpon>
@@ -163,6 +171,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.0.1">
     </PackageReference>
+    <PackageReference Include="System.Resources.Extensions">
+      <Version>6.0.0</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="ExtensionWindowControl.xaml">
@@ -186,6 +197,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\HomeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StepByStepInstructionsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
