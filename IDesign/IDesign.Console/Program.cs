@@ -119,7 +119,7 @@ namespace IDesign.ConsoleApp
         {
             Console.WriteLine("\nResults:");
 
-            results = results.Where(x => x.Result.GetScore() >= 0).ToList();
+            results = results.Where(x => x.Result.GetScore() >= 80).ToList();
 
             for (var i = 0; i < results.Count; i++)
             {
