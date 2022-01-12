@@ -95,11 +95,6 @@ namespace IDesign.Recognizers.Checks
                 ?.GetDestination();
         }
 
-        public static bool CheckModifier(this IEntity entityNode, string modifier)
-        {
-            return entityNode.GetModifiers().Any(x => x.ToString().CheckIfTwoStringsAreEqual(modifier));
-        }
-
         public static bool CheckTypeDeclaration(this IEntity entityNode, EntityType nodeType)
         {
             return entityNode.GetEntityType().Equals(nodeType);
