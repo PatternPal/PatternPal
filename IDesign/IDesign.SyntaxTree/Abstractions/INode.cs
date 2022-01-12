@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -27,17 +29,17 @@ namespace SyntaxTree.Abstractions
         IRoot GetRoot();
     }
 
-    public interface IParameterized
+    public interface IParameterized : INode
     {
         IEnumerable<TypeSyntax> GetParameters();
     }
 
-    public interface IBodied
+    public interface IBodied : INode
     {
         CSharpSyntaxNode GetBody();
     }
 
-    public interface IModified
+    public interface IModified : INode
     {
         /// <summary>
         ///     Gets the modifiers of this node
@@ -46,7 +48,33 @@ namespace SyntaxTree.Abstractions
         IEnumerable<IModifier> GetModifiers();
     }
 
-    public interface IChild<out T> where T : INode
+    public interface IParent : INode
+    {
+        /// <summary>
+        ///     Get all children
+        /// </summary>
+        /// <returns>All children of this node</returns>
+        IEnumerable<INode> GetChildren();
+    }
+
+    /// <summary>
+    /// Is needed because net standard 2.0 doesn't support default interface implementations, stupid
+    /// </summary>
+    public static class ParentExtension
+    {
+        /// <summary>
+        ///     Get all children recursive
+        /// </summary>
+        /// <returns></returns>
+        static IEnumerable<INode> GetAllChildren(this IParent parent)
+        {
+            return parent
+                .GetChildren()
+                .SelectMany(child => (child as IParent)?.GetAllChildren().Append(child) ?? new[] { child });
+        }
+    }
+
+    public interface IChild<out T> where T : INode, IParent
     {
         /// <summary>
         ///     Gets the parent of this node

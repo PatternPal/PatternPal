@@ -1,4 +1,7 @@
-﻿using IDesign.Extension.Stores;
+﻿using System.Windows;
+using System.Windows.Input;
+using IDesign.Extension.Stores;
+using IDesign.Extension.Commands;
 
 namespace IDesign.Extension.ViewModels
 {
@@ -8,10 +11,11 @@ namespace IDesign.Extension.ViewModels
         {
             _navigationStore = navigationStore;
             _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
+            BackCommand = new BackCommand(navigationStore);
         }
 
         /// <summary>
-        ///     Navigation Store used for switching between views
+        /// Navigation Store used for switching between views
         /// </summary>
         private NavigationStore _navigationStore { get; }
 
@@ -23,12 +27,21 @@ namespace IDesign.Extension.ViewModels
 
         public override string Title => "IDesign";
 
+        public ICommand BackCommand { get; }
+        public Visibility BackButtonVisibility
+        {
+            get => CurrentViewModel.GetType() == typeof(HomeViewModel)
+                ? Visibility.Collapsed
+                : Visibility.Visible;
+        }
+
         /// <summary>
-        ///     Update view when the CurrentViewModel is changed
+        /// Update view and back button when the CurrentViewModel is changed
         /// </summary>
         private void OnCurrentViewModelChanged()
         {
             OnPropertyChanged(nameof(CurrentViewModel));
+            OnPropertyChanged(nameof(BackButtonVisibility));
         }
     }
 }

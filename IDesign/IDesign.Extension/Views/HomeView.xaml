@@ -6,41 +6,51 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
              mc:Ignorable="d"
-             d:DesignHeight="360" d:DesignWidth="300"
-             SizeChanged="HomeView_OnSizeChanged">
+             d:DesignHeight="360"
+             d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
             <Style TargetType="TextBlock">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
+                <Setter Property="Foreground"
+                        Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
             </Style>
             <Style TargetType="Button">
                 <Setter Property="Background">
                     <Setter.Value>
-                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                            <GradientStop Color="#4573EF" Offset="0" />
-                            <GradientStop Color="#4496F3" Offset="0.53" />
+                        <LinearGradientBrush StartPoint="0,0"
+                                             EndPoint="1,1">
+                            <GradientStop Color="#4573EF"
+                                          Offset="0" />
+                            <GradientStop Color="#4496F3"
+                                          Offset="0.53" />
                         </LinearGradientBrush>
                     </Setter.Value>
                 </Setter>
-                <Setter Property="Foreground" Value="#ffffff" />
+                <Setter Property="Foreground"
+                        Value="#ffffff" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Border Background="{TemplateBinding Background}"
                                     BorderBrush="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowTabMouseOverBackgroundBeginKey}}"
                                     BorderThickness="1">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center" />
                             </Border>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
                 <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
+                    <Trigger Property="IsMouseOver"
+                             Value="True">
                         <Setter Property="Background">
                             <Setter.Value>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                    <GradientStop Color="#4496F3" Offset="0" />
-                                    <GradientStop Color="#4573EF" Offset="0.53" />
+                                <LinearGradientBrush StartPoint="0,0"
+                                                     EndPoint="1,1">
+                                    <GradientStop Color="#4496F3"
+                                                  Offset="0" />
+                                    <GradientStop Color="#4573EF"
+                                                  Offset="0.53" />
                                 </LinearGradientBrush>
                             </Setter.Value>
                         </Setter>
@@ -49,32 +59,41 @@
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
-    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" Name="ButtonsPanel" HorizontalAlignment="Center" Orientation="Vertical">
-                <StackPanel Margin="20,20,20,0">
-                    <Button Content="{x:Static UIResources:ExtensionUIResources.ExercisesTitle}" Height="40"
-                            FontSize="15" />
-                    <TextBlock TextWrapping="Wrap"
-                               Text="{x:Static UIResources:ExtensionUIResources.ExercisesDescription}" Width="150" />
-                </StackPanel>
-                <StackPanel Margin="20,20,20,0">
-                    <Button Content="{x:Static UIResources:ExtensionUIResources.StepByStepTitle}" Height="40"
-                            FontSize="15" />
-                    <TextBlock TextWrapping="Wrap"
-                               Text="{x:Static UIResources:ExtensionUIResources.StepByStepDescription}" Width="150" />
-                </StackPanel>
-                <StackPanel Margin="20,20,20,0">
-                    <Button Content="{x:Static UIResources:ExtensionUIResources.DetectorTitle}" Height="40"
-                            FontSize="15" Command="{Binding NavigateDetectorCommand}" />
-                    <TextBlock TextWrapping="Wrap"
-                               Text="{x:Static UIResources:ExtensionUIResources.DetectorDescription}" Width="150" />
-                </StackPanel>
+        <StackPanel Grid.Row="0"
+                    HorizontalAlignment="Center"
+                    Orientation="Vertical">
+            <StackPanel Margin="20,20,20,0">
+                <Button Content="{x:Static UIResources:ExtensionUIResources.StepByStepTitle}"
+                        Height="40"
+                        FontSize="15"
+                        Command="{Binding NavigateStepByStepListCommand}" />
+                <TextBlock TextWrapping="Wrap"
+                           Text="{x:Static UIResources:ExtensionUIResources.StepByStepDescription}"
+                           Width="150" />
             </StackPanel>
-        </Grid>
-    </ScrollViewer>
+            <StackPanel Margin="20,20,20,0">
+                <Button Content="{x:Static UIResources:ExtensionUIResources.DetectorTitle}"
+                        Height="40"
+                        FontSize="15"
+                        Command="{Binding NavigateDetectorCommand}" />
+                <TextBlock TextWrapping="Wrap"
+                           Text="{x:Static UIResources:ExtensionUIResources.DetectorDescription}"
+                           Width="150" />
+            </StackPanel>
+            <StackPanel Margin="20,20,20,0">
+                <Button Content="{x:Static UIResources:ExtensionUIResources.Settings}"
+                        Click="OnSettingsClickEvent"
+                        Height="40"
+                        FontSize="15" />
+                <TextBlock TextWrapping="Wrap"
+                           Text="{x:Static UIResources:ExtensionUIResources.SettingsDescription}"
+                           Width="150" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
 </UserControl>

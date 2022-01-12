@@ -3,6 +3,13 @@ on:
   push:
     branches:
       - master
+      - development
+    paths:
+      - 'IDesign/**'
+  pull_request:
+    branches:
+      - master
+      - development
     paths:
       - 'IDesign/**'
   workflow_dispatch: 
@@ -44,6 +51,7 @@ jobs:
   release-extension:
     runs-on: ubuntu-latest
     needs: build-extension
+    if: github.event_name == 'push' && github.ref_name == 'master'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2

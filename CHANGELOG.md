@@ -7,11 +7,27 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+-   New view for selecting a design pattern to implement using step-by-step instructions
+-   New view for implementing a pattern using step-by-step instructions
+-   IDesign option page with option to turn logging data off
+-   Settings button on homescreen, which leads to the IDesign option page
+-   The possibility to define knock-out criteria in pattern recognizers
+-   Back button that is used for going back to the previous page
+-   OnBuildDone event to recognize build, rebuild, clean and deploy actions
+-   API client for the LoggingAPI
+
+
+### Improved
+
+- Github Ci/Cd, build extension also in develop and only test when code changed
+- Design Pattern readability currently only improved Singleton
+
 ## [2.0.0] - 2021-12-15
 
 ### Added
 
--   Bride design pattern recognizer
+-   Bridge design pattern recognizer
 -   Home screen for the extension
 -   GitHub Ci/Cd
 -   Navigation between screen

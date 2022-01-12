@@ -1,5 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace IDesign.Extension.Views
 {
@@ -13,9 +17,16 @@ namespace IDesign.Extension.Views
             InitializeComponent();
         }
 
-        private void HomeView_OnSizeChanged(object sender, SizeChangedEventArgs e)
+        public void OnSettingsClickEvent(object sender, RoutedEventArgs e)
         {
-            ButtonsPanel.Orientation = e.NewSize.Width >= 570 ? Orientation.Horizontal : Orientation.Vertical;
+            ThreadHelper.ThrowIfNotOnUIThread();
+            Guid guid = typeof(IDesignExtensionPackage).GUID;
+            var vsShell = (IVsShell)ServiceProvider.GlobalProvider.GetService(typeof(IVsShell));
+            if (vsShell.IsPackageLoaded(ref guid, out var myPackage)
+               == Microsoft.VisualStudio.VSConstants.S_OK)
+            {
+                ((IDesignExtensionPackage)myPackage).ShowOptionPage(typeof(IDesignOptionPageGrid));
+            }
         }
     }
 }

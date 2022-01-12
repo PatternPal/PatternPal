@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29509.3
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IDesign.Recognizers", "IDesign.Regonizers\IDesign.Recognizers.csproj", "{1F20D376-AA08-45BE-9589-CFD70932C170}"
 EndProject
@@ -24,7 +24,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDesign.Extension", "IDesig
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IDesign.CommonResources", "IDesign.CommonResources\IDesign.CommonResources.csproj", "{68B3C66E-D837-4B67-B674-C994BC4E207B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDesign.SyntaxTree", "IDesign.SyntaxTree\IDesign.SyntaxTree.csproj", "{86E26B75-AEA1-43FA-AEC5-A81131606D13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IDesign.SyntaxTree", "IDesign.SyntaxTree\IDesign.SyntaxTree.csproj", "{86E26B75-AEA1-43FA-AEC5-A81131606D13}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDesign.StepByStep", "IDesign.StepByStep\IDesign.StepByStep.csproj", "{206F6058-7DFB-4676-AACA-CFAAF56E6936}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,6 +62,10 @@ Global
 		{86E26B75-AEA1-43FA-AEC5-A81131606D13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86E26B75-AEA1-43FA-AEC5-A81131606D13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86E26B75-AEA1-43FA-AEC5-A81131606D13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{206F6058-7DFB-4676-AACA-CFAAF56E6936}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{206F6058-7DFB-4676-AACA-CFAAF56E6936}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{206F6058-7DFB-4676-AACA-CFAAF56E6936}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{206F6058-7DFB-4676-AACA-CFAAF56E6936}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,6 +78,7 @@ Global
 		{6D62168E-3F32-47F9-8BC0-514BF633F903} = {D8082781-8981-4B17-9E4A-5C25EF7E3892}
 		{68B3C66E-D837-4B67-B674-C994BC4E207B} = {D8082781-8981-4B17-9E4A-5C25EF7E3892}
 		{86E26B75-AEA1-43FA-AEC5-A81131606D13} = {25C2E758-AC65-4A3A-A11A-2D3510C01BB8}
+		{206F6058-7DFB-4676-AACA-CFAAF56E6936} = {25C2E758-AC65-4A3A-A11A-2D3510C01BB8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {31FB6D39-7D9F-44BC-AF8B-3AA700C8C087}

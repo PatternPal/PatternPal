@@ -434,4 +434,10 @@
   <data name="StrategyNodeMethods" xml:space="preserve">
     <value>Strategy method</value>
   </data>
+  <data name="Modifier" xml:space="preserve">
+    <value>{0} should be {1}</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>{0} type should be {1}</value>
+  </data>
 </root>

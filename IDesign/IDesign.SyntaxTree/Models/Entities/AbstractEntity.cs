@@ -5,6 +5,7 @@ using SyntaxTree.Abstractions;
 using SyntaxTree.Abstractions.Entities;
 using SyntaxTree.Abstractions.Members;
 using SyntaxTree.Abstractions.Root;
+using SyntaxTree.Models.Members.Constructor;
 using SyntaxTree.Models.Members.Method;
 using SyntaxTree.Models.Members.Property;
 using SyntaxTree.Utils;
@@ -69,6 +70,24 @@ namespace SyntaxTree.Models.Entities
         }
 
         public virtual IEnumerable<IMember> GetMembers() { return _methods.Cast<IMember>().Concat(_properties); }
+
+        public IEnumerable<IMember> GetAllMembers()
+        {
+            var members = GetMembers().ToList();
+            
+            foreach (var property in members.OfType<Property>()) {
+                if (property.IsField()) members.Add(property.GetField());
+                if (property.HasGetter()) members.Add(property.GetGetter());
+                if (property.HasSetter()) members.Add(property.GetSetter());
+            }
+            
+            foreach (var constructor in members.OfType<Constructor>())
+            {
+                members.Add(constructor.AsMethod());
+            }
+            
+            return members;
+        }
 
         public IEnumerable<IEntity> GetEntities()
         {
@@ -150,6 +169,13 @@ namespace SyntaxTree.Models.Entities
         public override string ToString()
         {
             return GetName();
+        }
+
+        public virtual IEnumerable<INode> GetChildren()
+        {
+            return _entities.Cast<INode>()
+                .Concat(_methods)
+                .Concat(_properties);
         }
     }
 }

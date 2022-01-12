@@ -139,5 +139,7 @@ namespace IDesign.Tests.Utils
         {
             return Array.Empty<IRelation>();
         }
+
+        public IEnumerable<INode> GetChildren() { return Array.Empty<INode>(); }
     }
 }
