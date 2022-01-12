@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,7 +12,8 @@ namespace IDesign.LoggingAPI
     {
         [Required, Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
-        public string CommitID { get; set; }
+
+        public string? CommitID { get; set; }
         public int ExerciseID { get; set; }
         [Required]
         public DateTime Time { get; set; }

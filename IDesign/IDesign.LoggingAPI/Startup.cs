@@ -32,6 +32,7 @@ namespace IDesign.LoggingAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "LoggingAPI", Version = "v1" });
             });
+            //services.AddApplicationInsightsTelemetry();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

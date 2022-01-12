@@ -42,7 +42,7 @@ namespace IDesign.LoggingAPI.Migrations
                 {
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Message = table.Column<string>(type: "TEXT", nullable: true),
+                    Message = table.Column<string>(type: "TEXT", nullable: false),
                     ActionID = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>

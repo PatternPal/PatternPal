@@ -14,9 +14,9 @@ namespace IDesign.LoggingAPI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "5.0.12");
+                .HasAnnotation("ProductVersion", "5.0.13");
 
-            modelBuilder.Entity("LoggingAPI.Action", b =>
+            modelBuilder.Entity("IDesign.LoggingAPI.Action", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -47,7 +47,7 @@ namespace IDesign.LoggingAPI.Migrations
                     b.ToTable("Actions");
                 });
 
-            modelBuilder.Entity("LoggingAPI.ActionType", b =>
+            modelBuilder.Entity("IDesign.LoggingAPI.ActionType", b =>
                 {
                     b.Property<string>("ID")
                         .HasColumnType("TEXT");
@@ -75,7 +75,7 @@ namespace IDesign.LoggingAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("LoggingAPI.ExtensionError", b =>
+            modelBuilder.Entity("IDesign.LoggingAPI.ExtensionError", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -85,6 +85,7 @@ namespace IDesign.LoggingAPI.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Message")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("ID");
@@ -92,7 +93,7 @@ namespace IDesign.LoggingAPI.Migrations
                     b.ToTable("ExtensionErrors");
                 });
 
-            modelBuilder.Entity("LoggingAPI.Mode", b =>
+            modelBuilder.Entity("IDesign.LoggingAPI.Mode", b =>
                 {
                     b.Property<string>("ID")
                         .HasColumnType("TEXT");
@@ -108,7 +109,7 @@ namespace IDesign.LoggingAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("LoggingAPI.Session", b =>
+            modelBuilder.Entity("IDesign.LoggingAPI.Session", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
