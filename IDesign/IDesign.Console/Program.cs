@@ -179,7 +179,22 @@ namespace IDesign.ConsoleApp
 
             foreach (var child in result.GetChildFeedback())
             {
-                PrintResult(child, depth + 1);
+                PrintResultRecursive(child, depth + 1);
+            }
+        }
+
+        private static void PrintResultRecursive(ICheckResult result, int depth)
+        {
+            if (result.IsHidden)
+            {
+                foreach (var sub in result.GetChildFeedback())
+                {
+                    PrintResultRecursive(sub, depth);
+                }
+            }
+            else
+            {
+                PrintResult(result, depth);
             }
         }
 

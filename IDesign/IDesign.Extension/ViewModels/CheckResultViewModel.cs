@@ -58,9 +58,8 @@ namespace IDesign.Extension.ViewModels
         private IEnumerable<CheckResultViewModel> GetSubResults()
         {
             var toReturn = new List<CheckResultViewModel>();
-            var allSubResults = Result.GetChildFeedback();
 
-            foreach (ICheckResult result in allSubResults)
+            foreach (ICheckResult result in Result.GetChildFeedback())
             {
                 RecursiveFunction(toReturn, result);
             }
