@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,8 +22,7 @@ namespace IDesign.Core
             new DesignPattern(Strategy, new StrategyRecognizer(), WikiPageResources.Strategy),
             new DesignPattern(Adapter, new AdapterRecognizer(), WikiPageResources.Adapter),
             new DesignPattern(Observer, new ObserverRecognizer(), WikiPageResources.Observer),
-            new DesignPattern(Bridge, new BridgeRecognizer(), WikiPageResources.Bridge),
-            new DesignPattern("Test", new TestRecognizer(), "")
+            new DesignPattern(Bridge, new BridgeRecognizer(), WikiPageResources.Bridge)
         };
 
         public SyntaxGraph Graph;

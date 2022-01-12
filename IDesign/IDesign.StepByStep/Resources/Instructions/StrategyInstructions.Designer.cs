@@ -61,7 +61,7 @@ namespace IDesign.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create an interface or abstract class (TIP: Use &apos;Behaviour&apos; in the interface/class name)..
+        ///   Looks up a localized string similar to Create an interface or abstract class which will be the strategy class..
         /// </summary>
         public static string _1 {
             get {
@@ -70,7 +70,7 @@ namespace IDesign.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a class that implements the interface/abstract class you&apos;ve just created (It is preferred to also use the word &apos;Behaviour&apos; in the name)..
+        ///   Looks up a localized string similar to Create a class that implements the interface/abstract class you&apos;ve just created (context class)..
         /// </summary>
         public static string _2 {
             get {
@@ -79,7 +79,7 @@ namespace IDesign.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a class that is going to be using the interface as a variable..
+        ///   Looks up a localized string similar to Create a class which will be the concrete strategy class..
         /// </summary>
         public static string _3 {
             get {
@@ -88,7 +88,7 @@ namespace IDesign.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add the interface you created in step 1 as a variable to the class you just created..
+        ///   Looks up a localized string similar to Make a field/property in the concrete strategy class with the strategy class as its type. Make the modifier of the field/property private..
         /// </summary>
         public static string _4 {
             get {
