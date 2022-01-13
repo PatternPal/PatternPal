@@ -53,8 +53,10 @@ jobs:
         with:
           name: code-coverage-report
           path: dist/
-      - name: Unzip
-        run: unzip ./dist/code-coverage-report.zip -d ./dist
+      - name: Test
+        run: ls -r dist/
+#      - name: Unzip
+#        run: unzip ./dist/code-coverage-report.zip -d ./dist
       - name: Make directory
         run: mkdir TestResults
       - name: Move results
