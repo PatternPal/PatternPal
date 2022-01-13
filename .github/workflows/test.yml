@@ -63,7 +63,7 @@ jobs:
           FOLDERS=`ls -m ./TestResults | tr -d ' '`
           echo '::set-output name=RESULTS::$FOLDERS'
       - name: Code Coverage Summary Report
-        uses: irongut/CodeCoverageSummary@v1.0.2
+        uses: irongut/CodeCoverageSummary@v1.2.0
         with:
           filename: ${{ steps.results.outputs.RESULTS }}
           badge: true
