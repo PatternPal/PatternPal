@@ -18,6 +18,6 @@ namespace IDesign.StepByStep.Models
         public string Title => _title ?? "Instruction unavailable";
         public string Description => _description ?? "";
         
-        public IEnumerable<IInstructionCheck> Checks => Enumerable.Empty<IInstructionCheck>();
+        public virtual IEnumerable<IInstructionCheck> Checks => Enumerable.Empty<IInstructionCheck>();
     }
 }
