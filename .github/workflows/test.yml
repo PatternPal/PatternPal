@@ -60,7 +60,7 @@ jobs:
       - name: List results
         id: results
         run: |
-          FOLDERS=`ls -m | tr -d ' '`
+          FOLDERS=`ls -m ./TestResults | tr -d ' '`
           echo '::set-output name=RESULTS::$FOLDERS'
       - name: Code Coverage Summary Report
         uses: irongut/CodeCoverageSummary@v1.0.2
