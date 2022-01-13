@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Linq;
 using IDesign.StepByStep.Abstractions;
 using IDesign.StepByStep.Models;
-using IDesign.StepByStep.Resources.Instructions;
+using SyntaxTree.Models;
 using static IDesign.Core.Resources.DesignPatternNameResources;
 
 namespace IDesign.StepByStep.InstructionSets
@@ -13,24 +10,41 @@ namespace IDesign.StepByStep.InstructionSets
     public class StrategyInstructionSet : IInstructionSet
     {
         public string Name => Strategy;
-        public LinkedList<Instruction> Instructions { get; set; }
+        public IEnumerable<IInstruction> Instructions { get; }
 
         public StrategyInstructionSet()
         {
-            SetInstructions();
+            var list = new List<IInstruction>();
+            Instructions = list;
+            
+            list.Add(new StrategyInstructionInterface("Strategy interface", "Create an interface or abstract class which will be the strategy class."));
+            list.Add(new SimpleInstruction("Strategy Context", "Create a class that implements the interface/abstract class you've just created (context class)."));
+            list.Add(new SimpleInstruction("Concrete Strategy", "Create a class which will be the concrete strategy class."));
+            list.Add(new SimpleInstruction("Concrete Strategy", "Make a field/property in the concrete strategy class with the strategy class as its type. Make the modifier of the field/property private."));
+        }
+        
+        private class StrategyInstructionInterface : SimpleInstruction, IFileSelector
+        {
+            public StrategyInstructionInterface(string title, string description) : base(title, description) {
+            }
+
+            public override IEnumerable<IInstructionCheck> Checks => new List<IInstructionCheck>()
+            {
+                new AbstractCheck()
+            };
+
+            public string FileId => "strategy.interface";
         }
 
-        public void SetInstructions()
+        private class AbstractCheck : IInstructionCheck
         {
-            Instructions = new LinkedList<Instruction>();
-            var resourceSet = 
-                StrategyInstructions.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true)
-                    .OfType<DictionaryEntry>()
-                    .OrderBy(i => i.Key.ToString().Length)
-                    .ThenBy(i => i.Key);
+            public bool Correct(IInstructionState state)
+            {
+                if (!state.ContainsKey("strategy.interface")) return false;
 
-            foreach (DictionaryEntry entry in resourceSet)
-                Instructions.AddLast(new Instruction((string)entry.Value));
+                var entity = state["strategy.interface"];
+                return entity.GetModifiers().Contains(Modifiers.Abstract);
+            }
         }
     }
 }
