@@ -7,6 +7,14 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- The Logging Api and Test in the root project
+
+### CI/CD
+
+- Now tests multiple test projects
+
 ## [2.1.0] - 2022-01-12
 
 ### Added
