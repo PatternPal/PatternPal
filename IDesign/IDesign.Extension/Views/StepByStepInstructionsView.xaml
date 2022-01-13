@@ -85,6 +85,13 @@
                     Orientation="Horizontal"
                     HorizontalAlignment="Center"
                     Margin="0,0,0,10">
+            <Button Name="CheckImplementationButton" 
+                    Click="CheckImplementationButton_OnClick"
+                    Height="40"
+                    Width="60"
+                    FontSize="15"
+                    Margin="10,0,10,0"
+                    HorizontalAlignment="Center">Check</Button>
             <Button Name="PreviousInstructionButton"
                     Click="PreviousInstructionButton_OnClick"
                     Height="40"
