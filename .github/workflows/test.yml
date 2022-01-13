@@ -53,14 +53,14 @@ jobs:
         with:
           name: code-coverage-report
           path: dist/
-      - name: Test
-        run: ls -r
-#      - name: Unzip
-#        run: unzip ./dist/code-coverage-report.zip -d ./dist
+      - name: Unzip
+        run: unzip ./dist/code-coverage-report.zip -d ./dist
       - name: Make directory
         run: mkdir TestResults
       - name: Move results
         run: cp --backup=t ./dist/*/TestResults/coverage.cobertura.xml ./TestResults
+      - name: Test
+        run: ls -r
       - name: Code Coverage Summary Report
         uses: irongut/CodeCoverageSummary@v1.0.2
         with:
