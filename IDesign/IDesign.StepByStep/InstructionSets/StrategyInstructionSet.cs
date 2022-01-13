@@ -2,6 +2,7 @@
 using System.Linq;
 using IDesign.StepByStep.Abstractions;
 using IDesign.StepByStep.Models;
+using SyntaxTree.Abstractions.Entities;
 using SyntaxTree.Models;
 using static IDesign.Core.Resources.DesignPatternNameResources;
 
@@ -43,7 +44,7 @@ namespace IDesign.StepByStep.InstructionSets
                 if (!state.ContainsKey("strategy.interface")) return false;
 
                 var entity = state["strategy.interface"];
-                return entity.GetModifiers().Contains(Modifiers.Abstract);
+                return entity.GetModifiers().Contains(Modifiers.Abstract) || entity.GetEntityType() == EntityType.Interface;
             }
         }
     }

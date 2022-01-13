@@ -59,6 +59,7 @@
     <Compile Include="Commands\NavigateCommand.cs" />
     <Compile Include="LeftMarginMultiplierConverter.cs" />
     <Compile Include="Model\Action.cs" />
+    <Compile Include="Model\InstructionState.cs" />
     <Compile Include="Resources\ExtensionUIResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

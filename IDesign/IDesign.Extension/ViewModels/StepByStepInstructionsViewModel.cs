@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using IDesign.Extension.Commands;
 using IDesign.Extension.Stores;
 using IDesign.StepByStep.Abstractions;
-using IDesign.StepByStep.Models;
 
 namespace IDesign.Extension.ViewModels
 {
