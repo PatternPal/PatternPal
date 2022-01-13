@@ -56,11 +56,11 @@ jobs:
       - name: Make directory
         run: mkdir TestResults
       - name: Move results
-        run: cp --backup=t ./dist/*/TestResults/coverage.cobertura.xml ./TestResults
+        run: cp --backup=t ./dist/*/TestResults/coverage.cobertura.xml ./
       - name: List results
         id: results
         run: |
-          FOLDERS=`ls -m ./TestResults | tr -d ' '`
+          FOLDERS=`ls -1p | grep -v / | xargs echo | sed 's/ /,/g'`
           echo "::set-output name=RESULTS::$FOLDERS"
       - name: Code Coverage Summary Report
         uses: irongut/CodeCoverageSummary@v1.2.0
