@@ -80,6 +80,9 @@
     <Compile Include="UserControls\SelectPaths.xaml.cs">
       <DependentUpon>SelectPaths.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ExpanderResults.xaml.cs">
+      <DependentUpon>ExpanderResults.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\TreeViewResults.xaml.cs">
       <DependentUpon>TreeViewResults.xaml</DependentUpon>
     </Compile>
@@ -187,6 +190,10 @@
     <Page Include="UserControls\SelectPaths.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ExpanderResults.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\TreeViewResults.xaml">
       <SubType>Designer</SubType>

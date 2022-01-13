@@ -214,6 +214,33 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This pattern is almost complete!.
+        /// </summary>
+        public static string CompletionStatusAlmostComplete {
+            get {
+                return ResourceManager.GetString("CompletionStatusAlmostComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This pattern has been completed..
+        /// </summary>
+        public static string CompletionStatusComplete {
+            get {
+                return ResourceManager.GetString("CompletionStatusComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This pattern is not close to completion yet..
+        /// </summary>
+        public static string CompletionStatusNotComplete {
+            get {
+                return ResourceManager.GetString("CompletionStatusNotComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Concrete decorator constructor.
         /// </summary>
         public static string ConcreteDecoratorConstructor {

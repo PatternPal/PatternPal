@@ -168,6 +168,15 @@
   <data name="Child" xml:space="preserve">
     <value>Should be extended by a class.</value>
   </data>
+  <data name="CompletionStatusAlmostComplete" xml:space="preserve">
+    <value>This pattern is almost complete!</value>
+  </data>
+  <data name="CompletionStatusComplete" xml:space="preserve">
+    <value>This pattern has been completed.</value>
+  </data>
+  <data name="CompletionStatusNotComplete" xml:space="preserve">
+    <value>This pattern is not close to completion yet.</value>
+  </data>
   <data name="ConcreteDecoratorConstructor" xml:space="preserve">
     <value>Concrete decorator constructor</value>
   </data>

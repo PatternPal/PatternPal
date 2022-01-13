@@ -4,6 +4,9 @@ using System.Windows.Media;
 using IDesign.Core.Models;
 using IDesign.Recognizers.Abstractions;
 using SyntaxTree.Abstractions.Entities;
+using Microsoft.VisualStudio.Imaging;
+using Microsoft.VisualStudio.Imaging.Interop;
+using static IDesign.CommonResources.ClassFeedbackRes;
 
 namespace IDesign.Extension.ViewModels
 {
@@ -16,6 +19,20 @@ namespace IDesign.Extension.ViewModels
 
         public RecognitionResult Result { get; set; }
         public string PatternName => Result.Pattern.Name;
+
+        public string PatternCompletionStatusText
+        {
+            get
+            {
+                if (Score == 100) 
+                    return CompletionStatusComplete;
+                
+                if (Score >= 80)
+                    return CompletionStatusAlmostComplete;
+
+                return CompletionStatusNotComplete;
+            }
+        }
         public int Score => Result.Result.GetScore();
 
         public List<Named> Childs
@@ -97,13 +114,25 @@ namespace IDesign.Extension.ViewModels
 
     public class PatternResultPartViewModel : Named
     {
-        public PatternResultPartViewModel(string name, List<object> childViewModels)
+        public enum Status
+        {
+            Warning,
+            OK
+        }
+
+        public PatternResultPartViewModel(string name, List<object> childViewModels, Status status)
         {
             Name = name;
             ChildViewModels = childViewModels;
+            CurrentStatus = status;
         }
+
+        public ImageMoniker Icon => 
+            CurrentStatus == Status.Warning ? KnownMonikers.StatusWarning : KnownMonikers.StatusOK;
 
         public List<object> ChildViewModels { get; set; }
         public string Name { get; set; }
+
+        public Status CurrentStatus { get; set; }
     }
 }
