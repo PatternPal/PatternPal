@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows.Input;
 using IDesign.Extension.Commands;
+using IDesign.Extension.Model;
 using IDesign.Extension.Stores;
 using IDesign.StepByStep.Abstractions;
 
@@ -14,6 +15,8 @@ namespace IDesign.Extension.ViewModels
         public IInstructionSet InstructionSet { get; }
 
         private LinkedListNode<IInstruction> _currentInstruction;
+
+        public IInstructionState State = new InstructionState();
 
 
         public LinkedListNode<IInstruction> CurrentInstruction

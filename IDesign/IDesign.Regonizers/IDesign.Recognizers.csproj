@@ -11,10 +11,4 @@
     <ProjectReference Include="..\IDesign.SyntaxTree\IDesign.SyntaxTree.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="IDesign.Recognizers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=39972fad20392a0b">
-      <HintPath>..\IDesign.Console\bin\Release\IDesign.Recognizers.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>
