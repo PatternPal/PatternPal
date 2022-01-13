@@ -40,10 +40,10 @@ jobs:
       - name: Test
         run: dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutput=./TestResults/ /p:CoverletOutputFormat=cobertura
       - name: Move results
-        run: cd /src/folder
-             for f in */TestResults/coverage.cobertura.xml; do
-               cp -v "$f" ./IDesign/TestResults/"${f//\//_}"
-             done
+        run: |
+          for f in */TestResults/coverage.cobertura.xml; do
+            cp -v "$f" ./IDesign/TestResults/"${f//\//_}"
+          done
       - name: Archive code coverage results
         uses: actions/upload-artifact@v2
         with:
