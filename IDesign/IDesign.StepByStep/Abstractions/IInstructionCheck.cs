@@ -1,7 +1,9 @@
-﻿namespace IDesign.StepByStep.Abstractions
+﻿using IDesign.Recognizers.Abstractions;
+
+namespace IDesign.StepByStep.Abstractions
 {
     public interface IInstructionCheck
     {
-        bool Correct(IInstructionState state);
+        ICheckResult Correct(IInstructionState state);
     }
 }

@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using IDesign.Recognizers.Abstractions;
+using IDesign.Recognizers.Models.Checks.Entities;
+using IDesign.Recognizers.Models.Output;
 using IDesign.StepByStep.Abstractions;
 using IDesign.StepByStep.Models;
 using SyntaxTree.Abstractions.Entities;
@@ -36,15 +39,17 @@ namespace IDesign.StepByStep.InstructionSets
 
             public string FileId => "strategy.interface";
         }
-
+        
         private class AbstractCheck : IInstructionCheck
         {
-            public bool Correct(IInstructionState state)
+            public ICheckResult Correct(IInstructionState state)
             {
-                if (!state.ContainsKey("strategy.interface")) return false;
-
+                if (!state.ContainsKey("strategy.interface")) return new CheckResult("", FeedbackType.Incorrect, null);
+                
                 var entity = state["strategy.interface"];
-                return entity.GetModifiers().Contains(Modifiers.Abstract) || entity.GetEntityType() == EntityType.Interface;
+                return new EntityCheck()
+                    .Modifiers(Modifiers.Abstract)
+                    .Check(entity);
             }
         }
     }
