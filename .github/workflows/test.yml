@@ -23,7 +23,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 6.0
+          dotnet-version: 6.0.x
       - name: Remove extension
         run: dotnet sln IDesign.sln remove IDesign.Extension/IDesign.Extension.csproj
       - uses: actions/cache@v2
