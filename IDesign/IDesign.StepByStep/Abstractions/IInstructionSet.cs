@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using IDesign.StepByStep.Models;
+﻿using System.Collections.Generic;
 
 namespace IDesign.StepByStep.Abstractions
 {
@@ -17,12 +15,6 @@ namespace IDesign.StepByStep.Abstractions
         /// <summary>
         /// List that contains all instructions for this instruction set
         /// </summary>
-        LinkedList<Instruction> Instructions { get; set; }
-
-        /// <summary>
-        /// Retrieves instructions from the corresponding .resx file and loads them into the Instructions list
-        /// </summary>
-        void SetInstructions();
-
+        IEnumerable<IInstruction> Instructions { get; }
     }
 }

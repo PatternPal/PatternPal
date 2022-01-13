@@ -1,28 +1,23 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Linq;
+using IDesign.StepByStep.Abstractions;
 
 namespace IDesign.StepByStep.Models
 {
-    public class Instruction
+    public class SimpleInstruction : IInstruction
     {
-        private string _instructionText;
-        /// <summary>
-        /// Text that contains the instruction
-        /// </summary>
-        public string InstructionText
+        private readonly string _title;
+        private readonly string _description;
+
+        public SimpleInstruction(string title, string description)
         {
-            get
-            {
-                return _instructionText ?? "Instruction unavailable";
-            }
-            set
-            {
-                _instructionText = value;
-            }
+            _title = title;
+            _description = description;
         }
 
-        public Instruction(string instructionText)
-        {
-            InstructionText = instructionText;
-        }
+        public string Title => _title ?? "Instruction unavailable";
+        public string Description => _description ?? "";
+        
+        public IEnumerable<IInstructionCheck> Checks => Enumerable.Empty<IInstructionCheck>();
     }
 }

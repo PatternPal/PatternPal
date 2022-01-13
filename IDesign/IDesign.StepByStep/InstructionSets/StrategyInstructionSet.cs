@@ -13,24 +13,17 @@ namespace IDesign.StepByStep.InstructionSets
     public class StrategyInstructionSet : IInstructionSet
     {
         public string Name => Strategy;
-        public LinkedList<Instruction> Instructions { get; set; }
+        public IEnumerable<IInstruction> Instructions { get; }
 
         public StrategyInstructionSet()
         {
-            SetInstructions();
-        }
-
-        public void SetInstructions()
-        {
-            Instructions = new LinkedList<Instruction>();
-            var resourceSet = 
-                StrategyInstructions.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true)
-                    .OfType<DictionaryEntry>()
-                    .OrderBy(i => i.Key.ToString().Length)
-                    .ThenBy(i => i.Key);
-
-            foreach (DictionaryEntry entry in resourceSet)
-                Instructions.AddLast(new Instruction((string)entry.Value));
+            var list = new List<IInstruction>();
+            Instructions = list;
+            
+            list.Add(new SimpleInstruction("Strategy interface", "Create an interface or abstract class which will be the strategy class."));
+            list.Add(new SimpleInstruction("Strategy Context", "Create a class that implements the interface/abstract class you've just created (context class)."));
+            list.Add(new SimpleInstruction("Concrete Strategy", "Create a class which will be the concrete strategy class."));
+            list.Add(new SimpleInstruction("Concrete Strategy", "Make a field/property in the concrete strategy class with the strategy class as its type. Make the modifier of the field/property private."));
         }
     }
 }

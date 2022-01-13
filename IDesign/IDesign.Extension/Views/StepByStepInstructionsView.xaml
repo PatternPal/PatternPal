@@ -3,12 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:IDesign.Extension"
              xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
-             xmlns:UIResources="clr-namespace:IDesign.Extension.Resources"
              mc:Ignorable="d"
              d:DesignHeight="360"
-             d:DesignWidth="300">
+             d:DesignWidth="300" d:DataContext="{d:DesignData StepByStepInstructionsViewModel |(in IDesign.Extension.ViewModels)}">
     <UserControl.Resources>
         <ResourceDictionary>
             <Style TargetType="TextBlock">
@@ -70,12 +68,20 @@
         <TextBlock Grid.Row="0"
                    TextWrapping="Wrap"
                    TextAlignment="Left"
-                   Text="{Binding CurrentInstruction.Value.InstructionText}"
+                   Text="{Binding CurrentInstruction.Value.Title}"
                    FontSize="15"
                    HorizontalAlignment="Center"
                    Margin="20,0,20,10"
                    MaxWidth="380" />
-        <StackPanel Grid.Row="1"
+        <TextBlock Grid.Row="1"
+                   TextWrapping="Wrap"
+                   TextAlignment="Left"
+                   Text="{Binding CurrentInstruction.Value.Description}"
+                   FontSize="15"
+                   HorizontalAlignment="Center"
+                   Margin="20,0,20,10"
+                   MaxWidth="380" />
+        <StackPanel Grid.Row="2"
                     Orientation="Horizontal"
                     HorizontalAlignment="Center"
                     Margin="0,0,0,10">
@@ -94,7 +100,7 @@
                     Margin="10,0,0,0"
                     HorizontalAlignment="Center">&gt;&gt;</Button>
         </StackPanel>
-        <TextBlock Grid.Row="2"
+        <TextBlock Grid.Row="3"
                    TextWrapping="Wrap"
                    TextAlignment="Left"
                    FontSize="15"
