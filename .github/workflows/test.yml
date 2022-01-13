@@ -54,7 +54,7 @@ jobs:
           name: code-coverage-report
           path: dist/
       - name: Test
-        run: ls -r dist/
+        run: ls -r
 #      - name: Unzip
 #        run: unzip ./dist/code-coverage-report.zip -d ./dist
       - name: Make directory
