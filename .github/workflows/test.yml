@@ -57,12 +57,15 @@ jobs:
         run: mkdir TestResults
       - name: Move results
         run: cp --backup=t ./dist/*/TestResults/coverage.cobertura.xml ./TestResults
-      - name: Test
-        run: ls -R
+      - name: List results
+        id: results
+        run: |
+          FOLDERS=`ls -m | tr -d ' '`
+          echo '::set-output name=RESULTS::$FOLDERS'
       - name: Code Coverage Summary Report
         uses: irongut/CodeCoverageSummary@v1.0.2
         with:
-          filename: TestResults/coverage.cobertura.xml*
+          filename: ${{ steps.results.outputs.RESULTS }}
           badge: true
           format: 'markdown'
           output: 'both'
