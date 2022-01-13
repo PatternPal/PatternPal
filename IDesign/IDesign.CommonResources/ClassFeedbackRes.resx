@@ -440,4 +440,7 @@
   <data name="Type" xml:space="preserve">
     <value>{0} type should be {1}</value>
   </data>
+  <data name="EntityType" xml:space="preserve">
+    <value>Entity should be of type {1}</value>
+  </data>
 </root>

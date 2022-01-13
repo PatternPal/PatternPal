@@ -340,6 +340,15 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Entity should be of type {1}.
+        /// </summary>
+        public static string EntityType {
+            get {
+                return ResourceManager.GetString("EntityType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Abstract creator.
         /// </summary>
         public static string FactoryAbstractCreator {
