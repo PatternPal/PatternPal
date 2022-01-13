@@ -56,6 +56,7 @@ jobs:
       - name: Move results
         run: |
           mkdir TestResults
+          unzip -q ./dist/code-coverage-report.zip -d ./dist
           cp --backup=t ./dist/*/TestResults/coverage.cobertura.xml ./TestResults
       - name: Code Coverage Summary Report
         uses: irongut/CodeCoverageSummary@v1.0.2
