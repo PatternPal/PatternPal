@@ -77,5 +77,10 @@ namespace IDesign.Extension.Views
 
             };
         }
+
+        private void CheckImplementationButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            
+        }
     }
 }
