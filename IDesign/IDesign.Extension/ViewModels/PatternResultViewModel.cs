@@ -3,9 +3,11 @@ using System.Linq;
 using System.Windows.Media;
 using IDesign.Core.Models;
 using IDesign.Recognizers.Abstractions;
+using IDesign.Recognizers.Models.ElementChecks;
 using SyntaxTree.Abstractions.Entities;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
+using SyntaxTree.Abstractions;
 using static IDesign.CommonResources.ClassFeedbackRes;
 
 namespace IDesign.Extension.ViewModels
@@ -30,7 +32,7 @@ namespace IDesign.Extension.ViewModels
         {
             get
             {
-                if (Score == 100) 
+                if (Score == 100)
                     return CompletionStatusComplete;
                 
                 if (Score >= 80)
@@ -41,19 +43,19 @@ namespace IDesign.Extension.ViewModels
         }
         public int Score => Result.Result.GetScore();
 
-        public List<Named> Childs
+        public List<PatternResultPartViewModel> Children
         {
             get
             {
-                var result = new List<Named>();
-                if (Improvements.Any())
+                var result = new List<PatternResultPartViewModel>();
+                if (IncorrectRequirements.Any())
                 {
-                    result.Add(new PatternResultPartViewModel("Improvements ", Improvements.ToList(), Status.Warning));
+                    result.Add(new PatternResultPartViewModel(IncorrectRequirements.ToList(), Status.Warning));
                 }
 
-                if (Requirements.Any())
+                if (CorrectRequirements.Any())
                 {
-                    result.Add(new PatternResultPartViewModel("All requirements ", Requirements.ToList(), Status.OK));
+                    result.Add(new PatternResultPartViewModel(CorrectRequirements.ToList(), Status.OK));
                 }
 
                 return result;
@@ -62,10 +64,11 @@ namespace IDesign.Extension.ViewModels
 
         public SolidColorBrush Color => GetColor(Result.Result.GetScore());
 
-        public IEnumerable<object> Requirements => Result.Result.GetResults().Select(x => new CheckResultViewModel(x));
+        public IEnumerable<object> CorrectRequirements =>
+            AddRequirementsFromResults(Result.Result.GetResults(), new List<CheckResultViewModel>(), FeedbackType.Correct);
 
-        public IEnumerable<object> Improvements =>
-            AddImprovementsFromResults(Result.Result.GetResults(), new List<CheckResultViewModel>());
+        public IEnumerable<object> IncorrectRequirements =>
+            AddRequirementsFromResults(Result.Result.GetResults(), new List<CheckResultViewModel>(), FeedbackType.Incorrect);
 
         public IEntity EntityNode { get; internal set; }
 
@@ -90,49 +93,81 @@ namespace IDesign.Extension.ViewModels
             return FeedbackType.Correct;
         }
 
-        public IList<CheckResultViewModel> AddImprovementsFromResults(
+        public IList<CheckResultViewModel> AddRequirementsFromResults(
             IEnumerable<ICheckResult> results,
-            IList<CheckResultViewModel> destination
+            IList<CheckResultViewModel> destination,
+            FeedbackType feedbackType
         )
         {
             foreach (var result in results)
             {
                 var childFeedback = result.GetChildFeedback();
                 if (childFeedback.Any())
-                {
-                    AddImprovementsFromResults(childFeedback, destination);
-                }
-
-                else if (result.GetFeedbackType() == FeedbackType.Incorrect)
-                {
+                    AddRequirementsFromResults(childFeedback, destination, feedbackType);
+                
+                else if (result.GetFeedbackType() == feedbackType)
                     destination.Add(new CheckResultViewModel(result));
-                }
             }
-
             return destination;
         }
     }
 
-    public interface Named
-    {
-        string Name { get; }
-    }
 
-    public class PatternResultPartViewModel : Named
+    public class PatternResultPartViewModel
     {
-        public PatternResultPartViewModel(string name, List<object> childViewModels, Status status)
+        public ImageMoniker Icon =>
+            CurrentStatus == Status.Warning ? KnownMonikers.StatusWarning : KnownMonikers.StatusOK;
+
+        public List<object> ChildViewModels { get; set; }
+
+        public int ChildrenCount
         {
-            Name = name;
+            get
+            {
+                int count = 0;
+
+                foreach (CheckResultViewModel model in ChildViewModels)
+                {
+                    count += CountChildrenRecursive(0, model.Result);
+                }
+
+                return count;
+            }
+        }
+        public Status CurrentStatus { get; set; }
+
+        public string SummaryText
+        {
+            get
+            {
+                if (CurrentStatus == Status.Warning)
+                    return string.Format(SummaryTextIncorrectRequirements, ChildrenCount);
+
+                return string.Format(SummaryTextCorrectRequirements, ChildrenCount);
+            }
+        }
+
+        public PatternResultPartViewModel(List<object> childViewModels, Status status)
+        {
             ChildViewModels = childViewModels;
             CurrentStatus = status;
         }
 
-        public ImageMoniker Icon => 
-            CurrentStatus == Status.Warning ? KnownMonikers.StatusWarning : KnownMonikers.StatusOK;
+        private int CountChildrenRecursive(int count, ICheckResult result)
+        {
+            int countTest = 0;
 
-        public List<object> ChildViewModels { get; set; }
-        public string Name { get; set; }
+            if (result.GetChildFeedback().Any())
+            {
+                foreach (var sub in result.GetChildFeedback())
+                {
+                    countTest += CountChildrenRecursive(count, sub);
+                }
 
-        public Status CurrentStatus { get; set; }
+                return countTest;
+            }
+
+            return ++count;
+        }
     }
 }

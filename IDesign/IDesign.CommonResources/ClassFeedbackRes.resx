@@ -438,4 +438,10 @@
   <data name="StrategyNodeMethods" xml:space="preserve">
     <value>Strategy method</value>
   </data>
+  <data name="SummaryTextCorrectRequirements" xml:space="preserve">
+    <value>You have correctly implemented {0} element(s).</value>
+  </data>
+  <data name="SummaryTextIncorrectRequirements" xml:space="preserve">
+    <value>You still have {0} issue(s) to address.</value>
+  </data>
 </root>

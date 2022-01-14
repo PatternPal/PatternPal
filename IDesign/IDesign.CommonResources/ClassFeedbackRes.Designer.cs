@@ -1022,5 +1022,23 @@ namespace IDesign.CommonResources {
                 return ResourceManager.GetString("StrategyNodeMethods", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have correctly implemented {0} element(s)..
+        /// </summary>
+        public static string SummaryTextCorrectRequirements {
+            get {
+                return ResourceManager.GetString("SummaryTextCorrectRequirements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You still have {0} issue(s) to address..
+        /// </summary>
+        public static string SummaryTextIncorrectRequirements {
+            get {
+                return ResourceManager.GetString("SummaryTextIncorrectRequirements", resourceCulture);
+            }
+        }
     }
 }

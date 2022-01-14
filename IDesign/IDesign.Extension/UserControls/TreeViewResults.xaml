@@ -175,7 +175,7 @@
               BorderThickness="0 0">
         <TreeView.Resources>
             <HierarchicalDataTemplate DataType="{x:Type models:PatternResultViewModel}"
-                                      ItemsSource="{Binding Childs}">
+                                      ItemsSource="{Binding Children}">
                 <StackPanel Orientation="Horizontal" Height="26">
                     <Image Source="/IDesign.Extension;component/Resources/logo.png" Width="20" Height="20" />
                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
