@@ -31,7 +31,7 @@ namespace IDesign.Extension.ViewModels
         public Visibility BackButtonVisibility
         {
             get => CurrentViewModel.GetType() == typeof(HomeViewModel)
-                ? Visibility.Hidden
+                ? Visibility.Collapsed
                 : Visibility.Visible;
         }
 

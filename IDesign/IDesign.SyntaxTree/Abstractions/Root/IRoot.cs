@@ -15,7 +15,7 @@ namespace SyntaxTree.Abstractions.Root
         IEnumerable<IRelation> GetRelations(IEntity entity);
     }
 
-    public interface INamespaceContainer : INode
+    public interface INamespaceContainer : INode, IParent
     {
         /// <summary>
         ///     Get all Namespaces in the current node
@@ -29,7 +29,7 @@ namespace SyntaxTree.Abstractions.Root
         IEnumerable<UsingDirectiveSyntax> GetUsing();
     }
 
-    public interface IEntitiesContainer : INode
+    public interface IEntitiesContainer : INode, IParent
     {
         /// <summary>
         ///     Get all entities in the current node, not in sub namespaces!

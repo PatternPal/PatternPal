@@ -24,6 +24,13 @@ namespace SyntaxTree.Abstractions.Entities
         /// </summary>
         /// <returns>A list of Members</returns>
         IEnumerable<IMember> GetMembers();
+        
+        /// <summary>
+        ///     Gets a list of all methods, field, properties and constructors.
+        ///     Also includes wrappers for example the getter and setter of a property as an Method
+        /// </summary>
+        /// <returns>A list of Members</returns>
+        IEnumerable<IMember> GetAllMembers();
 
         /// <summary>
         ///     Get a list of bases of this note (overrides / implementations)

@@ -55,5 +55,12 @@ namespace SyntaxTree.Models.Root
         {
             return _graph.GetRelations(entity);
         }
+        
+        public IEnumerable<INode> GetChildren()
+        {
+            return _entities
+                .Cast<INode>()
+                .Concat(_namespaces);
+        }
     }
 }

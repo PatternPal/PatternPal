@@ -682,6 +682,15 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} should be {1}.
+        /// </summary>
+        public static string Modifier {
+            get {
+                return ResourceManager.GetString("Modifier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Node should be an abstract class or an interface..
         /// </summary>
         public static string NodeAbstractOrInterface {
@@ -1020,6 +1029,15 @@ namespace IDesign.CommonResources {
         public static string StrategyNodeMethods {
             get {
                 return ResourceManager.GetString("StrategyNodeMethods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} type should be {1}.
+        /// </summary>
+        public static string Type {
+            get {
+                return ResourceManager.GetString("Type", resourceCulture);
             }
         }
         

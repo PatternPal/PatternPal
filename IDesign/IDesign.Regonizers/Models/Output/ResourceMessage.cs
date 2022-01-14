@@ -7,15 +7,10 @@ namespace IDesign.Recognizers.Models.Output
         public string Key;
         public string[] Parameters;
 
-        public ResourceMessage(string key, string[] parameters)
+        public ResourceMessage(string key, params string[] parameters)
         {
             Key = key;
             Parameters = parameters;
-        }
-
-        public ResourceMessage(string key)
-        {
-            Key = key;
         }
 
         public string GetKey()

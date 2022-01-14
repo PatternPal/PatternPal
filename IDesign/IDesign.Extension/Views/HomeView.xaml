@@ -7,8 +7,7 @@
              xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
              mc:Ignorable="d"
              d:DesignHeight="360"
-             d:DesignWidth="300"
-             SizeChanged="HomeView_OnSizeChanged">
+             d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
             <Style TargetType="TextBlock">
@@ -66,7 +65,6 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0"
-                    Name="ButtonsPanel"
                     HorizontalAlignment="Center"
                     Orientation="Vertical">
             <StackPanel Margin="20,20,20,0">
@@ -87,13 +85,15 @@
                            Text="{x:Static UIResources:ExtensionUIResources.DetectorDescription}"
                            Width="150" />
             </StackPanel>
+            <StackPanel Margin="20,20,20,0">
+                <Button Content="{x:Static UIResources:ExtensionUIResources.Settings}"
+                        Click="OnSettingsClickEvent"
+                        Height="40"
+                        FontSize="15" />
+                <TextBlock TextWrapping="Wrap"
+                           Text="{x:Static UIResources:ExtensionUIResources.SettingsDescription}"
+                           Width="150" />
+            </StackPanel>
         </StackPanel>
-        <Button Content="{x:Static UIResources:ExtensionUIResources.Settings}"
-                Click="OnSettingsClickEvent"
-                FontSize="10"
-                HorizontalAlignment="Right"
-                Height="17"
-                VerticalAlignment="Bottom"
-                Width="40" />
     </Grid>
 </UserControl>
