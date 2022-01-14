@@ -10,6 +10,12 @@ using static IDesign.CommonResources.ClassFeedbackRes;
 
 namespace IDesign.Extension.ViewModels
 {
+    public enum Status
+    {
+        Warning,
+        OK
+    }
+
     public class PatternResultViewModel
     {
         public PatternResultViewModel(RecognitionResult result)
@@ -42,12 +48,12 @@ namespace IDesign.Extension.ViewModels
                 var result = new List<Named>();
                 if (Improvements.Any())
                 {
-                    result.Add(new PatternResultPartViewModel("Improvements ", Improvements.ToList()));
+                    result.Add(new PatternResultPartViewModel("Improvements ", Improvements.ToList(), Status.Warning));
                 }
 
                 if (Requirements.Any())
                 {
-                    result.Add(new PatternResultPartViewModel("All requirements ", Requirements.ToList()));
+                    result.Add(new PatternResultPartViewModel("All requirements ", Requirements.ToList(), Status.OK));
                 }
 
                 return result;
@@ -114,12 +120,6 @@ namespace IDesign.Extension.ViewModels
 
     public class PatternResultPartViewModel : Named
     {
-        public enum Status
-        {
-            Warning,
-            OK
-        }
-
         public PatternResultPartViewModel(string name, List<object> childViewModels, Status status)
         {
             Name = name;
