@@ -23,25 +23,31 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-
     <StackPanel>
         <ItemsControl Name="ResultsView">
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:PatternResultViewModel}">
-                    <Grid Margin="0,5,0,5" >
+                    <Grid Margin="0,5,0,5">
                         <Expander Padding="5,5,0,5"
-                                  HorizontalAlignment="Stretch"
-                                  VerticalAlignment="Stretch"
-                                  Header="{Binding PatternName}"
-                                  ExpandDirection="Down"
-                                  IsExpanded="False" >
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                Header="{Binding PatternName}"
+                                ExpandDirection="Down"
+                                IsExpanded="False">
                             <StackPanel>
                                 <TextBlock Text="{Binding PatternCompletionStatusText}"></TextBlock>
-                                <!-- <StackPanel> -->
-                                <!--     <imaging:CrispImage Width="16" -->
-                                <!--                         Height="16" -->
-                                <!--                         Moniker="{Binding Icon}" /> -->
-                                <!-- </StackPanel> -->
+                                <!--<ItemsControl Name="ResultsViewParts">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate DataType="{x:Type models:PatternResultPartViewModel}">
+                                            <StackPanel>
+                                                <imaging:CrispImage Width="16" 
+                                                        Height="16"
+                                                        Moniker="{Binding Icon}" />
+                                                <TextBlock Text="Hallo"></TextBlock>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>-->
                             </StackPanel>
                         </Expander>
                     </Grid>
