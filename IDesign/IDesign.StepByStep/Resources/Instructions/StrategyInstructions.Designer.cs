@@ -61,7 +61,7 @@ namespace IDesign.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create an interface or abstract class which will be the strategy class..
+        ///   Looks up a localized string similar to Create an abstract class. For example, ‘Duck’. The behaviour will be added later..
         /// </summary>
         public static string _1 {
             get {
@@ -70,7 +70,7 @@ namespace IDesign.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a class that implements the interface/abstract class you&apos;ve just created (context class)..
+        ///   Looks up a localized string similar to Create subclasses that implement the previously created abstract class. For example, ‘RunnerDuck’ and ‘RubberDuck’..
         /// </summary>
         public static string _2 {
             get {
@@ -79,7 +79,7 @@ namespace IDesign.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a class which will be the concrete strategy class..
+        ///   Looks up a localized string similar to To the abstract class, add a method called “perform[behaviour-name]”. For example, ‘performQuack’..
         /// </summary>
         public static string _3 {
             get {
@@ -88,11 +88,47 @@ namespace IDesign.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make a field/property in the concrete strategy class with the strategy class as its type. Make the modifier of the field/property private..
+        ///   Looks up a localized string similar to Create an interface (for example, ‘QuackBehaviour’) that defines the behaviour you want to implement later. For example, ‘public string Quack();’..
         /// </summary>
         public static string _4 {
             get {
                 return ResourceManager.GetString("4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add to the abstract class (previously referred to as ‘Duck’) a property. The type of this property must be the interface that defines the behaviour you want to implement. For example, ‘QuackBehaviour’..
+        /// </summary>
+        public static string _5 {
+            get {
+                return ResourceManager.GetString("5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In the abstract class (named “Duck” in a previous example), implement the method that performs the behaviour. It must call the behaviour method through the behaviour property (for example, QuackBehaviour.Quack();).
+        /// </summary>
+        public static string _6 {
+            get {
+                return ResourceManager.GetString("6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a class which implements the behaviour interface, here you will add the specific implementation of the behaviour. (for example LoudQuackBehaviour or NoQuackBehaviour).
+        /// </summary>
+        public static string _7 {
+            get {
+                return ResourceManager.GetString("7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In the constructor of the subclass that implemented the abstract class (for example RunnerDuck or RubberDuck) instantiate the behaviour as the specific behaviour class you want to use..
+        /// </summary>
+        public static string _8 {
+            get {
+                return ResourceManager.GetString("8", resourceCulture);
             }
         }
     }
