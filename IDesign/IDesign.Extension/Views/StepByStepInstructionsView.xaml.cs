@@ -15,6 +15,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using IDesign.StepByStep.Abstractions;
 using SyntaxTree;
+using SyntaxTree.Abstractions.Entities;
 using Project = Microsoft.CodeAnalysis.Project;
 
 namespace IDesign.Extension.Views
@@ -123,6 +124,14 @@ namespace IDesign.Extension.Views
             if (instruction is IFileSelector fileSelector)
             {
                 _viewModel.State[fileSelector.FileId] = graph.GetAll().FirstOrDefault().Value;
+                /*graph.GetAll().TryGetValue("testProjectyay.Duck", out IEntity value1);
+                graph.GetAll().TryGetValue("testProjectyay.IBehaviour", out IEntity value2);
+                graph.GetAll().TryGetValue("testProjectyay.VeryCoolBehaviour", out IEntity value3);
+                graph.GetAll().TryGetValue("testProjectyay.VeryCoolDuck", out IEntity value4);
+                _viewModel.State["strategy.abstract"] = value1;
+                _viewModel.State["strategy.interface"] = value2;
+                _viewModel.State["strategy.interface.subclass"] = value3;
+                _viewModel.State["strategy.abstract.subclass"] = value4;*/
             }
 
             foreach (var check in instruction.Checks)
