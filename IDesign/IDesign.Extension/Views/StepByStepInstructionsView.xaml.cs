@@ -119,8 +119,8 @@ namespace IDesign.Extension.Views
                 ClassSelection.SelectedItem =
                     keyed.ContainsKey(fileSelector.FileId) ? keyed[fileSelector.FileId] : null;
                 CheckImplementationButton.IsEnabled = ClassSelection.SelectedItem != null;
-                NextInstructionButton.IsEnabled = false;
             }
+            NextInstructionButton.IsEnabled = false;
         }
 
         private void CheckImplementationButton_OnClick(object sender, RoutedEventArgs e)
