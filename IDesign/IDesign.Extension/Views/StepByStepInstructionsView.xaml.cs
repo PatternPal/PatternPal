@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -30,7 +33,7 @@ namespace IDesign.Extension.Views
         {
             InitializeComponent();
             InitializeViewModelAndButtons();
-            
+
             Dispatcher.VerifyAccess();
             LoadProject();
             Dte = Package.GetGlobalService(typeof(SDTE)) as DTE;
@@ -104,22 +107,10 @@ namespace IDesign.Extension.Views
 
         private void CheckImplementationButton_OnClick(object sender, RoutedEventArgs e)
         {
-            LoadProject();
-
-            var graph = new SyntaxGraph();
-
-            foreach (var project in Projects)
-            {
-                foreach (var document in project.Documents)
-                {
-                    var text = FileManager.MakeStringFromFile(document.FilePath);
-                    graph.AddFile(text, document.FilePath);
-                }
-            }
-            
-            graph.CreateGraph();
+            var graph = CreateGraph();
 
             var instruction = _viewModel.CurrentInstruction.Value;
+
             if (instruction is IFileSelector fileSelector)
             {
                 _viewModel.State[fileSelector.FileId] = graph.GetAll().FirstOrDefault().Value;
@@ -135,11 +126,35 @@ namespace IDesign.Extension.Views
                 }
             }
         }
-        
-        
+
+        private SyntaxGraph CreateGraph()
+        {
+            LoadProject();
+
+            var graph = new SyntaxGraph();
+
+            foreach (var project in Projects)
+            {
+                foreach (var document in project.Documents)
+                {
+                    var text = FileManager.MakeStringFromFile(document.FilePath);
+                    graph.AddFile(text, document.FilePath);
+                }
+            }
+
+            graph.CreateGraph();
+            
+            _viewModel.cbItems.Clear();
+            foreach (var pair in graph.GetAll().OrderByDescending(p => File.GetCreationTime((p.Value.GetRoot().GetSource()))))
+            {
+                _viewModel.cbItems.Add(pair.Key);
+            }
+
+            return graph;
+        }
 
         #region IVsSolutionEvents
-        
+
         public int OnAfterOpenProject(IVsHierarchy pHierarchy, int fAdded)
         {
             return VSConstants.S_OK;
@@ -193,7 +208,7 @@ namespace IDesign.Extension.Views
         {
             return VSConstants.S_OK;
         }
-        
+
         #endregion
 
         private void LoadProject()
@@ -202,18 +217,25 @@ namespace IDesign.Extension.Views
             var ws = (Workspace)cm.GetService<VisualStudioWorkspace>();
             Projects = ws.CurrentSolution.Projects.ToList();
         }
-        
+
         #region IVsRunningDocTableEvents3 implementation
 
-        int IVsRunningDocTableEvents.OnAfterFirstDocumentLock(uint docCookie, uint dwRDTLockType,
-            uint dwReadLocksRemaining, uint dwEditLocksRemaining)
+        int IVsRunningDocTableEvents.OnAfterFirstDocumentLock(
+            uint docCookie,
+            uint dwRDTLockType,
+            uint dwReadLocksRemaining,
+            uint dwEditLocksRemaining
+        )
         {
             return VSConstants.S_OK;
         }
 
-        int IVsRunningDocTableEvents.OnBeforeLastDocumentUnlock(uint docCookie, uint dwRDTLockType,
+        int IVsRunningDocTableEvents.OnBeforeLastDocumentUnlock(
+            uint docCookie,
+            uint dwRDTLockType,
             uint dwReadLocksRemaining,
-            uint dwEditLocksRemaining)
+            uint dwEditLocksRemaining
+        )
         {
             return VSConstants.S_OK;
         }
@@ -239,5 +261,10 @@ namespace IDesign.Extension.Views
         }
 
         #endregion
+
+        private void OnDropDownOpened(object sender, EventArgs e)
+        {
+            CreateGraph();
+        }
     }
 }
