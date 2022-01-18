@@ -8,6 +8,9 @@
              d:DesignHeight="400" d:DesignWidth="400">
     <UserControl.Resources>
         <ResourceDictionary>
+            <Style TargetType="RadioButton">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid x:Name="RadioGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -16,19 +19,18 @@
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
-            <RowDefinition Height="30" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <RadioButton Grid.Column="0" GroupName="Radio" x:Name="radio1" IsChecked="True" Content="Active Document"
-                     Checked="ActiveDocument_Checked" />
-        <RadioButton Grid.Column="1" GroupName="Radio" Content="Project" Checked="Project_Checked" />
-        <ComboBox Grid.Row="1" Grid.ColumnSpan="2" x:Name="ProjectSelection" Height="20" Margin="5">
+                     Checked="ActiveDocument_Checked" Margin="0,0,0,5"/>
+        <RadioButton Grid.Column="1" GroupName="Radio" Content="Project" Checked="Project_Checked" Margin="0,0,0,5"/>
+        <ComboBox Grid.Row="1" Grid.ColumnSpan="2" x:Name="ProjectSelection" Height="Auto" Margin="5">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Name}" />
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-
     </Grid>
 </UserControl>

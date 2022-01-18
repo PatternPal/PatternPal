@@ -48,14 +48,15 @@ namespace IDesign.Extension.ViewModels
             get
             {
                 var result = new List<PatternResultPartViewModel>();
+
                 if (IncorrectRequirements.Any())
                 {
-                    result.Add(new PatternResultPartViewModel(IncorrectRequirements.ToList(), Status.Warning));
+                    result.Add(new PatternResultPartViewModel(IncorrectRequirements.ToList(), Status.Warning, FeedbackType.Incorrect));
                 }
 
                 if (CorrectRequirements.Any())
                 {
-                    result.Add(new PatternResultPartViewModel(CorrectRequirements.ToList(), Status.OK));
+                    result.Add(new PatternResultPartViewModel(CorrectRequirements.ToList(), Status.OK, FeedbackType.Correct));
                 }
 
                 return result;
@@ -102,16 +103,25 @@ namespace IDesign.Extension.ViewModels
             foreach (var result in results)
             {
                 var childFeedback = result.GetChildFeedback();
+
+                var hasChildrenWithGivenFeedbackType = 
+                    childFeedback.Any(x => x.GetFeedbackType() == feedbackType && 
+                                           !x.GetChildFeedback().Any());
+
+                if (!result.IsHidden && hasChildrenWithGivenFeedbackType)
+                {
+                    destination.Add(new CheckResultViewModel(result, feedbackType));
+                }
+
                 if (childFeedback.Any())
+                {
                     AddRequirementsFromResults(childFeedback, destination, feedbackType);
-                
-                else if (result.GetFeedbackType() == feedbackType)
-                    destination.Add(new CheckResultViewModel(result));
+                }
             }
+
             return destination;
         }
     }
-
 
     public class PatternResultPartViewModel
     {
@@ -120,21 +130,9 @@ namespace IDesign.Extension.ViewModels
 
         public List<object> ChildViewModels { get; set; }
 
-        public int ChildrenCount
-        {
-            get
-            {
-                int count = 0;
-
-                foreach (CheckResultViewModel model in ChildViewModels)
-                {
-                    count += CountChildrenRecursive(0, model.Result);
-                }
-
-                return count;
-            }
-        }
         public Status CurrentStatus { get; set; }
+
+        public FeedbackType FeedbackType { get; set; }
 
         public string SummaryText
         {
@@ -147,27 +145,50 @@ namespace IDesign.Extension.ViewModels
             }
         }
 
-        public PatternResultPartViewModel(List<object> childViewModels, Status status)
+        public int ChildrenCount
+        {
+            get
+            {
+                int count = 0;
+
+                foreach (CheckResultViewModel model in ChildViewModels)
+                {
+                    count += CountChildren(model.Result);
+                }
+
+                return count;
+            }
+        }
+
+        public PatternResultPartViewModel(List<object> childViewModels, Status status, FeedbackType feedbackType)
         {
             ChildViewModels = childViewModels;
             CurrentStatus = status;
+            FeedbackType = feedbackType;
         }
 
-        private int CountChildrenRecursive(int count, ICheckResult result)
+        private int CountChildren(ICheckResult result)
         {
-            int countTest = 0;
+            int totalCount = 0;
 
             if (result.GetChildFeedback().Any())
             {
-                foreach (var sub in result.GetChildFeedback())
+                foreach (ICheckResult childResult in result.GetChildFeedback())
                 {
-                    countTest += CountChildrenRecursive(count, sub);
+                    if (!childResult.GetChildFeedback().Any() && childResult.GetFeedbackType() == FeedbackType)
+                    {
+                        totalCount++;
+                    }
+                    else if (childResult.IsHidden)
+                    {
+                        totalCount += CountChildren(childResult);
+                    }
                 }
 
-                return countTest;
+                return totalCount;
             }
 
-            return ++count;
+            return totalCount;
         }
     }
 }
