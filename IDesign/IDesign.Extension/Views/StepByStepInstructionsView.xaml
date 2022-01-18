@@ -85,12 +85,14 @@
                    Margin="20,0,20,10"
                    MaxWidth="380" />
         <ComboBox Grid.Row="2"
+                  Name="ClassSelection"
                   Margin="20,0,20,10"
                   Width="200"
                   HorizontalAlignment="Center"
                   ItemsSource="{Binding cbItems}"
                   SelectedItem="{Binding SelectedcbItem}"
-                  DropDownOpened="OnDropDownOpened" />
+                  DropDownOpened="OnDropDownOpened"
+                  SelectionChanged="OnSelectionChanged"/>
         <StackPanel Grid.Row="3"
                     Orientation="Horizontal"
                     HorizontalAlignment="Center"

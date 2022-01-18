@@ -82,6 +82,7 @@ namespace IDesign.Extension.Views
         /// </summary>
         private void CheckIfNextPreviousButtonsAvailable()
         {
+            CheckIfCheckIsAvailable();
             NextInstructionButton.Visibility =
                 _viewModel.CurrentInstruction.Next != null ? Visibility.Visible : Visibility.Hidden;
             PreviousInstructionButton.Visibility = _viewModel.CurrentInstruction.Previous != null
@@ -105,20 +106,28 @@ namespace IDesign.Extension.Views
             };
         }
 
+        private void CheckIfCheckIsAvailable()
+        {
+            ClassSelection.Visibility = _viewModel.CurrentInstruction.Value is IFileSelector ? Visibility.Visible : Visibility.Hidden;
+            CheckImplementationButton.IsEnabled = false;
+        }
+
         private void CheckImplementationButton_OnClick(object sender, RoutedEventArgs e)
         {
-            var graph = CreateGraph();
+            var graph = CreateGraph(false);
 
             var instruction = _viewModel.CurrentInstruction.Value;
 
             if (instruction is IFileSelector fileSelector)
             {
-                _viewModel.State[fileSelector.FileId] = graph.GetAll().FirstOrDefault().Value;
+                if (_viewModel.SelectedcbItem == null) return;
+                _viewModel.State[fileSelector.FileId] = graph.GetAll()[_viewModel.SelectedcbItem];
             }
 
             foreach (var check in instruction.Checks)
             {
                 var result = check.Correct(_viewModel.State);
+                //TODO show results
                 if (result.GetFeedbackType() == FeedbackType.Incorrect)
                 {
                     Trace.WriteLine("incorrect");
@@ -127,7 +136,7 @@ namespace IDesign.Extension.Views
             }
         }
 
-        private SyntaxGraph CreateGraph()
+        private SyntaxGraph CreateGraph(bool fill = true)
         {
             LoadProject();
 
@@ -143,11 +152,15 @@ namespace IDesign.Extension.Views
             }
 
             graph.CreateGraph();
-            
-            _viewModel.cbItems.Clear();
-            foreach (var pair in graph.GetAll().OrderByDescending(p => File.GetCreationTime((p.Value.GetRoot().GetSource()))))
+
+            if (fill)
             {
-                _viewModel.cbItems.Add(pair.Key);
+                _viewModel.cbItems.Clear();
+                foreach (var pair in graph.GetAll()
+                             .OrderByDescending(p => File.GetCreationTime((p.Value.GetRoot().GetSource()))))
+                {
+                    _viewModel.cbItems.Add(pair.Key);
+                }
             }
 
             return graph;
@@ -265,6 +278,11 @@ namespace IDesign.Extension.Views
         private void OnDropDownOpened(object sender, EventArgs e)
         {
             CreateGraph();
+        }
+
+        private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            CheckImplementationButton.IsEnabled = true;
         }
     }
 }
