@@ -79,7 +79,7 @@ namespace IDesign.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To the abstract class, add a method called “perform[behaviour-name]”. For example, ‘performQuack’..
+        ///   Looks up a localized string similar to To the abstract class, add a method called “Perform[behaviour-name]”. For example, ‘PerformQuack’..
         /// </summary>
         public static string _3 {
             get {

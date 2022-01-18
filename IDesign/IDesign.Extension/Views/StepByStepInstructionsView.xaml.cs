@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using EnvDTE;
 using IDesign.Core;
+using IDesign.Extension.Model;
 using IDesign.Extension.ViewModels;
 using IDesign.Recognizers.Abstractions;
 using Microsoft.CodeAnalysis;
@@ -106,14 +107,25 @@ namespace IDesign.Extension.Views
             };
         }
 
+        private Dictionary<string, string> keyed = new Dictionary<string, string>();
+
         private void CheckIfCheckIsAvailable()
         {
-            ClassSelection.Visibility = _viewModel.CurrentInstruction.Value is IFileSelector ? Visibility.Visible : Visibility.Hidden;
-            CheckImplementationButton.IsEnabled = false;
+            ClassSelection.Visibility = _viewModel.CurrentInstruction.Value is IFileSelector
+                ? Visibility.Visible
+                : Visibility.Hidden;
+            if (_viewModel.CurrentInstruction.Value is IFileSelector fileSelector)
+            {
+                ClassSelection.SelectedItem =
+                    keyed.ContainsKey(fileSelector.FileId) ? keyed[fileSelector.FileId] : null;
+                CheckImplementationButton.IsEnabled = ClassSelection.SelectedItem != null;
+                NextInstructionButton.IsEnabled = false;
+            }
         }
 
         private void CheckImplementationButton_OnClick(object sender, RoutedEventArgs e)
         {
+            NextInstructionButton.IsEnabled = false;
             var graph = CreateGraph(false);
 
             var instruction = _viewModel.CurrentInstruction.Value;
@@ -124,9 +136,10 @@ namespace IDesign.Extension.Views
                 _viewModel.State[fileSelector.FileId] = graph.GetAll()[_viewModel.SelectedcbItem];
             }
 
+            var state = _createState(graph);
             foreach (var check in instruction.Checks)
             {
-                var result = check.Correct(_viewModel.State);
+                var result = check.Correct(state);
                 //TODO show results
                 if (result.GetFeedbackType() == FeedbackType.Incorrect)
                 {
@@ -134,6 +147,25 @@ namespace IDesign.Extension.Views
                     return;
                 }
             }
+
+            //Save all changed state to the state between instructions, only when all is succefull
+            foreach (var pair in state)
+            {
+                keyed[pair.Key] = pair.Value?.GetFullName();
+            }
+
+            NextInstructionButton.IsEnabled = true;
+        }
+
+        private IInstructionState _createState(SyntaxGraph graph)
+        {
+            var state = new InstructionState();
+            foreach (var pair in keyed)
+            {
+                state[pair.Key] = pair.Value == null ? null : graph.GetAll()[pair.Value];
+            }
+
+            return state;
         }
 
         private SyntaxGraph CreateGraph(bool fill = true)
@@ -283,6 +315,11 @@ namespace IDesign.Extension.Views
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CheckImplementationButton.IsEnabled = true;
+
+            if (_viewModel.CurrentInstruction.Value is IFileSelector fileSelector)
+            {
+                keyed[fileSelector.FileId] = _viewModel.SelectedcbItem;
+            }
         }
     }
 }
