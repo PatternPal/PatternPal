@@ -189,7 +189,7 @@ namespace IDesign.Extension.Views
             {
                 _viewModel.cbItems.Clear();
                 foreach (var pair in graph.GetAll()
-                             .OrderByDescending(p => File.GetCreationTime((p.Value.GetRoot().GetSource()))))
+                             .OrderByDescending(p => File.GetLastWriteTime((p.Value.GetRoot().GetSource()))))
                 {
                     _viewModel.cbItems.Add(pair.Key);
                 }
