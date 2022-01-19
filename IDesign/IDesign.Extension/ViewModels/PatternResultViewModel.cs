@@ -28,6 +28,9 @@ namespace IDesign.Extension.ViewModels
         public RecognitionResult Result { get; set; }
         public string PatternName => Result.Pattern.Name;
 
+        /// <summary>
+        /// Text that describes the pattern completeness, taken from Resources file
+        /// </summary>
         public string PatternCompletionStatusText
         {
             get
@@ -41,7 +44,9 @@ namespace IDesign.Extension.ViewModels
                 return CompletionStatusNotComplete;
             }
         }
+
         public int Score => Result.Result.GetScore();
+
 
         public List<PatternResultPartViewModel> Children
         {
@@ -94,6 +99,13 @@ namespace IDesign.Extension.ViewModels
             return FeedbackType.Correct;
         }
 
+        /// <summary>
+        /// Takes the results and adds the requirements (Group checks) as a list of CheckResultViewModel classes
+        /// </summary>
+        /// <param name="results"></param>
+        /// <param name="destination"></param>
+        /// <param name="feedbackType"></param>
+        /// <returns>A list that contains CheckResultViewModel classes</returns>
         public IList<CheckResultViewModel> AddRequirementsFromResults(
             IEnumerable<ICheckResult> results,
             IList<CheckResultViewModel> destination,
@@ -104,11 +116,18 @@ namespace IDesign.Extension.ViewModels
             {
                 var childFeedback = result.GetChildFeedback();
 
-                var hasChildrenWithGivenFeedbackType = 
-                    childFeedback.Any(x => x.GetFeedbackType() == feedbackType && 
-                                           !x.GetChildFeedback().Any());
+                // Child feedback has at least one element check from the given feedback type
+                var hasChildrenFromGivenFeedbackType = 
+                    childFeedback.Any(
+                        x => x.GetFeedbackType() == feedbackType && 
+                            !x.GetChildFeedback().Any()
+                    );
 
-                if (!result.IsHidden && hasChildrenWithGivenFeedbackType)
+                if (!result.IsHidden && hasChildrenFromGivenFeedbackType)
+                {
+                    destination.Add(new CheckResultViewModel(result, feedbackType));
+                }
+                else if (result.IsHidden && hasChildrenFromGivenFeedbackType && feedbackType == FeedbackType.Incorrect)
                 {
                     destination.Add(new CheckResultViewModel(result, feedbackType));
                 }

@@ -22,6 +22,10 @@ namespace IDesign.Extension.ViewModels
 
         public CheckResultViewModel(ICheckResult result) : this(result, FeedbackType.Correct) { }
 
+        /// <summary>
+        /// Loops through all subresults recursively and place them in an IEnumberable
+        /// </summary>
+        /// <returns>IEnumerable that contains CheckResultViewModel classes</returns>
         private IEnumerable<CheckResultViewModel> GetSubResults()
         {
             var toReturn = new List<CheckResultViewModel>();
@@ -34,6 +38,11 @@ namespace IDesign.Extension.ViewModels
             return toReturn;
         }
 
+        /// <summary>
+        /// Recursive function, used by GetSubResults
+        /// </summary>
+        /// <param name="toReturn"></param>
+        /// <param name="result"></param>
         private void GetSubResultsRecursive(List<CheckResultViewModel> toReturn, ICheckResult result)
         {
             if (result.IsHidden)
