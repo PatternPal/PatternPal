@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using IDesign.Recognizers;
@@ -10,6 +11,7 @@ using IDesign.Recognizers.Models.Output;
 using IDesign.StepByStep.Abstractions;
 using IDesign.StepByStep.Models;
 using IDesign.StepByStep.Resources.Instructions;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SyntaxTree.Abstractions;
 using SyntaxTree.Abstractions.Entities;
@@ -146,7 +148,9 @@ namespace IDesign.StepByStep.InstructionSets
                             x => x.GetRelationType() == RelationType.Extends &&
                                  x.GetDestination().GetName() == strategyAbstract.GetName()
                         ),
-                        new ResourceMessage("StrategyInstructionCheckIfClassIsSubclassOfAbstractClass", strategyAbstract.GetName())
+                        new ResourceMessage(
+                            "StrategyInstructionCheckIfClassIsSubclassOfAbstractClass", strategyAbstract.GetName()
+                        )
                     )
                     .Check(entity);
             }
@@ -162,10 +166,10 @@ namespace IDesign.StepByStep.InstructionSets
 
                 return new EntityCheck()
                     .Any.Method()
-                        .Custom(
-                            m => m.GetName().Contains("Perform"),
-                            new ResourceMessage("StrategyInstructionCheckForPerformMethod")
-                        )
+                    .Custom(
+                        m => m.GetName().Contains("Perform"),
+                        new ResourceMessage("StrategyInstructionCheckForPerformMethod")
+                    )
                     .Build()
                     .Check(entity);
             }
@@ -231,20 +235,27 @@ namespace IDesign.StepByStep.InstructionSets
                         .Custom(
                             x =>
                             {
-                                var expression = x.GetBody()?.DescendantNodes().OfType<InvocationExpressionSyntax>()
-                                    .FirstOrDefault();
-                                if (expression == default) return false;
-                                var split = expression.Expression.ToString().Split('.').ToList();
-                                split.Remove("this");
-                                split.Remove("base");
-                                if (split.Count() <= 1) return false;
+                                foreach (List<string> split in from expression in
+                                             (x.GetBody()?.DescendantNodes(v => true) ?? Array.Empty<SyntaxNode>())
+                                             .OfType<InvocationExpressionSyntax>().ToList()
+                                         where expression != default
+                                         select expression.Expression.ToString().Split('.').ToList())
+                                {
+                                    split.Remove("this");
+                                    split.Remove("base");
+                                    if (split.Count() <= 1) continue;
 
 
-                                var field = entity.GetAllFields().FirstOrDefault(f => f.GetName().Equals(split[0]));
-                                if (field == null) return false;
-                                return field.GetFieldType().ToString().Equals(interfaceEntity.GetName());
+                                    var field = entity.GetAllFields().FirstOrDefault(f => f.GetName().Equals(split[0]));
+                                    if (field == null) continue;
+                                    if (field.GetFieldType().ToString().Equals(interfaceEntity.GetName())) return true;
+                                }
+
+                                return false;
                             },
-                            new ResourceMessage("StrategyInstructionMethodCalledThroughBehaviourCheck", interfaceEntity.GetName())
+                            new ResourceMessage(
+                                "StrategyInstructionMethodCalledThroughBehaviourCheck", interfaceEntity.GetName()
+                            )
                         )
                         .Build()
                         .Check(entity);
@@ -270,7 +281,9 @@ namespace IDesign.StepByStep.InstructionSets
                                      x.GetDestination().GetName() == strategyInterface.GetName()
                             );
                         },
-                        new ResourceMessage("StrategyInstructionCheckIfClassIsSubclassOfInterfaceClass", strategyInterface.GetName())
+                        new ResourceMessage(
+                            "StrategyInstructionCheckIfClassIsSubclassOfInterfaceClass", strategyInterface.GetName()
+                        )
                     )
                     .Check(entity);
             }
@@ -288,10 +301,10 @@ namespace IDesign.StepByStep.InstructionSets
                 return
                     new EntityCheck()
                         .Any.Constructor()
-                            .Custom(
-                                c => c.AsMethod().CheckCreationType(create.GetName()),
-                                new ResourceMessage("StrategyInstructionConstructorInstantiatesBehaviour", create.GetName())
-                            )
+                        .Custom(
+                            c => c.AsMethod().CheckCreationType(create.GetName()),
+                            new ResourceMessage("StrategyInstructionConstructorInstantiatesBehaviour", create.GetName())
+                        )
                         .Build()
                         .Check(entity);
             }
