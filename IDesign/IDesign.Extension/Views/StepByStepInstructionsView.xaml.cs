@@ -143,7 +143,7 @@ namespace IDesign.Extension.Views
                 //TODO show results
                 if (result.GetFeedbackType() == FeedbackType.Incorrect)
                 {
-                    Trace.WriteLine("incorrect");
+                    Trace.WriteLine("incorrect" + result.GetFeedback());
                     return;
                 }
             }

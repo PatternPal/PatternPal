@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using IDesign.Recognizers;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Checks;
 using IDesign.Recognizers.Models.Checks.Entities;
+using IDesign.Recognizers.Models.Checks.Members;
 using IDesign.Recognizers.Models.Output;
 using IDesign.StepByStep.Abstractions;
 using IDesign.StepByStep.Models;
@@ -81,10 +83,11 @@ namespace IDesign.StepByStep.InstructionSets
             );
 
             list.Add(
-                new SimpleInstruction(
+                new ComplexInstruction(
                     "Strategy Interface Implementation",
                     StrategyInstructions._7,
-                    new List<IInstructionCheck>() { new CheckIfClassIsSubclassOfInterface() }
+                    new List<IInstructionCheck>() { new CheckIfClassIsSubclassOfInterface() },
+                    "strategy.interface.subclass"
                 )
             );
 
@@ -189,10 +192,8 @@ namespace IDesign.StepByStep.InstructionSets
                 var entity = state["strategy.interface"];
 
                 return new EntityCheck()
-                    .Custom(
-                        m => m.GetAllMethods().Count() > 0,
-                        new ResourceMessage("StrategyCheckMethodCount")
-                    )
+                    .Any.Method()
+                    .Build()
                     .Check(entity);
             }
         }
@@ -207,10 +208,9 @@ namespace IDesign.StepByStep.InstructionSets
 
                 var interfaceEntity = state["strategy.interface"];
                 return new EntityCheck()
-                    .Custom(
-                        m => m.GetProperties().Any(x => x.GetType().ToString() == interfaceEntity.GetName()),
-                        new ResourceMessage("StrategyPropertyCheck")
-                    )
+                    .Any.Field(variants: true)
+                    .Type(interfaceEntity)
+                    .Build()
                     .Check(entity);
             }
         }
@@ -222,15 +222,29 @@ namespace IDesign.StepByStep.InstructionSets
                 if (!state.ContainsKey("strategy.abstract")) return new CheckResult("", FeedbackType.Incorrect, null);
 
                 var entity = state["strategy.abstract"];
-                //var interfaceEntity = state["strategy.interface"];
+                var interfaceEntity = state["strategy.interface"];
                 return
                     new EntityCheck() //NOTE: if there's a different method called in the body this might be seen as true (while it should not be)
+                        .Any.Method()
                         .Custom(
-                            m => m.GetAllMethods().Any(
-                                x => x.GetBody().DescendantNodes().OfType<MethodDeclarationSyntax>().Any()
-                            ),
+                            x =>
+                            {
+                                var expression = x.GetBody()?.DescendantNodes().OfType<InvocationExpressionSyntax>()
+                                    .FirstOrDefault();
+                                if (expression == default) return false;
+                                var split = expression.Expression.ToString().Split('.').ToList();
+                                split.Remove("this");
+                                split.Remove("base");
+                                if (split.Count() <= 1) return false;
+
+
+                                var field = entity.GetAllFields().FirstOrDefault(f => f.GetName().Equals(split[0]));
+                                if (field == null) return false;
+                                return field.GetFieldType().ToString().Equals(interfaceEntity.GetName());
+                            },
                             new ResourceMessage("StrategyMethodCalledThroughBehaviourCheck")
                         )
+                        .Build()
                         .Check(entity);
             }
         }
@@ -247,10 +261,13 @@ namespace IDesign.StepByStep.InstructionSets
 
                 return new EntityCheck()
                     .Custom(
-                        m => m.GetRelations().Any(
-                            x => x.GetRelationType() == RelationType.Implements &&
-                                 x.GetDestination().GetName() == strategyInterface.GetName()
-                        ),
+                        m =>
+                        {
+                            return m.GetRelations().Any(
+                                x => x.GetRelationType() == RelationType.Implements &&
+                                     x.GetDestination().GetName() == strategyInterface.GetName()
+                            );
+                        },
                         new ResourceMessage("StrategyCheckIfClassIsSubclassOfInterfaceClass")
                     )
                     .Check(entity);
@@ -265,15 +282,15 @@ namespace IDesign.StepByStep.InstructionSets
                     return new CheckResult("", FeedbackType.Incorrect, null);
 
                 var entity = state["strategy.abstract.subclass"];
-                //var behaviourType = entity.GetProperties().FirstOrDefault().GetType();
+                var create = state["strategy.interface.subclass"];
                 return
-                    new EntityCheck() //NOTE: if there's a different property declared in the body this might be seen as true (while it should not be)
-                        .Custom(
-                            m => m.GetConstructors().Any(
-                                x => x.GetBody().DescendantNodes().OfType<PropertyDeclarationSyntax>().Any()
-                            ),
-                            new ResourceMessage("StrategyConstructorInstantiatesBehaviourCheck")
-                        )
+                    new EntityCheck()
+                        .Any.Constructor()
+                            .Custom(
+                                c => c.AsMethod().CheckCreationType(create.GetName()),
+                                new ResourceMessage("")
+                            )
+                        .Build()
                         .Check(entity);
             }
         }
