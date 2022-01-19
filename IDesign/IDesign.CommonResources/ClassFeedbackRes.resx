@@ -450,4 +450,7 @@
   <data name="SummaryTextIncorrectRequirements" xml:space="preserve">
     <value>You still have {0} issue(s) to address.</value>
   </data>
+  <data name="EntityType" xml:space="preserve">
+    <value>Should be a {0}</value>
+  </data>
 </root>

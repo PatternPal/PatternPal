@@ -161,10 +161,12 @@ namespace IDesign.StepByStep.InstructionSets
                 var entity = state["strategy.abstract"];
 
                 return new EntityCheck()
-                    .Custom(
-                        m => m.GetAllMethods().Any(x => x.GetName().Contains("Perform")),
-                        new ResourceMessage("StrategyCheckForPerformMethod")
-                    )
+                    .Any.Method()
+                        .Custom(
+                            m => m.GetName().Contains("Perform"),
+                            new ResourceMessage("StrategyCheckForPerformMethod")
+                        )
+                    .Build()
                     .Check(entity);
             }
         }

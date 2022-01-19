@@ -367,7 +367,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Entity should be of type {1}.
+        ///   Looks up a localized string similar to Should be a {0}.
         /// </summary>
         public static string EntityType {
             get {
@@ -1042,15 +1042,6 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} type should be {1}.
-        /// </summary>
-        public static string Type {
-            get {
-                return ResourceManager.GetString("Type", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to You have correctly implemented {0} element(s)..
         /// </summary>
         public static string SummaryTextCorrectRequirements {
@@ -1065,6 +1056,15 @@ namespace IDesign.CommonResources {
         public static string SummaryTextIncorrectRequirements {
             get {
                 return ResourceManager.GetString("SummaryTextIncorrectRequirements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} type should be {1}.
+        /// </summary>
+        public static string Type {
+            get {
+                return ResourceManager.GetString("Type", resourceCulture);
             }
         }
     }
