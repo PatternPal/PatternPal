@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using IDesign.Recognizers;
 using IDesign.Recognizers.Abstractions;
@@ -202,11 +203,25 @@ namespace IDesign.StepByStep.InstructionSets
                 if (!state.ContainsKey("strategy.abstract")) return new CheckResult("", FeedbackType.Incorrect, null);
 
                 var entity = state["strategy.abstract"];
-                //var interfaceEntity = state["strategy.interface"];
+                var interfaceEntity = state["strategy.interface"];
                 return new EntityCheck() //NOTE: if there's a different method called in the body this might be seen as true (while it should not be)
-                    .Custom(m => m.GetAllMethods().Any(x => x.GetBody().DescendantNodes().OfType<MethodDeclarationSyntax>().Any()),
+                    .Custom(m =>
+                        {
+                            Trace.WriteLine(m.GetAllMethods());
+                            return m.GetAllMethods()
+                                .Any(x =>
+                                {
+                                    Trace.WriteLine(x.GetBody());
+                                    Trace.WriteLine(x.GetBody()?.DescendantNodes());
+                                    Trace.WriteLine(x.GetBody()?.DescendantNodes().OfType<InvocationExpressionSyntax>());
+                                    return x.GetBody() != null && x.GetBody().DescendantNodes()
+                                        .OfType<InvocationExpressionSyntax>()
+                                        .Any();
+                                });
+                        },
                         new ResourceMessage("StrategyMethodCalledThroughBehaviourCheck"))
                     .Check(entity);
+                
             }
         }
         private class CheckIfClassIsSubclassOfInterface : IInstructionCheck
