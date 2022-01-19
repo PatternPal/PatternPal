@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using EnvDTE;
 using IDesign.Core;
+using IDesign.Extension.Model;
 using IDesign.Extension.ViewModels;
 using IDesign.Recognizers.Abstractions;
 using Microsoft.CodeAnalysis;
@@ -15,7 +19,6 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using IDesign.StepByStep.Abstractions;
 using SyntaxTree;
-using SyntaxTree.Abstractions.Entities;
 using Project = Microsoft.CodeAnalysis.Project;
 
 namespace IDesign.Extension.Views
@@ -31,7 +34,7 @@ namespace IDesign.Extension.Views
         {
             InitializeComponent();
             InitializeViewModelAndButtons();
-            
+
             Dispatcher.VerifyAccess();
             LoadProject();
             Dte = Package.GetGlobalService(typeof(SDTE)) as DTE;
@@ -80,6 +83,7 @@ namespace IDesign.Extension.Views
         /// </summary>
         private void CheckIfNextPreviousButtonsAvailable()
         {
+            CheckIfCheckIsAvailable();
             NextInstructionButton.Visibility =
                 _viewModel.CurrentInstruction.Next != null ? Visibility.Visible : Visibility.Hidden;
             PreviousInstructionButton.Visibility = _viewModel.CurrentInstruction.Previous != null
@@ -103,7 +107,68 @@ namespace IDesign.Extension.Views
             };
         }
 
+        private Dictionary<string, string> keyed = new Dictionary<string, string>();
+
+        private void CheckIfCheckIsAvailable()
+        {
+            ClassSelection.Visibility = _viewModel.CurrentInstruction.Value is IFileSelector
+                ? Visibility.Visible
+                : Visibility.Hidden;
+            if (_viewModel.CurrentInstruction.Value is IFileSelector fileSelector)
+            {
+                ClassSelection.SelectedItem =
+                    keyed.ContainsKey(fileSelector.FileId) ? keyed[fileSelector.FileId] : null;
+                CheckImplementationButton.IsEnabled = ClassSelection.SelectedItem != null;
+            }
+            NextInstructionButton.IsEnabled = false;
+        }
+
         private void CheckImplementationButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            NextInstructionButton.IsEnabled = false;
+            var graph = CreateGraph(false);
+
+            var instruction = _viewModel.CurrentInstruction.Value;
+
+            if (instruction is IFileSelector fileSelector)
+            {
+                if (_viewModel.SelectedcbItem == null) return;
+                _viewModel.State[fileSelector.FileId] = graph.GetAll()[_viewModel.SelectedcbItem];
+            }
+
+            var state = _createState(graph);
+            foreach (var check in instruction.Checks)
+            {
+                var result = check.Correct(state);
+                //TODO show results
+                if (result.GetFeedbackType() == FeedbackType.Incorrect)
+                {
+                    Trace.WriteLine("incorrect");
+                    return;
+                }
+            }
+
+            //Save all changed state to the state between instructions, only when all is succefull
+            foreach (var pair in state)
+            {
+                keyed[pair.Key] = pair.Value?.GetFullName();
+            }
+
+            NextInstructionButton.IsEnabled = true;
+        }
+
+        private IInstructionState _createState(SyntaxGraph graph)
+        {
+            var state = new InstructionState();
+            foreach (var pair in keyed)
+            {
+                state[pair.Key] = pair.Value == null ? null : graph.GetAll()[pair.Value];
+            }
+
+            return state;
+        }
+
+        private SyntaxGraph CreateGraph(bool fill = true)
         {
             LoadProject();
 
@@ -117,38 +182,24 @@ namespace IDesign.Extension.Views
                     graph.AddFile(text, document.FilePath);
                 }
             }
-            
+
             graph.CreateGraph();
 
-            var instruction = _viewModel.CurrentInstruction.Value;
-            if (instruction is IFileSelector fileSelector)
+            if (fill)
             {
-                _viewModel.State[fileSelector.FileId] = graph.GetAll().FirstOrDefault().Value;
-                /*graph.GetAll().TryGetValue("testProjectyay.Duck", out IEntity value1);
-                graph.GetAll().TryGetValue("testProjectyay.IBehaviour", out IEntity value2);
-                graph.GetAll().TryGetValue("testProjectyay.VeryCoolBehaviour", out IEntity value3);
-                graph.GetAll().TryGetValue("testProjectyay.VeryCoolDuck", out IEntity value4);
-                _viewModel.State["strategy.abstract"] = value1;
-                _viewModel.State["strategy.interface"] = value2;
-                _viewModel.State["strategy.interface.subclass"] = value3;
-                _viewModel.State["strategy.abstract.subclass"] = value4;*/
-            }
-
-            foreach (var check in instruction.Checks)
-            {
-                var result = check.Correct(_viewModel.State);
-                if (result.GetFeedbackType() == FeedbackType.Incorrect)
+                _viewModel.cbItems.Clear();
+                foreach (var pair in graph.GetAll()
+                             .OrderByDescending(p => File.GetLastWriteTime((p.Value.GetRoot().GetSource()))))
                 {
-                    Trace.WriteLine("incorrect");
-                    return;
+                    _viewModel.cbItems.Add(pair.Key);
                 }
             }
+
+            return graph;
         }
-        
-        
 
         #region IVsSolutionEvents
-        
+
         public int OnAfterOpenProject(IVsHierarchy pHierarchy, int fAdded)
         {
             return VSConstants.S_OK;
@@ -202,7 +253,7 @@ namespace IDesign.Extension.Views
         {
             return VSConstants.S_OK;
         }
-        
+
         #endregion
 
         private void LoadProject()
@@ -211,18 +262,25 @@ namespace IDesign.Extension.Views
             var ws = (Workspace)cm.GetService<VisualStudioWorkspace>();
             Projects = ws.CurrentSolution.Projects.ToList();
         }
-        
+
         #region IVsRunningDocTableEvents3 implementation
 
-        int IVsRunningDocTableEvents.OnAfterFirstDocumentLock(uint docCookie, uint dwRDTLockType,
-            uint dwReadLocksRemaining, uint dwEditLocksRemaining)
+        int IVsRunningDocTableEvents.OnAfterFirstDocumentLock(
+            uint docCookie,
+            uint dwRDTLockType,
+            uint dwReadLocksRemaining,
+            uint dwEditLocksRemaining
+        )
         {
             return VSConstants.S_OK;
         }
 
-        int IVsRunningDocTableEvents.OnBeforeLastDocumentUnlock(uint docCookie, uint dwRDTLockType,
+        int IVsRunningDocTableEvents.OnBeforeLastDocumentUnlock(
+            uint docCookie,
+            uint dwRDTLockType,
             uint dwReadLocksRemaining,
-            uint dwEditLocksRemaining)
+            uint dwEditLocksRemaining
+        )
         {
             return VSConstants.S_OK;
         }
@@ -248,5 +306,20 @@ namespace IDesign.Extension.Views
         }
 
         #endregion
+
+        private void OnDropDownOpened(object sender, EventArgs e)
+        {
+            CreateGraph();
+        }
+
+        private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            CheckImplementationButton.IsEnabled = true;
+
+            if (_viewModel.CurrentInstruction.Value is IFileSelector fileSelector)
+            {
+                keyed[fileSelector.FileId] = _viewModel.SelectedcbItem;
+            }
+        }
     }
 }

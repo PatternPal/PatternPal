@@ -124,7 +124,7 @@
     <value>Create subclasses that implement the previously created abstract class. For example, ‘RunnerDuck’ and ‘RubberDuck’.</value>
   </data>
   <data name="3" xml:space="preserve">
-    <value>To the abstract class, add a method called “perform[behaviour-name]”. For example, ‘performQuack’.</value>
+    <value>To the abstract class, add a method called “Perform[behaviour-name]”. For example, ‘PerformQuack’.</value>
   </data>
   <data name="4" xml:space="preserve">
     <value>Create an interface (for example, ‘QuackBehaviour’) that defines the behaviour you want to implement later. For example, ‘public string Quack();’.</value>
