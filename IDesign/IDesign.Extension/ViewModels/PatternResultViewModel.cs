@@ -43,6 +43,8 @@ namespace IDesign.Extension.ViewModels
         }
         public int Score => Result.Result.GetScore();
 
+        public bool Expanded { get; set; } = false;
+
         public List<PatternResultPartViewModel> Children
         {
             get

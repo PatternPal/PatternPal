@@ -32,7 +32,7 @@
                                   HorizontalAlignment="Stretch"
                                   VerticalAlignment="Stretch"
                                   ExpandDirection="Down"
-                                  IsExpanded="False">
+                                  IsExpanded="{Binding Expanded}">
                             <Expander.Header>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="{Binding PatternName}"

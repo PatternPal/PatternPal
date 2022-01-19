@@ -124,6 +124,7 @@ namespace IDesign.Extension.Views
             }
 
             NextInstructionButton.IsEnabled = false;
+            ExpanderResults.ResultsView.ItemsSource = new List<PatternResultViewModel>();
         }
 
         private void CheckImplementationButton_OnClick(object sender, RoutedEventArgs e)
@@ -143,15 +144,18 @@ namespace IDesign.Extension.Views
             var viewModels = new List<PatternResultViewModel>
             {
                 new PatternResultViewModel(
-                    new RecognitionResult()
+                    new RecognitionResult
                     {
                         Pattern = new DesignPattern(_viewModel.InstructionSet.Name, null, null),
-                        Result = new Result()
+                        Result = new Result
                         {
                             Results = instruction.Checks.Select(c => c.Correct(state)).ToList()
                         }
                     }
                 )
+                {
+                    Expanded = true
+                }
             };
             
             var correct = viewModels[0].Result.Result.GetResults().All(c => c.GetFeedbackType() == FeedbackType.Correct);
