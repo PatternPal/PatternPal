@@ -146,7 +146,7 @@ namespace IDesign.StepByStep.InstructionSets
                             x => x.GetRelationType() == RelationType.Extends &&
                                  x.GetDestination().GetName() == strategyAbstract.GetName()
                         ),
-                        new ResourceMessage("StrategyCheckIfClassIsSubclassOfAbstractClass")
+                        new ResourceMessage("StrategyCheckIfClassIsSubclassOfAbstractClass", strategyAbstract.GetName())
                     )
                     .Check(entity);
             }
@@ -179,6 +179,7 @@ namespace IDesign.StepByStep.InstructionSets
 
                 return new EntityCheck()
                     .Type(EntityType.Interface)
+                    .Custom(null, new ResourceMessage("StrategyInterfaceCheck"))
                     .Check(entity);
             }
         }
@@ -192,7 +193,7 @@ namespace IDesign.StepByStep.InstructionSets
                 var entity = state["strategy.interface"];
 
                 return new EntityCheck()
-                    .Any.Method()
+                    .Any.Method("StrategyMethod")
                     .Build()
                     .Check(entity);
             }
@@ -242,7 +243,7 @@ namespace IDesign.StepByStep.InstructionSets
                                 if (field == null) return false;
                                 return field.GetFieldType().ToString().Equals(interfaceEntity.GetName());
                             },
-                            new ResourceMessage("StrategyMethodCalledThroughBehaviourCheck")
+                            new ResourceMessage("StrategyMethodCalledThroughBehaviourCheck", interfaceEntity.GetName())
                         )
                         .Build()
                         .Check(entity);
@@ -268,7 +269,7 @@ namespace IDesign.StepByStep.InstructionSets
                                      x.GetDestination().GetName() == strategyInterface.GetName()
                             );
                         },
-                        new ResourceMessage("StrategyCheckIfClassIsSubclassOfInterfaceClass")
+                        new ResourceMessage("StrategyCheckIfClassIsSubclassOfInterfaceClass", strategyInterface.GetName())
                     )
                     .Check(entity);
             }
@@ -288,7 +289,7 @@ namespace IDesign.StepByStep.InstructionSets
                         .Any.Constructor()
                             .Custom(
                                 c => c.AsMethod().CheckCreationType(create.GetName()),
-                                new ResourceMessage("")
+                                new ResourceMessage("StrategyConstructorInstantiatesBehaviour", create.GetName())
                             )
                         .Build()
                         .Check(entity);
