@@ -474,4 +474,13 @@
   <data name="StrategyInstructionMethodCalledThroughBehaviourCheck" xml:space="preserve">
     <value>Should call the behaviour of type {0}</value>
   </data>
+  <data name="InstructionCompletionStatusAlmostComplete" xml:space="preserve">
+    <value>This instruction is almost complete.</value>
+  </data>
+  <data name="InstructionCompletionStatusComplete" xml:space="preserve">
+    <value>This instruction has been completed.</value>
+  </data>
+  <data name="InstructionCompletionStatusNotComplete" xml:space="preserve">
+    <value>This instruction is not close to completion yet.</value>
+  </data>
 </root>

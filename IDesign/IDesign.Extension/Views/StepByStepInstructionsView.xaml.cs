@@ -335,6 +335,7 @@ namespace IDesign.Extension.Views
             if (_viewModel.CurrentInstruction.Value is IFileSelector fileSelector)
             {
                 keyed[fileSelector.FileId] = _viewModel.SelectedcbItem;
+                NextInstructionButton.IsEnabled = false;
             }
         }
     }

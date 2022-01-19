@@ -32,11 +32,22 @@ namespace IDesign.Extension.ViewModels
         {
             get
             {
+                if (!PatternName.Contains("Instruction"))
+                {
+                    if (Score == 100)
+                        return CompletionStatusComplete;
+
+                    if (Score >= 80)
+                        return CompletionStatusAlmostComplete;
+
+                    return CompletionStatusNotComplete;
+                }
+
                 if (Score == 100)
-                    return CompletionStatusComplete;
-                
+                    return InstructionCompletionStatusComplete;
+
                 if (Score >= 80)
-                    return CompletionStatusAlmostComplete;
+                    return InstructionCompletionStatusAlmostComplete;
 
                 return CompletionStatusNotComplete;
             }

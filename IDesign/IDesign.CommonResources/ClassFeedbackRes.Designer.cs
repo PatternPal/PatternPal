@@ -547,6 +547,33 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This instruction is almost complete..
+        /// </summary>
+        public static string InstructionCompletionStatusAlmostComplete {
+            get {
+                return ResourceManager.GetString("InstructionCompletionStatusAlmostComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This instruction has been completed..
+        /// </summary>
+        public static string InstructionCompletionStatusComplete {
+            get {
+                return ResourceManager.GetString("InstructionCompletionStatusComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This instruction is not close to completion yet..
+        /// </summary>
+        public static string InstructionCompletionStatusNotComplete {
+            get {
+                return ResourceManager.GetString("InstructionCompletionStatusNotComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There should be at least 3 methods: add, remove and notify..
         /// </summary>
         public static string MethodAmountThree {
