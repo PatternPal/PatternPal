@@ -367,7 +367,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should be a {0}.
+        ///   Looks up a localized string similar to Should be a(n) {0}.
         /// </summary>
         public static string EntityType {
             get {
@@ -1029,6 +1029,69 @@ namespace IDesign.CommonResources {
         public static string StrategyFieldStateType {
             get {
                 return ResourceManager.GetString("StrategyFieldStateType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should have a perform method.
+        /// </summary>
+        public static string StrategyInstructionCheckForPerformMethod {
+            get {
+                return ResourceManager.GetString("StrategyInstructionCheckForPerformMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should implement {0}.
+        /// </summary>
+        public static string StrategyInstructionCheckIfClassIsSubclassOfAbstractClass {
+            get {
+                return ResourceManager.GetString("StrategyInstructionCheckIfClassIsSubclassOfAbstractClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should implement {0}.
+        /// </summary>
+        public static string StrategyInstructionCheckIfClassIsSubclassOfInterfaceClass {
+            get {
+                return ResourceManager.GetString("StrategyInstructionCheckIfClassIsSubclassOfInterfaceClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Constructor should instantiate {0}.
+        /// </summary>
+        public static string StrategyInstructionConstructorInstantiatesBehaviour {
+            get {
+                return ResourceManager.GetString("StrategyInstructionConstructorInstantiatesBehaviour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should be an interface.
+        /// </summary>
+        public static string StrategyInstructionInterfaceCheck {
+            get {
+                return ResourceManager.GetString("StrategyInstructionInterfaceCheck", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should have atleast one method.
+        /// </summary>
+        public static string StrategyInstructionMethod {
+            get {
+                return ResourceManager.GetString("StrategyInstructionMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should call the behaviour of type {0}.
+        /// </summary>
+        public static string StrategyInstructionMethodCalledThroughBehaviourCheck {
+            get {
+                return ResourceManager.GetString("StrategyInstructionMethodCalledThroughBehaviourCheck", resourceCulture);
             }
         }
         

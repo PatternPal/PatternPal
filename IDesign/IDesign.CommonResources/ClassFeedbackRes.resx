@@ -451,6 +451,27 @@
     <value>You still have {0} issue(s) to address.</value>
   </data>
   <data name="EntityType" xml:space="preserve">
-    <value>Should be a {0}</value>
+    <value>Should be a(n) {0}</value>
+  </data>
+  <data name="StrategyInstructionCheckForPerformMethod" xml:space="preserve">
+    <value>Should have a perform method</value>
+  </data>
+  <data name="StrategyInstructionCheckIfClassIsSubclassOfAbstractClass" xml:space="preserve">
+    <value>Should implement {0}</value>
+  </data>
+  <data name="StrategyInstructionCheckIfClassIsSubclassOfInterfaceClass" xml:space="preserve">
+    <value>Should implement {0}</value>
+  </data>
+  <data name="StrategyInstructionConstructorInstantiatesBehaviour" xml:space="preserve">
+    <value>Constructor should instantiate {0}</value>
+  </data>
+  <data name="StrategyInstructionInterfaceCheck" xml:space="preserve">
+    <value>Should be an interface</value>
+  </data>
+  <data name="StrategyInstructionMethod" xml:space="preserve">
+    <value>Should have atleast one method</value>
+  </data>
+  <data name="StrategyInstructionMethodCalledThroughBehaviourCheck" xml:space="preserve">
+    <value>Should call the behaviour of type {0}</value>
   </data>
 </root>
