@@ -181,7 +181,6 @@ namespace IDesign.StepByStep.InstructionSets
 
                 return new EntityCheck()
                     .Type(EntityType.Interface)
-                    .Custom(null, new ResourceMessage("StrategyInterfaceCheck"))
                     .Check(entity);
             }
         }
