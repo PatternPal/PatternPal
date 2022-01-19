@@ -20,6 +20,7 @@ namespace IDesign.Recognizers.Models.Output
         public List<ICheckResult> ChildFeedback { get; set; } = new List<ICheckResult>();
         public IResourceMessage Feedback { get; set; }
         public bool HasIncorrectKnockOutCheck { get; set; }
+        public bool IsHidden { get; set; }
 
         private float _score;
 

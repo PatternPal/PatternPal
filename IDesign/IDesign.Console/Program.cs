@@ -141,10 +141,7 @@ namespace IDesign.ConsoleApp
                     }
                 }
 
-                Console.Write($"{i}) {name} | {results[i].Pattern.Name}: ");
-                Trace.Write($"{i}) {name} | {results[i].Pattern.Name}: ");
-
-                PrintScore(results[i].Result.GetScore());
+                Trace.Write($"{i}) {name} | {results[i].Pattern.Name}");
 
                 Console.ForegroundColor = ConsoleColor.Red;
 
@@ -175,14 +172,29 @@ namespace IDesign.ConsoleApp
             }
 
             var text = new string('\t', depth) + symbol +
-                       $"{ResourceUtils.ResultToString(result)} | {result.GetScore()}p / {result.GetTotalChecks()}p";
+                       $"{ResourceUtils.ResultToString(result)}";
 
             Console.WriteLine(text);
             Trace.WriteLine(text);
 
             foreach (var child in result.GetChildFeedback())
             {
-                PrintResult(child, depth + 1);
+                PrintResultRecursive(child, depth + 1);
+            }
+        }
+
+        private static void PrintResultRecursive(ICheckResult result, int depth)
+        {
+            if (result.IsHidden)
+            {
+                foreach (var sub in result.GetChildFeedback())
+                {
+                    PrintResultRecursive(sub, depth);
+                }
+            }
+            else
+            {
+                PrintResult(result, depth);
             }
         }
 

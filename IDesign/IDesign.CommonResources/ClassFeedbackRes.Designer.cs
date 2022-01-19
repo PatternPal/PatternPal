@@ -19,7 +19,7 @@ namespace IDesign.CommonResources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class ClassFeedbackRes {
@@ -210,6 +210,33 @@ namespace IDesign.CommonResources {
         public static string Child {
             get {
                 return ResourceManager.GetString("Child", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This pattern is almost complete!.
+        /// </summary>
+        public static string CompletionStatusAlmostComplete {
+            get {
+                return ResourceManager.GetString("CompletionStatusAlmostComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This pattern has been completed..
+        /// </summary>
+        public static string CompletionStatusComplete {
+            get {
+                return ResourceManager.GetString("CompletionStatusComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This pattern is not close to completion yet..
+        /// </summary>
+        public static string CompletionStatusNotComplete {
+            get {
+                return ResourceManager.GetString("CompletionStatusNotComplete", resourceCulture);
             }
         }
         
@@ -493,7 +520,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should be used by Abstraction methods.
+        ///   Looks up a localized string similar to Implementer methods should be used by Abstraction methods.
         /// </summary>
         public static string ImplementerMethodsUsedInAbstraction {
             get {
@@ -1020,6 +1047,24 @@ namespace IDesign.CommonResources {
         public static string Type {
             get {
                 return ResourceManager.GetString("Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have correctly implemented {0} element(s)..
+        /// </summary>
+        public static string SummaryTextCorrectRequirements {
+            get {
+                return ResourceManager.GetString("SummaryTextCorrectRequirements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You still have {0} issue(s) to address..
+        /// </summary>
+        public static string SummaryTextIncorrectRequirements {
+            get {
+                return ResourceManager.GetString("SummaryTextIncorrectRequirements", resourceCulture);
             }
         }
     }

@@ -63,10 +63,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 The version developed by the previous team.
 
-[Unreleased]: https://github.com/super-idesign/designpatternrecognizer/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/PatternPal/PatternPal/compare/v2.1.0...HEAD
 
-[2.1.0]: https://github.com/super-idesign/designpatternrecognizer/compare/v2.0.0...v2.1.0
+[2.1.0]: https://github.com/PatternPal/PatternPal/compare/v2.0.0...v2.1.0
 
-[2.0.0]: https://github.com/super-idesign/designpatternrecognizer/compare/v1.0.0...v2.0.0
+[2.0.0]: https://github.com/PatternPal/PatternPal/compare/v1.0.0...v2.0.0
 
-[1.0.0]: https://github.com/super-idesign/designpatternrecognizer/releases/tag/v1.0.0
+[1.0.0]: https://github.com/PatternPal/PatternPal/releases/tag/v1.0.0
