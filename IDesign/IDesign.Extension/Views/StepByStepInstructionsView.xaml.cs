@@ -8,9 +8,11 @@ using System.Windows;
 using System.Windows.Controls;
 using EnvDTE;
 using IDesign.Core;
+using IDesign.Core.Models;
 using IDesign.Extension.Model;
 using IDesign.Extension.ViewModels;
 using IDesign.Recognizers.Abstractions;
+using IDesign.Recognizers.Models.Output;
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
@@ -120,6 +122,7 @@ namespace IDesign.Extension.Views
                     keyed.ContainsKey(fileSelector.FileId) ? keyed[fileSelector.FileId] : null;
                 CheckImplementationButton.IsEnabled = ClassSelection.SelectedItem != null;
             }
+
             NextInstructionButton.IsEnabled = false;
         }
 
@@ -137,16 +140,25 @@ namespace IDesign.Extension.Views
             }
 
             var state = _createState(graph);
-            foreach (var check in instruction.Checks)
+            var viewModels = new List<PatternResultViewModel>
             {
-                var result = check.Correct(state);
-                //TODO show results
-                if (result.GetFeedbackType() == FeedbackType.Incorrect)
-                {
-                    Trace.WriteLine("incorrect" + result.GetFeedback());
-                    return;
-                }
-            }
+                new PatternResultViewModel(
+                    new RecognitionResult()
+                    {
+                        Pattern = new DesignPattern(_viewModel.InstructionSet.Name, null, null),
+                        Result = new Result()
+                        {
+                            Results = instruction.Checks.Select(c => c.Correct(state)).ToList()
+                        }
+                    }
+                )
+            };
+            
+            var correct = viewModels[0].Result.Result.GetResults().All(c => c.GetFeedbackType() == FeedbackType.Correct);
+            
+            ExpanderResults.ResultsView.ItemsSource = viewModels;
+            
+            if (!correct) return;
 
             //Save all changed state to the state between instructions, only when all is succefull
             foreach (var pair in state)

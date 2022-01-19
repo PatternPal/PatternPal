@@ -37,6 +37,7 @@ namespace IDesign.CommonResources
             if (ResMessage != null)
             {
                 message = GetResourceFromString(ResMessage.GetKey());
+                if (message == null) return "";
                 if (ResMessage.GetParameters() != null && ResMessage.GetParameters().Length > 0)
                 {
                     message = string.Format(message, ResMessage.GetParameters());

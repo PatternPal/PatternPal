@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
+             xmlns:usercontrol="clr-namespace:IDesign.Extension.UserControls"
              mc:Ignorable="d"
              d:DesignHeight="360"
              d:DesignWidth="300"
@@ -74,6 +75,7 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -156,5 +158,6 @@
                  Text="The class doesn't have an abstract method">
             </Run>
         </TextBlock>
+        <usercontrol:ExpanderResults x:Name="ExpanderResults" Grid.Row="5" Margin="20,0,20,0" />
     </Grid>
 </UserControl>
