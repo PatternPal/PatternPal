@@ -172,7 +172,7 @@ namespace IDesign.ConsoleApp
             }
 
             var text = new string('\t', depth) + symbol +
-                       $"{ResourceUtils.ResultToString(result)}";
+                       $" {ResourceUtils.ResultToString(result)}";
 
             Console.WriteLine(text);
             Trace.WriteLine(text);

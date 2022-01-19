@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Resources;
+using System.Text.RegularExpressions;
 using IDesign.Recognizers.Abstractions;
 
 namespace IDesign.CommonResources
@@ -31,15 +32,21 @@ namespace IDesign.CommonResources
             return ResourceManager.GetString(name, Culture);
         }
 
-        public static string ResourceMessageToString(IResourceMessage ResMessage)
+        public static string ResourceMessageToString(IResourceMessage resMessage, ICheckResult result)
         {
             var message = "";
-            if (ResMessage != null)
+
+            if (resMessage != null)
             {
-                message = GetResourceFromString(ResMessage.GetKey());
-                if (ResMessage.GetParameters() != null && ResMessage.GetParameters().Length > 0)
+                message = GetResourceFromString(resMessage.GetKey());
+
+                if (resMessage.GetParameters() != null && resMessage.GetParameters().Length > 0)
                 {
-                    message = string.Format(message, ResMessage.GetParameters());
+                    message = string.Format(message, resMessage.GetParameters());
+                }
+                else if (ContainsCurlyBracketsWithDigits(resMessage))
+                {
+                    message = string.Format(message, result.GetElement());
                 }
 
                 return message;
@@ -51,17 +58,35 @@ namespace IDesign.CommonResources
         public static string ResultToString(ICheckResult result)
         {
             var res = "";
-            if (result.GetElement() != null)
+            var messageResource = result.GetFeedback();
+
+            if (result.GetElement() != null && !ContainsCurlyBracketsWithDigits(messageResource))
             {
                 res += result.GetElement() + " | ";
             }
 
-            if (result.GetFeedback() != null)
+            if (messageResource != null)
             {
-                res += ResourceMessageToString(result.GetFeedback());
+                res += ResourceMessageToString(messageResource, result);
             }
 
             return res;
+        }
+
+        private static bool ContainsCurlyBracketsWithDigits(IResourceMessage resMessage)
+        {
+            if (resMessage != null)
+            {
+                var resMessageString = GetResourceFromString(resMessage?.GetKey());
+                var regex = new Regex(@"\{\d\}");
+
+                if (resMessageString != null)
+                {
+                    return regex.IsMatch(resMessageString);
+                }
+            }
+
+            return false;
         }
     }
 }
