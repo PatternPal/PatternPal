@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IDesign.Tests.TestClasses.StrategyStepByStepTest1
+namespace IDesign.Tests.TestClasses.StrategyStepByStepTest
 {
     public class VeryCoolBehaviour : IBehaviour
     {
