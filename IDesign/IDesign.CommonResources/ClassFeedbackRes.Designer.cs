@@ -907,7 +907,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} is your State concrete class.
+        ///   Looks up a localized string similar to State concrete class.
         /// </summary>
         public static string StateConcrete {
             get {
@@ -952,7 +952,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change state method.
+        ///   Looks up a localized string similar to {0} contains change state method.
         /// </summary>
         public static string StateNodeMethods {
             get {
@@ -997,7 +997,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} is Strategy context field.
+        ///   Looks up a localized string similar to Strategy context field.
         /// </summary>
         public static string StrategyContextField {
             get {

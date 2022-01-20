@@ -397,7 +397,7 @@
     <value>Change state method in concrete state class</value>
   </data>
   <data name="StateConcrete" xml:space="preserve">
-    <value>{0} is your State concrete class</value>
+    <value>State concrete class</value>
   </data>
   <data name="StateContext" xml:space="preserve">
     <value>{0} is your State context class</value>
@@ -412,7 +412,7 @@
     <value>{0} used return type</value>
   </data>
   <data name="StateNodeMethods" xml:space="preserve">
-    <value>Change state method</value>
+    <value>{0} contains change state method</value>
   </data>
   <data name="Strategy" xml:space="preserve">
     <value>{0} is the parent class or interface of the concrete strategy class</value>
@@ -427,7 +427,7 @@
     <value>{0} is your Strategy context class</value>
   </data>
   <data name="StrategyContextField" xml:space="preserve">
-    <value>{0} is Strategy context field</value>
+    <value>Strategy context field</value>
   </data>
   <data name="StrategyFieldStateType" xml:space="preserve">
     <value>{0} used return type</value>
