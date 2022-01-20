@@ -14,7 +14,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Improved
 
-- Rewritten feedback text to one sentence that includes the file/node name
+- Rewrote feedback text to one sentence that includes the file/node name
 
 ### Removed
 
