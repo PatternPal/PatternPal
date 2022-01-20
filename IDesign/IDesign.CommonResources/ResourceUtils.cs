@@ -8,6 +8,7 @@ namespace IDesign.CommonResources
     public static class ResourceUtils
     {
         private static ResourceManager resourceMan;
+        private static readonly Regex regex = new Regex(@"\{\d+\}");
 
         public static ResourceManager ResourceManager
         {
@@ -32,24 +33,21 @@ namespace IDesign.CommonResources
             return ResourceManager.GetString(name, Culture);
         }
 
-        public static string ResourceMessageToString(IResourceMessage resMessage, ICheckResult result)
+        public static string ResourceMessageToString(IResourceMessage resMessage, ICheckResult result = null)
         {
             var message = "";
 
-            if (resMessage != null)
+            if (resMessage == null) return message;
+
+            message = GetResourceFromString(resMessage.GetKey());
+
+            if (resMessage.GetParameters() != null && resMessage.GetParameters().Length > 0)
             {
-                message = GetResourceFromString(resMessage.GetKey());
-
-                if (resMessage.GetParameters() != null && resMessage.GetParameters().Length > 0)
-                {
-                    message = string.Format(message, resMessage.GetParameters());
-                }
-                else if (ContainsCurlyBracketsWithDigits(resMessage))
-                {
-                    message = string.Format(message, result.GetElement());
-                }
-
-                return message;
+                message = string.Format(message, resMessage.GetParameters());
+            }
+            else if (result != null && ContainsCurlyBracketsWithDigits(resMessage))
+            {
+                message = string.Format(message, result.GetElement());
             }
 
             return message;
@@ -75,15 +73,13 @@ namespace IDesign.CommonResources
 
         private static bool ContainsCurlyBracketsWithDigits(IResourceMessage resMessage)
         {
-            if (resMessage != null)
-            {
-                var resMessageString = GetResourceFromString(resMessage?.GetKey());
-                var regex = new Regex(@"\{\d\}");
+            if (resMessage == null) return false;
 
-                if (resMessageString != null)
-                {
-                    return regex.IsMatch(resMessageString);
-                }
+            var resMessageString = GetResourceFromString(resMessage?.GetKey());
+
+            if (resMessageString != null)
+            {
+                return regex.IsMatch(resMessageString);
             }
 
             return false;

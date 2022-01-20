@@ -141,7 +141,8 @@ namespace IDesign.ConsoleApp
                     }
                 }
 
-                Trace.Write($"{i}) {name} | {results[i].Pattern.Name}");
+                Console.WriteLine($"{i}) {name} | {results[i].Pattern.Name}");
+                Trace.WriteLine($"{i}) {name} | {results[i].Pattern.Name}");
 
                 Console.ForegroundColor = ConsoleColor.Red;
 
