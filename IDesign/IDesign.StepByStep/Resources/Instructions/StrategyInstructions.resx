@@ -130,7 +130,7 @@
     <value>Create an interface (for example, ‘IQuackBehaviour’) that defines the behaviour you want to implement later. For example, ‘public string Quack();’.</value>
   </data>
   <data name="5" xml:space="preserve">
-    <value>Add to the abstract class (previously referred to as ‘Duck’) a property. The type of this property must be the interface that defines the behaviour you want to implement. For example, ‘QuackBehaviour’.</value>
+    <value>Add a property to the abstract class (previously referred to as ‘Duck’). The type of this property must be the interface that defines the behaviour you want to implement. For example, ‘QuackBehaviour’.</value>
   </data>
   <data name="6" xml:space="preserve">
     <value>In the abstract class (named “Duck” in a previous example), implement the method that performs the behaviour. It must call the behaviour method through the behaviour property (for example, QuackBehaviour.Quack();)</value>

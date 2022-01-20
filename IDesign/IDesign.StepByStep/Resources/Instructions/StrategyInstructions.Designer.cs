@@ -97,7 +97,7 @@ namespace IDesign.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add to the abstract class (previously referred to as ‘Duck’) a property. The type of this property must be the interface that defines the behaviour you want to implement. For example, ‘QuackBehaviour’..
+        ///   Looks up a localized string similar to Add a property to the abstract class (previously referred to as ‘Duck’). The type of this property must be the interface that defines the behaviour you want to implement. For example, ‘QuackBehaviour’..
         /// </summary>
         public static string _5 {
             get {
