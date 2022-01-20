@@ -8,7 +8,7 @@ namespace IDesign.Extension
         public static int GetDepth(this TreeViewItem item)
         {
             TreeViewItem parent;
-            while ((parent = GetParent(item)) != null)
+            if ((parent = GetParent(item)) != null)
             {
                 return GetDepth(parent) + 1;
             }
