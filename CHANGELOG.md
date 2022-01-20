@@ -9,7 +9,16 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- New user control to display detected Design Patterns using expander controls 
 - The Logging Api and Test in the root project
+
+## Improved
+
+- Rewritten feedback text to one sentence that includes the file/node name
+
+### Removed
+
+- TreeViewResults user control has been removed as it is has been replaced by ExpanderResults
 
 ### CI/CD
 
