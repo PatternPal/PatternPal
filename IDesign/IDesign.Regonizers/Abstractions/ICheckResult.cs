@@ -64,5 +64,10 @@ namespace IDesign.Recognizers.Abstractions
         /// </summary>
         /// <returns>True is one or more checks are knock-out checks and are incorrect, false otherwise</returns>
         bool HasIncorrectKnockOutCheck { get; set; }
+
+        /// <summary>
+        ///     Whether the feedback of the GroupCheck (excluding child feedback) should be hidden in the output
+        /// </summary>
+        bool IsHidden { get; set; }
     }
 }

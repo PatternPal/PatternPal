@@ -139,7 +139,7 @@ namespace IDesign.Extension.Views
             }
 
             // - Change your UI information here
-            TreeViewResults.ResultsView.ItemsSource = viewModels;
+             ExpanderResults.ResultsView.ItemsSource = viewModels;
         }
 
 

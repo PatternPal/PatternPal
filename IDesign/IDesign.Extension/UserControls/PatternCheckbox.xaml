@@ -75,7 +75,8 @@
                 <DockPanel LastChildFill="False">
                     <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked, Mode=TwoWay}" Width="Auto"
                               Margin="3" DockPanel.Dock="Left" Checked="CheckBox_Changed" Unchecked="CheckBox_Changed" />
-                    <Button DockPanel.Dock="Right" FontSize="12" VerticalContentAlignment="Top" Margin="3,3,3,3"
+                    <!-- TODO: Fix button to redirect to the corresponding wikipedia page -->
+                    <!--<Button DockPanel.Dock="Right" FontSize="12" VerticalContentAlignment="Top" Margin="3,3,3,3"
                             Width="17" Height="17" Content="?" Click="Button_Click" DataContext="{Binding WikiPage}">
                         <Button.Resources>
                             <Style TargetType="Border">
@@ -89,7 +90,7 @@
                                         Value="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
                             </Style>
                         </Button.Resources>
-                    </Button>
+                    </Button>-->
                 </DockPanel>
             </HierarchicalDataTemplate>
         </ListBox.ItemTemplate>

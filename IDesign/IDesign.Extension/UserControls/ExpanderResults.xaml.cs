@@ -12,15 +12,16 @@ using Microsoft.VisualStudio.TextManager.Interop;
 namespace IDesign.Extension.UserControls
 {
     /// <summary>
-    ///     Interaction logic for TreeViewResults.xaml
+    ///     Interaction logic for ExpanderResults.xaml
     /// </summary>
-    public partial class TreeViewResults : UserControl
+    public partial class ExpanderResults : UserControl
     {
-        public TreeViewResults()
+        public ExpanderResults()
         {
             InitializeComponent();
         }
 
+        //TODO: Handle clicking on a node to bring the user to the right document
         private void EventSetter_OnHandler(object sender, MouseButtonEventArgs e)
         {
             var viewItem = sender as TreeViewItem;
