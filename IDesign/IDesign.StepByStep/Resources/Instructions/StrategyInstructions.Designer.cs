@@ -70,7 +70,7 @@ namespace IDesign.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create subclasses that implement the previously created abstract class. For example, ‘RunnerDuck’ and ‘RubberDuck’..
+        ///   Looks up a localized string similar to Create subclasses that inherit the previously created abstract class. For example, ‘RunnerDuck’ and ‘RubberDuck’..
         /// </summary>
         public static string _2 {
             get {
