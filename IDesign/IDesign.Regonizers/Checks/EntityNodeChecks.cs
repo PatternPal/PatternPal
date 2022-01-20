@@ -35,18 +35,14 @@ namespace IDesign.Recognizers.Checks
                 return true;
             }
 
-            foreach (var _ in from relation in node.GetRelations().Where(
-                         x => x.GetRelationType() == RelationType.Extends ||
-                              x.GetRelationType() == RelationType.Implements
-                     )
-                     where relation.GetDestination()
-                         .MethodInEntityNode(methodName, amountOfParams)
-                     select new { })
-            {
-                return true;
-            }
-
-            return false;
+            return node.GetRelations()
+                .Where(
+                    x => x.GetRelationType() == RelationType.Extends ||
+                         x.GetRelationType() == RelationType.Implements
+                )
+                .Where(relation => relation.GetDestination().MethodInEntityNode(methodName, amountOfParams))
+                .Select(relation => new { })
+                .Any();
         }
 
         public static bool InterfaceImplementsMethod(this IEntity node, IMethod method)
