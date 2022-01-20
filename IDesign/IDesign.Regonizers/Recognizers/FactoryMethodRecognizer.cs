@@ -52,7 +52,7 @@ namespace IDesign.Recognizers.Recognizers
                                 }, "FactoryConcreteCreatorMethodAny"
                             ),
 
-                            //check if node (concrete creator) has creates relations
+                            //check if node (concrete creator) has created relations
                             new GroupCheck<IEntity, IEntity>(
                                 new List<ICheck<IEntity>>
                                 {
