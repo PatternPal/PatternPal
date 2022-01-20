@@ -115,7 +115,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adaptee should be used by an adapter..
+        ///   Looks up a localized string similar to Adaptee ({0}) should be used by an adapter..
         /// </summary>
         public static string AdapteeIsUsed {
             get {
@@ -250,7 +250,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method should have the component as a parameter..
+        ///   Looks up a localized string similar to Method ({0}) should have the component as a parameter..
         /// </summary>
         public static string ConcreteDecoratorMethodParameters {
             get {
@@ -322,7 +322,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Field should be the component..
+        ///   Looks up a localized string similar to Field ({0}) should be the component..
         /// </summary>
         public static string DecoratorComponentFieldType {
             get {
@@ -331,7 +331,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method should have the component as a parameter..
+        ///   Looks up a localized string similar to Method ({0}) should have the component as a parameter..
         /// </summary>
         public static string DecoratorComponentMethodParameters {
             get {
@@ -358,7 +358,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Abstract creator.
+        ///   Looks up a localized string similar to {0} is your Abstract creator.
         /// </summary>
         public static string FactoryAbstractCreator {
             get {
@@ -367,7 +367,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create method.
+        ///   Looks up a localized string similar to {0} contains the create method.
         /// </summary>
         public static string FactoryAbstractCreatorMethod {
             get {
@@ -385,7 +385,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create method of the concrete creator.
+        ///   Looks up a localized string similar to {0} contains the create method of the concrete creator.
         /// </summary>
         public static string FactoryConcreteCreatorMethod {
             get {
@@ -412,7 +412,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Product of the factory method.
+        ///   Looks up a localized string similar to {0} contains the Product of the Factory Method.
         /// </summary>
         public static string FactoryCreates {
             get {
@@ -529,7 +529,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There should be at least 3 methods: add, remove and notify..
+        ///   Looks up a localized string similar to {0} should have at least 3 methods: add, remove and notify..
         /// </summary>
         public static string MethodAmountThree {
             get {
@@ -790,7 +790,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Observer.
+        ///   Looks up a localized string similar to {0} is your Observer.
         /// </summary>
         public static string Observer {
             get {
@@ -889,7 +889,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parent class or interface of the concrete state class.
+        ///   Looks up a localized string similar to {0} is the parent class or interface of the concrete state class.
         /// </summary>
         public static string State {
             get {
@@ -961,7 +961,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parent class or interface of the concrete strategy class.
+        ///   Looks up a localized string similar to {0} is the parent class or interface of the concrete strategy class.
         /// </summary>
         public static string Strategy {
             get {

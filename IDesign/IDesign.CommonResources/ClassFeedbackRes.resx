@@ -136,7 +136,7 @@
     <value>Adapter field ({0}) should have adaptee as type.</value>
   </data>
   <data name="AdapteeIsUsed" xml:space="preserve">
-    <value>Adaptee should be used by an adapter.</value>
+    <value>Adaptee ({0}) should be used by an adapter.</value>
   </data>
   <data name="AdapterAdaptee" xml:space="preserve">
     <value>{0} should have adaptee.</value>
@@ -181,7 +181,7 @@
     <value>Concrete decorator ({0}) method</value>
   </data>
   <data name="ConcreteDecoratorMethodParameters" xml:space="preserve">
-    <value>Method should have the component as a parameter.</value>
+    <value>Method ({0}) should have the component as a parameter.</value>
   </data>
   <data name="ConcreteState" xml:space="preserve">
     <value>Concrete State</value>
@@ -205,10 +205,10 @@
     <value>Decorator component field</value>
   </data>
   <data name="DecoratorComponentFieldType" xml:space="preserve">
-    <value>Field should be the component.</value>
+    <value>Field ({0}) should be the component.</value>
   </data>
   <data name="DecoratorComponentMethodParameters" xml:space="preserve">
-    <value>Method should have the component as a parameter.</value>
+    <value>Method ({0}) should have the component as a parameter.</value>
   </data>
   <data name="DecoratorConcrete" xml:space="preserve">
     <value>Concrete decorator</value>
@@ -217,16 +217,16 @@
     <value>Concrete decorator method ({0}) should use the component and call its base.</value>
   </data>
   <data name="FactoryAbstractCreator" xml:space="preserve">
-    <value>Abstract creator</value>
+    <value>{0} is your Abstract creator</value>
   </data>
   <data name="FactoryAbstractCreatorMethod" xml:space="preserve">
-    <value>Create method</value>
+    <value>{0} contains the create method</value>
   </data>
   <data name="FactoryConcreteCreator" xml:space="preserve">
     <value>Concrete creator</value>
   </data>
   <data name="FactoryConcreteCreatorMethod" xml:space="preserve">
-    <value>Create method of the concrete creator</value>
+    <value>{0} contains the create method of the concrete creator</value>
   </data>
   <data name="FactoryConcreteCreatorMethodAny" xml:space="preserve">
     <value>Concrete creator ({0}) should have at least one method.</value>
@@ -235,7 +235,7 @@
     <value>Concrete product ({0}) should have at least one method.</value>
   </data>
   <data name="FactoryCreates" xml:space="preserve">
-    <value>Product of the factory method</value>
+    <value>{0} contains the Product of the Factory Method</value>
   </data>
   <data name="FactoryMethodCreateTypeProduct" xml:space="preserve">
     <value>Method ({0}) should create a product.</value>
@@ -274,7 +274,7 @@
     <value>Implementer should be used by the abstraction</value>
   </data>
   <data name="MethodAmountThree" xml:space="preserve">
-    <value>There should be at least 3 methods: add, remove and notify.</value>
+    <value>{0} should have at least 3 methods: add, remove and notify.</value>
   </data>
   <data name="MethodAny" xml:space="preserve">
     <value>{0} should have at least one method.</value>
@@ -358,7 +358,7 @@
     <value>Object adapter</value>
   </data>
   <data name="Observer" xml:space="preserve">
-    <value>Observer</value>
+    <value>{0} is your Observer</value>
   </data>
   <data name="ObserverConcreteSubject" xml:space="preserve">
     <value>Observer concrete subject</value>
@@ -391,7 +391,7 @@
     <value>Singleton method ({0}) should be able to return a new Singleton.</value>
   </data>
   <data name="State" xml:space="preserve">
-    <value>Parent class or interface of the concrete state class</value>
+    <value>{0} is the parent class or interface of the concrete state class</value>
   </data>
   <data name="StateClassChangeState" xml:space="preserve">
     <value>Change state method in concrete state class</value>
@@ -415,7 +415,7 @@
     <value>Change state method</value>
   </data>
   <data name="Strategy" xml:space="preserve">
-    <value>Parent class or interface of the concrete strategy class</value>
+    <value>{0} is the parent class or interface of the concrete strategy class</value>
   </data>
   <data name="StrategyConcrete" xml:space="preserve">
     <value>{0} is your Concrete strategy class</value>
