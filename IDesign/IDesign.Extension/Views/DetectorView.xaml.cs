@@ -209,7 +209,7 @@ namespace IDesign.Extension.Views
             SelectPaths.ProjectSelection.SelectedIndex = list.First();
         }
 
-        private async void Analyse()
+        private async Task Analyse()
         {
             LoadProject();
             var cur = GetCurrentPath().FirstOrDefault();

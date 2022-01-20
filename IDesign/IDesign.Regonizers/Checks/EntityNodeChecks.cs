@@ -18,15 +18,11 @@ namespace IDesign.Recognizers.Checks
 
         public static bool ClassImplementsInterfaceMethod(this IEntity node, IMethod method)
         {
-            foreach (var _ in from interFace in node.GetRelations()
-                         .Where(x => x.GetRelationType() == RelationType.Implements)
-                     where InterfaceImplementsMethod(interFace.GetDestination(), method)
-                     select new { })
-            {
-                return true;
-            }
-
-            return false;
+            return node.GetRelations()
+                .Where(x => x.GetRelationType() == RelationType.Implements)
+                .Where(interFace => InterfaceImplementsMethod(interFace.GetDestination(), method))
+                .Select(interFace => new { })
+                .Any();
         }
 
         public static bool MethodInEntityNode(this IEntity node, string methodName, int amountOfParams)
