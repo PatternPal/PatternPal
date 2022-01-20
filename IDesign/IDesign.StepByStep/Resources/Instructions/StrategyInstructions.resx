@@ -127,7 +127,7 @@
     <value>To the abstract class, add a method called “Perform[behaviour-name]”. For example, ‘PerformQuack’.</value>
   </data>
   <data name="4" xml:space="preserve">
-    <value>Create an interface (for example, ‘QuackBehaviour’) that defines the behaviour you want to implement later. For example, ‘public string Quack();’.</value>
+    <value>Create an interface (for example, ‘IQuackBehaviour’) that defines the behaviour you want to implement later. For example, ‘public string Quack();’.</value>
   </data>
   <data name="5" xml:space="preserve">
     <value>Add to the abstract class (previously referred to as ‘Duck’) a property. The type of this property must be the interface that defines the behaviour you want to implement. For example, ‘QuackBehaviour’.</value>

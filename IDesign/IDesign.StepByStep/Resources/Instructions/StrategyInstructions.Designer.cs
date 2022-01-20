@@ -88,7 +88,7 @@ namespace IDesign.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create an interface (for example, ‘QuackBehaviour’) that defines the behaviour you want to implement later. For example, ‘public string Quack();’..
+        ///   Looks up a localized string similar to Create an interface (for example, ‘IQuackBehaviour’) that defines the behaviour you want to implement later. For example, ‘public string Quack();’..
         /// </summary>
         public static string _4 {
             get {
