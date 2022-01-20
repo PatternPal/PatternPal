@@ -164,7 +164,7 @@ namespace IDesign.Extension.Views
             
             if (!correct) return;
 
-            //Save all changed state to the state between instructions, only when all is succefull
+            //Save all changed state to the state between instructions, only when all is successful
             foreach (var pair in state)
             {
                 keyed[pair.Key] = pair.Value?.GetFullName();
