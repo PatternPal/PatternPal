@@ -49,7 +49,7 @@ namespace IDesign.Extension.ViewModels
                 if (Score >= 80)
                     return InstructionCompletionStatusAlmostComplete;
 
-                return CompletionStatusNotComplete;
+                return InstructionCompletionStatusNotComplete;
             }
         }
         public int Score => Result.Result.GetScore();
