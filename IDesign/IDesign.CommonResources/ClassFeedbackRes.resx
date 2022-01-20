@@ -118,55 +118,52 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Abstraction" xml:space="preserve">
-    <value>Abstraction class</value>
+    <value>{0} is your Abstraction class</value>
   </data>
   <data name="AbstractionHasImplementerReference" xml:space="preserve">
-    <value>Abstraction contains a reference to the Implementer</value>
+    <value>Abstraction contains a reference ({0}) to the Implementer</value>
   </data>
   <data name="AbstractionUsesImplementer" xml:space="preserve">
-    <value>Should use the Implementer</value>
+    <value>Abstraction should use the Implementer ({0})</value>
   </data>
   <data name="AbstractState" xml:space="preserve">
     <value>Abstract State</value>
   </data>
   <data name="AdapteeExtendsApter" xml:space="preserve">
-    <value>Adaptee should extend an adapter.</value>
+    <value>Adaptee ({0}) should extend an adapter.</value>
   </data>
   <data name="AdapteeField" xml:space="preserve">
-    <value>Adapter field should have adaptee as type.</value>
+    <value>Adapter field ({0}) should have adaptee as type.</value>
   </data>
   <data name="AdapteeIsUsed" xml:space="preserve">
-    <value>Adaptee should be used by an adapter.</value>
+    <value>Adaptee ({0}) should be used by an adapter.</value>
   </data>
   <data name="AdapterAdaptee" xml:space="preserve">
-    <value>Should have adaptee.</value>
+    <value>{0} should have adaptee.</value>
   </data>
   <data name="AdapterClass" xml:space="preserve">
     <value>Class adapter</value>
   </data>
   <data name="AdapterMethod" xml:space="preserve">
-    <value>All Adapter methods should call adaptee.</value>
+    <value>Adapter method ({0}) should call adaptee.</value>
   </data>
   <data name="AdapterMethodReturnType" xml:space="preserve">
-    <value>Adapter method should return adaptee.</value>
+    <value>Adapter method ({0}) should return adaptee.</value>
   </data>
   <data name="AdapterMethodUses" xml:space="preserve">
-    <value>Adapter method should use adaptee.</value>
+    <value>Adapter method ({0}) should use adaptee.</value>
   </data>
   <data name="Bridge" xml:space="preserve">
     <value>Bridge</value>
   </data>
   <data name="BridgeAbstraction" xml:space="preserve">
-    <value>Bridge Abstraction</value>
+    <value>{0} is your Bridge Abstraction</value>
   </data>
   <data name="BridgeImplementer" xml:space="preserve">
-    <value>Bridge Implementer</value>
-  </data>
-  <data name="BridgeImplementor" xml:space="preserve">
-    <value>Bridge Implementor</value>
+    <value>{0} is your Bridge Implementer</value>
   </data>
   <data name="Child" xml:space="preserve">
-    <value>Should be extended by a class.</value>
+    <value>{0} should be extended by a class.</value>
   </data>
   <data name="CompletionStatusAlmostComplete" xml:space="preserve">
     <value>This pattern is almost complete!</value>
@@ -178,13 +175,13 @@
     <value>This pattern is not close to completion yet.</value>
   </data>
   <data name="ConcreteDecoratorConstructor" xml:space="preserve">
-    <value>Concrete decorator constructor</value>
+    <value>Concrete decorator ({0}) constructor</value>
   </data>
   <data name="ConcreteDecoratorMethod" xml:space="preserve">
-    <value>Concrete decorator method</value>
+    <value>Concrete decorator ({0}) method</value>
   </data>
   <data name="ConcreteDecoratorMethodParameters" xml:space="preserve">
-    <value>Method should have the component as a parameter.</value>
+    <value>Method ({0}) should have the component as a parameter.</value>
   </data>
   <data name="ConcreteState" xml:space="preserve">
     <value>Concrete State</value>
@@ -199,7 +196,7 @@
     <value>Decorator component</value>
   </data>
   <data name="DecoratorComponentChild" xml:space="preserve">
-    <value>Should be implemented or extended by one other class.</value>
+    <value>{0} should be implemented or extended by one other class.</value>
   </data>
   <data name="DecoratorComponentConstructor" xml:space="preserve">
     <value>Decorator component constructor</value>
@@ -208,109 +205,109 @@
     <value>Decorator component field</value>
   </data>
   <data name="DecoratorComponentFieldType" xml:space="preserve">
-    <value>Field should be the component.</value>
+    <value>Field ({0}) should be the component.</value>
   </data>
   <data name="DecoratorComponentMethodParameters" xml:space="preserve">
-    <value>Method should have the component as a parameter.</value>
+    <value>Method ({0}) should have the component as a parameter.</value>
   </data>
   <data name="DecoratorConcrete" xml:space="preserve">
     <value>Concrete decorator</value>
   </data>
   <data name="DecoratorConcreteMethodArguments" xml:space="preserve">
-    <value>Concrete decorator method should use the component and call its base.</value>
+    <value>Concrete decorator method ({0}) should use the component and call its base.</value>
   </data>
   <data name="FactoryAbstractCreator" xml:space="preserve">
-    <value>Abstract creator</value>
+    <value>{0} is your Abstract creator</value>
   </data>
   <data name="FactoryAbstractCreatorMethod" xml:space="preserve">
-    <value>Create method</value>
+    <value>{0} contains the create method</value>
   </data>
   <data name="FactoryConcreteCreator" xml:space="preserve">
     <value>Concrete creator</value>
   </data>
   <data name="FactoryConcreteCreatorMethod" xml:space="preserve">
-    <value>Create method of the concrete creator</value>
+    <value>{0} contains the create method of the concrete creator</value>
   </data>
   <data name="FactoryConcreteCreatorMethodAny" xml:space="preserve">
-    <value>Concrete creator should have at least one method.</value>
+    <value>Concrete creator ({0}) should have at least one method.</value>
   </data>
   <data name="FactoryConcreteProductMethodAny" xml:space="preserve">
-    <value>Concrete product should have at least one method.</value>
+    <value>Concrete product ({0}) should have at least one method.</value>
   </data>
   <data name="FactoryCreates" xml:space="preserve">
-    <value>Product of the factory method</value>
+    <value>{0} contains the Product of the Factory Method</value>
   </data>
   <data name="FactoryMethodCreateTypeProduct" xml:space="preserve">
-    <value>Method should create a product.</value>
+    <value>Method ({0}) should create a product.</value>
   </data>
   <data name="FactoryMethodReturnTypeProduct" xml:space="preserve">
-    <value>Method should return a product.</value>
+    <value>Method ({0}) should return a product.</value>
   </data>
   <data name="FactoryMethodReturnTypeProductInterface" xml:space="preserve">
-    <value>Method should return a product interface.</value>
+    <value>Method ({0}) should return a product interface.</value>
   </data>
   <data name="FieldModifierNotPublic" xml:space="preserve">
-    <value>Field should not be public.</value>
+    <value>Field ({0}) should not be public.</value>
   </data>
   <data name="FieldModifierPrivate" xml:space="preserve">
-    <value>Field should be private.</value>
+    <value>Field ({0}) should be private.</value>
   </data>
   <data name="FieldModifierStatic" xml:space="preserve">
-    <value>Field should be static.</value>
+    <value>Field ({0}) should be static.</value>
   </data>
   <data name="FieldType" xml:space="preserve">
-    <value>Field type should be {0}.</value>
+    <value>Field type should be {0}</value>
   </data>
   <data name="ImplementerAbstractOrInterface" xml:space="preserve">
-    <value>Implementer should be an abstract class or an interface</value>
+    <value>Implementer ({0}) should be an abstract class or an interface</value>
   </data>
   <data name="ImplementerMethods" xml:space="preserve">
-    <value>Implementer methods</value>
+    <value>Implementer ({0}) methods</value>
   </data>
   <data name="ImplementerMethodsUsedInAbstraction" xml:space="preserve">
-    <value>Implementer methods should be used by Abstraction methods</value>
+    <value>Implementer methods ({0}) should be used by Abstraction methods</value>
   </data>
   <data name="ImplementerReference" xml:space="preserve">
-    <value>Implementer reference</value>
+    <value>Implementer {0} reference</value>
   </data>
   <data name="ImplementerUsedByAbstraction" xml:space="preserve">
     <value>Implementer should be used by the abstraction</value>
   </data>
   <data name="MethodAmountThree" xml:space="preserve">
-    <value>There should be at least 3 methods: add, remove and notify.</value>
+    <value>{0} should have at least 3 methods: add, remove and notify.</value>
   </data>
   <data name="MethodAny" xml:space="preserve">
-    <value>Should have at least one method.</value>
+    <value>{0} should have at least one method.</value>
   </data>
   <data name="MethodBaseCall" xml:space="preserve">
-    <value>Calls base method</value>
+    <value>Method ({0}) calls base method</value>
   </data>
   <data name="MethodBodyEmpty" xml:space="preserve">
-    <value>Method body should be empty.</value>
+    <value>Method ({0}) body should be empty.</value>
   </data>
   <data name="MethodCreateSameInterface" xml:space="preserve">
-    <value>Method should create a different class of the same interface as this class.</value>
+    <value>Method ({0}) should create a different class of the same interface as this class.</value>
   </data>
   <data name="MethodCreateType" xml:space="preserve">
-    <value>Method should create {0}.</value>
+    <value>Method ({0}) should create.</value>
   </data>
   <data name="MethodModifierAbstract" xml:space="preserve">
-    <value>Method should be abstract.</value>
+    <value>Method ({0}) should be abstract.</value>
   </data>
   <data name="MethodModifierNotPrivate" xml:space="preserve">
-    <value>Method should not be private.</value>
+    <value>Method ({0}) should not be private.</value>
   </data>
   <data name="MethodModifierPublic" xml:space="preserve">
-    <value>Method should be public.</value>
+    <value>Method ({0}) should be public.</value>
   </data>
   <data name="MethodModifierStatic" xml:space="preserve">
-    <value>Method should be static.</value>
+    <value>Method ({0}) should be static.</value>
   </data>
   <data name="MethodNameOverride" xml:space="preserve">
-    <value>Method should override base method.</value>
+    <value>Method ({0}) should override base method.</value>
   </data>
   <data name="MethodOverride" xml:space="preserve">
-    <value>Method should override or is implemented.</value>
+    <value>Method ({0}) should override or is implemented.</value>
   </data>
   <data name="MethodParameterNone" xml:space="preserve">
     <value>Class should have no methods with this parameter type {0}.</value>
@@ -325,43 +322,43 @@
     <value>Method should return {0}.</value>
   </data>
   <data name="NodeAbstractOrInterface" xml:space="preserve">
-    <value>Node should be an abstract class or an interface.</value>
+    <value>{0} should be an abstract class or an interface.</value>
   </data>
   <data name="NodeDoesNotCreate" xml:space="preserve">
-    <value>Should not create other classes.</value>
+    <value>{0} should not create other classes.</value>
   </data>
   <data name="NodeDoesNotUse" xml:space="preserve">
-    <value>Should not use other classes.</value>
+    <value>{0} should not use other classes.</value>
   </data>
   <data name="NodeImplementedByAny" xml:space="preserve">
-    <value>Should be implemented by an interface</value>
+    <value>{0} should be implemented by an interface</value>
   </data>
   <data name="NodeImplementedOrInherited" xml:space="preserve">
-    <value>Node should be implemented or inherited</value>
+    <value>{0} should be implemented or inherited</value>
   </data>
   <data name="NodeInherited" xml:space="preserve">
-    <value>Class should be inherited</value>
+    <value>{0} should be inherited</value>
   </data>
   <data name="NodeModifierAbstract" xml:space="preserve">
-    <value>Class should be abstract.</value>
+    <value>Class {0} should be abstract.</value>
   </data>
   <data name="NodeNotImplementedAny" xml:space="preserve">
-    <value>Should not implement an interface.</value>
+    <value>{0} should not implement an interface.</value>
   </data>
   <data name="NodeTypeClass" xml:space="preserve">
-    <value>Should be a class.</value>
+    <value>{0} should be a class.</value>
   </data>
   <data name="NodeUsedByAny" xml:space="preserve">
-    <value>Node should be used by other classes.</value>
+    <value>{0} should be used by other classes.</value>
   </data>
   <data name="NodeUses1" xml:space="preserve">
-    <value>Should use at least 1 other node</value>
+    <value>{0} should use at least 1 other node</value>
   </data>
   <data name="ObjectAdapter" xml:space="preserve">
     <value>Object adapter</value>
   </data>
   <data name="Observer" xml:space="preserve">
-    <value>Observer</value>
+    <value>{0} is your Observer</value>
   </data>
   <data name="ObserverConcreteSubject" xml:space="preserve">
     <value>Observer concrete subject</value>
@@ -376,25 +373,25 @@
     <value>Subject interface</value>
   </data>
   <data name="Parent" xml:space="preserve">
-    <value>Should be extended by a class or implemented by an interface.</value>
+    <value>{0} should be extended by a class or implemented by an interface.</value>
   </data>
   <data name="ProductClass" xml:space="preserve">
-    <value>Should be product class.</value>
+    <value>{0} should be product class.</value>
   </data>
   <data name="SingletonConstructor" xml:space="preserve">
-    <value>Non public constructor</value>
+    <value>{0} is not a public constructor</value>
   </data>
   <data name="SingletonField" xml:space="preserve">
-    <value>Should have an instance of itself.</value>
+    <value>{0} should have an instance of itself.</value>
   </data>
   <data name="SingletonMethod" xml:space="preserve">
-    <value>Should have GetInstance().</value>
+    <value>"{0}" should have GetInstance().</value>
   </data>
   <data name="SingletonMethodReturnCreationType" xml:space="preserve">
-    <value>Singleton method should be able to return a new Singleton.</value>
+    <value>Singleton method ({0}) should be able to return a new Singleton.</value>
   </data>
   <data name="State" xml:space="preserve">
-    <value>Parent class or interface of the concrete state class</value>
+    <value>{0} is the parent class or interface of the concrete state class</value>
   </data>
   <data name="StateClassChangeState" xml:space="preserve">
     <value>Change state method in concrete state class</value>
@@ -403,40 +400,40 @@
     <value>State concrete class</value>
   </data>
   <data name="StateContext" xml:space="preserve">
-    <value>State context class</value>
+    <value>{0} is your State context class</value>
   </data>
   <data name="StateContextField" xml:space="preserve">
-    <value>State context field</value>
+    <value>{0} is your State context field</value>
   </data>
   <data name="StateCreatesOtherState" xml:space="preserve">
     <value>Concrete state class should create another state</value>
   </data>
   <data name="StateFieldStateType" xml:space="preserve">
-    <value>Used return type</value>
+    <value>{0} used return type</value>
   </data>
   <data name="StateNodeMethods" xml:space="preserve">
-    <value>Change state method</value>
+    <value>{0} contains change state method</value>
   </data>
   <data name="Strategy" xml:space="preserve">
-    <value>Parent class or interface of the concrete strategy class</value>
+    <value>{0} is the parent class or interface of the concrete strategy class</value>
   </data>
   <data name="StrategyConcrete" xml:space="preserve">
-    <value>Concrete strategy class</value>
+    <value>{0} is your Concrete strategy class</value>
   </data>
   <data name="StrategyConcreteMethod" xml:space="preserve">
-    <value>Concrete strategy method</value>
+    <value>{0} is your Concrete strategy method</value>
   </data>
   <data name="StrategyContext" xml:space="preserve">
-    <value>Strategy context class</value>
+    <value>{0} is your Strategy context class</value>
   </data>
   <data name="StrategyContextField" xml:space="preserve">
     <value>Strategy context field</value>
   </data>
   <data name="StrategyFieldStateType" xml:space="preserve">
-    <value>Used return type</value>
+    <value>{0} used return type</value>
   </data>
   <data name="StrategyNodeMethods" xml:space="preserve">
-    <value>Strategy method</value>
+    <value>{0} is your Strategy method</value>
   </data>
   <data name="Modifier" xml:space="preserve">
     <value>{0} should be {1}</value>

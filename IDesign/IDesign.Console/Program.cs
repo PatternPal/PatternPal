@@ -141,7 +141,8 @@ namespace IDesign.ConsoleApp
                     }
                 }
 
-                Trace.Write($"{i}) {name} | {results[i].Pattern.Name}");
+                Console.WriteLine($"{i}) {name} | {results[i].Pattern.Name}");
+                Trace.WriteLine($"{i}) {name} | {results[i].Pattern.Name}");
 
                 Console.ForegroundColor = ConsoleColor.Red;
 
@@ -172,7 +173,7 @@ namespace IDesign.ConsoleApp
             }
 
             var text = new string('\t', depth) + symbol +
-                       $"{ResourceUtils.ResultToString(result)}";
+                       $" {ResourceUtils.ResultToString(result)}";
 
             Console.WriteLine(text);
             Trace.WriteLine(text);

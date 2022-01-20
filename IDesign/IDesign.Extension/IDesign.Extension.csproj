@@ -57,7 +57,6 @@
     <Compile Include="Commands\BackCommand.cs" />
     <Compile Include="Commands\LoggingApiClient.cs" />
     <Compile Include="Commands\NavigateCommand.cs" />
-    <Compile Include="LeftMarginMultiplierConverter.cs" />
     <Compile Include="Model\Action.cs" />
     <Compile Include="Model\InstructionState.cs" />
     <Compile Include="Resources\ExtensionUIResources.Designer.cs">
@@ -74,7 +73,6 @@
     <Compile Include="Stores\NavigationStore.cs" />
     <Compile Include="Commands\SubscribeBuildEvents.cs" />
     <Compile Include="SummaryFactory.cs" />
-    <Compile Include="TreeViewItemExtensions.cs" />
     <Compile Include="UserControls\PatternCheckbox.xaml.cs">
       <DependentUpon>PatternCheckbox.xaml</DependentUpon>
     </Compile>
@@ -83,9 +81,6 @@
     </Compile>
     <Compile Include="UserControls\ExpanderResults.xaml.cs">
       <DependentUpon>ExpanderResults.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\TreeViewResults.xaml.cs">
-      <DependentUpon>TreeViewResults.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\CheckResultViewModel.cs" />
     <Compile Include="ViewModels\DesignPatternViewModel.cs" />
@@ -195,10 +190,6 @@
     <Page Include="UserControls\ExpanderResults.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UserControls\TreeViewResults.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DetectorView.xaml">
       <SubType>Designer</SubType>

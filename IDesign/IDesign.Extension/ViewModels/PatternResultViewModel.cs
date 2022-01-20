@@ -3,15 +3,16 @@ using System.Linq;
 using System.Windows.Media;
 using IDesign.Core.Models;
 using IDesign.Recognizers.Abstractions;
-using IDesign.Recognizers.Models.ElementChecks;
 using SyntaxTree.Abstractions.Entities;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
-using SyntaxTree.Abstractions;
 using static IDesign.CommonResources.ClassFeedbackRes;
 
 namespace IDesign.Extension.ViewModels
 {
+    /// <summary>
+    /// Enum that is used to determine the correct icon to display
+    /// </summary>
     public enum Status
     {
         Warning,
@@ -28,6 +29,10 @@ namespace IDesign.Extension.ViewModels
         public RecognitionResult Result { get; set; }
         public string PatternName => Result.Pattern.Name;
 
+        /// <summary>
+        /// Text that describes the pattern completeness based on the score value.
+        /// Strings are loaded from Resources file
+        /// </summary>
         public string PatternCompletionStatusText
         {
             get
@@ -52,6 +57,10 @@ namespace IDesign.Extension.ViewModels
                 return InstructionCompletionStatusNotComplete;
             }
         }
+
+        /// <summary>
+        /// Completion score. 100 means all requirements are fulfilled.
+        /// </summary>
         public int Score => Result.Result.GetScore();
 
         public bool Expanded { get; set; } = false;
@@ -76,21 +85,37 @@ namespace IDesign.Extension.ViewModels
             }
         }
 
-        public SolidColorBrush Color => GetColor(Result.Result.GetScore());
+        public SolidColorBrush ProgressBarColor => GetProgressBarColor();
 
+        /// <summary>
+        /// IEnumerable that contains checkresults for all correctly implemented requirements
+        /// </summary>
         public IEnumerable<object> CorrectRequirements =>
             AddRequirementsFromResults(Result.Result.GetResults(), new List<CheckResultViewModel>(), FeedbackType.Correct);
 
+        /// <summary>
+        /// IEnumerable that contains checkresults for all incorrectly implemented requirements
+        /// </summary>
         public IEnumerable<object> IncorrectRequirements =>
             AddRequirementsFromResults(Result.Result.GetResults(), new List<CheckResultViewModel>(), FeedbackType.Incorrect);
 
         public IEntity EntityNode { get; internal set; }
 
-        public SolidColorBrush GetColor(int score)
+        /// <summary>
+        /// Returns the progress bar color based on the score value.
+        /// </summary>
+        /// <returns></returns>
+        public SolidColorBrush GetProgressBarColor()
         {
+            var score = Result.Result.GetScore();
+
             return score < 40 ? Brushes.Red : score < 80 ? Brushes.Yellow : Brushes.Green;
         }
 
+        /// <summary>
+        /// Returns the correct feedback type based on the score
+        /// </summary>
+        /// <returns></returns>
         public FeedbackType GetFeedbackType()
         {
             var score = Result.Result.GetScore();
@@ -107,6 +132,13 @@ namespace IDesign.Extension.ViewModels
             return FeedbackType.Correct;
         }
 
+        /// <summary>
+        /// Takes the results and adds the requirements (Group checks) as a list of CheckResultViewModel classes
+        /// </summary>
+        /// <param name="results"></param>
+        /// <param name="destination"></param>
+        /// <param name="feedbackType"></param>
+        /// <returns>A list that contains CheckResultViewModel classes</returns>
         public IList<CheckResultViewModel> AddRequirementsFromResults(
             IEnumerable<ICheckResult> results,
             IList<CheckResultViewModel> destination,
@@ -117,11 +149,18 @@ namespace IDesign.Extension.ViewModels
             {
                 var childFeedback = result.GetChildFeedback();
 
-                var hasChildrenWithGivenFeedbackType = 
-                    childFeedback.Any(x => x.GetFeedbackType() == feedbackType && 
-                                           !x.GetChildFeedback().Any());
+                // Child feedback has at least one element check from the given feedback type
+                var hasChildrenFromGivenFeedbackType = 
+                    childFeedback.Any(
+                        x => x.GetFeedbackType() == feedbackType && 
+                            !x.GetChildFeedback().Any()
+                    );
 
-                if (!result.IsHidden && hasChildrenWithGivenFeedbackType)
+                if (!result.IsHidden && hasChildrenFromGivenFeedbackType)
+                {
+                    destination.Add(new CheckResultViewModel(result, feedbackType));
+                }
+                else if (result.IsHidden && hasChildrenFromGivenFeedbackType && feedbackType == FeedbackType.Incorrect)
                 {
                     destination.Add(new CheckResultViewModel(result, feedbackType));
                 }
@@ -138,6 +177,9 @@ namespace IDesign.Extension.ViewModels
 
     public class PatternResultPartViewModel
     {
+        /// <summary>
+        /// The icon to be shown for the result part.
+        /// </summary>
         public ImageMoniker Icon =>
             CurrentStatus == Status.Warning ? KnownMonikers.StatusWarning : KnownMonikers.StatusOK;
 
@@ -147,6 +189,10 @@ namespace IDesign.Extension.ViewModels
 
         public FeedbackType FeedbackType { get; set; }
 
+        /// <summary>
+        /// Text that contains the amount of correct/incorrect requirements.
+        /// Part of the string is loaded from the Resources file.
+        /// </summary>
         public string SummaryText
         {
             get
@@ -180,6 +226,11 @@ namespace IDesign.Extension.ViewModels
             FeedbackType = feedbackType;
         }
 
+        /// <summary>
+        /// Counts the children recursively for a given ICheckResult
+        /// </summary>
+        /// <param name="result">The ICheckResult for which to count the children</param>
+        /// <returns>Children count</returns>
         private int CountChildren(ICheckResult result)
         {
             int totalCount = 0;

@@ -56,7 +56,9 @@ namespace IDesign.Core
             var results = new List<RecognitionResult>();
             var j = 0;
 
-            var entities = Graph?.GetAll();
+            if (Graph == null) return results;
+
+            var entities = Graph.GetAll();
             foreach (var node in entities?.Values)
             {
                 j++;

@@ -45,13 +45,15 @@ namespace IDesign.Recognizers
                 )
             };
 
-            var implementerGroupCheck = new GroupCheck<IEntity, IEntity>(
-                implementerChecks,
-                x => entityNode
+            var implementerName = entityNode
                     .GetRelations()
                     .Where(y => y.GetRelationType().Equals(RelationType.Uses))
-                    .Select(y => y.GetDestination()),
-                "BridgeImplementer"
+                    .Select(y => y.GetDestination());
+
+            var implementerGroupCheck = new GroupCheck<IEntity, IEntity>(
+                implementerChecks,
+                x => implementerName,
+                new ResourceMessage("BridgeImplementer", implementerName?.FirstOrDefault()?.GetName())
             );
 
             var abstractionGroupCheckList = new List<ICheck<IEntity>>

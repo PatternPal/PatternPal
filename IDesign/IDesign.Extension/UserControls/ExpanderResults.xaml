@@ -41,9 +41,9 @@
                                                  Height="5" 
                                                  Value="{Binding Path=Score, Mode=OneWay}"
                                                  Width="30" Margin="10 0 0 0" 
-                                                 BorderBrush="{Binding Color}" 
+                                                 BorderBrush="{Binding ProgressBarColor}" 
                                                  BorderThickness="1"
-                                                 Foreground="{Binding Color}" />
+                                                 Foreground="{Binding ProgressBarColor}" />
                                 </StackPanel>
                             </Expander.Header>
                             <StackPanel>
