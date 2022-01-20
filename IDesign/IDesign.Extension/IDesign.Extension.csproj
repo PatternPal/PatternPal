@@ -83,9 +83,6 @@
     <Compile Include="UserControls\ExpanderResults.xaml.cs">
       <DependentUpon>ExpanderResults.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\TreeViewResults.xaml.cs">
-      <DependentUpon>TreeViewResults.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\CheckResultViewModel.cs" />
     <Compile Include="ViewModels\DesignPatternViewModel.cs" />
     <Compile Include="ExtensionWindow.cs" />
@@ -194,10 +191,6 @@
     <Page Include="UserControls\ExpanderResults.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UserControls\TreeViewResults.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DetectorView.xaml">
       <SubType>Designer</SubType>
