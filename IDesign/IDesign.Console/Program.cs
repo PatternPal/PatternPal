@@ -83,7 +83,7 @@ namespace IDesign.ConsoleApp
             //When no specific pattern is chosen, select all
             if (selectedPatterns.Count == 0)
             {
-                selectedPatterns = designPatternsList;
+                selectedPatterns = designPatternsList.ToList();
             }
 
             Console.WriteLine("Selected files:");
