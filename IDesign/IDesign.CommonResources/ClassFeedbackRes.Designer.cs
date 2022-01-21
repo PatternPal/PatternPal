@@ -19,7 +19,7 @@ namespace IDesign.CommonResources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class ClassFeedbackRes {
@@ -61,7 +61,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Abstraction class.
+        ///   Looks up a localized string similar to {0} is your Abstraction class.
         /// </summary>
         public static string Abstraction {
             get {
@@ -70,7 +70,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Abstraction contains a reference to the Implementer.
+        ///   Looks up a localized string similar to Abstraction contains a reference ({0}) to the Implementer.
         /// </summary>
         public static string AbstractionHasImplementerReference {
             get {
@@ -79,7 +79,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should use the Implementer.
+        ///   Looks up a localized string similar to Abstraction should use the Implementer ({0}).
         /// </summary>
         public static string AbstractionUsesImplementer {
             get {
@@ -97,7 +97,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adaptee should extend an adapter..
+        ///   Looks up a localized string similar to Adaptee ({0}) should extend an adapter..
         /// </summary>
         public static string AdapteeExtendsApter {
             get {
@@ -106,7 +106,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adapter field should have adaptee as type..
+        ///   Looks up a localized string similar to Adapter field ({0}) should have adaptee as type..
         /// </summary>
         public static string AdapteeField {
             get {
@@ -115,7 +115,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adaptee should be used by an adapter..
+        ///   Looks up a localized string similar to Adaptee ({0}) should be used by an adapter..
         /// </summary>
         public static string AdapteeIsUsed {
             get {
@@ -124,7 +124,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should have adaptee..
+        ///   Looks up a localized string similar to {0} should have adaptee..
         /// </summary>
         public static string AdapterAdaptee {
             get {
@@ -142,7 +142,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All Adapter methods should call adaptee..
+        ///   Looks up a localized string similar to Adapter method ({0}) should call adaptee..
         /// </summary>
         public static string AdapterMethod {
             get {
@@ -151,7 +151,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adapter method should return adaptee..
+        ///   Looks up a localized string similar to Adapter method ({0}) should return adaptee..
         /// </summary>
         public static string AdapterMethodReturnType {
             get {
@@ -160,7 +160,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adapter method should use adaptee..
+        ///   Looks up a localized string similar to Adapter method ({0}) should use adaptee..
         /// </summary>
         public static string AdapterMethodUses {
             get {
@@ -178,7 +178,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bridge Abstraction.
+        ///   Looks up a localized string similar to {0} is your Bridge Abstraction.
         /// </summary>
         public static string BridgeAbstraction {
             get {
@@ -187,7 +187,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bridge Implementer.
+        ///   Looks up a localized string similar to {0} is your Bridge Implementer.
         /// </summary>
         public static string BridgeImplementer {
             get {
@@ -196,16 +196,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bridge Implementor.
-        /// </summary>
-        public static string BridgeImplementor {
-            get {
-                return ResourceManager.GetString("BridgeImplementor", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Should be extended by a class..
+        ///   Looks up a localized string similar to {0} should be extended by a class..
         /// </summary>
         public static string Child {
             get {
@@ -214,7 +205,34 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Concrete decorator constructor.
+        ///   Looks up a localized string similar to This pattern is almost complete!.
+        /// </summary>
+        public static string CompletionStatusAlmostComplete {
+            get {
+                return ResourceManager.GetString("CompletionStatusAlmostComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This pattern has been completed..
+        /// </summary>
+        public static string CompletionStatusComplete {
+            get {
+                return ResourceManager.GetString("CompletionStatusComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This pattern is not close to completion yet..
+        /// </summary>
+        public static string CompletionStatusNotComplete {
+            get {
+                return ResourceManager.GetString("CompletionStatusNotComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Concrete decorator ({0}) constructor.
         /// </summary>
         public static string ConcreteDecoratorConstructor {
             get {
@@ -223,7 +241,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Concrete decorator method.
+        ///   Looks up a localized string similar to Concrete decorator ({0}) method.
         /// </summary>
         public static string ConcreteDecoratorMethod {
             get {
@@ -232,7 +250,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method should have the component as a parameter..
+        ///   Looks up a localized string similar to Method ({0}) should have the component as a parameter..
         /// </summary>
         public static string ConcreteDecoratorMethodParameters {
             get {
@@ -277,7 +295,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should be implemented or extended by one other class..
+        ///   Looks up a localized string similar to {0} should be implemented or extended by one other class..
         /// </summary>
         public static string DecoratorComponentChild {
             get {
@@ -304,7 +322,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Field should be the component..
+        ///   Looks up a localized string similar to Field ({0}) should be the component..
         /// </summary>
         public static string DecoratorComponentFieldType {
             get {
@@ -313,7 +331,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method should have the component as a parameter..
+        ///   Looks up a localized string similar to Method ({0}) should have the component as a parameter..
         /// </summary>
         public static string DecoratorComponentMethodParameters {
             get {
@@ -331,7 +349,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Concrete decorator method should use the component and call its base..
+        ///   Looks up a localized string similar to Concrete decorator method ({0}) should use the component and call its base..
         /// </summary>
         public static string DecoratorConcreteMethodArguments {
             get {
@@ -340,7 +358,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Abstract creator.
+        ///   Looks up a localized string similar to {0} is your Abstract creator.
         /// </summary>
         public static string FactoryAbstractCreator {
             get {
@@ -349,7 +367,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create method.
+        ///   Looks up a localized string similar to {0} contains the create method.
         /// </summary>
         public static string FactoryAbstractCreatorMethod {
             get {
@@ -367,7 +385,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create method of the concrete creator.
+        ///   Looks up a localized string similar to {0} contains the create method of the concrete creator.
         /// </summary>
         public static string FactoryConcreteCreatorMethod {
             get {
@@ -376,7 +394,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Concrete creator should have at least one method..
+        ///   Looks up a localized string similar to Concrete creator ({0}) should have at least one method..
         /// </summary>
         public static string FactoryConcreteCreatorMethodAny {
             get {
@@ -385,7 +403,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Concrete product should have at least one method..
+        ///   Looks up a localized string similar to Concrete product ({0}) should have at least one method..
         /// </summary>
         public static string FactoryConcreteProductMethodAny {
             get {
@@ -394,7 +412,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Product of the factory method.
+        ///   Looks up a localized string similar to {0} contains the Product of the Factory Method.
         /// </summary>
         public static string FactoryCreates {
             get {
@@ -403,7 +421,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method should create a product..
+        ///   Looks up a localized string similar to Method ({0}) should create a product..
         /// </summary>
         public static string FactoryMethodCreateTypeProduct {
             get {
@@ -412,7 +430,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method should return a product..
+        ///   Looks up a localized string similar to Method ({0}) should return a product..
         /// </summary>
         public static string FactoryMethodReturnTypeProduct {
             get {
@@ -421,7 +439,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method should return a product interface..
+        ///   Looks up a localized string similar to Method ({0}) should return a product interface..
         /// </summary>
         public static string FactoryMethodReturnTypeProductInterface {
             get {
@@ -430,7 +448,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Field should not be public..
+        ///   Looks up a localized string similar to Field ({0}) should not be public..
         /// </summary>
         public static string FieldModifierNotPublic {
             get {
@@ -439,7 +457,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Field should be private..
+        ///   Looks up a localized string similar to Field ({0}) should be private..
         /// </summary>
         public static string FieldModifierPrivate {
             get {
@@ -448,7 +466,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Field should be static..
+        ///   Looks up a localized string similar to Field ({0}) should be static..
         /// </summary>
         public static string FieldModifierStatic {
             get {
@@ -457,7 +475,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Field type should be {0}..
+        ///   Looks up a localized string similar to Field type should be {0}.
         /// </summary>
         public static string FieldType {
             get {
@@ -466,7 +484,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Implementer should be an abstract class or an interface.
+        ///   Looks up a localized string similar to Implementer ({0}) should be an abstract class or an interface.
         /// </summary>
         public static string ImplementerAbstractOrInterface {
             get {
@@ -475,7 +493,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Implementer methods.
+        ///   Looks up a localized string similar to Implementer ({0}) methods.
         /// </summary>
         public static string ImplementerMethods {
             get {
@@ -484,7 +502,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should be used by Abstraction methods.
+        ///   Looks up a localized string similar to Implementer methods ({0}) should be used by Abstraction methods.
         /// </summary>
         public static string ImplementerMethodsUsedInAbstraction {
             get {
@@ -493,7 +511,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Implementer reference.
+        ///   Looks up a localized string similar to Implementer {0} reference.
         /// </summary>
         public static string ImplementerReference {
             get {
@@ -511,7 +529,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There should be at least 3 methods: add, remove and notify..
+        ///   Looks up a localized string similar to {0} should have at least 3 methods: add, remove and notify..
         /// </summary>
         public static string MethodAmountThree {
             get {
@@ -520,7 +538,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should have at least one method..
+        ///   Looks up a localized string similar to {0} should have at least one method..
         /// </summary>
         public static string MethodAny {
             get {
@@ -529,7 +547,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Calls base method.
+        ///   Looks up a localized string similar to Method ({0}) calls base method.
         /// </summary>
         public static string MethodBaseCall {
             get {
@@ -538,7 +556,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method body should be empty..
+        ///   Looks up a localized string similar to Method ({0}) body should be empty..
         /// </summary>
         public static string MethodBodyEmpty {
             get {
@@ -547,7 +565,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method should create a different class of the same interface as this class..
+        ///   Looks up a localized string similar to Method ({0}) should create a different class of the same interface as this class..
         /// </summary>
         public static string MethodCreateSameInterface {
             get {
@@ -556,7 +574,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method should create {0}..
+        ///   Looks up a localized string similar to Method ({0}) should create..
         /// </summary>
         public static string MethodCreateType {
             get {
@@ -565,7 +583,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method should be abstract..
+        ///   Looks up a localized string similar to Method ({0}) should be abstract..
         /// </summary>
         public static string MethodModifierAbstract {
             get {
@@ -574,7 +592,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method should not be private..
+        ///   Looks up a localized string similar to Method ({0}) should not be private..
         /// </summary>
         public static string MethodModifierNotPrivate {
             get {
@@ -583,7 +601,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method should be public..
+        ///   Looks up a localized string similar to Method ({0}) should be public..
         /// </summary>
         public static string MethodModifierPublic {
             get {
@@ -592,7 +610,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method should be static..
+        ///   Looks up a localized string similar to Method ({0}) should be static..
         /// </summary>
         public static string MethodModifierStatic {
             get {
@@ -601,7 +619,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method should override base method..
+        ///   Looks up a localized string similar to Method ({0}) should override base method..
         /// </summary>
         public static string MethodNameOverride {
             get {
@@ -610,7 +628,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Method should override or is implemented..
+        ///   Looks up a localized string similar to Method ({0}) should override or is implemented..
         /// </summary>
         public static string MethodOverride {
             get {
@@ -664,7 +682,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Node should be an abstract class or an interface..
+        ///   Looks up a localized string similar to {0} should be an abstract class or an interface..
         /// </summary>
         public static string NodeAbstractOrInterface {
             get {
@@ -673,7 +691,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should not create other classes..
+        ///   Looks up a localized string similar to {0} should not create other classes..
         /// </summary>
         public static string NodeDoesNotCreate {
             get {
@@ -682,7 +700,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should not use other classes..
+        ///   Looks up a localized string similar to {0} should not use other classes..
         /// </summary>
         public static string NodeDoesNotUse {
             get {
@@ -691,7 +709,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should be implemented by an interface.
+        ///   Looks up a localized string similar to {0} should be implemented by an interface.
         /// </summary>
         public static string NodeImplementedByAny {
             get {
@@ -700,7 +718,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Node should be implemented or inherited.
+        ///   Looks up a localized string similar to {0} should be implemented or inherited.
         /// </summary>
         public static string NodeImplementedOrInherited {
             get {
@@ -709,7 +727,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Class should be inherited.
+        ///   Looks up a localized string similar to {0} should be inherited.
         /// </summary>
         public static string NodeInherited {
             get {
@@ -718,7 +736,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Class should be abstract..
+        ///   Looks up a localized string similar to Class {0} should be abstract..
         /// </summary>
         public static string NodeModifierAbstract {
             get {
@@ -727,7 +745,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should not implement an interface..
+        ///   Looks up a localized string similar to {0} should not implement an interface..
         /// </summary>
         public static string NodeNotImplementedAny {
             get {
@@ -736,7 +754,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should be a class..
+        ///   Looks up a localized string similar to {0} should be a class..
         /// </summary>
         public static string NodeTypeClass {
             get {
@@ -745,7 +763,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Node should be used by other classes..
+        ///   Looks up a localized string similar to {0} should be used by other classes..
         /// </summary>
         public static string NodeUsedByAny {
             get {
@@ -754,7 +772,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should use at least 1 other node.
+        ///   Looks up a localized string similar to {0} should use at least 1 other node.
         /// </summary>
         public static string NodeUses1 {
             get {
@@ -772,7 +790,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Observer.
+        ///   Looks up a localized string similar to {0} is your Observer.
         /// </summary>
         public static string Observer {
             get {
@@ -817,7 +835,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should be extended by a class or implemented by an interface..
+        ///   Looks up a localized string similar to {0} should be extended by a class or implemented by an interface..
         /// </summary>
         public static string Parent {
             get {
@@ -826,7 +844,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should be product class..
+        ///   Looks up a localized string similar to {0} should be product class..
         /// </summary>
         public static string ProductClass {
             get {
@@ -835,7 +853,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Non public constructor.
+        ///   Looks up a localized string similar to {0} is not a public constructor.
         /// </summary>
         public static string SingletonConstructor {
             get {
@@ -844,7 +862,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should have an instance of itself..
+        ///   Looks up a localized string similar to {0} should have an instance of itself..
         /// </summary>
         public static string SingletonField {
             get {
@@ -853,7 +871,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should have GetInstance()..
+        ///   Looks up a localized string similar to &quot;{0}&quot; should have GetInstance()..
         /// </summary>
         public static string SingletonMethod {
             get {
@@ -862,7 +880,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Singleton method should be able to return a new Singleton..
+        ///   Looks up a localized string similar to Singleton method ({0}) should be able to return a new Singleton..
         /// </summary>
         public static string SingletonMethodReturnCreationType {
             get {
@@ -871,7 +889,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parent class or interface of the concrete state class.
+        ///   Looks up a localized string similar to {0} is the parent class or interface of the concrete state class.
         /// </summary>
         public static string State {
             get {
@@ -898,7 +916,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to State context class.
+        ///   Looks up a localized string similar to {0} is your State context class.
         /// </summary>
         public static string StateContext {
             get {
@@ -907,7 +925,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to State context field.
+        ///   Looks up a localized string similar to {0} is your State context field.
         /// </summary>
         public static string StateContextField {
             get {
@@ -925,7 +943,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Used return type.
+        ///   Looks up a localized string similar to {0} used return type.
         /// </summary>
         public static string StateFieldStateType {
             get {
@@ -934,7 +952,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change state method.
+        ///   Looks up a localized string similar to {0} contains change state method.
         /// </summary>
         public static string StateNodeMethods {
             get {
@@ -943,7 +961,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parent class or interface of the concrete strategy class.
+        ///   Looks up a localized string similar to {0} is the parent class or interface of the concrete strategy class.
         /// </summary>
         public static string Strategy {
             get {
@@ -952,7 +970,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Concrete strategy class.
+        ///   Looks up a localized string similar to {0} is your Concrete strategy class.
         /// </summary>
         public static string StrategyConcrete {
             get {
@@ -961,7 +979,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Concrete strategy method.
+        ///   Looks up a localized string similar to {0} is your Concrete strategy method.
         /// </summary>
         public static string StrategyConcreteMethod {
             get {
@@ -970,7 +988,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Strategy context class.
+        ///   Looks up a localized string similar to {0} is your Strategy context class.
         /// </summary>
         public static string StrategyContext {
             get {
@@ -988,7 +1006,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Used return type.
+        ///   Looks up a localized string similar to {0} used return type.
         /// </summary>
         public static string StrategyFieldStateType {
             get {
@@ -997,11 +1015,29 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Strategy method.
+        ///   Looks up a localized string similar to {0} is your Strategy method.
         /// </summary>
         public static string StrategyNodeMethods {
             get {
                 return ResourceManager.GetString("StrategyNodeMethods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have correctly implemented {0} element(s)..
+        /// </summary>
+        public static string SummaryTextCorrectRequirements {
+            get {
+                return ResourceManager.GetString("SummaryTextCorrectRequirements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You still have {0} issue(s) to address..
+        /// </summary>
+        public static string SummaryTextIncorrectRequirements {
+            get {
+                return ResourceManager.GetString("SummaryTextIncorrectRequirements", resourceCulture);
             }
         }
         

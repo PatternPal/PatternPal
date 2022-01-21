@@ -79,7 +79,7 @@ namespace IDesign.Extension.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} classes and/or interfaces were analysed.
+        ///   Looks up a localized string similar to {0} classes and/or interfaces were analysed..
         /// </summary>
         internal static string MultipleEntiyNodesAnalysed {
             get {

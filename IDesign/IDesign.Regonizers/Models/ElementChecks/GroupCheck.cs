@@ -25,24 +25,29 @@ namespace IDesign.Recognizers.Models.ElementChecks
         private readonly List<ICheck<TChild>> _checks;
         private readonly Func<TParent, IEnumerable<TChild>> _elements;
         private readonly IResourceMessage _resourcemessage;
+        private readonly bool _hidden;
 
-        public GroupCheck(List<ICheck<TChild>> checks, Func<TParent, IEnumerable<TChild>> elements,
-            string resourcemessage, GroupCheckType type = GroupCheckType.Any)
-        {
-            _checks = checks;
-            _resourcemessage = new ResourceMessage(resourcemessage);
-            _elements = elements;
-            Type = type;
-        }
-
-        public GroupCheck(List<ICheck<TChild>> checks, Func<TParent, IEnumerable<TChild>> elements,
-            IResourceMessage resourcemessage, GroupCheckType type = GroupCheckType.Any)
+        public GroupCheck(
+            List<ICheck<TChild>> checks, 
+            Func<TParent, IEnumerable<TChild>> elements,
+            IResourceMessage resourcemessage, 
+            GroupCheckType type = GroupCheckType.Any,
+            bool hidden = false)
         {
             _checks = checks;
             _resourcemessage = resourcemessage;
             _elements = elements;
             Type = type;
+            _hidden = hidden;
         }
+
+        public GroupCheck(
+            List<ICheck<TChild>> checks,
+            Func<TParent, IEnumerable<TChild>> elements,
+            string resourcemessage,
+            GroupCheckType type = GroupCheckType.Any,
+            bool hidden = false)
+        : this(checks, elements, new ResourceMessage(resourcemessage), type, hidden) { }
 
         public GroupCheckType Type { get; set; }
 
@@ -63,9 +68,9 @@ namespace IDesign.Recognizers.Models.ElementChecks
             var allChildFeedback = new Dictionary<TChild, (float score, IEnumerable<ICheckResult> childFeedback)>();
 
             foreach (var (element, childFeedback, score) in from element in elements
-                     let childFeedback = _checks.Select(x => x.Check(element))
-                     let score = childFeedback.Sum(x => x.GetScore())
-                     select (element, childFeedback, score))
+                                                            let childFeedback = _checks.Select(x => x.Check(element))
+                                                            let score = childFeedback.Sum(x => x.GetScore())
+                                                            select (element, childFeedback, score))
             {
                 allChildFeedback.Add(element, (score, childFeedback));
             }
@@ -105,6 +110,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
             {
                 ChildFeedback = highestScored.Value.childFeedback.ToList(),
                 HasIncorrectKnockOutCheck = incorrectKnockOut,
+                IsHidden = _hidden
             };
         }
 
@@ -146,6 +152,7 @@ namespace IDesign.Recognizers.Models.ElementChecks
             {
                 ChildFeedback = childResults,
                 HasIncorrectKnockOutCheck = incorrectKnockOut,
+                IsHidden = _hidden
             };
         }
 
@@ -177,17 +184,18 @@ namespace IDesign.Recognizers.Models.ElementChecks
 
                 childResults.Add(new CheckResult(valueTuple.Key.ToString(), feedback, valueTuple.Key)
                 {
-                    Feedback = _resourcemessage, 
+                    Feedback = _resourcemessage,
                     ChildFeedback = valueTuple.Value.childFeedback.ToList(),
-                    HasIncorrectKnockOutCheck = childHasIncorrectKnockOut
+                    HasIncorrectKnockOutCheck = childHasIncorrectKnockOut,
                 });
             }
 
             return new CheckResult(_resourcemessage, feedback, elementToCheck)
             {
-                ChildFeedback = childResults, 
+                ChildFeedback = childResults,
                 CalculationType = CheckCalculationType.Average,
-                HasIncorrectKnockOutCheck = incorrectKnockOut
+                HasIncorrectKnockOutCheck = incorrectKnockOut,
+                IsHidden = _hidden
             };
         }
 

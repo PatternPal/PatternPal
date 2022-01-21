@@ -162,7 +162,7 @@
                       VerticalAlignment="Center" Unchecked="SelectAll_Unchecked" Checked="SelectAll_Checked" />
         </Border>
         <usercontrol:PatternCheckbox Grid.Row="3" x:Name="PatternCheckbox" Margin="20,0,20,0" />
-        <usercontrol:SelectPaths Grid.Row="4" x:Name="SelectPaths" Margin="20,0,20,0" />
+        <usercontrol:SelectPaths Grid.Row="4" x:Name="SelectPaths" Margin="20,10,20,0" />
         <Border x:Name="ButtonBorder" Grid.Row="5" Background="Transparent" BorderThickness="0 0" Margin="20,0,20,0"
                 Style="{StaticResource ButtonBorder}">
             <Grid>
@@ -181,8 +181,8 @@
                       FlowDirection="RightToLeft" Style="{DynamicResource CheckboxStyle}" Checked="CheckSwitch_Checked"
                       Unchecked="CheckSwitch_Unchecked" />
         </DockPanel>
-        <TextBlock Grid.Row="7" x:Name="SummaryControl" TextWrapping="Wrap" Margin="20,8,20,8" Width="400" HorizontalAlignment="Left"/>
-        <usercontrol:TreeViewResults x:Name="TreeViewResults" Grid.Row="8" Margin="20,0,20,0" />
+        <TextBlock Grid.Row="7" x:Name="SummaryControl" TextWrapping="Wrap" Margin="20,8,20,8" MaxWidth="450" HorizontalAlignment="Left"/>
+        <usercontrol:ExpanderResults x:Name="ExpanderResults" Grid.Row="8" Margin="20,0,20,0" />
         <ProgressBar Grid.Row="9" Height="20" VerticalAlignment="Bottom" Minimum="0" Maximum="100" Name="statusBar" />
         <TextBlock Grid.Row="9" x:Name="ProgressStatusBlock" Height="20" HorizontalAlignment="Left" FontWeight="Bold" Margin="150,0,0,0" />
     </Grid>

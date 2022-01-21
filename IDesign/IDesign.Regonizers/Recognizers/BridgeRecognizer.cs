@@ -45,13 +45,15 @@ namespace IDesign.Recognizers
                 )
             };
 
-            var implementerGroupCheck = new GroupCheck<IEntity, IEntity>(
-                implementerChecks,
-                x => entityNode
+            var implementerName = entityNode
                     .GetRelations()
                     .Where(y => y.GetRelationType().Equals(RelationType.Uses))
-                    .Select(y => y.GetDestination()),
-                "BridgeImplementer"
+                    .Select(y => y.GetDestination());
+
+            var implementerGroupCheck = new GroupCheck<IEntity, IEntity>(
+                implementerChecks,
+                x => implementerName,
+                new ResourceMessage("BridgeImplementer", implementerName?.FirstOrDefault()?.GetName())
             );
 
             var abstractionGroupCheckList = new List<ICheck<IEntity>>
@@ -107,13 +109,13 @@ namespace IDesign.Recognizers
             var abstractionGroupCheck =
                 new GroupCheck<IEntity, IEntity>(
                     abstractionGroupCheckList,
-                    x => new List<IEntity> {entityNode},
+                    x => new List<IEntity> { entityNode },
                     "BridgeAbstraction"
                 );
 
             var bridgeGroupCheck = new GroupCheck<IEntity, IEntity>(
-                new List<ICheck<IEntity>> {abstractionGroupCheck, implementerGroupCheck},
-                x => new List<IEntity> {entityNode},
+                new List<ICheck<IEntity>> { abstractionGroupCheck, implementerGroupCheck },
+                x => new List<IEntity> { entityNode },
                 "Bridge"
             );
 
@@ -171,13 +173,18 @@ namespace IDesign.Recognizers
                                     )
                                 },
                                 x => entityNode.GetAllMethods(),
-                                "ImplementerMethods"
+                                "ImplementerMethods",
+                                GroupCheckType.Any,
+                                true
                             )
                         },
                         x => fieldsToCheck,
-                        "ImplementerReference"
+                        "ImplementerReference",
+                        GroupCheckType.Any,
+                        true
                     )
-                }, x => entityNode.GetRelations(), "Abstraction")
+                },
+                x => entityNode.GetRelations(), "Abstraction", GroupCheckType.Any, true)
             };
         }
     }

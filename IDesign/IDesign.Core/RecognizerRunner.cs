@@ -56,8 +56,10 @@ namespace IDesign.Core
             var results = new List<RecognitionResult>();
             var j = 0;
 
+            if (Graph == null) return results;
+
             var entities = Graph.GetAll();
-            foreach (var node in entities.Values)
+            foreach (var node in entities?.Values)
             {
                 j++;
                 ProgressUpdate((int)((j / (float)entities.Count * 50f) + 50), "Scanning class: " + node.GetName());
