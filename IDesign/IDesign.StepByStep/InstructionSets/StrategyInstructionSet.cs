@@ -22,7 +22,7 @@ namespace IDesign.StepByStep.InstructionSets
 {
     public class StrategyInstructionSet : IInstructionSet
     {
-        public string Name => "StrategyInstruction";
+        public string Name => "Strategy";
         public IEnumerable<IInstruction> Instructions { get; }
 
         public StrategyInstructionSet()
