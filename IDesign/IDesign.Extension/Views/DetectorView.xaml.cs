@@ -199,20 +199,17 @@ namespace IDesign.Extension.Views
 
         private void SelectProjectFromFile(string path = null)
         {
-            foreach (var index in from project in Projects
-                     from index in
-                         from doc in project.Documents
-                         where doc.FilePath == path
-                         let index = Projects.IndexOf(project)
-                         select index
-                     select index)
-            {
-                SelectPaths.ProjectSelection.SelectedIndex = index;
-                return;
-            }
+            var list = Projects.SelectMany(
+                project => project.Documents.Where(doc => doc.FilePath == path)
+                    .Select(doc => new { doc, index = Projects.IndexOf(project) })
+                    .Select(@t => @t.index)
+            ).ToList();
+            
+            if (list.Count == 0) return;
+            SelectPaths.ProjectSelection.SelectedIndex = list.First();
         }
 
-        private async void Analyse()
+        private async Task Analyse()
         {
             LoadProject();
             var cur = GetCurrentPath().FirstOrDefault();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using IDesign.Core.Models;
@@ -13,8 +14,7 @@ namespace IDesign.Core
 {
     public class RecognizerRunner
     {
-        public static readonly List<DesignPattern> DesignPatterns = new List<DesignPattern>
-        {
+        public static readonly ImmutableList<DesignPattern> DesignPatterns = ImmutableList.Create(
             new DesignPattern(Singleton, new SingletonRecognizer(), WikiPageResources.Singleton),
             new DesignPattern(FactoryMethod, new FactoryMethodRecognizer(), WikiPageResources.FactoryMethod),
             new DesignPattern(Decorator, new DecoratorRecognizer(), WikiPageResources.Decorator),
@@ -23,7 +23,7 @@ namespace IDesign.Core
             new DesignPattern(Adapter, new AdapterRecognizer(), WikiPageResources.Adapter),
             new DesignPattern(Observer, new ObserverRecognizer(), WikiPageResources.Observer),
             new DesignPattern(Bridge, new BridgeRecognizer(), WikiPageResources.Bridge)
-        };
+        );
 
         public SyntaxGraph Graph;
 
