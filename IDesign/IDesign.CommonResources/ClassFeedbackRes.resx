@@ -271,7 +271,7 @@
     <value>Implementer {0} reference</value>
   </data>
   <data name="ImplementerUsedByAbstraction" xml:space="preserve">
-    <value>Implementer should be used by the abstraction</value>
+    <value>Implementer ({0}) should be used by the abstraction</value>
   </data>
   <data name="MethodAmountThree" xml:space="preserve">
     <value>{0} should have at least 3 methods: add, remove and notify.</value>
