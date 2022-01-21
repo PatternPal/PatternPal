@@ -7,24 +7,26 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [2.2.0] - 2022-01-21
+
 ### Added
 
-- New user control to display detected Design Patterns using expander controls 
-- The Logging Api and Test in the root project
+-   New user control to display detected Design Patterns using expander controls 
+-   The Logging Api and Test in the root project
 
 ### Improved
 
-- Rewrote feedback text to one sentence that includes the file/node name
-- Changed IDesign to PatternPal
+-   Rewrote feedback text to one sentence that includes the file/node name
+-   Changed IDesign to PatternPal
 
 ### Removed
 
-- TreeViewResults user control has been removed as it is has been replaced by ExpanderResults
+-   TreeViewResults user control has been removed as it is has been replaced by ExpanderResults
 
 ### CI/CD
 
-- Now tests multiple test projects
-- SonarCloud
+-   Now tests multiple test projects
+-   SonarCloud
 
 ## [2.1.0] - 2022-01-12
 
@@ -74,7 +76,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 The version developed by the previous team.
 
-[Unreleased]: https://github.com/PatternPal/PatternPal/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/PatternPal/PatternPal/compare/v2.2.0...HEAD
+
+[2.2.0]: https://github.com/PatternPal/PatternPal/compare/v2.1.0...v2.2.0
 
 [2.1.0]: https://github.com/PatternPal/PatternPal/compare/v2.0.0...v2.1.0
 
