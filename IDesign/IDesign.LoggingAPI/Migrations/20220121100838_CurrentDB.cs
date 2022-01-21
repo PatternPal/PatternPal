@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IDesign.LoggingAPI.Migrations
 {
-    public partial class currentDatabase : Migration
+    public partial class CurrentDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -99,7 +99,17 @@ namespace IDesign.LoggingAPI.Migrations
             migrationBuilder.InsertData(
                 table: "Modes",
                 column: "ID",
-                value: "Step by Step");
+                value: "StepByStep");
+
+            migrationBuilder.InsertData(
+                table: "Modes",
+                column: "ID",
+                value: "Default");
+
+            migrationBuilder.InsertData(
+                table: "Sessions",
+                columns: new[] { "ID", "EndSession", "ExtensionVersion", "StartSession", "TimeZone" },
+                values: new object[] { new Guid("79f83fbd-a9ed-434e-b585-e9258f804012"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, new DateTime(2021, 12, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), 1 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

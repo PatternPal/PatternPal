@@ -36,7 +36,18 @@ namespace IDesign.LoggingAPI
                 new ActionType { ID = "Deploy" });
 
             modelBuilder.Entity<Mode>().HasData(
-                new Mode { ID = "Step by Step" });
+                new Mode { ID = "StepByStep" },
+                new Mode { ID = "Default"});
+
+            modelBuilder.Entity<Session>().HasData(
+                new Session
+                {
+                    ID = Guid.Parse("79f83fbd-a9ed-434e-b585-e9258f804012"),
+                    ExtensionVersion = 1,
+                    StartSession = new DateTime(2021, 12, 9),
+                    TimeZone = 1
+                }
+            );
         }
     }
 }

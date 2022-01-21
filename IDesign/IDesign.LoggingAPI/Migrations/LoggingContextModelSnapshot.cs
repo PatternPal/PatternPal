@@ -105,7 +105,11 @@ namespace IDesign.LoggingAPI.Migrations
                     b.HasData(
                         new
                         {
-                            ID = "Step by Step"
+                            ID = "StepByStep"
+                        },
+                        new
+                        {
+                            ID = "Default"
                         });
                 });
 
@@ -130,6 +134,16 @@ namespace IDesign.LoggingAPI.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Sessions");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = new Guid("79f83fbd-a9ed-434e-b585-e9258f804012"),
+                            EndSession = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ExtensionVersion = 1,
+                            StartSession = new DateTime(2021, 12, 9, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TimeZone = 1
+                        });
                 });
 #pragma warning restore 612, 618
         }

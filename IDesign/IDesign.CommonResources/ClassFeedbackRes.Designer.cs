@@ -358,6 +358,15 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Should be a(n) {0}.
+        /// </summary>
+        public static string EntityType {
+            get {
+                return ResourceManager.GetString("EntityType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} is your Abstract creator.
         /// </summary>
         public static string FactoryAbstractCreator {
@@ -525,6 +534,33 @@ namespace IDesign.CommonResources {
         public static string ImplementerUsedByAbstraction {
             get {
                 return ResourceManager.GetString("ImplementerUsedByAbstraction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This instruction is almost complete..
+        /// </summary>
+        public static string InstructionCompletionStatusAlmostComplete {
+            get {
+                return ResourceManager.GetString("InstructionCompletionStatusAlmostComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This instruction has been completed..
+        /// </summary>
+        public static string InstructionCompletionStatusComplete {
+            get {
+                return ResourceManager.GetString("InstructionCompletionStatusComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This instruction is not close to completion yet..
+        /// </summary>
+        public static string InstructionCompletionStatusNotComplete {
+            get {
+                return ResourceManager.GetString("InstructionCompletionStatusNotComplete", resourceCulture);
             }
         }
         
@@ -1015,7 +1051,70 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Should have a perform method.
+        /// </summary>
+        public static string StrategyInstructionCheckForPerformMethod {
+            get {
+                return ResourceManager.GetString("StrategyInstructionCheckForPerformMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should implement {0}.
+        /// </summary>
+        public static string StrategyInstructionCheckIfClassIsSubclassOfAbstractClass {
+            get {
+                return ResourceManager.GetString("StrategyInstructionCheckIfClassIsSubclassOfAbstractClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should implement {0}.
+        /// </summary>
+        public static string StrategyInstructionCheckIfClassIsSubclassOfInterfaceClass {
+            get {
+                return ResourceManager.GetString("StrategyInstructionCheckIfClassIsSubclassOfInterfaceClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Constructor should instantiate {0}.
+        /// </summary>
+        public static string StrategyInstructionConstructorInstantiatesBehaviour {
+            get {
+                return ResourceManager.GetString("StrategyInstructionConstructorInstantiatesBehaviour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} is your Strategy method.
+        /// </summary>
+        public static string StrategyInstructionInterfaceCheck {
+            get {
+                return ResourceManager.GetString("StrategyInstructionInterfaceCheck", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should have atleast one method.
+        /// </summary>
+        public static string StrategyInstructionMethod {
+            get {
+                return ResourceManager.GetString("StrategyInstructionMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Should call the behaviour of type {0}.
+        /// </summary>
+        public static string StrategyInstructionMethodCalledThroughBehaviourCheck {
+            get {
+                return ResourceManager.GetString("StrategyInstructionMethodCalledThroughBehaviourCheck", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Strategy method.
         /// </summary>
         public static string StrategyNodeMethods {
             get {

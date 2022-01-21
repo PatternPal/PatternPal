@@ -40,6 +40,7 @@ namespace IDesign.CommonResources
             if (resMessage == null) return message;
 
             message = GetResourceFromString(resMessage.GetKey());
+            if (message == null) return "";
 
             if (resMessage.GetParameters() != null && resMessage.GetParameters().Length > 0)
             {

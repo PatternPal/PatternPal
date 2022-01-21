@@ -61,7 +61,6 @@ namespace IDesign.Core
             var entities = Graph.GetAll();
 
             if (entities == null) return results;
-
             foreach (var node in entities.Values)
             {
                 j++;

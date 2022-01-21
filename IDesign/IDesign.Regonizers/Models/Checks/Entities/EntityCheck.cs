@@ -2,6 +2,7 @@
 using System.Linq;
 using IDesign.Recognizers.Abstractions;
 using IDesign.Recognizers.Models.Checks.Entities.GroupChecks;
+using IDesign.Recognizers.Models.Checks.Members;
 using IDesign.Recognizers.Models.Output;
 using SyntaxTree.Abstractions;
 using SyntaxTree.Abstractions.Entities;
@@ -29,13 +30,14 @@ namespace IDesign.Recognizers.Models.Checks.Entities
 
         public ICheckResult Check(IEntity elementToCheck)
         {
-            List<ICheckResult> results = new List<ICheckResult>();
+            List<ICheckResult> results = _checks.Select(c => c.Check(elementToCheck)).ToList();
+
             foreach (var group in Groups)
             {
                 foreach (var check in group)
                 {
                     List<IMember> members = check.GetCheckable(elementToCheck).ToList();
-                    
+
                     Dictionary<IMember, List<ICheckResult>> resultsD = members.ToDictionary(
                         member => member,
                         member => check.Checks().Select(c => c.Check(member)).ToList()
@@ -56,6 +58,18 @@ namespace IDesign.Recognizers.Models.Checks.Entities
             result.Results = r.GetChildFeedback().ToList();
 
             return result;
+        }
+
+        /// <inheritdoc cref="AbstractMemberListCheck{T,R}.Modifiers"/>
+        public EntityCheck Modifiers(params IModifier[] modifiers)
+        {
+            _checks.Add(new ModifierCheck(modifiers));
+            return This();
+        }
+        
+        public EntityCheck Type(EntityType type)
+        {
+            return Custom(e => e.GetEntityType() == type, new ResourceMessage("EntityType", type.ToString()));
         }
     }
 

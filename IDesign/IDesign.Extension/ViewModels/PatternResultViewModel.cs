@@ -37,13 +37,24 @@ namespace IDesign.Extension.ViewModels
         {
             get
             {
-                if (Score == 100)
-                    return CompletionStatusComplete;
-                
-                if (Score >= 80)
-                    return CompletionStatusAlmostComplete;
+                if (IDesignExtensionPackage.CurrentMode == Mode.Default)
+                {
+                    if (Score == 100)
+                        return CompletionStatusComplete;
 
-                return CompletionStatusNotComplete;
+                    if (Score >= 80)
+                        return CompletionStatusAlmostComplete;
+
+                    return CompletionStatusNotComplete;
+                }
+                //CurrentMode is mode.StepByStep (this is currently the only other option, so no else if)
+                if (Score == 100)
+                    return InstructionCompletionStatusComplete;
+
+                if (Score >= 80)
+                    return InstructionCompletionStatusAlmostComplete;
+
+                return InstructionCompletionStatusNotComplete;
             }
         }
 
@@ -51,6 +62,8 @@ namespace IDesign.Extension.ViewModels
         /// Completion score. 100 means all requirements are fulfilled.
         /// </summary>
         public int Score => Result.Result.GetScore();
+
+        public bool Expanded { get; set; } = false;
 
         public List<PatternResultPartViewModel> Children
         {

@@ -71,7 +71,8 @@
                 <Button Content="{x:Static UIResources:ExtensionUIResources.StepByStepTitle}"
                         Height="40"
                         FontSize="15"
-                        Command="{Binding NavigateStepByStepListCommand}" />
+                        Command="{Binding NavigateStepByStepListCommand}"
+                        Click="StepByStep_OnClick"/>
                 <TextBlock TextWrapping="Wrap"
                            Text="{x:Static UIResources:ExtensionUIResources.StepByStepDescription}"
                            Width="150" />

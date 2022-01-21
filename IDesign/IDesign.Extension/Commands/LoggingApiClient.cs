@@ -12,7 +12,7 @@ namespace IDesign.Extension.Commands
 {
     public static class LoggingApiClient
     {
-        private static readonly HttpClient client = new HttpClient() { BaseAddress = new Uri("https://localhost:5001/api/Logging/") };
+        private static readonly HttpClient client = new HttpClient() { BaseAddress = new Uri("https://localhost:44387/api/Logging/") };
 
         public static async Task<HttpResponseMessage> PostActionAsync(EnvDTE.vsBuildAction vsAction)
         {
