@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using IDesign.Extension.ViewModels;
 
 namespace IDesign.Extension.Stores
@@ -45,6 +46,8 @@ namespace IDesign.Extension.Stores
         {
             if (ViewModelHistory.Count > 0)
             {
+                if (CurrentViewModel.GetType() == typeof(StepByStepListViewModel))
+                    IDesignExtensionPackage.CurrentMode = Mode.Default;
                 _currentViewModel = ViewModelHistory.Pop();
                 CurrentViewModelChanged?.Invoke();
                 return _currentViewModel;

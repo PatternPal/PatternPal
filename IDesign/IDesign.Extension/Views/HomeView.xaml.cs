@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.VisualStudio;
@@ -27,6 +28,11 @@ namespace IDesign.Extension.Views
             {
                 ((IDesignExtensionPackage)myPackage).ShowOptionPage(typeof(IDesignOptionPageGrid));
             }
+        }
+
+        private void StepByStep_OnClick(object sender, RoutedEventArgs e)
+        {
+            IDesignExtensionPackage.CurrentMode = Mode.StepByStep;
         }
     }
 }

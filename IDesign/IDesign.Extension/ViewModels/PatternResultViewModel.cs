@@ -37,7 +37,7 @@ namespace IDesign.Extension.ViewModels
         {
             get
             {
-                if (!PatternName.Contains("Instruction"))
+                if (IDesignExtensionPackage.CurrentMode == Mode.Default)
                 {
                     if (Score == 100)
                         return CompletionStatusComplete;
@@ -47,7 +47,7 @@ namespace IDesign.Extension.ViewModels
 
                     return CompletionStatusNotComplete;
                 }
-
+                //CurrentMode is mode.StepByStep (this is currently the only other option, so no else if)
                 if (Score == 100)
                     return InstructionCompletionStatusComplete;
 

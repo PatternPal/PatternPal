@@ -39,6 +39,11 @@ namespace IDesign.Extension
         /// </summary>
         public const string PackageGuidString = "99085877-4676-4a93-8c40-630784cf71f6";
 
+        /// <summary>
+        ///     The current mode the user is using (currently either "Default" or "Step by Step")
+        /// </summary>
+        public static Mode CurrentMode = Mode.Default;
+
         #region Package Members
 
         public bool DoLogData
@@ -87,5 +92,11 @@ namespace IDesign.Extension
             get { return _doLogData; }
             set { _doLogData = value; }
         }
+    }
+
+    public enum Mode
+    {
+        Default,
+        StepByStep
     }
 }
