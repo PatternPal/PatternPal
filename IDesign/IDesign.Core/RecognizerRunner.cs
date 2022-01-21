@@ -59,7 +59,10 @@ namespace IDesign.Core
             if (Graph == null) return results;
 
             var entities = Graph.GetAll();
-            foreach (var node in entities?.Values)
+
+            if (entities == null) return results;
+
+            foreach (var node in entities.Values)
             {
                 j++;
                 ProgressUpdate((int)((j / (float)entities.Count * 50f) + 50), "Scanning class: " + node.GetName());
@@ -80,7 +83,7 @@ namespace IDesign.Core
 
         private void ProgressUpdate(int percentage, string status)
         {
-            OnProgressUpdate?.Invoke(this, new RecognizerProgress {CurrentPercentage = percentage, Status = status});
+            OnProgressUpdate?.Invoke(this, new RecognizerProgress { CurrentPercentage = percentage, Status = status });
         }
     }
 }
