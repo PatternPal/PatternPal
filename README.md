@@ -12,7 +12,7 @@ A Visual Studio extension that detects design patterns and helps users implement
 
 ## Usage
 ### Opening extension
-You can open the main view of the extension through `View > Other Windows > IDesign Extension`.
+You can open the main view of the extension through `View > Other Windows > PatternPal Extension`.
 
 ## Authors
 Project coordinator: Hieke Keuning (h.w.keuning@uu.nl), Utrecht University

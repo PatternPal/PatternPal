@@ -5,12 +5,16 @@ on:
     branches:
       - master
       - develop
+    paths:
+      - 'PatternPal/**'
   pull_request:
     types: [ opened, synchronize, reopened ]
+    paths:
+      - 'PatternPal/**'
 
 defaults:
   run:
-    working-directory: ./IDesign
+    working-directory: ./PatternPal
     
 jobs:
   build:
