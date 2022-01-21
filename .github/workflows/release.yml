@@ -5,21 +5,21 @@ on:
       - master
       - development
     paths:
-      - 'IDesign/**'
+      - 'PatternPal/**'
   pull_request:
     branches:
       - master
       - development
     paths:
-      - 'IDesign/**'
+      - 'PatternPal/**'
   workflow_dispatch: 
 
 defaults:
   run:
-    working-directory: ./IDesign
+    working-directory: ./PatternPal
 
 env:
-  vsix_path: IDesign/IDesign.Extension/bin/Release/IDesign.Extension.vsix
+  vsix_path: PatternPal/PatternPal.Extension/bin/Release/PatternPal.Extension.vsix
 
 jobs:
   build-extension:
@@ -46,7 +46,7 @@ jobs:
       - name: Collect artifacts - VSIX
         uses: actions/upload-artifact@v2
         with:
-          name: IDesign.Extension.vsix
+          name: PatternPal.Extension.vsix
           path: ${{ env.vsix_path }}
   release-extension:
     runs-on: ubuntu-latest
@@ -62,7 +62,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/download-artifact@master
         with:
-          name: IDesign.Extension.vsix
+          name: PatternPal.Extension.vsix
           path: dist/
       - name: Update changelog
         uses: thomaseizinger/keep-a-changelog-new-release@master
@@ -91,8 +91,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/IDesign.Extension.vsix
-          asset_name: IDesign.Extension.vsix
+          asset_path: dist/PatternPal.Extension.vsix
+          asset_name: PatternPal.Extension.vsix
           asset_content_type: binary/octet-stream
       - name: Commit and push CHANGELOG.md
         uses: EndBug/add-and-commit@v7
