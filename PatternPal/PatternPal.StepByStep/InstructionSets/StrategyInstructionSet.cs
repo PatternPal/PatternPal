@@ -149,7 +149,7 @@ namespace PatternPal.StepByStep.InstructionSets
                                  x.GetDestination().GetName() == strategyAbstract.GetName()
                         ),
                         new ResourceMessage(
-                            "StrategyInstructionCheckIfClassIsSubclassOfAbstractClass", strategyAbstract.GetName()
+                            "StrategyInstructionCheckIfClassIsSubclassOfAbstractClass", entity.GetName(), strategyAbstract.GetName()
                         )
                     )
                     .Check(entity);
@@ -168,7 +168,7 @@ namespace PatternPal.StepByStep.InstructionSets
                     .Any.Method()
                     .Custom(
                         m => m.GetName().Contains("Perform"),
-                        new ResourceMessage("StrategyInstructionCheckForPerformMethod")
+                        new ResourceMessage("StrategyInstructionCheckForPerformMethod", entity.GetName())
                     )
                     .Build()
                     .Check(entity);
@@ -198,7 +198,7 @@ namespace PatternPal.StepByStep.InstructionSets
                 var entity = state["strategy.interface"];
 
                 return new EntityCheck()
-                    .Any.Method("StrategyInstructionMethod")
+                    .Any.Method(new ResourceMessage("StrategyInstructionMethod", entity.GetName()))
                     .Build()
                     .Check(entity);
             }
@@ -254,7 +254,7 @@ namespace PatternPal.StepByStep.InstructionSets
                                 return false;
                             },
                             new ResourceMessage(
-                                "StrategyInstructionMethodCalledThroughBehaviourCheck", interfaceEntity.GetName()
+                                "StrategyInstructionMethodCalledThroughBehaviourCheck", entity.GetName(), interfaceEntity.GetName()
                             )
                         )
                         .Build()
@@ -282,7 +282,7 @@ namespace PatternPal.StepByStep.InstructionSets
                             );
                         },
                         new ResourceMessage(
-                            "StrategyInstructionCheckIfClassIsSubclassOfInterfaceClass", strategyInterface.GetName()
+                            "StrategyInstructionCheckIfClassIsSubclassOfInterfaceClass", entity.GetName(), strategyInterface.GetName()
                         )
                     )
                     .Check(entity);
@@ -303,7 +303,7 @@ namespace PatternPal.StepByStep.InstructionSets
                         .Any.Constructor()
                         .Custom(
                             c => c.AsMethod().CheckCreationType(create.GetName()),
-                            new ResourceMessage("StrategyInstructionConstructorInstantiatesBehaviour", create.GetName())
+                            new ResourceMessage("StrategyInstructionConstructorInstantiatesBehaviour", entity.GetName(), create.GetName())
                         )
                         .Build()
                         .Check(entity);
