@@ -529,7 +529,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Implementer should be used by the abstraction.
+        ///   Looks up a localized string similar to Implementer ({0}) should be used by the abstraction.
         /// </summary>
         public static string ImplementerUsedByAbstraction {
             get {

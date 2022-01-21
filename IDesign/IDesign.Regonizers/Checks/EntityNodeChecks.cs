@@ -18,15 +18,11 @@ namespace IDesign.Recognizers.Checks
 
         public static bool ClassImplementsInterfaceMethod(this IEntity node, IMethod method)
         {
-            foreach (var _ in from interFace in node.GetRelations()
-                         .Where(x => x.GetRelationType() == RelationType.Implements)
-                     where InterfaceImplementsMethod(interFace.GetDestination(), method)
-                     select new { })
-            {
-                return true;
-            }
-
-            return false;
+            return node.GetRelations()
+                .Where(x => x.GetRelationType() == RelationType.Implements)
+                .Where(interFace => InterfaceImplementsMethod(interFace.GetDestination(), method))
+                .Select(interFace => new { })
+                .Any();
         }
 
         public static bool MethodInEntityNode(this IEntity node, string methodName, int amountOfParams)
@@ -39,18 +35,14 @@ namespace IDesign.Recognizers.Checks
                 return true;
             }
 
-            foreach (var _ in from relation in node.GetRelations().Where(
-                         x => x.GetRelationType() == RelationType.Extends ||
-                              x.GetRelationType() == RelationType.Implements
-                     )
-                     where relation.GetDestination()
-                         .MethodInEntityNode(methodName, amountOfParams)
-                     select new { })
-            {
-                return true;
-            }
-
-            return false;
+            return node.GetRelations()
+                .Where(
+                    x => x.GetRelationType() == RelationType.Extends ||
+                         x.GetRelationType() == RelationType.Implements
+                )
+                .Where(relation => relation.GetDestination().MethodInEntityNode(methodName, amountOfParams))
+                .Select(relation => new { })
+                .Any();
         }
 
         public static bool InterfaceImplementsMethod(this IEntity node, IMethod method)

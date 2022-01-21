@@ -24,7 +24,7 @@ namespace IDesign.Extension.ViewModels
             NavigateStepByStepInstructionsCommand =
                 new NavigateCommand<StepByStepInstructionsViewModel>(navigationStore,
                     () => new StepByStepInstructionsViewModel(navigationStore, SelectedInstructionSet));
-            InstructionSetList = InstructionSetsCreator.InstructionSets;
+            InstructionSetList = InstructionSetsCreator.InstructionSets.ToList();
             SelectedInstructionSet = InstructionSetList?.FirstOrDefault();
         }
     }
