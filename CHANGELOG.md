@@ -12,9 +12,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - New user control to display detected Design Patterns using expander controls 
 - The Logging Api and Test in the root project
 
-## Improved
+### Improved
 
 - Rewrote feedback text to one sentence that includes the file/node name
+- Changed IDesign to PatternPal
 
 ### Removed
 
