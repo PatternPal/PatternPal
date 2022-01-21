@@ -1051,7 +1051,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should have a perform method.
+        ///   Looks up a localized string similar to {0} Should have a perform method.
         /// </summary>
         public static string StrategyInstructionCheckForPerformMethod {
             get {
@@ -1060,7 +1060,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should implement {0}.
+        ///   Looks up a localized string similar to {0} should implement {1}.
         /// </summary>
         public static string StrategyInstructionCheckIfClassIsSubclassOfAbstractClass {
             get {
@@ -1069,7 +1069,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should implement {0}.
+        ///   Looks up a localized string similar to {0} should implement {1}.
         /// </summary>
         public static string StrategyInstructionCheckIfClassIsSubclassOfInterfaceClass {
             get {
@@ -1078,7 +1078,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Constructor should instantiate {0}.
+        ///   Looks up a localized string similar to The constructor of {0} should instantiate {1}.
         /// </summary>
         public static string StrategyInstructionConstructorInstantiatesBehaviour {
             get {
@@ -1087,7 +1087,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} is your Strategy method.
+        ///   Looks up a localized string similar to Should be an interface.
         /// </summary>
         public static string StrategyInstructionInterfaceCheck {
             get {
@@ -1096,7 +1096,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should have atleast one method.
+        ///   Looks up a localized string similar to {0} should have atleast one method.
         /// </summary>
         public static string StrategyInstructionMethod {
             get {
@@ -1105,7 +1105,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Should call the behaviour of type {0}.
+        ///   Looks up a localized string similar to {0} should call the behaviour of type {1}.
         /// </summary>
         public static string StrategyInstructionMethodCalledThroughBehaviourCheck {
             get {
@@ -1114,7 +1114,7 @@ namespace IDesign.CommonResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Strategy method.
+        ///   Looks up a localized string similar to {0} is your Strategy method.
         /// </summary>
         public static string StrategyNodeMethods {
             get {
