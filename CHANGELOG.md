@@ -24,6 +24,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### CI/CD
 
 - Now tests multiple test projects
+- SonarCloud
 
 ## [2.1.0] - 2022-01-12
 
