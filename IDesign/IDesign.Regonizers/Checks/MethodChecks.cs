@@ -41,19 +41,17 @@ namespace IDesign.Recognizers.Checks
         {
             var body = methodSyntax.GetBody();
 
-            if (body != null)
-            {
-                var creations = body.DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
-                foreach (var _ in from creationExpression in creations
-                         where creationExpression.Type is IdentifierNameSyntax name &&
-                               name.Identifier.ToString().CheckIfTwoStringsAreEqual(creationType)
-                         select new { })
-                {
-                    return true;
-                }
-            }
+            if (body == null) return false;
 
-            return false;
+            var creations = body.DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
+
+            return creations
+                .Where(
+                    creationExpression => creationExpression.Type is IdentifierNameSyntax name &&
+                                          name.Identifier.ToString().CheckIfTwoStringsAreEqual(creationType)
+                )
+                .Select(creationExpression => new { })
+                .Any();
         }
 
         public static bool CheckReturnTypeSameAsCreation(this IMethod methodSyntax)
@@ -69,15 +67,14 @@ namespace IDesign.Recognizers.Checks
         public static IEnumerable<string> GetCreatedTypes(this IMethod methodSyntax)
         {
             var result = new List<string>();
-            if (methodSyntax.GetBody() != null)
+            if (methodSyntax.GetBody() == null) return result;
+
+            var creations = methodSyntax.GetBody().DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
+            foreach (var identifiers in from creation in creations
+                     let identifiers = creation.DescendantNodes().OfType<IdentifierNameSyntax>()
+                     select identifiers)
             {
-                var creations = methodSyntax.GetBody().DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
-                foreach (var identifiers in from creation in creations
-                         let identifiers = creation.DescendantNodes().OfType<IdentifierNameSyntax>()
-                         select identifiers)
-                {
-                    result.AddRange(identifiers.Select(y => y.Identifier.ToString()));
-                }
+                result.AddRange(identifiers.Select(y => y.Identifier.ToString()));
             }
 
             return result;
@@ -85,29 +82,33 @@ namespace IDesign.Recognizers.Checks
 
         public static bool CheckIfMethodCallsMethodInNode(this IMethod method, IEntity node)
         {
-            if (method.GetBody() != null)
-            {
-                var invocations = method.GetBody().DescendantNodes().OfType<InvocationExpressionSyntax>();
-                foreach (var _ in from invocation in invocations
-                         let identifier = invocation.Expression.DescendantNodesAndSelf()
-                             .OfType<IdentifierNameSyntax>()
-                             .FirstOrDefault()
-                         let arguments = invocation.ArgumentList.Arguments.Count
-                         where identifier != null && node.MethodInEntityNode(identifier.ToString(), arguments)
-                         select new { })
-                {
-                    return true;
-                }
-            }
+            if (method.GetBody() == null)
+                return false;
 
-            return false;
+            var invocations = method.GetBody().DescendantNodes().OfType<InvocationExpressionSyntax>();
+            return invocations
+                .Select(
+                    invocation => new
+                    {
+                        invocation,
+                        identifier = invocation.Expression.DescendantNodesAndSelf()
+                            .OfType<IdentifierNameSyntax>()
+                            .FirstOrDefault()
+                    }
+                )
+                .Select(@t => new { @t, arguments = @t.invocation.ArgumentList.Arguments.Count })
+                .Where(
+                    @t => @t.@t.identifier != null && node.MethodInEntityNode(
+                        @t.@t.identifier.ToString(), @t.arguments
+                    )
+                )
+                .Select(@t => new { })
+                .Any();
         }
 
         public static bool CheckIfMethodCallsBase(this IMethod method)
         {
-            return method.GetBody() != null
-                ? method.GetBody().DescendantNodes().OfType<BaseExpressionSyntax>().Any()
-                : false;
+            return method.GetBody() != null && method.GetBody().DescendantNodes().OfType<BaseExpressionSyntax>().Any();
         }
 
         public static bool CheckParameters(this IMethod methodSyntax, IEnumerable<string> parameters)
