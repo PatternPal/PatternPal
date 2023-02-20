@@ -7,6 +7,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [2.2.2] - 2023-02-20
+
 ## [2.2.1] - 2022-01-21
 
 ### Fix
@@ -82,7 +84,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 The version developed by the previous team.
 
-[Unreleased]: https://github.com/PatternPal/PatternPal/compare/v2.2.1...HEAD
+[Unreleased]: https://github.com/PatternPal/PatternPal/compare/v2.2.2...HEAD
+
+[2.2.2]: https://github.com/PatternPal/PatternPal/compare/v2.2.1...v2.2.2
 
 [2.2.1]: https://github.com/PatternPal/PatternPal/compare/v2.2.0...v2.2.1
 
