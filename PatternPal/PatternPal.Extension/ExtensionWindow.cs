@@ -34,5 +34,9 @@ namespace PatternPal.Extension
             // the object returned by the Content property.
             Content = new ExtensionWindowControl {DataContext = new MainViewModel(navigationStore)};
         }
+
+        internal static void Main()
+        {
+        }
     }
 }
