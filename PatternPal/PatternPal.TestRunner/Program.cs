@@ -24,6 +24,8 @@ while (reader.ReadLine() is { } line)
         lineParts[ 1 ]);
 }
 
+bool checkAllResultsForCorrectness = args.Length > 1 && args[ 1 ] == "all";
+
 FileManager fileManager = new();
 RecognizerRunner runner = new();
 IList< ProjectResult > results = new List< ProjectResult >();
@@ -61,7 +63,7 @@ foreach (ProjectResult result in results)
         continue;
     }
 
-    if (result.Correct)
+    if (result.Correct(checkAllResultsForCorrectness))
     {
         correctlyDetectedPatterns++;
     }
@@ -84,7 +86,7 @@ Console.WriteLine();
 // Print incorrect results, with detected pattern with highest score
 foreach (ProjectResult result in results)
 {
-    if (result.Correct)
+    if (result.Correct(checkAllResultsForCorrectness))
     {
         continue;
     }
@@ -95,8 +97,11 @@ foreach (ProjectResult result in results)
         continue;
     }
 
-    DetectionResult res = result.Results[ 0 ];
-    Console.WriteLine($"{result.ProjectName}: Expected '{result.ImplementedPattern}', found '{res.DetectedPattern}' with score {res.Score} (implemented in '{res.ClassName}')");
+    Console.WriteLine($"{result.ProjectName}: Expected '{result.ImplementedPattern}', found:");
+    foreach (DetectionResult res in result.Results)
+    {
+        Console.WriteLine($"  - '{res.DetectedPattern}' with score {res.Score} (implemented in '{res.ClassName}')");
+    }
 }
 
 class ProjectResult
@@ -107,13 +112,46 @@ class ProjectResult
     // KNOWN: Results are sorted by score in descending order
     internal required IList< DetectionResult > Results { get; init; }
 
-    internal bool Correct => Results.Count != 0
-                             && Results[ 0 ].DetectedPattern.Replace(
-                                 " ",
-                                 string.Empty)
-                             == ImplementedPattern.Replace(
-                                 " ",
-                                 string.Empty);
+    private bool ? m_Correct;
+
+    internal bool Correct(
+        bool checkAllResultsForCorrectness)
+    {
+        if (m_Correct.HasValue)
+        {
+            return m_Correct.Value;
+        }
+
+        if (Results.Count == 0)
+        {
+            m_Correct = false;
+            return m_Correct.Value;
+        }
+
+        string implementedPatternNormalized = ImplementedPattern.Replace(
+            " ",
+            string.Empty);
+
+        foreach (DetectionResult result in Results)
+        {
+            if (result.DetectedPattern.Replace(
+                    " ",
+                    string.Empty)
+                == implementedPatternNormalized)
+            {
+                m_Correct = true;
+                return m_Correct.Value;
+            }
+
+            if (!checkAllResultsForCorrectness)
+            {
+                break;
+            }
+        }
+
+        m_Correct = false;
+        return m_Correct.Value;
+    }
 }
 
 class DetectionResult
