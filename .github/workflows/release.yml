@@ -3,13 +3,11 @@ on:
   push:
     branches:
       - master
-      - development
     paths:
       - 'PatternPal/**'
   pull_request:
     branches:
       - master
-      - development
     paths:
       - 'PatternPal/**'
   workflow_dispatch: 
@@ -42,7 +40,7 @@ jobs:
       - name: Restore NuGet Packages
         run: nuget restore
       - name: Build extension
-        run: msbuild /t:Rebuild /p:Configuration=Release
+        run: dotnet build --no-incremental --configuration Release
       - name: Collect artifacts - VSIX
         uses: actions/upload-artifact@v2
         with:
