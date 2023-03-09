@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package patternpal;
+
+option csharp_namespace = "PatternPal.Protos";
+
+// Defines the API exposed by the PatternPal background service.
+service PatternPal {
+    // Runs the recognizer(s) for a given file or project.
+    rpc Recognize (RecognizeRequest) returns (stream RecognizerResult);
+}
+
+// Input arguments for recognizer request.
+message RecognizeRequest {
+    // Path of the file or project to analyze.
+    oneof file_or_project {
+        // Path of the file to analyze.
+        string file = 1;
+        // Path of the project to analyze.
+        string project = 2;
+    };
+    // Recognizer to run.
+    Recognizer recognizer = 3;
+}
+
+// Result of the recognizer.
+message RecognizerResult {
+    // Pattern which was detected.
+    string detected_pattern = 1;
+    // Class which the pattern was detected on.
+    string class_name = 2;
+    // Confidence score in the detected pattern, between 0 and 100.
+    double score = 3;
+}
+
+// Recognizers which can be run.
+enum Recognizer {
+    // All recognizers.
+    R_ALL = 0;
+    // Adapter.
+    R_ADAPTER = 1;
+    // Bridge.
+    R_BRIDGE = 2;
+    // Decorator.
+    R_DECORATOR = 3;
+    // Factory Method.
+    R_FACTORY_METHOD = 4;
+    // Observer.
+    R_OBSERVER = 5;
+    // Singleton.
+    R_SINGLETON = 6;
+    // State.
+    R_STATE = 7;
+    // Strategy.
+    R_STRATEGY = 8;
+}

@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\greet.proto" GrpcServices="Server" />
+    <Protobuf Include="../../Protos/patternpal.proto" GrpcServices="Server" Link="Protos/patternpal.proto" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PatternPal.Core\PatternPal.Core.csproj" />
+    <ProjectReference Include="../PatternPal.Core/PatternPal.Core.csproj" />
   </ItemGroup>
 
 </Project>
