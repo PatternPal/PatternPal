@@ -36,21 +36,21 @@ message RecognizerResult {
 // Recognizers which can be run.
 enum Recognizer {
     // All recognizers.
-    R_ALL = 0;
+    ALL = 0;
     // Adapter.
-    R_ADAPTER = 1;
+    ADAPTER = 1;
     // Bridge.
-    R_BRIDGE = 2;
+    BRIDGE = 2;
     // Decorator.
-    R_DECORATOR = 3;
+    DECORATOR = 3;
     // Factory Method.
-    R_FACTORY_METHOD = 4;
+    FACTORY_METHOD = 4;
     // Observer.
-    R_OBSERVER = 5;
+    OBSERVER = 5;
     // Singleton.
-    R_SINGLETON = 6;
+    SINGLETON = 6;
     // State.
-    R_STATE = 7;
+    STATE = 7;
     // Strategy.
-    R_STRATEGY = 8;
+    STRATEGY = 8;
 }

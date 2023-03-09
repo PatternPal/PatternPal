@@ -13,6 +13,11 @@ internal static class Program
 
         WebApplication app = builder.Build();
 
+        app.UseGrpcWeb(
+            new GrpcWebOptions
+            {
+                DefaultEnabled = true
+            });
         app.MapGrpcService< PatternPalService >();
 
         app.Run();
