@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
 using PatternPal.Core.Models;
@@ -6,6 +7,9 @@ using PatternPal.Recognizers.Abstractions;
 using SyntaxTree.Abstractions.Entities;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
+
+using PatternPal.Protos;
+
 using static PatternPal.CommonResources.ClassFeedbackRes;
 
 namespace PatternPal.Extension.ViewModels
@@ -23,11 +27,17 @@ namespace PatternPal.Extension.ViewModels
     {
         public PatternResultViewModel(RecognitionResult result)
         {
+            //Result = result;
+        }
+
+        public PatternResultViewModel(
+            RecognizerResult result)
+        {
             Result = result;
         }
 
-        public RecognitionResult Result { get; set; }
-        public string PatternName => Result.Pattern.Name;
+        public RecognizerResult Result { get; }
+        public string PatternName => Result.DetectedPattern;
 
         /// <summary>
         /// Text that describes the pattern completeness based on the score value.
@@ -61,7 +71,7 @@ namespace PatternPal.Extension.ViewModels
         /// <summary>
         /// Completion score. 100 means all requirements are fulfilled.
         /// </summary>
-        public int Score => Result.Result.GetScore();
+        public int Score => (int)Result.Score;
 
         public bool Expanded { get; set; } = false;
 
@@ -69,7 +79,7 @@ namespace PatternPal.Extension.ViewModels
         {
             get
             {
-                var result = new List<PatternResultPartViewModel>();
+                List< PatternResultPartViewModel > result = new List<PatternResultPartViewModel>();
 
                 if (IncorrectRequirements.Any())
                 {
@@ -90,14 +100,14 @@ namespace PatternPal.Extension.ViewModels
         /// <summary>
         /// IEnumerable that contains checkresults for all correctly implemented requirements
         /// </summary>
-        public IEnumerable<object> CorrectRequirements =>
-            AddRequirementsFromResults(Result.Result.GetResults(), new List<CheckResultViewModel>(), FeedbackType.Correct);
+        public IEnumerable< object > CorrectRequirements => Array.Empty< object >( );
+            //AddRequirementsFromResults(Result.Result.GetResults(), new List<CheckResultViewModel>(), FeedbackType.Correct);
 
         /// <summary>
         /// IEnumerable that contains checkresults for all incorrectly implemented requirements
         /// </summary>
-        public IEnumerable<object> IncorrectRequirements =>
-            AddRequirementsFromResults(Result.Result.GetResults(), new List<CheckResultViewModel>(), FeedbackType.Incorrect);
+        public IEnumerable<object> IncorrectRequirements =>Array.Empty< object >( );
+            //AddRequirementsFromResults(Result.Result.GetResults(), new List<CheckResultViewModel>(), FeedbackType.Incorrect);
 
         public IEntity EntityNode { get; internal set; }
 
@@ -107,8 +117,7 @@ namespace PatternPal.Extension.ViewModels
         /// <returns></returns>
         public SolidColorBrush GetProgressBarColor()
         {
-            var score = Result.Result.GetScore();
-
+            int score = Score;
             return score < 40 ? Brushes.Red : score < 80 ? Brushes.Yellow : Brushes.Green;
         }
 
@@ -118,13 +127,12 @@ namespace PatternPal.Extension.ViewModels
         /// <returns></returns>
         public FeedbackType GetFeedbackType()
         {
-            var score = Result.Result.GetScore();
-            if (score < 40)
+            if (Score < 40)
             {
                 return FeedbackType.Incorrect;
             }
 
-            if (score < 80)
+            if (Score < 80)
             {
                 return FeedbackType.SemiCorrect;
             }
@@ -145,12 +153,12 @@ namespace PatternPal.Extension.ViewModels
             FeedbackType feedbackType
         )
         {
-            foreach (var result in results)
+            foreach (ICheckResult result in results)
             {
-                var childFeedback = result.GetChildFeedback();
+                IEnumerable< ICheckResult > childFeedback = result.GetChildFeedback();
 
                 // Child feedback has at least one element check from the given feedback type
-                var hasChildrenFromGivenFeedbackType = 
+                bool hasChildrenFromGivenFeedbackType = 
                     childFeedback.Any(
                         x => x.GetFeedbackType() == feedbackType && 
                             !x.GetChildFeedback().Any()

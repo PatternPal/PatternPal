@@ -1,14 +1,8 @@
-﻿using System.Net.Http;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
-
-using Grpc.Core;
-using Grpc.Net.Client;
-using Grpc.Net.Client.Web;
 
 using PatternPal.Extension.Stores;
 using PatternPal.Extension.Commands;
-using PatternPal.Protos;
 
 namespace PatternPal.Extension.ViewModels
 {
@@ -19,25 +13,6 @@ namespace PatternPal.Extension.ViewModels
             _navigationStore = navigationStore;
             _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
             BackCommand = new BackCommand(navigationStore);
-
-            GrpcChannel channel = GrpcChannel.ForAddress(
-                "http://localhost:5000",
-                new GrpcChannelOptions
-                {
-                    HttpHandler = new GrpcWebHandler(new HttpClientHandler()),
-                });
-
-            Protos.PatternPal.PatternPalClient client = new Protos.PatternPal.PatternPalClient(channel);
-            IAsyncStreamReader< RecognizerResult > responseStream = client.Recognize(
-                new RecognizeRequest
-                {
-                    File = "Hoi", Recognizer = Recognizer.All,
-                }).ResponseStream;
-
-            if (responseStream.MoveNext().Result)
-            {
-                RecognizerResult response = responseStream.Current;
-            }
         }
 
         /// <summary>

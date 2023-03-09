@@ -2,10 +2,16 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using EnvDTE;
+
+using Grpc.Core;
+using Grpc.Net.Client;
+using Grpc.Net.Client.Web;
+
 using PatternPal.Core;
 using PatternPal.Core.Models;
 using PatternPal.Extension.ViewModels;
@@ -15,6 +21,9 @@ using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+
+using PatternPal.Protos;
+
 using Project = Microsoft.CodeAnalysis.Project;
 
 namespace PatternPal.Extension.Views
@@ -126,22 +135,19 @@ namespace PatternPal.Extension.Views
             Grid.RowDefinitions[3].Height = new GridLength(height);
         }
 
-        private void CreateResultViewModels(IEnumerable<RecognitionResult> results)
+        private void CreateResultViewModels(
+            IEnumerable< RecognizerResult > results)
         {
-            var viewModels = new List<PatternResultViewModel>();
-            foreach (var patterns in from item in RecognizerRunner.DesignPatterns
-                     let patterns = results.Where(x => x.Pattern.Equals(item))
-                     where patterns.Count() > 0
-                     select patterns)
+            List< PatternResultViewModel > viewModels = new List< PatternResultViewModel >();
+
+            foreach (RecognizerResult result in results)
             {
-                viewModels.AddRange(patterns.OrderBy(x => x.Result.GetScore())
-                    .Select(x => new PatternResultViewModel(x)));
+                viewModels.Add(new PatternResultViewModel(result));
             }
 
             // - Change your UI information here
-             ExpanderResults.ResultsView.ItemsSource = viewModels;
+            ExpanderResults.ResultsView.ItemsSource = viewModels;
         }
-
 
         private List<string> GetCurrentPath()
         {
@@ -211,77 +217,36 @@ namespace PatternPal.Extension.Views
 
         private async Task Analyse()
         {
-            LoadProject();
-            var cur = GetCurrentPath().FirstOrDefault();
-            SelectProjectFromFile(cur);
-            ChoosePath();
-            var SelectedPatterns = ViewModels.Where(x => x.IsChecked).Select(x => x.Pattern).ToList();
+            //LoadProject();
+            string cur = GetCurrentPath().FirstOrDefault();
+            //SelectProjectFromFile(cur);
+            //ChoosePath();
 
-            if (!Loading && Paths.Count != 0 && SelectedPatterns.Count != 0)
+            //List< DesignPattern > selectedPatterns = ViewModels.Where(x => x.IsChecked).Select(x => x.Pattern).ToList();
+
+            // TODO CV: Cache channel
+            GrpcChannel channel = GrpcChannel.ForAddress(
+                "http://localhost:5000",
+                new GrpcChannelOptions
+                {
+                    HttpHandler = new GrpcWebHandler(new HttpClientHandler()),
+                });
+
+            Protos.PatternPal.PatternPalClient client = new Protos.PatternPal.PatternPalClient(channel);
+            IAsyncStreamReader< RecognizerResult > responseStream = client.Recognize(
+                new RecognizeRequest
+                {
+                    File = cur, Recognizer = Recognizer.Singleton,
+                }).ResponseStream;
+
+            IList< RecognizerResult > results = new List< RecognizerResult >();
+            while (await responseStream.MoveNext())
             {
-                if ((bool)SelectPaths.radio1.IsChecked)
-                {
-                    CheckSwitch.IsChecked = true;
-                }
-                else
-                {
-                    CheckSwitch.IsChecked = false;
-                }
-
-                var runner = new RecognizerRunner();
-                Loading = true;
-                statusBar.Value = 0;
-                var progress = new Progress<RecognizerProgress>(value =>
-                {
-                    statusBar.Value = value.CurrentPercentage;
-                    ProgressStatusBlock.Text = value.Status;
-                });
-
-                IProgress<RecognizerProgress> iprogress = progress;
-                runner.OnProgressUpdate += (o, recognizerProgress) => iprogress.Report(recognizerProgress);
-
-                await Task.Run(() =>
-                {
-                    try
-                    {
-                        runner.CreateGraph(Paths);
-                        Results = runner.Run(SelectedPatterns);
-
-                        //Here you signal the UI thread to execute the action:
-                        Dispatcher?.BeginInvoke(new Action(() =>
-                        {
-                            var results = Results;
-                            var allResults = Results;
-                            if ((bool)SelectPaths.radio1.IsChecked)
-                            {
-                                results = results.Where(x => x.FilePath == cur).ToList();
-                                Results = results;
-
-                                SummaryRow.Height = GridLength.Auto;
-                            }
-                            else
-                            {
-                                SummaryRow.Height = new GridLength(0);
-                            }
-
-                            if (!(bool)CheckSwitch.IsChecked)
-                            {
-                                results = Results.Where(x => x.Result.GetScore() >= 80).ToList();
-                            }
-
-                            SummaryControl.Text = SummaryFactory.CreateSummary(results, allResults);
-                            CreateResultViewModels(results);
-                            ResetUI();
-                        }));
-                    }
-                    catch (Exception e)
-                    {
-                        throw e;
-                    }
-
-                    ;
-                });
+                results.Add(responseStream.Current);
             }
+
+            CreateResultViewModels(results);
+            SummaryControl.Text = "Recognizer is finished";
         }
 
         private void CheckSwitch_Checked(object sender, RoutedEventArgs e)
@@ -291,7 +256,7 @@ namespace PatternPal.Extension.Views
                 return;
             }
 
-            CreateResultViewModels(Results);
+            //CreateResultViewModels(Results);
         }
 
         private void CheckSwitch_Unchecked(object sender, RoutedEventArgs e)
@@ -302,7 +267,7 @@ namespace PatternPal.Extension.Views
             }
 
             var results = Results.Where(x => x.Result.GetScore() >= 80).ToList();
-            CreateResultViewModels(results);
+            //CreateResultViewModels(results);
         }
 
         private void ResetUI()

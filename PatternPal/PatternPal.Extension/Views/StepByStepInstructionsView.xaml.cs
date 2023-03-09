@@ -157,8 +157,8 @@ namespace PatternPal.Extension.Views
                     Expanded = true
                 }
             };
-            
-            var correct = viewModels[0].Result.Result.GetResults().All(c => c.GetFeedbackType() == FeedbackType.Correct);
+
+            var correct = false; //viewModels[0].Result.Result.GetResults().All(c => c.GetFeedbackType() == FeedbackType.Correct);
             
             ExpanderResults.ResultsView.ItemsSource = viewModels;
             
