@@ -19,8 +19,8 @@ message RecognizeRequest {
         // Path of the project to analyze.
         string project = 2;
     };
-    // Recognizer to run.
-    Recognizer recognizer = 3;
+    // Recognizers to run.
+    repeated Recognizer recognizers = 3;
 }
 
 // Result of the recognizer.
@@ -29,8 +29,27 @@ message RecognizerResult {
     string detected_pattern = 1;
     // Class which the pattern was detected on.
     string class_name = 2;
-    // Confidence score in the detected pattern, between 0 and 100.
-    double score = 3;
+    Result result = 3;
+}
+
+// TODO CV: Proper naming and documentation.
+message Result {
+    int32 score = 1;
+    repeated CheckResult results = 2;
+}
+
+message CheckResult {
+    repeated CheckResult child_feedback = 1;
+    FeedbackType feedback_type = 2;
+    bool hidden = 3;
+    double score = 4;
+}
+
+enum FeedbackType {
+    UNKNOWN = 0;
+    CORRECT = 1;
+    SEMI_CORRECT = 2;
+    INCORRECT = 3;
 }
 
 // Recognizers which can be run.

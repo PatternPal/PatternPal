@@ -1,41 +1,59 @@
-﻿using System.ComponentModel;
-using PatternPal.Core.Models;
+﻿#region
+
+using System.ComponentModel;
+
+using PatternPal.Protos;
+
+#endregion
 
 namespace PatternPal.Extension.ViewModels
 {
     public class DesignPatternViewModel : INotifyPropertyChanged
     {
-        private bool isChecked;
+        private bool m_IsChecked;
 
-        public DesignPatternViewModel(string name, DesignPattern pattern, string wikiPage)
+        public DesignPatternViewModel(
+            Recognizer recognizer)
         {
-            WikiPage = wikiPage;
-            Name = name;
-            Pattern = pattern;
+            Recognizer = recognizer;
             IsChecked = true;
         }
 
-        public DesignPattern Pattern { get; set; }
+        //public DesignPatternViewModel(
+        //    string name,
+        //    DesignPattern pattern,
+        //    string wikiPage)
+        //{
+        //    WikiPage = wikiPage;
+        //    Name = name;
+        //    Pattern = pattern;
+        //    IsChecked = true;
+        //}
 
-        public string Name { get; set; }
+        public Recognizer Recognizer { get; }
 
-        public string WikiPage { get; set; }
+        public string Name => Recognizer.ToString();
+
+        //public string WikiPage { get; set; }
 
         public bool IsChecked
         {
-            get => isChecked;
+            get => m_IsChecked;
             set
             {
-                isChecked = value;
+                m_IsChecked = value;
                 OnPropertyChanged("IsChecked");
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void OnPropertyChanged(string name)
+        protected void OnPropertyChanged(
+            string name)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            PropertyChanged?.Invoke(
+                this,
+                new PropertyChangedEventArgs(name));
         }
     }
 }

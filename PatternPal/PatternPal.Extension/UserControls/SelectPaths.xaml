@@ -22,10 +22,10 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <RadioButton Grid.Column="0" GroupName="Radio" x:Name="radio1" IsChecked="True" Content="Active Document"
+        <RadioButton Grid.Row="0" Grid.Column="0" GroupName="Radio" x:Name="ActiveDocument" IsChecked="True" Content="Active Document"
                      Checked="ActiveDocument_Checked" Margin="0,0,0,5"/>
-        <RadioButton Grid.Column="1" GroupName="Radio" Content="Project" Checked="Project_Checked" Margin="0,0,0,5"/>
-        <ComboBox Grid.Row="1" Grid.ColumnSpan="2" x:Name="ProjectSelection" Height="Auto" Margin="5">
+        <RadioButton Grid.Row="0"  Grid.Column="1" GroupName="Radio" x:Name="Project" Content="Project" Checked="Project_Checked" Margin="0,0,0,5"/>
+        <ComboBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" x:Name="ProjectSelection" Height="Auto" Margin="5">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Name}" />

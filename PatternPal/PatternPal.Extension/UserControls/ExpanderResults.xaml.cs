@@ -31,19 +31,19 @@ namespace PatternPal.Extension.UserControls
                 return;
             }
 
-            var element = viewModel.Result.GetElement();
-            if (element == null)
-            {
-                return;
-            }
+            //var element = viewModel.Result.GetElement();
+            //if (element == null)
+            //{
+            //    return;
+            //}
 
-            var node = element.GetSyntaxNode();
-            if (node == null)
-            {
-                return;
-            }
+            //var node = element.GetSyntaxNode();
+            //if (node == null)
+            //{
+            //    return;
+            //}
 
-            SelectNodeInEditor(node, element.GetRoot().GetSource());
+            //SelectNodeInEditor(node, element.GetRoot().GetSource());
         }
 
         /// <summary>
