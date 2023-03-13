@@ -1,27 +1,28 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
-using PatternPal.Core.Models;
-using PatternPal.Recognizers.Abstractions;
+
+using PatternPal.Protos;
+
 using SyntaxTree.Abstractions.Entities;
 
 namespace PatternPal.Extension.ViewModels
 {
     public class ResultViewModel
     {
-        public ResultViewModel(RecognitionResult result)
+        public ResultViewModel(RecognizerResult result)
         {
             Result = result;
         }
 
-        public RecognitionResult Result { get; set; }
-        public string PatternName => Result.Pattern.Name;
-        public int Score => Result.Result.GetScore();
+        public RecognizerResult Result { get; set; }
+        public string PatternName => Result.DetectedPattern;
+        public int Score => Result.Result.Score;
 
-        public SolidColorBrush Color => GetColor(Result.Result.GetScore());
+        public SolidColorBrush Color => GetColor(Result.Result.Score);
 
         public IEnumerable<CheckResultViewModel> Results =>
-            Result.Result.GetResults().Select(x => new CheckResultViewModel(x, GetFeedbackType()));
+            Result.Result.Results.Select(x => new CheckResultViewModel(x, GetFeedbackType()));
 
         public IEntity EntityNode { get; internal set; }
 
@@ -32,18 +33,18 @@ namespace PatternPal.Extension.ViewModels
 
         public FeedbackType GetFeedbackType()
         {
-            var score = Result.Result.GetScore();
+            var score = Result.Result.Score;
             if (score < 40)
             {
-                return FeedbackType.Incorrect;
+                return FeedbackType.FeedbackIncorrect;
             }
 
             if (score < 80)
             {
-                return FeedbackType.SemiCorrect;
+                return FeedbackType.FeedbackSemiCorrect;
             }
 
-            return FeedbackType.Correct;
+            return FeedbackType.FeedbackCorrect;
         }
     }
 }

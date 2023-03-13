@@ -21,7 +21,6 @@ using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
-using PatternPal.Core.Models;
 using PatternPal.Extension.ViewModels;
 using PatternPal.Protos;
 
@@ -69,7 +68,7 @@ namespace PatternPal.Extension.Views
         private List< Project > Projects { get; set; }
         private bool Loading { get; set; }
         private DTE Dte { get; }
-        private List< RecognitionResult > Results { get; set; }
+        private List< RecognizerResult > Results { get; set; }
 
         public int OnAfterOpenProject(
             IVsHierarchy pHierarchy,
@@ -224,7 +223,7 @@ namespace PatternPal.Extension.Views
             {
                 if (null != Dte.ActiveDocument)
                 {
-                    request.File = Dte.ActiveDocument.Name;
+                    request.File = Dte.ActiveDocument.FullName;
                 }
             }
             else
@@ -285,13 +284,13 @@ namespace PatternPal.Extension.Views
                 return;
             }
 
-            List< RecognitionResult > results = Results.Where(x => x.Result.GetScore() >= 80).ToList();
+            List< RecognizerResult > results = Results.Where(x => x.Result.Score >= 80).ToList();
             //CreateResultViewModels(results);
         }
 
         private void ResetUI()
         {
-            statusBar.Value = 0;
+            //statusBar.Value = 0;
             Loading = false;
             ProgressStatusBlock.Text = "";
         }

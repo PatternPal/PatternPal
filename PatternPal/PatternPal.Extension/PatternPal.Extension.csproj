@@ -248,10 +248,6 @@
       <Project>{68b3c66e-d837-4b67-b674-c994bc4e207b}</Project>
       <Name>PatternPal.CommonResources</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PatternPal.Core\PatternPal.Core.csproj">
-      <Project>{39c79d09-34da-496b-936d-4387f5db9104}</Project>
-      <Name>PatternPal.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PatternPal.Extension.Protos\PatternPal.Extension.Protos.csproj">
       <Project>{070aad55-a535-4e4c-9d33-039d3e370187}</Project>
       <Name>PatternPal.Extension.Protos</Name>

@@ -1,4 +1,10 @@
-﻿using PatternPal.Recognizers.Abstractions;
+﻿#region
+
+using PatternPal.Recognizers.Abstractions;
+
+using FeedbackType = PatternPal.Protos.FeedbackType;
+
+#endregion
 
 namespace PatternPal.Services;
 
@@ -28,14 +34,12 @@ public class PatternPalService : Protos.PatternPal.PatternPalBase
         List< DesignPattern > patterns = new();
         foreach (Recognizer recognizer in request.Recognizers)
         {
-            patterns.Add(
-                RecognizerRunner.DesignPatterns.Find(
-                    p => string.Equals(
-                        p.Name,
-                        recognizer.ToString().Replace(
-                            "_",
-                            " "),
-                        StringComparison.InvariantCultureIgnoreCase))!);
+            if (recognizer == Recognizer.Unknown)
+            {
+                continue;
+            }
+
+            patterns.Add(RecognizerRunner.GetDesignPattern(recognizer));
         }
 
         foreach (RecognitionResult result in runner.Run(patterns))
@@ -49,11 +53,12 @@ public class PatternPalService : Protos.PatternPal.PatternPalBase
                 res.Results.Add(CreateCheckResult(checkResult));
             }
 
-            responseStream.WriteAsync(
-                new RecognizerResult
-                {
-                    DetectedPattern = result.Pattern.Name, ClassName = result.EntityNode.GetFullName(), Result = res,
-                });
+            RecognizerResult r = new RecognizerResult
+                                 {
+                                     DetectedPattern = result.Pattern.Name, ClassName = result.EntityNode.GetFullName(), Result = res,
+                                 };
+            responseStream.WriteAsync(r);
+            Console.WriteLine("Response: " + r);
         }
 
         return Task.CompletedTask;
@@ -64,7 +69,7 @@ public class PatternPalService : Protos.PatternPal.PatternPalBase
     {
         CheckResult newCheckResult = new()
                                      {
-                                         FeedbackType = (Protos.FeedbackType)((int)checkResult.GetFeedbackType() + 1), Hidden = checkResult.IsHidden, Score = checkResult.GetScore()
+                                         FeedbackType = (FeedbackType)((int)checkResult.GetFeedbackType() + 1), Hidden = checkResult.IsHidden, Score = checkResult.GetScore()
                                      };
         foreach (ICheckResult childCheckResult in checkResult.GetChildFeedback())
         {

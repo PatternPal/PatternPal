@@ -10,7 +10,6 @@ using Google.Protobuf.Collections;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
 
-using PatternPal.Core.Models;
 using PatternPal.Protos;
 using PatternPal.Recognizers.Abstractions;
 
@@ -35,12 +34,6 @@ namespace PatternPal.Extension.ViewModels
 
     public class PatternResultViewModel
     {
-        public PatternResultViewModel(
-            RecognitionResult result)
-        {
-            //Result = result;
-        }
-
         public PatternResultViewModel(
             RecognizerResult result)
         {
@@ -98,7 +91,7 @@ namespace PatternPal.Extension.ViewModels
                         new PatternResultPartViewModel(
                             IncorrectRequirements.ToList(),
                             Status.Warning,
-                            FeedbackType.Incorrect));
+                            FeedbackType.FeedbackIncorrect));
                 }
 
                 if (CorrectRequirements.Any())
@@ -107,7 +100,7 @@ namespace PatternPal.Extension.ViewModels
                         new PatternResultPartViewModel(
                             CorrectRequirements.ToList(),
                             Status.OK,
-                            FeedbackType.Correct));
+                            FeedbackType.FeedbackCorrect));
                 }
 
                 return result;
@@ -122,7 +115,7 @@ namespace PatternPal.Extension.ViewModels
         public IEnumerable< object > CorrectRequirements => AddRequirementsFromResults(
             Result.Result.Results,
             new List< CheckResultViewModel >(),
-            FeedbackType.Correct);
+            FeedbackType.FeedbackCorrect);
 
         /// <summary>
         /// IEnumerable that contains checkresults for all incorrectly implemented requirements
@@ -130,7 +123,7 @@ namespace PatternPal.Extension.ViewModels
         public IEnumerable< object > IncorrectRequirements => AddRequirementsFromResults(
             Result.Result.Results,
             new List< CheckResultViewModel >(),
-            FeedbackType.Incorrect);
+            FeedbackType.FeedbackIncorrect);
 
         public IEntity EntityNode { get; internal set; }
 
@@ -152,15 +145,15 @@ namespace PatternPal.Extension.ViewModels
         {
             if (Score < 40)
             {
-                return FeedbackType.Incorrect;
+                return FeedbackType.FeedbackIncorrect;
             }
 
             if (Score < 80)
             {
-                return FeedbackType.SemiCorrect;
+                return FeedbackType.FeedbackSemiCorrect;
             }
 
-            return FeedbackType.Correct;
+            return FeedbackType.FeedbackCorrect;
         }
 
         /// <summary>
@@ -195,7 +188,7 @@ namespace PatternPal.Extension.ViewModels
                 else
                     if (result.Hidden
                         && hasChildrenFromGivenFeedbackType
-                        && feedbackType == FeedbackType.Incorrect)
+                        && feedbackType == FeedbackType.FeedbackIncorrect)
                     {
                         destination.Add(
                             new CheckResultViewModel(

@@ -46,30 +46,30 @@ message CheckResult {
 }
 
 enum FeedbackType {
-    UNKNOWN = 0;
-    CORRECT = 1;
-    SEMI_CORRECT = 2;
-    INCORRECT = 3;
+    FEEDBACK_UNKNOWN = 0;
+    FEEDBACK_CORRECT = 1;
+    FEEDBACK_SEMI_CORRECT = 2;
+    FEEDBACK_INCORRECT = 3;
 }
 
 // Recognizers which can be run.
 enum Recognizer {
     // All recognizers.
-    ALL = 0;
+    RECOGNIZER_UNKNOWN = 0;
     // Adapter.
-    ADAPTER = 1;
+    RECOGNIZER_ADAPTER = 1;
     // Bridge.
-    BRIDGE = 2;
+    RECOGNIZER_BRIDGE = 2;
     // Decorator.
-    DECORATOR = 3;
+    RECOGNIZER_DECORATOR = 3;
     // Factory Method.
-    FACTORY_METHOD = 4;
+    RECOGNIZER_FACTORY_METHOD = 4;
     // Observer.
-    OBSERVER = 5;
+    RECOGNIZER_OBSERVER = 5;
     // Singleton.
-    SINGLETON = 6;
+    RECOGNIZER_SINGLETON = 6;
     // State.
-    STATE = 7;
+    RECOGNIZER_STATE = 7;
     // Strategy.
-    STRATEGY = 8;
+    RECOGNIZER_STRATEGY = 8;
 }

@@ -46,7 +46,7 @@ namespace PatternPal.Extension.ViewModels
             CheckResult result)
             : this(
                 result,
-                Protos.FeedbackType.Correct)
+                Protos.FeedbackType.FeedbackCorrect)
         {
         }
 
