@@ -19,8 +19,8 @@ message RecognizeRequest {
         // Path of the project to analyze.
         string project = 2;
     };
-    // Recognizer to run.
-    Recognizer recognizer = 3;
+    // Recognizers to run.
+    repeated Recognizer recognizers = 3;
 }
 
 // Result of the recognizer.
@@ -29,28 +29,48 @@ message RecognizerResult {
     string detected_pattern = 1;
     // Class which the pattern was detected on.
     string class_name = 2;
-    // Confidence score in the detected pattern, between 0 and 100.
-    double score = 3;
+    Result result = 3;
+}
+
+// TODO CV: Proper naming and documentation.
+message Result {
+    int32 score = 1;
+    repeated CheckResult results = 2;
+}
+
+message CheckResult {
+    repeated CheckResult child_feedback = 1;
+    FeedbackType feedback_type = 2;
+    bool hidden = 3;
+    double score = 4;
+    string feedback_message = 5;
+}
+
+enum FeedbackType {
+    FEEDBACK_UNKNOWN = 0;
+    FEEDBACK_CORRECT = 1;
+    FEEDBACK_SEMI_CORRECT = 2;
+    FEEDBACK_INCORRECT = 3;
 }
 
 // Recognizers which can be run.
 enum Recognizer {
     // All recognizers.
-    R_ALL = 0;
+    RECOGNIZER_UNKNOWN = 0;
     // Adapter.
-    R_ADAPTER = 1;
+    RECOGNIZER_ADAPTER = 1;
     // Bridge.
-    R_BRIDGE = 2;
+    RECOGNIZER_BRIDGE = 2;
     // Decorator.
-    R_DECORATOR = 3;
+    RECOGNIZER_DECORATOR = 3;
     // Factory Method.
-    R_FACTORY_METHOD = 4;
+    RECOGNIZER_FACTORY_METHOD = 4;
     // Observer.
-    R_OBSERVER = 5;
+    RECOGNIZER_OBSERVER = 5;
     // Singleton.
-    R_SINGLETON = 6;
+    RECOGNIZER_SINGLETON = 6;
     // State.
-    R_STATE = 7;
+    RECOGNIZER_STATE = 7;
     // Strategy.
-    R_STRATEGY = 8;
+    RECOGNIZER_STRATEGY = 8;
 }

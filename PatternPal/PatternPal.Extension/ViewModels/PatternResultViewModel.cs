@@ -1,12 +1,24 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
-using PatternPal.Core.Models;
-using PatternPal.Recognizers.Abstractions;
-using SyntaxTree.Abstractions.Entities;
+
+using Google.Protobuf.Collections;
+
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
+
+using PatternPal.Protos;
+
+using SyntaxTree.Abstractions.Entities;
+
 using static PatternPal.CommonResources.ClassFeedbackRes;
+
+using FeedbackType = PatternPal.Protos.FeedbackType;
+
+#endregion
 
 namespace PatternPal.Extension.ViewModels
 {
@@ -21,13 +33,14 @@ namespace PatternPal.Extension.ViewModels
 
     public class PatternResultViewModel
     {
-        public PatternResultViewModel(RecognitionResult result)
+        public PatternResultViewModel(
+            RecognizerResult result)
         {
             Result = result;
         }
 
-        public RecognitionResult Result { get; set; }
-        public string PatternName => Result.Pattern.Name;
+        public RecognizerResult Result { get; }
+        public string PatternName => Result.DetectedPattern;
 
         /// <summary>
         /// Text that describes the pattern completeness based on the score value.
@@ -61,24 +74,32 @@ namespace PatternPal.Extension.ViewModels
         /// <summary>
         /// Completion score. 100 means all requirements are fulfilled.
         /// </summary>
-        public int Score => Result.Result.GetScore();
+        public int Score => Result.Result.Score;
 
         public bool Expanded { get; set; } = false;
 
-        public List<PatternResultPartViewModel> Children
+        public List< PatternResultPartViewModel > Children
         {
             get
             {
-                var result = new List<PatternResultPartViewModel>();
+                List< PatternResultPartViewModel > result = new List< PatternResultPartViewModel >();
 
                 if (IncorrectRequirements.Any())
                 {
-                    result.Add(new PatternResultPartViewModel(IncorrectRequirements.ToList(), Status.Warning, FeedbackType.Incorrect));
+                    result.Add(
+                        new PatternResultPartViewModel(
+                            IncorrectRequirements.ToList(),
+                            Status.Warning,
+                            FeedbackType.FeedbackIncorrect));
                 }
 
                 if (CorrectRequirements.Any())
                 {
-                    result.Add(new PatternResultPartViewModel(CorrectRequirements.ToList(), Status.OK, FeedbackType.Correct));
+                    result.Add(
+                        new PatternResultPartViewModel(
+                            CorrectRequirements.ToList(),
+                            Status.OK,
+                            FeedbackType.FeedbackCorrect));
                 }
 
                 return result;
@@ -90,14 +111,18 @@ namespace PatternPal.Extension.ViewModels
         /// <summary>
         /// IEnumerable that contains checkresults for all correctly implemented requirements
         /// </summary>
-        public IEnumerable<object> CorrectRequirements =>
-            AddRequirementsFromResults(Result.Result.GetResults(), new List<CheckResultViewModel>(), FeedbackType.Correct);
+        public IEnumerable< object > CorrectRequirements => AddRequirementsFromResults(
+            Result.Result.Results,
+            new List< CheckResultViewModel >(),
+            FeedbackType.FeedbackCorrect);
 
         /// <summary>
         /// IEnumerable that contains checkresults for all incorrectly implemented requirements
         /// </summary>
-        public IEnumerable<object> IncorrectRequirements =>
-            AddRequirementsFromResults(Result.Result.GetResults(), new List<CheckResultViewModel>(), FeedbackType.Incorrect);
+        public IEnumerable< object > IncorrectRequirements => AddRequirementsFromResults(
+            Result.Result.Results,
+            new List< CheckResultViewModel >(),
+            FeedbackType.FeedbackIncorrect);
 
         public IEntity EntityNode { get; internal set; }
 
@@ -107,8 +132,7 @@ namespace PatternPal.Extension.ViewModels
         /// <returns></returns>
         public SolidColorBrush GetProgressBarColor()
         {
-            var score = Result.Result.GetScore();
-
+            int score = Score;
             return score < 40 ? Brushes.Red : score < 80 ? Brushes.Yellow : Brushes.Green;
         }
 
@@ -118,18 +142,17 @@ namespace PatternPal.Extension.ViewModels
         /// <returns></returns>
         public FeedbackType GetFeedbackType()
         {
-            var score = Result.Result.GetScore();
-            if (score < 40)
+            if (Score < 40)
             {
-                return FeedbackType.Incorrect;
+                return FeedbackType.FeedbackIncorrect;
             }
 
-            if (score < 80)
+            if (Score < 80)
             {
-                return FeedbackType.SemiCorrect;
+                return FeedbackType.FeedbackSemiCorrect;
             }
 
-            return FeedbackType.Correct;
+            return FeedbackType.FeedbackCorrect;
         }
 
         /// <summary>
@@ -139,35 +162,45 @@ namespace PatternPal.Extension.ViewModels
         /// <param name="destination"></param>
         /// <param name="feedbackType"></param>
         /// <returns>A list that contains CheckResultViewModel classes</returns>
-        public IList<CheckResultViewModel> AddRequirementsFromResults(
-            IEnumerable<ICheckResult> results,
-            IList<CheckResultViewModel> destination,
-            FeedbackType feedbackType
-        )
+        public IList< CheckResultViewModel > AddRequirementsFromResults(
+            RepeatedField< CheckResult > results,
+            IList< CheckResultViewModel > destination,
+            FeedbackType feedbackType)
         {
-            foreach (var result in results)
+            foreach (CheckResult result in results)
             {
-                var childFeedback = result.GetChildFeedback();
+                RepeatedField< CheckResult > childFeedback = result.ChildFeedback;
 
                 // Child feedback has at least one element check from the given feedback type
-                var hasChildrenFromGivenFeedbackType = 
+                bool hasChildrenFromGivenFeedbackType =
                     childFeedback.Any(
-                        x => x.GetFeedbackType() == feedbackType && 
-                            !x.GetChildFeedback().Any()
+                        x => x.FeedbackType == feedbackType && !x.ChildFeedback.Any()
                     );
 
-                if (!result.IsHidden && hasChildrenFromGivenFeedbackType)
+                if (!result.Hidden && hasChildrenFromGivenFeedbackType)
                 {
-                    destination.Add(new CheckResultViewModel(result, feedbackType));
+                    destination.Add(
+                        new CheckResultViewModel(
+                            result,
+                            feedbackType));
                 }
-                else if (result.IsHidden && hasChildrenFromGivenFeedbackType && feedbackType == FeedbackType.Incorrect)
-                {
-                    destination.Add(new CheckResultViewModel(result, feedbackType));
-                }
+                else
+                    if (result.Hidden
+                        && hasChildrenFromGivenFeedbackType
+                        && feedbackType == FeedbackType.FeedbackIncorrect)
+                    {
+                        destination.Add(
+                            new CheckResultViewModel(
+                                result,
+                                feedbackType));
+                    }
 
                 if (childFeedback.Any())
                 {
-                    AddRequirementsFromResults(childFeedback, destination, feedbackType);
+                    AddRequirementsFromResults(
+                        childFeedback,
+                        destination,
+                        feedbackType);
                 }
             }
 
@@ -181,9 +214,11 @@ namespace PatternPal.Extension.ViewModels
         /// The icon to be shown for the result part.
         /// </summary>
         public ImageMoniker Icon =>
-            CurrentStatus == Status.Warning ? KnownMonikers.StatusWarning : KnownMonikers.StatusOK;
+            CurrentStatus == Status.Warning
+                ? KnownMonikers.StatusWarning
+                : KnownMonikers.StatusOK;
 
-        public List<object> ChildViewModels { get; set; }
+        public List< object > ChildViewModels { get; set; }
 
         public Status CurrentStatus { get; set; }
 
@@ -198,9 +233,13 @@ namespace PatternPal.Extension.ViewModels
             get
             {
                 if (CurrentStatus == Status.Warning)
-                    return string.Format(SummaryTextIncorrectRequirements, ChildrenCount);
+                    return string.Format(
+                        SummaryTextIncorrectRequirements,
+                        ChildrenCount);
 
-                return string.Format(SummaryTextCorrectRequirements, ChildrenCount);
+                return string.Format(
+                    SummaryTextCorrectRequirements,
+                    ChildrenCount);
             }
         }
 
@@ -219,7 +258,10 @@ namespace PatternPal.Extension.ViewModels
             }
         }
 
-        public PatternResultPartViewModel(List<object> childViewModels, Status status, FeedbackType feedbackType)
+        public PatternResultPartViewModel(
+            List< object > childViewModels,
+            Status status,
+            FeedbackType feedbackType)
         {
             ChildViewModels = childViewModels;
             CurrentStatus = status;
@@ -231,22 +273,25 @@ namespace PatternPal.Extension.ViewModels
         /// </summary>
         /// <param name="result">The ICheckResult for which to count the children</param>
         /// <returns>Children count</returns>
-        private int CountChildren(ICheckResult result)
+        private int CountChildren(
+            CheckResult result)
         {
             int totalCount = 0;
 
-            if (result.GetChildFeedback().Any())
+            if (result.ChildFeedback.Any())
             {
-                foreach (ICheckResult childResult in result.GetChildFeedback())
+                foreach (CheckResult childResult in result.ChildFeedback)
                 {
-                    if (!childResult.GetChildFeedback().Any() && childResult.GetFeedbackType() == FeedbackType)
+                    if (!childResult.ChildFeedback.Any()
+                        && childResult.FeedbackType == FeedbackType)
                     {
                         totalCount++;
                     }
-                    else if (childResult.IsHidden)
-                    {
-                        totalCount += CountChildren(childResult);
-                    }
+                    else
+                        if (childResult.Hidden)
+                        {
+                            totalCount += CountChildren(childResult);
+                        }
                 }
 
                 return totalCount;

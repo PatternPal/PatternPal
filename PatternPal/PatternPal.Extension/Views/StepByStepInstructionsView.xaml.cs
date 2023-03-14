@@ -7,18 +7,17 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using EnvDTE;
-using PatternPal.Core;
-using PatternPal.Core.Models;
 using PatternPal.Extension.Model;
 using PatternPal.Extension.ViewModels;
-using PatternPal.Recognizers.Abstractions;
-using PatternPal.Recognizers.Models.Output;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+
+using PatternPal.Protos;
 using PatternPal.StepByStep.Abstractions;
 using SyntaxTree;
 using Project = Microsoft.CodeAnalysis.Project;
@@ -144,21 +143,21 @@ namespace PatternPal.Extension.Views
             var viewModels = new List<PatternResultViewModel>
             {
                 new PatternResultViewModel(
-                    new RecognitionResult
+                    new RecognizerResult
                     {
-                        Pattern = new DesignPattern(_viewModel.InstructionSet.Name, null, null),
-                        Result = new Result
-                        {
-                            Results = instruction.Checks.Select(c => c.Correct(state)).ToList()
-                        }
+                        DetectedPattern = _viewModel.InstructionSet.Name,
+                        //Result = new Result
+                        //{
+                        //    Results = instruction.Checks.Select(c => c.Correct(state)).ToList()
+                        //}
                     }
                 )
                 {
                     Expanded = true
                 }
             };
-            
-            var correct = viewModels[0].Result.Result.GetResults().All(c => c.GetFeedbackType() == FeedbackType.Correct);
+
+            var correct = false; //viewModels[0].Result.Result.GetResults().All(c => c.GetFeedbackType() == FeedbackType.Correct);
             
             ExpanderResults.ResultsView.ItemsSource = viewModels;
             
@@ -194,8 +193,8 @@ namespace PatternPal.Extension.Views
             {
                 foreach (var document in project.Documents)
                 {
-                    var text = FileManager.MakeStringFromFile(document.FilePath);
-                    graph.AddFile(text, document.FilePath);
+                    //var text = FileManager.MakeStringFromFile(document.FilePath);
+                    //graph.AddFile(text, document.FilePath);
                 }
             }
 

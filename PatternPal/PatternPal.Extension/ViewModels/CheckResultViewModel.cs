@@ -1,38 +1,44 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using System.Linq;
-using PatternPal.CommonResources;
-using PatternPal.Recognizers.Abstractions;
+
+using PatternPal.Protos;
+
+#endregion
 
 namespace PatternPal.Extension.ViewModels
 {
     public class CheckResultViewModel
     {
-        public ICheckResult Result { get; set; }
+        public CheckResult Result { get; set; }
         public string Message { get; set; }
-        public float Score => Result.GetScore();
+        public float Score => (float)Result.Score;
         public FeedbackType ChildrenFeedbackType { get; set; }
-        public IEnumerable<CheckResultViewModel> SubResults => GetSubResults();
+        public IEnumerable< CheckResultViewModel > SubResults => GetSubResults();
 
-        public CheckResultViewModel(ICheckResult result, FeedbackType childrenFeedbackType)
+        public CheckResultViewModel(
+            CheckResult result,
+            FeedbackType childrenFeedbackType = FeedbackType.FeedbackCorrect)
         {
             Result = result;
-            Message = ResourceUtils.ResultToString(Result);
+            Message = Result.FeedbackMessage;
             ChildrenFeedbackType = childrenFeedbackType;
         }
-
-        public CheckResultViewModel(ICheckResult result) : this(result, FeedbackType.Correct) { }
 
         /// <summary>
         /// Loops through all subresults recursively and place them in an IEnumberable
         /// </summary>
         /// <returns>IEnumerable that contains CheckResultViewModel classes</returns>
-        private IEnumerable<CheckResultViewModel> GetSubResults()
+        private IEnumerable< CheckResultViewModel > GetSubResults()
         {
-            var toReturn = new List<CheckResultViewModel>();
+            List< CheckResultViewModel > toReturn = new List< CheckResultViewModel >();
 
-            foreach (ICheckResult result in Result.GetChildFeedback())
+            foreach (CheckResult result in Result.ChildFeedback)
             {
-                GetSubResultsRecursive(toReturn, result);
+                GetSubResultsRecursive(
+                    toReturn,
+                    result);
             }
 
             return toReturn;
@@ -43,19 +49,25 @@ namespace PatternPal.Extension.ViewModels
         /// </summary>
         /// <param name="toReturn"></param>
         /// <param name="result"></param>
-        private void GetSubResultsRecursive(List<CheckResultViewModel> toReturn, ICheckResult result)
+        private void GetSubResultsRecursive(
+            List< CheckResultViewModel > toReturn,
+            CheckResult result)
         {
-            if (result.IsHidden)
+            if (result.Hidden)
             {
-                foreach (var sub in result.GetChildFeedback())
+                foreach (CheckResult sub in result.ChildFeedback)
                 {
-                    GetSubResultsRecursive(toReturn, sub);
+                    GetSubResultsRecursive(
+                        toReturn,
+                        sub);
                 }
             }
-            else if (!result.GetChildFeedback().Any() && result.GetFeedbackType() == ChildrenFeedbackType)
-            {
-                toReturn.Add(new CheckResultViewModel(result));
-            }
+            else
+                if (!result.ChildFeedback.Any()
+                    && result.FeedbackType == ChildrenFeedbackType)
+                {
+                    toReturn.Add(new CheckResultViewModel(result));
+                }
         }
     }
 }

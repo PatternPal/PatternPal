@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using PatternPal.Core.Models;
 using PatternPal.Extension.Resources;
+using PatternPal.Protos;
+
 using SyntaxTree.Abstractions.Entities;
 
 namespace PatternPal.Extension
@@ -40,7 +41,7 @@ namespace PatternPal.Extension
 
         private string CreatePartOfPatternSummary(
             IEnumerable<string> uniqueFiles,
-            IEnumerable<RecognitionResult> allResults,
+            IEnumerable<RecognizerResult> allResults,
             IEnumerable<IEntity> uniqueEntityNodes,
             ref int recognizedPatternsCount
         )
@@ -50,49 +51,51 @@ namespace PatternPal.Extension
             {
                 var allRecognizedPatters =
                     allResults
-                        .Where(x => x.Result.GetScore() >= 80)
-                        .OrderByDescending(x => x.Result.GetScore());
-                foreach (var (entityNode, partOfPatterns) in from entityNode in uniqueEntityNodes
-                         let partOfPatterns = allRecognizedPatters
-                             .Where(x => x.Result.GetRelatedSubTypes().ContainsKey(entityNode))
-                         where partOfPatterns.Count() > 0
-                         select (entityNode, partOfPatterns))
-                {
-                    resultList +=
-                        $"{Environment.NewLine}{string.Format(SummaryRescources.ClassSeemsPartOf, entityNode.GetName(), partOfPatterns.First().Pattern.Name)}";
-                    recognizedPatternsCount++;
-                }
+                        .Where(x => x.Result.Score >= 80)
+                        .OrderByDescending(x => x.Result.Score);
+                //foreach (var (entityNode, partOfPatterns) in from entityNode in uniqueEntityNodes
+                //         let partOfPatterns = allRecognizedPatters
+                //             .Where(x => x.Result.GetRelatedSubTypes().ContainsKey(entityNode))
+                //         where partOfPatterns.Count() > 0
+                //         select (entityNode, partOfPatterns))
+                //{
+                //    resultList +=
+                //        $"{Environment.NewLine}{string.Format(SummaryRescources.ClassSeemsPartOf, entityNode.GetName(), partOfPatterns.First().Pattern.Name)}";
+                //    recognizedPatternsCount++;
+                //}
             }
 
             return resultList;
         }
 
-        private string CreateNoPatternsFoundSummary(IEnumerable<RecognitionResult> results)
+        private string CreateNoPatternsFoundSummary(IEnumerable<RecognizerResult> results)
         {
             var result = SummaryRescources.NoPatternsRecognized + " ";
-            var resultsWithScore = results.Where(x => x.Result.GetScore() > 0)
-                .OrderByDescending(x => x.Result.GetScore());
+            var resultsWithScore = results.Where(x => x.Result.Score > 0)
+                .OrderByDescending(x => x.Result.Score);
 
             if (resultsWithScore.Count() > 0)
             {
                 var highestScored = resultsWithScore.First();
                 result += string.Format(
-                    SummaryRescources.ClassScoresHighestOn, highestScored.EntityNode.GetName(),
-                    highestScored.Pattern.Name
+                    SummaryRescources.ClassScoresHighestOn, highestScored.ClassName,
+                    highestScored.DetectedPattern
                 );
             }
 
             return result;
         }
 
-        public string CreateSummary(IEnumerable<RecognitionResult> results, IEnumerable<RecognitionResult> allResults)
+        public string CreateSummary(IEnumerable<RecognizerResult> results, IEnumerable<RecognizerResult> allResults)
         {
             var result = "";
             if (results.Count() == 0)
             {
                 return SummaryRescources.NothingClassesOrInterfacesFound;
             }
+                return SummaryRescources.NothingClassesOrInterfacesFound;
 
+            /*
             var uniqueFiles = results.Select(x => x.FilePath).Distinct();
             var uniqueEntityNodes = results.Select(x => x.EntityNode).Distinct();
 
@@ -133,6 +136,7 @@ namespace PatternPal.Extension
             result += resultList;
 
             return result;
+            */
         }
     }
 }
