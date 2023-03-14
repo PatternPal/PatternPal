@@ -60,6 +60,7 @@
     <Compile Include="Commands\BackCommand.cs" />
     <Compile Include="Commands\LoggingApiClient.cs" />
     <Compile Include="Commands\NavigateCommand.cs" />
+    <Compile Include="Grpc\GrpcChannelHelper.cs" />
     <Compile Include="Model\Action.cs" />
     <Compile Include="Model\InstructionState.cs" />
     <Compile Include="Resources\ExtensionUIResources.Designer.cs">
@@ -248,17 +249,9 @@
       <Project>{68b3c66e-d837-4b67-b674-c994bc4e207b}</Project>
       <Name>PatternPal.CommonResources</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PatternPal.Core\PatternPal.Core.csproj">
-      <Project>{39c79d09-34da-496b-936d-4387f5db9104}</Project>
-      <Name>PatternPal.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PatternPal.Extension.Protos\PatternPal.Extension.Protos.csproj">
       <Project>{070aad55-a535-4e4c-9d33-039d3e370187}</Project>
       <Name>PatternPal.Extension.Protos</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PatternPal.Regonizers\PatternPal.Recognizers.csproj">
-      <Project>{1f20d376-aa08-45be-9589-cfd70932c170}</Project>
-      <Name>PatternPal.Recognizers</Name>
     </ProjectReference>
     <ProjectReference Include="..\PatternPal.StepByStep\PatternPal.StepByStep.csproj">
       <Project>{206f6058-7dfb-4676-aaca-cfaaf56e6936}</Project>
