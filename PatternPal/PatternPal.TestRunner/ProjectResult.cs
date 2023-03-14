@@ -21,7 +21,7 @@ class ProjectResult
     /// <remarks>Results are sorted by score in descending order.</remarks>
     internal required IList< DetectionResult > Results { get; init; }
 
-    private bool ? m_Correct;
+    private bool ? _correct;
 
     /// <summary>
     /// Checks whether the implemented pattern is recognized.
@@ -31,15 +31,15 @@ class ProjectResult
     internal bool Correct(
         bool checkAllResultsForCorrectness)
     {
-        if (m_Correct.HasValue)
+        if (_correct.HasValue)
         {
-            return m_Correct.Value;
+            return _correct.Value;
         }
 
         if (Results.Count == 0)
         {
-            m_Correct = false;
-            return m_Correct.Value;
+            _correct = false;
+            return _correct.Value;
         }
 
         // Remove any spaces which may be present in the pattern name (e.g. 'Factory Method' ->
@@ -55,8 +55,8 @@ class ProjectResult
                     string.Empty)
                 == implementedPatternNormalized)
             {
-                m_Correct = true;
-                return m_Correct.Value;
+                _correct = true;
+                return _correct.Value;
             }
 
             if (!checkAllResultsForCorrectness)
@@ -65,8 +65,8 @@ class ProjectResult
             }
         }
 
-        m_Correct = false;
-        return m_Correct.Value;
+        _correct = false;
+        return _correct.Value;
     }
 }
 

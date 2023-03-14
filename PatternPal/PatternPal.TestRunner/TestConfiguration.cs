@@ -24,7 +24,7 @@ public class TestConfiguration
 /// <summary>
 /// Defines the configuration format for a project to be tested.
 /// </summary>
-public class Project
+public class Project 
 {
     /// <summary>
     /// The directory containing the project to be analyzed.
