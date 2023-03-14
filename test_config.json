@@ -1,0 +1,71 @@
+{
+  "CheckAllResults": false,
+  "Projects": [
+    {
+      "Directory": "I:/Dev/PatternPalTestCorpus/AbishekAditya/AdapterPattern",
+      "ImplementedPattern": "Adapter"
+    },
+    {
+      "Directory": "I:/Dev/PatternPalTestCorpus/AbishekAditya/BridgePattern",
+      "ImplementedPattern": "Bridge"
+    },
+    {
+      "Directory": "I:/Dev/PatternPalTestCorpus/AbishekAditya/DecoratorPattern",
+      "ImplementedPattern": "Decorator",
+      "Skip": true
+    },
+    {
+      "Directory": "I:/Dev/PatternPalTestCorpus/AbishekAditya/FactoryPattern/Factory Method",
+      "ImplementedPattern": "FactoryMethod"
+    },
+    {
+      "Directory": "I:/Dev/PatternPalTestCorpus/AbishekAditya/ObserverPattern",
+      "ImplementedPattern": "Observer"
+    },
+    {
+      "Directory": "I:/Dev/PatternPalTestCorpus/AbishekAditya/SingletonPattern",
+      "ImplementedPattern": "Singleton"
+    },
+    {
+      "Directory": "I:/Dev/PatternPalTestCorpus/AbishekAditya/StatePattern",
+      "ImplementedPattern": "State"
+    },
+    {
+      "Directory": "I:/Dev/PatternPalTestCorpus/AbishekAditya/StrategyPattern",
+      "ImplementedPattern": "Strategy"
+    },
+    {
+      "Directory": "I:/Dev/PatternPalTestCorpus/WesDoyle/StructuralPatterns/Adapter",
+      "ImplementedPattern": "Adapter"
+    },
+    {
+      "Directory": "I:/Dev/PatternPalTestCorpus/WesDoyle/StructuralPatterns/Bridge",
+      "ImplementedPattern": "Bridge"
+    },
+    {
+      "Directory": "I:/Dev/PatternPalTestCorpus/WesDoyle/StructuralPatterns/Decorator",
+      "ImplementedPattern": "Decorator"
+    },
+    {
+      "Directory": "I:/Dev/PatternPalTestCorpus/WesDoyle/CreationalPatterns/FactoryMethod",
+      "ImplementedPattern": "FactoryMethod"
+    },
+    {
+      "Directory": "I:/Dev/PatternPalTestCorpus/WesDoyle/BehavioralPatterns/Observer",
+      "ImplementedPattern": "Observer"
+    },
+    {
+      "Directory": "I:/Dev/PatternPalTestCorpus/WesDoyle/CreationalPatterns/Singleton",
+      "ImplementedPattern": "Singleton"
+    },
+    {
+      "Directory": "I:/Dev/PatternPalTestCorpus/WesDoyle/BehavioralPatterns/State",
+      "ImplementedPattern": "State"
+    },
+    {
+      "Directory": "I:/Dev/PatternPalTestCorpus/WesDoyle/BehavioralPatterns/Strategy",
+      "ImplementedPattern": "Strategy",
+      "Skip": true
+    }
+  ]
+}
