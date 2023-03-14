@@ -1,5 +1,6 @@
 {
   "CheckAllResults": false,
+  "ShowIncorrectResults": false,
   "Projects": [
     {
       "Directory": "I:/Dev/PatternPalTestCorpus/AbishekAditya/AdapterPattern",
