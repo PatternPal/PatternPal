@@ -1,4 +1,4 @@
-﻿name: Build
+name: Build
 
 on:
   push:
@@ -18,26 +18,31 @@ defaults:
     
 jobs:
   build:
-    name: Build
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '3.1.x'
-      - name: Setup MSBuild.exe
-        uses: microsoft/setup-msbuild@v1.0.2
+      - uses: actions/checkout@v3
+      
       - uses: actions/cache@v2
         with:
-          path: ~/.nuget/packages
+          path: ./packages
           # Look to see if there is a cache hit for the corresponding requirements file
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
           restore-keys: |
-            ${{ runner.os }}-nuget
+            ${{ runner.os }}-nuget-
+      
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.3.1
+        with:
+          msbuild-architecture: x64
+           
       - name: Restore NuGet Packages
         run: nuget restore
+        
       - name: Build
-        run: dotnet build --configuration Release
+        run: msbuild /p:Configuration=Release PatternPal.sln
+      
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: PatternPal
+          path: ./PatternPal.Extension/bin/Release/PatternPal.Extension.vsix
