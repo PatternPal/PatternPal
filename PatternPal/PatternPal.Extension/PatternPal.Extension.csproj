@@ -252,10 +252,6 @@
       <Project>{070aad55-a535-4e4c-9d33-039d3e370187}</Project>
       <Name>PatternPal.Extension.Protos</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PatternPal.Regonizers\PatternPal.Recognizers.csproj">
-      <Project>{1f20d376-aa08-45be-9589-cfd70932c170}</Project>
-      <Name>PatternPal.Recognizers</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PatternPal.StepByStep\PatternPal.StepByStep.csproj">
       <Project>{206f6058-7dfb-4676-aaca-cfaaf56e6936}</Project>
       <Name>PatternPal.StepByStep</Name>

@@ -11,7 +11,6 @@ using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
 
 using PatternPal.Protos;
-using PatternPal.Recognizers.Abstractions;
 
 using SyntaxTree.Abstractions.Entities;
 

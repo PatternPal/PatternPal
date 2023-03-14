@@ -1,10 +1,4 @@
-﻿#region
-
-using PatternPal.Recognizers.Abstractions;
-
-using FeedbackType = PatternPal.Protos.FeedbackType;
-
-#endregion
+﻿using PatternPal.CommonResources;
 
 namespace PatternPal.Services;
 
@@ -15,8 +9,6 @@ public class PatternPalService : Protos.PatternPal.PatternPalBase
         IServerStreamWriter< RecognizerResult > responseStream,
         ServerCallContext context)
     {
-        Console.WriteLine("Received recognize request: " + request);
-
         // TODO CV: Handle error cases
         if (string.IsNullOrWhiteSpace(request.File)
             && string.IsNullOrWhiteSpace(request.Project))
@@ -58,7 +50,6 @@ public class PatternPalService : Protos.PatternPal.PatternPalBase
                                      DetectedPattern = result.Pattern.Name, ClassName = result.EntityNode.GetFullName(), Result = res,
                                  };
             responseStream.WriteAsync(r);
-            Console.WriteLine("Response: " + r);
         }
 
         return Task.CompletedTask;
@@ -69,7 +60,7 @@ public class PatternPalService : Protos.PatternPal.PatternPalBase
     {
         CheckResult newCheckResult = new()
                                      {
-                                         FeedbackType = (FeedbackType)((int)checkResult.GetFeedbackType() + 1), Hidden = checkResult.IsHidden, Score = checkResult.GetScore()
+                                         FeedbackType = (FeedbackType)((int)checkResult.GetFeedbackType() + 1), Hidden = checkResult.IsHidden, Score = checkResult.GetScore(), FeedbackMessage = ResourceUtils.ResultToString(checkResult),
                                      };
         foreach (ICheckResult childCheckResult in checkResult.GetChildFeedback())
         {

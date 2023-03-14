@@ -208,6 +208,7 @@ namespace PatternPal.Extension.Views
         private async Task Analyse()
         {
             // TODO CV: Cache channel
+            // TODO CV: Use Unix Domain Sockets?
             GrpcChannel channel = GrpcChannel.ForAddress(
                 "http://localhost:5000",
                 new GrpcChannelOptions

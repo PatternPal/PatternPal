@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using System.Linq;
 
-using PatternPal.CommonResources;
 using PatternPal.Protos;
-using PatternPal.Recognizers.Abstractions;
 
-using FeedbackType = PatternPal.Recognizers.Abstractions.FeedbackType;
+#endregion
 
 namespace PatternPal.Extension.ViewModels
 {
@@ -14,40 +14,16 @@ namespace PatternPal.Extension.ViewModels
         public CheckResult Result { get; set; }
         public string Message { get; set; }
         public float Score => (float)Result.Score;
-        public Protos.FeedbackType ChildrenFeedbackType { get; set; }
+        public FeedbackType ChildrenFeedbackType { get; set; }
         public IEnumerable< CheckResultViewModel > SubResults => GetSubResults();
 
         public CheckResultViewModel(
-            ICheckResult result,
-            FeedbackType childrenFeedbackType)
-        {
-            //Result = result;
-            //Message = ResourceUtils.ResultToString(Result);
-            //ChildrenFeedbackType = childrenFeedbackType;
-        }
-
-        public CheckResultViewModel(
-            ICheckResult result)
-            : this(
-                result,
-                FeedbackType.Correct)
-        {
-        }
-
-        public CheckResultViewModel(
             CheckResult result,
-            Protos.FeedbackType childrenFeedbackType)
+            FeedbackType childrenFeedbackType = FeedbackType.FeedbackCorrect)
         {
             Result = result;
+            Message = Result.FeedbackMessage;
             ChildrenFeedbackType = childrenFeedbackType;
-        }
-
-        public CheckResultViewModel(
-            CheckResult result)
-            : this(
-                result,
-                Protos.FeedbackType.FeedbackCorrect)
-        {
         }
 
         /// <summary>

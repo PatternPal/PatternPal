@@ -9,7 +9,6 @@ using System.Windows.Controls;
 using EnvDTE;
 using PatternPal.Extension.Model;
 using PatternPal.Extension.ViewModels;
-using PatternPal.Recognizers.Abstractions;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio;
@@ -22,7 +21,6 @@ using PatternPal.Protos;
 using PatternPal.StepByStep.Abstractions;
 using SyntaxTree;
 using Project = Microsoft.CodeAnalysis.Project;
-using Result = PatternPal.Recognizers.Models.Output.Result;
 
 namespace PatternPal.Extension.Views
 {

@@ -43,6 +43,7 @@ message CheckResult {
     FeedbackType feedback_type = 2;
     bool hidden = 3;
     double score = 4;
+    string feedback_message = 5;
 }
 
 enum FeedbackType {
