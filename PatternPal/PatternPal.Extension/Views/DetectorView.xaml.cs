@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,8 +10,6 @@ using System.Windows.Controls;
 using EnvDTE;
 
 using Grpc.Core;
-using Grpc.Net.Client;
-using Grpc.Net.Client.Web;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio;
@@ -21,6 +18,7 @@ using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
+using PatternPal.Extension.Grpc;
 using PatternPal.Extension.ViewModels;
 using PatternPal.Protos;
 
@@ -207,15 +205,6 @@ namespace PatternPal.Extension.Views
 
         private async Task Analyse()
         {
-            // TODO CV: Cache channel
-            // TODO CV: Use Unix Domain Sockets?
-            GrpcChannel channel = GrpcChannel.ForAddress(
-                "http://localhost:5000",
-                new GrpcChannelOptions
-                {
-                    HttpHandler = new GrpcWebHandler(new HttpClientHandler()),
-                });
-
             RecognizeRequest request = new RecognizeRequest();
 
             // TODO CV: Handle error cases
@@ -250,7 +239,7 @@ namespace PatternPal.Extension.Views
                 request.Recognizers.Add(designPatternViewModel.Recognizer);
             }
 
-            Protos.PatternPal.PatternPalClient client = new Protos.PatternPal.PatternPalClient(channel);
+            Protos.PatternPal.PatternPalClient client = new Protos.PatternPal.PatternPalClient(GrpcChannelHelper.Channel);
             IAsyncStreamReader< RecognizerResult > responseStream = client.Recognize(request).ResponseStream;
 
             IList< RecognizerResult > results = new List< RecognizerResult >();
