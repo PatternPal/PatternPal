@@ -12,10 +12,6 @@ on:
     paths:
       - 'PatternPal/**'
   workflow_dispatch:
-
-defaults:
-  run:
-    working-directory: ./PatternPal
     
 jobs:
   build:
@@ -25,7 +21,7 @@ jobs:
       
       - uses: actions/cache@v2
         with:
-          path: ./packages
+          path: ./PatternPal/packages
           # Look to see if there is a cache hit for the corresponding requirements file
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
           restore-keys: |
@@ -40,10 +36,10 @@ jobs:
         run: nuget restore
         
       - name: Build
-        run: msbuild /p:Configuration=Release PatternPal.sln
+        run: msbuild /p:Configuration=Release PatternPal/PatternPal.sln
       
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3
         with:
           name: PatternPal
-          path: ./PatternPal.Extension/bin/Release/PatternPal.Extension.vsix
+          path: ./PatternPal/PatternPal.Extension/bin/Release/PatternPal.Extension.vsix
