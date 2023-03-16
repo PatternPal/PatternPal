@@ -33,7 +33,7 @@ jobs:
           msbuild-architecture: x64
            
       - name: Restore NuGet Packages
-        run: nuget restore
+        run: nuget restore PatternPal/PatternPal.sln
         
       - name: Build
         run: msbuild /p:Configuration=Release PatternPal/PatternPal.sln
