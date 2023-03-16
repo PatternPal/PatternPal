@@ -1,7 +1,8 @@
-using System.Linq;
+﻿using System.Linq;
 using PatternPal.Recognizers.Recognizers;
 using PatternPal.Tests.Utils;
 using NUnit.Framework;
+using PatternPal.Tests.TestClasses.Singleton;
 
 namespace PatternPal.Tests.Recognizers
 {
@@ -22,6 +23,7 @@ namespace PatternPal.Tests.Recognizers
             var testNode = testGraph.Values.First();
 
             var result = singleton.Recognize(testNode);
+
 
             Assert.That(result.GetScore(), Is.InRange(minScore, maxScore));
         }

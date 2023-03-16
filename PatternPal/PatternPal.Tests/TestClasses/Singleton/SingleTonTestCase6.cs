@@ -1,5 +1,8 @@
 ﻿namespace PatternPal.Tests.TestClasses.Singleton
 {
+    /*
+     * test already exists. see singleton test 5.
+     */
     public class SingleTonTestCase6
     {
         private static SingleTonTestCase6 _instance;
