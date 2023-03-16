@@ -341,3 +341,6 @@ ASALocalRun/
 
 
 *.orig
+
+# PatternPal background service publish output folder which is included in the VSIX
+PatternPal/PatternPal.Extension/PatternPal/
