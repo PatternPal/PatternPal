@@ -46,5 +46,4 @@ jobs:
     needs: Build
     steps:
       - name: Test
-        run: dotnet test --no-build --verbosity normal
-
+        run: dotnet test .\PatternPal\PatternPal.sln --no-build --verbosity normal
