@@ -39,7 +39,7 @@ jobs:
         run: nuget restore PatternPal/PatternPal.sln
         
       - name: Build
-        run: msbuild /p:Configuration=Release PatternPal/PatternPal.sln
+        run: msbuild PatternPal/PatternPal.sln
 
       - name: Test
         run: dotnet test --no-build --verbosity normal PatternPal/PatternPal.sln
