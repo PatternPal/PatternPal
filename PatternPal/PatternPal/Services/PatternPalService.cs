@@ -32,7 +32,7 @@ public class PatternPalService : Protos.PatternPal.PatternPalBase
         List<string> files;
         // Return all the .cs files (and in all subdirectories)
         // Does not include files part of project but not in directory
-        if (pathProject != "" || pathProject != null)
+        if (string.IsNullOrEmpty(pathProject))
         {
             files = Directory.GetFiles(
                 Path.GetDirectoryName(pathProject),
