@@ -21,6 +21,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatternPal.Tests", "PatternPal.Tests\PatternPal.Tests.csproj", "{026711C4-E66B-4553-8EA4-F7FE89A70C85}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatternPal.Extension", "PatternPal.Extension\PatternPal.Extension.csproj", "{6D62168E-3F32-47F9-8BC0-514BF633F903}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1BA98BCC-D3F8-4982-8B66-AD37AAED39A3} = {1BA98BCC-D3F8-4982-8B66-AD37AAED39A3}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatternPal.CommonResources", "PatternPal.CommonResources\PatternPal.CommonResources.csproj", "{68B3C66E-D837-4B67-B674-C994BC4E207B}"
 EndProject
