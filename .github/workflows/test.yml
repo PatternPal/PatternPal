@@ -11,33 +11,39 @@ on:
     types: [ opened, synchronize, reopened ]
     paths:
       - 'PatternPal/**'
-
-defaults:
-  run:
-    working-directory: ./PatternPal
-
+  workflow_dispatch:
+    
 jobs:
-  test:
-    name: Build
+  Build:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v1
+      - uses: actions/checkout@v3
+      
+      - uses: actions/cache@v3
         with:
-          dotnet-version: 3.1.x
-      - name: Remove extension
-        run: dotnet sln PatternPal.sln remove PatternPal.Extension/PatternPal.Extension.csproj
-      - uses: actions/cache@v2
-        with:
-          path: ~/.nuget/packages
+          path: ./PatternPal/packages
           # Look to see if there is a cache hit for the corresponding requirements file
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
           restore-keys: |
-            ${{ runner.os }}-nuget
-      - name: Restore dependencies
-        run: dotnet restore & nuget restore
+            ${{ runner.os }}-nuget-
+      
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.3.1
+        with:
+          msbuild-architecture: x64
+
+      - name: Remove extension
+        run: dotnet sln PatternPal/PatternPal.sln remove PatternPal/PatternPal.Extension/PatternPal.Extension.csproj
+           
+      - name: Restore NuGet Packages
+        run: nuget restore PatternPal/PatternPal.sln
+        
       - name: Build
-        run: dotnet build
+        run: msbuild /p:Configuration=Release PatternPal/PatternPal.sln
+      
+  Test:
+    runs-on: windows-latest
+    steps:
       - name: Test
         run: dotnet test --no-build --verbosity normal
+
