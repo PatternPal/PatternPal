@@ -16,4 +16,8 @@
     <ProjectReference Include="..\PatternPal.CommonResources\PatternPal.CommonResources.csproj" />
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="call $(RepositoryRoot)Tools\copy_to_extension.bat $(OutputPath) $(RepositoryRoot)" />
+  </Target>
+
 </Project>
