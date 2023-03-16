@@ -43,6 +43,7 @@ jobs:
       
   Test:
     runs-on: windows-latest
+    needs: Build
     steps:
       - name: Test
         run: dotnet test --no-build --verbosity normal
