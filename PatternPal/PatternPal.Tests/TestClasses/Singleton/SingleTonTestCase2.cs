@@ -8,7 +8,7 @@
      * 5- It does NOT have a public/internal property or method with its own type.
      * 6- Instead, its field is public and readonly
      * 7- And already instantiated
-     * 8- Which guarantees it always that same instance
+     * 8- Which guarantees it always is that same instance
      */
     public class SingleTonTestCase2
     {

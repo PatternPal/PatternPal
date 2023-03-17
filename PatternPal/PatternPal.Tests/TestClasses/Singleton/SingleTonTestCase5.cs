@@ -25,5 +25,10 @@
 
             return _instance;
         }
+
+        public void DoSomething()
+        {
+
+        }
     }
 }
