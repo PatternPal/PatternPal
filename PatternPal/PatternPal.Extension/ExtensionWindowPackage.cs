@@ -1,11 +1,25 @@
-﻿using System;
+﻿#region
+
+using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using PatternPal.Extension.Commands;
+
+using EnvDTE;
+
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+
+using PatternPal.Extension.Commands;
+using PatternPal.Extension.Grpc;
+
+using Process = System.Diagnostics.Process;
+
+#endregion
 
 namespace PatternPal.Extension
 {
@@ -27,12 +41,25 @@ namespace PatternPal.Extension
     ///         &gt; in .vsixmanifest file.
     ///     </para>
     /// </remarks>
-    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
-    [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
-    [ProvideMenuResource("Menus.ctmenu", 1)]
-    [ProvideToolWindow(typeof(ExtensionWindow))]
+    [ProvideAutoLoad(
+        VSConstants.UICONTEXT.SolutionOpening_string,
+        PackageAutoLoadFlags.BackgroundLoad)]
+    [PackageRegistration(
+        UseManagedResourcesOnly = true,
+        AllowsBackgroundLoading = true)]
+    [InstalledProductRegistration(
+        "#110",
+        "#112",
+        "1.0",
+        IconResourceID = 400)] // Info on this package for Help/About
+    [ProvideMenuResource(
+        "Menus.ctmenu",
+        1)]
+    [ProvideToolWindow(typeof( ExtensionWindow ))]
     [Guid(PackageGuidString)]
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
+    [SuppressMessage(
+        "StyleCop.CSharp.DocumentationRules",
+        "SA1650:ElementDocumentationMustBeSpelledCorrectly",
         Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     public sealed class ExtensionWindowPackage : AsyncPackage
     {
@@ -56,19 +83,27 @@ namespace PatternPal.Extension
         ///     A task representing the async work of package initialization, or an already completed task if there is none.
         ///     Do not return null from this method.
         /// </returns>
-        protected override async Task InitializeAsync(CancellationToken cancellationToken,
-            IProgress<ServiceProgressData> progress)
+        protected override async Task InitializeAsync(
+            CancellationToken cancellationToken,
+            IProgress< ServiceProgressData > progress)
         {
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
             await ExtensionWindowCommand.InitializeAsync(this);
+
+            GrpcBackgroundServiceHelper.StartBackgroundService((DTE)GetService(typeof( DTE )));
         }
 
-        public override IVsAsyncToolWindowFactory GetAsyncToolWindowFactory(Guid toolWindowType)
+        internal static void Main()
+        {
+        }
+
+        public override IVsAsyncToolWindowFactory GetAsyncToolWindowFactory(
+            Guid toolWindowType)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            if (toolWindowType == typeof(ExtensionWindow).GUID)
+            if (toolWindowType == typeof( ExtensionWindow ).GUID)
             {
                 return this;
             }
@@ -76,14 +111,18 @@ namespace PatternPal.Extension
             return base.GetAsyncToolWindowFactory(toolWindowType);
         }
 
-        protected override string GetToolWindowTitle(Type toolWindowType, int id)
+        protected override string GetToolWindowTitle(
+            Type toolWindowType,
+            int id)
         {
-            if (toolWindowType == typeof(ExtensionWindow))
+            if (toolWindowType == typeof( ExtensionWindow ))
             {
                 return "ExtensionWindow loading";
             }
 
-            return base.GetToolWindowTitle(toolWindowType, id);
+            return base.GetToolWindowTitle(
+                toolWindowType,
+                id);
         }
 
         #endregion

@@ -4,6 +4,8 @@ using PatternPal.Extension.Stores;
 using PatternPal.Extension.ViewModels;
 using Microsoft.VisualStudio.Shell;
 
+using PatternPal.Extension.Grpc;
+
 namespace PatternPal.Extension
 {
     /// <summary>
@@ -35,8 +37,10 @@ namespace PatternPal.Extension
             Content = new ExtensionWindowControl {DataContext = new MainViewModel(navigationStore)};
         }
 
-        internal static void Main()
+        protected override void OnClose()
         {
+            GrpcBackgroundServiceHelper.KillBackgroundService();
+            base.OnClose();
         }
     }
 }
