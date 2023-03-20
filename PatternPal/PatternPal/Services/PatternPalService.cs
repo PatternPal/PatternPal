@@ -75,7 +75,9 @@ public class PatternPalService : Protos.PatternPal.PatternPalBase
 
             RecognizerResult r = new RecognizerResult
                                  {
-                                     DetectedPattern = result.Pattern.Name, ClassName = result.EntityNode.GetFullName(), Result = res,
+                                     DetectedPattern = result.Pattern.Name,
+                                     ClassName = result.EntityNode.GetFullName(),
+                                     Result = res,
                                  };
             responseStream.WriteAsync(r);
         }
@@ -88,7 +90,10 @@ public class PatternPalService : Protos.PatternPal.PatternPalBase
     {
         CheckResult newCheckResult = new()
                                      {
-                                         FeedbackType = (FeedbackType)((int)checkResult.GetFeedbackType() + 1), Hidden = checkResult.IsHidden, Score = checkResult.GetScore(), FeedbackMessage = ResourceUtils.ResultToString(checkResult),
+                                         FeedbackType = (FeedbackType)((int)checkResult.GetFeedbackType() + 1),
+                                         Hidden = checkResult.IsHidden,
+                                         Score = checkResult.GetScore(),
+                                         FeedbackMessage = ResourceUtils.ResultToString(checkResult),
                                      };
         foreach (ICheckResult childCheckResult in checkResult.GetChildFeedback())
         {
