@@ -14,7 +14,7 @@ using PatternPal.Protos;
 
 using SyntaxTree.Abstractions.Entities;
 
-using static PatternPal.CommonResources.ClassFeedbackRes;
+//using static PatternPal.CommonResources.ClassFeedbackRes;
 
 using FeedbackType = PatternPal.Protos.FeedbackType;
 
@@ -52,22 +52,23 @@ namespace PatternPal.Extension.ViewModels
             {
                 if (PatternPalExtensionPackage.CurrentMode == Mode.Default)
                 {
+                    // TODO CommonResources are not used anymore.
                     if (Score == 100)
-                        return CompletionStatusComplete;
+                        return null; // CompletionStatusComplete;
 
                     if (Score >= 80)
-                        return CompletionStatusAlmostComplete;
+                        return null; // CompletionStatusAlmostComplete;
 
-                    return CompletionStatusNotComplete;
+                    return null; // CompletionStatusNotComplete;
                 }
                 //CurrentMode is mode.StepByStep (this is currently the only other option, so no else if)
                 if (Score == 100)
-                    return InstructionCompletionStatusComplete;
+                    return null; // InstructionCompletionStatusComplete;
 
                 if (Score >= 80)
-                    return InstructionCompletionStatusAlmostComplete;
+                    return null; // InstructionCompletionStatusAlmostComplete;
 
-                return InstructionCompletionStatusNotComplete;
+                return null; // InstructionCompletionStatusNotComplete;
             }
         }
 
@@ -234,11 +235,11 @@ namespace PatternPal.Extension.ViewModels
             {
                 if (CurrentStatus == Status.Warning)
                     return string.Format(
-                        SummaryTextIncorrectRequirements,
+                        null /*SummaryTextIncorrectRequirements*/,
                         ChildrenCount);
 
                 return string.Format(
-                    SummaryTextCorrectRequirements,
+                    null /*SummaryTextCorrectRequirements*/,
                     ChildrenCount);
             }
         }
