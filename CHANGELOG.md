@@ -7,6 +7,14 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [3.0.0] - 2023-03-22
+
+### Added
+- PatternPal.TestRunner: tool to run PatternPal on many projects at once.
+
+### Improved
+- Decouple recognizers from extension, run them in a background service instead.
+
 ## [2.2.2] - 2023-02-20
 
 ## [2.2.1] - 2022-01-21
@@ -84,7 +92,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 The version developed by the previous team.
 
-[Unreleased]: https://github.com/PatternPal/PatternPal/compare/v2.2.2...HEAD
+[Unreleased]: https://github.com/PatternPal/PatternPal/compare/v3.0.0...HEAD
+
+[3.0.0]: https://github.com/PatternPal/PatternPal/compare/v2.2.2...v3.0.0
 
 [2.2.2]: https://github.com/PatternPal/PatternPal/compare/v2.2.1...v2.2.2
 
