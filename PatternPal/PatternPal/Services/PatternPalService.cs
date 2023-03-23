@@ -1,6 +1,8 @@
 ﻿#region
 
 using PatternPal.CommonResources;
+using PatternPal.StepByStep;
+using PatternPal.StepByStep.Abstractions;
 
 using SyntaxTree;
 
@@ -85,6 +87,24 @@ public class PatternPalService : Protos.PatternPal.PatternPalBase
         }
 
         return Task.CompletedTask;
+    }
+
+    public override Task< GetInstructionSetsResponse > GetInstructionSets(
+        GetInstructionSetsRequest request,
+        ServerCallContext context)
+    {
+        GetInstructionSetsResponse response = new();
+        foreach (IInstructionSet instructionSet in InstructionSetsCreator.InstructionSets)
+        {
+            response.InstructionSets.Add(
+                new InstructionSet
+                {
+                    Name = instructionSet.Name,
+                    NumberOfInstructions = (uint)instructionSet.Instructions.Count(),
+                });
+        }
+
+        return Task.FromResult(response);
     }
 
     public override Task< GetSelectableClassesResponse > GetSelectableClasses(

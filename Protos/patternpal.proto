@@ -11,6 +11,9 @@ service PatternPal {
 
     // Step-by-step
 
+    // Gets the instruction sets which are available for step-by-step mode.
+    rpc GetInstructionSets (GetInstructionSetsRequest) returns (GetInstructionSetsResponse);
+
     // Gets the classes which are selectable from the dropdown during a check of a step.
     rpc GetSelectableClasses (GetSelectableClassesRequest) returns (GetSelectableClassesResponse);
 }
@@ -78,6 +81,20 @@ enum Recognizer {
     RECOGNIZER_STATE = 7;
     // Strategy.
     RECOGNIZER_STRATEGY = 8;
+}
+
+// Request for the instruction sets which are available for step-by-step mode.
+message GetInstructionSetsRequest {
+}
+
+// List of instruction set names which are available.
+message GetInstructionSetsResponse {
+    repeated InstructionSet instruction_sets = 1;
+}
+
+message InstructionSet {
+    string name = 1;
+    uint32 number_of_instructions = 2;
 }
 
 // Request for selectable classes, with the documents in which to look for them.

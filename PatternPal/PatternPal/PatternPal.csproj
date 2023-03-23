@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="../PatternPal.Core/PatternPal.Core.csproj" />
     <ProjectReference Include="..\PatternPal.CommonResources\PatternPal.CommonResources.csproj" />
+    <ProjectReference Include="..\PatternPal.StepByStep\PatternPal.StepByStep.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

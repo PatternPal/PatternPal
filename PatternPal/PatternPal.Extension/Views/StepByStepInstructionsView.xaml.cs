@@ -380,7 +380,23 @@ namespace PatternPal.Extension.Views
             object sender,
             EventArgs e)
         {
-            CreateGraph();
+            _viewModel.cbItems.Clear();
+            LoadProject();
+
+            GetSelectableClassesRequest request = new GetSelectableClassesRequest();
+            foreach (Project project in Projects)
+            {
+                foreach (Document document in project.Documents)
+                {
+                    request.Documents.Add(document.FilePath);
+                }
+            }
+
+            GetSelectableClassesResponse response = _client.GetSelectableClasses(request);
+            foreach (string selectableClass in response.SelectableClasses)
+            {
+                _viewModel.cbItems.Add(selectableClass);
+            }
         }
 
         private void OnSelectionChanged(
