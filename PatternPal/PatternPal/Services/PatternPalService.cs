@@ -94,13 +94,13 @@ public class PatternPalService : Protos.PatternPal.PatternPalBase
         ServerCallContext context)
     {
         GetInstructionSetsResponse response = new();
-        foreach (IInstructionSet instructionSet in InstructionSetsCreator.InstructionSets)
+        foreach ((string name, IInstructionSet set) in InstructionSetsCreator.InstructionSets)
         {
             response.InstructionSets.Add(
                 new InstructionSet
                 {
-                    Name = instructionSet.Name,
-                    NumberOfInstructions = (uint)instructionSet.Instructions.Count(),
+                    Name = name,
+                    NumberOfInstructions = (uint)set.Instructions.Count(),
                 });
         }
 
@@ -129,6 +129,29 @@ public class PatternPalService : Protos.PatternPal.PatternPalBase
         }
 
         return Task.FromResult(selectableClasses);
+    }
+
+    public override Task< GetInstructionByIdResponse > GetInstructionById(
+        GetInstructionByIdRequest request,
+        ServerCallContext context)
+    {
+        IInstructionSet set = InstructionSetsCreator.InstructionSets[ request.InstructionSetName ];
+        IInstruction instruction = set.Instructions.ToList()[ request.InstructionId ];
+
+        GetInstructionByIdResponse response = new()
+                                              {
+                                                  Instruction = new Instruction
+                                                                {
+                                                                    Title = instruction.Title,
+                                                                    Description = instruction.Description,
+                                                                    ShowFileSelector = instruction is IFileSelector,
+                                                                    FileId = instruction is IFileSelector fileSelector
+                                                                        ? fileSelector.FileId
+                                                                        : string.Empty,
+                                                                }
+                                              };
+
+        return Task.FromResult(response);
     }
 
     private CheckResult CreateCheckResult(

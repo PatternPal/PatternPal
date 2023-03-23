@@ -16,6 +16,8 @@ service PatternPal {
 
     // Gets the classes which are selectable from the dropdown during a check of a step.
     rpc GetSelectableClasses (GetSelectableClassesRequest) returns (GetSelectableClassesResponse);
+
+    rpc GetInstructionById (GetInstructionByIdRequest) returns (GetInstructionByIdResponse);
 }
 
 // Input arguments for recognizer request.
@@ -105,4 +107,20 @@ message GetSelectableClassesRequest {
 // List of classes which are selectable.
 message GetSelectableClassesResponse {
     repeated string selectable_classes = 1;
+}
+
+message GetInstructionByIdRequest {
+    string instruction_set_name = 1;
+    int32 instruction_id = 2;
+}
+
+message GetInstructionByIdResponse {
+    Instruction instruction = 1;
+}
+
+message Instruction {
+    string title = 1;
+    string description = 2;
+    bool show_file_selector = 3;
+    string file_id = 4;
 }

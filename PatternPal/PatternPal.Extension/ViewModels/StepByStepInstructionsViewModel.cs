@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 using PatternPal.Extension.Commands;
+using PatternPal.Extension.Grpc;
 using PatternPal.Extension.Model;
 using PatternPal.Extension.Stores;
 using PatternPal.Protos;
@@ -20,8 +21,6 @@ namespace PatternPal.Extension.ViewModels
 
         public InstructionSet InstructionSet { get; }
 
-        private LinkedListNode< IInstruction > _currentInstruction;
-
         public IInstructionState State = new InstructionState();
 
         public ObservableCollection< string > cbItems { get; set; } =
@@ -29,14 +28,16 @@ namespace PatternPal.Extension.ViewModels
 
         public string SelectedcbItem { get; set; }
 
-        public LinkedListNode< IInstruction > CurrentInstruction
+        private IList< Instruction > _instructions;
+
+        public Instruction CurrentInstruction
         {
-            get => _currentInstruction;
-            set
-            {
-                _currentInstruction = value;
-                OnPropertyChanged(nameof( CurrentInstruction ));
-            }
+            get => _instructions[ _currentInstructionNumber - 1 ];
+            //set
+            //{
+            //    _currentInstruction = value;
+            //    OnPropertyChanged(nameof( CurrentInstruction ));
+            //}
         }
 
         private int _currentInstructionNumber;
@@ -51,6 +52,36 @@ namespace PatternPal.Extension.ViewModels
             }
         }
 
+        public bool TrySelectPreviousInstruction()
+        {
+            if (_currentInstructionNumber == 1)
+            {
+                return false;
+            }
+
+            CurrentInstructionNumber--;
+            return true;
+        }
+
+        public bool TrySelectNextInstruction()
+        {
+            if (_currentInstructionNumber == InstructionSet.NumberOfInstructions)
+            {
+                return false;
+            }
+
+            CurrentInstructionNumber++;
+            if (null == _instructions[ _currentInstructionNumber ])
+            {
+                _instructions.Add(GetInstructionById(CurrentInstructionNumber));
+            }
+
+            return true;
+        }
+
+        public bool HasPreviousInstruction => _currentInstructionNumber > 1;
+        public bool HasNextInstruction => _currentInstructionNumber < InstructionSet.NumberOfInstructions;
+
         /// <summary>
         /// Title that is shown on the top of the screen. Contains the current instruction number out of the number of total instructions
         /// </summary>
@@ -62,12 +93,28 @@ namespace PatternPal.Extension.ViewModels
         {
             NavigateHomeCommand = new NavigateCommand< HomeViewModel >(
                 navigationStore,
-                () => new HomeViewModel(navigationStore)
-            );
+                () => new HomeViewModel(navigationStore));
             InstructionSet = instructionSet;
 
-            //CurrentInstruction = new LinkedList< IInstruction >(InstructionSet.Instructions).First;
+            _instructions = new List< Instruction >((int)InstructionSet.NumberOfInstructions)
+                            {
+                                GetInstructionById(CurrentInstructionNumber),
+                            };
             CurrentInstructionNumber = 1;
+        }
+
+        private Instruction GetInstructionById(
+            int instructionId)
+        {
+            Protos.PatternPal.PatternPalClient client = new Protos.PatternPal.PatternPalClient(GrpcChannelHelper.Channel);
+            GetInstructionByIdResponse response = client.GetInstructionById(
+                new GetInstructionByIdRequest
+                {
+                    InstructionSetName = InstructionSet.Name,
+                    InstructionId = instructionId,
+                });
+
+            return response.Instruction;
         }
     }
 }

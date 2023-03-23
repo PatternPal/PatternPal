@@ -72,10 +72,8 @@ namespace PatternPal.Extension.Views
             object sender,
             RoutedEventArgs e)
         {
-            if (_viewModel.CurrentInstruction.Previous != null)
+            if (_viewModel.TrySelectPreviousInstruction())
             {
-                _viewModel.CurrentInstruction = _viewModel.CurrentInstruction.Previous;
-                _viewModel.CurrentInstructionNumber--;
                 CheckIfNextPreviousButtonsAvailable();
             }
         }
@@ -89,10 +87,8 @@ namespace PatternPal.Extension.Views
             object sender,
             RoutedEventArgs e)
         {
-            if (_viewModel.CurrentInstruction.Next != null)
+            if (_viewModel.TrySelectNextInstruction())
             {
-                _viewModel.CurrentInstruction = _viewModel.CurrentInstruction.Next;
-                _viewModel.CurrentInstructionNumber++;
                 CheckIfNextPreviousButtonsAvailable();
             }
         }
@@ -103,11 +99,10 @@ namespace PatternPal.Extension.Views
         private void CheckIfNextPreviousButtonsAvailable()
         {
             CheckIfCheckIsAvailable();
-            NextInstructionButton.Visibility =
-                _viewModel.CurrentInstruction.Next != null
-                    ? Visibility.Visible
-                    : Visibility.Hidden;
-            PreviousInstructionButton.Visibility = _viewModel.CurrentInstruction.Previous != null
+            NextInstructionButton.Visibility = _viewModel.HasNextInstruction
+                ? Visibility.Visible
+                : Visibility.Hidden;
+            PreviousInstructionButton.Visibility = _viewModel.HasPreviousInstruction
                 ? Visibility.Visible
                 : Visibility.Hidden;
         }
@@ -132,14 +127,14 @@ namespace PatternPal.Extension.Views
 
         private void CheckIfCheckIsAvailable()
         {
-            ClassSelection.Visibility = _viewModel.CurrentInstruction.Value is IFileSelector
+            ClassSelection.Visibility = _viewModel.CurrentInstruction.ShowFileSelector
                 ? Visibility.Visible
                 : Visibility.Hidden;
-            if (_viewModel.CurrentInstruction.Value is IFileSelector fileSelector)
+            if (_viewModel.CurrentInstruction.ShowFileSelector)
             {
                 ClassSelection.SelectedItem =
-                    keyed.ContainsKey(fileSelector.FileId)
-                        ? keyed[ fileSelector.FileId ]
+                    keyed.ContainsKey(_viewModel.CurrentInstruction.FileId)
+                        ? keyed[ _viewModel.CurrentInstruction.FileId ]
                         : null;
                 CheckImplementationButton.IsEnabled = ClassSelection.SelectedItem != null;
             }
@@ -155,13 +150,11 @@ namespace PatternPal.Extension.Views
             NextInstructionButton.IsEnabled = false;
             SyntaxGraph graph = CreateGraph(false);
 
-            IInstruction instruction = _viewModel.CurrentInstruction.Value;
-
-            if (instruction is IFileSelector fileSelector)
+            if (_viewModel.CurrentInstruction.ShowFileSelector)
             {
                 if (_viewModel.SelectedcbItem == null)
                     return;
-                _viewModel.State[ fileSelector.FileId ] = graph.GetAll()[ _viewModel.SelectedcbItem ];
+                _viewModel.State[ _viewModel.CurrentInstruction.FileId ] = graph.GetAll()[ _viewModel.SelectedcbItem ];
             }
 
             IInstructionState state = _createState(graph);
@@ -405,9 +398,9 @@ namespace PatternPal.Extension.Views
         {
             CheckImplementationButton.IsEnabled = true;
 
-            if (_viewModel.CurrentInstruction.Value is IFileSelector fileSelector)
+            if (_viewModel.CurrentInstruction.ShowFileSelector)
             {
-                keyed[ fileSelector.FileId ] = _viewModel.SelectedcbItem;
+                keyed[ _viewModel.CurrentInstruction.FileId ] = _viewModel.SelectedcbItem;
                 NextInstructionButton.IsEnabled = false;
             }
         }
