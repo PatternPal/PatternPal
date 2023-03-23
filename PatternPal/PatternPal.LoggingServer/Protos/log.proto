@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option csharp_namespace = "PatternPal.LoggingServer";
+
+package log;
+
+// The greeting service definition.
+service Log {
+  // Sends a greeting
+  rpc Log (LogRequest) returns (LogReply);
+}
+
+// The request message containing the user's name.
+message LogRequest {
+  string subjectID = 1;
+  string toolInstances = 2;
+  EventType eventType = 3;
+  // CodeState
+}
+
+// The response message containing the greetings.
+message LogReply {
+  string message = 1; 
+  // Simple message to return just to confirm that the server is up and running
+}
