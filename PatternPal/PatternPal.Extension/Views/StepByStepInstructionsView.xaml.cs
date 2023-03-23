@@ -1,14 +1,12 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+
 using EnvDTE;
-using PatternPal.Extension.Model;
-using PatternPal.Extension.ViewModels;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio;
@@ -17,18 +15,29 @@ using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
+using PatternPal.Extension.Grpc;
+using PatternPal.Extension.Model;
+using PatternPal.Extension.ViewModels;
 using PatternPal.Protos;
 using PatternPal.StepByStep.Abstractions;
+
 using SyntaxTree;
+using SyntaxTree.Abstractions.Entities;
+
+using Document = Microsoft.CodeAnalysis.Document;
 using Project = Microsoft.CodeAnalysis.Project;
+
+#endregion
 
 namespace PatternPal.Extension.Views
 {
     /// <summary>
     /// Interaction logic for StepByStepInstructionsView.xaml
     /// </summary>
-    public partial class StepByStepInstructionsView : UserControl, IVsSolutionEvents, IVsRunningDocTableEvents
+    public partial class StepByStepInstructionsView : IVsSolutionEvents,
+                                                      IVsRunningDocTableEvents
     {
+        private readonly Protos.PatternPal.PatternPalClient _client;
         private StepByStepInstructionsViewModel _viewModel;
 
         public StepByStepInstructionsView()
@@ -38,15 +47,20 @@ namespace PatternPal.Extension.Views
 
             Dispatcher.VerifyAccess();
             LoadProject();
-            Dte = Package.GetGlobalService(typeof(SDTE)) as DTE;
-            var rdt = (IVsRunningDocumentTable)Package.GetGlobalService(typeof(SVsRunningDocumentTable));
-            rdt.AdviseRunningDocTableEvents(this, out _);
-            var ss = (IVsSolution)Package.GetGlobalService(typeof(SVsSolution));
-            ss.AdviseSolutionEvents(this, out _);
+            Dte = Package.GetGlobalService(typeof( SDTE )) as DTE;
+            IVsRunningDocumentTable rdt = (IVsRunningDocumentTable)Package.GetGlobalService(typeof( SVsRunningDocumentTable ));
+            rdt.AdviseRunningDocTableEvents(
+                this,
+                out _);
+            IVsSolution ss = (IVsSolution)Package.GetGlobalService(typeof( SVsSolution ));
+            ss.AdviseSolutionEvents(
+                this,
+                out _);
+            _client = new Protos.PatternPal.PatternPalClient(GrpcChannelHelper.Channel);
         }
 
-        private List<string> Paths { get; set; }
-        private List<Project> Projects { get; set; }
+        private List< string > Paths { get; set; }
+        private List< Project > Projects { get; set; }
         private DTE Dte { get; }
 
         /// <summary>
@@ -54,7 +68,9 @@ namespace PatternPal.Extension.Views
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void PreviousInstructionButton_OnClick(object sender, RoutedEventArgs e)
+        private void PreviousInstructionButton_OnClick(
+            object sender,
+            RoutedEventArgs e)
         {
             if (_viewModel.CurrentInstruction.Previous != null)
             {
@@ -69,7 +85,9 @@ namespace PatternPal.Extension.Views
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void NextInstructionButton_OnClick(object sender, RoutedEventArgs e)
+        private void NextInstructionButton_OnClick(
+            object sender,
+            RoutedEventArgs e)
         {
             if (_viewModel.CurrentInstruction.Next != null)
             {
@@ -86,7 +104,9 @@ namespace PatternPal.Extension.Views
         {
             CheckIfCheckIsAvailable();
             NextInstructionButton.Visibility =
-                _viewModel.CurrentInstruction.Next != null ? Visibility.Visible : Visibility.Hidden;
+                _viewModel.CurrentInstruction.Next != null
+                    ? Visibility.Visible
+                    : Visibility.Hidden;
             PreviousInstructionButton.Visibility = _viewModel.CurrentInstruction.Previous != null
                 ? Visibility.Visible
                 : Visibility.Hidden;
@@ -95,20 +115,20 @@ namespace PatternPal.Extension.Views
         private void InitializeViewModelAndButtons()
         {
             DataContextChanged += delegate
-            {
-                // only bind events when dataContext is set, not unset
-                if (this.DataContext == null)
-                {
-                    return;
-                }
+                                  {
+                                      // only bind events when dataContext is set, not unset
+                                      if (this.DataContext == null)
+                                      {
+                                          return;
+                                      }
 
-                _viewModel = (StepByStepInstructionsViewModel)(this.DataContext);
+                                      _viewModel = (StepByStepInstructionsViewModel)(this.DataContext);
 
-                CheckIfNextPreviousButtonsAvailable();
-            };
+                                      CheckIfNextPreviousButtonsAvailable();
+                                  };
         }
 
-        private Dictionary<string, string> keyed = new Dictionary<string, string>();
+        private Dictionary< string, string > keyed = new Dictionary< string, string >();
 
         private void CheckIfCheckIsAvailable()
         {
@@ -118,129 +138,149 @@ namespace PatternPal.Extension.Views
             if (_viewModel.CurrentInstruction.Value is IFileSelector fileSelector)
             {
                 ClassSelection.SelectedItem =
-                    keyed.ContainsKey(fileSelector.FileId) ? keyed[fileSelector.FileId] : null;
+                    keyed.ContainsKey(fileSelector.FileId)
+                        ? keyed[ fileSelector.FileId ]
+                        : null;
                 CheckImplementationButton.IsEnabled = ClassSelection.SelectedItem != null;
             }
 
             NextInstructionButton.IsEnabled = false;
-            ExpanderResults.ResultsView.ItemsSource = new List<PatternResultViewModel>();
+            ExpanderResults.ResultsView.ItemsSource = new List< PatternResultViewModel >();
         }
 
-        private void CheckImplementationButton_OnClick(object sender, RoutedEventArgs e)
+        private void CheckImplementationButton_OnClick(
+            object sender,
+            RoutedEventArgs e)
         {
             NextInstructionButton.IsEnabled = false;
-            var graph = CreateGraph(false);
+            SyntaxGraph graph = CreateGraph(false);
 
-            var instruction = _viewModel.CurrentInstruction.Value;
+            IInstruction instruction = _viewModel.CurrentInstruction.Value;
 
             if (instruction is IFileSelector fileSelector)
             {
-                if (_viewModel.SelectedcbItem == null) return;
-                _viewModel.State[fileSelector.FileId] = graph.GetAll()[_viewModel.SelectedcbItem];
+                if (_viewModel.SelectedcbItem == null)
+                    return;
+                _viewModel.State[ fileSelector.FileId ] = graph.GetAll()[ _viewModel.SelectedcbItem ];
             }
 
-            var state = _createState(graph);
-            var viewModels = new List<PatternResultViewModel>
-            {
-                new PatternResultViewModel(
-                    new RecognizerResult
-                    {
-                        DetectedPattern = _viewModel.InstructionSet.Name,
-                        //Result = new Result
-                        //{
-                        //    Results = instruction.Checks.Select(c => c.Correct(state)).ToList()
-                        //}
-                    }
-                )
-                {
-                    Expanded = true
-                }
-            };
+            IInstructionState state = _createState(graph);
+            List< PatternResultViewModel > viewModels = new List< PatternResultViewModel >
+                                                        {
+                                                            new PatternResultViewModel(
+                                                                new RecognizerResult
+                                                                {
+                                                                    DetectedPattern = _viewModel.InstructionSet.Name,
+                                                                    //Result = new Result
+                                                                    //{
+                                                                    //    Results = instruction.Checks.Select(c => c.Correct(state)).ToList()
+                                                                    //}
+                                                                }
+                                                            )
+                                                            {
+                                                                Expanded = true
+                                                            }
+                                                        };
 
-            var correct = false; //viewModels[0].Result.Result.GetResults().All(c => c.GetFeedbackType() == FeedbackType.Correct);
-            
+            bool correct = false; //viewModels[0].Result.Result.GetResults().All(c => c.GetFeedbackType() == FeedbackType.Correct);
+
             ExpanderResults.ResultsView.ItemsSource = viewModels;
-            
-            if (!correct) return;
+
+            if (!correct)
+                return;
 
             //Save all changed state to the state between instructions, only when all is successful
-            foreach (var pair in state)
+            foreach (KeyValuePair< string, IEntity > pair in state)
             {
-                keyed[pair.Key] = pair.Value?.GetFullName();
+                keyed[ pair.Key ] = pair.Value?.GetFullName();
             }
 
             NextInstructionButton.IsEnabled = true;
         }
 
-        private IInstructionState _createState(SyntaxGraph graph)
+        private IInstructionState _createState(
+            SyntaxGraph graph)
         {
-            var state = new InstructionState();
-            foreach (var pair in keyed)
+            InstructionState state = new InstructionState();
+            foreach (KeyValuePair< string, string > pair in keyed)
             {
-                state[pair.Key] = pair.Value == null ? null : graph.GetAll()[pair.Value];
+                state[ pair.Key ] = pair.Value == null
+                    ? null
+                    : graph.GetAll()[ pair.Value ];
             }
 
             return state;
         }
 
-        private SyntaxGraph CreateGraph(bool fill = true)
+        private SyntaxGraph CreateGraph(
+            bool fill = true)
         {
             LoadProject();
 
-            var graph = new SyntaxGraph();
+            GetSelectableClassesRequest request = new GetSelectableClassesRequest();
 
-            foreach (var project in Projects)
+            foreach (Project project in Projects)
             {
-                foreach (var document in project.Documents)
+                foreach (Document document in project.Documents)
                 {
-                    //var text = FileManager.MakeStringFromFile(document.FilePath);
-                    //graph.AddFile(text, document.FilePath);
+                    request.Documents.Add(document.FilePath);
                 }
             }
-
-            graph.CreateGraph();
 
             if (fill)
             {
+                GetSelectableClassesResponse response = _client.GetSelectableClasses(request);
                 _viewModel.cbItems.Clear();
-                foreach (var pair in graph.GetAll()
-                             .OrderByDescending(p => File.GetLastWriteTime((p.Value.GetRoot().GetSource()))))
+                foreach (string selectableClass in response.SelectableClasses)
                 {
-                    _viewModel.cbItems.Add(pair.Key);
+                    _viewModel.cbItems.Add(selectableClass);
                 }
             }
 
-            return graph;
+            return null;
         }
 
         #region IVsSolutionEvents
 
-        public int OnAfterOpenProject(IVsHierarchy pHierarchy, int fAdded)
+        public int OnAfterOpenProject(
+            IVsHierarchy pHierarchy,
+            int fAdded)
         {
             return VSConstants.S_OK;
         }
 
-        public int OnQueryCloseProject(IVsHierarchy pHierarchy, int fRemoving, ref int pfCancel)
+        public int OnQueryCloseProject(
+            IVsHierarchy pHierarchy,
+            int fRemoving,
+            ref int pfCancel)
         {
             return VSConstants.S_OK;
         }
 
-        public int OnBeforeCloseProject(IVsHierarchy pHierarchy, int fRemoved)
+        public int OnBeforeCloseProject(
+            IVsHierarchy pHierarchy,
+            int fRemoved)
         {
             return VSConstants.S_OK;
         }
 
-        public int OnAfterLoadProject(IVsHierarchy pStubHierarchy, IVsHierarchy pRealHierarchy)
+        public int OnAfterLoadProject(
+            IVsHierarchy pStubHierarchy,
+            IVsHierarchy pRealHierarchy)
         {
             return VSConstants.S_OK;
         }
 
-        public int OnQueryUnloadProject(IVsHierarchy pRealHierarchy, ref int pfCancel)
+        public int OnQueryUnloadProject(
+            IVsHierarchy pRealHierarchy,
+            ref int pfCancel)
         {
             return VSConstants.S_OK;
         }
 
-        public int OnBeforeUnloadProject(IVsHierarchy pRealHierarchy, IVsHierarchy pStubHierarchy)
+        public int OnBeforeUnloadProject(
+            IVsHierarchy pRealHierarchy,
+            IVsHierarchy pStubHierarchy)
         {
             return VSConstants.S_OK;
         }
@@ -248,23 +288,29 @@ namespace PatternPal.Extension.Views
         /// <summary>
         ///     Gets all the projects after opening solution.
         /// </summary>
-        public int OnAfterOpenSolution(object pUnkReserved, int fNewSolution)
+        public int OnAfterOpenSolution(
+            object pUnkReserved,
+            int fNewSolution)
         {
             LoadProject();
             return VSConstants.S_OK;
         }
 
-        public int OnQueryCloseSolution(object pUnkReserved, ref int pfCancel)
+        public int OnQueryCloseSolution(
+            object pUnkReserved,
+            ref int pfCancel)
         {
             return VSConstants.S_OK;
         }
 
-        public int OnBeforeCloseSolution(object pUnkReserved)
+        public int OnBeforeCloseSolution(
+            object pUnkReserved)
         {
             return VSConstants.S_OK;
         }
 
-        public int OnAfterCloseSolution(object pUnkReserved)
+        public int OnAfterCloseSolution(
+            object pUnkReserved)
         {
             return VSConstants.S_OK;
         }
@@ -273,8 +319,8 @@ namespace PatternPal.Extension.Views
 
         private void LoadProject()
         {
-            var cm = (IComponentModel)Package.GetGlobalService(typeof(SComponentModel));
-            var ws = (Workspace)cm.GetService<VisualStudioWorkspace>();
+            IComponentModel cm = (IComponentModel)Package.GetGlobalService(typeof( SComponentModel ));
+            Workspace ws = (Workspace)cm.GetService< VisualStudioWorkspace >();
             Projects = ws.CurrentSolution.Projects.ToList();
         }
 
@@ -300,40 +346,52 @@ namespace PatternPal.Extension.Views
             return VSConstants.S_OK;
         }
 
-        int IVsRunningDocTableEvents.OnAfterSave(uint docCookie)
+        int IVsRunningDocTableEvents.OnAfterSave(
+            uint docCookie)
         {
             return VSConstants.S_OK;
         }
 
-        int IVsRunningDocTableEvents.OnAfterAttributeChange(uint docCookie, uint grfAttribs)
+        int IVsRunningDocTableEvents.OnAfterAttributeChange(
+            uint docCookie,
+            uint grfAttribs)
         {
             return VSConstants.S_OK;
         }
 
-        int IVsRunningDocTableEvents.OnBeforeDocumentWindowShow(uint docCookie, int fFirstShow, IVsWindowFrame pFrame)
+        int IVsRunningDocTableEvents.OnBeforeDocumentWindowShow(
+            uint docCookie,
+            int fFirstShow,
+            IVsWindowFrame pFrame)
         {
             return VSConstants.S_OK;
         }
 
-        int IVsRunningDocTableEvents.OnAfterDocumentWindowHide(uint docCookie, IVsWindowFrame pFrame)
+        int IVsRunningDocTableEvents.OnAfterDocumentWindowHide(
+            uint docCookie,
+            IVsWindowFrame pFrame)
         {
             return VSConstants.S_OK;
         }
 
         #endregion
 
-        private void OnDropDownOpened(object sender, EventArgs e)
+        private void OnDropDownOpened(
+            object sender,
+            EventArgs e)
         {
             CreateGraph();
         }
 
-        private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void OnSelectionChanged(
+            object sender,
+            SelectionChangedEventArgs e)
         {
             CheckImplementationButton.IsEnabled = true;
 
             if (_viewModel.CurrentInstruction.Value is IFileSelector fileSelector)
             {
-                keyed[fileSelector.FileId] = _viewModel.SelectedcbItem;
+                keyed[ fileSelector.FileId ] = _viewModel.SelectedcbItem;
                 NextInstructionButton.IsEnabled = false;
             }
         }

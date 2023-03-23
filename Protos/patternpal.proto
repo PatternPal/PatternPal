@@ -8,6 +8,11 @@ option csharp_namespace = "PatternPal.Protos";
 service PatternPal {
     // Runs the recognizer(s) for a given file or project.
     rpc Recognize (RecognizeRequest) returns (stream RecognizerResult);
+
+    // Step-by-step
+
+    // Gets the classes which are selectable from the dropdown during a check of a step.
+    rpc GetSelectableClasses (GetSelectableClassesRequest) returns (GetSelectableClassesResponse);
 }
 
 // Input arguments for recognizer request.
@@ -73,4 +78,14 @@ enum Recognizer {
     RECOGNIZER_STATE = 7;
     // Strategy.
     RECOGNIZER_STRATEGY = 8;
+}
+
+// Request for selectable classes, with the documents in which to look for them.
+message GetSelectableClassesRequest {
+    repeated string documents = 1;
+}
+
+// List of classes which are selectable.
+message GetSelectableClassesResponse {
+    repeated string selectable_classes = 1;
 }

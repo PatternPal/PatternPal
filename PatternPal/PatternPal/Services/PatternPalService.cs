@@ -2,6 +2,8 @@
 
 using PatternPal.CommonResources;
 
+using SyntaxTree;
+
 #endregion
 
 namespace PatternPal.Services;
@@ -83,6 +85,30 @@ public class PatternPalService : Protos.PatternPal.PatternPalBase
         }
 
         return Task.CompletedTask;
+    }
+
+    public override Task< GetSelectableClassesResponse > GetSelectableClasses(
+        GetSelectableClassesRequest request,
+        ServerCallContext context)
+    {
+        SyntaxGraph graph = new();
+
+        foreach (string document in request.Documents)
+        {
+            graph.AddFile(
+                FileManager.MakeStringFromFile(document),
+                document);
+        }
+
+        graph.CreateGraph();
+
+        GetSelectableClassesResponse selectableClasses = new();
+        foreach ((string source, _) in graph.GetAll().OrderByDescending(p => File.GetLastWriteTime(p.Value.GetRoot().GetSource())))
+        {
+            selectableClasses.SelectableClasses.Add(source);
+        }
+
+        return Task.FromResult(selectableClasses);
     }
 
     private CheckResult CreateCheckResult(
