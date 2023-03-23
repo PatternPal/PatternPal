@@ -31,4 +31,22 @@
 
         }
     }
+
+    /*
+     * 7- And it gets used
+     */
+    public class SingleTonTestCase5User
+    {
+        SingleTonTestCase5 instance;
+
+        public SingleTonTestCase5User()
+        {
+            instance = SingleTonTestCase5.GetInstance();
+        }
+
+        public void DoSomethingWithSingleton()
+        {
+            instance.DoSomething();
+        }
+    }
 }
