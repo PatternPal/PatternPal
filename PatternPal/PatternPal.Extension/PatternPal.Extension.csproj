@@ -63,7 +63,6 @@
     <Compile Include="Grpc\GrpcBackgroundServiceHelper.cs" />
     <Compile Include="Grpc\GrpcChannelHelper.cs" />
     <Compile Include="Model\Action.cs" />
-    <Compile Include="Model\InstructionState.cs" />
     <Compile Include="Resources\ExtensionUIResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

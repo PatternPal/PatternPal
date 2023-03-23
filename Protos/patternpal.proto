@@ -18,6 +18,8 @@ service PatternPal {
     rpc GetSelectableClasses (GetSelectableClassesRequest) returns (GetSelectableClassesResponse);
 
     rpc GetInstructionById (GetInstructionByIdRequest) returns (GetInstructionByIdResponse);
+
+    rpc CheckInstruction (CheckInstructionRequest) returns (RecognizerResult);
 }
 
 // Input arguments for recognizer request.
@@ -123,4 +125,11 @@ message Instruction {
     string description = 2;
     bool show_file_selector = 3;
     string file_id = 4;
+}
+
+message CheckInstructionRequest {
+    string instruction_set_name = 1;
+    int32 instruction_id = 2;
+    repeated string documents = 3;
+    string selected_item = 4;
 }

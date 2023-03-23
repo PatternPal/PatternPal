@@ -26,7 +26,8 @@ namespace PatternPal.Extension.Grpc
             _backgroundService = Process.Start(
                 new ProcessStartInfo(backgroundServicePath)
                 {
-                    CreateNoWindow = true, UseShellExecute = false,
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
                 });
 
             if (null == _backgroundService)

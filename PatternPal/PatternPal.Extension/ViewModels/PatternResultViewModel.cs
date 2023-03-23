@@ -15,7 +15,6 @@ using PatternPal.Protos;
 using SyntaxTree.Abstractions.Entities;
 
 //using static PatternPal.CommonResources.ClassFeedbackRes;
-
 using FeedbackType = PatternPal.Protos.FeedbackType;
 
 #endregion
@@ -233,14 +232,15 @@ namespace PatternPal.Extension.ViewModels
         {
             get
             {
-                if (CurrentStatus == Status.Warning)
-                    return string.Format(
-                        null /*SummaryTextIncorrectRequirements*/,
-                        ChildrenCount);
+                //if (CurrentStatus == Status.Warning)
+                //return string.Format(
+                //    null /*SummaryTextIncorrectRequirements*/,
+                //    ChildrenCount);
 
-                return string.Format(
-                    null /*SummaryTextCorrectRequirements*/,
-                    ChildrenCount);
+                return string.Empty;
+                //return string.Format(
+                //    null /*SummaryTextCorrectRequirements*/,
+                //    ChildrenCount);
             }
         }
 

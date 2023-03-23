@@ -16,13 +16,8 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
 using PatternPal.Extension.Grpc;
-using PatternPal.Extension.Model;
 using PatternPal.Extension.ViewModels;
 using PatternPal.Protos;
-using PatternPal.StepByStep.Abstractions;
-
-using SyntaxTree;
-using SyntaxTree.Abstractions.Entities;
 
 using Document = Microsoft.CodeAnalysis.Document;
 using Project = Microsoft.CodeAnalysis.Project;
@@ -148,69 +143,15 @@ namespace PatternPal.Extension.Views
             RoutedEventArgs e)
         {
             NextInstructionButton.IsEnabled = false;
-            SyntaxGraph graph = CreateGraph(false);
 
-            if (_viewModel.CurrentInstruction.ShowFileSelector)
-            {
-                if (_viewModel.SelectedcbItem == null)
-                    return;
-                _viewModel.State[ _viewModel.CurrentInstruction.FileId ] = graph.GetAll()[ _viewModel.SelectedcbItem ];
-            }
+            CheckInstructionRequest request = new CheckInstructionRequest
+                                              {
+                                                  InstructionSetName = _viewModel.InstructionSet.Name,
+                                                  InstructionId = _viewModel.CurrentInstructionNumber - 1,
+                                                  SelectedItem = _viewModel.SelectedcbItem,
+                                              };
 
-            IInstructionState state = _createState(graph);
-            List< PatternResultViewModel > viewModels = new List< PatternResultViewModel >
-                                                        {
-                                                            new PatternResultViewModel(
-                                                                new RecognizerResult
-                                                                {
-                                                                    DetectedPattern = _viewModel.InstructionSet.Name,
-                                                                    //Result = new Result
-                                                                    //{
-                                                                    //    Results = instruction.Checks.Select(c => c.Correct(state)).ToList()
-                                                                    //}
-                                                                }
-                                                            )
-                                                            {
-                                                                Expanded = true
-                                                            }
-                                                        };
-
-            bool correct = false; //viewModels[0].Result.Result.GetResults().All(c => c.GetFeedbackType() == FeedbackType.Correct);
-
-            ExpanderResults.ResultsView.ItemsSource = viewModels;
-
-            if (!correct)
-                return;
-
-            //Save all changed state to the state between instructions, only when all is successful
-            foreach (KeyValuePair< string, IEntity > pair in state)
-            {
-                keyed[ pair.Key ] = pair.Value?.GetFullName();
-            }
-
-            NextInstructionButton.IsEnabled = true;
-        }
-
-        private IInstructionState _createState(
-            SyntaxGraph graph)
-        {
-            InstructionState state = new InstructionState();
-            foreach (KeyValuePair< string, string > pair in keyed)
-            {
-                state[ pair.Key ] = pair.Value == null
-                    ? null
-                    : graph.GetAll()[ pair.Value ];
-            }
-
-            return state;
-        }
-
-        private SyntaxGraph CreateGraph(
-            bool fill = true)
-        {
             LoadProject();
-
-            GetSelectableClassesRequest request = new GetSelectableClassesRequest();
 
             foreach (Project project in Projects)
             {
@@ -220,17 +161,33 @@ namespace PatternPal.Extension.Views
                 }
             }
 
-            if (fill)
+            try
             {
-                GetSelectableClassesResponse response = _client.GetSelectableClasses(request);
-                _viewModel.cbItems.Clear();
-                foreach (string selectableClass in response.SelectableClasses)
-                {
-                    _viewModel.cbItems.Add(selectableClass);
-                }
+                Protos.PatternPal.PatternPalClient client = new Protos.PatternPal.PatternPalClient(GrpcChannelHelper.Channel);
+                RecognizerResult result = client.CheckInstruction(request);
+
+                List< PatternResultViewModel > viewModels = new List< PatternResultViewModel >
+                                                            {
+                                                                new PatternResultViewModel(result)
+                                                                {
+                                                                    Expanded = true
+                                                                }
+                                                            };
+
+                bool correct = result.Result.Results.All(c => c.FeedbackType == FeedbackType.FeedbackCorrect);
+
+                ExpanderResults.ResultsView.ItemsSource = viewModels;
+
+                if (!correct)
+                    return;
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                return;
             }
 
-            return null;
+            NextInstructionButton.IsEnabled = true;
         }
 
         #region IVsSolutionEvents
@@ -313,7 +270,7 @@ namespace PatternPal.Extension.Views
         private void LoadProject()
         {
             IComponentModel cm = (IComponentModel)Package.GetGlobalService(typeof( SComponentModel ));
-            Workspace ws = (Workspace)cm.GetService< VisualStudioWorkspace >();
+            Workspace ws = cm.GetService< VisualStudioWorkspace >();
             Projects = ws.CurrentSolution.Projects.ToList();
         }
 

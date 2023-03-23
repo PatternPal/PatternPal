@@ -6,10 +6,8 @@ using System.Windows.Input;
 
 using PatternPal.Extension.Commands;
 using PatternPal.Extension.Grpc;
-using PatternPal.Extension.Model;
 using PatternPal.Extension.Stores;
 using PatternPal.Protos;
-using PatternPal.StepByStep.Abstractions;
 
 #endregion
 
@@ -21,8 +19,6 @@ namespace PatternPal.Extension.ViewModels
 
         public InstructionSet InstructionSet { get; }
 
-        public IInstructionState State = new InstructionState();
-
         public ObservableCollection< string > cbItems { get; set; } =
             new ObservableCollection< string >();
 
@@ -30,15 +26,7 @@ namespace PatternPal.Extension.ViewModels
 
         private IList< Instruction > _instructions;
 
-        public Instruction CurrentInstruction
-        {
-            get => _instructions[ _currentInstructionNumber - 1 ];
-            //set
-            //{
-            //    _currentInstruction = value;
-            //    OnPropertyChanged(nameof( CurrentInstruction ));
-            //}
-        }
+        public Instruction CurrentInstruction => _instructions[ _currentInstructionNumber - 1 ];
 
         private int _currentInstructionNumber;
 
@@ -60,6 +48,7 @@ namespace PatternPal.Extension.ViewModels
             }
 
             CurrentInstructionNumber--;
+            OnPropertyChanged(nameof( CurrentInstruction ));
             return true;
         }
 
@@ -71,11 +60,13 @@ namespace PatternPal.Extension.ViewModels
             }
 
             CurrentInstructionNumber++;
-            if (null == _instructions[ _currentInstructionNumber ])
+            if (_currentInstructionNumber >= _instructions.Count
+                || null == _instructions[ _currentInstructionNumber ])
             {
-                _instructions.Add(GetInstructionById(CurrentInstructionNumber));
+                _instructions.Add(GetInstructionById(CurrentInstructionNumber - 1));
             }
 
+            OnPropertyChanged(nameof( CurrentInstruction ));
             return true;
         }
 

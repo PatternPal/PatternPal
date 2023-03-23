@@ -5,6 +5,7 @@ using PatternPal.StepByStep;
 using PatternPal.StepByStep.Abstractions;
 
 using SyntaxTree;
+using SyntaxTree.Abstractions.Entities;
 
 #endregion
 
@@ -12,6 +13,8 @@ namespace PatternPal.Services;
 
 public class PatternPalService : Protos.PatternPal.PatternPalBase
 {
+    private Dictionary< string, string > _keyed = new();
+
     public override Task Recognize(
         RecognizeRequest request,
         IServerStreamWriter< RecognizerResult > responseStream,
@@ -152,6 +155,62 @@ public class PatternPalService : Protos.PatternPal.PatternPalBase
                                               };
 
         return Task.FromResult(response);
+    }
+
+    public override Task< RecognizerResult > CheckInstruction(
+        CheckInstructionRequest request,
+        ServerCallContext context)
+    {
+        IInstructionSet set = InstructionSetsCreator.InstructionSets[ request.InstructionSetName ];
+        IInstruction instruction = set.Instructions.ToList()[ request.InstructionId ];
+
+        SyntaxGraph graph = new();
+
+        foreach (string document in request.Documents)
+        {
+            graph.AddFile(
+                FileManager.MakeStringFromFile(document),
+                document);
+        }
+
+        graph.CreateGraph();
+
+        if (instruction is IFileSelector fileSelector)
+        {
+            _keyed[ fileSelector.FileId ] = request.SelectedItem;
+        }
+
+        IInstructionState state = new InstructionState();
+        foreach (KeyValuePair< string, string > pair in _keyed)
+        {
+            state[ pair.Key ] = graph.GetAll()[ pair.Value ];
+        }
+
+        Result res = new();
+        foreach (ICheckResult checkResult in instruction.Checks.Select(check => check.Correct(state)))
+        {
+            res.Results.Add(CreateCheckResult(checkResult));
+        }
+
+        RecognizerResult r = new()
+                             {
+                                 DetectedPattern = set.Name,
+                                 //ClassName = result.EntityNode.GetFullName(),
+                                 Result = res,
+                             };
+
+        bool correct = r.Result.Results.All(c => c.FeedbackType == FeedbackType.FeedbackCorrect);
+
+        if (correct)
+        {
+            //Save all changed state to the state between instructions, only when all is successful
+            foreach (KeyValuePair< string, IEntity > pair in state)
+            {
+                _keyed[ pair.Key ] = pair.Value.GetFullName();
+            }
+        }
+
+        return Task.FromResult(r);
     }
 
     private CheckResult CreateCheckResult(
