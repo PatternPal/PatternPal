@@ -76,7 +76,6 @@
     </Compile>
     <Compile Include="Stores\NavigationStore.cs" />
     <Compile Include="Commands\SubscribeBuildEvents.cs" />
-    <Compile Include="SummaryFactory.cs" />
     <Compile Include="UserControls\PatternCheckbox.xaml.cs">
       <DependentUpon>PatternCheckbox.xaml</DependentUpon>
     </Compile>
@@ -99,9 +98,7 @@
     <Compile Include="ViewModels\DetectorViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\PatternComponentViewModel.cs" />
     <Compile Include="ViewModels\PatternResultViewModel.cs" />
-    <Compile Include="ViewModels\EntityNodeViewModel.cs" />
     <Compile Include="ViewModels\ResultViewModel.cs" />
     <Compile Include="ViewModels\StepByStepInstructionsViewModel.cs" />
     <Compile Include="ViewModels\StepByStepListViewModel.cs" />
@@ -248,10 +245,6 @@
     <ProjectReference Include="..\PatternPal.Extension.Protos\PatternPal.Extension.Protos.csproj">
       <Project>{070aad55-a535-4e4c-9d33-039d3e370187}</Project>
       <Name>PatternPal.Extension.Protos</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PatternPal.SyntaxTree\PatternPal.SyntaxTree.csproj">
-      <Project>{86e26b75-aea1-43fa-aec5-a81131606d13}</Project>
-      <Name>PatternPal.SyntaxTree</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

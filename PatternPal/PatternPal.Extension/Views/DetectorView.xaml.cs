@@ -35,8 +35,6 @@ namespace PatternPal.Extension.Views
                                         IVsSolutionEvents,
                                         IVsRunningDocTableEvents
     {
-        private readonly SummaryFactory SummaryFactory = new SummaryFactory();
-
         /// <summary>
         ///     Initializes a new instance of the <see cref="ExtensionWindowControl" /> class.
         /// </summary>

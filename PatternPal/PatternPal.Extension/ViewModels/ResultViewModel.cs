@@ -4,8 +4,6 @@ using System.Windows.Media;
 
 using PatternPal.Protos;
 
-using SyntaxTree.Abstractions.Entities;
-
 namespace PatternPal.Extension.ViewModels
 {
     public class ResultViewModel
@@ -23,8 +21,6 @@ namespace PatternPal.Extension.ViewModels
 
         public IEnumerable<CheckResultViewModel> Results =>
             Result.Result.Results.Select(x => new CheckResultViewModel(x, GetFeedbackType()));
-
-        public IEntity EntityNode { get; internal set; }
 
         public SolidColorBrush GetColor(int score)
         {

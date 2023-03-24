@@ -12,8 +12,6 @@ using Microsoft.VisualStudio.Imaging.Interop;
 
 using PatternPal.Protos;
 
-using SyntaxTree.Abstractions.Entities;
-
 //using static PatternPal.CommonResources.ClassFeedbackRes;
 using FeedbackType = PatternPal.Protos.FeedbackType;
 
@@ -123,8 +121,6 @@ namespace PatternPal.Extension.ViewModels
             Result.Result.Results,
             new List< CheckResultViewModel >(),
             FeedbackType.FeedbackIncorrect);
-
-        public IEntity EntityNode { get; internal set; }
 
         /// <summary>
         /// Returns the progress bar color based on the score value.
