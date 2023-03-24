@@ -13,8 +13,6 @@ namespace PatternPal.Services;
 
 public class PatternPalService : Protos.PatternPal.PatternPalBase
 {
-    private Dictionary< string, string > _keyed = new();
-
     public override Task Recognize(
         RecognizeRequest request,
         IServerStreamWriter< RecognizerResult > responseStream,
@@ -177,11 +175,11 @@ public class PatternPalService : Protos.PatternPal.PatternPalBase
 
         if (instruction is IFileSelector fileSelector)
         {
-            _keyed[ fileSelector.FileId ] = request.SelectedItem;
+            State.StateKeyed[ fileSelector.FileId ] = request.SelectedItem;
         }
 
         IInstructionState state = new InstructionState();
-        foreach (KeyValuePair< string, string > pair in _keyed)
+        foreach (KeyValuePair< string, string > pair in State.StateKeyed)
         {
             state[ pair.Key ] = graph.GetAll()[ pair.Value ];
         }
@@ -206,7 +204,7 @@ public class PatternPalService : Protos.PatternPal.PatternPalBase
             //Save all changed state to the state between instructions, only when all is successful
             foreach (KeyValuePair< string, IEntity > pair in state)
             {
-                _keyed[ pair.Key ] = pair.Value.GetFullName();
+                State.StateKeyed[ pair.Key ] = pair.Value.GetFullName();
             }
         }
 
@@ -228,5 +226,10 @@ public class PatternPalService : Protos.PatternPal.PatternPalBase
             newCheckResult.ChildFeedback.Add(CreateCheckResult(childCheckResult));
         }
         return newCheckResult;
+    }
+
+    private static class State
+    {
+        internal static Dictionary< string, string > StateKeyed = new();
     }
 }

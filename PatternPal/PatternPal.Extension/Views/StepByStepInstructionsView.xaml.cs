@@ -6,8 +6,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-using EnvDTE;
-
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
@@ -18,9 +16,6 @@ using Microsoft.VisualStudio.Shell.Interop;
 using PatternPal.Extension.Grpc;
 using PatternPal.Extension.ViewModels;
 using PatternPal.Protos;
-
-using Document = Microsoft.CodeAnalysis.Document;
-using Project = Microsoft.CodeAnalysis.Project;
 
 #endregion
 
@@ -42,7 +37,6 @@ namespace PatternPal.Extension.Views
 
             Dispatcher.VerifyAccess();
             LoadProject();
-            Dte = Package.GetGlobalService(typeof( SDTE )) as DTE;
             IVsRunningDocumentTable rdt = (IVsRunningDocumentTable)Package.GetGlobalService(typeof( SVsRunningDocumentTable ));
             rdt.AdviseRunningDocTableEvents(
                 this,
@@ -54,9 +48,7 @@ namespace PatternPal.Extension.Views
             _client = new Protos.PatternPal.PatternPalClient(GrpcChannelHelper.Channel);
         }
 
-        private List< string > Paths { get; set; }
         private List< Project > Projects { get; set; }
-        private DTE Dte { get; }
 
         /// <summary>
         /// Activated after clicking on the previous instruction button
@@ -118,21 +110,12 @@ namespace PatternPal.Extension.Views
                                   };
         }
 
-        private Dictionary< string, string > keyed = new Dictionary< string, string >();
-
         private void CheckIfCheckIsAvailable()
         {
             ClassSelection.Visibility = _viewModel.CurrentInstruction.ShowFileSelector
                 ? Visibility.Visible
                 : Visibility.Hidden;
-            if (_viewModel.CurrentInstruction.ShowFileSelector)
-            {
-                ClassSelection.SelectedItem =
-                    keyed.ContainsKey(_viewModel.CurrentInstruction.FileId)
-                        ? keyed[ _viewModel.CurrentInstruction.FileId ]
-                        : null;
-                CheckImplementationButton.IsEnabled = ClassSelection.SelectedItem != null;
-            }
+            CheckImplementationButton.IsEnabled = !_viewModel.CurrentInstruction.ShowFileSelector || ClassSelection.SelectedItem != null;
 
             NextInstructionButton.IsEnabled = false;
             ExpanderResults.ResultsView.ItemsSource = new List< PatternResultViewModel >();
@@ -354,12 +337,7 @@ namespace PatternPal.Extension.Views
             SelectionChangedEventArgs e)
         {
             CheckImplementationButton.IsEnabled = true;
-
-            if (_viewModel.CurrentInstruction.ShowFileSelector)
-            {
-                keyed[ _viewModel.CurrentInstruction.FileId ] = _viewModel.SelectedcbItem;
-                NextInstructionButton.IsEnabled = false;
-            }
+            NextInstructionButton.IsEnabled = false;
         }
     }
 }
