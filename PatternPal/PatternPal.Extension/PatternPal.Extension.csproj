@@ -249,10 +249,6 @@
       <Project>{070aad55-a535-4e4c-9d33-039d3e370187}</Project>
       <Name>PatternPal.Extension.Protos</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PatternPal.StepByStep\PatternPal.StepByStep.csproj">
-      <Project>{206f6058-7dfb-4676-aaca-cfaaf56e6936}</Project>
-      <Name>PatternPal.StepByStep</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PatternPal.SyntaxTree\PatternPal.SyntaxTree.csproj">
       <Project>{86e26b75-aea1-43fa-aec5-a81131606d13}</Project>
       <Name>PatternPal.SyntaxTree</Name>
