@@ -1,6 +1,5 @@
 ﻿#region
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
@@ -12,8 +11,7 @@ using Microsoft.VisualStudio.Imaging.Interop;
 
 using PatternPal.Protos;
 
-//using static PatternPal.CommonResources.ClassFeedbackRes;
-using FeedbackType = PatternPal.Protos.FeedbackType;
+using static PatternPal.Protos.CheckResult.Types;
 
 #endregion
 
@@ -31,13 +29,13 @@ namespace PatternPal.Extension.ViewModels
     public class PatternResultViewModel
     {
         public PatternResultViewModel(
-            RecognizerResult result)
+            RecognizeResult result)
         {
             Result = result;
         }
 
-        public RecognizerResult Result { get; }
-        public string PatternName => Result.DetectedPattern;
+        public RecognizeResult Result { get; }
+        public string PatternName => Result.Recognizer.ToString();
 
         /// <summary>
         /// Text that describes the pattern completeness based on the score value.
@@ -72,7 +70,7 @@ namespace PatternPal.Extension.ViewModels
         /// <summary>
         /// Completion score. 100 means all requirements are fulfilled.
         /// </summary>
-        public int Score => Result.Result.Score;
+        public int Score => (int)Result.Score;
 
         public bool Expanded { get; set; } = false;
 
@@ -110,7 +108,7 @@ namespace PatternPal.Extension.ViewModels
         /// IEnumerable that contains checkresults for all correctly implemented requirements
         /// </summary>
         public IEnumerable< object > CorrectRequirements => AddRequirementsFromResults(
-            Result.Result.Results,
+            Result.Results,
             new List< CheckResultViewModel >(),
             FeedbackType.FeedbackCorrect);
 
@@ -118,7 +116,7 @@ namespace PatternPal.Extension.ViewModels
         /// IEnumerable that contains checkresults for all incorrectly implemented requirements
         /// </summary>
         public IEnumerable< object > IncorrectRequirements => AddRequirementsFromResults(
-            Result.Result.Results,
+            Result.Results,
             new List< CheckResultViewModel >(),
             FeedbackType.FeedbackIncorrect);
 
@@ -165,12 +163,12 @@ namespace PatternPal.Extension.ViewModels
         {
             foreach (CheckResult result in results)
             {
-                RepeatedField< CheckResult > childFeedback = result.ChildFeedback;
+                RepeatedField< CheckResult > childFeedback = result.SubCheckResults;
 
                 // Child feedback has at least one element check from the given feedback type
                 bool hasChildrenFromGivenFeedbackType =
                     childFeedback.Any(
-                        x => x.FeedbackType == feedbackType && !x.ChildFeedback.Any()
+                        x => x.FeedbackType == feedbackType && !x.SubCheckResults.Any()
                     );
 
                 if (!result.Hidden && hasChildrenFromGivenFeedbackType)
@@ -275,11 +273,11 @@ namespace PatternPal.Extension.ViewModels
         {
             int totalCount = 0;
 
-            if (result.ChildFeedback.Any())
+            if (result.SubCheckResults.Any())
             {
-                foreach (CheckResult childResult in result.ChildFeedback)
+                foreach (CheckResult childResult in result.SubCheckResults)
                 {
-                    if (!childResult.ChildFeedback.Any()
+                    if (!childResult.SubCheckResults.Any()
                         && childResult.FeedbackType == FeedbackType)
                     {
                         totalCount++;

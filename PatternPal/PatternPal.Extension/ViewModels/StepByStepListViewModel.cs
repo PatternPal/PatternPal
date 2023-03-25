@@ -36,8 +36,7 @@ namespace PatternPal.Extension.ViewModels
                         navigationStore,
                         SelectedInstructionSet));
 
-            Protos.PatternPal.PatternPalClient client = new Protos.PatternPal.PatternPalClient(GrpcChannelHelper.Channel);
-            GetInstructionSetsResponse response = client.GetInstructionSets(new GetInstructionSetsRequest());
+            GetInstructionSetsResponse response = GrpcHelper.StepByStepClient.GetInstructionSets(new GetInstructionSetsRequest());
 
             InstructionSetList = response.InstructionSets;
             SelectedInstructionSet = InstructionSetList?.FirstOrDefault();

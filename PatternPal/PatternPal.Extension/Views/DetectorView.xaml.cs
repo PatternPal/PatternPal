@@ -64,7 +64,7 @@ namespace PatternPal.Extension.Views
         private List< Project > Projects { get; set; }
         private bool Loading { get; set; }
         private DTE Dte { get; }
-        private List< RecognizerResult > Results { get; set; }
+        private List< RecognizeResult > Results { get; set; }
 
         public int OnAfterOpenProject(
             IVsHierarchy pHierarchy,
@@ -163,11 +163,11 @@ namespace PatternPal.Extension.Views
         }
 
         private void CreateResultViewModels(
-            IEnumerable< RecognizerResult > results)
+            IEnumerable< RecognizeResult > results)
         {
             List< PatternResultViewModel > viewModels = new List< PatternResultViewModel >();
 
-            foreach (RecognizerResult result in results)
+            foreach (RecognizeResult result in results)
             {
                 viewModels.Add(new PatternResultViewModel(result));
             }
@@ -237,13 +237,12 @@ namespace PatternPal.Extension.Views
                 request.Recognizers.Add(designPatternViewModel.Recognizer);
             }
 
-            Protos.PatternPal.PatternPalClient client = new Protos.PatternPal.PatternPalClient(GrpcChannelHelper.Channel);
-            IAsyncStreamReader< RecognizerResult > responseStream = client.Recognize(request).ResponseStream;
+            IAsyncStreamReader< RecognizeResponse > responseStream = GrpcHelper.RecognizerClient.Recognize(request).ResponseStream;
 
-            IList< RecognizerResult > results = new List< RecognizerResult >();
+            IList< RecognizeResult > results = new List< RecognizeResult >();
             while (await responseStream.MoveNext())
             {
-                results.Add(responseStream.Current);
+                results.Add(responseStream.Current.Result);
             }
 
             CreateResultViewModels(results);
@@ -272,7 +271,7 @@ namespace PatternPal.Extension.Views
                 return;
             }
 
-            List< RecognizerResult > results = Results.Where(x => x.Result.Score >= 80).ToList();
+            List< RecognizeResult > results = Results.Where(x => x.Score >= 80).ToList();
             //CreateResultViewModels(results);
         }
 

@@ -97,8 +97,7 @@ namespace PatternPal.Extension.ViewModels
         private Instruction GetInstructionById(
             int instructionId)
         {
-            Protos.PatternPal.PatternPalClient client = new Protos.PatternPal.PatternPalClient(GrpcChannelHelper.Channel);
-            GetInstructionByIdResponse response = client.GetInstructionById(
+            GetInstructionByIdResponse response = GrpcHelper.StepByStepClient.GetInstructionById(
                 new GetInstructionByIdRequest
                 {
                     InstructionSetName = InstructionSet.Name,

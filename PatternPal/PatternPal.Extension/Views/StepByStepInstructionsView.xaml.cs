@@ -27,7 +27,6 @@ namespace PatternPal.Extension.Views
     public partial class StepByStepInstructionsView : IVsSolutionEvents,
                                                       IVsRunningDocTableEvents
     {
-        private readonly Protos.PatternPal.PatternPalClient _client;
         private StepByStepInstructionsViewModel _viewModel;
 
         public StepByStepInstructionsView()
@@ -45,7 +44,6 @@ namespace PatternPal.Extension.Views
             ss.AdviseSolutionEvents(
                 this,
                 out _);
-            _client = new Protos.PatternPal.PatternPalClient(GrpcChannelHelper.Channel);
         }
 
         private List< Project > Projects { get; set; }
@@ -146,8 +144,7 @@ namespace PatternPal.Extension.Views
 
             try
             {
-                Protos.PatternPal.PatternPalClient client = new Protos.PatternPal.PatternPalClient(GrpcChannelHelper.Channel);
-                RecognizerResult result = client.CheckInstruction(request);
+                RecognizeResult result = GrpcHelper.StepByStepClient.CheckInstruction(request).Result;
 
                 List< PatternResultViewModel > viewModels = new List< PatternResultViewModel >
                                                             {
@@ -157,7 +154,7 @@ namespace PatternPal.Extension.Views
                                                                 }
                                                             };
 
-                bool correct = result.Result.Results.All(c => c.FeedbackType == FeedbackType.FeedbackCorrect);
+                bool correct = result.Results.All(c => c.FeedbackType == CheckResult.Types.FeedbackType.FeedbackCorrect);
 
                 ExpanderResults.ResultsView.ItemsSource = viewModels;
 
@@ -325,7 +322,7 @@ namespace PatternPal.Extension.Views
                 }
             }
 
-            GetSelectableClassesResponse response = _client.GetSelectableClasses(request);
+            GetSelectableClassesResponse response = GrpcHelper.StepByStepClient.GetSelectableClasses(request);
             foreach (string selectableClass in response.SelectableClasses)
             {
                 _viewModel.cbItems.Add(selectableClass);
