@@ -1,0 +1,18 @@
+syntax = "proto3"
+
+package patternpal;
+
+option csharp_namespace = "PatternPal.Protos";
+
+service Tests {
+	rpc LogBuildEvent (LogBuildEventRequest) returns (LogBuildEventResponse);
+}
+
+message LogBuildEventRequest {
+	string subjectid = 1;
+}
+
+message LogBuildEventResponse {
+	string response = 1;
+}
+
