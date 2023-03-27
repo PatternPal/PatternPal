@@ -14,7 +14,6 @@ namespace PatternPal.LoggingServer.Services
         public override Task<LogReply> Log(LogRequest request, ServerCallContext context)
         {
             
-            // TODO EVERYTHING
 
             return Task.FromResult(new LogReply
             {

@@ -10,6 +10,33 @@ service Log {
   rpc Log (LogRequest) returns (LogReply);
 }
 
+
+enum EventType
+{
+    SESSION_START = 0;
+    SESSION_END = 1;
+    PROJECT_OPEN = 2;
+    PROJECT_CLOSE = 3;
+    FILE_CREATE = 4;
+    FILE_DELETE = 5;
+    FILE_OPEN = 6;
+    FILE_CLOSE = 7;
+    FILE_FOCUS = 8;
+    FILE_RENAME = 9;
+    FILE_COPY = 10;
+    FILE_EDIT = 11;
+    COMPILE = 12;
+    COMPILE_ERROR = 13;
+    COMPILE_WARNING = 14;
+    SUBMIT = 15;
+    RUN_PROGRAM = 16;
+    DEBUG_PROGRAM = 17;
+    RUN_TEST = 18;
+    DEBUG_TEST = 19;
+    RESOURCE_VIEW = 20;
+    INTERVENTION = 21;
+    CUSTOM = 22;
+}
 // The request message containing the user's name.
 message LogRequest {
   string subjectID = 1;

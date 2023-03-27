@@ -33,9 +33,7 @@ namespace PatternPal.LoggingServer.Models
 
     public class ProgSnap2Event
     {
-        [Name("EventID")]
         public string EventID { get; set; }
-        [Name("SubjectID")]
         public string SubjectID { get; set; }
         public string ToolInstances { get; set; }
         public string CodeStateID { get; set; }

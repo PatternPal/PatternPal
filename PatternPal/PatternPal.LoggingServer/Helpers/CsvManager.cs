@@ -40,7 +40,11 @@ public class CSVManager
                 if (reader.GetField(index.Key) == index.Value)
                 {
                     e = reader.GetRecord<ProgSnap2Event>();
-                    events.Add(e);
+                    
+                    if (e != null)
+                    {
+                        events.Add(e);
+                    }
                 }
             }   
         }
