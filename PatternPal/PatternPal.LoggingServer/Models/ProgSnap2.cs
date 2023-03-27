@@ -1,5 +1,7 @@
 ﻿using CsvHelper.Configuration.Attributes;
-using Google.Protobuf.WellKnownTypes;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using PatternPal.LoggingServer.Models;
 
 namespace PatternPal.LoggingServer.Models
@@ -33,16 +35,13 @@ namespace PatternPal.LoggingServer.Models
 
     public class ProgSnap2Event
     {
+
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string EventID { get; set; }
         public string SubjectID { get; set; }
         public string ToolInstances { get; set; }
         public string CodeStateID { get; set; }
         public EventType EventType { get; set; }
-        public int? Order { get; set; }
-        public Timestamp? ServerTimeStamp { get; set; }
-        public TimeZoneInfo? ServerTimeZone { get; set; }
-        public Timestamp? ClientTimeStamp { get; set; }
-        public TimeZoneInfo? ClientTimeZone { get; set; }
     }
 
 }
