@@ -240,9 +240,9 @@ namespace PatternPal.Extension.Views
             }
 
             Protos.PatternPal.PatternPalClient client = new Protos.PatternPal.PatternPalClient(GrpcChannelHelper.Channel);
-            IAsyncStreamReader< RecognizerResult > responseStream = client.Recognize(request).ResponseStream;
+            IAsyncStreamReader<RecognizerResult> responseStream = client.Recognize(request).ResponseStream;
 
-            IList< RecognizerResult > results = new List< RecognizerResult >();
+            IList<RecognizerResult> results = new List<RecognizerResult>();
             while (await responseStream.MoveNext())
             {
                 results.Add(responseStream.Current);
@@ -252,7 +252,6 @@ namespace PatternPal.Extension.Views
             SummaryControl.Text = "Recognizer is finished";
             ResetUI();
         }
-
         private void CheckSwitch_Checked(
             object sender,
             RoutedEventArgs e)

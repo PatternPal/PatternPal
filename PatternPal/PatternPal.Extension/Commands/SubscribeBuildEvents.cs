@@ -7,6 +7,14 @@ using System.Threading.Tasks;
 using PatternPal.Extension.Commands;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Grpc.Core;
+using PatternPal.Extension.Grpc;
+using StreamJsonRpc;
+using EnvDTE;
+using PatternPal.Extension.UserControls;
+using PatternPal.Extension.ViewModels;
+using EnvDTE80;
+using PatternPal.Protos;
 
 namespace PatternPal.Extension
 {
@@ -16,6 +24,7 @@ namespace PatternPal.Extension
         ///     VS Package that provides this command, not null.
         /// </summary>
         private static PatternPalExtensionPackage package;
+
         public static void Initialize(EnvDTE.DTE dte, PatternPalExtensionPackage package)
         {
             Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
@@ -29,6 +38,16 @@ namespace PatternPal.Extension
             {
                 try { await LoggingApiClient.PostActionAsync(Action); }
                 catch (Exception ex) { }
+
+                //Request to service
+                LogBuildEventRequest request = new LogBuildEventRequest { SubjectId = "iets" };
+
+                LoggingService.LoggingServiceClient client =
+                    new LoggingService.LoggingServiceClient(GrpcChannelHelper.Channel);
+                  LogBuildEventResponse response = client.LogBuildEvent(request);
+                   
+                
+            
             }
         }
     }

@@ -13,7 +13,7 @@ namespace PatternPal.Extension.ViewModels
     {
         public override string Title => Resources.ExtensionUIResources.DetectorTitle;
         public ICommand NavigateHomeCommand { get; }
-        public DetectorViewModel(NavigationStore navigationStore)
+        public DetectorViewModel(NavigationStore navigationStore) 
         {
             NavigateHomeCommand = new NavigateCommand<HomeViewModel>(navigationStore, () => new HomeViewModel(navigationStore));
         }

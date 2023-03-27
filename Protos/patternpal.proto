@@ -46,6 +46,7 @@ message CheckResult {
     string feedback_message = 5;
 }
 
+//Enum always first value 0
 enum FeedbackType {
     FEEDBACK_UNKNOWN = 0;
     FEEDBACK_CORRECT = 1;

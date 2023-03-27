@@ -1,4 +1,6 @@
-﻿namespace PatternPal;
+﻿using LoggingService = PatternPal.Services.LoggingService;
+
+namespace PatternPal;
 
 internal static class Program
 {
@@ -19,7 +21,7 @@ internal static class Program
                 DefaultEnabled = true
             });
         app.MapGrpcService< PatternPalService >();
-
+        app.MapGrpcService<LoggingService>();
         app.Run();
     }
 }

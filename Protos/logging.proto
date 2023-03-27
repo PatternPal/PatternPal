@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package patternpal;
+
+option csharp_namespace = "PatternPal.Protos";
+
+// Defines the API exposed by the PatternPal background service.
+// Snake case
+service LoggingService {
+    // Runs the recognizer(s) for a given file or project.
+    rpc LogBuildEvent (LogBuildEventRequest) returns (LogBuildEventResponse);
+}
+
+// Input arguments for recognizer request.
+message LogBuildEventRequest {
+
+    string subject_id = 1;
+  
+}
+
+// Input arguments for recognizer request.
+message LogBuildEventResponse {
+
+    string response_message = 1;
+    string poep = 2;
+    string daan = 3;
+
+}
