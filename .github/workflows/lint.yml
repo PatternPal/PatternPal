@@ -40,6 +40,7 @@ jobs:
       - name: Inspect code
         uses: muno92/resharper_inspectcode@main
         with:
-          solutionPath: PatternPal/PatternPal.sln
-          exclude: PatternPal/PatternPal.Extension.Protos
-          failOnIssue: '0'
+          workingDirectory: PatternPal
+          solutionPath: ./PatternPal.sln
+          solutionWideAnalysis: false
+          include: ./PatternPal.Core
