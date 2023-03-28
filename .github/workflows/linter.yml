@@ -38,9 +38,8 @@ jobs:
         run: nuget restore PatternPal/PatternPal.sln
         
       - name: Inspect code
-        uses: muno92/resharper_inspectcode@1.6.5
+        uses: muno92/resharper_inspectcode@main
         with:
           workingDirectory: PatternPal
           solutionPath: ./PatternPal.sln
-          #minimumSeverity: warning
           failOnIssue: 0
