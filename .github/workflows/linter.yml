@@ -14,13 +14,19 @@ on:
   workflow_dispatch:
 
 jobs:
-  resharper:
-    runs-on: ubuntu-latest
+  inspection:
+    runs-on: windows-latest #ubuntu-latest # or macos-latest, windows-latest
+    name: Inspection
     steps:
-      - name: checkout
-        uses: actions/checkout@v2
-      
-      - name: resharper
-        uses: ovda96/resharper-action@master
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
         with:
-          solution: PatternPal/PatternPal.sln
+          dotnet-version: '7.0.x' # [3.1.x, 5.0.x, 6.0.x, 7.0.x]
+      - name: Restore
+        run: dotnet restore
+      - name: Inspect code
+        uses: muno92/resharper_inspectcode@1.6.5
+        with:
+          solutionPath: PatternPal/PatternPal.sln
