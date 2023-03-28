@@ -1,0 +1,18 @@
+name: ReSharper
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  resharper:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      
+      - name: resharper
+        uses: glassechidna/resharper-action@master
+        with:
+          solution: PatternPal.sln
