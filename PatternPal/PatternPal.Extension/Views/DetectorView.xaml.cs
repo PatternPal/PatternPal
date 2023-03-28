@@ -203,6 +203,11 @@ namespace PatternPal.Extension.Views
 
         private async Task Analyse()
         {
+            if (null == Dte)
+            {
+                return;
+            }
+
             RecognizeRequest request = new RecognizeRequest();
 
             // TODO CV: Handle error cases
@@ -237,6 +242,8 @@ namespace PatternPal.Extension.Views
                 request.Recognizers.Add(designPatternViewModel.Recognizer);
             }
 
+            request.ShowAllResults = !(ShowAllCheckBox.IsChecked.HasValue && ShowAllCheckBox.IsChecked.Value);
+
             IAsyncStreamReader< RecognizeResponse > responseStream = GrpcHelper.RecognizerClient.Recognize(request).ResponseStream;
 
             IList< RecognizeResult > results = new List< RecognizeResult >();
@@ -247,37 +254,7 @@ namespace PatternPal.Extension.Views
 
             CreateResultViewModels(results);
             SummaryControl.Text = "Recognizer is finished";
-            ResetUI();
-        }
 
-        private void CheckSwitch_Checked(
-            object sender,
-            RoutedEventArgs e)
-        {
-            if (Results == null)
-            {
-                return;
-            }
-
-            //CreateResultViewModels(Results);
-        }
-
-        private void CheckSwitch_Unchecked(
-            object sender,
-            RoutedEventArgs e)
-        {
-            if (Results == null)
-            {
-                return;
-            }
-
-            List< RecognizeResult > results = Results.Where(x => x.Score >= 80).ToList();
-            //CreateResultViewModels(results);
-        }
-
-        private void ResetUI()
-        {
-            //statusBar.Value = 0;
             Loading = false;
             ProgressStatusBlock.Text = "";
         }
@@ -360,5 +337,19 @@ namespace PatternPal.Extension.Views
         }
 
         #endregion
+
+        private void ShowAllCheckBox_OnChecked(
+            object sender,
+            RoutedEventArgs e)
+        {
+            Analyse();
+        }
+
+        private void ShowAllCheckBox_OnUnchecked(
+            object sender,
+            RoutedEventArgs e)
+        {
+            Analyse();
+        }
     }
 }

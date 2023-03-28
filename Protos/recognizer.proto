@@ -26,6 +26,9 @@ message RecognizeRequest {
 
     // List of recognizers which should be run.
     repeated patternpal.Recognizer recognizers = 3;
+
+    // Whether to show all results or just those above a threshold determined by the backend.
+    bool show_all_results = 4;
 }
 
 // Recognize response message.
