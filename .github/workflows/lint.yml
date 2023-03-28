@@ -40,6 +40,5 @@ jobs:
       - name: Inspect code
         uses: muno92/resharper_inspectcode@main
         with:
-          workingDirectory: PatternPal
-          solutionPath: ./PatternPal.sln
+          solutionPath: PatternPal/PatternPal.sln
           failOnIssue: '0'
