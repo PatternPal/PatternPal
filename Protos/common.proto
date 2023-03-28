@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package patternpal;
+
+option csharp_namespace = "PatternPal.Protos";
+
+// Result of the recognizer.
+message RecognizeResult {
+    // The recognizer which was used to obtain this result.
+    Recognizer recognizer = 1;
+
+    // Name of the class on which the pattern was detected.
+    string class_name = 2;
+
+    // The score is a value between 0 and 100 which indicates how well the pattern is implemented.
+    uint32 score = 3;
+
+    // The results for the individual checks which make up the recognizer.
+    repeated CheckResult results = 4;
+}
+
+// Result of one specific check inside a recognizer.
+message CheckResult {
+    // Indicates the type of feedback.
+    FeedbackType feedback_type = 1;
+
+    // The feedback message to be presented to the user.
+    string feedback_message = 2;
+
+    // The score is a value between 0 and 10 which indicates how well the check is implemented.
+    double score = 3;
+
+    // Indicates whether the check should be hidden in the results view.
+    bool hidden = 4;
+
+    // The results for any sub-checks which may be contained in this check.
+    repeated CheckResult sub_check_results = 5;
+
+    // The type of feedback for the current check.
+    enum FeedbackType {
+        // Not used. This is the default value required by the Protocol Buffer spec.
+        FEEDBACK_UNKNOWN = 0;
+
+        // The check is implemented correctly.
+        FEEDBACK_CORRECT = 1;
+
+        // The check has some sub-checks which are not implemented correctly.
+        FEEDBACK_SEMI_CORRECT = 2;
+
+        // The check is implemented incorrectly.
+        FEEDBACK_INCORRECT = 3;
+    }
+}
+
+// Recognizers which can be run.
+enum Recognizer {
+    // Not used. This is the default value required by the Protocol Buffer spec.
+    RECOGNIZER_UNKNOWN = 0;
+
+    // Recognizer for the Adapter pattern.
+    RECOGNIZER_ADAPTER = 1;
+
+    // Recognizer for the Bridge pattern.
+    RECOGNIZER_BRIDGE = 2;
+
+    // Recognizer for the Decorator pattern.
+    RECOGNIZER_DECORATOR = 3;
+
+    // Recognizer for the Factory Method pattern.
+    RECOGNIZER_FACTORY_METHOD = 4;
+
+    // Recognizer for the Observer pattern.
+    RECOGNIZER_OBSERVER = 5;
+
+    // Recognizer for the Singleton pattern.
+    RECOGNIZER_SINGLETON = 6;
+
+    // Recognizer for the State pattern.
+    RECOGNIZER_STATE = 7;
+
+    // Recognizer for the Strategy pattern.
+    RECOGNIZER_STRATEGY = 8;
+}

@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package patternpal;
+
+import "common.proto";
+
+option csharp_namespace = "PatternPal.Protos";
+
+// The PatternPal recognizer API exposed by the background service.
+service RecognizerService {
+    // Runs the specified recognizer(s) on the given file(s)/project, and returns a result for each
+    // class in which a design pattern is detected.
+    rpc Recognize (RecognizeRequest) returns (stream RecognizeResponse);
+}
+
+// Recognize request message.
+message RecognizeRequest {
+    // Path of the file or project to run the recognizers on.
+    oneof file_or_project {
+        // Path of the file to run the recognizers on.
+        string file = 1;
+
+        // Path of the project to run the recognizers on.
+        string project = 2;
+    };
+
+    // List of recognizers which should be run.
+    repeated patternpal.Recognizer recognizers = 3;
+}
+
+// Recognize response message.
+message RecognizeResponse {
+    // Result of the recognizer.
+    patternpal.RecognizeResult result = 1;
+}
