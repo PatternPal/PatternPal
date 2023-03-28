@@ -203,6 +203,11 @@ namespace PatternPal.Extension.Views
 
         private async Task Analyse()
         {
+            if (null == Dte)
+            {
+                return;
+            }
+
             RecognizeRequest request = new RecognizeRequest();
 
             // TODO CV: Handle error cases
@@ -337,24 +342,14 @@ namespace PatternPal.Extension.Views
             object sender,
             RoutedEventArgs e)
         {
-            if (Results == null)
-            {
-                return;
-            }
-
-            CreateResultViewModels(Results);
+            Analyse();
         }
 
         private void ShowAllCheckBox_OnUnchecked(
             object sender,
             RoutedEventArgs e)
         {
-            if (Results == null)
-            {
-                return;
-            }
-
-            CreateResultViewModels(Results);
+            Analyse();
         }
     }
 }
