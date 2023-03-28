@@ -41,4 +41,5 @@ jobs:
         uses: muno92/resharper_inspectcode@main
         with:
           solutionPath: PatternPal/PatternPal.sln
+          exclude: PatternPal/PatternPal.Extension.Protos
           failOnIssue: '0'
