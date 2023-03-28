@@ -23,4 +23,4 @@ jobs:
       - name: resharper
         uses: glassechidna/resharper-action@master
         with:
-          solution: PatternPal.sln
+          solution: PatternPal/PatternPal.sln
