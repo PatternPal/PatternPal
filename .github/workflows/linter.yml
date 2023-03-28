@@ -1,9 +1,17 @@
 name: ReSharper
 
 on:
-  pull_request:
+  push:
     branches:
+      - master
       - develop
+    paths:
+      - 'PatternPal/**'
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+    paths:
+      - 'PatternPal/**'
+  workflow_dispatch:
 
 jobs:
   resharper:
