@@ -18,7 +18,18 @@ You can open the main view of the extension through `View > Other Windows > Patt
 ## Authors
 Project coordinator: [Hieke Keuning](https://github.com/hiekekeuning) (h.w.keuning@uu.nl), Utrecht University
 
-### Team 2021-2022
+### Team 2023 (Utrecht University)
+- Matteo Bertorotta
+- Daan	van Dam
+- Wing Toh Wong
+- Casper Verhaar
+- Siem van den Tweel
+- Rutger Vincken
+- Linde van Werven
+- Jeroen van Dam
+- Olaf van der Aart
+
+### Team 2021-2022 (Windesheim University of Applied Sciences)
  - [Frank Stam](https://github.com/FrankS01)
  - Jasper van Veenhuizen
  - [Nienke Hulzebos](https://github.com/nienkehulzebos)
@@ -26,7 +37,7 @@ Project coordinator: [Hieke Keuning](https://github.com/hiekekeuning) (h.w.keuni
  - [Zeewar Ghafir](https://github.com/zeewar)
  - [Koen van Staveren](https://github.com/UnderKoen)
  
- ### Team 2019-2020
+ ### Team 2019-2020 (Windesheim University of Applied Sciences)
  - Henrico Pops
  - Jacq Wattel
  - Tristan Heizenberg
