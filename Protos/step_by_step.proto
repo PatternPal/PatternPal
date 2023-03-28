@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+package patternpal;
+
+import "common.proto";
+
+option csharp_namespace = "PatternPal.Protos";
+
+// The PatternPal step-by-step API exposed by the background service.
+service StepByStepService {
+    // Gets the instruction sets which are available for step-by-step mode.
+    rpc GetInstructionSets (GetInstructionSetsRequest) returns (GetInstructionSetsResponse);
+
+    // Gets the classes which are selectable when checking a step.
+    rpc GetSelectableClasses (GetSelectableClassesRequest) returns (GetSelectableClassesResponse);
+
+    // Gets a instruction with a given id.
+    rpc GetInstructionById (GetInstructionByIdRequest) returns (GetInstructionByIdResponse);
+
+    // Checks whether a instruction is implemented correctly.
+    rpc CheckInstruction (CheckInstructionRequest) returns (CheckInstructionResponse);
+}
+
+// GetInstructionSets request message.
+message GetInstructionSetsRequest {
+}
+
+// GetInstructionSets response message.
+message GetInstructionSetsResponse {
+    // List of instruction sets which are available for step-by-step mode.
+    repeated InstructionSet instruction_sets = 1;
+}
+
+// An instruction set.
+message InstructionSet {
+    // Name of the set.
+    string name = 1;
+
+    // Number of instructions in the set.
+    uint32 number_of_instructions = 2;
+}
+
+// GetSelectableClasses request message.
+message GetSelectableClassesRequest {
+    // List of documents which may contain selectable classes.
+    repeated string documents = 1;
+}
+
+// GetSelectableClasses response message.
+message GetSelectableClassesResponse {
+    // List of class names which are selectable.
+    repeated string selectable_classes = 1;
+}
+
+// GetInstructionById request message.
+message GetInstructionByIdRequest {
+    // Name of the instruction set from which to get the instruction.
+    string instruction_set_name = 1;
+
+    // Id of the instruction to get, 0-based.
+    int32 instruction_id = 2;
+}
+
+// GetInstructionById response message.
+message GetInstructionByIdResponse {
+    // Instruction which was found.
+    Instruction instruction = 1;
+}
+
+// An instruction.
+message Instruction {
+    // Title of the instruction.
+    string title = 1;
+
+    // Description of the instruction.
+    string description = 2;
+
+    // Whether to show a file selector.
+    bool show_file_selector = 3;
+    
+    // Key used to store the selected file.
+    string file_id = 4;
+}
+
+// CheckInstruction request message.
+message CheckInstructionRequest {
+    // Name of the instruction set from which to get the instruction.
+    string instruction_set_name = 1;
+
+    // Id of the instruction to check, 0-based.
+    int32 instruction_id = 2;
+
+    // List of documents which should be included in the check.
+    repeated string documents = 3;
+    
+    // Optional. The selected item in the file selector.
+    string selected_item = 4;
+}
+
+// CheckInstruction response message.
+message CheckInstructionResponse {
+    // Result of the check of the instruction.
+    patternpal.RecognizeResult result = 1;
+}

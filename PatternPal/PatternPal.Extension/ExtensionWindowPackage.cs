@@ -1,14 +1,10 @@
 ﻿#region
 
 using System;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-
-using EnvDTE;
 
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
@@ -16,8 +12,6 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 using PatternPal.Extension.Commands;
 using PatternPal.Extension.Grpc;
-
-using Process = System.Diagnostics.Process;
 
 #endregion
 
@@ -92,7 +86,7 @@ namespace PatternPal.Extension
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
             await ExtensionWindowCommand.InitializeAsync(this);
 
-            GrpcBackgroundServiceHelper.StartBackgroundService((DTE)GetService(typeof( DTE )));
+            GrpcBackgroundServiceHelper.StartBackgroundService(this);
         }
 
         internal static void Main()

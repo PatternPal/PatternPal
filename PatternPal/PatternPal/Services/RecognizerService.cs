@@ -1,16 +1,10 @@
-﻿#region
+﻿namespace PatternPal.Services;
 
-using PatternPal.CommonResources;
-
-#endregion
-
-namespace PatternPal.Services;
-
-public class PatternPalService : Protos.PatternPal.PatternPalBase
+public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
 {
     public override Task Recognize(
         RecognizeRequest request,
-        IServerStreamWriter< RecognizerResult > responseStream,
+        IServerStreamWriter< RecognizeResponse > responseStream,
         ServerCallContext context)
     {
         string pathFile = request.File;
@@ -64,22 +58,23 @@ public class PatternPalService : Protos.PatternPal.PatternPalBase
 
         foreach (RecognitionResult result in runner.Run(patterns))
         {
-            Result res = new()
-                         {
-                             Score = result.Result.GetScore()
-                         };
+            RecognizeResult res = new()
+                                  {
+                                      Recognizer = result.Pattern.RecognizerType,
+                                      ClassName = result.EntityNode.GetFullName(),
+                                      Score = (uint)result.Result.GetScore()
+                                  };
+
             foreach (ICheckResult checkResult in result.Result.GetResults())
             {
                 res.Results.Add(CreateCheckResult(checkResult));
             }
 
-            RecognizerResult r = new RecognizerResult
-                                 {
-                                     DetectedPattern = result.Pattern.Name,
-                                     ClassName = result.EntityNode.GetFullName(),
-                                     Result = res,
-                                 };
-            responseStream.WriteAsync(r);
+            RecognizeResponse response = new()
+                                         {
+                                             Result = res,
+                                         };
+            responseStream.WriteAsync(response);
         }
 
         return Task.CompletedTask;
@@ -90,14 +85,14 @@ public class PatternPalService : Protos.PatternPal.PatternPalBase
     {
         CheckResult newCheckResult = new()
                                      {
-                                         FeedbackType = (FeedbackType)((int)checkResult.GetFeedbackType() + 1),
+                                         FeedbackType = (CheckResult.Types.FeedbackType)((int)checkResult.GetFeedbackType() + 1),
                                          Hidden = checkResult.IsHidden,
                                          Score = checkResult.GetScore(),
                                          FeedbackMessage = ResourceUtils.ResultToString(checkResult),
                                      };
         foreach (ICheckResult childCheckResult in checkResult.GetChildFeedback())
         {
-            newCheckResult.ChildFeedback.Add(CreateCheckResult(childCheckResult));
+            newCheckResult.SubCheckResults.Add(CreateCheckResult(childCheckResult));
         }
         return newCheckResult;
     }

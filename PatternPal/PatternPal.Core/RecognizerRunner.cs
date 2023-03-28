@@ -26,35 +26,43 @@ namespace PatternPal.Core
             new DesignPattern(
                 Singleton,
                 new SingletonRecognizer(),
-                WikiPageResources.Singleton),
+                WikiPageResources.Singleton,
+                Recognizer.Singleton),
             new DesignPattern(
                 FactoryMethod,
                 new FactoryMethodRecognizer(),
-                WikiPageResources.FactoryMethod),
+                WikiPageResources.FactoryMethod,
+                Recognizer.FactoryMethod),
             new DesignPattern(
                 Decorator,
                 new DecoratorRecognizer(),
-                WikiPageResources.Decorator),
+                WikiPageResources.Decorator,
+                Recognizer.Decorator),
             new DesignPattern(
                 State,
                 new StateRecognizer(),
-                WikiPageResources.State),
+                WikiPageResources.State,
+                Recognizer.State),
             new DesignPattern(
                 Strategy,
                 new StrategyRecognizer(),
-                WikiPageResources.Strategy),
+                WikiPageResources.Strategy,
+                Recognizer.Strategy),
             new DesignPattern(
                 Adapter,
                 new AdapterRecognizer(),
-                WikiPageResources.Adapter),
+                WikiPageResources.Adapter,
+                Recognizer.Adapter),
             new DesignPattern(
                 Observer,
                 new ObserverRecognizer(),
-                WikiPageResources.Observer),
+                WikiPageResources.Observer,
+                Recognizer.Observer),
             new DesignPattern(
                 Bridge,
                 new BridgeRecognizer(),
-                WikiPageResources.Bridge)
+                WikiPageResources.Bridge,
+                Recognizer.Bridge)
         );
 
         private static readonly DesignPattern[ ] s_DesignPatterns;
@@ -67,35 +75,43 @@ namespace PatternPal.Core
                                    new DesignPattern(
                                        Adapter,
                                        new AdapterRecognizer(),
-                                       WikiPageResources.Adapter),
+                                       WikiPageResources.Adapter,
+                                       Recognizer.Adapter),
                                    new DesignPattern(
                                        Bridge,
                                        new BridgeRecognizer(),
-                                       WikiPageResources.Bridge),
+                                       WikiPageResources.Bridge,
+                                       Recognizer.Bridge),
                                    new DesignPattern(
                                        Decorator,
                                        new DecoratorRecognizer(),
-                                       WikiPageResources.Decorator),
+                                       WikiPageResources.Decorator,
+                                       Recognizer.Decorator),
                                    new DesignPattern(
                                        FactoryMethod,
                                        new FactoryMethodRecognizer(),
-                                       WikiPageResources.FactoryMethod),
+                                       WikiPageResources.FactoryMethod,
+                                       Recognizer.FactoryMethod),
                                    new DesignPattern(
                                        Observer,
                                        new ObserverRecognizer(),
-                                       WikiPageResources.Observer),
+                                       WikiPageResources.Observer,
+                                       Recognizer.Observer),
                                    new DesignPattern(
                                        Singleton,
                                        new SingletonRecognizer(),
-                                       WikiPageResources.Singleton),
+                                       WikiPageResources.Singleton,
+                                       Recognizer.Singleton),
                                    new DesignPattern(
                                        State,
                                        new StateRecognizer(),
-                                       WikiPageResources.State),
+                                       WikiPageResources.State,
+                                       Recognizer.State),
                                    new DesignPattern(
                                        Strategy,
                                        new StrategyRecognizer(),
-                                       WikiPageResources.Strategy),
+                                       WikiPageResources.Strategy,
+                                       Recognizer.Strategy),
                                };
         }
 
@@ -158,7 +174,10 @@ namespace PatternPal.Core
                     from pattern in patterns
                     select new RecognitionResult
                            {
-                               Result = pattern.Recognizer.Recognize(node), EntityNode = node, FilePath = node.GetRoot().GetSource(), Pattern = pattern
+                               Result = pattern.Recognizer.Recognize(node),
+                               EntityNode = node,
+                               FilePath = node.GetRoot().GetSource(),
+                               Pattern = pattern
                            }
                 );
             }
@@ -174,7 +193,8 @@ namespace PatternPal.Core
                 this,
                 new RecognizerProgress
                 {
-                    CurrentPercentage = percentage, Status = status
+                    CurrentPercentage = percentage,
+                    Status = status
                 });
         }
     }
