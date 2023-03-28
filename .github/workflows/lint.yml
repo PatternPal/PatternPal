@@ -42,4 +42,4 @@ jobs:
         with:
           workingDirectory: PatternPal
           solutionPath: ./PatternPal.sln
-          failOnIssue: 0
+          failOnIssue: '0'
