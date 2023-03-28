@@ -42,5 +42,3 @@ jobs:
         with:
           workingDirectory: PatternPal
           solutionPath: ./PatternPal.sln
-          solutionWideAnalysis: false
-          include: ./PatternPal.Core
