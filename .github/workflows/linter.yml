@@ -21,6 +21,6 @@ jobs:
         uses: actions/checkout@v2
       
       - name: resharper
-        uses: glassechidna/resharper-action@master
+        uses: ovda96/resharper-action@master
         with:
           solution: PatternPal/PatternPal.sln
