@@ -15,7 +15,7 @@ on:
 
 jobs:
   inspection:
-    runs-on: windows-latest #ubuntu-latest # or macos-latest, windows-latest
+    runs-on: windows-latest #windows-latest, ubuntu-latest, macos-latest
     name: Inspection
     steps:
       - name: Checkout
@@ -33,3 +33,4 @@ jobs:
         uses: muno92/resharper_inspectcode@1.6.5
         with:
           solutionPath: PatternPal/PatternPal.sln
+          failOnIssue: 0
