@@ -1,6 +1,7 @@
 ﻿using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using PatternPal.LoggingServer;
+using PatternPal.LoggingServer.Data;
 using PatternPal.LoggingServer.Data.Interfaces;
 using PatternPal.LoggingServer.Models;
 
@@ -9,8 +10,8 @@ namespace PatternPal.LoggingServer.Services
     public class LoggerService : Log.LogBase
     {
         private readonly ILogger<LoggerService> _logger;
-        private readonly IRepository<ProgSnap2Event> _eventRepository;
-        public LoggerService(ILogger<LoggerService> logger, IRepository<ProgSnap2Event> repository)
+        private readonly EventRepository _eventRepository;
+        public LoggerService(ILogger<LoggerService> logger, EventRepository repository)
         {
             _logger = logger;
             _eventRepository = repository;
@@ -18,20 +19,29 @@ namespace PatternPal.LoggingServer.Services
 
         public override async Task<LogReply> Log(LogRequest request, ServerCallContext context)
         {
-            _logger.LogCritical("skitta");
 
-            var res = await _eventRepository.GetAll();
+            Guid sessionId = Guid.Parse(request.SessionID);
+            Guid subjectId = Guid.Parse(request.SubjectID);
 
-            _logger.LogCritical(res.Count().ToString());
-            _logger.LogInformation("Received Log Request: {0}", request.EventType);
+
+            DateTimeOffset cDto = DateTimeOffset.Parse(request.ClientTimestamp);
+            
+            
+            int order = await _eventRepository.GetNextOrder(sessionId, subjectId);
+            
+            
 
             ProgSnap2Event newEvent = new ProgSnap2Event
             {
-                EventType = Models.EventType.Compile,
-                EventID = Guid.NewGuid().ToString(),
-                SubjectID = request.SubjectID,
+                Order = order, 
+                EventType = request.EventType,
+                EventId = Guid.NewGuid(),
+                SubjectId = subjectId,
                 ToolInstances = request.ToolInstances,
-                CodeStateID = request.ToolInstances
+                CodeStateId = Guid.NewGuid(), // TODO: implement code state
+                ClientDatetime = cDto,
+                ServerDatetime = DateTimeOffset.Now,
+                SessionId = sessionId
             };
 
             await _eventRepository.Insert(newEvent);

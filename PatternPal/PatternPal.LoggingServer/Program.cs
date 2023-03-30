@@ -13,9 +13,6 @@ internal static class Program
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder();
 
-        // Additional configuration is required to successfully run gRPC on macOS.
-        // For instructions on how to configure Kestrel and gRPC clients on macOS, visit https://go.microsoft.com/fwlink/?linkid=2099682
-
         builder.Services.AddGrpc();
 
 
@@ -26,17 +23,9 @@ internal static class Program
         );
 
         // Add the repository
-        builder.Services.AddScoped<IRepository<ProgSnap2Event>, EventRepository>();
+        builder.Services.AddScoped<EventRepository, EventRepository>();
 
         WebApplication app = builder.Build();
-
-
-        //app.UseGrpcWeb(
-        //    new GrpcWebOptions
-        //    {
-        //        DefaultEnabled = true
-        //    });
-        // configure services
 
         app.MapGrpcService<LoggerService>();
 

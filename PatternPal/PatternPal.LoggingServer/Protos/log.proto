@@ -2,6 +2,7 @@ syntax = "proto3";
 
 option csharp_namespace = "PatternPal.LoggingServer";
 
+import "google/type/datetime.proto";
 package log;
 
 // The greeting service definition.
@@ -37,15 +38,17 @@ enum EventType
     INTERVENTION = 21;
     CUSTOM = 22;
 }
-// The request message containing the user's name.
+// Client configuration message to log to the server
 message LogRequest {
   string subjectID = 1;
   string toolInstances = 2;
   EventType eventType = 3;
-  // CodeState
+  string SessionID = 4;
+  string clientTimestamp = 5; // ISO 8601
+
 }
 
-// The response message containing the greetings.
+// Confirmation message 
 message LogReply {
   string message = 1; 
   // Simple message to return just to confirm that the server is up and running
