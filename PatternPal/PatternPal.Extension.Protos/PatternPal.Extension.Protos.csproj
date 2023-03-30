@@ -16,6 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PatternPal\PatternPal.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Protobuf Include="../../Protos/patternpal.proto" GrpcServices="Client" Link="Protos/patternpal.proto" />
   </ItemGroup>
 

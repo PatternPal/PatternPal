@@ -52,5 +52,24 @@ namespace PatternPal.LoggingServer.Data
         }
 
 
+        public async Task<ProgSnap2Event?> GetBy(string column, string value)
+        {
+            return await _context.Events.FirstOrDefaultAsync(e => EF.Property<string>(e, column) == value);
+        }
+
+        public async Task<List<ProgSnap2Event>> GetAllBy(string column, string value)
+        {
+            return await _context.Events.Where(e => EF.Property<string>(e, column) == value).ToListAsync();
+        }
+
+        public async Task<int> GetNextOrder(Guid sessionId, Guid subjectId)
+        {
+            ProgSnap2Event? lastEvent = await _context.Events.Where(e => e.SessionId == sessionId && e.SubjectId == subjectId).OrderByDescending(e => e.Order).FirstOrDefaultAsync();
+            if (lastEvent == null)
+            {
+                return 0;
+            }
+            return lastEvent.Order + 1;
+        }
     }
 }
