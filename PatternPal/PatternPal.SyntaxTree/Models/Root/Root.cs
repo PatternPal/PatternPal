@@ -51,7 +51,7 @@ namespace SyntaxTree.Models.Root
                 .ToDictionary(p => p.Key, p => p.Value);
         }
 
-        public IEnumerable<IRelation> GetRelations(IEntity entity)
+        public IEnumerable<IRelation<IEntity>> GetRelations(IEntity entity)
         {
             return _graph.GetRelations(entity);
         }

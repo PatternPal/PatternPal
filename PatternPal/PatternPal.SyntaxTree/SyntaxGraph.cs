@@ -67,11 +67,11 @@ namespace SyntaxTree
         /// </summary>
         /// <param name="entity">The entity</param>
         /// <returns>A wrapper of the entity with the relations</returns>
-        public IEnumerable<IRelation> GetRelations(IEntity entity)
+        public IEnumerable<IRelation<IEntity>> GetRelations(IEntity entity)
         {
             if (!_relations.relations.ContainsKey(entity))
             {
-                return Array.Empty<IRelation>();
+                return Array.Empty<IRelation<IEntity>>();
             }
 
             return _relations.relations[entity].AsReadOnly();

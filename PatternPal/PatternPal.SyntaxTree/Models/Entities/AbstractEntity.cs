@@ -120,7 +120,7 @@ namespace SyntaxTree.Models.Entities
             return GetName();
         }
 
-        public IEnumerable<IRelation> GetRelations()
+        public IEnumerable<IRelation<IEntity>> GetRelations()
         {
             return _parent.GetRoot().GetRelations(this);
         }
