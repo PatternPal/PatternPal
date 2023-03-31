@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatternPal", "PatternPal\Pa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatternPal.Extension.Protos", "PatternPal.Extension.Protos\PatternPal.Extension.Protos.csproj", "{070AAD55-A535-4E4C-9D33-039D3E370187}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatternPal.Service_Tests", "PatternPal.Service_Tests\PatternPal.Service_Tests.csproj", "{0B21B84E-4C07-4583-B93F-464426E74F71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatternPal.ServiceTests", "PatternPal.Service_Tests\PatternPal.ServiceTests.csproj", "{0B21B84E-4C07-4583-B93F-464426E74F71}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
