@@ -147,9 +147,10 @@ namespace PatternPal.Extension.Views
         private void AddViewModels()
         {
             ViewModels = new List< DesignPatternViewModel >();
-            foreach (object value in Enum.GetValues(typeof( Recognizer )))
+            GetSupportedRecognizersResponse response = GrpcHelper.RecognizerClient.GetSupportedRecognizers(new GetSupportedRecognizersRequest());
+            foreach (Recognizer recognizer in response.Recognizers)
             {
-                ViewModels.Add(new DesignPatternViewModel((Recognizer)value));
+                ViewModels.Add(new DesignPatternViewModel(recognizer));
             }
 
             PatternCheckbox.listBox.DataContext = ViewModels;
