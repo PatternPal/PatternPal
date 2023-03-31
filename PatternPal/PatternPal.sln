@@ -37,8 +37,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatternPal", "PatternPal\Pa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatternPal.Extension.Protos", "PatternPal.Extension.Protos\PatternPal.Extension.Protos.csproj", "{070AAD55-A535-4E4C-9D33-039D3E370187}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatternPal.ServiceTests", "PatternPal.Service_Tests\PatternPal.ServiceTests.csproj", "{0B21B84E-4C07-4583-B93F-464426E74F71}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -181,18 +179,6 @@ Global
 		{070AAD55-A535-4E4C-9D33-039D3E370187}.Release|arm64.Build.0 = Release|Any CPU
 		{070AAD55-A535-4E4C-9D33-039D3E370187}.Release|x86.ActiveCfg = Release|Any CPU
 		{070AAD55-A535-4E4C-9D33-039D3E370187}.Release|x86.Build.0 = Release|Any CPU
-		{0B21B84E-4C07-4583-B93F-464426E74F71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0B21B84E-4C07-4583-B93F-464426E74F71}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0B21B84E-4C07-4583-B93F-464426E74F71}.Debug|arm64.ActiveCfg = Debug|Any CPU
-		{0B21B84E-4C07-4583-B93F-464426E74F71}.Debug|arm64.Build.0 = Debug|Any CPU
-		{0B21B84E-4C07-4583-B93F-464426E74F71}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{0B21B84E-4C07-4583-B93F-464426E74F71}.Debug|x86.Build.0 = Debug|Any CPU
-		{0B21B84E-4C07-4583-B93F-464426E74F71}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0B21B84E-4C07-4583-B93F-464426E74F71}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0B21B84E-4C07-4583-B93F-464426E74F71}.Release|arm64.ActiveCfg = Release|Any CPU
-		{0B21B84E-4C07-4583-B93F-464426E74F71}.Release|arm64.Build.0 = Release|Any CPU
-		{0B21B84E-4C07-4583-B93F-464426E74F71}.Release|x86.ActiveCfg = Release|Any CPU
-		{0B21B84E-4C07-4583-B93F-464426E74F71}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -207,7 +193,6 @@ Global
 		{86E26B75-AEA1-43FA-AEC5-A81131606D13} = {25C2E758-AC65-4A3A-A11A-2D3510C01BB8}
 		{206F6058-7DFB-4676-AACA-CFAAF56E6936} = {25C2E758-AC65-4A3A-A11A-2D3510C01BB8}
 		{7F41BB23-A8CE-4C6B-BAA9-B00AB47283E0} = {42465826-0737-421D-9D08-30F8C43D7912}
-		{0B21B84E-4C07-4583-B93F-464426E74F71} = {42465826-0737-421D-9D08-30F8C43D7912}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {31FB6D39-7D9F-44BC-AF8B-3AA700C8C087}

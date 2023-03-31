@@ -1,11 +1,18 @@
 ﻿#region
 
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Grpc.Core;
 using Grpc.Net.Client;
 using Grpc.Net.Client.Web;
+using NUnit.Framework;
 using PatternPal.Protos;
 using Snapshooter.NUnit;
+using VerifyNUnit;
 
 #endregion
 
@@ -34,16 +41,17 @@ namespace PatternPal.Service_Tests
         /// Test if the result from the service singleton recognizer is always the same
         /// </summary>
         [Test]
-        [TestCase("SingleTonTestCase3.cs")]
+        [TestCase("SingleTonTestCase1.cs")]
         //[TestCase("SingleTonTestCase7.cs", 0, 79)]
         //[TestCase("SingleTonTestCase8.cs", 0, 79)]
         //[TestCase("SingleTonTestCase9.cs", 0, 79)]
         //[TestCase("SingleTonTestCase10.cs", 0, 79)]
-        public void ReceiveBadScoreSingleton(string filename)
+        public Task ReceiveBadScoreSingleton(string filename)
         {
 
-            RecognizeRequest request = new RecognizeRequest();
-            request.File = "C:\\Users\\Daan\\Documents\\GitHub\\PatternPal2\\PatternPal\\PatternPal\\PatternPal.Tests\\TestClasses\\Singleton\\" + filename;
+            RecognizeRequest request = new RecognizeRequest { File = Directory.GetCurrentDirectory() + "\\TestClasses\\Singleton\\" + filename };
+
+            request.Recognizers.Add(Recognizer.Singleton);
 
             IAsyncStreamReader<RecognizeResponse> responseStream = _client.Recognize(request).ResponseStream;
             
@@ -54,7 +62,8 @@ namespace PatternPal.Service_Tests
                 results.Add(responseStream.Current.Result);
             }
 
-            Snapshot.Match(results);
+            //Snapshot.Match(results);
+            return Verifier.Verify(results);
 
             //TODO snapshot testing .json 
 
