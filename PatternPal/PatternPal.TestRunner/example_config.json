@@ -1,0 +1,14 @@
+{
+  "CheckAllResults": false,
+  "ShowIncorrectResults": false,
+  "Projects": [
+    {
+      "Directory": "/path/to/project/directory",
+      "ImplementedPattern": "Adapter"
+    },
+    {
+      "Directory": "/path/to/another/project/directory",
+      "ImplementedPattern": "Bridge"
+    }
+  ]
+}

@@ -8,9 +8,23 @@ option csharp_namespace = "PatternPal.Protos";
 
 // The PatternPal recognizer API exposed by the background service.
 service RecognizerService {
+    // Gets the supported recognizers which can be selected by the user.
+    rpc GetSupportedRecognizers (GetSupportedRecognizersRequest)
+        returns (GetSupportedRecognizersResponse);
+
     // Runs the specified recognizer(s) on the given file(s)/project, and returns a result for each
     // class in which a design pattern is detected.
     rpc Recognize (RecognizeRequest) returns (stream RecognizeResponse);
+}
+
+// GetSupportedRecognizers request message.
+message GetSupportedRecognizersRequest {
+}
+
+// GetSupportedRecognizers response message.
+message GetSupportedRecognizersResponse {
+    // List of recognizers which are supported.
+    repeated patternpal.Recognizer recognizers = 1;
 }
 
 // Recognize request message.
@@ -26,6 +40,9 @@ message RecognizeRequest {
 
     // List of recognizers which should be run.
     repeated patternpal.Recognizer recognizers = 3;
+
+    // Whether to show all results or just those above a threshold determined by the backend.
+    bool show_all_results = 4;
 }
 
 // Recognize response message.
