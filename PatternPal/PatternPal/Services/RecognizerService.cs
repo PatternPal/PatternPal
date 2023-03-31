@@ -4,6 +4,31 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
 {
     private const int SCORE_THRESHOLD_FOR_SHOW_ALL = 80;
 
+    public override Task< GetSupportedRecognizersResponse > GetSupportedRecognizers(
+        GetSupportedRecognizersRequest request,
+        ServerCallContext context)
+    {
+        GetSupportedRecognizersResponse response = new();
+
+        bool initialValue = true;
+        foreach (object value in Enum.GetValues(typeof( Recognizer )))
+        {
+            // Skip the first value of the enum. This value is required by the Protocol Buffer
+            // spec, but it shouldn't be used directly, because it's impossible to know whether
+            // the value was set to the default value, or no value was set (because when no
+            // value is set, the default value is used).
+            if (initialValue)
+            {
+                initialValue = false;
+                continue;
+            }
+
+            response.Recognizers.Add((Recognizer)value);
+        }
+
+        return Task.FromResult(response);
+    }
+
     public override Task Recognize(
         RecognizeRequest request,
         IServerStreamWriter< RecognizeResponse > responseStream,
