@@ -11,7 +11,6 @@ using Grpc.Net.Client;
 using Grpc.Net.Client.Web;
 using NUnit.Framework;
 using PatternPal.Protos;
-using Snapshooter.NUnit;
 using VerifyNUnit;
 
 #endregion
