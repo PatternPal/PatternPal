@@ -4,13 +4,15 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Net.Http;
 using System.Threading.Tasks;
+
 using Grpc.Core;
 using Grpc.Net.Client;
-using Grpc.Net.Client.Web;
+
 using NUnit.Framework;
+
 using PatternPal.Protos;
+
 using VerifyNUnit;
 
 #endregion
@@ -26,12 +28,7 @@ namespace PatternPal.Service_Tests
         public void Setup()
         {
             // Create a gRPC channel once because it is an expensive operation
-            channel = GrpcChannel.ForAddress(
-                "http://localhost:5000",
-                new GrpcChannelOptions
-                {
-                    HttpHandler = new GrpcWebHandler(new HttpClientHandler()),
-                });
+            channel = GrpcChannel.ForAddress("http://localhost:5001");
             // Make a recognizer service client
             _client = new RecognizerService.RecognizerServiceClient(channel);
         }
@@ -45,18 +42,21 @@ namespace PatternPal.Service_Tests
         //[TestCase("SingleTonTestCase8.cs", 0, 79)]
         //[TestCase("SingleTonTestCase9.cs", 0, 79)]
         //[TestCase("SingleTonTestCase10.cs", 0, 79)]
-        public Task ReceiveBadScoreSingleton(string filename)
+        public Task ReceiveBadScoreSingleton(
+            string filename)
         {
-
-            RecognizeRequest request = new RecognizeRequest { File = Directory.GetCurrentDirectory() + "\\TestClasses\\Singleton\\" + filename };
+            RecognizeRequest request = new RecognizeRequest
+                                       {
+                                           File = Directory.GetCurrentDirectory() + "\\TestClasses\\Singleton\\" + filename
+                                       };
 
             request.Recognizers.Add(Recognizer.Singleton);
 
-            IAsyncStreamReader<RecognizeResponse> responseStream = _client.Recognize(request).ResponseStream;
-            
+            IAsyncStreamReader< RecognizeResponse > responseStream = _client.Recognize(request).ResponseStream;
+
             IList< RecognizeResult > results = new List< RecognizeResult >();
 
-            while ( responseStream.MoveNext().Result )
+            while (responseStream.MoveNext().Result)
             {
                 results.Add(responseStream.Current.Result);
             }
@@ -65,7 +65,6 @@ namespace PatternPal.Service_Tests
             return Verifier.Verify(results);
 
             //TODO snapshot testing .json 
-
         }
 
         //[Test]
@@ -83,7 +82,7 @@ namespace PatternPal.Service_Tests
         public void DidBackgroundServiceStart()
         {
             bool isRunning = false;
-            Process[] processName = Process.GetProcessesByName("PatternPal");
+            Process[ ] processName = Process.GetProcessesByName("PatternPal");
             if (processName.Length == 0)
             {
                 isRunning = true;
@@ -99,13 +98,12 @@ namespace PatternPal.Service_Tests
 
             try
             {
-                Process[] processName = Process.GetProcessesByName("PatternPal");
+                Process[ ] processName = Process.GetProcessesByName("PatternPal");
             }
             catch (InvalidOperationException)
             {
                 success = true;
             }
-
 
             Assert.IsTrue(success);
         }
