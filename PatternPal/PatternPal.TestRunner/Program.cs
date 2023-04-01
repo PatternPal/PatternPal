@@ -144,7 +144,7 @@
 
         RecognizerRunner runner = new(
             _fileManager.GetAllCSharpFilesFromDirectory(project.Directory),
-            RecognizerRunner.DesignPatterns );
+            DesignPattern.SupportedPatterns );
 
         foreach (RecognitionResult recognitionResult in runner.Run().Where(x => x.Result.GetScore() >= 50).OrderByDescending(x => x.Result.GetScore()).ToList())
         {

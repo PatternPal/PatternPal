@@ -26,7 +26,7 @@ namespace PatternPal.ConsoleApp
         private static void Main(
             string[ ] args)
         {
-            DesignPattern[ ] designPatternsList = RecognizerRunner.DesignPatterns;
+            DesignPattern[ ] designPatternsList = DesignPattern.SupportedPatterns;
             bool showHelp = false;
             List< DesignPattern > selectedPatterns = new();
             FileManager fileManager = new();
