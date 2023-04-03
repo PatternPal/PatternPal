@@ -8,7 +8,7 @@ on:
     paths:
       - 'PatternPal/**'
   pull_request:
-    types: [ opened, synchronize, reopened ]
+    types: [ opened, synchronize, reopened, ready_for_review ]
     paths:
       - 'PatternPal/**'
   workflow_dispatch:
