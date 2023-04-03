@@ -2,7 +2,6 @@ syntax = "proto3";
 
 option csharp_namespace = "PatternPal.LoggingServer";
 
-import "google/type/datetime.proto";
 package log;
 
 // The greeting service definition.

@@ -13,6 +13,6 @@
     <None Include=".dockerignore" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="NewFolder\" />
+    <None Remove="NewFolder\**" />
   </ItemGroup>
 </Project>

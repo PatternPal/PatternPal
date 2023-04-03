@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>54aa2d3e-dd56-4cd8-8b6d-bc7007164b3b</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <ContainerImageName>dotnet-logserver-image</ContainerImageName>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
@@ -17,8 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\log.proto" GrpcServices="Server" AdditionalImportDirs="Protos/Google/googleapis" />
-    <Protobuf Include="Protos\Google\googleapis\google\type\datetime.proto" />
+    <Protobuf Include="Protos\log.proto" GrpcServices="Server"/>
   </ItemGroup>
 
   <ItemGroup>
