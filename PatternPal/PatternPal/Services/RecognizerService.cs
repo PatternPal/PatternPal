@@ -1,9 +1,13 @@
 ﻿namespace PatternPal.Services;
 
+/// <inheritdoc cref="Protos.RecognizerService"/>
 public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
 {
+    // The threshold for always showing a result. Results with a score below the threshold are only
+    // shown if the user presses the 'show all' button in the UI.
     private const int SCORE_THRESHOLD_FOR_SHOW_ALL = 80;
 
+    /// <inheritdoc />
     public override Task< GetSupportedRecognizersResponse > GetSupportedRecognizers(
         GetSupportedRecognizersRequest request,
         ServerCallContext context)
@@ -11,7 +15,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
         GetSupportedRecognizersResponse response = new();
 
         bool initialValue = true;
-        foreach (object value in Enum.GetValues(typeof( Recognizer )))
+        foreach (Recognizer recognizer in Enum.GetValues< Recognizer >())
         {
             // Skip the first value of the enum. This value is required by the Protocol Buffer
             // spec, but it shouldn't be used directly, because it's impossible to know whether
@@ -23,82 +27,33 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                 continue;
             }
 
-            response.Recognizers.Add((Recognizer)value);
+            response.Recognizers.Add(recognizer);
         }
 
         return Task.FromResult(response);
     }
 
+    /// <inheritdoc />
     public override Task Recognize(
         RecognizeRequest request,
         IServerStreamWriter< RecognizeResponse > responseStream,
         ServerCallContext context)
     {
         // TODO CV: Handle error cases
-        List< string > ? files = null;
-        switch (request.FileOrProjectCase)
-        {
-            case RecognizeRequest.FileOrProjectOneofCase.File:
-            {
-                if (string.IsNullOrWhiteSpace(request.File))
-                {
-                    return Task.CompletedTask;
-                }
 
-                // Discriminate files based on file name extension
-                if (!request.File.EndsWith(".cs"))
-                {
-                    //TODO programming language is not compatible add a feedback message for project check for .csproj?
-                }
-
-                files = new List< string >
-                        {
-                            request.File
-                        };
-
-                break;
-            }
-            case RecognizeRequest.FileOrProjectOneofCase.Project:
-            {
-                if (string.IsNullOrWhiteSpace(request.Project))
-                {
-                    return Task.CompletedTask;
-                }
-
-                string ? projectDirectory = Path.GetDirectoryName(request.Project);
-                if (string.IsNullOrWhiteSpace(projectDirectory))
-                {
-                    return Task.CompletedTask;
-                }
-
-                files = Directory.GetFiles(
-                    projectDirectory,
-                    "*.cs",
-                    SearchOption.AllDirectories).ToList();
-                break;
-            }
-        }
-
+        // Get the list of files on which to run the recognizers.
+        IList< string > ? files = GetFiles(request);
         if (files is null)
         {
             return Task.CompletedTask;
         }
 
-        RecognizerRunner runner = new();
-        runner.CreateGraph(files);
-
-        List< DesignPattern > patterns = new();
-        foreach (Recognizer recognizer in request.Recognizers)
-        {
-            if (recognizer == Recognizer.Unknown)
-            {
-                continue;
-            }
-
-            patterns.Add(RecognizerRunner.GetDesignPattern(recognizer));
-        }
-
-        List< RecognitionResult > results = runner.Run(patterns);
+        // Run the recognizers. We need to cast the result to a `List` to access the `Sort` method,
+        // which is defined on the class, not on the `IList` contract.
+        RecognizerRunner runner = new(
+            files,
+            request.Recognizers );
+        List< RecognitionResult > results = (List< RecognitionResult >)runner.Run();
 
         // Sort results by score, in descending order.
         results.Sort(
@@ -117,6 +72,8 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                 break;
             }
 
+            // Convert the result types returned by the recognizer to the result types which can be
+            // sent over the wire.
             RecognizeResult res = new()
                                   {
                                       Recognizer = result.Pattern.RecognizerType,
@@ -139,6 +96,60 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
         return Task.CompletedTask;
     }
 
+    /// <summary>
+    /// Gets the list of files on which to run the recognizers.
+    /// </summary>
+    /// <returns><see langword="null"/> if the request contains no valid file or project directory,
+    /// or a list of files otherwise.</returns>
+    private IList< string > ? GetFiles(
+        RecognizeRequest request)
+    {
+        switch (request.FileOrProjectCase)
+        {
+            case RecognizeRequest.FileOrProjectOneofCase.File:
+            {
+                if (string.IsNullOrWhiteSpace(request.File)
+                    || Path.GetExtension(request.File) != ".cs")
+                {
+                    return null;
+                }
+
+                return new List< string >
+                       {
+                           request.File
+                       };
+            }
+            case RecognizeRequest.FileOrProjectOneofCase.Project:
+            {
+                if (string.IsNullOrWhiteSpace(request.Project))
+                {
+                    return null;
+                }
+
+                string ? projectDirectory = Path.GetDirectoryName(request.Project);
+                if (string.IsNullOrWhiteSpace(projectDirectory))
+                {
+                    return null;
+                }
+
+                return Directory.GetFiles(
+                    projectDirectory,
+                    "*.cs",
+                    SearchOption.AllDirectories).ToList();
+            }
+            default:
+            {
+                return null;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Converts an <see cref="ICheckResult"/> to a <see cref="CheckResult"/>, which can be sent
+    /// over the wire.
+    /// </summary>
+    /// <param name="checkResult">The <see cref="ICheckResult"/> to convert.</param>
+    /// <returns>The <see cref="CheckResult"/> instance created from the given <see cref="ICheckResult"/>.</returns>
     private CheckResult CreateCheckResult(
         ICheckResult checkResult)
     {

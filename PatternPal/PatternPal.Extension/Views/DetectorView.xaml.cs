@@ -177,8 +177,9 @@ namespace PatternPal.Extension.Views
             ExpanderResults.ResultsView.ItemsSource = viewModels;
         }
 
-        private void SaveAllDocuments()
+        private async Task SaveAllDocuments()
         {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             Dte.Documents.SaveAll();
         }
 
@@ -198,7 +199,6 @@ namespace PatternPal.Extension.Views
             object sender,
             RoutedEventArgs e)
         {
-            SaveAllDocuments();
             Analyse();
         }
 
@@ -208,6 +208,8 @@ namespace PatternPal.Extension.Views
             {
                 return;
             }
+
+            await SaveAllDocuments();
 
             RecognizeRequest request = new RecognizeRequest();
 
