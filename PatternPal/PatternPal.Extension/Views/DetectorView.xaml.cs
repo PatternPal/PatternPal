@@ -147,9 +147,10 @@ namespace PatternPal.Extension.Views
         private void AddViewModels()
         {
             ViewModels = new List< DesignPatternViewModel >();
-            foreach (object value in Enum.GetValues(typeof( Recognizer )))
+            GetSupportedRecognizersResponse response = GrpcHelper.RecognizerClient.GetSupportedRecognizers(new GetSupportedRecognizersRequest());
+            foreach (Recognizer recognizer in response.Recognizers)
             {
-                ViewModels.Add(new DesignPatternViewModel((Recognizer)value));
+                ViewModels.Add(new DesignPatternViewModel(recognizer));
             }
 
             PatternCheckbox.listBox.DataContext = ViewModels;
@@ -176,8 +177,9 @@ namespace PatternPal.Extension.Views
             ExpanderResults.ResultsView.ItemsSource = viewModels;
         }
 
-        private void SaveAllDocuments()
+        private async Task SaveAllDocuments()
         {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             Dte.Documents.SaveAll();
         }
 
@@ -197,7 +199,6 @@ namespace PatternPal.Extension.Views
             object sender,
             RoutedEventArgs e)
         {
-            SaveAllDocuments();
             Analyse();
         }
 
@@ -207,6 +208,8 @@ namespace PatternPal.Extension.Views
             {
                 return;
             }
+
+            await SaveAllDocuments();
 
             RecognizeRequest request = new RecognizeRequest();
 
