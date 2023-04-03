@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+option csharp_namespace = "PatternPal.LoggingServer";
+
+import "google/type/datetime.proto";
+package log;
+
+// The greeting service definition.
+service Log {
+  // Sends a greeting
+  rpc Log (LogRequest) returns (LogReply);
+}
+
+
+enum EventType
+{
+    SESSION_START = 0;
+    SESSION_END = 1;
+    PROJECT_OPEN = 2;
+    PROJECT_CLOSE = 3;
+    FILE_CREATE = 4;
+    FILE_DELETE = 5;
+    FILE_OPEN = 6;
+    FILE_CLOSE = 7;
+    FILE_FOCUS = 8;
+    FILE_RENAME = 9;
+    FILE_COPY = 10;
+    FILE_EDIT = 11;
+    COMPILE = 12;
+    COMPILE_ERROR = 13;
+    COMPILE_WARNING = 14;
+    SUBMIT = 15;
+    RUN_PROGRAM = 16;
+    DEBUG_PROGRAM = 17;
+    RUN_TEST = 18;
+    DEBUG_TEST = 19;
+    RESOURCE_VIEW = 20;
+    INTERVENTION = 21;
+    CUSTOM = 22;
+}
+// Client configuration message to log to the server
+message LogRequest {
+  string subjectID = 1;
+  string toolInstances = 2;
+  EventType eventType = 3;
+  string SessionID = 4;
+  string clientTimestamp = 5; // ISO 8601
+
+}
+
+// Confirmation message 
+message LogReply {
+  string message = 1; 
+  // Simple message to return just to confirm that the server is up and running
+}

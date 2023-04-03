@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+  patternpal.loggingserver:
+    image: ${DOCKER_REGISTRY-}patternpalloggingserver
+    build:
+      context: .
+      dockerfile: PatternPal.LoggingServer/Dockerfile
+  patternpal.loggingserver.database:
+    container_name: 'postgres'
+    image: postgres
+    ports:
+        - "5434:5432"
+    environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
