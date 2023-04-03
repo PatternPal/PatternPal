@@ -39,9 +39,6 @@ jobs:
       - name: Build
         run: msbuild /p:Configuration=Release PatternPal/PatternPal.sln
       
-      - name: Debug
-        run: dir PatternPal/PatternPal.Extension/PatternPal
-      
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3
         with:
