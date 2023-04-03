@@ -17,51 +17,37 @@ using VerifyNUnit;
 
 #endregion
 
-namespace PatternPal.Tests.BackgroundService
+namespace PatternPal.Service_Tests
 {
-    [TestFixture]
     public class Tests
     {
         private RecognizerService.RecognizerServiceClient _client;
-        private GrpcChannel _channel;
-        private static Process _backgroundService;
+        private GrpcChannel channel;
 
         [SetUp]
         public void Setup()
         {
-            // TODO start process and test
-            //string backgroundServicePath = Path.Combine(
-            //    Directory.GetCurrentDirectory(),
-            //    "PatternPal",
-            //    "PatternPal.exe");
-            //_backgroundService = Process.Start(
-            //    new ProcessStartInfo(backgroundServicePath)
-            //    {
-            //        CreateNoWindow = true,
-            //        UseShellExecute = false,
-            //    });
-
             // Create a gRPC channel once because it is an expensive operation
-            _channel = GrpcChannel.ForAddress("http://localhost:5001");
-
+            channel = GrpcChannel.ForAddress("http://localhost:5001");
             // Make a recognizer service client
-            _client = new RecognizerService.RecognizerServiceClient(_channel);
+            _client = new RecognizerService.RecognizerServiceClient(channel);
         }
 
         /// <summary>
-        /// Test if the result from the service singleton recognizer is none because no well implemented.
+        /// Test if the result from the service singleton recognizer is always the same
         /// </summary>
         [Test]
         [TestCase("SingleTonTestCase1.cs")]
-        public Task ReceiveNoScoresBadSingleton(
+        //[TestCase("SingleTonTestCase7.cs", 0, 79)]
+        //[TestCase("SingleTonTestCase8.cs", 0, 79)]
+        //[TestCase("SingleTonTestCase9.cs", 0, 79)]
+        //[TestCase("SingleTonTestCase10.cs", 0, 79)]
+        public Task ReceiveBadScoreSingleton(
             string filename)
         {
             RecognizeRequest request = new RecognizeRequest
                                        {
-                                           File = Path.Combine(
-                                               Directory.GetCurrentDirectory(),
-                                               "\\TestClasses\\Singleton\\",
-                                               filename)
+                                           File = Directory.GetCurrentDirectory() + "\\TestClasses\\Singleton\\" + filename
                                        };
 
             request.Recognizers.Add(Recognizer.Singleton);
@@ -74,12 +60,23 @@ namespace PatternPal.Tests.BackgroundService
             {
                 results.Add(responseStream.Current.Result);
             }
-            // TODO receive no scores when show all is toggled "OFF"
+
+            //Snapshot.Match(results);
             return Verifier.Verify(results);
 
+            //TODO snapshot testing .json 
         }
 
-        
+        //[Test]
+        //[TestCase("SingleTonTestCase1.cs")]
+        //[TestCase("SingleTonTestCase2.cs")]
+        //[TestCase("SingleTonTestCase4.cs")]
+        //[TestCase("SingleTonTestCase5.cs")]
+        //[TestCase("SingleTonTestCase6.cs")]
+        //public void ReceiveGoodScoreSingleton(string filename)
+        //{
+        //    Assert.Pass();
+        //}
 
         [Test]
         public void DidBackgroundServiceStart()
@@ -94,29 +91,21 @@ namespace PatternPal.Tests.BackgroundService
             Assert.IsTrue(isRunning);
         }
 
-        /// <summary>
-        /// Test whether killing the process was successful.
-        /// </summary>
-        [OneTimeTearDown]
-        public void CleanUp()
+        [Test]
+        public void WasBackgroundServiceKilled()
         {
-            // TODO change into locally started patternpal process
-            Process temp = new Process();
-            temp.Kill();
-            bool killed = false;
+            bool success = false;
 
-            // Check if process exists
             try
             {
-                Process[] Processname = Process.GetProcessesByName("PatternPal");
+                Process[ ] processName = Process.GetProcessesByName("PatternPal");
             }
             catch (InvalidOperationException)
             {
-                killed = true; // Process does not exist
+                success = true;
             }
 
-            Assert.IsTrue(killed);
+            Assert.IsTrue(success);
         }
-        
     }
 }
