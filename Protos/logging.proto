@@ -14,15 +14,57 @@ service LoggingService {
 // Input arguments for recognizer request.
 message LogBuildEventRequest {
 
-    string subject_id = 1;
-  
+// Specific columns 
+EventType event_type = 0;
+string event_id = 1;
+string subject_id = 2;
+string tool_instances = 3;
+string code_state_id = 4;
+
+// Optional columns
+string client_timestamp = 5;
+string experimental_condition = 6; 
+string logging_error_id = 7;
+string parent_event_id = 8;
+string session_id = 9;
+string project_id = 10;
+string code_state_section = 11;
+string event_initiation = 12;
+string compile_result = 13;
+string compile_message_type = 14;
+string compile_message_data = 15;
+string source_location = 16;
+string execution_id = 17;
+string test_id = 18;
+string execution_result_id = 19;
+string intervention_category = 20;
+string intervention_type = 21;
+string intervention_message = 22;
 }
 
-// Input arguments for recognizer request.
+// Input arguments for recognizer response.
 message LogBuildEventResponse {
 
-    string response_message = 1;
-    string poep = 2;
-    string daan = 3;
+    string response_message = 2;
 
+}
+
+// The possible event types that are logged
+enum EventType
+{
+    SESSION_START = 0;
+    SESSION_END = 1;
+    PROJECT_OPEN = 2;
+    PROJECT_CLOSE = 3;
+    FILE_CREATE = 4;
+    FILE_DELETE = 5;
+    FILE_EDIT = 6;
+    COMPILE = 7;
+    COMPILE_ERROR = 8;
+    RUN_PROGRAM = 9;
+    DEBUG_PROGRAM = 10;
+    RUN_TEST = 11;
+    DEBUG_TEST = 12;
+    INTERVENTION = 13;
+    CUSTOM = 14;
 }
