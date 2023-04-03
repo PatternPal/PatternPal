@@ -16,6 +16,7 @@ on:
 jobs:
   inspection:
     runs-on: windows-latest #windows-latest, ubuntu-latest, macos-latest
+    if: github.event.pull_request.draft == false
     name: Inspection
     steps:
       - name: Checkout
