@@ -14,12 +14,12 @@ namespace PatternPal.Extension.ViewModels
         public CheckResult Result { get; set; }
         public string Message { get; set; }
         public float Score => (float)Result.Score;
-        public FeedbackType ChildrenFeedbackType { get; set; }
+        public CheckResult.Types.FeedbackType ChildrenFeedbackType { get; set; }
         public IEnumerable< CheckResultViewModel > SubResults => GetSubResults();
 
         public CheckResultViewModel(
             CheckResult result,
-            FeedbackType childrenFeedbackType = FeedbackType.FeedbackCorrect)
+            CheckResult.Types.FeedbackType childrenFeedbackType = CheckResult.Types.FeedbackType.FeedbackCorrect)
         {
             Result = result;
             Message = Result.FeedbackMessage;
@@ -34,7 +34,7 @@ namespace PatternPal.Extension.ViewModels
         {
             List< CheckResultViewModel > toReturn = new List< CheckResultViewModel >();
 
-            foreach (CheckResult result in Result.ChildFeedback)
+            foreach (CheckResult result in Result.SubCheckResults)
             {
                 GetSubResultsRecursive(
                     toReturn,
@@ -55,7 +55,7 @@ namespace PatternPal.Extension.ViewModels
         {
             if (result.Hidden)
             {
-                foreach (CheckResult sub in result.ChildFeedback)
+                foreach (CheckResult sub in result.SubCheckResults)
                 {
                     GetSubResultsRecursive(
                         toReturn,
@@ -63,7 +63,7 @@ namespace PatternPal.Extension.ViewModels
                 }
             }
             else
-                if (!result.ChildFeedback.Any()
+                if (!result.SubCheckResults.Any()
                     && result.FeedbackType == ChildrenFeedbackType)
                 {
                     toReturn.Add(new CheckResultViewModel(result));

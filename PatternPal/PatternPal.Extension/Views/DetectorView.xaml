@@ -177,9 +177,9 @@
                            Foreground="#4496F3" VerticalAlignment="Top" FontSize="15" FontWeight="Bold"
                            Margin="5,5,5,0" />
             </StackPanel>
-            <CheckBox Margin="0 0 5 0" x:Name="CheckSwitch" DockPanel.Dock="Right" Content="Show All" IsChecked="True"
-                      FlowDirection="RightToLeft" Style="{DynamicResource CheckboxStyle}" Checked="CheckSwitch_Checked"
-                      Unchecked="CheckSwitch_Unchecked" />
+            <CheckBox Margin="0 0 5 0" x:Name="ShowAllCheckBox" DockPanel.Dock="Right" Content="Show All" IsChecked="True"
+                      FlowDirection="RightToLeft" Style="{DynamicResource CheckboxStyle}" Checked="ShowAllCheckBox_OnChecked"
+                      Unchecked="ShowAllCheckBox_OnUnchecked" />
         </DockPanel>
         <TextBlock Grid.Row="7" x:Name="SummaryControl" TextWrapping="Wrap" Margin="20,8,20,8" MaxWidth="450" HorizontalAlignment="Left"/>
         <usercontrol:ExpanderResults x:Name="ExpanderResults" Grid.Row="8" Margin="20,0,20,0" />

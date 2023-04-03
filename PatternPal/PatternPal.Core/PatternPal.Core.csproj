@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <DebugType>full</DebugType>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
@@ -46,7 +46,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="../../Protos/patternpal.proto" GrpcServices="Server" Link="Protos/patternpal.proto" />
+    <Protobuf Include="../../Protos/common.proto" GrpcServices="Server" Link="Protos/common.proto" />
+    <Protobuf Include="../../Protos/recognizer.proto" GrpcServices="Server" Link="Protos/recognizer.proto" />
+    <Protobuf Include="../../Protos/step_by_step.proto" GrpcServices="Server" Link="Protos/step_by_step.proto" />
   </ItemGroup>
 
 </Project>
