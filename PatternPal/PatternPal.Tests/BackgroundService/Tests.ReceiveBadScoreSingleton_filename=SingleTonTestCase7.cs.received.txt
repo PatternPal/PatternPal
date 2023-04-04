@@ -1,0 +1,95 @@
+﻿[
+  {
+    Recognizer: Bridge,
+    ClassName: PatternPal.Tests.TestClasses.Singleton.SingleTonTestCase7,
+    Results: [
+      {
+        FeedbackType: FeedbackIncorrect,
+        FeedbackMessage: SingleTonTestCase7 | Bridge,
+        Hidden: false,
+        SubCheckResults: [
+          {
+            FeedbackType: FeedbackIncorrect,
+            FeedbackMessage: SingleTonTestCase7 is your Bridge Abstraction,
+            Hidden: false,
+            SubCheckResults: [
+              {
+                FeedbackType: FeedbackIncorrect,
+                FeedbackMessage: SingleTonTestCase7 should be an abstract class or an interface.,
+                Hidden: false
+              },
+              {
+                FeedbackType: FeedbackIncorrect,
+                FeedbackMessage: SingleTonTestCase7 should be implemented or inherited,
+                Hidden: false
+              },
+              {
+                FeedbackType: FeedbackIncorrect,
+                FeedbackMessage: SingleTonTestCase7 should use at least 1 other node,
+                Hidden: false
+              },
+              {
+                FeedbackType: FeedbackIncorrect,
+                FeedbackMessage:  is your Abstraction class,
+                Hidden: false,
+                SubCheckResults: [
+                  {
+                    FeedbackType: FeedbackIncorrect,
+                    FeedbackMessage: Abstraction should use the Implementer (),
+                    Hidden: false
+                  },
+                  {
+                    FeedbackType: FeedbackIncorrect,
+                    FeedbackMessage: Implementer  reference,
+                    Hidden: false,
+                    SubCheckResults: [
+                      {
+                        FeedbackType: FeedbackIncorrect,
+                        FeedbackMessage: Abstraction contains a reference () to the Implementer,
+                        Hidden: false
+                      },
+                      {
+                        FeedbackType: FeedbackIncorrect,
+                        FeedbackMessage: Implementer () methods,
+                        Hidden: false,
+                        SubCheckResults: [
+                          {
+                            FeedbackType: FeedbackIncorrect,
+                            FeedbackMessage: Implementer methods () should be used by Abstraction methods,
+                            Hidden: false
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            FeedbackType: FeedbackIncorrect,
+            FeedbackMessage:  is your Bridge Implementer,
+            Hidden: false,
+            SubCheckResults: [
+              {
+                FeedbackType: FeedbackIncorrect,
+                FeedbackMessage: Implementer () should be an abstract class or an interface,
+                Hidden: false
+              },
+              {
+                FeedbackType: FeedbackIncorrect,
+                FeedbackMessage:  should be implemented or inherited,
+                Hidden: false
+              },
+              {
+                FeedbackType: FeedbackIncorrect,
+                FeedbackMessage: Implementer () should be used by the abstraction,
+                Hidden: false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

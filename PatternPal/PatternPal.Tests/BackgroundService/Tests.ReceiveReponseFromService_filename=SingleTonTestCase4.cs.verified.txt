@@ -1,0 +1,69 @@
+﻿[
+  {
+    Recognizer: Singleton,
+    ClassName: PatternPal.Tests.TestClasses.Singleton.SingleTonTestCase4,
+    Score: 100,
+    Results: [
+      {
+        FeedbackType: FeedbackCorrect,
+        FeedbackMessage: "Instance()" should have GetInstance().,
+        Score: 3.0,
+        Hidden: false,
+        SubCheckResults: [
+          {
+            FeedbackType: FeedbackCorrect,
+            FeedbackMessage: Node should be static, not private,
+            Score: 1.0,
+            Hidden: false
+          },
+          {
+            FeedbackType: FeedbackCorrect,
+            FeedbackMessage: Node type should be SingleTonTestCase4,
+            Score: 1.0,
+            Hidden: false
+          },
+          {
+            FeedbackType: FeedbackCorrect,
+            FeedbackMessage: Singleton method (Instance()) should be able to return a new Singleton.,
+            Score: 1.0,
+            Hidden: false
+          }
+        ]
+      },
+      {
+        FeedbackType: FeedbackCorrect,
+        FeedbackMessage: _instance should have an instance of itself.,
+        Score: 2.0,
+        Hidden: false,
+        SubCheckResults: [
+          {
+            FeedbackType: FeedbackCorrect,
+            FeedbackMessage: Node should be not public, static,
+            Score: 1.0,
+            Hidden: false
+          },
+          {
+            FeedbackType: FeedbackCorrect,
+            FeedbackMessage: Field type should be SingleTonTestCase4,
+            Score: 1.0,
+            Hidden: false
+          }
+        ]
+      },
+      {
+        FeedbackType: FeedbackCorrect,
+        FeedbackMessage: SingleTonTestCase4() is not a public constructor,
+        Score: 1.0,
+        Hidden: false,
+        SubCheckResults: [
+          {
+            FeedbackType: FeedbackCorrect,
+            FeedbackMessage: Node should be not public,
+            Score: 1.0,
+            Hidden: false
+          }
+        ]
+      }
+    ]
+  }
+]

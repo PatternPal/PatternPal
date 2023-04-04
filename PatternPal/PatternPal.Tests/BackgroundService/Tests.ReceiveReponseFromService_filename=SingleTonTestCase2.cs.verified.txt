@@ -1,0 +1,65 @@
+﻿[
+  {
+    Recognizer: Singleton,
+    ClassName: PatternPal.Tests.TestClasses.Singleton.SingleTonTestCase2,
+    Score: 50,
+    Results: [
+      {
+        FeedbackType: FeedbackIncorrect,
+        FeedbackMessage: "SingleTonTestCase2()" should have GetInstance().,
+        Hidden: false,
+        SubCheckResults: [
+          {
+            FeedbackType: FeedbackIncorrect,
+            FeedbackMessage: Node should be static, not private,
+            Hidden: false
+          },
+          {
+            FeedbackType: FeedbackIncorrect,
+            FeedbackMessage: Node type should be SingleTonTestCase2,
+            Hidden: false
+          },
+          {
+            FeedbackType: FeedbackIncorrect,
+            FeedbackMessage: Singleton method (SingleTonTestCase2()) should be able to return a new Singleton.,
+            Hidden: false
+          }
+        ]
+      },
+      {
+        FeedbackType: FeedbackCorrect,
+        FeedbackMessage: _obj should have an instance of itself.,
+        Score: 2.0,
+        Hidden: false,
+        SubCheckResults: [
+          {
+            FeedbackType: FeedbackCorrect,
+            FeedbackMessage: Node should be not public, static,
+            Score: 1.0,
+            Hidden: false
+          },
+          {
+            FeedbackType: FeedbackCorrect,
+            FeedbackMessage: Field type should be SingleTonTestCase2,
+            Score: 1.0,
+            Hidden: false
+          }
+        ]
+      },
+      {
+        FeedbackType: FeedbackCorrect,
+        FeedbackMessage: SingleTonTestCase2() is not a public constructor,
+        Score: 1.0,
+        Hidden: false,
+        SubCheckResults: [
+          {
+            FeedbackType: FeedbackCorrect,
+            FeedbackMessage: Node should be not public,
+            Score: 1.0,
+            Hidden: false
+          }
+        ]
+      }
+    ]
+  }
+]

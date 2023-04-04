@@ -1,0 +1,126 @@
+﻿[
+  {
+    Recognizer: Singleton,
+    ClassName: PatternPal.Tests.TestClasses.Singleton.SingleTonTestCase5,
+    Score: 100,
+    Results: [
+      {
+        FeedbackType: FeedbackCorrect,
+        FeedbackMessage: "GetInstance()" should have GetInstance().,
+        Score: 3.0,
+        Hidden: false,
+        SubCheckResults: [
+          {
+            FeedbackType: FeedbackCorrect,
+            FeedbackMessage: Node should be static, not private,
+            Score: 1.0,
+            Hidden: false
+          },
+          {
+            FeedbackType: FeedbackCorrect,
+            FeedbackMessage: Node type should be SingleTonTestCase5,
+            Score: 1.0,
+            Hidden: false
+          },
+          {
+            FeedbackType: FeedbackCorrect,
+            FeedbackMessage: Singleton method (GetInstance()) should be able to return a new Singleton.,
+            Score: 1.0,
+            Hidden: false
+          }
+        ]
+      },
+      {
+        FeedbackType: FeedbackCorrect,
+        FeedbackMessage: _instance should have an instance of itself.,
+        Score: 2.0,
+        Hidden: false,
+        SubCheckResults: [
+          {
+            FeedbackType: FeedbackCorrect,
+            FeedbackMessage: Node should be not public, static,
+            Score: 1.0,
+            Hidden: false
+          },
+          {
+            FeedbackType: FeedbackCorrect,
+            FeedbackMessage: Field type should be SingleTonTestCase5,
+            Score: 1.0,
+            Hidden: false
+          }
+        ]
+      },
+      {
+        FeedbackType: FeedbackCorrect,
+        FeedbackMessage: SingleTonTestCase5() is not a public constructor,
+        Score: 1.0,
+        Hidden: false,
+        SubCheckResults: [
+          {
+            FeedbackType: FeedbackCorrect,
+            FeedbackMessage: Node should be not public,
+            Score: 1.0,
+            Hidden: false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    Recognizer: Singleton,
+    ClassName: PatternPal.Tests.TestClasses.Singleton.SingleTonTestCase5User,
+    Results: [
+      {
+        FeedbackType: FeedbackIncorrect,
+        FeedbackMessage: "DoSomethingWithSingleton()" should have GetInstance().,
+        Hidden: false,
+        SubCheckResults: [
+          {
+            FeedbackType: FeedbackIncorrect,
+            FeedbackMessage: Node should be static, not private,
+            Hidden: false
+          },
+          {
+            FeedbackType: FeedbackIncorrect,
+            FeedbackMessage: Node type should be SingleTonTestCase5User,
+            Hidden: false
+          },
+          {
+            FeedbackType: FeedbackIncorrect,
+            FeedbackMessage: Singleton method (DoSomethingWithSingleton()) should be able to return a new Singleton.,
+            Hidden: false
+          }
+        ]
+      },
+      {
+        FeedbackType: FeedbackIncorrect,
+        FeedbackMessage: instance should have an instance of itself.,
+        Hidden: false,
+        SubCheckResults: [
+          {
+            FeedbackType: FeedbackIncorrect,
+            FeedbackMessage: Node should be not public, static,
+            Hidden: false
+          },
+          {
+            FeedbackType: FeedbackIncorrect,
+            FeedbackMessage: Field type should be SingleTonTestCase5User,
+            Hidden: false
+          }
+        ]
+      },
+      {
+        FeedbackType: FeedbackIncorrect,
+        FeedbackMessage: SingleTonTestCase5User() is not a public constructor,
+        Hidden: false,
+        SubCheckResults: [
+          {
+            FeedbackType: FeedbackIncorrect,
+            FeedbackMessage: Node should be not public,
+            Hidden: false
+          }
+        ]
+      }
+    ]
+  }
+]

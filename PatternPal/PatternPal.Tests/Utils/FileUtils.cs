@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace PatternPal.Tests.Utils
 {
@@ -38,6 +39,22 @@ namespace PatternPal.Tests.Utils
             }
 
             return filesContents;
+        }
+
+        /// <summary>
+        /// Return the folder that contains the solution
+        /// </summary>
+        /// <param name="filepath">The current directory</param>
+        /// <returns>Directory that contains </returns>
+        public static DirectoryInfo ObtainSolutionFolder(string filepath = null)
+        {
+            DirectoryInfo directory = new DirectoryInfo(
+                filepath ?? Directory.GetCurrentDirectory());
+            while (directory != null && !directory.GetFiles("*.sln").Any())
+            {
+                directory = directory.Parent;
+            }
+            return directory;
         }
     }
 }
