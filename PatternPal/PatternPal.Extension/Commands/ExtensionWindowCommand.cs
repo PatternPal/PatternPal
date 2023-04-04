@@ -1,7 +1,12 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.ComponentModel.Design;
 using System.Threading.Tasks;
+
 using Microsoft.VisualStudio.Shell;
+
+#endregion
 
 namespace PatternPal.Extension.Commands
 {
@@ -10,14 +15,14 @@ namespace PatternPal.Extension.Commands
     /// </summary>
     internal sealed class ExtensionWindowCommand
     {
-        public const int CommandId = 0x0100;
+        private const int CommandId = 0x0100;
 
-        public static readonly Guid CommandSetGUID = new Guid("5eb4c6e9-8015-4fa4-8670-f71284492188");
+        private static readonly Guid CommandSetGUID = new Guid("5eb4c6e9-8015-4fa4-8670-f71284492188");
 
         /// <summary>
         ///     VS Package that provides this command, not null.
         /// </summary>
-        private readonly AsyncPackage package;
+        private readonly AsyncPackage _package;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ExtensionWindowCommand" /> class.
@@ -25,13 +30,19 @@ namespace PatternPal.Extension.Commands
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
         /// <param name="commandService">Command service to add command to, not null.</param>
-        private ExtensionWindowCommand(AsyncPackage package, OleMenuCommandService commandService)
+        private ExtensionWindowCommand(
+            AsyncPackage package,
+            OleMenuCommandService commandService)
         {
-            this.package = package ?? throw new ArgumentNullException(nameof(package));
-            commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
+            this._package = package ?? throw new ArgumentNullException(nameof( package ));
+            commandService = commandService ?? throw new ArgumentNullException(nameof( commandService ));
 
-            var menuCommandID = new CommandID(CommandSetGUID, CommandId);
-            var menuItem = new MenuCommand(Execute, menuCommandID);
+            CommandID menuCommandId = new CommandID(
+                CommandSetGUID,
+                CommandId);
+            MenuCommand menuItem = new MenuCommand(
+                Execute,
+                menuCommandId);
             commandService.AddCommand(menuItem);
         }
 
@@ -44,14 +55,17 @@ namespace PatternPal.Extension.Commands
         ///     Initializes the singleton instance of the command.
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
-        public static async Task InitializeAsync(AsyncPackage package)
+        public static async Task InitializeAsync(
+            AsyncPackage package)
         {
             // Switch to the main thread - the call to AddCommand in ExtensionWindowCommand's constructor requires
             // the UI thread.
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
-            var commandService = await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
-            Instance = new ExtensionWindowCommand(package, commandService);
+            OleMenuCommandService commandService = await package.GetServiceAsync(typeof( IMenuCommandService )) as OleMenuCommandService;
+            Instance = new ExtensionWindowCommand(
+                package,
+                commandService);
         }
 
         /// <summary>
@@ -59,16 +73,23 @@ namespace PatternPal.Extension.Commands
         /// </summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event args.</param>
-        private void Execute(object sender, EventArgs e)
+        private void Execute(
+            object sender,
+            EventArgs e)
         {
-            package.JoinableTaskFactory.RunAsync(async delegate
-            {
-                var window = await package.ShowToolWindowAsync(typeof(ExtensionWindow), 0, true, package.DisposalToken);
-                if (null == window || null == window.Frame)
+            _package.JoinableTaskFactory.Run(
+                async () =>
                 {
-                    throw new NotSupportedException("Cannot create tool window");
-                }
-            });
+                    ToolWindowPane window = await _package.ShowToolWindowAsync(
+                        typeof( ExtensionWindow ),
+                        0,
+                        true,
+                        _package.DisposalToken);
+                    if (window?.Frame == null)
+                    {
+                        throw new NotSupportedException("Cannot create tool window");
+                    }
+                });
         }
     }
 }
