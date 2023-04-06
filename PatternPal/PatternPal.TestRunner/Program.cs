@@ -1,12 +1,15 @@
-﻿internal static class Program
+﻿namespace PatternPal.TestRunner;
+
+internal class Program
 {
-    private const string c_configArg = "Config";
-    private const string c_helpMessage = "Please supply the path to the configuration file.\nUsage:\n\tTestRunner --config=/path/to/file.json";
+    private const string ConfigArg = "Config";
+    private const string HelpMessage = "Please supply the path to the configuration file.\nUsage:\n\tTestRunner --config=/path/to/file.json";
 
-    private static FileManager _fileManager;
-    private static RecognizerRunner _runner;
+    private readonly FileManager _fileManager;
+    private readonly TestConfiguration _configuration;
 
-    public static void Main(string[] args)
+    public static void Main(
+        string[ ] args)
     {
         // Parse config
         TestConfiguration configuration;
@@ -20,11 +23,20 @@
             return;
         }
 
-        _fileManager = new FileManager();
-        _runner = new RecognizerRunner();
+        new Program(configuration).Run();
+    }
 
+    private Program(
+        TestConfiguration configuration)
+    {
+        _fileManager = new FileManager();
+        _configuration = configuration;
+    }
+
+    private void Run()
+    {
         // Run PatternPal for all the test projects; filter nulls
-        IList< ProjectResult > results = configuration.Projects.Select(TestProject).Where(result => result != null).ToList();
+        IList< ProjectResult > results = _configuration.Projects.Select(TestProject).Where(result => result != null).Select(project => project!).ToList();
         int totalProjectsChecked = results.Count;
 
         // Calculate correctly detected patterns
@@ -38,7 +50,7 @@
                 continue;
             }
 
-            if (result.Correct(configuration.CheckAllResults))
+            if (result.Correct(_configuration.CheckAllResults))
             {
                 correctlyDetectedPatterns++;
             }
@@ -58,14 +70,14 @@
         }
 
         // If option specified in configuration: print incorrect results.
-        if (!configuration.ShowIncorrectResults)
+        if (!_configuration.ShowIncorrectResults)
         {
             return;
         }
 
         foreach (ProjectResult result in results)
         {
-            if (!result.Correct(configuration.CheckAllResults))
+            if (!result.Correct(_configuration.CheckAllResults))
             {
                 PrintIncorrectResult(result);
             }
@@ -80,22 +92,23 @@
     /// <exception cref="ArgumentException">Thrown when config filepath was not supplied in the CL-args.</exception>
     /// <exception cref="FileNotFoundException">Thrown when the config file was not found at the specified path.</exception>
     /// <exception cref="FormatException">Thrown when the config file could not be parsed.</exception>
-    private static TestConfiguration ParseConfig(string[] args)
+    private static TestConfiguration ParseConfig(
+        string[ ] args)
     {
         // Parse command line arguments
         IConfigurationBuilder commandLineArgsConfigBuilder = new ConfigurationManager();
         commandLineArgsConfigBuilder.AddCommandLine(args);
         IConfigurationRoot commandLineArgs = commandLineArgsConfigBuilder.Build();
 
-        string? configFilePath = commandLineArgs[c_configArg];
+        string ? configFilePath = commandLineArgs[ ConfigArg ];
 
         if (string.IsNullOrWhiteSpace(configFilePath))
         {
             // Arg was not supplied, thus we print the help message.
-            throw new ArgumentException(c_helpMessage);
+            throw new ArgumentException(HelpMessage);
         }
 
-        FileInfo configFile = new(configFilePath);
+        FileInfo configFile = new( configFilePath );
         if (!configFile.Exists)
         {
             throw new FileNotFoundException(
@@ -113,7 +126,7 @@
             throw new FormatException("Failed to parse configuration file");
         }
 
-        TestConfiguration? configuration = configurationBuilder.Build().Get<TestConfiguration>();
+        TestConfiguration ? configuration = configurationBuilder.Build().Get< TestConfiguration >();
         if (configuration is null)
         {
             throw new FormatException("Failed to parse configuration file");
@@ -127,7 +140,8 @@
     /// </summary>
     /// <param name="project">The project to test</param>
     /// <returns>The result if the project was not skipped, else null.</returns>
-    private static ProjectResult? TestProject(Project project)
+    private ProjectResult ? TestProject(
+        Project project)
     {
         if (project.Skip)
         {
@@ -135,15 +149,17 @@
         }
 
         ProjectResult result = new()
-        {
-            Directory = project.Directory,
-            ImplementedPattern = project.ImplementedPattern,
-            Results = new List<DetectionResult>(),
-        };
-        
-        _runner.CreateGraph(_fileManager.GetAllCSharpFilesFromDirectory(project.Directory));
+                               {
+                                   Directory = project.Directory,
+                                   ImplementedPattern = project.ImplementedPattern,
+                                   Results = new List< DetectionResult >(),
+                               };
 
-        foreach (RecognitionResult recognitionResult in _runner.Run(RecognizerRunner.DesignPatterns.ToList()).Where(x => x.Result.GetScore() >= 50).OrderByDescending(x => x.Result.GetScore()).ToList())
+        RecognizerRunner runner = new(
+            _fileManager.GetAllCSharpFilesFromDirectory(project.Directory),
+            DesignPattern.SupportedPatterns );
+
+        foreach (RecognitionResult recognitionResult in runner.Run().Where(x => x.Result.GetScore() >= 50).OrderByDescending(x => x.Result.GetScore()).ToList())
         {
             result.Results.Add(
                 new DetectionResult
@@ -161,7 +177,8 @@
     ///  Prints details on an incorrectly detected pattern, including the detected pattern with the highest score.
     /// </summary>
     /// <param name="result">The result to be printed.</param>
-    private static void PrintIncorrectResult(ProjectResult result)
+    private static void PrintIncorrectResult(
+        ProjectResult result)
     {
         if (result.Results.Count == 0)
         {

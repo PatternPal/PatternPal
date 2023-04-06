@@ -7,6 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Monikers.imagemanifest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <content Include="Monikers.imagemanifest">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.51.0" />
     <PackageReference Include="Grpc.AspNetCore.Web" Version="2.51.0" />
   </ItemGroup>
@@ -14,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="../PatternPal.Core/PatternPal.Core.csproj" />
     <ProjectReference Include="..\PatternPal.CommonResources\PatternPal.CommonResources.csproj" />
+    <ProjectReference Include="..\PatternPal.StepByStep\PatternPal.StepByStep.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

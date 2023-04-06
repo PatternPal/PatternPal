@@ -8,7 +8,7 @@ on:
     paths:
       - 'PatternPal/**'
   pull_request:
-    types: [ opened, synchronize, reopened ]
+    types: [ opened, synchronize, reopened, ready_for_review ]
     paths:
       - 'PatternPal/**'
   workflow_dispatch:
@@ -16,12 +16,13 @@ on:
 jobs:
   Build:
     runs-on: windows-latest
+    if: github.event.pull_request.draft == false
     steps:
       - uses: actions/checkout@v3
       
       - uses: actions/cache@v3
         with:
-          path: ./PatternPal/packages
+          path: ~/.nuget/packages
           # Look to see if there is a cache hit for the corresponding requirements file
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
           restore-keys: |
@@ -37,9 +38,6 @@ jobs:
         
       - name: Build
         run: msbuild /p:Configuration=Release PatternPal/PatternPal.sln
-      
-      - name: Debug
-        run: dir PatternPal/PatternPal.Extension/PatternPal
       
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3

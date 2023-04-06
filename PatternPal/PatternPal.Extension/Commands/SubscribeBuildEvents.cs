@@ -16,30 +16,37 @@ using PatternPal.Extension.ViewModels;
 using EnvDTE80;
 using PatternPal.Protos;
 
-namespace PatternPal.Extension
+namespace PatternPal.Extension.Commands
 {
     public static class SubscribeBuildEvents
     {
         /// <summary>
         ///     VS Package that provides this command, not null.
         /// </summary>
-        private static PatternPalExtensionPackage package;
+        private static PatternPalExtensionPackage _package;
 
-        public static void Initialize(EnvDTE.DTE dte, PatternPalExtensionPackage package)
+        public static void Initialize(
+            DTE dte,
+            PatternPalExtensionPackage package)
         {
-            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+            ThreadHelper.ThrowIfNotOnUIThread();
             dte.Events.BuildEvents.OnBuildDone += BuildEvents_OnBuildDone;
-            SubscribeBuildEvents.package = package;
+            _package = package;
         }
 
-        private static async void BuildEvents_OnBuildDone(EnvDTE.vsBuildScope Scope, EnvDTE.vsBuildAction Action)
+        private static void BuildEvents_OnBuildDone(
+            vsBuildScope Scope,
+            vsBuildAction Action)
         {
-            if (package.DoLogData)
-            {
-                try { await LoggingApiClient.PostActionAsync(Action); }
-                catch (Exception ex) { }
+            ThreadHelper.JoinableTaskFactory.Run(
+                async () =>
+                {
+                    if (_package.DoLogData)
+                    {
+                        try { await LoggingApiClient.PostActionAsync(Action); }
+                        catch (Exception) { }
 
-                //Request to service
+                           //Request to service
                 LogBuildEventRequest request = new LogBuildEventRequest { SubjectId = "iets" };
 
                 LoggingService.LoggingServiceClient client =
@@ -47,8 +54,8 @@ namespace PatternPal.Extension
                   LogBuildEventResponse response = client.LogBuildEvent(request);
                    
                 
-            
-            }
+                    }
+                });
         }
     }
 }

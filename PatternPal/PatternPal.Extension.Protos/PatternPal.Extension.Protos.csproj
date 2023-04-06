@@ -16,9 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!--  "Toevoegen aan Protos is deze dupliceren voor service" -->
-    <Protobuf Include="../../Protos/patternpal.proto" GrpcServices="Client" Link="Protos/patternpal.proto" />
     <Protobuf Include="../../Protos/logging.proto" GrpcServices="Client" Link="Protos/logging.proto" />
+    <Protobuf Include="../../Protos/common.proto" GrpcServices="Client" Link="Protos/common.proto" />
+    <Protobuf Include="../../Protos/recognizer.proto" GrpcServices="Client" Link="Protos/recognizer.proto" />
+    <Protobuf Include="../../Protos/step_by_step.proto" GrpcServices="Client" Link="Protos/step_by_step.proto" />
   </ItemGroup>
 
 </Project>

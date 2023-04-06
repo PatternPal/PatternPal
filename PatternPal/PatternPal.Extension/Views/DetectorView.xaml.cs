@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 
 using EnvDTE;
 
@@ -31,12 +30,9 @@ namespace PatternPal.Extension.Views
     /// <summary>
     ///     Interaction logic for DetectorView.xaml
     /// </summary>
-    public partial class DetectorView : UserControl,
-                                        IVsSolutionEvents,
+    public partial class DetectorView : IVsSolutionEvents,
                                         IVsRunningDocTableEvents
     {
-        private readonly SummaryFactory SummaryFactory = new SummaryFactory();
-
         /// <summary>
         ///     Initializes a new instance of the <see cref="ExtensionWindowControl" /> class.
         /// </summary>
@@ -44,7 +40,6 @@ namespace PatternPal.Extension.Views
         {
             InitializeComponent();
             AddViewModels();
-            Loading = false;
             Dispatcher.VerifyAccess();
             LoadProject();
             SelectAll.IsChecked = true;
@@ -62,11 +57,8 @@ namespace PatternPal.Extension.Views
         }
 
         private List< DesignPatternViewModel > ViewModels { get; set; }
-        private List< string > Paths { get; set; }
         private List< Project > Projects { get; set; }
-        private bool Loading { get; set; }
         private DTE Dte { get; }
-        private List< RecognizerResult > Results { get; set; }
 
         public int OnAfterOpenProject(
             IVsHierarchy pHierarchy,
@@ -149,9 +141,10 @@ namespace PatternPal.Extension.Views
         private void AddViewModels()
         {
             ViewModels = new List< DesignPatternViewModel >();
-            foreach (object value in Enum.GetValues(typeof( Recognizer )))
+            GetSupportedRecognizersResponse response = GrpcHelper.RecognizerClient.GetSupportedRecognizers(new GetSupportedRecognizersRequest());
+            foreach (Recognizer recognizer in response.Recognizers)
             {
-                ViewModels.Add(new DesignPatternViewModel((Recognizer)value));
+                ViewModels.Add(new DesignPatternViewModel(recognizer));
             }
 
             PatternCheckbox.listBox.DataContext = ViewModels;
@@ -165,11 +158,11 @@ namespace PatternPal.Extension.Views
         }
 
         private void CreateResultViewModels(
-            IEnumerable< RecognizerResult > results)
+            IEnumerable< RecognizeResult > results)
         {
             List< PatternResultViewModel > viewModels = new List< PatternResultViewModel >();
 
-            foreach (RecognizerResult result in results)
+            foreach (RecognizeResult result in results)
             {
                 viewModels.Add(new PatternResultViewModel(result));
             }
@@ -180,6 +173,7 @@ namespace PatternPal.Extension.Views
 
         private void SaveAllDocuments()
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             Dte.Documents.SaveAll();
         }
 
@@ -199,12 +193,21 @@ namespace PatternPal.Extension.Views
             object sender,
             RoutedEventArgs e)
         {
-            SaveAllDocuments();
-            Analyse();
+            ThreadHelper.JoinableTaskFactory.Run(AnalyzeAsync);
         }
 
-        private async Task Analyse()
+        private async Task AnalyzeAsync()
         {
+            if (null == Dte)
+            {
+                return;
+            }
+
+            // Switch to main thread, which is required to access the `DTE` service.
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            SaveAllDocuments();
+
             RecognizeRequest request = new RecognizeRequest();
 
             // TODO CV: Handle error cases
@@ -239,48 +242,18 @@ namespace PatternPal.Extension.Views
                 request.Recognizers.Add(designPatternViewModel.Recognizer);
             }
 
-            Protos.PatternPal.PatternPalClient client = new Protos.PatternPal.PatternPalClient(GrpcChannelHelper.Channel);
-            IAsyncStreamReader<RecognizerResult> responseStream = client.Recognize(request).ResponseStream;
+            request.ShowAllResults = !(ShowAllCheckBox.IsChecked.HasValue && ShowAllCheckBox.IsChecked.Value);
 
-            IList<RecognizerResult> results = new List<RecognizerResult>();
+            IAsyncStreamReader< RecognizeResponse > responseStream = GrpcHelper.RecognizerClient.Recognize(request).ResponseStream;
+
+            IList< RecognizeResult > results = new List< RecognizeResult >();
             while (await responseStream.MoveNext())
             {
-                results.Add(responseStream.Current);
+                results.Add(responseStream.Current.Result);
             }
 
             CreateResultViewModels(results);
             SummaryControl.Text = "Recognizer is finished";
-            ResetUI();
-        }
-        private void CheckSwitch_Checked(
-            object sender,
-            RoutedEventArgs e)
-        {
-            if (Results == null)
-            {
-                return;
-            }
-
-            //CreateResultViewModels(Results);
-        }
-
-        private void CheckSwitch_Unchecked(
-            object sender,
-            RoutedEventArgs e)
-        {
-            if (Results == null)
-            {
-                return;
-            }
-
-            List< RecognizerResult > results = Results.Where(x => x.Result.Score >= 80).ToList();
-            //CreateResultViewModels(results);
-        }
-
-        private void ResetUI()
-        {
-            //statusBar.Value = 0;
-            Loading = false;
             ProgressStatusBlock.Text = "";
         }
 
@@ -290,11 +263,9 @@ namespace PatternPal.Extension.Views
         {
             List< DesignPatternViewModel > designPatternViewModels = PatternCheckbox.listBox.Items.OfType< DesignPatternViewModel >().ToList();
 
-            for (int i = 0;
-                 i < designPatternViewModels.Count();
-                 i++)
+            foreach (DesignPatternViewModel designPattern in designPatternViewModels)
             {
-                designPatternViewModels[ i ].IsChecked = true;
+                designPattern.IsChecked = true;
             }
         }
 
@@ -304,11 +275,9 @@ namespace PatternPal.Extension.Views
         {
             List< DesignPatternViewModel > designPatternViewModels = PatternCheckbox.listBox.Items.OfType< DesignPatternViewModel >().ToList();
 
-            for (int i = 0;
-                 i < designPatternViewModels.Count();
-                 i++)
+            foreach (DesignPatternViewModel designPattern in designPatternViewModels)
             {
-                designPatternViewModels[ i ].IsChecked = false;
+                designPattern.IsChecked = false;
             }
         }
 
@@ -335,7 +304,7 @@ namespace PatternPal.Extension.Views
         int IVsRunningDocTableEvents.OnAfterSave(
             uint docCookie)
         {
-            Analyse();
+            ThreadHelper.JoinableTaskFactory.Run(AnalyzeAsync);
             return VSConstants.S_OK;
         }
 
@@ -362,5 +331,19 @@ namespace PatternPal.Extension.Views
         }
 
         #endregion
+
+        private void ShowAllCheckBox_OnChecked(
+            object sender,
+            RoutedEventArgs e)
+        {
+            ThreadHelper.JoinableTaskFactory.Run(AnalyzeAsync);
+        }
+
+        private void ShowAllCheckBox_OnUnchecked(
+            object sender,
+            RoutedEventArgs e)
+        {
+            ThreadHelper.JoinableTaskFactory.Run(AnalyzeAsync);
+        }
     }
 }

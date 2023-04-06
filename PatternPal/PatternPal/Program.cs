@@ -20,7 +20,9 @@ internal static class Program
             {
                 DefaultEnabled = true
             });
-        app.MapGrpcService< PatternPalService >();
+
+        app.MapGrpcService< RecognizerService >();
+        app.MapGrpcService< StepByStepService >();
         app.MapGrpcService<LoggingService>();
         app.Run();
     }

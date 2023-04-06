@@ -2,10 +2,15 @@
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+
 using EnvDTE;
+
 using System.ComponentModel;
+
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+
+using PatternPal.Extension.Commands;
 
 namespace PatternPal.Extension
 {
@@ -27,11 +32,20 @@ namespace PatternPal.Extension
     ///         &gt; in .vsixmanifest file.
     ///     </para>
     /// </remarks>
-    [ProvideAutoLoad(UIContextGuids80.SolutionExists, PackageAutoLoadFlags.BackgroundLoad)]
-    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
+    [ProvideAutoLoad(
+        UIContextGuids80.SolutionExists,
+        PackageAutoLoadFlags.BackgroundLoad)]
+    [PackageRegistration(
+        UseManagedResourcesOnly = true,
+        AllowsBackgroundLoading = true)]
     [Guid(PackageGuidString)]
-    [ProvideOptionPage(typeof(PatternPalOptionPageGrid),
-    "PatternPal", "Privacy", 0, 0, true)]
+    [ProvideOptionPage(
+        typeof( PatternPalOptionPageGrid ),
+        "PatternPal",
+        "Privacy",
+        0,
+        0,
+        true)]
     public sealed class PatternPalExtensionPackage : AsyncPackage
     {
         /// <summary>
@@ -50,7 +64,7 @@ namespace PatternPal.Extension
         {
             get
             {
-                PatternPalOptionPageGrid page = (PatternPalOptionPageGrid)GetDialogPage(typeof(PatternPalOptionPageGrid));
+                PatternPalOptionPageGrid page = (PatternPalOptionPageGrid)GetDialogPage(typeof( PatternPalOptionPageGrid ));
                 return page.DoLogData;
             }
         }
@@ -68,26 +82,30 @@ namespace PatternPal.Extension
         ///     A task representing the async work of package initialization, or an already completed task if there is none.
         ///     Do not return null from this method.
         /// </returns>
-        protected override async Task InitializeAsync(CancellationToken cancellationToken,
-            IProgress<ServiceProgressData> progress)
+        protected override async Task InitializeAsync(
+            CancellationToken cancellationToken,
+            IProgress< ServiceProgressData > progress)
         {
             // NOTE: This code is delayed called!
 
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-            var dte = (DTE)GetService(typeof(DTE));
-            SubscribeBuildEvents.Initialize(dte, this);
+            DTE dte = (DTE)await GetServiceAsync(typeof( DTE ));
+            SubscribeBuildEvents.Initialize(
+                dte,
+                this);
         }
 
         #endregion
     }
+
     public class PatternPalOptionPageGrid : DialogPage
     {
-        private bool _doLogData = false;
+        private bool _doLogData;
 
         [Category("Privacy")]
-        [DisplayName("Log data")] 
+        [DisplayName("Log data")]
         [Description("Whether PatternPal can log your data. The data which gets logged are your actions and your source code. This is used for research. This option is turned off by default.")]
         public bool DoLogData
         {
