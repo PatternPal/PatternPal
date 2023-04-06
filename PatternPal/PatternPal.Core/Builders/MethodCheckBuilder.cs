@@ -1,16 +1,28 @@
 ﻿namespace PatternPal.Core.Builders;
 
-internal class MethodCheckBuilder : ICheckBuilder
+internal interface IMethodCheckBuilder : ICheckBuilder
 {
-    private ModifierCheckBuilder ? _modifierCheckBuilder;
+    IMethodCheckBuilder Modifiers(
+        IModifierCheckBuilder modifierCheckBuilder);
+
+    IMethodCheckBuilder Modifiers(
+        Action< IModifierCheckBuilder > builderAction);
+
+    IMethodCheckBuilder ReturnType(
+        GetCurrentEntity getCurrentEntity);
+}
+
+internal class MethodCheckBuilder : IMethodCheckBuilder
+{
+    private IModifierCheckBuilder ? _modifierCheckBuilder;
 
     ICheck ICheckBuilder.Build() => new MethodCheck
                                     {
                                         ModifierCheck = (ModifierCheck ?)_modifierCheckBuilder?.Build(),
                                     };
 
-    internal MethodCheckBuilder Modifiers(
-        ModifierCheckBuilder modifierCheckBuilder)
+    IMethodCheckBuilder IMethodCheckBuilder.Modifiers(
+        IModifierCheckBuilder modifierCheckBuilder)
     {
         if (_modifierCheckBuilder is not null)
         {
@@ -24,15 +36,16 @@ internal class MethodCheckBuilder : ICheckBuilder
         return this;
     }
 
-    internal MethodCheckBuilder Modifiers(
-        Action< ModifierCheckBuilder > builderAction)
+    IMethodCheckBuilder IMethodCheckBuilder.Modifiers(
+        Action< IModifierCheckBuilder > builderAction)
     {
         _modifierCheckBuilder ??= new ModifierCheckBuilder();
         builderAction(_modifierCheckBuilder);
         return this;
     }
 
-    internal MethodCheckBuilder ReturnType()
+    IMethodCheckBuilder IMethodCheckBuilder.ReturnType(
+        GetCurrentEntity getCurrentEntity)
     {
         return this;
     }

@@ -1,12 +1,6 @@
 ﻿namespace PatternPal.Core.Checks;
 
-internal interface ICheck
-{
-    bool Check(
-        INode node);
-}
-
-internal class RootCheck : ICheck
+internal class ClassCheck : ICheck
 {
     public bool Check(
         INode node)
