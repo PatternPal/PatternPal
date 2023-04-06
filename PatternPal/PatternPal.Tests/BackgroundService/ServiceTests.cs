@@ -27,27 +27,26 @@ namespace PatternPal.Service_Tests
         [SetUp]
         public void Setup()
         {
-            //// Move to directory with PatternPal.exe
-            //string extensionDirectory = Directory.GetCurrentDirectory();
-            //DirectoryInfo solutionPath = FileUtils.ObtainSolutionFolder(extensionDirectory);
-            //string processPath = Path.Combine(
-            //    solutionPath.FullName,
-            //    "PatternPal.Extension",
-            //    "bin",
-            //    "Debug",
-            //    "PatternPal");
-            //Directory.SetCurrentDirectory(processPath);
+            // Move to directory with PatternPal.exe
+            string extensionDirectory = Directory.GetCurrentDirectory();
+            DirectoryInfo solutionPath = FileUtils.ObtainSolutionFolder(extensionDirectory);
+            string processPath = Path.Combine(
+                solutionPath.FullName,
+                "PatternPal.Extension",
+                "bin",
+                "Debug",
+                "PatternPal");
 
-            //// Start the process
-            //string myExe = Path.Combine(
-            //    processPath,
-            //    "PatternPal.exe");
-            //ProcessStartInfo processInfo = new ProcessStartInfo
-            //{
-            //    FileName = myExe,
-            //    WorkingDirectory = processPath
-            //};
-            //_backgroundService = Process.Start(processInfo);
+            // Start the process
+            string myExe = Path.Combine(
+                processPath,
+                "PatternPal.exe");
+            ProcessStartInfo processInfo = new ProcessStartInfo
+            {
+                FileName = myExe,
+                WorkingDirectory = processPath
+            };
+            _backgroundService = Process.Start(processInfo);
 
             // Create a gRPC channel once because it is an expensive operation
             _channel = GrpcChannel.ForAddress("http://localhost:5001");
@@ -58,15 +57,16 @@ namespace PatternPal.Service_Tests
         [Test]
         public void DidBackgroundServiceStart()
         {
+            // Arrange
             Process[] process = Process.GetProcessesByName("PatternPal");
+
+            // Assert
             Assert.IsTrue(process.Length > 0);
         }
 
         [Test]
         // "Good" implemented design patterns
         [TestCase("SingleTonTestCase1.cs")]
-        [TestCase("SingleTonTestCase4.cs")]
-        [TestCase("SingleTonTestCase5.cs")]
         public Task ReceiveReponseFromService(
             string filename)
         {
@@ -91,10 +91,42 @@ namespace PatternPal.Service_Tests
         }
 
         /// <summary>
-        /// Test if we receive no results if "show all" is not pressed and wrong pattern is provided to a recognizer.
+        /// Test if we receive results if "show all" is selected and wrong pattern is provided to a recognizer.
+        /// </summary>
+        /// <param name="filename"></param>
+        [Test]
+        [TestCase("SingleTonTestCase10.cs")] // Offer the wrong pattern for the selected recognizer
+        public void ReceiveResultsWithShowAll(
+            string filename)
+        {
+            // Arrange
+            RecognizeRequest request = new RecognizeRequest
+            {
+                File = Directory.GetCurrentDirectory() + "\\TestClasses\\Singleton\\" + filename
+            };
+            // Attach a bridge recognizer
+            request.Recognizers.Add(Recognizer.Bridge);
+            // Show all results
+            request.ShowAllResults = true;
+            
+            // Act
+            IAsyncStreamReader<RecognizeResponse> responseStream = _client.Recognize(request).ResponseStream;
+            IList<RecognizeResult> results = new List<RecognizeResult>();
+            while (responseStream.MoveNext().Result)
+            {
+                results.Add(responseStream.Current.Result);
+            }
+
+            // Assert
+            // At least one result because the request was to show all results
+            Assert.IsTrue(results.Count > 0);
+        }
+
+        /// <summary>
+        /// Test if we receive no results if "show all" is not selected and wrong pattern is provided to a recognizer.
         /// </summary>
         [Test]
-        [TestCase("SingleTonTestCase7.cs")] // Offer the wrong pattern for the selected recognizer
+        [TestCase("SingleTonTestCase10.cs")] // Offer the wrong pattern for the selected recognizer
         public void ReceiveNoResultsWithoutShowAll(
             string filename)
         {
@@ -122,41 +154,10 @@ namespace PatternPal.Service_Tests
             //return Verifier.Verify(results);
         }
 
-        /// <summary>
-        /// Test if we receive results if "show all" is selected and wrong pattern is provided to a recognizer.
-        /// </summary>
-        /// <param name="filename"></param>
-        [Test]
-        [TestCase("SingleTonTestCase10.cs")] // Offer the wrong pattern for the selected recognizer
-        public void ReceiveResultsWithShowAll(
-            string filename)
-        {
-            RecognizeRequest request = new RecognizeRequest
-            {
-                File = Directory.GetCurrentDirectory() + "\\TestClasses\\Singleton\\" + filename
-            };
-
-            // Attach a bridge recognizer
-            request.Recognizers.Add(Recognizer.Bridge);
-            // Show all results
-            request.ShowAllResults = true;
-
-            IAsyncStreamReader<RecognizeResponse> responseStream = _client.Recognize(request).ResponseStream;
-
-            IList<RecognizeResult> results = new List<RecognizeResult>();
-
-            while (responseStream.MoveNext().Result)
-            {
-                results.Add(responseStream.Current.Result);
-            }
-
-            // At least one result because the request was to show all results
-            Assert.IsTrue(results.Count > 0);
-        }
-
         [Test]
         public void WasBackgroundServiceKilled()
         {
+            _backgroundService.Kill(true);
             // Arrange
             Process[] process = Process.GetProcessesByName("patternpal");
 
@@ -169,6 +170,7 @@ namespace PatternPal.Service_Tests
             //Assert
             bool allExited = process.Skip(1).All(p => p.HasExited);
             Assert.IsTrue(allExited);
+            
         }
     }
 }

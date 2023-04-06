@@ -6,12 +6,12 @@ set OUTPUT_PATH="%2PatternPal\PatternPal.Extension\PatternPal\"
 
 rem Remove the previous background service build output.
 if exist %OUTPUT_PATH% (
-    del /F /S /Q %OUTPUT_PATH% > NUL
-    rmdir /S /Q %OUTPUT_PATH% > NUL
+    del /F /S /Q %OUTPUT_PATH%  
+    rmdir /S /Q %OUTPUT_PATH%  
 )
 
 rem Recreate the output directory.
 mkdir %OUTPUT_PATH%
 
 rem Copy the build output of the background service to the output folder.
-xcopy "%2PatternPal\PatternPal\%1" %OUTPUT_PATH% /S > NUL
+xcopy "%2PatternPal\PatternPal\%1" %OUTPUT_PATH% /S 
