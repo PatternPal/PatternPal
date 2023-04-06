@@ -13,7 +13,7 @@ internal class ModifierCheck : ICheck
         _notModifiers = notModifiers;
     }
 
-    bool ICheck.Check(
+    public bool Check(
         INode node)
     {
         if (node is not IModified modified)

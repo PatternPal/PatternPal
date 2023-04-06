@@ -4,13 +4,14 @@ internal class SingletonRecognizer
 {
     internal ICheck Create()
     {
-        ICheckBuilder modifierCheckBuilder =
-            new ModifierCheckBuilder()
+        MethodCheckBuilder methodCheckBuilder =
+            new MethodCheckBuilder()
                 .Modifiers(
-                    Modifiers.Private,
-                    Modifiers.Abstract)
-                .NotModifiers(Modifiers.Public);
+                    builder => builder
+                        .NotModifiers(Modifiers.Static))
+                // TODO: Func to get current entity (from context or something like that)
+                .ReturnType();
 
-        return modifierCheckBuilder.Build();
+        return ((ICheckBuilder)methodCheckBuilder).Build();
     }
 }

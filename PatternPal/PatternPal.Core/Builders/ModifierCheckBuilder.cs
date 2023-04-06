@@ -11,7 +11,7 @@ internal class ModifierCheckBuilder : ICheckBuilder
         _notModifiers = new List< IModifier >();
     }
 
-    ICheck ICheckBuilder.Build() => new ModifierCheck(
+    public ICheck Build() => new ModifierCheck(
         _modifiers,
         _notModifiers);
 
