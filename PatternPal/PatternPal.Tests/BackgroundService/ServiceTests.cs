@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Grpc.Net.Client;
@@ -16,37 +17,42 @@ using VerifyNUnit;
 
 namespace PatternPal.Service_Tests
 {
+    [TestFixture]
     public class Tests
     {
         private RecognizerService.RecognizerServiceClient _client;
-        private GrpcChannel channel;
+        private GrpcChannel _channel;
         private static Process _backgroundService;
 
         [SetUp]
         public void Setup()
         {
-            string extensionDirectory = Directory.GetCurrentDirectory();
-            DirectoryInfo solutionPath = FileUtils.ObtainSolutionFolder(extensionDirectory);
+            //// Move to directory with PatternPal.exe
+            //string extensionDirectory = Directory.GetCurrentDirectory();
+            //DirectoryInfo solutionPath = FileUtils.ObtainSolutionFolder(extensionDirectory);
+            //string processPath = Path.Combine(
+            //    solutionPath.FullName,
+            //    "PatternPal.Extension",
+            //    "bin",
+            //    "Debug",
+            //    "PatternPal");
+            //Directory.SetCurrentDirectory(processPath);
 
-            string processPath = Path.Combine(
-                solutionPath.FullName,
-                "PatternPal.Extension",
-                "bin",
-                "Debug",
-                "PatternPal",
-                "PatternPal.exe");
-
-            _backgroundService = Process.Start(
-                new ProcessStartInfo(processPath)
-                {
-                    CreateNoWindow = true,
-                    UseShellExecute = false,
-                });
+            //// Start the process
+            //string myExe = Path.Combine(
+            //    processPath,
+            //    "PatternPal.exe");
+            //ProcessStartInfo processInfo = new ProcessStartInfo
+            //{
+            //    FileName = myExe,
+            //    WorkingDirectory = processPath
+            //};
+            //_backgroundService = Process.Start(processInfo);
 
             // Create a gRPC channel once because it is an expensive operation
-            channel = GrpcChannel.ForAddress("http://localhost:5001");
-            // Make a recognizer service client
-            _client = new RecognizerService.RecognizerServiceClient(channel);
+            _channel = GrpcChannel.ForAddress("http://localhost:5001");
+            // Make a recognizer service clients
+            _client = new RecognizerService.RecognizerServiceClient(_channel);
         }
 
         [Test]
@@ -59,10 +65,8 @@ namespace PatternPal.Service_Tests
         [Test]
         // "Good" implemented design patterns
         [TestCase("SingleTonTestCase1.cs")]
-        //[TestCase("SingleTonTestCase2.cs")]
         [TestCase("SingleTonTestCase4.cs")]
         [TestCase("SingleTonTestCase5.cs")]
-        //[TestCase("SingleTonTestCase6.cs")]
         public Task ReceiveReponseFromService(
             string filename)
         {
@@ -95,18 +99,18 @@ namespace PatternPal.Service_Tests
             string filename)
         {
             RecognizeRequest request = new RecognizeRequest
-                                       {
-                                           File = Directory.GetCurrentDirectory() + "\\TestClasses\\Singleton\\" + filename
-                                       };
+            {
+                File = Directory.GetCurrentDirectory() + "\\TestClasses\\Singleton\\" + filename
+            };
 
             // Attach a bridge recognizer
             request.Recognizers.Add(Recognizer.Bridge);
             // Do not show all results
             request.ShowAllResults = false;
 
-            IAsyncStreamReader< RecognizeResponse > responseStream = _client.Recognize(request).ResponseStream;
+            IAsyncStreamReader<RecognizeResponse> responseStream = _client.Recognize(request).ResponseStream;
 
-            IList< RecognizeResult > results = new List< RecognizeResult >();
+            IList<RecognizeResult> results = new List<RecognizeResult>();
 
             while (responseStream.MoveNext().Result)
             {
@@ -153,9 +157,18 @@ namespace PatternPal.Service_Tests
         [Test]
         public void WasBackgroundServiceKilled()
         {
-            _backgroundService.Kill();
+            // Arrange
             Process[] process = Process.GetProcessesByName("patternpal");
-            Assert.IsTrue(process.Length == 0);
+
+            // Act
+            foreach (Process processItem in process)
+            {
+                processItem.Kill();
+            }
+
+            //Assert
+            bool allExited = process.Skip(1).All(p => p.HasExited);
+            Assert.IsTrue(allExited);
         }
     }
 }
