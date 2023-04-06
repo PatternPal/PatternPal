@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 using PatternPal.Core.Models;
@@ -27,8 +28,8 @@ public class RecognizerRunner
     /// <param name="files">The files to run the recognizers on.</param>
     /// <param name="recognizers">The recognizers to run.</param>
     public RecognizerRunner(
-        IEnumerable< string > files,
-        IEnumerable< Recognizer > recognizers)
+        IEnumerable files,
+        IEnumerable recognizers)
     {
         CreateGraph(files);
 
@@ -53,7 +54,7 @@ public class RecognizerRunner
     /// <param name="files">The files to run the recognizers on.</param>
     /// <param name="patterns">The design patterns for which to run the recognizers.</param>
     public RecognizerRunner(
-        IEnumerable< string > files,
+        IEnumerable files,
         IList< DesignPattern > patterns)
     {
         CreateGraph(files);
@@ -65,7 +66,7 @@ public class RecognizerRunner
     /// </summary>
     /// <param name="files">The files from which to create a <see cref="SyntaxGraph"/></param>
     private void CreateGraph(
-        IEnumerable< string > files)
+        IEnumerable files)
     {
         _graph = new SyntaxGraph();
         foreach (string file in files)

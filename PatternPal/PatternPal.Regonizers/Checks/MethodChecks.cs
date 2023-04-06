@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SyntaxTree.Abstractions;
@@ -64,7 +65,7 @@ namespace PatternPal.Recognizers.Checks
             return currentClass.ClassImplementsInterfaceMethod(methodSyntax);
         }
 
-        public static IEnumerable<string> GetCreatedTypes(this IMethod methodSyntax)
+        public static IEnumerable GetCreatedTypes(this IMethod methodSyntax)
         {
             var result = new List<string>();
             if (methodSyntax.GetBody() == null) return result;

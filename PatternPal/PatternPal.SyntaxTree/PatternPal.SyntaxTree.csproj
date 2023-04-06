@@ -20,8 +20,4 @@
     <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="4.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\Members"/>
-  </ItemGroup>
-
 </Project>

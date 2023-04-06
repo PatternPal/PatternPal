@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SyntaxTree.Abstractions.Members;
 using SyntaxTree.Abstractions.Root;
@@ -7,6 +8,7 @@ namespace SyntaxTree.Abstractions.Entities
 {
     public interface IEntity : IModified, IChild<IEntitiesContainer>, INamedEntitiesContainer
     {
+        TypeDeclarationSyntax GetTypeDeclarationSyntax();
         /// <summary>
         ///     Get a list of methods declared in this node
         /// </summary>
@@ -30,13 +32,13 @@ namespace SyntaxTree.Abstractions.Entities
         ///     Also includes wrappers for example the getter and setter of a property as an Method
         /// </summary>
         /// <returns>A list of Members</returns>
-        IEnumerable<IMember> GetAllMembers();
+        IEnumerable GetAllMembers();
 
         /// <summary>
         ///     Get a list of bases of this note (overrides / implementations)
         /// </summary>
         /// <returns>A list of types</returns>
-        IEnumerable<TypeSyntax> GetBases();
+        IEnumerable GetBases();
 
         /// <summary>
         ///     Gets the type of this entity
@@ -49,7 +51,7 @@ namespace SyntaxTree.Abstractions.Entities
         /// <returns></returns>
         string GetFullName();
 
-        IEnumerable<IRelation<IEntity>> GetRelations();
+        IEnumerable<IRelation> GetRelations();
 
         /// <summary>
         ///     Gets all methods this includes getter and setter from properties and constructors

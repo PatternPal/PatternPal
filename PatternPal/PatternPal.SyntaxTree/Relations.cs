@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -7,6 +8,7 @@ using SyntaxTree.Abstractions;
 using SyntaxTree.Abstractions.Entities;
 using SyntaxTree.Abstractions.Root;
 using SyntaxTree.Models.Entities;
+using SyntaxTree.Models.Members.Method;
 
 namespace SyntaxTree
 {
@@ -27,6 +29,8 @@ namespace SyntaxTree
 
         private readonly SyntaxGraph _graph;
         private Dictionary<string, IEntity> _entities;
+
+        //Relations between entities
         internal Dictionary<IEntity, List<Relation>> relations = new Dictionary<IEntity, List<Relation>>();
 
         public Relations(SyntaxGraph graph)
@@ -42,6 +46,29 @@ namespace SyntaxTree
                 CreateParentClasses(entity);
                 CreateCreationalEdges(entity);
                 CreateUsingEdges(entity);
+            }
+        }
+
+        private void CreateMethodEdges(IEntity entity)
+        {
+            foreach (Method method in entity.GetAllMethods())
+            {
+                IEnumerable childNodes = method.GetBody().DescendantNodes();
+
+                foreach (var creation in childNodes.OfType<ObjectCreationExpressionSyntax>())
+                {
+                    if (creation.Type is IdentifierNameSyntax name)
+                    {
+                        //Get method/entity associated with creation
+                        //Add relation
+                    }
+                }
+
+                foreach (var identifier in childNodes.OfType<IdentifierNameSyntax>())
+                {
+                    //Get method/entity associated with identifier
+                    //Add relation
+                }
             }
         }
 
@@ -85,6 +112,7 @@ namespace SyntaxTree
             var childNodes = entity.GetSyntaxNode().DescendantNodes();
             foreach (var creation in childNodes.OfType<ObjectCreationExpressionSyntax>())
             {
+              
                 if (creation.Type is IdentifierNameSyntax name)
                 {
                     AddRelation(entity, RelationType.Creates, name.ToString());

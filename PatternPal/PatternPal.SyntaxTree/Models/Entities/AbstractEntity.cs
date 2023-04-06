@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SyntaxTree.Abstractions;
@@ -17,7 +18,7 @@ namespace SyntaxTree.Models.Entities
         private readonly List<TypeSyntax> _bases;
         private readonly List<IEntity> _entities = new List<IEntity>();
 
-        private readonly List<IMethod> _methods = new List<IMethod>();
+        private readonly List<Method> _methods = new List<Method>();
 
         private readonly IEntitiesContainer _parent;
         private readonly List<IProperty> _properties = new List<IProperty>();
@@ -49,6 +50,11 @@ namespace SyntaxTree.Models.Entities
             _bases = node.BaseList?.Types.Select(t => t.Type).ToList() ?? new List<TypeSyntax>();
         }
 
+        public TypeDeclarationSyntax GetTypeDeclarationSyntax()
+        {
+            return _typeDeclarationSyntax;
+        }
+
         public override string GetName()
         {
             return _typeDeclarationSyntax.Identifier.Text;
@@ -71,7 +77,7 @@ namespace SyntaxTree.Models.Entities
 
         public virtual IEnumerable<IMember> GetMembers() { return _methods.Cast<IMember>().Concat(_properties); }
 
-        public IEnumerable<IMember> GetAllMembers()
+        public IEnumerable GetAllMembers()
         {
             var members = GetMembers().ToList();
             
@@ -94,7 +100,7 @@ namespace SyntaxTree.Models.Entities
             return _entities.AsReadOnly();
         }
 
-        public IEnumerable<TypeSyntax> GetBases()
+        public IEnumerable GetBases()
         {
             return _bases;
         }

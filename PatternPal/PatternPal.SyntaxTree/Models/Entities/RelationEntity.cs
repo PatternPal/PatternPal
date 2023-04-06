@@ -5,12 +5,12 @@ using SyntaxTree.Abstractions.Root;
 
 namespace SyntaxTree.Models.Entities
 {
-    public class Relation : IRelation<IEntity>
+    public class RelationEntity : IRelation
     {
         private readonly IEntity _entityNode;
         private readonly RelationType _type;
 
-        public Relation(IEntity entityNode, RelationType type)
+        public RelationEntity(IEntity entityNode, RelationType type)
         {
             _entityNode = entityNode;
             _type = type;

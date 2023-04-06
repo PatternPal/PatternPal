@@ -2,12 +2,12 @@
 
 namespace SyntaxTree.Abstractions
 {
-    public interface IRelation<N> where N : INode
+    public interface IRelation
     {
         /// <summary>
         ///     Gets the destination node of this relation
         /// </summary>
-        N GetDestination();
+        ///N GetDestination();
 
         /// <summary>
         ///     Gets the type of this relation
