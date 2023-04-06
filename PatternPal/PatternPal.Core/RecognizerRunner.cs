@@ -1,13 +1,9 @@
 ﻿#region
 
-using System;
-using System.Collections.Generic;
-
 using PatternPal.Core.Models;
 using PatternPal.Protos;
 
 using SyntaxTree;
-using SyntaxTree.Abstractions.Entities;
 
 #endregion
 
