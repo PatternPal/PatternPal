@@ -8,18 +8,24 @@ internal class SingletonRecognizer
         rootCheckBuilder
             .Class(
                 classBuilder => classBuilder
-                    .Any(
-                        new MethodCheckBuilder()
-                            .Modifiers(
-                                modifierBuilder => modifierBuilder
-                                    .Modifiers(Modifiers.Static)
-                            )
-                            .Not(
-                                new ModifierCheckBuilder()
-                                    .Modifiers(Modifiers.Private)
-                            )
-                            .ReturnType(ICheckBuilder.GetCurrentEntity)
-                    )
+                                .Any(
+                                    new MethodCheckBuilder()
+                                        .Modifiers(
+                                            Modifiers.Static
+                                        )
+                                        .Not(
+                                            builder => builder
+                                                .Modifiers(Modifiers.Private)
+                                        )
+                                        .ReturnType(ICheckBuilder.GetCurrentEntity)
+                                )
+                                .Not(
+                                    builder => builder
+                                        .Method(
+                                            methodBuilder => methodBuilder
+                                                .Modifiers(Modifiers.Public)
+                                        )
+                                )
             );
     }
 }

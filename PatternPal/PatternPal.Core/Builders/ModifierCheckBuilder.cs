@@ -9,6 +9,12 @@ internal class ModifierCheckBuilder : ICheckBuilder
         _modifiers = new List< IModifier >();
     }
 
+    public ModifierCheckBuilder(
+        IEnumerable< IModifier > modifiers)
+    {
+        _modifiers = new List< IModifier >(modifiers);
+    }
+
     public ICheck Build() => new ModifierCheck(_modifiers);
 
     internal ModifierCheckBuilder Modifiers(

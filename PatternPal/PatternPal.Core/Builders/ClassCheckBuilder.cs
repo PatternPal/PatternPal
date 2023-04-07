@@ -9,6 +9,13 @@ internal class ClassCheckBuilder : CheckCollectionBuilder
 
     public override ICheck Build() => new ClassCheck();
 
+    internal ClassCheckBuilder Not(
+        Action< ClassCheckBuilder > builderAction)
+    {
+        base.Not(builderAction);
+        return this;
+    }
+
     internal ClassCheckBuilder Any(
         params ICheckBuilder[ ] checks)
     {

@@ -7,19 +7,28 @@ internal class MethodCheckBuilder : CheckCollectionBuilder
     {
     }
 
+    internal MethodCheckBuilder Not(
+        Action< MethodCheckBuilder > builderAction)
+    {
+        MethodCheckBuilder nestedBuilder = new();
+        builderAction(nestedBuilder);
+        CheckBuilders.Add(new NotCheckBuilder(nestedBuilder));
+        return this;
+    }
+
+    internal MethodCheckBuilder Modifiers(
+        params IModifier[ ] modifiers)
+    {
+        CheckBuilders.Add(new ModifierCheckBuilder(modifiers));
+        return this;
+    }
+
     internal MethodCheckBuilder Modifiers(
         Action< ModifierCheckBuilder > builderAction)
     {
         ModifierCheckBuilder modifierCheckBuilder = new();
         CheckBuilders.Add(modifierCheckBuilder);
         builderAction(modifierCheckBuilder);
-        return this;
-    }
-
-    internal MethodCheckBuilder Not(
-        ICheckBuilder checkBuilder)
-    {
-        CheckBuilders.Add(new NotCheckBuilder(checkBuilder));
         return this;
     }
 
