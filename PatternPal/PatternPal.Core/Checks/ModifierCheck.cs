@@ -3,14 +3,11 @@
 internal class ModifierCheck : ICheck
 {
     private readonly List< IModifier > _modifiers;
-    private readonly List< IModifier > _notModifiers;
 
     public ModifierCheck(
-        List< IModifier > modifiers,
-        List< IModifier > notModifiers)
+        List< IModifier > modifiers)
     {
         _modifiers = modifiers;
-        _notModifiers = notModifiers;
     }
 
     public bool Check(
@@ -31,14 +28,6 @@ internal class ModifierCheck : ICheck
         foreach (IModifier modifier in _modifiers)
         {
             if (!modifiers.Contains(modifier))
-            {
-                return false;
-            }
-        }
-
-        foreach (IModifier notModifier in _notModifiers)
-        {
-            if (modifiers.Contains(notModifier))
             {
                 return false;
             }

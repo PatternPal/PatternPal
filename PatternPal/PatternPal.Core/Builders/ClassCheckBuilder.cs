@@ -2,8 +2,6 @@
 
 internal class ClassCheckBuilder : CheckCollectionBuilder
 {
-    private MethodCheckBuilder ? _methodCheckBuilder;
-
     public ClassCheckBuilder()
         : base(CheckCollectionKind.All)
     {
@@ -24,10 +22,9 @@ internal class ClassCheckBuilder : CheckCollectionBuilder
     internal ClassCheckBuilder Method(
         Action< MethodCheckBuilder > builderAction)
     {
-        // TODO CV: Can we define the implementing type on the interface so we don't have to specify the types explicitly.
-        return ICheckBuilder.BuildCheck(
-            this,
-            ref _methodCheckBuilder,
-            builderAction);
+        MethodCheckBuilder methodCheckBuilder = new();
+        CheckBuilders.Add(methodCheckBuilder);
+        builderAction(methodCheckBuilder);
+        return this;
     }
 }

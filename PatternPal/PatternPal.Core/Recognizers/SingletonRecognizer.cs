@@ -12,8 +12,11 @@ internal class SingletonRecognizer
                         new MethodCheckBuilder()
                             .Modifiers(
                                 modifierBuilder => modifierBuilder
-                                                   .Modifiers(Modifiers.Static)
-                                                   .NotModifiers(Modifiers.Private)
+                                    .Modifiers(Modifiers.Static)
+                            )
+                            .Not(
+                                new ModifierCheckBuilder()
+                                    .Modifiers(Modifiers.Private)
                             )
                             .ReturnType(ICheckBuilder.GetCurrentEntity)
                     )

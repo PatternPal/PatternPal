@@ -8,17 +8,6 @@ internal interface ICheckBuilder
     internal static readonly GetCurrentEntity GetCurrentEntity = ctx => ctx.CurrentEntity;
 
     ICheck Build();
-
-    internal static TParentCheckBuilder BuildCheck< TParentCheckBuilder, TChildCheckBuilder >(
-        TParentCheckBuilder classCheckBuilder,
-        ref TChildCheckBuilder ? methodCheckBuilder,
-        Action< TChildCheckBuilder > builderAction)
-        where TChildCheckBuilder : ICheckBuilder, new()
-    {
-        methodCheckBuilder ??= new TChildCheckBuilder();
-        builderAction(methodCheckBuilder);
-        return classCheckBuilder;
-    }
 }
 
 internal class RootCheckBuilder : ICheckBuilder

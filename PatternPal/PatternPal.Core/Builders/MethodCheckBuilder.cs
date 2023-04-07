@@ -1,21 +1,26 @@
 ﻿namespace PatternPal.Core.Builders;
 
-internal class MethodCheckBuilder : ICheckBuilder
+internal class MethodCheckBuilder : CheckCollectionBuilder
 {
-    private ModifierCheckBuilder ? _modifierCheckBuilder;
-
-    ICheck ICheckBuilder.Build() => new MethodCheck
-                                    {
-                                        ModifierCheck = (ModifierCheck ?)_modifierCheckBuilder?.Build(),
-                                    };
+    internal MethodCheckBuilder()
+        : base(CheckCollectionKind.All)
+    {
+    }
 
     internal MethodCheckBuilder Modifiers(
         Action< ModifierCheckBuilder > builderAction)
     {
-        return ICheckBuilder.BuildCheck(
-            this,
-            ref _modifierCheckBuilder,
-            builderAction);
+        ModifierCheckBuilder modifierCheckBuilder = new();
+        CheckBuilders.Add(modifierCheckBuilder);
+        builderAction(modifierCheckBuilder);
+        return this;
+    }
+
+    internal MethodCheckBuilder Not(
+        ICheckBuilder checkBuilder)
+    {
+        CheckBuilders.Add(new NotCheckBuilder(checkBuilder));
+        return this;
     }
 
     internal MethodCheckBuilder ReturnType(
