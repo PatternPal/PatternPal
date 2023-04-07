@@ -5,6 +5,7 @@ internal class SingletonRecognizer
     internal void Create(
         RootCheckBuilder rootCheckBuilder)
     {
+        // TODO CV: Is there a way to get rid of the builder actions?
         rootCheckBuilder
             .Class(
                 c => c
@@ -12,9 +13,7 @@ internal class SingletonRecognizer
                          a => a
                              .Method(
                                  m => m
-                                      .Modifiers(
-                                          Modifiers.Static
-                                      )
+                                      .Modifiers(Modifiers.Static)
                                       .Not(
                                           n => n
                                               .Modifiers(Modifiers.Private)
@@ -24,9 +23,7 @@ internal class SingletonRecognizer
                          a => a
                              .Method(
                                  m => m
-                                      .Modifiers(
-                                          Modifiers.Public
-                                      )
+                                      .Modifiers(Modifiers.Public)
                                       .Not(
                                           n => n
                                               .Modifiers(Modifiers.Static)
