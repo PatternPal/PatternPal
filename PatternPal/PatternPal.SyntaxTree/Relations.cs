@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -17,144 +16,158 @@ namespace SyntaxTree
         private static readonly Dictionary<RelationType, RelationType> ReversedTypes =
             new Dictionary<RelationType, RelationType>
             {
-                {RelationType.Implements, RelationType.ImplementedBy},
-                {RelationType.ImplementedBy, RelationType.Implements},
-                {RelationType.Creates, RelationType.CreatedBy},
-                {RelationType.CreatedBy, RelationType.Creates},
-                {RelationType.Uses, RelationType.UsedBy},
-                {RelationType.UsedBy, RelationType.Uses},
-                {RelationType.Extends, RelationType.ExtendedBy},
-                {RelationType.ExtendedBy, RelationType.Extends}
+                { RelationType.Implements, RelationType.ImplementedBy },
+                { RelationType.ImplementedBy, RelationType.Implements },
+                { RelationType.Creates, RelationType.CreatedBy },
+                { RelationType.CreatedBy, RelationType.Creates },
+                { RelationType.Uses, RelationType.UsedBy },
+                { RelationType.UsedBy, RelationType.Uses },
+                { RelationType.Extends, RelationType.ExtendedBy },
+                { RelationType.ExtendedBy, RelationType.Extends }
             };
+    
+        //private static readonly Dictionary<Relationable, Relationable> ReversedRelationables =
+        //    new Dictionary<Relationable, Relationable>
+        //    {
+        //        { Relationable.Entity, Relationable.Method }, { Relationable.Method, Relationable.Entity }
+        //    };
+        
+        //List with all relations in graph
+        internal List<Relation> relations = new List<Relation>();
+
+        //Dictionary to access relations of entities fast
+        internal Dictionary<IEntity, List<Relation>> EntityRelations = new Dictionary<IEntity, List<Relation>>();
+
+        //Dictionary to access relations of methods fast
+        internal Dictionary<Method, List<Relation>> MethodRelations = new Dictionary<Method, List<Relation>>();
 
         private readonly SyntaxGraph _graph;
         private Dictionary<string, IEntity> _entities;
-
-        //Relations between entities
-        internal Dictionary<IEntity, List<Relation>> relations = new Dictionary<IEntity, List<Relation>>();
+        private List<Method> _methods = new List<Method>();
 
         public Relations(SyntaxGraph graph)
         {
             _graph = graph;
         }
 
-        public void CreateEdgesOfEntities()
+        public void CreateEdges()
         {
             _entities = _graph.GetAll();
-            foreach (var entity in _entities.Values)
+            //Get all methods
+            _methods.AddRange(_entities.Values.SelectMany(y =>
+                y.GetMembers().Where(x => x.GetType() == typeof(Method)).Cast<Method>()));
+
+            foreach (IEntity entity in _entities.Values)
             {
                 CreateParentClasses(entity);
                 CreateCreationalEdges(entity);
                 CreateUsingEdges(entity);
             }
-        }
 
-        private void CreateMethodEdges(IEntity entity)
-        {
-            foreach (Method method in entity.GetAllMethods())
+            foreach (Method method in _methods)
             {
-                IEnumerable childNodes = method.GetBody().DescendantNodes();
-
-                foreach (var creation in childNodes.OfType<ObjectCreationExpressionSyntax>())
-                {
-                    if (creation.Type is IdentifierNameSyntax name)
-                    {
-                        //Get method/entity associated with creation
-                        //Add relation
-                    }
-                }
-
-                foreach (var identifier in childNodes.OfType<IdentifierNameSyntax>())
-                {
-                    //Get method/entity associated with identifier
-                    //Add relation
-                }
+                CreateCreationalEdges(method);
+                CreateUsingEdges(method);
             }
         }
 
-        private void AddRelation(IEntity node, RelationType type, string destination)
+        private void AddRelation(INode node1, INode node2, RelationType type)
         {
-            var edgeNode = GetNodeByName(node, destination);
-            if (edgeNode == null)
-            {
+            if(node1 == null || node2 == null)
                 return;
+
+            Relation relation = new Relation(type);
+            Relation relationReversed = new Relation(ReversedTypes[type]);
+
+            switch (node1)
+            {
+                case IEntity e:
+                    relation.Node1Entity = e;
+                    relationReversed.Node2Entity = e;
+                    break;
+                case Method m:
+                    relation.Node1Method = m;
+                    relationReversed.Node2Method = m;
+                    break;
+                default:
+                    throw new ArgumentException($"Cannot add relations to {node1}");
             }
 
-            AddRelation(node, type, edgeNode);
-        }
-
-        private void AddRelation(IEntity node, RelationType type, IEntity edgeNode)
-        {
-            if (edgeNode == null)
+            switch (node2)
             {
+                case IEntity e:
+                    relation.Node2Entity = e;
+                    relationReversed.Node1Entity = e;
+                    break;
+                case Method m:
+                    relation.Node2Method = m;
+                    relationReversed.Node2Method = m;
+                    break;
+                default:
+                    throw new ArgumentException($"Cannot add relations to {node2}");
+            }
+
+            if (relations.Contains(relation))
                 return;
-            }
 
-            if (!relations.ContainsKey(node))
+            switch (node1)
             {
-                relations.Add(node, new List<Relation>());
+                case IEntity e:
+                    if (!EntityRelations.ContainsKey(e))
+                        EntityRelations[e] = new List<Relation> { relation };
+                    else
+                        EntityRelations[e].Add(relation);
+                    break;
+                case Method m:
+                    if (!MethodRelations.ContainsKey(m))
+                        MethodRelations[m] = new List<Relation> { relation };
+                    else
+                        MethodRelations[m].Add(relation);
+                    break;
+                default:
+                    throw new ArgumentException($"Cannot add relations to {node1}");
             }
 
-            var list = relations[node];
-
-            //Make sure relation does not already exists
-            if (list.Any(x => x.GetDestination() == edgeNode && x.GetRelationType() == type))
+            switch (node2)
             {
-                return;
+                case IEntity e:
+                    if (!EntityRelations.ContainsKey(e))
+                        EntityRelations[e] = new List<Relation> { relation };
+                    else
+                        EntityRelations[e].Add(relation);
+                    break;
+                case Method m:
+                    if (!MethodRelations.ContainsKey(m))
+                        MethodRelations[m] = new List<Relation> { relation };
+                    else
+                        MethodRelations[m].Add(relation);
+                    break;
+                default:
+                    throw new ArgumentException($"Cannot add relations to {node1}");
             }
 
-            list.Add(new Relation(edgeNode, type));
-            AddRelation(edgeNode, ReversedTypes[type], node);
+            relations.Add(relation);
+            AddRelation(node2, node1, ReversedTypes[type]);
         }
 
-        private void CreateCreationalEdges(IEntity entity)
+        private IEntity GetEntityByName(SyntaxNode syntaxNode)
         {
-            var childNodes = entity.GetSyntaxNode().DescendantNodes();
-            foreach (var creation in childNodes.OfType<ObjectCreationExpressionSyntax>())
-            {
-              
-                if (creation.Type is IdentifierNameSyntax name)
-                {
-                    AddRelation(entity, RelationType.Creates, name.ToString());
-                }
-            }
+            return _entities.Values.FirstOrDefault(x => x.GetSyntaxNode().IsEquivalentTo(syntaxNode));
         }
 
-        private void CreateUsingEdges(IEntity entity)
+        private Method GetMethodByName(SyntaxNode methodDeclaration)
         {
-            var childNodes = new List<SyntaxNode>();
-            foreach (var member in entity.GetMembers())
-            {
-                childNodes.AddRange(member.GetSyntaxNode().DescendantNodes(n => true));
-            }
-
-            foreach (var identifier in childNodes.OfType<IdentifierNameSyntax>())
-            {
-                if (identifier is IdentifierNameSyntax name)
-                {
-                    AddRelation(entity, RelationType.Uses, name.ToString());
-                }
-            }
-        }
-
-        private IEntity GetNodeByName(IEntity node, string name)
-        {
-            var namespaces = node.GetParent().GetAllAccessNamespaces();
-
-            return namespaces.Select(x => x.Length == 0 ? name : $"{x}.{name}")
-                .Where(x => _entities.ContainsKey(x))
-                .Select(x => _entities[x])
-                .FirstOrDefault();
+            return _methods.FirstOrDefault(x => x.GetSyntaxNode().IsEquivalentTo(methodDeclaration));
         }
 
         private void CreateParentClasses(IEntity entity)
         {
-            foreach (var type in entity.GetBases())
+            foreach (TypeSyntax type in entity.GetBases())
             {
                 //TODO check generic
-                var typeName = type.ToString();
+                //string typeName = type.ToString();
 
-                var edgeNode = GetNodeByName(entity, typeName);
+                IEntity edgeNode = GetEntityByName(type);
                 if (edgeNode == null)
                 {
                     continue;
@@ -177,35 +190,48 @@ namespace SyntaxTree
                         continue;
                 }
 
-                AddRelation(entity, relationType, edgeNode);
+                AddRelation(entity, edgeNode, relationType);
             }
         }
 
+        private void CreateCreationalEdges(INode node)
+        {
+            IEnumerable<SyntaxNode> childNodes = node.GetSyntaxNode().DescendantNodes();
+            foreach (var creation in childNodes.OfType<ObjectCreationExpressionSyntax>())
+            {
+                if (creation.Type is IdentifierNameSyntax name)
+                {
+                    INode node2 = (INode)GetEntityByName(creation) ?? GetMethodByName(creation);
+
+                    AddRelation(node, node2, RelationType.Creates);
+                }
+            }
+        }
+
+        private void CreateUsingEdges(INode node)
+        {
+            //var childNodes = new List<SyntaxNode>();
+            //foreach (var member in node.GetMembers())
+            //{
+            //    childNodes.AddRange(member.GetSyntaxNode().DescendantNodes(n => true));
+            //}
+
+            //TODO: Check if this is same as above for entities
+
+            IEnumerable<SyntaxNode> childNodes = node.GetSyntaxNode().DescendantNodes();
+
+            foreach (var identifier in childNodes.OfType<IdentifierNameSyntax>())
+            {
+                INode node2 = (INode)GetEntityByName(identifier) ?? GetMethodByName(identifier);
+
+                AddRelation(node, node2, RelationType.Uses);
+            }
+        }
         public void Reset()
         {
-            relations = new Dictionary<IEntity, List<Relation>>();
-        }
-    }
-
-    public static class UsingUtil
-    {
-        public static IEnumerable<string> GetAllAccessNamespaces(this IEntitiesContainer root)
-        {
-            var namespaces = new List<string>();
-            if (root is INamespace names)
-            {
-                namespaces.AddRange(names.GetRoot().GetAllAccessNamespaces());
-                namespaces.Add(names.GetName());
-            }
-
-            if (root is IUsingContainer usingContainer)
-            {
-                namespaces.AddRange(usingContainer.GetUsing().Select(x => x.Name.ToString()));
-            }
-
-            namespaces.Add("");
-
-            return namespaces;
+            relations = new List<Relation>();
+            EntityRelations = new Dictionary<IEntity, List<Relation>>();
+            MethodRelations = new Dictionary<Method, List<Relation>>();
         }
     }
 }

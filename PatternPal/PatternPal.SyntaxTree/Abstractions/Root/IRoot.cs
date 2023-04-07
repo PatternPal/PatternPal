@@ -12,7 +12,7 @@ namespace SyntaxTree.Abstractions.Root
         /// <returns>Filepath of the source</returns>
         string GetSource();
 
-        IEnumerable<IRelation<IEntity>> GetRelations(IEntity entity);
+        IEnumerable<Relation> GetRelations(INode node);
     }
 
     public interface INamespaceContainer : INode, IParent

@@ -12,7 +12,6 @@ namespace SyntaxTree.Models.Members.Method
     {
         private readonly MethodDeclarationSyntax _methodDeclaration;
         private readonly IEntity _parent;
-        public List<RelationMethod> RelationMethods = new List<RelationMethod>();
         public Method(MethodDeclarationSyntax node, IEntity parent) : base(node, parent?.GetRoot())
         {
             _methodDeclaration = node;

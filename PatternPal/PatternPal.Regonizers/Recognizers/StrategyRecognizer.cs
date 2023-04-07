@@ -67,8 +67,8 @@ namespace PatternPal.Recognizers.Recognizers
                                 }, x => x.GetFields(), "StrategyContextField", GroupCheckType.All
                             )
                         },
-                        x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.UsedBy))
-                            .Select(y => y.GetDestination()), "StrategyContext"
+                        x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.UsedBy) && y.Node2Entity != null)
+                            .Select(y => y.Node2Entity), "StrategyContext"
                     ),
 
                     //check inheritance
@@ -83,10 +83,10 @@ namespace PatternPal.Recognizers.Recognizers
                                 x => x.GetRelations().All(y => y.GetRelationType() != RelationType.Uses),
                                 "NodeDoesNotUse", 1
                             )
-                        }, x => x.GetRelations().Where(
-                            y => y.GetRelationType().Equals(RelationType.ExtendedBy) ||
-                                 y.GetRelationType().Equals(RelationType.ImplementedBy)
-                        ).Select(y => y.GetDestination()), "StrategyConcrete", GroupCheckType.All
+                        }, x => x.GetRelations().Where(y => 
+                            (y.GetRelationType().Equals(RelationType.ExtendedBy) || 
+                             y.GetRelationType().Equals(RelationType.ImplementedBy)) 
+                            && y.Node2Entity != null).Select(y => y.Node2Entity), "StrategyConcrete", GroupCheckType.All
                     )
                 }, x => new List<IEntity> {node}, "Strategy"
             );
@@ -96,11 +96,10 @@ namespace PatternPal.Recognizers.Recognizers
 
             result.RelatedSubTypes.Add(node, "AbstractStrategy");
 
-            foreach (var concrete in node.GetRelations().Where(
-                         x =>
-                             x.GetRelationType().Equals(RelationType.ExtendedBy) ||
-                             x.GetRelationType().Equals(RelationType.ImplementedBy)
-                     ).Select(x => x.GetDestination()))
+            foreach (var concrete in node.GetRelations().Where(x => 
+                         (x.GetRelationType().Equals(RelationType.ExtendedBy) || 
+                          x.GetRelationType().Equals(RelationType.ImplementedBy)) 
+                         && x.Node2Entity != null).Select(x => x.Node2Entity))
             {
                 result.RelatedSubTypes.Add(concrete, "ConcreteStrategy");
             }

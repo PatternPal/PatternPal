@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using SyntaxTree.Abstractions;
 using SyntaxTree.Abstractions.Entities;
@@ -19,8 +19,8 @@ namespace PatternPal.Recognizers.Checks
         public static bool ClassImplementsInterfaceMethod(this IEntity node, IMethod method)
         {
             return node.GetRelations()
-                .Where(x => x.GetRelationType() == RelationType.Implements)
-                .Where(interFace => InterfaceImplementsMethod(interFace.GetDestination(), method))
+                .Where(x => x.GetRelationType() == RelationType.Implements && x.Node2Entity != null)
+                .Where(interFace => InterfaceImplementsMethod(interFace.Node2Entity, method))
                 .Select(interFace => new { })
                 .Any();
         }
@@ -37,10 +37,11 @@ namespace PatternPal.Recognizers.Checks
 
             return node.GetRelations()
                 .Where(
-                    x => x.GetRelationType() == RelationType.Extends ||
-                         x.GetRelationType() == RelationType.Implements
+                    x => (x.GetRelationType() == RelationType.Extends ||
+                         x.GetRelationType() == RelationType.Implements) &&
+                         x.Node2Entity != null
                 )
-                .Where(relation => relation.GetDestination().MethodInEntityNode(methodName, amountOfParams))
+                .Where(relation => relation.Node2Entity.MethodInEntityNode(methodName, amountOfParams))
                 .Select(relation => new { })
                 .Any();
         }
@@ -63,15 +64,17 @@ namespace PatternPal.Recognizers.Checks
         public static bool ClassImplementsInterface(this IEntity node, string name)
         {
             return node.GetRelations()
-                .Any(x => x.GetRelationType() == RelationType.Implements && x.GetDestination().GetName() == name);
+                .Any(x => x.GetRelationType() == RelationType.Implements && 
+                   x.Node2Entity != null && x.Node2Entity.GetName() == name);
         }
 
         public static IEntity GetExtends(this IEntity node)
         {
             return node
                 .GetRelations()
-                .FirstOrDefault(x => x.GetRelationType() == RelationType.Extends)
-                ?.GetDestination();
+                .FirstOrDefault(x => x.GetRelationType() == RelationType.Extends &&
+                    x.Node2Entity != null)
+                ?.Node2Entity;
         }
 
         public static bool Extends(this IEntity node)
@@ -83,8 +86,8 @@ namespace PatternPal.Recognizers.Checks
         {
             return node = node
                 .GetRelations()
-                .FirstOrDefault(x => x.GetDestination().GetName() == name)
-                ?.GetDestination();
+                .FirstOrDefault(x => x.Node2Entity != null && x.Node2Entity.GetName() == name)
+                ?.Node2Entity;
         }
 
         public static bool CheckTypeDeclaration(this IEntity entityNode, EntityType nodeType)

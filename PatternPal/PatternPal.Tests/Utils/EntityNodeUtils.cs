@@ -135,9 +135,9 @@ namespace PatternPal.Tests.Utils
             return new Dictionary<string, IEntity>();
         }
 
-        public IEnumerable<IRelation<IEntity>> GetRelations(IEntity entity)
+        public IEnumerable<Relation> GetRelations(INode node)
         {
-            return Array.Empty<IRelation<IEntity>>();
+            return Array.Empty<Relation>();
         }
 
         public IEnumerable<INode> GetChildren() { return Array.Empty<INode>(); }

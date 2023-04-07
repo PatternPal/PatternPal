@@ -77,8 +77,7 @@ namespace PatternPal.Recognizers.Recognizers
                                 }, x => x.GetFields(), "StateContextField", GroupCheckType.All
                             )
                         },
-                        x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.UsedBy))
-                            .Select(y => y.GetDestination()), "StateContext"
+                        x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.UsedBy) && y.Node2Entity != null).Select(y => y.Node2Entity), "StateContext"
                     ),
 
                     //check inheritance
@@ -110,25 +109,19 @@ namespace PatternPal.Recognizers.Recognizers
                                         }, x => x.GetAllMethods(), "StateClassChangeState"
                                     )
                                 },
-                                x => entityNode.GetRelations()
-                                    .Where(y => y.GetRelationType().Equals(RelationType.Creates))
-                                    .Select(y => y.GetDestination()), "StateCreatesOtherState"
+                                x => entityNode.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Creates) && y.Node2Entity != null).Select(y => y.Node2Entity), "StateCreatesOtherState"
                             )
                         }, x => x.GetRelations().Where(
                             y =>
-                                y.GetRelationType().Equals(RelationType.ExtendedBy) ||
-                                y.GetRelationType().Equals(RelationType.ImplementedBy)
-                        ).Select(y => y.GetDestination()), "StateConcrete", GroupCheckType.All
+                                (y.GetRelationType().Equals(RelationType.ExtendedBy) ||
+                                y.GetRelationType().Equals(RelationType.ImplementedBy)) && y.Node2Entity != null
+                        ).Select(y => y.Node2Entity), "StateConcrete", GroupCheckType.All
                     )
                 }, x => new List<IEntity> { node }, "State"
             );
 
             result.Results.Add(statePatternCheck.Check(node));
-            foreach (var concrete in node.GetRelations().Where(
-                         x =>
-                             x.GetRelationType().Equals(RelationType.ExtendedBy) ||
-                             x.GetRelationType().Equals(RelationType.ImplementedBy)
-                     ).Select(x => x.GetDestination()))
+            foreach (var concrete in node.GetRelations().Where(x => (x.GetRelationType().Equals(RelationType.ExtendedBy) || x.GetRelationType().Equals(RelationType.ImplementedBy)) && x.Node2Entity != null).Select(x => x.Node2Entity))
             {
                 result.RelatedSubTypes.Add(concrete, "ConcreteState");
             }

@@ -126,7 +126,7 @@ namespace SyntaxTree.Models.Entities
             return GetName();
         }
 
-        public IEnumerable<IRelation<IEntity>> GetRelations()
+        public IEnumerable<Relation> GetRelations()
         {
             return _parent.GetRoot().GetRelations(this);
         }

@@ -8,6 +8,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using SyntaxTree.Abstractions;
 using SyntaxTree.Abstractions.Entities;
 using SyntaxTree.Abstractions.Root;
+using SyntaxTree.Models.Members.Method;
 using SyntaxTree.Models.Root;
 
 #endregion
@@ -78,22 +79,29 @@ namespace SyntaxTree
         public void CreateGraph()
         {
             _relations.Reset();
-            _relations.CreateEdgesOfEntities();
+            _relations.CreateEdges();
         }
 
         /// <summary>
-        ///     Get all relations that a entity has
+        ///     Get all relations that a node has
         /// </summary>
-        /// <param name="entity">The entity</param>
+        /// <param name="node">The node</param>
         /// <returns>A wrapper of the entity with the relations</returns>
-        public IEnumerable<IRelation<IEntity>> GetRelations(IEntity entity)
+        public IEnumerable<Relation> GetRelations(INode node)
         {
-            if (!_relations.relations.ContainsKey(entity))
+            switch (node)
             {
-                return Array.Empty<IRelation<IEntity>>();
+                case IEntity e:
+                    if (_relations.EntityRelations.TryGetValue(e, out List<Relation> result))
+                        return result;
+                    break;
+                case Method m:
+                    if(_relations.MethodRelations.TryGetValue(m, out List<Relation> result2))
+                        return result2;
+                    break;
             }
 
-            return _relations.relations[ entity ].AsReadOnly();
+            return new List<Relation>();
         }
     }
 }

@@ -87,12 +87,15 @@ namespace PatternPal.Recognizers.Recognizers
                                     }, x => x.GetAllMethods(), "ConcreteDecoratorMethod")
                             },
                             x => entityNode.GetRelations()
-                                .Where(y => y.GetRelationType().Equals(RelationType.ExtendedBy))
-                                .Select(y => y.GetDestination()), "DecoratorConcrete", GroupCheckType.Median)
+                                .Where(y => y.GetRelationType().Equals(RelationType.ExtendedBy) && 
+                                            y.Node2Entity != null)
+                                .Select(y => y.Node2Entity), "DecoratorConcrete", GroupCheckType.Median)
                     },
                     x => x.GetRelations()
-                        .Where(y => y.GetRelationType().Equals(RelationType.Implements) ||
-                                    y.GetRelationType().Equals(RelationType.Extends)).Select(y => y.GetDestination()),
+                        .Where(y => (y.GetRelationType().Equals(RelationType.Implements) ||
+                                    y.GetRelationType().Equals(RelationType.Extends))
+                                    && y.Node2Entity != null)
+                        .Select(y => y.Node2Entity),
                     "DecoratorComponent")
             }, x => new List<IEntity> {entityNode}, "Decorator");
             var checkResult = decoratorCheck.Check(entityNode);
