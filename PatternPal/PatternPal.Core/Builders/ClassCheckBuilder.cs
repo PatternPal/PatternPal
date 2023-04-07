@@ -1,22 +1,33 @@
 ﻿namespace PatternPal.Core.Builders;
 
-internal interface IClassCheckBuilder : ICheckBuilder
+internal class ClassCheckBuilder : CheckCollectionBuilder
 {
-    IClassCheckBuilder Method(
-        Action< IMethodCheckBuilder > builderAction);
-}
+    private MethodCheckBuilder ? _methodCheckBuilder;
 
-internal class ClassCheckBuilder : IClassCheckBuilder
-{
-    private IMethodCheckBuilder ? _methodCheckBuilder;
-
-    public ICheck Build() => new ClassCheck();
-
-    IClassCheckBuilder IClassCheckBuilder.Method(
-        Action< IMethodCheckBuilder > builderAction)
+    public ClassCheckBuilder()
+        : base(CheckCollectionKind.All)
     {
-        _methodCheckBuilder ??= new MethodCheckBuilder();
-        builderAction(_methodCheckBuilder);
+    }
+
+    public override ICheck Build() => new ClassCheck();
+
+    internal ClassCheckBuilder Any(
+        params ICheckBuilder[ ] checks)
+    {
+        CheckBuilders.Add(
+            new CheckCollectionBuilder(
+                CheckCollectionKind.Any,
+                checks));
         return this;
+    }
+
+    internal ClassCheckBuilder Method(
+        Action< MethodCheckBuilder > builderAction)
+    {
+        // TODO CV: Can we define the implementing type on the interface so we don't have to specify the types explicitly.
+        return ICheckBuilder.BuildCheck(
+            this,
+            ref _methodCheckBuilder,
+            builderAction);
     }
 }

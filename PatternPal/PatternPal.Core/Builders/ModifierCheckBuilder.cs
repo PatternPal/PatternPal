@@ -1,15 +1,6 @@
 ﻿namespace PatternPal.Core.Builders;
 
-internal interface IModifierCheckBuilder : ICheckBuilder
-{
-    IModifierCheckBuilder Modifiers(
-        params IModifier[ ] modifiers);
-
-    IModifierCheckBuilder NotModifiers(
-        params IModifier[ ] notModifiers);
-}
-
-internal class ModifierCheckBuilder : IModifierCheckBuilder
+internal class ModifierCheckBuilder : ICheckBuilder
 {
     private readonly List< IModifier > _modifiers;
     private readonly List< IModifier > _notModifiers;
@@ -20,18 +11,18 @@ internal class ModifierCheckBuilder : IModifierCheckBuilder
         _notModifiers = new List< IModifier >();
     }
 
-    ICheck ICheckBuilder.Build() => new ModifierCheck(
+    public ICheck Build() => new ModifierCheck(
         _modifiers,
         _notModifiers);
 
-    IModifierCheckBuilder IModifierCheckBuilder.Modifiers(
+    internal ModifierCheckBuilder Modifiers(
         params IModifier[ ] modifiers)
     {
         _modifiers.AddRange(modifiers);
         return this;
     }
 
-    IModifierCheckBuilder IModifierCheckBuilder.NotModifiers(
+    internal ModifierCheckBuilder NotModifiers(
         params IModifier[ ] notModifiers)
     {
         _notModifiers.AddRange(notModifiers);

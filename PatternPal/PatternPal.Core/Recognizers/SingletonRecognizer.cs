@@ -3,18 +3,19 @@
 internal class SingletonRecognizer
 {
     internal void Create(
-        IRootCheckBuilder rootCheckBuilder)
+        RootCheckBuilder rootCheckBuilder)
     {
         rootCheckBuilder
             .Class(
                 classBuilder => classBuilder
-                    .Method(
-                        methodBuilder => methodBuilder
-                                         .Modifiers(
-                                             modifierBuilder => modifierBuilder
-                                                 .NotModifiers(Modifiers.Static)
-                                         )
-                                         .ReturnType(ICheckBuilder.GetCurrentEntity)
+                    .Any(
+                        new MethodCheckBuilder()
+                            .Modifiers(
+                                modifierBuilder => modifierBuilder
+                                                   .Modifiers(Modifiers.Static)
+                                                   .NotModifiers(Modifiers.Private)
+                            )
+                            .ReturnType(ICheckBuilder.GetCurrentEntity)
                     )
             );
     }
