@@ -23,7 +23,7 @@ internal class CheckCollectionBuilder : ICheckBuilder
         IEnumerable< ICheckBuilder > checkBuilders)
     {
         _checkCollectionKind = checkCollectionKind;
-        CheckBuilders = new List< ICheckBuilder >(checkBuilders);
+        CheckBuilders = checkBuilders as List< ICheckBuilder > ?? new List< ICheckBuilder >(checkBuilders);
     }
 
     public virtual ICheck Build()

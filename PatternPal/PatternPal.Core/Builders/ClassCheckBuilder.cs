@@ -17,12 +17,20 @@ internal class ClassCheckBuilder : CheckCollectionBuilder
     }
 
     internal ClassCheckBuilder Any(
-        params ICheckBuilder[ ] checks)
+        params Action< ClassCheckBuilder >[ ] builderActions)
     {
+        List< ICheckBuilder > builders = new( builderActions.Length );
+        foreach (Action< ClassCheckBuilder > builderAction in builderActions)
+        {
+            ClassCheckBuilder nestedBuilder = new();
+            builderAction(nestedBuilder);
+            builders.AddRange(nestedBuilder.CheckBuilders);
+        }
+
         CheckBuilders.Add(
             new CheckCollectionBuilder(
                 CheckCollectionKind.Any,
-                checks));
+                builders));
         return this;
     }
 
