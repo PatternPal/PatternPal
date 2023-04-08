@@ -16,6 +16,13 @@ internal class MethodCheckBuilder : CheckCollectionBuilder
         return this;
     }
 
+    internal MethodCheckBuilder Not(
+        ICheckBuilder checkBuilder)
+    {
+        CheckBuilders.Add(new NotCheckBuilder(checkBuilder));
+        return this;
+    }
+
     internal MethodCheckBuilder Modifiers(
         params IModifier[ ] modifiers)
     {

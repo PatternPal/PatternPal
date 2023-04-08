@@ -26,4 +26,11 @@ internal class RootCheckBuilder : ICheckBuilder
         buildAction(_classCheckBuilder);
         return this;
     }
+
+    internal RootCheckBuilder Class(
+        params ICheckBuilder[ ] checkBuilders)
+    {
+        _classCheckBuilder = new ClassCheckBuilder(checkBuilders);
+        return this;
+    }
 }

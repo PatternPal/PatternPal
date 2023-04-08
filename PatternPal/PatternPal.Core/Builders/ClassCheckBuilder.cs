@@ -7,12 +7,27 @@ internal class ClassCheckBuilder : CheckCollectionBuilder
     {
     }
 
+    public ClassCheckBuilder(
+        IEnumerable< ICheckBuilder > checkBuilders)
+        : base(
+            CheckCollectionKind.All,
+            checkBuilders)
+    {
+    }
+
     public override ICheck Build() => new ClassCheck();
 
     internal ClassCheckBuilder Not(
         Action< ClassCheckBuilder > builderAction)
     {
         base.Not(builderAction);
+        return this;
+    }
+
+    internal ClassCheckBuilder Not(
+        ICheckBuilder checkBuilder)
+    {
+        CheckBuilders.Add(new NotCheckBuilder(checkBuilder));
         return this;
     }
 
@@ -31,6 +46,16 @@ internal class ClassCheckBuilder : CheckCollectionBuilder
             new CheckCollectionBuilder(
                 CheckCollectionKind.Any,
                 builders));
+        return this;
+    }
+
+    internal ClassCheckBuilder Any(
+        params ICheckBuilder[ ] checkBuilders)
+    {
+        CheckBuilders.Add(
+            new CheckCollectionBuilder(
+                CheckCollectionKind.Any,
+                checkBuilders));
         return this;
     }
 
