@@ -11,14 +11,15 @@ internal class ModifierCheck : ICheck
     }
 
     public bool Check(
+        RecognizerContext ctx,
         INode node)
     {
         if (node is not IModified modified)
         {
-            throw new ArgumentException(
-                $"Node must implement {typeof( IModified )}",
-                nameof( node ));
+            return false;
         }
+
+        Console.WriteLine("got modifier check");
 
         // TODO: This method is terribly inefficient, rewrite Modifiers to be a flags enum and just
         // check if a bit is set or not.

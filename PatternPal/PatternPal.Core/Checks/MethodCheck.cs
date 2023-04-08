@@ -2,20 +2,40 @@
 
 internal class MethodCheck : ICheck
 {
-    internal ModifierCheck ? ModifierCheck { get; init; }
+    private readonly IEnumerable< ICheck > _checks;
+
+    // TODO CV: Handle multiple matches (e.g. a method check for a public method may match many methods).
+    internal IMethod ? MatchedEntity { get; private set; }
+
+    internal MethodCheck(
+        IEnumerable< ICheck > checks)
+    {
+        _checks = checks;
+    }
 
     public bool Check(
+        RecognizerContext ctx,
         INode node)
     {
-        if (node is not IEntity entity)
+        if (node is not IMethod method)
         {
-            throw new ArgumentException(
-                $"Node must implement {typeof( IEntity )}",
-                nameof( node ));
+            return false;
         }
 
-        bool ? modifierResult = ModifierCheck?.Check(entity);
+        ctx.ParentCheck = this;
 
+        foreach (ICheck check in _checks)
+        {
+            if (!check.Check(
+                ctx,
+                node))
+            {
+                return false;
+            }
+        }
+
+        Console.WriteLine($"Got method '{method}'");
+        MatchedEntity = method;
         return true;
     }
 }

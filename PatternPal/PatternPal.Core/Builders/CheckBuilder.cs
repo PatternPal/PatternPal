@@ -9,28 +9,3 @@ internal interface ICheckBuilder
 
     ICheck Build();
 }
-
-internal class RootCheckBuilder : ICheckBuilder
-{
-    private ClassCheckBuilder ? _classCheckBuilder;
-
-    public ICheck Build()
-    {
-        return new RootCheck();
-    }
-
-    internal RootCheckBuilder Class(
-        Action< ClassCheckBuilder > buildAction)
-    {
-        _classCheckBuilder ??= new ClassCheckBuilder();
-        buildAction(_classCheckBuilder);
-        return this;
-    }
-
-    internal RootCheckBuilder Class(
-        params ICheckBuilder[ ] checkBuilders)
-    {
-        _classCheckBuilder = new ClassCheckBuilder(checkBuilders);
-        return this;
-    }
-}

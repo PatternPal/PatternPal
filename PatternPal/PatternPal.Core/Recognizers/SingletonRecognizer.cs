@@ -4,59 +4,19 @@ namespace PatternPal.Core.Recognizers;
 
 internal class SingletonRecognizer
 {
-    internal void Create(
-        RootCheckBuilder rootCheckBuilder)
-    {
-        rootCheckBuilder
-            .Class(
-                c => c
-                     .Any(
-                         a => a
-                             .Method(
-                                 m => m
-                                      .Modifiers(Modifiers.Static)
-                                      .Not(
-                                          n => n
-                                              .Modifiers(Modifiers.Private)
-                                      )
-                                      .ReturnType(ICheckBuilder.GetCurrentEntity)
-                             ),
-                         a => a
-                             .Method(
-                                 m => m
-                                      .Modifiers(Modifiers.Public)
-                                      .Not(
-                                          n => n
-                                              .Modifiers(Modifiers.Static)
-                                      )
-                             )
-                     )
-                     .Not(
-                         n => n
-                             .Method(
-                                 m => m
-                                     .Modifiers(Modifiers.Public)
-                             )
-                     )
-            );
-    }
-
     internal IEnumerable< ICheckBuilder > Create()
     {
+        MethodCheckBuilder instanceMethod =
+            Method()
+                .Modifiers(Modifiers.Static);
+
         yield return Class(
-            Any(
-                Method()
-                    .Modifiers(Modifiers.Static)
-                    .Not(Modifiers2(Modifiers.Private))
-                    .ReturnType(ICheckBuilder.GetCurrentEntity),
-                Method()
-                    .Modifiers(Modifiers.Public)
-                    .Not(Modifiers2(Modifiers.Static))
-            ),
-            Not(
-                Method()
-                    .Modifiers(Modifiers.Public)
-            )
+            instanceMethod
+        );
+
+        yield return Class(
+            Method()
+                .Uses(instanceMethod.Result)
         );
     }
 }

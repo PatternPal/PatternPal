@@ -14,6 +14,7 @@ internal class CheckCollection : ICheck
     }
 
     bool ICheck.Check(
+        RecognizerContext ctx,
         INode node)
     {
         // TODO: Run check recursively on _checks and decide result based on _checkCollectionKind.

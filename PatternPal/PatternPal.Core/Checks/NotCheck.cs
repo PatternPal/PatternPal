@@ -11,8 +11,11 @@ internal class NotCheck : ICheck
     }
 
     bool ICheck.Check(
+        RecognizerContext ctx,
         INode node)
     {
-        return !_check.Check(node);
+        return !_check.Check(
+            ctx,
+            node);
     }
 }

@@ -3,14 +3,6 @@
 internal interface ICheck
 {
     bool Check(
+        RecognizerContext ctx,
         INode node);
-}
-
-internal class RootCheck : ICheck
-{
-    public bool Check(
-        INode node)
-    {
-        return false;
-    }
 }

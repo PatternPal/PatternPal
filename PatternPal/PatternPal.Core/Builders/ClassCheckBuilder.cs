@@ -15,7 +15,7 @@ internal class ClassCheckBuilder : CheckCollectionBuilder
     {
     }
 
-    public override ICheck Build() => new ClassCheck();
+    public override ICheck Build() => new ClassCheck(CheckBuilders.Select(checkBuilder => checkBuilder.Build()));
 
     internal ClassCheckBuilder Not(
         Action< ClassCheckBuilder > builderAction)

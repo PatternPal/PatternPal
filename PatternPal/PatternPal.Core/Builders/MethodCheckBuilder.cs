@@ -2,10 +2,15 @@
 
 internal class MethodCheckBuilder : CheckCollectionBuilder
 {
+    private readonly MethodCheck _check;
+
     internal MethodCheckBuilder()
         : base(CheckCollectionKind.All)
     {
+        _check = new MethodCheck(CheckBuilders.Select(checkBuilder => checkBuilder.Build()));
     }
+
+    public override ICheck Build() => _check;
 
     internal MethodCheckBuilder Not(
         Action< MethodCheckBuilder > builderAction)
@@ -42,6 +47,15 @@ internal class MethodCheckBuilder : CheckCollectionBuilder
     internal MethodCheckBuilder ReturnType(
         GetCurrentEntity getCurrentEntity)
     {
+        return this;
+    }
+
+    internal Func< INode > Result => () => _check.MatchedEntity!;
+
+    internal MethodCheckBuilder Uses(
+        Func< INode > getNode)
+    {
+        CheckBuilders.Add(new UsesCheckBuilder(getNode));
         return this;
     }
 }
