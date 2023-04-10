@@ -18,6 +18,22 @@ internal class SingletonRecognizer
                 Modifiers(
                     Modifier.Static,
                     Modifier.Private)
+            ),
+            Constructor(
+                Modifiers(Modifier.Private)
+            ),
+            Not(
+                Any(
+                    Constructor(
+                        Modifiers(Modifier.Public)
+                    ),
+                    Constructor(
+                        Modifiers(Modifier.Internal)
+                    ),
+                    Constructor(
+                        Modifiers(Modifier.Protected)
+                    )
+                )
             )
         );
 
@@ -52,5 +68,8 @@ internal static class CheckBuilder
         Func< INode > getMatchedEntity) => new( getMatchedEntity );
 
     internal static FieldCheckBuilder Field(
+        params ICheckBuilder[ ] checkBuilders) => new( checkBuilders );
+
+    internal static ConstructorCheckBuilder Constructor(
         params ICheckBuilder[ ] checkBuilders) => new( checkBuilders );
 }

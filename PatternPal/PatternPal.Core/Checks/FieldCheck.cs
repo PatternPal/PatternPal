@@ -11,14 +11,14 @@ internal class FieldCheck : ICheck
 
     public bool Check(RecognizerContext ctx, INode node)
     {
-        if(node is not IField) return false;
+        if(node is not IField field) return false;
 
         foreach (ICheck check in _checks) 
         {
             if (!check.Check(ctx, node)) return false;
         }
 
-        Console.WriteLine("field found");
+        Console.WriteLine($"Got field {field}");
 
         return true;
     }

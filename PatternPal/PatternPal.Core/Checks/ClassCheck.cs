@@ -40,6 +40,15 @@ internal class ClassCheck : ICheck
                     }
                     break;
                 }
+                case ConstructorCheck constructorCheck:
+                {
+                    foreach (IConstructor constructor in classEntity.GetConstructors())
+                    {
+                        constructorCheck.Check(ctx, constructor);
+                    }
+
+                    break;
+                }
                 default:
                 {
                     Console.WriteLine($"Unexpected check: {check.GetType().Name}");
