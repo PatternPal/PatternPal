@@ -8,14 +8,16 @@ internal class SingletonRecognizer
     {
         MethodCheckBuilder instanceMethod =
             Method(
-                Modifiers2(Modifiers.Static),
-                Not(Modifiers2(Modifiers.Private))
+                Modifiers(Modifier.Static),
+                Not(Modifiers(Modifier.Private))
             );
 
         yield return Class(
             instanceMethod,
             Field(
-                Modifiers2(Modifiers.Static, Modifiers.Private)
+                Modifiers(
+                    Modifier.Static,
+                    Modifier.Private)
             )
         );
 
@@ -41,15 +43,14 @@ internal static class CheckBuilder
         params ICheckBuilder[ ] checkBuilders) => new( checkBuilders );
 
     internal static MethodCheckBuilder Method(
-        params ICheckBuilder[] checkBuilders) => new (checkBuilders );
+        params ICheckBuilder[ ] checkBuilders) => new( checkBuilders );
 
-    internal static ModifierCheckBuilder Modifiers2(
+    internal static ModifierCheckBuilder Modifiers(
         params IModifier[ ] modifiers) => new( modifiers );
 
     internal static UsesCheckBuilder Uses(
-        Func<INode> getMatchedEntity) => new(getMatchedEntity);
+        Func< INode > getMatchedEntity) => new( getMatchedEntity );
 
     internal static FieldCheckBuilder Field(
-        params ICheckBuilder[] checkBuilders) => new( checkBuilders );
+        params ICheckBuilder[ ] checkBuilders) => new( checkBuilders );
 }
-

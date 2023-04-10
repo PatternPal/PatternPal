@@ -23,7 +23,7 @@ namespace PatternPal.Recognizers.Recognizers
             IEntity productnode = null;
 
             new EntityCheck()
-                .Modifiers(Modifiers.Abstract)
+                .Modifiers(Modifier.Abstract)
                 .Type(EntityType.Class);
 
             var factoryMethodChecks = new GroupCheck<IEntity, IEntity>(

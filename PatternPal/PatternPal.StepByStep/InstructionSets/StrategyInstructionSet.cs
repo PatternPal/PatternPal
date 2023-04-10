@@ -127,7 +127,7 @@ namespace PatternPal.StepByStep.InstructionSets
                 var entity = state["strategy.abstract"];
 
                 return new EntityCheck()
-                    .Modifiers(Modifiers.Abstract)
+                    .Modifiers(Modifier.Abstract)
                     .Check(entity);
             }
         }
