@@ -4,7 +4,7 @@ internal class NotCheckBuilder : ICheckBuilder
 {
     private readonly ICheckBuilder _checkBuilder;
 
-    public NotCheckBuilder(
+    internal NotCheckBuilder(
         ICheckBuilder checkBuilder)
     {
         _checkBuilder = checkBuilder;

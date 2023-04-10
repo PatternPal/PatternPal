@@ -38,13 +38,4 @@ internal class CheckCollectionBuilder : ICheckBuilder
             _checkCollectionKind,
             checks);
     }
-
-    protected void Not< TCheckBuilder >(
-        Action< TCheckBuilder > builderAction)
-        where TCheckBuilder : ICheckBuilder, new()
-    {
-        TCheckBuilder nestedBuilder = new();
-        builderAction(nestedBuilder);
-        CheckBuilders.Add(new NotCheckBuilder(nestedBuilder));
-    }
 }

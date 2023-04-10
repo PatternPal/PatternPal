@@ -4,14 +4,8 @@ internal class MethodCheckBuilder : CheckCollectionBuilder
 {
     private readonly MethodCheck _check;
 
-    internal MethodCheckBuilder()
-        : base(CheckCollectionKind.All)
-    {
-        _check = new MethodCheck(CheckBuilders.Select(checkBuilder => checkBuilder.Build()));
-    }
-
-    public MethodCheckBuilder(
-        IEnumerable<ICheckBuilder> checkBuilders)
+    internal MethodCheckBuilder(
+        IEnumerable< ICheckBuilder > checkBuilders)
         : base(
             CheckCollectionKind.All,
             checkBuilders)
@@ -21,5 +15,5 @@ internal class MethodCheckBuilder : CheckCollectionBuilder
 
     public override ICheck Build() => _check;
 
-    internal Func<INode> Result => () => _check.MatchedEntity!;
+    internal Func< INode > Result => () => _check.MatchedEntity!;
 }
