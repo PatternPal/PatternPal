@@ -28,9 +28,15 @@ internal class ClassCheck : ICheck
                 {
                     foreach (IMethod method in classEntity.GetMethods())
                     {
-                        methodCheck.Check(
-                            ctx,
-                            method);
+                        methodCheck.Check(ctx, method);
+                    }
+                    break;
+                }
+                case FieldCheck fieldCheck:
+                {
+                    foreach (IField field in classEntity.GetFields())
+                    {
+                        fieldCheck.Check(ctx, field);
                     }
                     break;
                 }

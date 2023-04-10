@@ -1,9 +1,0 @@
-{
-  "profiles": {
-    "PatternPal.ConsoleApp": {
-      "commandName": "Project",
-      "commandLineArgs": "--Singleton .\\PatternPal\\PatternPal.Tests\\TestClasses\\Singleton\\SingleTonTestCase5.cs",
-      "workingDirectory": "I:\\Dev\\PatternPal"
-    }
-  }
-}
