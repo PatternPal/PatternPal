@@ -12,6 +12,13 @@ internal class ClassCheck : ICheck
 
     public bool Check(
         RecognizerContext ctx,
+        IClass node)
+    {
+        return true;
+    }
+
+    public bool Check(
+        RecognizerContext ctx,
         INode node)
     {
         if (node is not IClass classEntity)
@@ -19,32 +26,74 @@ internal class ClassCheck : ICheck
             return false;
         }
 
-        Console.WriteLine($"Got class '{classEntity}'");
         foreach (ICheck check in _checks)
         {
             switch (check)
             {
                 case MethodCheck methodCheck:
                 {
+                    bool hasMatch = false;
                     foreach (IMethod method in classEntity.GetMethods())
                     {
-                        methodCheck.Check(ctx, method);
+                        if (methodCheck.Check(
+                            ctx,
+                            method))
+                        {
+                            hasMatch = true;
+                            break;
+                        }
+                    }
+                    if (!hasMatch)
+                    {
+                        return false;
                     }
                     break;
                 }
                 case FieldCheck fieldCheck:
                 {
+                    bool hasMatch = false;
                     foreach (IField field in classEntity.GetFields())
                     {
-                        fieldCheck.Check(ctx, field);
+                        if (fieldCheck.Check(
+                            ctx,
+                            field))
+                        {
+                            hasMatch = true;
+                            break;
+                        }
+                    }
+                    if (!hasMatch)
+                    {
+                        return false;
                     }
                     break;
                 }
                 case ConstructorCheck constructorCheck:
                 {
+                    bool hasMatch = false;
                     foreach (IConstructor constructor in classEntity.GetConstructors())
                     {
-                        constructorCheck.Check(ctx, constructor);
+                        if (constructorCheck.Check(
+                            ctx,
+                            constructor))
+                        {
+                            hasMatch = true;
+                            break;
+                        }
+                    }
+                    if (!hasMatch)
+                    {
+                        return false;
+                    }
+                    break;
+                }
+                case NotCheck:
+                {
+                    if (!check.Check(
+                        ctx,
+                        node))
+                    {
+                        return false;
                     }
 
                     break;
@@ -56,6 +105,8 @@ internal class ClassCheck : ICheck
                 }
             }
         }
+
+        Console.WriteLine($"Got class '{classEntity}'");
         return true;
     }
 }

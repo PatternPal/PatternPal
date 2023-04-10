@@ -21,11 +21,33 @@ internal class CheckCollection : ICheck
         switch (_checkCollectionKind)
         {
             case CheckCollectionKind.All:
-                throw new NotImplementedException();
-                break;
+            {
+                foreach (ICheck check in _checks)
+                {
+                    if (!check.Check(
+                        ctx,
+                        node))
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
             case CheckCollectionKind.Any:
-                throw new NotImplementedException();
-                break;
+            {
+                foreach (ICheck check in _checks)
+                {
+                    if (check.Check(
+                        ctx,
+                        node))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
             default:
                 throw new NotImplementedException();
         }

@@ -19,8 +19,6 @@ internal class ModifierCheck : ICheck
             return false;
         }
 
-        Console.WriteLine("got modifier check");
-
         // TODO: This method is terribly inefficient, rewrite Modifiers to be a flags enum and just
         // check if a bit is set or not.
         // TODO: Report which modifiers are missing/incorrect.

@@ -127,20 +127,15 @@ public class RecognizerRunner
                                 };
         foreach (ICheckBuilder checkBuilder in checkBuilders)
         {
-            Console.WriteLine();
-            Console.WriteLine("Got check builder");
-            Console.WriteLine();
             ICheck check = checkBuilder.Build();
 
             foreach (IEntity entity in entities)
             {
-                Console.WriteLine("Got entity");
                 bool result = check.Check(
                     ctx,
                     entity);
-                Console.WriteLine($"Result: {result}");
-                Console.WriteLine();
             }
+            Console.WriteLine();
         }
 
         return new List< RecognitionResult >();
