@@ -1,35 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PatternPal.Extension.Commands;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
+﻿#region
 
-namespace PatternPal.Extension
+using System;
+
+using EnvDTE;
+
+using Microsoft.VisualStudio.Shell;
+
+#endregion
+
+namespace PatternPal.Extension.Commands
 {
     public static class SubscribeBuildEvents
     {
         /// <summary>
         ///     VS Package that provides this command, not null.
         /// </summary>
-        private static PatternPalExtensionPackage package;
-        public static void Initialize(EnvDTE.DTE dte, PatternPalExtensionPackage package)
+        private static PatternPalExtensionPackage _package;
+
+        public static void Initialize(
+            DTE dte,
+            PatternPalExtensionPackage package)
         {
-            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+            ThreadHelper.ThrowIfNotOnUIThread();
             dte.Events.BuildEvents.OnBuildDone += BuildEvents_OnBuildDone;
-            SubscribeBuildEvents.package = package;
+            _package = package;
         }
 
-        private static async void BuildEvents_OnBuildDone(EnvDTE.vsBuildScope Scope, EnvDTE.vsBuildAction Action)
+        private static void BuildEvents_OnBuildDone(
+            vsBuildScope Scope,
+            vsBuildAction Action)
         {
-            if (package.DoLogData)
-            {
-                try { await LoggingApiClient.PostActionAsync(Action); }
-                catch (Exception ex) { }
-            }
+            ThreadHelper.JoinableTaskFactory.Run(
+                async () =>
+                {
+                    if (_package.DoLogData)
+                    {
+                        try { await LoggingApiClient.PostActionAsync(Action); }
+                        catch (Exception) { }
+                    }
+                });
         }
     }
 }

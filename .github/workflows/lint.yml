@@ -8,7 +8,7 @@ on:
     paths:
       - 'PatternPal/**'
   pull_request:
-    types: [ opened, synchronize, reopened ]
+    types: [ opened, synchronize, reopened, ready_for_review ]
     paths:
       - 'PatternPal/**'
   workflow_dispatch:
@@ -16,6 +16,7 @@ on:
 jobs:
   inspection:
     runs-on: windows-latest #windows-latest, ubuntu-latest, macos-latest
+    if: github.event.pull_request.draft == false
     name: Inspection
     steps:
       - name: Checkout

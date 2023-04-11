@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 
 using EnvDTE;
 
@@ -31,8 +30,7 @@ namespace PatternPal.Extension.Views
     /// <summary>
     ///     Interaction logic for DetectorView.xaml
     /// </summary>
-    public partial class DetectorView : UserControl,
-                                        IVsSolutionEvents,
+    public partial class DetectorView : IVsSolutionEvents,
                                         IVsRunningDocTableEvents
     {
         /// <summary>
@@ -42,7 +40,6 @@ namespace PatternPal.Extension.Views
         {
             InitializeComponent();
             AddViewModels();
-            Loading = false;
             Dispatcher.VerifyAccess();
             LoadProject();
             SelectAll.IsChecked = true;
@@ -60,11 +57,8 @@ namespace PatternPal.Extension.Views
         }
 
         private List< DesignPatternViewModel > ViewModels { get; set; }
-        private List< string > Paths { get; set; }
         private List< Project > Projects { get; set; }
-        private bool Loading { get; set; }
         private DTE Dte { get; }
-        private List< RecognizeResult > Results { get; set; }
 
         public int OnAfterOpenProject(
             IVsHierarchy pHierarchy,
@@ -179,6 +173,7 @@ namespace PatternPal.Extension.Views
 
         private void SaveAllDocuments()
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             Dte.Documents.SaveAll();
         }
 
@@ -198,16 +193,20 @@ namespace PatternPal.Extension.Views
             object sender,
             RoutedEventArgs e)
         {
-            SaveAllDocuments();
-            Analyse();
+            ThreadHelper.JoinableTaskFactory.Run(AnalyzeAsync);
         }
 
-        private async Task Analyse()
+        private async Task AnalyzeAsync()
         {
             if (null == Dte)
             {
                 return;
             }
+
+            // Switch to main thread, which is required to access the `DTE` service.
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            SaveAllDocuments();
 
             RecognizeRequest request = new RecognizeRequest();
 
@@ -256,7 +255,6 @@ namespace PatternPal.Extension.Views
             CreateResultViewModels(results);
             SummaryControl.Text = "Recognizer is finished";
 
-            Loading = false;
             ProgressStatusBlock.Text = "";
         }
 
@@ -266,11 +264,9 @@ namespace PatternPal.Extension.Views
         {
             List< DesignPatternViewModel > designPatternViewModels = PatternCheckbox.listBox.Items.OfType< DesignPatternViewModel >().ToList();
 
-            for (int i = 0;
-                 i < designPatternViewModels.Count();
-                 i++)
+            foreach (DesignPatternViewModel designPattern in designPatternViewModels)
             {
-                designPatternViewModels[ i ].IsChecked = true;
+                designPattern.IsChecked = true;
             }
         }
 
@@ -280,11 +276,9 @@ namespace PatternPal.Extension.Views
         {
             List< DesignPatternViewModel > designPatternViewModels = PatternCheckbox.listBox.Items.OfType< DesignPatternViewModel >().ToList();
 
-            for (int i = 0;
-                 i < designPatternViewModels.Count();
-                 i++)
+            foreach (DesignPatternViewModel designPattern in designPatternViewModels)
             {
-                designPatternViewModels[ i ].IsChecked = false;
+                designPattern.IsChecked = false;
             }
         }
 
@@ -311,7 +305,7 @@ namespace PatternPal.Extension.Views
         int IVsRunningDocTableEvents.OnAfterSave(
             uint docCookie)
         {
-            Analyse();
+            ThreadHelper.JoinableTaskFactory.Run(AnalyzeAsync);
             return VSConstants.S_OK;
         }
 
@@ -343,14 +337,14 @@ namespace PatternPal.Extension.Views
             object sender,
             RoutedEventArgs e)
         {
-            Analyse();
+            ThreadHelper.JoinableTaskFactory.Run(AnalyzeAsync);
         }
 
         private void ShowAllCheckBox_OnUnchecked(
             object sender,
             RoutedEventArgs e)
         {
-            Analyse();
+            ThreadHelper.JoinableTaskFactory.Run(AnalyzeAsync);
         }
     }
 }
