@@ -12,7 +12,4 @@
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="NewFolder\**" />
-  </ItemGroup>
 </Project>

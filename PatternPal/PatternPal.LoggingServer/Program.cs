@@ -15,9 +15,6 @@ internal static class Program
 
         builder.Services.AddGrpc();
 
-
-
-
         builder.Services.AddDbContext<ProgSnap2ContextClass>(options => 
             options.UseNpgsql( builder.Configuration.GetConnectionString("PostgresConnection") )
         );

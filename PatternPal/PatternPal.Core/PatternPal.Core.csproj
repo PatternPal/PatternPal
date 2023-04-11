@@ -47,6 +47,7 @@
 
   <ItemGroup>
     <Protobuf Include="../../Protos/patternpal.proto" GrpcServices="Server" Link="Protos/patternpal.proto" />
+    <Protobuf Include ="../../Protos/log.proto" GrpcServices="Client" Link="Protos/log.proto" />
   </ItemGroup>
 
 </Project>

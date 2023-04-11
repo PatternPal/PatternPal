@@ -8,7 +8,6 @@ namespace PatternPal.LoggingServer.Models
 {
     public class ProgSnap2Event
     {
-
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid EventId { get; set; }
 
@@ -20,7 +19,6 @@ namespace PatternPal.LoggingServer.Models
         public EventType EventType { get; set; }
 
         public DateTimeOffset ServerDatetime { get; set; }
-
         public DateTimeOffset ClientDatetime { get; set; }
 
     }
