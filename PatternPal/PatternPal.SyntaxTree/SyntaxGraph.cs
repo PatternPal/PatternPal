@@ -43,6 +43,8 @@ namespace SyntaxTree
                 source,
                 this);
 
+            SemanticModels.AddTreesToCompilation(tree);
+
             _roots.Add(root);
             foreach (KeyValuePair< string, IEntity > pair in root.GetAllEntities())
             {

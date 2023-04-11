@@ -101,13 +101,13 @@ namespace SyntaxTree
                     break;
                 case Method m:
                     relation.Node2Method = m;
-                    relationReversed.Node2Method = m;
+                    relationReversed.Node1Method = m;
                     break;
                 default:
                     throw new ArgumentException($"Cannot add relations to {node2}");
             }
 
-            if (relations.Contains(relation))
+            if (relations.Contains(relation) || relations.Contains(relationReversed))
                 return;
 
             switch (node1)
@@ -132,32 +132,44 @@ namespace SyntaxTree
             {
                 case IEntity e:
                     if (!EntityRelations.ContainsKey(e))
-                        EntityRelations[e] = new List<Relation> { relation };
+                        EntityRelations[e] = new List<Relation> { relationReversed };
                     else
-                        EntityRelations[e].Add(relation);
+                        EntityRelations[e].Add(relationReversed);
                     break;
                 case Method m:
                     if (!MethodRelations.ContainsKey(m))
-                        MethodRelations[m] = new List<Relation> { relation };
+                        MethodRelations[m] = new List<Relation> { relationReversed };
                     else
-                        MethodRelations[m].Add(relation);
+                        MethodRelations[m].Add(relationReversed);
                     break;
                 default:
                     throw new ArgumentException($"Cannot add relations to {node1}");
             }
 
             relations.Add(relation);
-            AddRelation(node2, node1, ReversedTypes[type]);
+            relations.Add(relationReversed);
         }
 
         private IEntity GetEntityByName(SyntaxNode syntaxNode)
         {
-            return _entities.Values.FirstOrDefault(x => x.GetSyntaxNode().IsEquivalentTo(syntaxNode));
+            SemanticModel semanticModel = SemanticModels.GetSemanticModel(syntaxNode.SyntaxTree, false);
+            
+            SymbolInfo symbol = semanticModel.GetSymbolInfo(syntaxNode);
+
+            TypeDeclarationSyntax entityDeclaration = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as TypeDeclarationSyntax;
+
+            return _entities.Values.FirstOrDefault(x => x.GetSyntaxNode().IsEquivalentTo(entityDeclaration));
         }
 
-        private Method GetMethodByName(SyntaxNode methodDeclaration)
+        private Method GetMethodByName(SyntaxNode methodNode)
         {
-            return _methods.FirstOrDefault(x => x.GetSyntaxNode().IsEquivalentTo(methodDeclaration));
+            SemanticModel semanticModel = SemanticModels.GetSemanticModel(methodNode.SyntaxTree, false);
+
+            SymbolInfo symbol = semanticModel.GetSymbolInfo(methodNode);
+
+            MethodDeclarationSyntax methodDeclaration = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as MethodDeclarationSyntax;
+
+            return _methods.FirstOrDefault(x => x.GetSyntaxNode().Equals(methodDeclaration));
         }
 
         private void CreateParentClasses(IEntity entity)
