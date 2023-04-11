@@ -46,10 +46,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include ="../../Protos/log.proto" GrpcServices="Client" Link="Protos/log.proto" />
-    <Protobuf Include="../../Protos/common.proto" GrpcServices="Server" Link="Protos/common.proto" />
-    <Protobuf Include="../../Protos/recognizer.proto" GrpcServices="Server" Link="Protos/recognizer.proto" />
-    <Protobuf Include="../../Protos/step_by_step.proto" GrpcServices="Server" Link="Protos/step_by_step.proto" />
+    <Protobuf Include="$(RepositoryRoot)Protos/log.proto" GrpcServices="Client" Link="Protos/log.proto" />
+    <Protobuf Include="$(RepositoryRoot)Protos/common.proto" GrpcServices="Server" Link="Protos/common.proto" />
+    <Protobuf Include="$(RepositoryRoot)Protos/recognizer.proto" GrpcServices="Server" Link="Protos/recognizer.proto" />
+    <Protobuf Include="$(RepositoryRoot)Protos/step_by_step.proto" GrpcServices="Server" Link="Protos/step_by_step.proto" />
   </ItemGroup>
 
 </Project>

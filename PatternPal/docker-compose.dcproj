@@ -5,7 +5,7 @@
     <ProjectGuid>a48ad329-e1c5-4c62-a86c-771df54e8db1</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup>
-    <DockerTargetOS>Windows</DockerTargetOS>
+    <DockerTargetOS>Linux</DockerTargetOS>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">

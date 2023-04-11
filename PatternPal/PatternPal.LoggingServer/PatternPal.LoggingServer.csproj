@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>54aa2d3e-dd56-4cd8-8b6d-bc7007164b3b</UserSecretsId>
-    <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <ContainerImageName>dotnet-logserver-image</ContainerImageName>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
@@ -25,7 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="../../Protos/log.proto" GrpcServices="Server" Link="Protos/log.proto" />
+    <Protobuf Include="Protos/log.proto" GrpcServices="Server" />
   </ItemGroup>
-
 </Project>

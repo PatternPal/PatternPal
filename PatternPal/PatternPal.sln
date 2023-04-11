@@ -38,6 +38,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatternPal.Extension.Protos", "PatternPal.Extension.Protos\PatternPal.Extension.Protos.csproj", "{070AAD55-A535-4E4C-9D33-039D3E370187}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatternPal.LoggingServer", "PatternPal.LoggingServer\PatternPal.LoggingServer.csproj", "{409D427A-F297-41D3-BCB3-FAA3ABBFDD8E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{070AAD55-A535-4E4C-9D33-039D3E370187} = {070AAD55-A535-4E4C-9D33-039D3E370187}
+	EndProjectSection
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{A48AD329-E1C5-4C62-A86C-771DF54E8DB1}"
 EndProject

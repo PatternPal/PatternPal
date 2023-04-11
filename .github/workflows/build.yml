@@ -14,6 +14,22 @@ on:
   workflow_dispatch:
     
 jobs:
+  Build_Logserver:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - uses: actions/checkout@v3
+      - 
+        name: Set up docker BuildX
+        uses: docker/setup-buildx-action@v1
+      - 
+        name: Build the Docker image
+        uses: docker/build-push-action@v2
+        with:   
+          push: false
+          context : PatternPal/PatternPal.LoggingServer/.
+          file: PatternPal/PatternPal.LoggingServer/Dockerfile
+
   Build:
     runs-on: windows-latest
     if: github.event.pull_request.draft == false
