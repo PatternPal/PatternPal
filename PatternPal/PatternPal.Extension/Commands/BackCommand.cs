@@ -1,29 +1,38 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Windows.Input;
+
 using PatternPal.Extension.Stores;
+
+#endregion
 
 namespace PatternPal.Extension.Commands
 {
     public class BackCommand : ICommand
     {
+        private NavigationStore NavigationStore { get; }
 
-        private NavigationStore _navigationStore { get; }
-
+#pragma warning disable CS0067
         public event EventHandler CanExecuteChanged;
+#pragma warning restore CS0067
 
-        public BackCommand(NavigationStore navigationStore)
+        public BackCommand(
+            NavigationStore navigationStore)
         {
-            _navigationStore = navigationStore;
+            NavigationStore = navigationStore;
         }
 
-        public bool CanExecute(object parameter)
+        public bool CanExecute(
+            object parameter)
         {
             return true;
         }
 
-        public void Execute(object parameter)
+        public void Execute(
+            object parameter)
         {
-            _navigationStore.Back();
+            NavigationStore.Back();
         }
     }
 }

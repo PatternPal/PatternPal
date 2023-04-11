@@ -7,6 +7,25 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [3.1.0] - 2023-04-04
+
+### Added
+* V23 h 89 collect test projects (singleton and strategy) by @ViciousDoormat in https://github.com/PatternPal/PatternPal/pull/155
+
+### Improved
+* Move step-by-step mode implementation to backend by @KnapSac in https://github.com/PatternPal/PatternPal/pull/154
+* BS+Ext: Get supported recognizers from backend by @KnapSac in https://github.com/PatternPal/PatternPal/pull/161
+* BS: Refactor and document RecognizerRunner and DesignPattern by @KnapSac in https://github.com/PatternPal/PatternPal/pull/162
+
+### Fixed
+* BS+Ext: Fix show all results button by @KnapSac in https://github.com/PatternPal/PatternPal/pull/160
+* Ext: Fix and deny all warnings by @KnapSac in https://github.com/PatternPal/PatternPal/pull/164
+
+### Meta
+* Housekeeping: refactor/delete irrelevant projects by @ovda96 in https://github.com/PatternPal/PatternPal/pull/157
+* Housekeeping: delete irrelevant directories by @ovda96 in https://github.com/PatternPal/PatternPal/pull/158
+* Refactor: directory housekeeping by @ovda96 in https://github.com/PatternPal/PatternPal/pull/159
+
 ## [3.0.0] - 2023-03-22
 
 ### Added
@@ -92,7 +111,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 The version developed by the previous team.
 
-[Unreleased]: https://github.com/PatternPal/PatternPal/compare/v3.0.0...HEAD
+[Unreleased]: https://github.com/PatternPal/PatternPal/compare/v3.1.0...HEAD
+
+[3.1.0]: https://github.com/PatternPal/PatternPal/compare/v3.0.0...v3.1.0
 
 [3.0.0]: https://github.com/PatternPal/PatternPal/compare/v2.2.2...v3.0.0
 

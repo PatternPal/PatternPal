@@ -1,14 +1,8 @@
-﻿#region
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
+#region
 
 using PatternPal.Core.Models;
+using PatternPal.Core.Recognizers;
 using PatternPal.Protos;
-
-using SyntaxTree;
-using SyntaxTree.Abstractions.Entities;
 
 #endregion
 
@@ -117,6 +111,34 @@ public class RecognizerRunner
         }
 
         return results;
+    }
+
+    public IList< RecognitionResult > RunV2()
+    {
+        SingletonRecognizer recognizer = new();
+
+        // TODO CV: Put all check builders into 'All' operator.
+        IEnumerable< ICheckBuilder > checkBuilders = recognizer.Create();
+        Dictionary< string, IEntity >.ValueCollection entities = _graph.GetAll().Values;
+
+        RecognizerContext ctx = new()
+                                {
+                                    Graph = _graph,
+                                };
+        foreach (ICheckBuilder checkBuilder in checkBuilders)
+        {
+            ICheck check = checkBuilder.Build();
+
+            foreach (IEntity entity in entities)
+            {
+                bool result = check.Check(
+                    ctx,
+                    entity);
+            }
+            Console.WriteLine();
+        }
+
+        return new List< RecognitionResult >();
     }
 
     /// <summary>

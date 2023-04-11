@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
     <DebugType>full</DebugType>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
@@ -19,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PatternPal.Regonizers\PatternPal.Recognizers.csproj" />
+    <ProjectReference Include="..\PatternPal.SyntaxTree\PatternPal.SyntaxTree.csproj" />
   </ItemGroup>
 
   <ItemGroup>
