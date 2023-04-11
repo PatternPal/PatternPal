@@ -1,21 +1,23 @@
 ﻿namespace PatternPal.Tests.TestClasses.Singleton
 {
+    /* This test is a "close to perfect" implementation using an edge case.
+     * 1- It has a static variable with its own type
+     * 2- Which is NOT private 
+     * 3- It has no public constructors (a static constructor cannot be called directly)
+     * 5- It does NOT have a public/internal property or method with its own type.
+     * 6- Instead, its field is public and readonly
+     * 7- And instantiated in the static constructor
+     * 8- Which guarantees it always is that same instance
+     */
     public class SingleTonTestCase6
     {
-        private static SingleTonTestCase6 _instance;
+        public static readonly SingleTonTestCase6 instance;
 
-        private SingleTonTestCase6()
+        static SingleTonTestCase6()
         {
+            instance = new SingleTonTestCase6 ();
         }
 
-        public static SingleTonTestCase6 GetInstance()
-        {
-            if (_instance == null)
-            {
-                _instance = new SingleTonTestCase6();
-            }
-
-            return _instance;
-        }
+        
     }
 }

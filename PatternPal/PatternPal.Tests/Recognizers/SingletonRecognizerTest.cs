@@ -1,7 +1,8 @@
-using System.Linq;
+﻿using System.Linq;
 using PatternPal.Recognizers.Recognizers;
 using PatternPal.Tests.Utils;
 using NUnit.Framework;
+using PatternPal.Tests.TestClasses.Singleton;
 
 namespace PatternPal.Tests.Recognizers
 {
@@ -12,7 +13,7 @@ namespace PatternPal.Tests.Recognizers
         [TestCase("SingleTonTestCase2.cs", 0, 79)]
         [TestCase("SingleTonTestCase3.cs", 0, 79)]
         [TestCase("SingleTonTestCase4.cs", 80, 100)]
-        [TestCase("SingleTonTestCase6.cs", 80, 100)]
+        [TestCase("SingleTonTestCase5.cs", 80, 100)]
         [TestCase("SingleTonTestCase7.cs", 0, 79)]
         public void SingletonRecognizer_Returns_Correct_Score(string filename, int minScore, int maxScore)
         {
@@ -22,6 +23,7 @@ namespace PatternPal.Tests.Recognizers
             var testNode = testGraph.Values.First();
 
             var result = singleton.Recognize(testNode);
+
 
             Assert.That(result.GetScore(), Is.InRange(minScore, maxScore));
         }

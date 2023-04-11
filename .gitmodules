@@ -1,3 +1,0 @@
-[submodule "PatternPal/PatternPal.LoggingServer/Protos/Google/googleapis"]
-	path = PatternPal/PatternPal.LoggingServer/Protos/Google/googleapis
-	url = https://github.com/googleapis/googleapis.git

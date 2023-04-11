@@ -4,9 +4,8 @@ using System;
 using System.Diagnostics;
 using System.IO;
 
-using EnvDTE;
-
-using Process = System.Diagnostics.Process;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 
 #endregion
 
@@ -17,27 +16,48 @@ namespace PatternPal.Extension.Grpc
         private static Process _backgroundService;
 
         internal static void StartBackgroundService(
-            DTE dte)
+            IServiceProvider serviceProvider)
         {
-            string backgroundServicePath = Path.Combine(
-                Directory.GetCurrentDirectory(),
-                "PatternPal",
-                "PatternPal.exe");
-            _backgroundService = Process.Start(
-                new ProcessStartInfo(backgroundServicePath)
-                {
-                    CreateNoWindow = true, UseShellExecute = false,
-                });
-
-            if (null == _backgroundService)
+            try
             {
-                throw new Exception("Unable to start background service");
+                Uri uri = new Uri(
+                    typeof( ExtensionWindowPackage ).Assembly.CodeBase,
+                    UriKind.Absolute);
+
+                string extensionDirectory = Path.GetDirectoryName(uri.LocalPath);
+                if (string.IsNullOrWhiteSpace(extensionDirectory))
+                {
+                    throw new Exception("Unable to find extension installation directory");
+                }
+
+                string backgroundServicePath = Path.Combine(
+                    extensionDirectory,
+                    "PatternPal",
+                    "PatternPal.exe");
+
+                _backgroundService = Process.Start(
+                    new ProcessStartInfo(backgroundServicePath)
+                    {
+                        CreateNoWindow = true,
+                        UseShellExecute = false,
+                    });
+            }
+            catch (Exception exception)
+            {
+                // TODO: Improve error handling
+                VsShellUtilities.ShowMessageBox(
+                    serviceProvider,
+                    $"The background service failed to start: {exception.Message}",
+                    "Background service error",
+                    OLEMSGICON.OLEMSGICON_CRITICAL,
+                    OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
             }
         }
 
         internal static void KillBackgroundService()
         {
-            _backgroundService.Kill();
+            _backgroundService?.Kill();
         }
     }
 }

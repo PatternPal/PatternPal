@@ -2,180 +2,137 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.IO;
-using System.Linq;
 
 using PatternPal.Core.Models;
-using PatternPal.Core.Resources;
 using PatternPal.Protos;
-using PatternPal.Recognizers;
-using PatternPal.Recognizers.Recognizers;
 
 using SyntaxTree;
-
-using static PatternPal.Core.Resources.DesignPatternNameResources;
+using SyntaxTree.Abstractions.Entities;
 
 #endregion
 
-namespace PatternPal.Core
+namespace PatternPal.Core;
+
+/// <summary>
+/// This class is the driver which handles running the recognizers.
+/// </summary>
+public class RecognizerRunner
 {
-    public class RecognizerRunner
+    private readonly IList< DesignPattern > _patterns;
+    private SyntaxGraph _graph;
+
+    /// <summary>
+    /// Create a new recognizer runner instance.
+    /// </summary>
+    /// <param name="files">The files to run the recognizers on.</param>
+    /// <param name="recognizers">The recognizers to run.</param>
+    public RecognizerRunner(
+        IEnumerable< string > files,
+        IEnumerable< Recognizer > recognizers)
     {
-        public static readonly ImmutableList< DesignPattern > DesignPatterns = ImmutableList.Create(
-            new DesignPattern(
-                Singleton,
-                new SingletonRecognizer(),
-                WikiPageResources.Singleton),
-            new DesignPattern(
-                FactoryMethod,
-                new FactoryMethodRecognizer(),
-                WikiPageResources.FactoryMethod),
-            new DesignPattern(
-                Decorator,
-                new DecoratorRecognizer(),
-                WikiPageResources.Decorator),
-            new DesignPattern(
-                State,
-                new StateRecognizer(),
-                WikiPageResources.State),
-            new DesignPattern(
-                Strategy,
-                new StrategyRecognizer(),
-                WikiPageResources.Strategy),
-            new DesignPattern(
-                Adapter,
-                new AdapterRecognizer(),
-                WikiPageResources.Adapter),
-            new DesignPattern(
-                Observer,
-                new ObserverRecognizer(),
-                WikiPageResources.Observer),
-            new DesignPattern(
-                Bridge,
-                new BridgeRecognizer(),
-                WikiPageResources.Bridge)
-        );
+        CreateGraph(files);
 
-        private static readonly DesignPattern[ ] s_DesignPatterns;
-
-        static RecognizerRunner()
+        // Get the design patterns which correspond to the given recognizers.
+        _patterns = new List< DesignPattern >();
+        foreach (Recognizer recognizer in recognizers)
         {
-            // TODO: Assert that these patterns are added in the same order as the definitions in the enum.
-            s_DesignPatterns = new[ ]
-                               {
-                                   new DesignPattern(
-                                       Adapter,
-                                       new AdapterRecognizer(),
-                                       WikiPageResources.Adapter),
-                                   new DesignPattern(
-                                       Bridge,
-                                       new BridgeRecognizer(),
-                                       WikiPageResources.Bridge),
-                                   new DesignPattern(
-                                       Decorator,
-                                       new DecoratorRecognizer(),
-                                       WikiPageResources.Decorator),
-                                   new DesignPattern(
-                                       FactoryMethod,
-                                       new FactoryMethodRecognizer(),
-                                       WikiPageResources.FactoryMethod),
-                                   new DesignPattern(
-                                       Observer,
-                                       new ObserverRecognizer(),
-                                       WikiPageResources.Observer),
-                                   new DesignPattern(
-                                       Singleton,
-                                       new SingletonRecognizer(),
-                                       WikiPageResources.Singleton),
-                                   new DesignPattern(
-                                       State,
-                                       new StateRecognizer(),
-                                       WikiPageResources.State),
-                                   new DesignPattern(
-                                       Strategy,
-                                       new StrategyRecognizer(),
-                                       WikiPageResources.Strategy),
-                               };
-        }
-
-        public static DesignPattern GetDesignPattern(
-            Recognizer recognizer) => s_DesignPatterns[ ((int)recognizer) - 1 ];
-
-        public SyntaxGraph Graph;
-
-        public event EventHandler< RecognizerProgress > OnProgressUpdate;
-
-        public SyntaxGraph CreateGraph(
-            List< string > files)
-        {
-            Graph = new SyntaxGraph();
-
-            for (var i = 0;
-                 i < files.Count;
-                 i++)
+            // `Recognizer.Unknown` is the default value of the `Recognizer` enum, as required
+            // by the Protocol Buffer spec. This value should never be used.
+            if (recognizer == Recognizer.Unknown)
             {
-                var content = FileManager.MakeStringFromFile(files[ i ]);
-                Graph.AddFile(
-                    content,
-                    files[ i ]);
-                ProgressUpdate(
-                    (int)(i / (float)files.Count * 50f),
-                    "Reading file: " + Path.GetFileName(files[ i ]));
+                continue;
             }
 
-            //Make relations
-            Graph.CreateGraph();
-            return Graph;
+            _patterns.Add(DesignPattern.SupportedPatterns[ ((int)recognizer) - 1 ]);
+        }
+    }
+
+    /// <summary>
+    /// Create a new recognizer runner instance.
+    /// </summary>
+    /// <param name="files">The files to run the recognizers on.</param>
+    /// <param name="patterns">The design patterns for which to run the recognizers.</param>
+    public RecognizerRunner(
+        IEnumerable< string > files,
+        IList< DesignPattern > patterns)
+    {
+        CreateGraph(files);
+        _patterns = patterns;
+    }
+
+    /// <summary>
+    /// Creates a <see cref="SyntaxGraph"/> from the given files.
+    /// </summary>
+    /// <param name="files">The files from which to create a <see cref="SyntaxGraph"/></param>
+    private void CreateGraph(
+        IEnumerable< string > files)
+    {
+        _graph = new SyntaxGraph();
+        foreach (string file in files)
+        {
+            string content = FileManager.MakeStringFromFile(file);
+            _graph.AddFile(
+                content,
+                file);
+        }
+        _graph.CreateGraph();
+    }
+
+    public event EventHandler< RecognizerProgress > OnProgressUpdate;
+
+    /// <summary>
+    /// Run the recognizers.
+    /// </summary>
+    /// <returns>A list of <see cref="RecognitionResult"/>, one per given design pattern.</returns>
+    public IList< RecognitionResult > Run()
+    {
+        // If the graph is empty, we don't have to do any work.
+        if (_graph.IsEmpty)
+        {
+            return new List< RecognitionResult >();
         }
 
-        /// <summary>
-        ///     Function that should be called to generate a syntax tree
-        /// </summary>
-        /// <param name="files"></param>
-        /// <param name="patterns"></param>
-        /// <returns></returns>
-        public List< RecognitionResult > Run(
-            List< DesignPattern > patterns)
+        int nodeIdx = 0;
+        Dictionary< string, IEntity > entities = _graph.GetAll();
+        IList< RecognitionResult > results = new List< RecognitionResult >();
+        foreach (IEntity node in entities.Values)
         {
-            var results = new List< RecognitionResult >();
-            var j = 0;
+            ReportProgress(
+                (int)((++nodeIdx / (float)entities.Count * 50f) + 50),
+                "Scanning class: " + node.GetName());
 
-            if (Graph == null)
-                return results;
-
-            var entities = Graph.GetAll();
-
-            if (entities == null)
-                return results;
-            foreach (var node in entities.Values)
+            // Run the recognizers.
+            foreach (DesignPattern pattern in _patterns)
             {
-                j++;
-                ProgressUpdate(
-                    (int)((j / (float)entities.Count * 50f) + 50),
-                    "Scanning class: " + node.GetName());
-                results.AddRange(
-                    from pattern in patterns
-                    select new RecognitionResult
-                           {
-                               Result = pattern.Recognizer.Recognize(node), EntityNode = node, FilePath = node.GetRoot().GetSource(), Pattern = pattern
-                           }
-                );
+                results.Add(
+                    new RecognitionResult
+                    {
+                        Result = pattern.Recognizer.Recognize(node),
+                        EntityNode = node,
+                        FilePath = node.GetRoot().GetSource(),
+                        Pattern = pattern
+                    });
             }
-
-            return results;
         }
 
-        private void ProgressUpdate(
-            int percentage,
-            string status)
-        {
-            OnProgressUpdate?.Invoke(
-                this,
-                new RecognizerProgress
-                {
-                    CurrentPercentage = percentage, Status = status
-                });
-        }
+        return results;
+    }
+
+    /// <summary>
+    /// Report a progress update.
+    /// </summary>
+    /// <param name="percentage">The current progress as a percentage.</param>
+    /// <param name="status">A status message associated with the current progress.</param>
+    private void ReportProgress(
+        int percentage,
+        string status)
+    {
+        OnProgressUpdate?.Invoke(
+            this,
+            new RecognizerProgress
+            {
+                CurrentPercentage = percentage,
+                Status = status
+            });
     }
 }
