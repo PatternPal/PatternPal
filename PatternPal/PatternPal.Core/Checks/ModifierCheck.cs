@@ -10,7 +10,7 @@ internal class ModifierCheck : ICheck
         _modifiers = modifiers;
     }
 
-    public CheckResult Check(
+    public ICheckResult Check(
         RecognizerContext ctx,
         INode node)
     {

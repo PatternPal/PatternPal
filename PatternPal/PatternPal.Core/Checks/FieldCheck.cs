@@ -9,13 +9,13 @@ internal class FieldCheck : ICheck
         _checks = checks;
     }
 
-    public CheckResult Check(RecognizerContext ctx, INode node)
+    public ICheckResult Check(RecognizerContext ctx, INode node)
     {
         if(node is not IField field) throw new NotImplementedException("Field Check was incorrect");
 
         foreach (ICheck check in _checks) 
         {
-            if (!check.Check(ctx, node).getCorrectness()) throw new NotImplementedException("Field Check was incorrect");
+            if (!check.Check(ctx, node).Correctness) throw new NotImplementedException("Field Check was incorrect");
         }
 
         Console.WriteLine($"Got field {field}");

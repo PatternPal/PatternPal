@@ -13,7 +13,7 @@ internal class ConstructorCheck : ICheck
         _checks = checks;
     }
 
-    public CheckResult Check(
+    public ICheckResult Check(
         RecognizerContext ctx,
         INode node)
     {
@@ -24,7 +24,7 @@ internal class ConstructorCheck : ICheck
 
         foreach (ICheck check in _checks)
         {
-            if (!check.Check(ctx, node).getCorrectness()) throw new NotImplementedException("Constructor Check was incorrect");
+            if (!check.Check(ctx, node).Correctness) throw new NotImplementedException("Constructor Check was incorrect");
         }
 
         Console.WriteLine($"Got Constructor '{constructor}'");

@@ -13,7 +13,7 @@ internal class MethodCheck : ICheck
         _checks = checks;
     }
 
-    public CheckResult Check(
+    public ICheckResult Check(
         RecognizerContext ctx,
         INode node)
     {
@@ -28,7 +28,7 @@ internal class MethodCheck : ICheck
         {
             if (!check.Check(
                 ctx,
-                node).getCorrectness())
+                node).Correctness)
             {
                 throw new NotImplementedException("Method Check was incorrect");
             }

@@ -2,7 +2,7 @@
 
 internal interface ICheck
 {
-    CheckResult Check(
+    ICheckResult Check(
         RecognizerContext ctx,
         INode node);
 }
