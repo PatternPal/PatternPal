@@ -97,21 +97,19 @@ namespace PatternPal.Recognizers.Recognizers
                                                     )
                                                 }, x => node.GetAllMethods(), "FactoryAbstractCreatorMethod"
                                             )
-                                        }, x => x.GetRelations().Where(
-                                                y => (y.GetRelationType().Equals(RelationType.Extends) ||
-                                                     y.GetRelationType().Equals(RelationType.Implements)) && y.Node2Entity != null
+                                        }, x => x.GetRelations(Relationable.Entity).Where(
+                                                y => y.GetRelationType().Equals(RelationType.Extends) ||
+                                                     y.GetRelationType().Equals(RelationType.Implements)
                                             )
                                             .Select(y => y.Node2Entity), "Child"
                                     )
-                                }, x => entityNode.GetRelations()
-                                    .Where(y => y.GetRelationType().Equals(RelationType.Creates) &&
-                                                y.Node2Entity != null)
+                                }, x => entityNode.GetRelations(Relationable.Entity)
+                                    .Where(y => y.GetRelationType().Equals(RelationType.Creates))
                                     .Select(y => y.Node2Entity), "FactoryCreates"
                             )
                         },
-                        x => x.GetRelations()
-                            .Where(y => y.GetRelationType().Equals(RelationType.ExtendedBy) &&
-                                        y.Node2Entity != null)
+                        x => x.GetRelations(Relationable.Entity)
+                            .Where(y => y.GetRelationType().Equals(RelationType.ExtendedBy))
                             .Select(y => y.Node2Entity),
                         "FactoryConcreteCreator",
                         GroupCheckType.All
@@ -147,7 +145,7 @@ namespace PatternPal.Recognizers.Recognizers
                                     )
                                 }, x => node.GetAllMethods(), "FactoryConcreteCreatorMethod"
                             )
-                        }, x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Uses) && y.Node2Entity != null)
+                        }, x => x.GetRelations(Relationable.Entity).Where(y => y.GetRelationType().Equals(RelationType.Uses))
                             .Select(y => y.Node2Entity), "ProductClass"
                     )
                 }, x => new List<IEntity> { node }, "FactoryAbstractCreator"

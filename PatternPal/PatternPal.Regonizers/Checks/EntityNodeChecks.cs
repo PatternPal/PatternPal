@@ -18,8 +18,8 @@ namespace PatternPal.Recognizers.Checks
 
         public static bool ClassImplementsInterfaceMethod(this IEntity node, IMethod method)
         {
-            return node.GetRelations()
-                .Where(x => x.GetRelationType() == RelationType.Implements && x.Node2Entity != null)
+            return node.GetRelations(Relationable.Entity)
+                .Where(x => x.GetRelationType() == RelationType.Implements)
                 .Where(interFace => InterfaceImplementsMethod(interFace.Node2Entity, method))
                 .Select(interFace => new { })
                 .Any();
@@ -35,11 +35,10 @@ namespace PatternPal.Recognizers.Checks
                 return true;
             }
 
-            return node.GetRelations()
+            return node.GetRelations(Relationable.Entity)
                 .Where(
-                    x => (x.GetRelationType() == RelationType.Extends ||
-                         x.GetRelationType() == RelationType.Implements) &&
-                         x.Node2Entity != null
+                    x => x.GetRelationType() == RelationType.Extends ||
+                         x.GetRelationType() == RelationType.Implements
                 )
                 .Where(relation => relation.Node2Entity.MethodInEntityNode(methodName, amountOfParams))
                 .Select(relation => new { })
@@ -63,17 +62,16 @@ namespace PatternPal.Recognizers.Checks
 
         public static bool ClassImplementsInterface(this IEntity node, string name)
         {
-            return node.GetRelations()
+            return node.GetRelations(Relationable.Entity)
                 .Any(x => x.GetRelationType() == RelationType.Implements && 
-                   x.Node2Entity != null && x.Node2Entity.GetName() == name);
+                   x.GetDestinationName() == name);
         }
 
         public static IEntity GetExtends(this IEntity node)
         {
             return node
-                .GetRelations()
-                .FirstOrDefault(x => x.GetRelationType() == RelationType.Extends &&
-                    x.Node2Entity != null)
+                .GetRelations(Relationable.Entity)
+                .FirstOrDefault(x => x.GetRelationType() == RelationType.Extends)
                 ?.Node2Entity;
         }
 
@@ -85,8 +83,8 @@ namespace PatternPal.Recognizers.Checks
         public static IEntity GetEdgeNode(this IEntity node, string name)
         {
             return node = node
-                .GetRelations()
-                .FirstOrDefault(x => x.Node2Entity != null && x.Node2Entity.GetName() == name)
+                .GetRelations(Relationable.Entity)
+                .FirstOrDefault(x => x.GetDestinationName() == name)
                 ?.Node2Entity;
         }
 
@@ -127,7 +125,7 @@ namespace PatternPal.Recognizers.Checks
             int amount
         )
         {
-            return entityNode.GetRelations()
+            return entityNode.GetRelations(Relationable.Entity)
                 .Count(x => x.GetRelationType().Equals(relationType)) >= amount;
         }
 
@@ -157,7 +155,7 @@ namespace PatternPal.Recognizers.Checks
             int amount
         )
         {
-            return entityNode.GetRelations()
+            return entityNode.GetRelations(Relationable.Entity)
                 .Count(x => x.GetRelationType().Equals(relationType)) <= amount;
         }
 

@@ -31,10 +31,9 @@ namespace PatternPal.Tests.Core
 
             var nodes = graph.GetAll();
 
-            var interfaceCheck = nodes[NameSpaceNode + "." + baseClass].GetRelations()
+            var interfaceCheck = nodes[NameSpaceNode + "." + baseClass].GetRelations(Relationable.Entity)
                 .Any(
-                    x => x.GetRelationType() == RelationType.Implements && 
-                         x.Node2Entity != null &&
+                    x => x.GetRelationType() == RelationType.Implements &&
                          x.Node2Entity.GetName() == relatedClass
                 );
             Assert.AreEqual(shouldBeValid, interfaceCheck);
@@ -63,9 +62,8 @@ namespace PatternPal.Tests.Core
 
             var nodes = graph.GetAll();
 
-            var extendsCheck = nodes[NameSpaceNode + "." + baseClass].GetRelations()
+            var extendsCheck = nodes[NameSpaceNode + "." + baseClass].GetRelations(Relationable.Entity)
                 .Any(x => x.GetRelationType() == RelationType.Extends && 
-                        x.Node2Entity != null &&
                         x.Node2Entity.GetName() == relatedClass);
             Assert.AreEqual(shouldBeValid, extendsCheck);
         }
@@ -93,9 +91,9 @@ namespace PatternPal.Tests.Core
 
             var nodes = graph.GetAll();
 
-            var createCheck = nodes[NameSpaceNode + "." + baseClass].GetRelations()
+            var createCheck = nodes[NameSpaceNode + "." + baseClass].GetRelations(Relationable.Entity)
                 .Any(x => x.GetRelationType() == RelationType.Creates &&
-                          x.Node2Entity != null && x.Node2Entity.GetName() == relatedClass);
+                    x.Node2Entity.GetName() == relatedClass);
             Assert.AreEqual(shouldBeValid, createCheck);
         }
 
@@ -123,9 +121,9 @@ namespace PatternPal.Tests.Core
 
             var nodes = graph.GetAll();
 
-            var usingCheck = nodes[NameSpaceNode + "." + baseClass].GetRelations()
+            var usingCheck = nodes[NameSpaceNode + "." + baseClass].GetRelations(Relationable.Entity)
                 .Any(x => x.GetRelationType() == RelationType.Uses && 
-                          x.Node2Entity != null && x.Node2Entity.GetName() == relatedClass);
+                          x.GetDestinationName() == relatedClass);
             Assert.AreEqual(shouldBeValid, usingCheck);
         }
     }

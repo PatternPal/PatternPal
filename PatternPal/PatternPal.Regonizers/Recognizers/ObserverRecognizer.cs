@@ -63,19 +63,18 @@ namespace PatternPal.Recognizers.Recognizers
                                                     new[] {node.GetName()}), 1f)
                                         }, d => d.GetFields(), "ObserverConcreteSubjectField")
                                 },
-                                c => c.GetRelations()
-                                    .Where(x => x.GetRelationType() == RelationType.ImplementedBy &&
-                                                x.Node2Entity != null)
+                                c => c.GetRelations(Relationable.Entity)
+                                    .Where(x => x.GetRelationType() == RelationType.ImplementedBy)
                                     .Select(x => x.Node2Entity), "ObserverConcreteSubject",
                                 GroupCheckType.Median)
                         },
-                        b => node.GetRelations().Where(x => x.GetRelationType() == RelationType.UsedBy && x.Node2Entity != null)
+                        b => node.GetRelations(Relationable.Entity).Where(x => x.GetRelationType() == RelationType.UsedBy)
                             .Select(x => x.Node2Entity).ToList(), "ObserverSubjectInterface")
                 }, a => new List<IEntity> {node}, "Observer");
 
             result.Results.Add(checks.Check(node));
             result.RelatedSubTypes.Add(node, "Observer");
-            foreach (var concrete in node.GetRelations().Where(x => x.GetRelationType().Equals(RelationType.ImplementedBy) && x.Node2Entity != null).Select(x => x.Node2Entity))
+            foreach (var concrete in node.GetRelations(Relationable.Entity).Where(x => x.GetRelationType().Equals(RelationType.ImplementedBy)).Select(x => x.Node2Entity))
             {
                 result.RelatedSubTypes.Add(concrete, "ConcreteObserver");
             }
@@ -123,7 +122,7 @@ namespace PatternPal.Recognizers.Recognizers
                                         new ResourceMessage("FieldType", new[] {node.GetName()}), 1f)
                                 }, d => d.GetFields(), "ObserverConcreteSubjectField")
                         },
-                        b => node.GetRelations().Where(x => x.GetRelationType() == RelationType.UsedBy && x.Node2Entity != null).Select(x => x.Node2Entity).ToList(), "Concrete subject")
+                        b => node.GetRelations(Relationable.Entity).Where(x => x.GetRelationType() == RelationType.UsedBy).Select(x => x.Node2Entity).ToList(), "Concrete subject")
                 }, a => new List<IEntity> {node}, "Observer");
 
             result.Results.Add(checks.Check(node));
@@ -131,7 +130,7 @@ namespace PatternPal.Recognizers.Recognizers
 
             result.Results.Add(checks.Check(node));
             result.RelatedSubTypes.Add(node, "Observer");
-            foreach (var concrete in node.GetRelations().Where(x => x.GetRelationType().Equals(RelationType.ImplementedBy) && x.Node2Entity != null).Select(x => x.Node2Entity))
+            foreach (var concrete in node.GetRelations(Relationable.Entity).Where(x => x.GetRelationType().Equals(RelationType.ImplementedBy)).Select(x => x.Node2Entity))
             {
                 result.RelatedSubTypes.Add(concrete, "ConcreteObserver");
             }

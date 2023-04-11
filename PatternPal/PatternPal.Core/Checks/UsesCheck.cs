@@ -29,7 +29,7 @@ internal class UsesCheck : ICheck
             return false;
         }
 
-        if (ctx.Graph.GetRelations(method).Any(x => x.Node2Method == usedMethod))
+        if (ctx.Graph.GetRelations(method, Relationable.Method).Any(x => x.Node2Method == usedMethod))
         {
             Console.WriteLine($"Used method: '{usedMethod}' Used by: '{method}'");
             return true;

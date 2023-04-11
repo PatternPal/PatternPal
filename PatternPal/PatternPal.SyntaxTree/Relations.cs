@@ -25,21 +25,15 @@ namespace SyntaxTree
                 { RelationType.Extends, RelationType.ExtendedBy },
                 { RelationType.ExtendedBy, RelationType.Extends }
             };
-    
-        //private static readonly Dictionary<Relationable, Relationable> ReversedRelationables =
-        //    new Dictionary<Relationable, Relationable>
-        //    {
-        //        { Relationable.Entity, Relationable.Method }, { Relationable.Method, Relationable.Entity }
-        //    };
-        
+
         //List with all relations in graph
-        internal List<Relation> relations = new List<Relation>();
+        internal List<Relation> relations = new();
 
         //Dictionary to access relations of entities fast
-        internal Dictionary<IEntity, List<Relation>> EntityRelations = new Dictionary<IEntity, List<Relation>>();
+        internal Dictionary<IEntity, List<Relation>> EntityRelations = new();
 
         //Dictionary to access relations of methods fast
-        internal Dictionary<Method, List<Relation>> MethodRelations = new Dictionary<Method, List<Relation>>();
+        internal Dictionary<Method, List<Relation>> MethodRelations = new();
 
         private readonly SyntaxGraph _graph;
         private Dictionary<string, IEntity> _entities;
@@ -76,8 +70,8 @@ namespace SyntaxTree
             if(node1 == null || node2 == null)
                 return;
 
-            Relation relation = new Relation(type);
-            Relation relationReversed = new Relation(ReversedTypes[type]);
+            Relation relation = new(type);
+            Relation relationReversed = new(ReversedTypes[type]);
 
             switch (node1)
             {

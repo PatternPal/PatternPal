@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using Microsoft.CodeAnalysis.CSharp;
 
 using SyntaxTree.Abstractions;
@@ -85,25 +85,51 @@ namespace SyntaxTree
         }
 
         /// <summary>
-        ///     Get all relations that a node has
+        ///     Get all relations that a node has, filtered on the type of the destination node of the relation.
         /// </summary>
         /// <param name="node">The node</param>
-        /// <returns>A wrapper of the entity with the relations</returns>
-        public IEnumerable<Relation> GetRelations(INode node)
+        /// <param name="type">The type of the destination node</param>
+        /// <returns>An IEnumerable of relations for this node filtered on type</returns>
+        public IEnumerable<Relation> GetRelations(INode node, Relationable type)
         {
             switch (node)
             {
                 case IEntity e:
+                {
                     if (_relations.EntityRelations.TryGetValue(e, out List<Relation> result))
-                        return result;
+                        return FilterRelations(result, type);
                     break;
+                }
                 case Method m:
-                    if(_relations.MethodRelations.TryGetValue(m, out List<Relation> result2))
-                        return result2;
+                {
+                    if (_relations.MethodRelations.TryGetValue(m, out List<Relation> result))
+                        return FilterRelations(result, type);
                     break;
+                }
             }
 
             return new List<Relation>();
+        }
+
+        /// <summary>
+        ///     Filters a list of relations based on what type the destination node should be. Helper function for GetRelations.
+        /// </summary>
+        /// <param name="res">The list of relations</param>
+        /// <param name="type">The type of the destination node</param>
+        /// <returns>An IEnumerable of relations filtered on type</returns>
+        private IEnumerable<Relation> FilterRelations(List<Relation> res, Relationable type)
+        {
+            switch (type)
+            {
+                case Relationable.Entity:
+                    return res.Where(x => x.Node2Entity != null);
+                case Relationable.Method:
+                    return res.Where(x => x.Node2Method != null);
+                case Relationable.All:
+                    return res;
+            }
+
+            return res;
         }
     }
 }

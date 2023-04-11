@@ -51,7 +51,7 @@ namespace SyntaxTree.Abstractions.Entities
         /// <returns></returns>
         string GetFullName();
 
-        IEnumerable<Relation> GetRelations();
+        IEnumerable<Relation> GetRelations(Relationable type);
 
         /// <summary>
         ///     Gets all methods this includes getter and setter from properties and constructors
