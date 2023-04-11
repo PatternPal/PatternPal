@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 using Grpc.Core;
@@ -13,7 +12,6 @@ using Grpc.Net.Client;
 using NUnit.Framework;
 
 using PatternPal.Protos;
-using PatternPal.Tests.Utils;
 
 using VerifyNUnit;
 
@@ -27,11 +25,18 @@ public class Tests
     private RecognizerService.RecognizerServiceClient _client;
     private GrpcChannel _channel;
     private static Process _backgroundService;
+    private string _patternPalDirectory;
 
     [SetUp]
     public void Setup()
     {
-        string processDirectory = Path.Combine(
+        if (_backgroundService is not null
+            && _backgroundService.StartTime != DateTime.MinValue)
+        {
+            return;
+        }
+
+        _patternPalDirectory = Path.Combine(
             Directory.GetCurrentDirectory(),
             "..",
             "..",
@@ -42,7 +47,7 @@ public class Tests
             "Debug",
             "net7.0");
         string processPath = Path.Combine(
-            processDirectory,
+            _patternPalDirectory,
             "PatternPal.exe");
 
         if (!Path.Exists(processPath))
@@ -54,7 +59,7 @@ public class Tests
         ProcessStartInfo processInfo = new()
                                        {
                                            FileName = processPath,
-                                           WorkingDirectory = processDirectory
+                                           WorkingDirectory = _patternPalDirectory
                                        };
         _backgroundService = Process.Start(processInfo);
 
@@ -67,11 +72,7 @@ public class Tests
     [Test]
     public void DidBackgroundServiceStart()
     {
-        // Arrange
-        Process[ ] process = Process.GetProcessesByName("PatternPal");
-
-        // Assert
-        Assert.IsTrue(process.Length > 0);
+        Assert.IsTrue(_backgroundService.StartTime != DateTime.MinValue);
     }
 
     [Test]
@@ -167,18 +168,10 @@ public class Tests
     [Test]
     public void WasBackgroundServiceKilled()
     {
-        _backgroundService.Kill(true);
-        // Arrange
-        Process[ ] process = Process.GetProcessesByName("patternpal");
-
         // Act
-        foreach (Process processItem in process)
-        {
-            processItem.Kill();
-        }
+        _backgroundService.Kill(true);
 
-        //Assert
-        bool allExited = process.Skip(1).All(p => p.HasExited);
-        Assert.IsTrue(allExited);
+        // Assert
+        Assert.IsTrue(_backgroundService is not null && _backgroundService.HasExited);
     }
 }
