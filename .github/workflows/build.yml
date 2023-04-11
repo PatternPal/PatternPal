@@ -26,7 +26,7 @@ jobs:
         name: Build the Docker image
         uses: docker/build-push-action@v4
         with:   
-          context : PatternPal/PatternPal.LoggingServer
+          context : PatternPal/
           file: PatternPal/PatternPal.LoggingServer/Dockerfile
 
   Build:
