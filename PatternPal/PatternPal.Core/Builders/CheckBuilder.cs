@@ -23,6 +23,9 @@ internal static class CheckBuilder
     internal static ClassCheckBuilder Class(
         params ICheckBuilder[ ] checkBuilders) => new( checkBuilders );
 
+    internal static ClassCheckBuilder AbstractClass(
+        params ICheckBuilder[] checkBuilders) => new(checkBuilders.Prepend(Modifiers(Modifier.Abstract)));
+
     internal static MethodCheckBuilder Method(
         params ICheckBuilder[ ] checkBuilders) => new( checkBuilders );
 
