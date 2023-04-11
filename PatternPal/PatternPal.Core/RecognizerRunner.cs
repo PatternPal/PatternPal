@@ -1,4 +1,4 @@
-#region
+﻿#region
 
 using PatternPal.Core.Models;
 using PatternPal.Core.Recognizers;
@@ -13,7 +13,7 @@ namespace PatternPal.Core;
 /// </summary>
 public class RecognizerRunner
 {
-    private readonly IList< DesignPattern > _patterns;
+    private readonly IList<DesignPattern> _patterns;
     private SyntaxGraph _graph;
 
     /// <summary>
@@ -22,13 +22,13 @@ public class RecognizerRunner
     /// <param name="files">The files to run the recognizers on.</param>
     /// <param name="recognizers">The recognizers to run.</param>
     public RecognizerRunner(
-        IEnumerable files,
-        IEnumerable recognizers)
+        IEnumerable<string> files,
+        IEnumerable<Recognizer> recognizers)
     {
         CreateGraph(files);
 
         // Get the design patterns which correspond to the given recognizers.
-        _patterns = new List< DesignPattern >();
+        _patterns = new List<DesignPattern>();
         foreach (Recognizer recognizer in recognizers)
         {
             // `Recognizer.Unknown` is the default value of the `Recognizer` enum, as required
@@ -38,7 +38,7 @@ public class RecognizerRunner
                 continue;
             }
 
-            _patterns.Add(DesignPattern.SupportedPatterns[ ((int)recognizer) - 1 ]);
+            _patterns.Add(DesignPattern.SupportedPatterns[((int)recognizer) - 1]);
         }
     }
 
@@ -48,8 +48,8 @@ public class RecognizerRunner
     /// <param name="files">The files to run the recognizers on.</param>
     /// <param name="patterns">The design patterns for which to run the recognizers.</param>
     public RecognizerRunner(
-        IEnumerable files,
-        IList< DesignPattern > patterns)
+        IEnumerable<string> files,
+        IList<DesignPattern> patterns)
     {
         CreateGraph(files);
         _patterns = patterns;
@@ -60,7 +60,7 @@ public class RecognizerRunner
     /// </summary>
     /// <param name="files">The files from which to create a <see cref="SyntaxGraph"/></param>
     private void CreateGraph(
-        IEnumerable files)
+        IEnumerable<string> files)
     {
         _graph = new SyntaxGraph();
         foreach (string file in files)
@@ -73,23 +73,23 @@ public class RecognizerRunner
         _graph.CreateGraph();
     }
 
-    public event EventHandler< RecognizerProgress > OnProgressUpdate;
+    public event EventHandler<RecognizerProgress> OnProgressUpdate;
 
     /// <summary>
     /// Run the recognizers.
     /// </summary>
     /// <returns>A list of <see cref="RecognitionResult"/>, one per given design pattern.</returns>
-    public IList< RecognitionResult > Run()
+    public IList<RecognitionResult> Run()
     {
         // If the graph is empty, we don't have to do any work.
         if (_graph.IsEmpty)
         {
-            return new List< RecognitionResult >();
+            return new List<RecognitionResult>();
         }
 
         int nodeIdx = 0;
-        Dictionary< string, IEntity > entities = _graph.GetAll();
-        IList< RecognitionResult > results = new List< RecognitionResult >();
+        Dictionary<string, IEntity> entities = _graph.GetAll();
+        IList<RecognitionResult> results = new List<RecognitionResult>();
         foreach (IEntity node in entities.Values)
         {
             ReportProgress(
@@ -113,18 +113,18 @@ public class RecognizerRunner
         return results;
     }
 
-    public IList< RecognitionResult > RunV2()
+    public IList<RecognitionResult> RunV2()
     {
         SingletonRecognizer recognizer = new();
 
         // TODO CV: Put all check builders into 'All' operator.
-        IEnumerable< ICheckBuilder > checkBuilders = recognizer.Create();
-        Dictionary< string, IEntity >.ValueCollection entities = _graph.GetAll().Values;
+        IEnumerable<ICheckBuilder> checkBuilders = recognizer.Create();
+        Dictionary<string, IEntity>.ValueCollection entities = _graph.GetAll().Values;
 
         RecognizerContext ctx = new()
-                                {
-                                    Graph = _graph,
-                                };
+        {
+            Graph = _graph,
+        };
         foreach (ICheckBuilder checkBuilder in checkBuilders)
         {
             ICheck check = checkBuilder.Build();
@@ -138,7 +138,7 @@ public class RecognizerRunner
             Console.WriteLine();
         }
 
-        return new List< RecognitionResult >();
+        return new List<RecognitionResult>();
     }
 
     /// <summary>

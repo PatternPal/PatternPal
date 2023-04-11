@@ -29,15 +29,10 @@ internal class UsesCheck : ICheck
             return false;
         }
 
-        foreach (IRelation relation in ctx.Graph.GetRelations(method.GetParent()))
+        if (ctx.Graph.GetRelations(method).Any(x => x.Node2Method == usedMethod))
         {
-            if (relation.GetRelationType() == RelationType.Uses
-                && relation.GetDestination() == usedMethod.GetParent()
-                && method.GetParent() != usedMethod.GetParent())
-            {
-                Console.WriteLine($"Used method: '{usedMethod}' Used by: '{method}'");
-                return true;
-            }
+            Console.WriteLine($"Used method: '{usedMethod}' Used by: '{method}'");
+            return true;
         }
 
         return false;
