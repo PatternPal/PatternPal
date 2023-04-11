@@ -22,7 +22,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         
-      - name: Remove extension
+      - name: Remove extension from solution
         run: dotnet sln PatternPal/PatternPal.sln remove PatternPal/PatternPal.Extension/PatternPal.Extension.csproj
         
       - name: Inspect code
@@ -30,6 +30,4 @@ jobs:
         with:
           workingDirectory: PatternPal
           solutionPath: ./PatternPal.sln
-          solutionWideAnalysis: false
-          include: PatternPal.Core
-          failOnIssue: 0
+          minimumSeverity: warning
