@@ -64,7 +64,7 @@ public class Tests
         _backgroundService = Process.Start(processInfo);
 
         // Create a gRPC channel once because it is an expensive operation
-        _channel = GrpcChannel.ForAddress("http://localhost:5001");
+        _channel = GrpcChannel.ForAddress("http://127.0.0.1:5001");
         // Make a recognizer service clients
         _client = new RecognizerService.RecognizerServiceClient(_channel);
     }
