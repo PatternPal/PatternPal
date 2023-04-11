@@ -30,4 +30,4 @@ jobs:
         with:
           workingDirectory: PatternPal
           solutionPath: ./PatternPal.sln
-          minimumSeverity: warning
+          minimumSeverity: error
