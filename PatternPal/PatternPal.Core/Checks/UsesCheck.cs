@@ -10,23 +10,23 @@ internal class UsesCheck : ICheck
         _getNode = getNode;
     }
 
-    public bool Check(
+    public ICheckResult Check(
         RecognizerContext ctx,
         INode node)
     {
         if (node is not IMethod method)
         {
-            return false;
+            throw new NotImplementedException("Uses Check was incorrect");
         }
 
         if (_getNode() is not IMethod usedMethod)
         {
-            return false;
+            throw new NotImplementedException("Uses Check was incorrect");
         }
 
         if (method == usedMethod)
         {
-            return false;
+            throw new NotImplementedException("Uses Check was incorrect");
         }
 
         foreach (IRelation relation in ctx.Graph.GetRelations(method.GetParent()))
@@ -36,10 +36,10 @@ internal class UsesCheck : ICheck
                 && method.GetParent() != usedMethod.GetParent())
             {
                 Console.WriteLine($"Used method: '{usedMethod}' Used by: '{method}'");
-                return true;
+                throw new NotImplementedException("Uses Check was correct");
             }
         }
 
-        return false;
+        throw new NotImplementedException("Uses Check was incorrect");
     }
 }

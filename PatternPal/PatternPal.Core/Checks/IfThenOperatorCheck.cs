@@ -13,7 +13,7 @@
             _thenChecks = thenChecks;
         }
 
-        bool ICheck.Check(
+        CheckResult ICheck.Check(
             RecognizerContext ctx,
             INode entityNode)
         {

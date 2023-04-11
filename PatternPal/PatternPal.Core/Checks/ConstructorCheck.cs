@@ -13,19 +13,22 @@ internal class ConstructorCheck : ICheck
         _checks = checks;
     }
 
-    public bool Check(
+    public CheckResult Check(
         RecognizerContext ctx,
         INode node)
     {
-        if (node is not IConstructor constructor) return false;
+        if (node is not IConstructor constructor)
+        {
+            throw new NotImplementedException("Constructor check failed");
+        }
 
         foreach (ICheck check in _checks)
         {
-            if (!check.Check(ctx, node)) return false;
+            if (!check.Check(ctx, node).getCorrectness()) throw new NotImplementedException("Constructor Check was incorrect");
         }
 
         Console.WriteLine($"Got Constructor '{constructor}'");
-        
-        return true;
+
+        throw new NotImplementedException("Constructor Check was correct");
     }
 }

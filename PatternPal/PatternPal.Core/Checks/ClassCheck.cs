@@ -10,7 +10,7 @@ internal class ClassCheck : ICheck
         _checks = checks;
     }
 
-    public bool Check(
+    public CheckResult Check(
         RecognizerContext ctx,
         IClass node)
     {
@@ -23,7 +23,7 @@ internal class ClassCheck : ICheck
     {
         if (node is not IClass classEntity)
         {
-            return false;
+            throw new NotImplementedException("Class Check was incorrect");
         }
 
         foreach (ICheck check in _checks)
@@ -105,8 +105,8 @@ internal class ClassCheck : ICheck
                 }
             }
         }
-
         Console.WriteLine($"Got class '{classEntity}'");
-        return true;
+        throw new NotImplementedException("Class Check was correct");
+
     }
 }

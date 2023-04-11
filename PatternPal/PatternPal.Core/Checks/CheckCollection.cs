@@ -13,7 +13,7 @@ internal class CheckCollection : ICheck
         _checks = checks;
     }
 
-    bool ICheck.Check(
+    CheckResult ICheck.Check(
         RecognizerContext ctx,
         INode node)
     {
