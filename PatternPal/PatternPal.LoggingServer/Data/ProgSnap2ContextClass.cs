@@ -18,7 +18,6 @@ namespace PatternPal.LoggingServer.Data
                 optionsBuilder.UseNpgsql(Configuration.GetConnectionString("PostgresConnection"));
             }
 
-
             public DbSet<ProgSnap2Event> Events { get; set; }
         }
 }

@@ -27,8 +27,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:   
           push: false
-          context : PatternPal/PatternPal.LoggingServer/.
           file: PatternPal/PatternPal.LoggingServer/Dockerfile
+          context : PatternPal/PatternPal.LoggingServer
 
   Build:
     runs-on: windows-latest

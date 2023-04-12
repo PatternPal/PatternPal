@@ -46,6 +46,7 @@ message LogRequest {
   EventType event_type = 3;
   string session_id = 4;
   string client_timestamp = 5; // ISO 8601
+  bytes data = 6;
 
 }
 

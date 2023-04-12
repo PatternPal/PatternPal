@@ -19,10 +19,11 @@ internal static class Program
             options.UseNpgsql( builder.Configuration.GetConnectionString("PostgresConnection") )
         );
 
-        // Add the repository
         builder.Services.AddScoped<EventRepository, EventRepository>();
 
         WebApplication app = builder.Build();
+
+        DatabaseManagementService.MigrationInitialization(app); 
 
         app.MapGrpcService<LoggerService>();
 

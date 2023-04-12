@@ -1,4 +1,5 @@
-﻿using Grpc.Core;
+﻿using System.IO.Compression;
+using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using PatternPal.LoggingServer;
 using PatternPal.LoggingServer.Data;
@@ -18,9 +19,14 @@ namespace PatternPal.LoggingServer.Services
 
         public override async Task<LogResponse> Log(LogRequest request, ServerCallContext context)
         {
+            // TODO: Validation of request (not null, correct guid format, expected data, etc.)
 
             Guid sessionId = Guid.Parse(request.SessionId);
             Guid subjectId = Guid.Parse(request.SubjectId);
+
+            byte[] compressed = request.Data.ToByteArray();
+
+            // TODO: File processing (decompression, diff comparison, etc.)
 
             DateTimeOffset cDto = DateTimeOffset.Parse(request.ClientTimestamp);
             
