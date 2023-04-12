@@ -19,16 +19,35 @@ namespace PatternPal.LoggingServer.Services
 
         public override async Task<LogResponse> Log(LogRequest request, ServerCallContext context)
         {
-            // TODO: Validation of request (not null, correct guid format, expected data, etc.)
+            if (!Guid.TryParse(request.SessionId, out Guid sessionId))
+            {
+                Status status = new Status(StatusCode.InvalidArgument, "Invalid sessionID GUID format");
 
-            Guid sessionId = Guid.Parse(request.SessionId);
-            Guid subjectId = Guid.Parse(request.SubjectId);
+                throw new RpcException(status);
+            }
+
+            if (!Guid.TryParse(request.SubjectId, out Guid subjectId))
+            {
+                Status status = new Status(StatusCode.InvalidArgument, "Invalid subjectID GUID format");
+                throw new RpcException(status);
+            }
+
+            if (request.EventType == EventType.EtUnknown)
+            {
+                Status status = new Status(StatusCode.InvalidArgument, "Unknown event type");
+                throw new RpcException(status);
+            }
+
+            if (DateTimeOffset.TryParse(request.ClientTimestamp, out DateTimeOffset cDto))
+            {
+                Status status = new Status(StatusCode.InvalidArgument, "Invalid datetime format ( ISO 8601 ) ");
+                throw new RpcException(status);
+            }
 
             byte[] compressed = request.Data.ToByteArray();
 
             // TODO: File processing (decompression, diff comparison, etc.)
 
-            DateTimeOffset cDto = DateTimeOffset.Parse(request.ClientTimestamp);
             
             int order = await _eventRepository.GetNextOrder(sessionId, subjectId);
 

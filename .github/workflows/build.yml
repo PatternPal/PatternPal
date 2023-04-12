@@ -28,7 +28,6 @@ jobs:
         with:   
           context : PatternPal/
           file: PatternPal/PatternPal.LoggingServer/Dockerfile
-          context : PatternPal/PatternPal.LoggingServer
 
   Build:
     runs-on: windows-latest
