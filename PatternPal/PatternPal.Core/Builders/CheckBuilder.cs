@@ -32,6 +32,9 @@ internal static class CheckBuilder
     internal static MethodCheckBuilder Method(
         params ICheckBuilder[ ] checkBuilders) => new( checkBuilders );
 
+    internal static PropertyCheckBuilder Property(
+        params ICheckBuilder[ ] checkBuilders) => new( checkBuilders );
+
     internal static ModifierCheckBuilder Modifiers(
         params IModifier[ ] modifiers) => new( modifiers );
 
