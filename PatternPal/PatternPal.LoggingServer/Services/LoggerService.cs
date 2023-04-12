@@ -38,7 +38,7 @@ namespace PatternPal.LoggingServer.Services
                 throw new RpcException(status);
             }
 
-            if (DateTimeOffset.TryParse(request.ClientTimestamp, out DateTimeOffset cDto))
+            if (!DateTimeOffset.TryParse(request.ClientTimestamp, out DateTimeOffset cDto))
             {
                 Status status = new Status(StatusCode.InvalidArgument, "Invalid datetime format ( ISO 8601 ) ");
                 throw new RpcException(status);
