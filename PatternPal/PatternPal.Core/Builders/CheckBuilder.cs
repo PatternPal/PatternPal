@@ -38,6 +38,9 @@ internal static class CheckBuilder
     internal static ModifierCheckBuilder Modifiers(
         params IModifier[ ] modifiers) => new( modifiers );
 
+    internal static ParameterCheckBuilder Parameters(
+        params TypeCheck[ ] parameterTypes) => new( parameterTypes );
+
     internal static UsesCheckBuilder Uses(
         Func< INode > getMatchedEntity) => new( getMatchedEntity );
 
