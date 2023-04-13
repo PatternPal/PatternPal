@@ -2,8 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
     <RootNamespace>PatternPal.CommonResources</RootNamespace>
   </PropertyGroup>
 
