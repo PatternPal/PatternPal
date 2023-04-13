@@ -36,6 +36,7 @@ namespace PatternPal.Extension.Commands
             ThreadHelper.ThrowIfNotOnUIThread();
             _dte.Events.BuildEvents.OnBuildDone += BuildEvents_OnBuildDone;
             _package = package;
+            SetSubjectId();
         }
 
         private static void BuildEvents_OnBuildDone(
@@ -67,12 +68,55 @@ namespace PatternPal.Extension.Commands
             //Request to service
             LogEventRequest request = new LogEventRequest
             {
+                SubjectId = GetSubjectId(),
                 CompileResult = outputMessage
             };
 
             LoggingService.LoggingServiceClient client =
                 new LoggingService.LoggingServiceClient(GrpcHelper.Channel);
             LogEventResponse response = client.LogEvent(request);
+      
         }
+
+        /// <summary>
+        /// Sets the SubjectId of the user, if not set already, as a GUID.
+        /// It creates a folder and a file for this at the UserLocalDataPath in the PatternPal Extension folder.
+        /// </summary>
+        static void SetSubjectId()
+        {
+            if (!_package.DoLogData) return;
+
+            string pathToFolder = Path.Combine(_package.UserLocalDataPath.ToString(), "Extensions", "Team PatternPal",
+                "PatternPal.Extension");
+            string dataDir = Path.Combine(pathToFolder, "UserData");
+            if (Directory.Exists(dataDir))
+            {
+                return;
+            }
+
+            Directory.CreateDirectory(dataDir);
+            string fileName = "subjectid.txt";
+            string filePath = Path.Combine(dataDir, fileName);
+            string fileContents = Guid.NewGuid().ToString();
+            File.WriteAllText(filePath, fileContents);
+        }
+
+        /// <summary>
+        /// Returns the SubjectId of this specific user. 
+        /// </summary>
+        /// <returns></returns>
+        static string GetSubjectId()
+        {
+            string pathToFolder = Path.Combine(_package.UserLocalDataPath.ToString(), "Extensions", "Team PatternPal",
+                "PatternPal.Extension");
+            string dataDir = Path.Combine(pathToFolder, "UserData");
+            // Create the data directory and file if it doesn't exist
+            Directory.CreateDirectory(dataDir);
+            string fileName = "subjectid.txt";
+            string filePath = Path.Combine(dataDir, fileName);
+            return File.ReadAllText(filePath);
+        }
+
+
     }
 }

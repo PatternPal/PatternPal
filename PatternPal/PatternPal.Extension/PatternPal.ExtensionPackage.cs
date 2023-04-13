@@ -2,7 +2,6 @@
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-
 using EnvDTE;
 
 using System.ComponentModel;
@@ -86,7 +85,6 @@ namespace PatternPal.Extension
             CancellationToken cancellationToken,
             IProgress< ServiceProgressData > progress)
         {
-            // NOTE: This code is delayed called!
 
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
@@ -95,6 +93,8 @@ namespace PatternPal.Extension
             SubscribeEvents.Initialize(
                 dte,
                 this);
+
+            
         }
 
         #endregion

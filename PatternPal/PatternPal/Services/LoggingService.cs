@@ -26,35 +26,20 @@ public class LoggingService : Protos.LoggingService.LoggingServiceBase
         GrpcChannel grpcChannel = GrpcChannel.ForAddress(
             "http://localhost:8001");
 
-        //TODO: Instead of sending random data to the Logging Server, use the data of receivedRequest.
         //Send request to logging server
         LogRequest sendRequest = new LogRequest
         {
-            //Random data
-            EventType = EventType.SessionStart,
-            EventId = "312-1067-B31D-214124124",
-            SubjectId = "6B29FC40-CA47-1067-B31D-00DD010662DA",
-            ToolInstances = "vs",
-            CodeStateId = "213421-2123",
-            ClientTimestamp = "2023-04-03T20:07:49+0000",
-            ExperimentalCondition = "213421-2123",
-            LoggingErrorId = "213421-2123",
-            ParentEventId = "213421-2123",
-            SessionId = "6B29FC40-CA47-1067-B31D-00DD010662DA",
-            ProjectId = "213421-2123",
-            CodeStateSection = "213421-2123",
+            EventType = EventType.Compile,
+            EventId = Guid.NewGuid().ToString(), //TO DO: Generate ID in Logging Server self
+            SubjectId = receivedRequest.SubjectId,
+            ToolInstances = Environment.Version.ToString(),
+            CodeStateId = Guid.NewGuid().ToString(),
+            CodeStateSection = Directory.GetCurrentDirectory(),
+            ClientTimestamp = "2023-04-03T20:07:49+0000", //TO DO: DateTimeOffset.Now.ToString("yyyy-MM-dd HH:mm:ss.fff zzz"), : Logging server cannot work with offsets yet
             EventInitiatior = EventInitiator.UserDirectAction,
-            EditType = EditType.GenericEdit,
-            CompileResult = "213421-2123",
-            CompileMessageType = "213421-2123",
-            CompileMessageData = "213421-2123",
-            SourceLocation = "213421-2123",
-            ExecutionId = "213421-2123",
-            TestId = "213421-2123",
-            ExecutionResultId = "213421-2123",
-            InterventionCategory = "213421-2123",
-            InterventionType = "213421-2123",
-            InterventionMessage = "213421-2123",
+            SessionId = "6B29FC40-CA47-1067-B31D-00DD010662DA", //TO DO: This ID should be the EventID of the SessionStart event that initiated the session, or it may be derived independently.
+            CompileResult = receivedRequest.CompileResult
+
 
 
         };
