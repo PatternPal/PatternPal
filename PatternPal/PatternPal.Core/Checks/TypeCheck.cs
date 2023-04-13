@@ -15,6 +15,6 @@ internal class TypeCheck : ICheck
         RecognizerContext ctx,
         INode node)
     {
-        throw new NotImplementedException("Property Check was not implemented");
+        throw new NotImplementedException("Type Check was not implemented");
     }
 }
