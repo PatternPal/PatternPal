@@ -1,4 +1,4 @@
-namespace PatternPal.Core.Checks;
+﻿namespace PatternPal.Core.Checks;
 
 internal class ParameterCheck : ICheck
 {
@@ -9,7 +9,7 @@ internal class ParameterCheck : ICheck
     { 
         _parameterTypes = parameterTypes;
     }
-    public bool Check(RecognizerContext ctx, INode node)
+    public ICheckResult Check(RecognizerContext ctx, INode node)
     {
         throw new NotImplementedException();
     }

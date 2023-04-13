@@ -41,6 +41,9 @@ internal static class CheckBuilder
     internal static ParameterCheckBuilder Parameters(
         params TypeCheck[ ] parameterTypes) => new( parameterTypes );
 
+    internal static TypeCheckBuilder Type(
+        Func<INode> getNode) => new( getNode );
+
     internal static UsesCheckBuilder Uses(
         Func< INode > getMatchedEntity) => new( getMatchedEntity );
 

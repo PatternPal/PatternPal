@@ -2,8 +2,19 @@
 
 internal class TypeCheck : ICheck
 {
-    public bool Check(RecognizerContext ctx, INode node) 
+    //used to get the type
+    private readonly Func<INode> _getNode;
+
+    public TypeCheck(
+        Func<INode> getNode)
     {
-        throw new NotImplementedException();
+        _getNode = getNode;
+    }
+
+    public ICheckResult Check(
+        RecognizerContext ctx,
+        INode node)
+    {
+        throw new NotImplementedException("Property Check was not implemented");
     }
 }
