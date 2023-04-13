@@ -56,7 +56,12 @@ namespace PatternPal.Extension.Grpc
 
         internal static void KillBackgroundService()
         {
-            _backgroundService?.Kill();
+            if (_backgroundService.HasExited)
+            {
+                return;
+            }
+
+            _backgroundService.Kill();
         }
     }
 }
