@@ -9,10 +9,10 @@
          _checks = checks;
      }
 
-    public bool Check(
+    public ICheckResult Check(
          RecognizerContext ctx,
          INode node)
      {
-         return true;
-     }
+        throw new NotImplementedException("Interface Check was not implemented");
+    }
  }

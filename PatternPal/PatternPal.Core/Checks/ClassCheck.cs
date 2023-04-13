@@ -12,13 +12,6 @@ internal class ClassCheck : ICheck
 
     public ICheckResult Check(
         RecognizerContext ctx,
-        IClass node)
-    {
-        return true;
-    }
-
-    public bool Check(
-        RecognizerContext ctx,
         INode node)
     {
         if (node is not IClass classEntity)
@@ -37,7 +30,7 @@ internal class ClassCheck : ICheck
                     {
                         if (methodCheck.Check(
                             ctx,
-                            method))
+                            method).Correctness)
                         {
                             hasMatch = true;
                             break;
@@ -45,7 +38,7 @@ internal class ClassCheck : ICheck
                     }
                     if (!hasMatch)
                     {
-                        return false;
+                        throw new NotImplementedException("Class Check was incorrect");
                     }
                     break;
                 }
@@ -56,7 +49,7 @@ internal class ClassCheck : ICheck
                     {
                         if (fieldCheck.Check(
                             ctx,
-                            field))
+                            field).Correctness)
                         {
                             hasMatch = true;
                             break;
@@ -64,7 +57,7 @@ internal class ClassCheck : ICheck
                     }
                     if (!hasMatch)
                     {
-                        return false;
+                        throw new NotImplementedException("Class Check was incorrect");
                     }
                     break;
                 }
@@ -75,7 +68,7 @@ internal class ClassCheck : ICheck
                     {
                         if (constructorCheck.Check(
                             ctx,
-                            constructor))
+                            constructor).Correctness)
                         {
                             hasMatch = true;
                             break;
@@ -83,7 +76,7 @@ internal class ClassCheck : ICheck
                     }
                     if (!hasMatch)
                     {
-                        return false;
+                        throw new NotImplementedException("Class Check was incorrect");
                     }
                     break;
                 }
@@ -91,9 +84,9 @@ internal class ClassCheck : ICheck
                 {
                     if (!check.Check(
                         ctx,
-                        node))
+                        node).Correctness)
                     {
-                        return false;
+                        throw new NotImplementedException("Class Check was incorrect");
                     }
 
                     break;

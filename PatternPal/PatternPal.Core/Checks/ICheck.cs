@@ -6,3 +6,11 @@ internal interface ICheck
         RecognizerContext ctx,
         INode node);
 }
+
+enum Priority
+{
+    Knockout,
+    High,
+    Mid,
+    Low
+}
