@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+  patternpal.loggingserver:
+    image: ${DOCKER_REGISTRY-}patternpalloggingserver
+    build:
+      context: .
+      dockerfile: PatternPal.LoggingServer/Dockerfile
+    ports:
+      - "8000:80"
+      - "8001:443" 
+    depends_on:
+      - patternpal.loggingserver.database
+  
+  patternpal.loggingserver.database:
+    container_name: 'postgres'
+    image: postgres
+    ports:
+        - "5434:5432"
+    environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres

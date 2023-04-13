@@ -1,0 +1,56 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "PatternPal.LoggingServer";
+
+package log;
+
+// The greeting service definition.
+service LogCollectorService {
+  // Sends a greeting
+  rpc Log (LogRequest) returns (LogResponse);
+}
+
+
+enum EventType
+{
+    ET_UNKNOWN = 0;
+    ET_SESSION_START = 1;
+    ET_SESSION_END = 2;
+    ET_PROJECT_OPEN = 3;
+    ET_PROJECT_CLOSE = 4;
+    ET_FILE_CREATE = 5;
+    ET_FILE_DELETE = 6;
+    ET_FILE_OPEN = 7;
+    ET_FILE_CLOSE = 8;
+    ET_FILE_FOCUS = 9;
+    ET_FILE_RENAME = 10;
+    ET_FILE_COPY = 11;
+    ET_FILE_EDIT = 12;
+    ET_COMPILE = 13;
+    ET_COMPILE_ERROR = 14;
+    ET_COMPILE_WARNING = 15;
+    ET_SUBMIT = 16;
+    ET_RUN_PROGRAM = 17;
+    ET_DEBUG_PROGRAM = 18;
+    ET_RUN_TEST = 19;
+    ET_DEBUG_TEST = 20;
+    ET_RESOURCE_VIEW = 21;
+    ET_INTERVENTION = 22;
+    ET_CUSTOM = 23;
+}
+
+// Client configuration message to log to the server
+message LogRequest {
+  string subject_id = 1;
+  string tool_instances = 2;
+  EventType event_type = 3;
+  string session_id = 4;
+  string client_timestamp = 5; // ISO 8601
+  bytes data = 6;
+}
+
+// Confirmation message 
+message LogResponse {
+  string message = 1; 
+  // Simple message to return just to confirm that the server is up and running
+}
