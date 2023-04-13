@@ -1,11 +1,9 @@
+﻿namespace PatternPal.Core.Checks;
 
-namespace PatternPal.Core.Checks;
+internal class TypeCheck : ICheck
 {
-    internal class TypeCheck : ICheck
+    public bool Check(RecognizerContext ctx, INode node) 
     {
-        public bool Check(RecognizerContext ctx, INode node)
-        {
-            throw new NotImplementedException();
-        }
+        throw new NotImplementedException();
     }
 }

@@ -1,4 +1,5 @@
 ﻿namespace PatternPal.Core.Builders;
+
 internal class ParameterCheckBuilder : ICheckBuilder
 {
     private readonly List<TypeCheck> _parameterTypes;
@@ -11,4 +12,3 @@ internal class ParameterCheckBuilder : ICheckBuilder
 
     public ICheck Build() => new ParameterCheck(_parameterTypes);
 }
-
