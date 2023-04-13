@@ -20,8 +20,8 @@ namespace PatternPal.LoggingServer.Services
         public override async Task<LogReply> Log(LogRequest request, ServerCallContext context)
         {
 
-            Guid sessionId = Guid.Parse(request.SessionID);
-            Guid subjectId = Guid.Parse(request.SubjectID);
+            Guid sessionId = Guid.Parse(request.SessionId);
+            Guid subjectId = Guid.Parse(request.SubjectId);
 
 
             DateTimeOffset cDto = DateTimeOffset.Parse(request.ClientTimestamp);
@@ -48,7 +48,7 @@ namespace PatternPal.LoggingServer.Services
 
             return await Task.FromResult(new LogReply
             {
-                Message = "Logged"
+                ResponseMessage = "Logged"
             });
         }
     }

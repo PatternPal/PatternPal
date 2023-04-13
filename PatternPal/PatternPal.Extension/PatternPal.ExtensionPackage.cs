@@ -92,7 +92,7 @@ namespace PatternPal.Extension
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
             DTE dte = (DTE)await GetServiceAsync(typeof( DTE ));
-            SubscribeBuildEvents.Initialize(
+            SubscribeEvents.Initialize(
                 dte,
                 this);
         }

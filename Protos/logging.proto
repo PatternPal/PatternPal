@@ -8,44 +8,46 @@ option csharp_namespace = "PatternPal.Protos";
 // Snake case
 service LoggingService {
     // Runs the recognizer(s) for a given file or project.
-    rpc LogBuildEvent (LogBuildEventRequest) returns (LogBuildEventResponse);
+    rpc LogEvent (LogEventRequest) returns (LogEventResponse);
 }
 
 // Input arguments for recognizer request.
-message LogBuildEventRequest {
+message LogEventRequest {
 
 // Specific columns 
-EventType event_type = 0;
-string event_id = 1;
-string subject_id = 2;
-string tool_instances = 3;
-string code_state_id = 4;
+EventType event_type = 1;
+string event_id = 2;
+string subject_id = 3;
+string tool_instances = 4;
+string code_state_id = 5;
 
 // Optional columns
-string client_timestamp = 5;
-string experimental_condition = 6; 
-string logging_error_id = 7;
-string parent_event_id = 8;
-string session_id = 9;
-string project_id = 10;
-string code_state_section = 11;
-string event_initiation = 12;
-string compile_result = 13;
-string compile_message_type = 14;
-string compile_message_data = 15;
-string source_location = 16;
-string execution_id = 17;
-string test_id = 18;
-string execution_result_id = 19;
-string intervention_category = 20;
-string intervention_type = 21;
-string intervention_message = 22;
+string client_timestamp = 6;
+string experimental_condition = 7; 
+string logging_error_id = 8;
+string parent_event_id = 9;
+string session_id = 10;
+string project_id = 11;
+string code_state_section = 12;
+EventInitiator event_initiatior = 13;
+EditType edit_type = 14;
+string compile_result = 15;
+string compile_message_type = 16;
+string compile_message_data = 17;
+string source_location = 18;
+string execution_id = 19;
+string test_id = 20;
+string execution_result_id = 21;
+string intervention_category = 22;
+string intervention_type = 23;
+string intervention_message = 24;
+
 }
 
 // Input arguments for recognizer response.
-message LogBuildEventResponse {
+message LogEventResponse {
 
-    string response_message = 2;
+    string response_message = 1;
 
 }
 
@@ -66,5 +68,35 @@ enum EventType
     RUN_TEST = 11;
     DEBUG_TEST = 12;
     INTERVENTION = 13;
-    CUSTOM = 14;
+    CUSTOM_EVENT_TYPE = 14;
+}
+
+// The possible event initiators
+enum EventInitiator
+{
+    USER_DIRECT_ACTION = 0;
+    USER_INDIRECT_ACTION = 1;
+    TOOL_REACTION = 2;
+    TOOL_TIMED_EVENT = 3;
+    INSTRUCTOR_DIRECT_ACTION = 4;
+    INSTRUCTOR_INDIRECT_ACTION = 5;
+    TEAM_MEMBER_DIRECT_ACTION = 6;
+    TEAM_MEMBER_INDIRECT_ACTION = 7;
+    CUSTOM_EVENT_INITIATOR = 8;
+}
+
+// The possible edit types
+enum EditType
+{
+    GENERIC_EDIT = 0;
+    INSERT = 1;
+    DELETE = 2;
+    REPLACE = 3;
+    MOVE = 4;
+    PASTE = 5;
+    UNDO = 6;
+    REDO = 7;
+    REFACTOR = 8;
+    RESET = 9;
+    CUSTOM_EDIT_TYPE = 10;
 }

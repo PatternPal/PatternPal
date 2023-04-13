@@ -10,7 +10,47 @@ service Log {
   rpc Log (LogRequest) returns (LogReply);
 }
 
+// Input arguments for recognizer request.
+message LogRequest {
 
+// Specific columns 
+EventType event_type = 1;
+string event_id = 2;
+string subject_id = 3;
+string tool_instances = 4;
+string code_state_id = 5;
+
+// Optional columns
+string client_timestamp = 6;
+string experimental_condition = 7; 
+string logging_error_id = 8;
+string parent_event_id = 9;
+string session_id = 10;
+string project_id = 11;
+string code_state_section = 12;
+EventInitiator event_initiatior = 13;
+EditType edit_type = 14;
+string compile_result = 15;
+string compile_message_type = 16;
+string compile_message_data = 17;
+string source_location = 18;
+string execution_id = 19;
+string test_id = 20;
+string execution_result_id = 21;
+string intervention_category = 22;
+string intervention_type = 23;
+string intervention_message = 24;
+
+}
+
+// Input arguments for recognizer response.
+message LogReply {
+
+    string response_message = 1;
+
+}
+
+// The possible event types that are logged
 enum EventType
 {
     SESSION_START = 0;
@@ -19,36 +59,43 @@ enum EventType
     PROJECT_CLOSE = 3;
     FILE_CREATE = 4;
     FILE_DELETE = 5;
-    FILE_OPEN = 6;
-    FILE_CLOSE = 7;
-    FILE_FOCUS = 8;
-    FILE_RENAME = 9;
-    FILE_COPY = 10;
-    FILE_EDIT = 11;
-    COMPILE = 12;
-    COMPILE_ERROR = 13;
-    COMPILE_WARNING = 14;
-    SUBMIT = 15;
-    RUN_PROGRAM = 16;
-    DEBUG_PROGRAM = 17;
-    RUN_TEST = 18;
-    DEBUG_TEST = 19;
-    RESOURCE_VIEW = 20;
-    INTERVENTION = 21;
-    CUSTOM = 22;
-}
-// Client configuration message to log to the server
-message LogRequest {
-  string subjectID = 1;
-  string toolInstances = 2;
-  EventType eventType = 3;
-  string SessionID = 4;
-  string clientTimestamp = 5; // ISO 8601
-
+    FILE_EDIT = 6;
+    COMPILE = 7;
+    COMPILE_ERROR = 8;
+    RUN_PROGRAM = 9;
+    DEBUG_PROGRAM = 10;
+    RUN_TEST = 11;
+    DEBUG_TEST = 12;
+    INTERVENTION = 13;
+    CUSTOM_EVENT_TYPE = 14;
 }
 
-// Confirmation message 
-message LogReply {
-  string message = 1; 
-  // Simple message to return just to confirm that the server is up and running
+// The possible event initiators
+enum EventInitiator
+{
+    USER_DIRECT_ACTION = 0;
+    USER_INDIRECT_ACTION = 1;
+    TOOL_REACTION = 2;
+    TOOL_TIMED_EVENT = 3;
+    INSTRUCTOR_DIRECT_ACTION = 4;
+    INSTRUCTOR_INDIRECT_ACTION = 5;
+    TEAM_MEMBER_DIRECT_ACTION = 6;
+    TEAM_MEMBER_INDIRECT_ACTION = 7;
+    CUSTOM_EVENT_INITIATOR = 8;
+}
+
+// The possible edit types
+enum EditType
+{
+    GENERIC_EDIT = 0;
+    INSERT = 1;
+    DELETE = 2;
+    REPLACE = 3;
+    MOVE = 4;
+    PASTE = 5;
+    UNDO = 6;
+    REDO = 7;
+    REFACTOR = 8;
+    RESET = 9;
+    CUSTOM_EDIT_TYPE = 10;
 }

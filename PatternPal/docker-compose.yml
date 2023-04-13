@@ -6,6 +6,9 @@ services:
     build:
       context: .
       dockerfile: PatternPal.LoggingServer/Dockerfile
+    ports:
+        - "8000:443"
+        - "8001:80"
   patternpal.loggingserver.database:
     container_name: 'postgres'
     image: postgres
