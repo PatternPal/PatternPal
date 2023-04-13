@@ -3,7 +3,7 @@ using SyntaxTree.Abstractions;
 
 namespace SyntaxTree.Models
 {
-    internal class Modifier : IModifier
+    public class Modifier : IModifier
     {
         private readonly string _name;
 
@@ -30,11 +30,7 @@ namespace SyntaxTree.Models
         {
             return _name;
         }
-    }
 
-    public static class Modifiers
-    {
-        //AccessModifiers
         public static readonly IModifier Public = new Modifier("public");
         public static readonly IModifier Internal = new Modifier("internal");
         public static readonly IModifier Protected = new Modifier("protected");

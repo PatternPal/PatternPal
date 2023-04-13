@@ -15,7 +15,7 @@ namespace PatternPal.Recognizers.Recognizers
         {
             var result = new Result();
 
-            var methodCheck = new ModifierCheck(Modifiers.Private.Not(), Modifiers.Static);
+            var methodCheck = new ModifierCheck(Modifier.Private.Not(), Modifier.Static);
 
             var resultResults = node.GetAllMethods().Select(methodCheck.Check).ToList();
             result.Results = resultResults;

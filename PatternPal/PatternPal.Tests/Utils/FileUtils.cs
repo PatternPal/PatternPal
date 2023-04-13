@@ -7,7 +7,7 @@ namespace PatternPal.Tests.Utils
     public static class FileUtils
     {
         /// <summary>
-        ///     Returns a string of all the contenst from the given file.
+        ///     Returns a string of all the contents from the given file.
         /// </summary>
         /// <param name="fileName">Path of the file which needs to be read</param>
         /// <returns>The file content</returns>
