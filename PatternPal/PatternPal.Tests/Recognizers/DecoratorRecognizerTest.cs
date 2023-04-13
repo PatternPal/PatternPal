@@ -1,5 +1,5 @@
 ﻿using PatternPal.Recognizers.Recognizers;
-using PatternPal.Tests.Utils;
+
 using NUnit.Framework;
 using SyntaxTree;
 

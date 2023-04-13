@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PatternPal.Tests.TestClasses.StrategyTest3
+﻿namespace PatternPal.Tests.TestClasses.StrategyTest3
 {
     //code is from https://www.dofactory.com/net/strategy-design-pattern
 

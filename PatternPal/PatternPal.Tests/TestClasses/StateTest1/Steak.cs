@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PatternPal.Tests.TestClasses.StateTest1
+﻿namespace PatternPal.Tests.TestClasses.StateTest1
 {
     //this code is from https://exceptionnotfound.net/state-pattern-in-csharp/
 

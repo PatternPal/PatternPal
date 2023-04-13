@@ -2,7 +2,6 @@
 using System.Linq;
 using NUnit.Framework;
 using SyntaxTree;
-using SyntaxTree.Abstractions.Entities;
 
 namespace PatternPal.Tests.Core
 {

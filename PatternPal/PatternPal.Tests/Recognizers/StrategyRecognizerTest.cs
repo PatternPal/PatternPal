@@ -1,10 +1,12 @@
-﻿using System;
-using PatternPal.CommonResources;
+﻿using PatternPal.CommonResources;
 using PatternPal.Recognizers.Abstractions;
 using PatternPal.Recognizers.Recognizers;
-using PatternPal.Tests.Utils;
+
 using NUnit.Framework;
+
 using SyntaxTree;
+
+using ICheckResult = PatternPal.Recognizers.Abstractions.ICheckResult;
 
 namespace PatternPal.Tests.Recognizers
 {

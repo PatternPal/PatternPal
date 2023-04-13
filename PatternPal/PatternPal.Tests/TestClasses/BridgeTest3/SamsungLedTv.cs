@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PatternPal.Tests.TestClasses.BridgeTest3
+﻿namespace PatternPal.Tests.TestClasses.BridgeTest3
 {
     public class SamsungLedTv : LEDTV
     {

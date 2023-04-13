@@ -14,10 +14,7 @@ internal class ClassCheck : ICheck
         RecognizerContext ctx,
         INode node)
     {
-        if (node is not IClass classEntity)
-        {
-            throw new NotImplementedException("Class Check was incorrect");
-        }
+        IClass classEntity = CheckHelper.ConvertAndThrowIfIncorrectNodeType< IClass >(node);
 
         foreach (ICheck check in _checks)
         {
@@ -98,8 +95,13 @@ internal class ClassCheck : ICheck
                 }
             }
         }
-        Console.WriteLine($"Got class '{classEntity}'");
-        throw new NotImplementedException("Class Check was correct");
 
+        return new NodeCheckResult
+               {
+                   ChildrenCheckResults = new List< ICheckResult >(),
+                   Correctness = true,
+                   FeedbackMessage = $"Found class '{classEntity}'",
+                   Priority = Priority.Knockout,
+               };
     }
 }
