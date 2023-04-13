@@ -10,7 +10,7 @@ internal class ClassCheck : ICheck
         _checks = checks;
     }
 
-    public CheckResult Check(
+    public ICheckResult Check(
         RecognizerContext ctx,
         IClass node)
     {
