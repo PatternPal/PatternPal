@@ -13,7 +13,7 @@ internal class CheckCollection : ICheck
         _checks = checks;
     }
 
-    bool ICheck.Check(
+    ICheckResult ICheck.Check(
         RecognizerContext ctx,
         INode node)
     {
@@ -25,14 +25,14 @@ internal class CheckCollection : ICheck
                 foreach (ICheck check in _checks)
                 {
                     if (!check.Check(
-                        ctx,
-                        node))
+                            ctx,
+                            node).Correctness)
                     {
-                        return false;
+                        throw new NotImplementedException("Check Check was incorrect");
                     }
                 }
 
-                return true;
+                throw new NotImplementedException("Check Check was correct");
             }
             case CheckCollectionKind.Any:
             {
@@ -40,14 +40,14 @@ internal class CheckCollection : ICheck
                 {
                     if (check.Check(
                         ctx,
-                        node))
+                        node).Correctness)
                     {
-                        return true;
+                        throw new NotImplementedException("CheckCollection check was correct");
                     }
                 }
 
-                return false;
-            }
+                throw new NotImplementedException("CheckCollection check was incorrect");
+                }
             default:
                 throw new NotImplementedException();
         }

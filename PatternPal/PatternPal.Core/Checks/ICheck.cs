@@ -2,7 +2,15 @@
 
 internal interface ICheck
 {
-    bool Check(
+    ICheckResult Check(
         RecognizerContext ctx,
         INode node);
+}
+
+enum Priority
+{
+    Knockout,
+    High,
+    Mid,
+    Low
 }

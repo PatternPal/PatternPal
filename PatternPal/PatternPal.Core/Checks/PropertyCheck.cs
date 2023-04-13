@@ -10,10 +10,10 @@ internal class PropertyCheck : ICheck
         _checks = checks;
     }
 
-    public bool Check(
+    public ICheckResult Check(
         RecognizerContext ctx,
         INode node)
     {
-        return false;
+        throw new NotImplementedException("Property Check was not implemented");
     }
 }

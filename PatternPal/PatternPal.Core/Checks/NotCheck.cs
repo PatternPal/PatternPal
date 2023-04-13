@@ -10,12 +10,12 @@ internal class NotCheck : ICheck
         _check = check;
     }
 
-    bool ICheck.Check(
+    ICheckResult ICheck.Check(
         RecognizerContext ctx,
         INode node)
     {
-        return !_check.Check(
-            ctx,
-            node);
+        //Todo: add implememtation
+        // return !_check.Check( ctx, node).Correctness;
+        throw new NotImplementedException("Not Check was incorrect");
     }
 }

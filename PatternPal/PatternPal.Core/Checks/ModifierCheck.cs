@@ -10,13 +10,13 @@ internal class ModifierCheck : ICheck
         _modifiers = modifiers;
     }
 
-    public bool Check(
+    public ICheckResult Check(
         RecognizerContext ctx,
         INode node)
     {
         if (node is not IModified modified)
         {
-            return false;
+            throw new NotImplementedException("Modifier Check was incorrect");
         }
 
         // TODO: This method is terribly inefficient, rewrite Modifiers to be a flags enum and just
@@ -28,10 +28,10 @@ internal class ModifierCheck : ICheck
         {
             if (!modifiers.Contains(modifier))
             {
-                return false;
+                throw new NotImplementedException("Modifier Check was incorrect");
             }
         }
 
-        return true;
+        throw new NotImplementedException("Modifier Check was correct");
     }
 }
