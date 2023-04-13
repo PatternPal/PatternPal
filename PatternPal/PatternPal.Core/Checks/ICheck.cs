@@ -26,7 +26,7 @@ internal static class CheckHelper
     /// <param name="node">The <see cref="INode"/> to convert.</param>
     /// <returns>The <see cref="INode"/> instance converted to an instance of type <see cref="T"/>.</returns>
     /// <exception cref="IncorrectNodeTypeException">Thrown if <paramref name="node"/> is not of type <see cref="T"/></exception>
-    internal static T ConvertAndThrowIfIncorrectNodeType< T >(
+    internal static T ConvertNodeElseThrow< T >(
         INode node)
         where T : INode => node is not T asT
         ? throw IncorrectNodeTypeException.From< T >()
