@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PatternPal.Core.Checks
+namespace PatternPal.Core.Checks;
 {
     internal class ParameterCheck : ICheck
     {
