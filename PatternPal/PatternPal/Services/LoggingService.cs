@@ -35,13 +35,13 @@ public class LoggingService : Protos.LoggingService.LoggingServiceBase
             ToolInstances = Environment.Version.ToString(),
             CodeStateId = Guid.NewGuid().ToString(),
             CodeStateSection = Directory.GetCurrentDirectory(),
-            ClientTimestamp = "2023-04-03T20:07:49+0000", //TO DO: DateTimeOffset.Now.ToString("yyyy-MM-dd HH:mm:ss.fff zzz"), : Logging server cannot work with offsets yet
+            ClientTimestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff zzz"), //TO DO: DateTimeOffset.Now.ToString("yyyy-MM-dd HH:mm:ss.fff zzz"), : Logging server cannot work with offsets yet
             EventInitiatior = EventInitiator.UserDirectAction,
             SessionId = "6B29FC40-CA47-1067-B31D-00DD010662DA", //TO DO: This ID should be the EventID of the SessionStart event that initiated the session, or it may be derived independently.
             CompileResult = receivedRequest.CompileResult
 
 
-
+                
         };
         Log.LogClient client = new Log.LogClient(grpcChannel);
         LogReply logReply = client.Log(sendRequest);

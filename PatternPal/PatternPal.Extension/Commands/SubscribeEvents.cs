@@ -110,7 +110,6 @@ namespace PatternPal.Extension.Commands
             string pathToFolder = Path.Combine(_package.UserLocalDataPath.ToString(), "Extensions", "Team PatternPal",
                 "PatternPal.Extension");
             string dataDir = Path.Combine(pathToFolder, "UserData");
-            // Create the data directory and file if it doesn't exist
             Directory.CreateDirectory(dataDir);
             string fileName = "subjectid.txt";
             string filePath = Path.Combine(dataDir, fileName);
