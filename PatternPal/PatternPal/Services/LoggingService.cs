@@ -26,30 +26,84 @@ public class LoggingService : Protos.LoggingService.LoggingServiceBase
         GrpcChannel grpcChannel = GrpcChannel.ForAddress(
             "http://localhost:8001");
 
-        //Send request to logging server
-        LogRequest sendRequest = new LogRequest
-        {
-            EventType = EventType.Compile,
-            EventId = Guid.NewGuid().ToString(), //TO DO: Generate ID in Logging Server self
-            SubjectId = receivedRequest.SubjectId,
-            ToolInstances = Environment.Version.ToString(),
-            CodeStateId = Guid.NewGuid().ToString(),
-            CodeStateSection = Directory.GetCurrentDirectory(),
-            ClientTimestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff zzz"), //TO DO: DateTimeOffset.Now.ToString("yyyy-MM-dd HH:mm:ss.fff zzz"), : Logging server cannot work with offsets yet
-            EventInitiatior = EventInitiator.UserDirectAction,
-            SessionId = "6B29FC40-CA47-1067-B31D-00DD010662DA", //TO DO: This ID should be the EventID of the SessionStart event that initiated the session, or it may be derived independently.
-            CompileResult = receivedRequest.CompileResult
+        //Create a log 
+        LogRequest sendRequest = DetermineSpecificLog(receivedRequest);
 
-
-                
-        };
+        //Specify according to the EventType
         Log.LogClient client = new Log.LogClient(grpcChannel);
         LogReply logReply = client.Log(sendRequest);
 
         //Send response back to frond-end to verify something has been received here
         LogEventResponse response = new LogEventResponse { ResponseMessage = "a response message." };
         return Task.FromResult(response);
-
     }
 
+    /// <summary>
+    /// Returns a log based on the event type
+    /// </summary>
+    private LogRequest DetermineSpecificLog(LogEventRequest receivedRequest)
+    {
+        switch (receivedRequest.EventType)
+        {
+            case Protos.EventType.Compile:
+                return CompileLog(receivedRequest);
+            case Protos.EventType.SessionStart:
+                return SessionStartLog(receivedRequest);
+            case Protos.EventType.SessionEnd:
+                return SessionEndLog(receivedRequest);
+            default:
+                return StandardLog(receivedRequest);
+        }
+    }
+
+
+    /// <summary>
+    /// Each log has certain required fields that are independent of the EventType. These fields are set here.
+    /// </summary>
+    /// <param name="receivedRequest"></param>
+    /// <returns></returns>
+    private LogRequest StandardLog(LogEventRequest receivedRequest)
+    {
+        return new LogRequest
+        {
+            EventId = Guid.NewGuid().ToString(), //TO DO: Generate ID in Logging Server self
+            SubjectId = receivedRequest.SubjectId,
+            ToolInstances = Environment.Version.ToString(),
+            CodeStateSection = Directory.GetCurrentDirectory(),
+            CodeStateId = Guid.NewGuid().ToString(),
+            ClientTimestamp =
+                DateTime.UtcNow.ToString(
+                    "yyyy-MM-dd HH:mm:ss.fff zzz"), //TO DO: DateTimeOffset.Now.ToString("yyyy-MM-dd HH:mm:ss.fff  zzz"), : Logging server cannot work with offsets yet
+            SessionId =
+                receivedRequest.SessionId 
+        };
+    }
+
+    private LogRequest CompileLog(LogEventRequest receivedRequest)
+    {
+        LogRequest sendLog = StandardLog(receivedRequest);
+        sendLog.EventType = LoggingServer.EventType.Compile;
+        sendLog.CompileResult = receivedRequest.CompileResult;
+        return sendLog;
+    }
+
+    private LogRequest SessionStartLog(LogEventRequest receivedRequest)
+    {
+        LogRequest sendLog = StandardLog(receivedRequest);
+        sendLog.EventType = LoggingServer.EventType.SessionStart;
+
+        return sendLog;
+    }
+
+
+    private LogRequest SessionEndLog(LogEventRequest receivedRequest)
+    {
+        LogRequest sendLog = StandardLog(receivedRequest);
+        sendLog.EventType = LoggingServer.EventType.SessionEnd;
+      
+        return sendLog;
+    }
 }
+
+
+

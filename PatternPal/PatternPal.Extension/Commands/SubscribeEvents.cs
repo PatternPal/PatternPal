@@ -28,18 +28,26 @@ namespace PatternPal.Extension.Commands
         private static PatternPalExtensionPackage _package;
 
         private static DTE _dte;
+
+        private static string _sessionId;
         public static void Initialize(
             DTE dte,
             PatternPalExtensionPackage package)
         {
             _dte = dte;
             ThreadHelper.ThrowIfNotOnUIThread();
-            _dte.Events.BuildEvents.OnBuildDone += BuildEvents_OnBuildDone;
             _package = package;
+
+            //Initialize event listeners
             SetSubjectId();
+            OnSessionStart();
+            _dte.Events.SolutionEvents.AfterClosing += OnSessionEnd; //TO DO: This is not firing!
+            _dte.Events.BuildEvents.OnBuildDone += OnBuildDone;
+
+
         }
 
-        private static void BuildEvents_OnBuildDone(
+        private static void OnBuildDone(
             vsBuildScope Scope,
             vsBuildAction Action)
         {
@@ -69,13 +77,68 @@ namespace PatternPal.Extension.Commands
             LogEventRequest request = new LogEventRequest
             {
                 SubjectId = GetSubjectId(),
-                CompileResult = outputMessage
+                EventType = EventType.Compile,
+                CompileResult = outputMessage,
+                SessionId = _sessionId
+                
             };
 
             LoggingService.LoggingServiceClient client =
                 new LoggingService.LoggingServiceClient(GrpcHelper.Channel);
             LogEventResponse response = client.LogEvent(request);
       
+        }
+
+        private static void OnSessionStart()
+        {
+            //(Re)set the sessionID
+            _sessionId = Guid.NewGuid().ToString();
+
+            if (!_package.DoLogData)
+            {
+                return;
+            }
+            if (!_package.DoLogData)
+            {
+                return;
+            }
+
+            //Create request
+            LogEventRequest request = CreateStandardLog();
+            request.EventType = EventType.SessionStart;
+
+            //Connection
+            LoggingService.LoggingServiceClient client =
+                new LoggingService.LoggingServiceClient(GrpcHelper.Channel);
+            LogEventResponse response = client.LogEvent(request);
+
+        }
+
+        private static void OnSessionEnd()
+        {
+
+            if (!_package.DoLogData)
+            {
+                return;
+            }
+            //Create request
+            LogEventRequest request = CreateStandardLog();
+            request.EventType = EventType.SessionEnd;
+
+            //Connection
+            LoggingService.LoggingServiceClient client =
+                new LoggingService.LoggingServiceClient(GrpcHelper.Channel);
+            LogEventResponse response = client.LogEvent(request);
+
+        }
+
+        static LogEventRequest CreateStandardLog()
+        {
+            return new LogEventRequest
+            {
+                SubjectId = GetSubjectId(),
+                SessionId = _sessionId
+            };
         }
 
         /// <summary>
