@@ -1,15 +1,15 @@
 ﻿namespace PatternPal.Core.Checks;
 
-internal class ParameterCheck : ICheck
+internal class ParameterCheck : CheckBase
 {
     private readonly List<TypeCheck> _parameterTypes;
 
-    public ParameterCheck(
-        List<TypeCheck> parameterTypes)
+    public ParameterCheck(Priority priority,
+        List<TypeCheck> parameterTypes) : base(priority)
     { 
         _parameterTypes = parameterTypes;
     }
-    public ICheckResult Check(RecognizerContext ctx, INode node)
+    public override ICheckResult Check(RecognizerContext ctx, INode node)
     {
         throw new NotImplementedException();
     }

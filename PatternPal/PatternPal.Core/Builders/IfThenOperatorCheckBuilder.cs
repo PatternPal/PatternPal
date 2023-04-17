@@ -1,27 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace PatternPal.Core.Builders;
 
-namespace PatternPal.Core.Builders
+internal class IfThenOperatorCheckBuilder : CheckBuilderBase
 {
-    internal class IfThenOperatorCheckBuilder : ICheckBuilder
+    private readonly List<ICheckBuilder> _ifCheckBuilders;
+    private readonly List<ICheckBuilder> _thenCheckBuilders;
+    
+    public IfThenOperatorCheckBuilder(Priority priority, List<ICheckBuilder> ifCheckBuilders, List<ICheckBuilder> thenCheckBuilders) : base(priority)
     {
-        private readonly List<ICheckBuilder> _ifCheckBuilders;
-        private readonly List<ICheckBuilder> _thenCheckBuilders;
+        _ifCheckBuilders = ifCheckBuilders;
+        _thenCheckBuilders = thenCheckBuilders;
+    }
 
-        public IfThenOperatorCheckBuilder(List<ICheckBuilder> ifCheckBuilders, List<ICheckBuilder> thenCheckBuilders)
-        {
-            _ifCheckBuilders = ifCheckBuilders;
-            _thenCheckBuilders = thenCheckBuilders;
-        }
-
-        ICheck ICheckBuilder.Build()
-        {
-            List<ICheck> ifChecks = _ifCheckBuilders.Select(checkBuilder => checkBuilder.Build()).ToList();
-            List<ICheck> thenChecks = _thenCheckBuilders.Select(checkBuilder => checkBuilder.Build()).ToList();
-            return new IfThenOperatorCheck(ifChecks, thenChecks);
-        }
+    public override ICheck Build()
+    {
+        List<ICheck> ifChecks = _ifCheckBuilders.Select(checkBuilder => checkBuilder.Build()).ToList();
+        List<ICheck> thenChecks = _thenCheckBuilders.Select(checkBuilder => checkBuilder.Build()).ToList();
+        return new IfThenOperatorCheck(Priority, ifChecks, thenChecks);
     }
 }

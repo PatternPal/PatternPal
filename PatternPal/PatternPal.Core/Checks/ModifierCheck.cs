@@ -1,16 +1,16 @@
 ﻿namespace PatternPal.Core.Checks;
 
-internal class ModifierCheck : ICheck
+internal class ModifierCheck : CheckBase
 {
     private readonly List< IModifier > _modifiers;
 
-    public ModifierCheck(
-        List< IModifier > modifiers)
+    public ModifierCheck(Priority priority,
+        List< IModifier > modifiers) : base(priority)
     {
         _modifiers = modifiers;
     }
 
-    public ICheckResult Check(
+    public override ICheckResult Check(
         RecognizerContext ctx,
         INode node)
     {

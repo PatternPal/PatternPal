@@ -1,16 +1,16 @@
 ﻿namespace PatternPal.Core.Checks;
 
-internal class ClassCheck : ICheck
+internal class ClassCheck : CheckBase
 {
     private readonly IEnumerable< ICheck > _checks;
 
-    internal ClassCheck(
-        IEnumerable< ICheck > checks)
+    internal ClassCheck(Priority priority, 
+        IEnumerable<ICheck> checks) : base(priority)
     {
         _checks = checks;
     }
 
-    public ICheckResult Check(
+    public override ICheckResult Check(
         RecognizerContext ctx,
         INode node)
     {

@@ -8,48 +8,63 @@ internal interface ICheckBuilder
     internal static readonly GetCurrentEntity GetCurrentEntity = ctx => ctx.CurrentEntity;
 
     ICheck Build();
+
+    Priority Priority { get; init; }
+}
+
+internal abstract class CheckBuilderBase : ICheckBuilder
+{
+    protected CheckBuilderBase(Priority priority)
+    {
+        Priority = priority;
+    }
+
+    public abstract ICheck Build();
+	
+    public Priority Priority { get; init; }
 }
 
 internal static class CheckBuilder
 {
-    internal static CheckCollectionBuilder Any(
-        params ICheckBuilder[ ] checkBuilders) => new(
+    internal static CheckCollectionBuilder Any(Priority priority,
+        params ICheckBuilder[] checkBuilders) => new(priority,
         CheckCollectionKind.Any,
-        checkBuilders );
+        checkBuilders);
 
-    internal static NotCheckBuilder Not(
-        ICheckBuilder checkBuilder) => new( checkBuilder );
+    internal static NotCheckBuilder Not(Priority priority,
+        ICheckBuilder checkBuilder) => new(priority, checkBuilder);
 
-    internal static ClassCheckBuilder Class(
-        params ICheckBuilder[ ] checkBuilders) => new( checkBuilders );
+    internal static ClassCheckBuilder Class(Priority priority,
+        params ICheckBuilder[] checkBuilders) => new(priority, checkBuilders);
 
-    internal static ClassCheckBuilder AbstractClass(
-        params ICheckBuilder[] checkBuilders) => new(checkBuilders.Prepend(Modifiers(Modifier.Abstract)));
+    internal static ClassCheckBuilder AbstractClass(Priority priority,
+        params ICheckBuilder[] checkBuilders) =>
+        new(priority, checkBuilders.Prepend(Modifiers(priority, Modifier.Abstract)));
 
-    internal static InterfaceCheckBuilder Interface(
-        params ICheckBuilder[] checkBuilders) => new(checkBuilders);
+    internal static InterfaceCheckBuilder Interface(Priority priority,
+        params ICheckBuilder[] checkBuilders) => new(priority, checkBuilders);
 
-    internal static MethodCheckBuilder Method(
-        params ICheckBuilder[ ] checkBuilders) => new( checkBuilders );
+    internal static MethodCheckBuilder Method(Priority priority,
+        params ICheckBuilder[] checkBuilders) => new(priority, checkBuilders);
 
-    internal static PropertyCheckBuilder Property(
-        params ICheckBuilder[ ] checkBuilders) => new( checkBuilders );
+    internal static PropertyCheckBuilder Property(Priority priority,
+        params ICheckBuilder[] checkBuilders) => new(priority, checkBuilders);
 
-    internal static ModifierCheckBuilder Modifiers(
-        params IModifier[ ] modifiers) => new( modifiers );
+    internal static ModifierCheckBuilder Modifiers(Priority priority,
+        params IModifier[] modifiers) => new(priority, modifiers);
 
-    internal static ParameterCheckBuilder Parameters(
-        params TypeCheck[ ] parameterTypes) => new( parameterTypes );
+    internal static ParameterCheckBuilder Parameters(Priority priority,
+        params TypeCheck[] parameterTypes) => new(priority, parameterTypes);
 
-    internal static TypeCheckBuilder Type(
-        Func<INode> getNode) => new( getNode );
+    internal static TypeCheckBuilder Type(Priority priority,
+        Func<INode> getNode) => new(priority, getNode);
 
-    internal static UsesCheckBuilder Uses(
-        Func< INode > getMatchedEntity) => new( getMatchedEntity );
+    internal static UsesCheckBuilder Uses(Priority priority,
+        Func<INode> getMatchedEntity) => new(priority, getMatchedEntity);
 
-    internal static FieldCheckBuilder Field(
-        params ICheckBuilder[ ] checkBuilders) => new( checkBuilders );
+    internal static FieldCheckBuilder Field(Priority priority,
+        params ICheckBuilder[] checkBuilders) => new(priority, checkBuilders);
 
-    internal static ConstructorCheckBuilder Constructor(
-        params ICheckBuilder[ ] checkBuilders) => new( checkBuilders );
+    internal static ConstructorCheckBuilder Constructor(Priority priority,
+        params ICheckBuilder[] checkBuilders) => new(priority, checkBuilders);
 }

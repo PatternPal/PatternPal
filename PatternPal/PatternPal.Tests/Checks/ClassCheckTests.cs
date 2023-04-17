@@ -15,7 +15,7 @@ public class ClassCheckTests
         IClass classEntity = EntityNodeUtils.CreateClass();
         IMethod methodEntity = EntityNodeUtils.CreateMethod();
 
-        ClassCheck classCheck = (ClassCheck)Class().Build();
+        ClassCheck classCheck = (ClassCheck)Class(Priority.Low).Build();
         RecognizerContext ctx = new();
 
         Assert.DoesNotThrow(
@@ -34,7 +34,7 @@ public class ClassCheckTests
     {
         IClass classEntity = EntityNodeUtils.CreateClass();
 
-        ClassCheck classCheck = (ClassCheck)Class().Build();
+        ClassCheck classCheck = (ClassCheck)Class(Priority.Low).Build();
         RecognizerContext ctx = new();
 
         ICheckResult result = classCheck.Check(
@@ -49,7 +49,7 @@ public class ClassCheckTests
     {
         IClass classEntity = EntityNodeUtils.CreateClass();
 
-        ClassCheck classCheck = (ClassCheck)Class(Parameters()).Build();
+        ClassCheck classCheck = (ClassCheck)Class(Priority.Low, Parameters(Priority.Low)).Build();
         RecognizerContext ctx = new();
 
         Assert.Throws< InvalidSubCheckException >(
@@ -63,7 +63,7 @@ public class ClassCheckTests
     {
         IClass classEntity = EntityNodeUtils.CreateClass();
 
-        ClassCheck classCheck = (ClassCheck)Class(Modifiers(Modifier.Public)).Build();
+        ClassCheck classCheck = (ClassCheck)Class(Priority.Low, Modifiers(Priority.Low, Modifier.Public)).Build();
         RecognizerContext ctx = new();
 
         ICheckResult result = classCheck.Check(

@@ -2,12 +2,26 @@
 
 internal interface ICheck
 {
+    Priority Priority { get; }
+
     ICheckResult Check(
         RecognizerContext ctx,
         INode node);
 }
 
-enum Priority
+internal abstract class CheckBase : ICheck
+{
+    public Priority Priority { get; init; }
+
+    protected CheckBase(Priority priority)
+    {
+        Priority = priority;
+    }
+	
+    public abstract ICheckResult Check(RecognizerContext ctx, INode node);
+}
+
+internal enum Priority
 {
     Knockout,
     High,

@@ -1,19 +1,19 @@
 ﻿namespace PatternPal.Core.Checks;
 
-internal class ConstructorCheck : ICheck
+internal class ConstructorCheck : CheckBase
 {
     private readonly IEnumerable<ICheck> _checks;
 
     // TODO CV: Handle multiple matches (e.g. a method check for a public method may match many methods).
     internal IMethod? MatchedEntity { get; private set; }
 
-    internal ConstructorCheck(
-        IEnumerable<ICheck> checks)
+    internal ConstructorCheck(Priority priority, 
+        IEnumerable<ICheck> checks) : base(priority)
     {
         _checks = checks;
     }
 
-    public ICheckResult Check(
+    public override ICheckResult Check(
         RecognizerContext ctx,
         INode node)
     {

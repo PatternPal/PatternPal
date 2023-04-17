@@ -1,15 +1,15 @@
 ﻿namespace PatternPal.Core.Builders;
 
 // TODO CV: Relations can probably use the same check builder
-internal class UsesCheckBuilder : ICheckBuilder
+internal class UsesCheckBuilder : CheckBuilderBase
 {
     private readonly Func< INode > _getNode;
 
-    internal UsesCheckBuilder(
-        Func< INode > getNode)
+    internal UsesCheckBuilder(Priority priority,
+        Func< INode > getNode) : base(priority)
     {
         _getNode = getNode;
     }
 
-    public ICheck Build() => new UsesCheck(_getNode);
+    public override ICheck Build() => new UsesCheck(Priority, _getNode);
 }
