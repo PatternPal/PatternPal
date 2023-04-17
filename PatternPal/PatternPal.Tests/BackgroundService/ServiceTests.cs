@@ -1,10 +1,8 @@
 ﻿#region
 
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Threading.Tasks;
 
 using Grpc.Core;
 using Grpc.Net.Client;
@@ -12,8 +10,6 @@ using Grpc.Net.Client;
 using NUnit.Framework;
 
 using PatternPal.Protos;
-
-using VerifyNUnit;
 
 #endregion
 

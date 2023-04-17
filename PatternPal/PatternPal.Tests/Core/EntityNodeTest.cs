@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using PatternPal.Recognizers;
-using PatternPal.Tests.Utils;
+
 using NUnit.Framework;
 
 namespace PatternPal.Tests.Core

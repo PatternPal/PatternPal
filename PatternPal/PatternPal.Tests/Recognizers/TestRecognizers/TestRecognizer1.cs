@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using PatternPal.Recognizers.Abstractions;
 using PatternPal.Recognizers.Checks;
 using PatternPal.Recognizers.Models.ElementChecks;
 using PatternPal.Recognizers.Models.Output;
 using SyntaxTree.Abstractions;
-using SyntaxTree.Abstractions.Entities;
 
 namespace PatternPal.Tests.Recognizers.TestRecognizers
 {

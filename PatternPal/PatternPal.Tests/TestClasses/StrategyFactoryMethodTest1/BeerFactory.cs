@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PatternPal.Tests.TestClasses.StrategyFactoryMethodTest1
+﻿namespace PatternPal.Tests.TestClasses.StrategyFactoryMethodTest1
 {
     internal abstract class BeerFactory
     {
