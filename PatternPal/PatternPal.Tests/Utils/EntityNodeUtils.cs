@@ -7,6 +7,7 @@ using SyntaxTree.Abstractions;
 using SyntaxTree.Abstractions.Root;
 using SyntaxTree.Models.Members.Field;
 using SyntaxTree.Models.Members.Method;
+using SyntaxTree.Models.Root;
 using SyntaxTree.Utils;
 
 namespace PatternPal.Tests.Utils
@@ -79,6 +80,11 @@ namespace PatternPal.Tests.Utils
                 GetClassDeclaration(),
                 new TestRoot());
 
+        internal static INamespace CreateNamespace() =>
+            new Namespace(
+                GetNamespaceDeclaration(),
+                new TestRoot());
+
         /// <summary>
         /// Creates an <see cref="IMethod"/> instance which can be used in tests.
         /// </summary>
@@ -113,7 +119,7 @@ namespace PatternPal.Tests.Utils
         private static ClassDeclarationSyntax GetClassDeclaration()
         {
             const string INPUT = """
-                                 class Test
+                                 public class Test
                                  {
                                      internal void DoSomething()
                                      {
@@ -127,6 +133,28 @@ namespace PatternPal.Tests.Utils
             Assert.IsInstanceOf< ClassDeclarationSyntax >(rootMember);
 
             return (ClassDeclarationSyntax)rootMember;
+        }
+
+        private static NamespaceDeclarationSyntax GetNamespaceDeclaration()
+        {
+            const string INPUT = """
+                                 namespace TestNamespace
+                                 {
+                                    class Test
+                                    {
+                                        internal void DoSomething()
+                                        {
+                                        }
+                                    }
+                                 }
+                                 """;
+
+            CompilationUnitSyntax root = GetCompilationRoot(INPUT);
+            MemberDeclarationSyntax rootMember = root.Members.First();
+
+            Assert.IsInstanceOf<NamespaceDeclarationSyntax>(rootMember);
+
+            return (NamespaceDeclarationSyntax)rootMember;
         }
 
         public static IMethod CreateMethod(
