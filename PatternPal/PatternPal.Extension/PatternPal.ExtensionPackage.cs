@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
 using PatternPal.Extension.Commands;
+using Microsoft.VisualStudio;
 
 namespace PatternPal.Extension
 {
@@ -96,7 +97,12 @@ namespace PatternPal.Extension
 
 
         }
-
+        protected override int QueryClose(out bool canClose)
+        {
+            SubscribeEvents.OnSessionEnd();
+            canClose = true; 
+            return VSConstants.S_OK;
+        }
         #endregion
     }
 

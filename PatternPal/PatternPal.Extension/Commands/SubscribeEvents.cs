@@ -44,7 +44,7 @@ namespace PatternPal.Extension.Commands
 
             // Link the Event when VS CLOSING                
       
-            dte.Events.DTEEvents.OnBeginShutdown += OnSessionEnd;
+          //  dte.Events.DTEEvents.OnBeginShutdown += OnSessionEnd;
 
             SetSubjectId();
             OnSessionStart();
@@ -117,7 +117,7 @@ namespace PatternPal.Extension.Commands
 
         }
 
-        private static void OnSessionEnd()
+        public static void OnSessionEnd()
         {
           
 
