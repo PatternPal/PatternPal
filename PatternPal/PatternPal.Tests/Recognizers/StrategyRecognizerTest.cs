@@ -50,7 +50,7 @@ namespace PatternPal.Tests.Recognizers
             Assert.That(result.GetScore(), Is.InRange(minScore, maxScore));
         }
 
-        public static void PrintResult(ICheckResult result, int depth)
+        private static void PrintResult(PatternPal.Recognizers.Abstractions.ICheckResult result, int depth)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             var symbol = "X";

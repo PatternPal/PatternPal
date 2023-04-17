@@ -133,7 +133,7 @@ public class RecognizerRunner
             {
                 bool result = check.Check(
                     ctx,
-                    entity);
+                    entity).Correctness;
             }
             Console.WriteLine();
         }

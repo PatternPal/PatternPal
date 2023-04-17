@@ -1,4 +1,4 @@
-﻿namespace PatternPal.Core.Checks;
+namespace PatternPal.Core.Checks;
 
 internal class UsesCheck : ICheck
 {
@@ -10,31 +10,31 @@ internal class UsesCheck : ICheck
         _getNode = getNode;
     }
 
-    public bool Check(
+    public ICheckResult Check(
         RecognizerContext ctx,
         INode node)
     {
         if (node is not IMethod method)
         {
-            return false;
+            throw new NotImplementedException("Uses Check was incorrect");
         }
 
         if (_getNode() is not IMethod usedMethod)
         {
-            return false;
+            throw new NotImplementedException("Uses Check was incorrect");
         }
 
         if (method == usedMethod)
         {
-            return false;
+            throw new NotImplementedException("Uses Check was incorrect");
         }
 
         if (ctx.Graph.GetRelations(method, Relationable.Method).Any(x => x.Node2Method == usedMethod))
         {
-            Console.WriteLine($"Used method: '{usedMethod}' Used by: '{method}'");
-            return true;
+                Console.WriteLine($"Used method: '{usedMethod}' Used by: '{method}'");
+                throw new NotImplementedException("Uses Check was correct");
         }
 
-        return false;
+        throw new NotImplementedException("Uses Check was incorrect");
     }
 }

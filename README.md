@@ -1,6 +1,6 @@
 # PatternPal
 A Visual Studio extension that detects design patterns and helps users implement them.
-Documentation on the [Wiki](https://github.com/PatternPal/PatternPal/wiki).
+Documentation (as of 03/2023: outdated) on the [Wiki](https://github.com/PatternPal/PatternPal/wiki).
 
 ## Requirements
  - Visual Studio 2022

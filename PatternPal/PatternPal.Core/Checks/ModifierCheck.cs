@@ -10,28 +10,24 @@ internal class ModifierCheck : ICheck
         _modifiers = modifiers;
     }
 
-    public bool Check(
+    public ICheckResult Check(
         RecognizerContext ctx,
         INode node)
     {
-        if (node is not IModified modified)
-        {
-            return false;
-        }
+        IModified modified = CheckHelper.ConvertNodeElseThrow<IModified>(node);
 
         // TODO: This method is terribly inefficient, rewrite Modifiers to be a flags enum and just
         // check if a bit is set or not.
-        // TODO: Report which modifiers are missing/incorrect.
         List< IModifier > modifiers = modified.GetModifiers().ToList();
 
         foreach (IModifier modifier in _modifiers)
         {
             if (!modifiers.Contains(modifier))
             {
-                return false;
+                return new LeafCheckResult{FeedbackMessage = $"The node {node} does not have the {modifier} modifier.", Correctness = false, Priority = Priority.Low};
             }
         }
 
-        return true;
+        return new LeafCheckResult{FeedbackMessage = "Modifiers correctly implemented.", Correctness = true, Priority = Priority.Low};
     }
 }

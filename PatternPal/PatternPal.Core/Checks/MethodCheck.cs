@@ -13,13 +13,13 @@ internal class MethodCheck : ICheck
         _checks = checks;
     }
 
-    public bool Check(
+    public ICheckResult Check(
         RecognizerContext ctx,
         INode node)
     {
         if (node is not IMethod method)
         {
-            return false;
+            throw new NotImplementedException("Method Check was incorrect");
         }
 
         ctx.ParentCheck = this;
@@ -28,14 +28,14 @@ internal class MethodCheck : ICheck
         {
             if (!check.Check(
                 ctx,
-                node))
+                node).Correctness)
             {
-                return false;
+                throw new NotImplementedException("Method Check was incorrect");
             }
         }
 
         Console.WriteLine($"Got method '{method}'");
         MatchedEntity = method;
-        return true;
+        throw new NotImplementedException("Method Check was correct");
     }
 }
