@@ -16,10 +16,21 @@ internal class ClassCheck : ICheck
     {
         IClass classEntity = CheckHelper.ConvertNodeElseThrow< IClass >(node);
 
+        bool hasFailedSubCheck = false;
+        IList< ICheckResult > subCheckResults = new List< ICheckResult >();
         foreach (ICheck check in _checks)
         {
             switch (check)
             {
+                case ModifierCheck modifierCheck:
+                {
+                    ICheckResult subCheckResult = modifierCheck.Check(
+                        ctx,
+                        classEntity);
+                    subCheckResults.Add(subCheckResult);
+                    hasFailedSubCheck = hasFailedSubCheck || !subCheckResult.Correctness;
+                    break;
+                }
                 case MethodCheck methodCheck:
                 {
                     bool hasMatch = false;
@@ -97,8 +108,8 @@ internal class ClassCheck : ICheck
 
         return new NodeCheckResult
                {
-                   ChildrenCheckResults = new List< ICheckResult >(),
-                   Correctness = true,
+                   ChildrenCheckResults = subCheckResults,
+                   Correctness = !hasFailedSubCheck,
                    FeedbackMessage = $"Found class '{classEntity}'",
                    Priority = Priority.Knockout,
                };
