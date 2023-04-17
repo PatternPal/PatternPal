@@ -14,7 +14,7 @@ internal class ClassCheck : ICheck
         RecognizerContext ctx,
         INode node)
     {
-        IClass classEntity = CheckHelper.ConvertAndThrowIfIncorrectNodeType< IClass >(node);
+        IClass classEntity = CheckHelper.ConvertNodeElseThrow< IClass >(node);
 
         foreach (ICheck check in _checks)
         {
@@ -89,10 +89,9 @@ internal class ClassCheck : ICheck
                     break;
                 }
                 default:
-                {
-                    Console.WriteLine($"Unexpected check: {check.GetType().Name}");
-                    break;
-                }
+                    throw CheckHelper.InvalidSubCheck(
+                        this,
+                        check);
             }
         }
 
