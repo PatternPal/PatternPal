@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SyntaxTree.Abstractions;
 using SyntaxTree.Abstractions.Entities;
@@ -36,7 +36,7 @@ namespace SyntaxTree
         internal Dictionary<Method, List<Relation>> MethodRelations = new();
 
         private readonly SyntaxGraph _graph;
-        private Dictionary<string, IEntity> _entities;
+        private List<IEntity> _entities;
         private List<Method> _methods = new List<Method>();
 
         public Relations(SyntaxGraph graph)
@@ -44,16 +44,20 @@ namespace SyntaxTree
             _graph = graph;
         }
 
+        /// <summary>
+        /// Creates Relations between entities and nodes.
+        /// </summary>
         public void CreateEdges()
         {
-            _entities = _graph.GetAll();
+            _entities = _graph.GetAll().Values.ToList();
+
             //Get all methods
-            _methods.AddRange(_entities.Values.SelectMany(y =>
+            _methods.AddRange(_entities.SelectMany(y =>
                 y.GetMembers().Where(x => x.GetType() == typeof(Method)).Cast<Method>()));
 
-            foreach (IEntity entity in _entities.Values)
+            foreach (IEntity entity in _entities)
             {
-                CreateParentClasses(entity);
+                CreateParentEdges(entity);
                 CreateCreationalEdges(entity);
                 CreateUsingEdges(entity);
             }
@@ -65,6 +69,13 @@ namespace SyntaxTree
             }
         }
 
+        /// <summary>
+        /// Adds a relation from node1 to node2. It also adds the reversed relation from node2 to node1.
+        /// </summary>
+        /// <param name="node1">INode, can be IEntity or Method.</param>
+        /// <param name="node2">INode, can be IEntity or Method.</param>
+        /// <param name="type">The RelationType of the relation</param>
+        /// <exception cref="ArgumentException">Throws exception when trying to add a relation to or from a not supported type.</exception>
         private void AddRelation(INode node1, INode node2, RelationType type)
         {
             if(node1 == null || node2 == null)
@@ -101,7 +112,7 @@ namespace SyntaxTree
                     throw new ArgumentException($"Cannot add relations to {node2}");
             }
 
-            if (relations.Contains(relation) || relations.Contains(relationReversed))
+            if (relations.Any(r => r.Equals(relation)) || relations.Any(r => r.Equals(relationReversed)))
                 return;
 
             switch (node1)
@@ -144,6 +155,11 @@ namespace SyntaxTree
             relations.Add(relationReversed);
         }
 
+        /// <summary>
+        /// Gets the IEntity instance saved in the SyntaxGraph by analyzing the SemanticModel of the SyntaxTree (Roslyn).
+        /// </summary>
+        /// <param name="syntaxNode">The SyntaxNode from which we want the belonging IEntity instance.</param>
+        /// <returns></returns>
         private IEntity GetEntityByName(SyntaxNode syntaxNode)
         {
             SemanticModel semanticModel = SemanticModels.GetSemanticModel(syntaxNode.SyntaxTree, false);
@@ -152,9 +168,14 @@ namespace SyntaxTree
 
             TypeDeclarationSyntax entityDeclaration = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as TypeDeclarationSyntax;
 
-            return _entities.Values.FirstOrDefault(x => x.GetSyntaxNode().IsEquivalentTo(entityDeclaration));
+            return _entities.FirstOrDefault(x => x.GetSyntaxNode().IsEquivalentTo(entityDeclaration));
         }
 
+        /// <summary>
+        /// Gets the Method instance saved in the SyntaxGraph by analyzing the SemanticModel of the SyntaxTree (Roslyn).
+        /// </summary>
+        /// <param name="methodNode">The SyntaxNode from which we want the belonging Method instance.</param>
+        /// <returns></returns>
         private Method GetMethodByName(SyntaxNode methodNode)
         {
             SemanticModel semanticModel = SemanticModels.GetSemanticModel(methodNode.SyntaxTree, false);
@@ -166,7 +187,11 @@ namespace SyntaxTree
             return _methods.FirstOrDefault(x => x.GetSyntaxNode().Equals(methodDeclaration));
         }
 
-        private void CreateParentClasses(IEntity entity)
+        /// <summary>
+        /// Creates the Extend, ExtendedBy, Implements and ImplementedBy relations between two IEntities.
+        /// </summary>
+        /// <param name="entity">The IEntity which parents will be evaluated.</param>
+        private void CreateParentEdges(IEntity entity)
         {
             foreach (TypeSyntax type in entity.GetBases())
             {
@@ -199,40 +224,79 @@ namespace SyntaxTree
                 AddRelation(entity, edgeNode, relationType);
             }
         }
-
+        
+        /// <summary>
+        /// Creates the Creates and CreatedBy relations between IEntities en Methods.
+        /// </summary>
+        /// <param name="node">The IEntity or Method which descendant nodes will be evaluated</param>
         private void CreateCreationalEdges(INode node)
         {
-            IEnumerable<SyntaxNode> childNodes = node.GetSyntaxNode().DescendantNodes();
-            foreach (var creation in childNodes.OfType<ObjectCreationExpressionSyntax>())
-            {
-                if (creation.Type is IdentifierNameSyntax name)
-                {
-                    INode node2 = (INode)GetEntityByName(creation) ?? GetMethodByName(creation);
+            List<SyntaxNode> childNodes = GetChildNodes(node);
 
-                    AddRelation(node, node2, RelationType.Creates);
+            foreach (SyntaxNode creation in childNodes)
+            {
+                switch (creation)
+                {
+                    case ImplicitObjectCreationExpressionSyntax implicitCreation:
+
+                        IdentifierNameSyntax leftSide = implicitCreation.Parent?.Parent?.Parent?
+                            .DescendantNodes().OfType<IdentifierNameSyntax>().FirstOrDefault();
+
+                        AddRelation(node, GetEntityByName(leftSide), RelationType.Creates);
+                        break;
+
+                    case ObjectCreationExpressionSyntax normalCreation:
+                        if (normalCreation.Type is IdentifierNameSyntax name)
+                        {
+                            AddRelation(node, GetEntityByName(name), RelationType.Creates);
+                        }
+                        break;
                 }
             }
         }
 
+        /// <summary>
+        /// Creates the Uses and UsedBy relations between IEntities and Methods
+        /// </summary>
+        /// <param name="node">The IEntity or Method which descendant nodes will be evaluated</param>
         private void CreateUsingEdges(INode node)
         {
-            //var childNodes = new List<SyntaxNode>();
-            //foreach (var member in node.GetMembers())
-            //{
-            //    childNodes.AddRange(member.GetSyntaxNode().DescendantNodes(n => true));
-            //}
+            List<SyntaxNode> childNodes = GetChildNodes(node);
 
-            //TODO: Check if this is same as above for entities
-
-            IEnumerable<SyntaxNode> childNodes = node.GetSyntaxNode().DescendantNodes();
-
-            foreach (var identifier in childNodes.OfType<IdentifierNameSyntax>())
+            foreach (IdentifierNameSyntax identifier in childNodes.OfType<IdentifierNameSyntax>())
             {
                 INode node2 = (INode)GetEntityByName(identifier) ?? GetMethodByName(identifier);
 
                 AddRelation(node, node2, RelationType.Uses);
             }
         }
+
+        /// <summary>
+        /// Helper function to retrieve all descendant nodes of a node.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private List<SyntaxNode> GetChildNodes(INode node)
+        {
+            List<SyntaxNode> childNodes = new();
+            switch (node)
+            {
+                case IEntity entityNode:
+                    foreach (var member in entityNode.GetMembers())
+                    {
+                        childNodes.AddRange(member.GetSyntaxNode().DescendantNodes());
+                    }
+                    break;
+                case Method methodNode:
+                    childNodes.AddRange(methodNode.GetSyntaxNode().DescendantNodes());
+                    break;
+            }
+            return childNodes;
+        }
+
+        /// <summary>
+        /// Resets the relation lists.
+        /// </summary>
         public void Reset()
         {
             relations = new List<Relation>();

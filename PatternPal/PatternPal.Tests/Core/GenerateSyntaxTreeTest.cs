@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.CodeAnalysis;
 using NUnit.Framework;
 using SyntaxTree;
 using SyntaxTree.Abstractions.Entities;
+using SyntaxTree.Models.Root;
 
 namespace PatternPal.Tests.Core
 {
@@ -10,6 +12,7 @@ namespace PatternPal.Tests.Core
     {
         private readonly Dictionary<string, IEntity> entityNodes =
             new Dictionary<string, IEntity>();
+
 
         [TestCase(
             @"namespace TestNamespace {
@@ -206,6 +209,109 @@ namespace PatternPal.Tests.Core
             var count = graph.GetRoots().SelectMany(r => r.GetUsing()).Count();
 
             Assert.AreEqual(amountOfUsings, count);
+        }
+
+        [TestCase(
+            @"namespace TestNamespace {
+                            class TestClass {
+                                public string Name {get; set;} 
+                                public TestClass(string name) {
+                                    this.Name = name;
+                                }
+                            }
+                        }"
+        )]
+        [TestCase(
+            @"namespace TestNamespace {
+                            class TestClass {
+                                public string Name {get; set;} 
+                                public TestClass(string name) {this.Name = name;}
+                                class InnerClass{}
+                            } 
+                        }"
+        )]
+        [TestCase(
+            @"namespace TestNamespace { 
+                            class TestClass{ 
+                                public string Name {get; set;} 
+                                public TestClass(string name){this.Name = name;}
+                                class InnerClass{}
+                            } 
+                        }"
+        )]
+        [TestCase(
+            @"namespace TestNamespace { 
+                            class TestClass{ 
+                                public string Name {get; set;} 
+                                public TestClass(string name){this.Name = name;}
+                            } 
+                            class TestClass2{}
+                            class TestClass3{}
+                        }"
+        )]
+        [TestCase(
+            @"namespace TestNamespace { 
+                            class TestClass{ 
+                                public string Name {get; set;} 
+                                public TestClass(string name){this.Name = name;}
+                                class InnerClass{}
+                            } 
+                            class TestClass2{}
+                        } 
+                        class OuterClass{}"
+        )]
+        [TestCase(
+            @"namespace TestNamespace{ 
+                            class TestClass{
+                                public string Name {get; set;} 
+                                public TestClass(string name){this.Name = name;} 
+                                class InnerClass{ 
+                                    class ClassInInnerClass{}
+                                }
+                            } 
+                            class TestClass2{}
+                        } 
+                        class OuterClass{}"
+        )]
+        [TestCase(
+            @"namespace TestNamespace{ 
+                            interface ITestClass{}
+                            class TestClass{ 
+                                public string Name {get; set;} 
+                                public TestClass(string name){this.Name = name;}
+                            }
+                        }"
+        )]
+        [TestCase(
+            @"namespace TestNamespace{ 
+                            class TestClass{ 
+                                public string Name {get; set;} 
+                                public TestClass(string name){this.Name = name;} 
+                                interface ITestClass{}
+                            }
+                        }"
+        )]
+        [TestCase(
+            @"namespace TestNamespace{ 
+                            class TestClass{ 
+                                public string Name {get; set;} 
+                                public TestClass(string name){this.Name = name;}
+                            }
+                        } 
+                        interface ITestClass{}"
+        )]
+        public void TestIfSemanticModelIsPresent(string file)
+        {
+            SyntaxGraph graph = new();
+            graph.AddFile(file, "testFile");
+            List<bool> semanticModelsPresent = new();
+
+            foreach (IEntity entity in graph.GetAll().Values)
+            {
+                semanticModelsPresent.Add(SemanticModels.GetSemanticModel(entity.GetSyntaxNode().SyntaxTree, false) != null);
+            }
+
+            Assert.That(semanticModelsPresent.All(b => b));
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace PatternPal.Tests.TestClasses.Relation
+﻿namespace PatternPal.Tests.TestClasses.Relation.Entities
 {
     public class RelationTestCase6 : ERelationTestCase6
     {

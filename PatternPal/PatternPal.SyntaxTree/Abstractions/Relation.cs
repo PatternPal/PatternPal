@@ -14,7 +14,7 @@ namespace SyntaxTree.Abstractions
     {
         private RelationType _type;
 
-        //There is one variable per possible type for node 1 and 2, this is done so we can have one generic Relation class. Only one Node1.. variable and only one Node2.. variable is meant to be initialized. This is done when the relation is created and should not be altered somewhere else!
+        //There is one variable per possible type for node 1 and 2, this is done so we can have one generic Relation class. Only one Node1.. variable and only one Node2.. variable is meant to be initialized. This is done when the relation is created and should not be altered somewhere else after creation and adding to the relation sets in the Relations instance!
         public IEntity Node1Entity;
         public IEntity Node2Entity;
 
@@ -45,10 +45,33 @@ namespace SyntaxTree.Abstractions
         /// <returns>The name of the destination node of this relation.</returns>
         public string GetDestinationName()
         {
-            return Node2Method.GetName() ?? Node2Entity.GetName();
+            return Node2Method?.GetName() ?? Node2Entity?.GetName();
+        }
+
+        public override bool Equals(object obj)
+        {
+            Relation relation = obj as Relation;
+            if (relation == null)
+            {
+                return false;
+            }
+
+            if (this.Node1Entity != relation.Node1Entity ||
+                this.Node1Method != relation.Node1Method ||
+                this.Node2Method != relation.Node1Method ||
+                this.Node2Entity != relation.Node2Entity ||
+                this._type != relation._type)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 
+    /// <summary>
+    /// The types of relations which are possible between entity and method nodes in the SyntaxGraph.
+    /// </summary>
     public enum RelationType
     {
         Implements,

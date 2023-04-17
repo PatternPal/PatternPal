@@ -25,6 +25,7 @@ namespace SyntaxTree
         public SyntaxGraph()
         {
             _relations = new Relations(this);
+            SemanticModels.Reset();
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-﻿namespace PatternPal.Tests.TestClasses.Relation
+﻿namespace PatternPal.Tests.TestClasses.Relation.Entities
 {
     public class RelationTestCase1 : ERelationTestCase1, IRelationTestCase1
     {
@@ -18,5 +18,6 @@
 
     public class CRelationTestCase1
     {
+        public CRelationTestCase1() { }
     }
 }
