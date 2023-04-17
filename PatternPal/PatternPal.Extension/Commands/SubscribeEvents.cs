@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using PatternPal.Extension.Commands;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -15,6 +16,7 @@ using EnvDTE;
 using PatternPal.Extension.UserControls;
 using PatternPal.Extension.ViewModels;
 using EnvDTE80;
+using Microsoft.Win32;
 using PatternPal.Protos;
 using PatternPal.Extension.Model;
 
@@ -30,6 +32,7 @@ namespace PatternPal.Extension.Commands
         private static DTE _dte;
 
         private static string _sessionId;
+
         public static void Initialize(
             DTE dte,
             PatternPalExtensionPackage package)
@@ -37,16 +40,20 @@ namespace PatternPal.Extension.Commands
             _dte = dte;
             ThreadHelper.ThrowIfNotOnUIThread();
             _package = package;
-
             //Initialize event listeners
+
+            // Link the Event when VS CLOSING                
+      
+            dte.Events.DTEEvents.OnBeginShutdown += OnSessionEnd;
+
             SetSubjectId();
             OnSessionStart();
-            _dte.Events.SolutionEvents.AfterClosing += OnSessionEnd; //TO DO: This is not firing!
+          //  _dte.Events.DTEEvents.OnBeginShutdown += OnSessionEnd; //TO DO: This is not firing!
+          //  SystemEvents.SessionEnding += OnSessionEnd;
             _dte.Events.BuildEvents.OnBuildDone += OnBuildDone;
 
 
         }
-
         private static void OnBuildDone(
             vsBuildScope Scope,
             vsBuildAction Action)
@@ -98,10 +105,6 @@ namespace PatternPal.Extension.Commands
             {
                 return;
             }
-            if (!_package.DoLogData)
-            {
-                return;
-            }
 
             //Create request
             LogEventRequest request = CreateStandardLog();
@@ -116,6 +119,7 @@ namespace PatternPal.Extension.Commands
 
         private static void OnSessionEnd()
         {
+          
 
             if (!_package.DoLogData)
             {
