@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using PatternPal.Recognizers.Recognizers;
-using PatternPal.Tests.Utils;
+
 using NUnit.Framework;
 using PatternPal.Tests.TestClasses.Singleton;
 

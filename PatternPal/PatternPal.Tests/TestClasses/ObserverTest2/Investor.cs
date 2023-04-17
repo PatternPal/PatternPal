@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PatternPal.Tests.TestClasses.ObserverTest2
+﻿namespace PatternPal.Tests.TestClasses.ObserverTest2
 {
     //This code is from https://www.dofactory.com/net/observer-design-pattern
 

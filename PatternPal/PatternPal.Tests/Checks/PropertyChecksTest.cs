@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using PatternPal.Recognizers.Checks;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+
 using NUnit.Framework;
 using SyntaxTree.Models.Members.Property;
 

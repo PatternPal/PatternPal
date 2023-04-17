@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PatternPal.Tests.TestClasses.BridgeTest2
+﻿namespace PatternPal.Tests.TestClasses.BridgeTest2
 {
     /// <summary>
     /// The 'RefinedAbstraction' class

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using PatternPal.Core;
+
 using NUnit.Framework;
 
 namespace PatternPal.Tests.Core

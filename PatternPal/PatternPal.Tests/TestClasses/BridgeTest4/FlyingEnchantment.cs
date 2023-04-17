@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PatternPal.Tests.TestClasses.BridgeTest4
+﻿namespace PatternPal.Tests.TestClasses.BridgeTest4
 {
     public class FlyingEnchantment : IEnchantment
     {

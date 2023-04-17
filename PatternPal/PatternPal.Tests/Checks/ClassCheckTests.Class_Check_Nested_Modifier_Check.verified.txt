@@ -1,0 +1,11 @@
+﻿{
+  FeedbackMessage: Found class 'Test',
+  Correctness: true,
+  ChildrenCheckResults: [
+    {
+      FeedbackMessage: Modifiers correctly implemented.,
+      Priority: Low,
+      Correctness: true
+    }
+  ]
+}

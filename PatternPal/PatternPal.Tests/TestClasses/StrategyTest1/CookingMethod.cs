@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PatternPal.Tests.TestClasses.StrategyTest1
+﻿namespace PatternPal.Tests.TestClasses.StrategyTest1
 {
     //this code is from https://github.com/exceptionnotfound/DesignPatterns/blob/master/Strategy/CookMethod.cs
 

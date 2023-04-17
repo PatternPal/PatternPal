@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using PatternPal.Recognizers.Checks;
-using PatternPal.Tests.Utils;
+
 using NUnit.Framework;
 
 namespace PatternPal.Tests.Checks
