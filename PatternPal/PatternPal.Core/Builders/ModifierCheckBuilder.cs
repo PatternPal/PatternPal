@@ -1,14 +1,15 @@
 ﻿namespace PatternPal.Core.Builders;
 
-internal class ModifierCheckBuilder : ICheckBuilder
+internal class ModifierCheckBuilder : CheckBuilderBase
 {
     private readonly List< IModifier > _modifiers;
 
-    internal ModifierCheckBuilder(
-        IEnumerable< IModifier > modifiers)
+    internal ModifierCheckBuilder(Priority priority,
+        IEnumerable< IModifier > modifiers) : base(priority)
     {
         _modifiers = new List< IModifier >(modifiers);
+        Priority = priority;
     }
 
-    public ICheck Build() => new ModifierCheck(_modifiers);
+    public override ICheck Build() => new ModifierCheck(Priority, _modifiers);
 }

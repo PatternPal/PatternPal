@@ -2,13 +2,13 @@
 
 internal class PropertyCheckBuilder : CheckCollectionBuilder
 {
-    internal PropertyCheckBuilder(
+    internal PropertyCheckBuilder(Priority priority,
         IEnumerable< ICheckBuilder > checkBuilders)
-        : base(
+        : base(priority,
             CheckCollectionKind.All,
             checkBuilders)
     {
     }
 
-    public override ICheck Build() => new PropertyCheck(CheckBuilders.Select(checkBuilder => checkBuilder.Build()));
+    public override ICheck Build() => new PropertyCheck(Priority, CheckBuilders.Select(checkBuilder => checkBuilder.Build()));
 }

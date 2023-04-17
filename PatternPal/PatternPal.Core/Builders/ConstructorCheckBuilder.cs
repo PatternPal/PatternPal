@@ -4,19 +4,13 @@ internal class ConstructorCheckBuilder : CheckCollectionBuilder
 {
     private readonly ConstructorCheck _check;
 
-    internal ConstructorCheckBuilder()
-        : base(CheckCollectionKind.All)
-    {
-        _check = new ConstructorCheck(CheckBuilders.Select(checkBuilder => checkBuilder.Build()));
-    }
-
-    public ConstructorCheckBuilder(
+    public ConstructorCheckBuilder(Priority priority,
         IEnumerable<ICheckBuilder> checkBuilders)
-        : base(
+        : base(priority,
             CheckCollectionKind.All,
             checkBuilders)
     {
-        _check = new ConstructorCheck(CheckBuilders.Select(checkBuilder => checkBuilder.Build()));
+        _check = new ConstructorCheck(Priority, CheckBuilders.Select(checkBuilder => checkBuilder.Build()));
     }
 
     public override ICheck Build() => _check;
