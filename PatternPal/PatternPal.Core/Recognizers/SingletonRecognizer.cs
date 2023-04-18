@@ -4,42 +4,42 @@ namespace PatternPal.Core.Recognizers;
 
 internal class SingletonRecognizer
 {
-    internal IEnumerable< ICheckBuilder > Create()
+    internal IEnumerable<ICheckBuilder> Create()
     {
         MethodCheckBuilder instanceMethod =
-            Method(
-                Modifiers(Modifier.Static),
-                Not(Modifiers(Modifier.Private))
+            Method(Priority.Low,
+                Modifiers(Priority.Low, Modifier.Static),
+                Not(Priority.Low, Modifiers(Priority.Low, Modifier.Private))
             );
 
-        yield return Class(
+        yield return Class(Priority.Low,
             instanceMethod,
-            Field(
-                Modifiers(
+            Field(Priority.Low,
+                Modifiers(Priority.Low,
                     Modifier.Static,
                     Modifier.Private)
             ),
-            Constructor(
-                Modifiers(Modifier.Private)
+            Constructor(Priority.Low,
+                Modifiers(Priority.Low, Modifier.Private)
             ),
-            Not(
-                Any(
-                    Constructor(
-                        Modifiers(Modifier.Public)
+            Not(Priority.Low,
+                Any(Priority.Low,
+                    Constructor(Priority.Low,
+                        Modifiers(Priority.Low, Modifier.Public)
                     ),
-                    Constructor(
-                        Modifiers(Modifier.Internal)
+                    Constructor(Priority.Low,
+                        Modifiers(Priority.Low, Modifier.Internal)
                     ),
-                    Constructor(
-                        Modifiers(Modifier.Protected)
+                    Constructor(Priority.Low,
+                        Modifiers(Priority.Low, Modifier.Protected)
                     )
                 )
             )
         );
 
-        yield return Class(
-            Method(
-                Uses(instanceMethod.Result)
+        yield return Class(Priority.Low,
+            Method(Priority.Low,
+                Uses(Priority.Low, instanceMethod.Result)
             )
         );
     }

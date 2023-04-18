@@ -1,19 +1,19 @@
 ﻿namespace PatternPal.Core.Checks;
 
-internal class CheckCollection : ICheck
+internal class CheckCollection : CheckBase
 {
     private readonly CheckCollectionKind _checkCollectionKind;
     private readonly IList< ICheck > _checks;
 
-    internal CheckCollection(
+    internal CheckCollection(Priority priority,
         CheckCollectionKind checkCollectionKind,
-        IList< ICheck > checks)
+        IList< ICheck > checks) : base(priority)
     {
         _checkCollectionKind = checkCollectionKind;
         _checks = checks;
     }
 
-    ICheckResult ICheck.Check(
+    public override ICheckResult Check(
         RecognizerContext ctx,
         INode node)
     {

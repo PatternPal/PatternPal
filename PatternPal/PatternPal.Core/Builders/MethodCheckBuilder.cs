@@ -4,13 +4,13 @@ internal class MethodCheckBuilder : CheckCollectionBuilder
 {
     private readonly MethodCheck _check;
 
-    internal MethodCheckBuilder(
+    internal MethodCheckBuilder(Priority priority,
         IEnumerable< ICheckBuilder > checkBuilders)
-        : base(
+        : base(priority,
             CheckCollectionKind.All,
             checkBuilders)
     {
-        _check = new MethodCheck(CheckBuilders.Select(checkBuilder => checkBuilder.Build()));
+        _check = new MethodCheck(Priority, CheckBuilders.Select(checkBuilder => checkBuilder.Build()));
     }
 
     public override ICheck Build() => _check;

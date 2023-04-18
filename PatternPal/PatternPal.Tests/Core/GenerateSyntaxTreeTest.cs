@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using NUnit.Framework;
 using SyntaxTree;
-using SyntaxTree.Abstractions.Entities;
-using SyntaxTree.Models.Root;
 
 namespace PatternPal.Tests.Core
 {

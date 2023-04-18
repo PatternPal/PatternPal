@@ -3,10 +3,11 @@
 internal class InterfaceCheckBuilder : CheckCollectionBuilder
 {
 
-    internal InterfaceCheckBuilder(IEnumerable<ICheckBuilder> checkBuilders) : base(CheckCollectionKind.All, checkBuilders)
+    internal InterfaceCheckBuilder(Priority priority, IEnumerable<ICheckBuilder> checkBuilders) : 
+        base(priority, CheckCollectionKind.All, checkBuilders)
     {
     }
 
-    public override ICheck Build() => new InterfaceCheck(CheckBuilders.Select(checkBuilder => checkBuilder.Build()));
+    public override ICheck Build() => new InterfaceCheck(Priority, CheckBuilders.Select(checkBuilder => checkBuilder.Build()));
 }
 

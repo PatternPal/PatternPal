@@ -1,28 +1,36 @@
 ﻿namespace PatternPal.Core.Checks;
 
-internal class ClassCheck : ICheck
+internal class ClassCheck : CheckBase
 {
     private readonly IEnumerable< ICheck > _checks;
 
-    internal ClassCheck(
-        IEnumerable< ICheck > checks)
+    internal ClassCheck(Priority priority, 
+        IEnumerable<ICheck> checks) : base(priority)
     {
         _checks = checks;
     }
 
-    public ICheckResult Check(
+    public override ICheckResult Check(
         RecognizerContext ctx,
         INode node)
     {
-        if (node is not IClass classEntity)
-        {
-            throw new NotImplementedException("Class Check was incorrect");
-        }
+        IClass classEntity = CheckHelper.ConvertNodeElseThrow< IClass >(node);
 
+        bool hasFailedSubCheck = false;
+        IList< ICheckResult > subCheckResults = new List< ICheckResult >();
         foreach (ICheck check in _checks)
         {
             switch (check)
             {
+                case ModifierCheck modifierCheck:
+                {
+                    ICheckResult subCheckResult = modifierCheck.Check(
+                        ctx,
+                        classEntity);
+                    subCheckResults.Add(subCheckResult);
+                    hasFailedSubCheck = hasFailedSubCheck || !subCheckResult.Correctness;
+                    break;
+                }
                 case MethodCheck methodCheck:
                 {
                     bool hasMatch = false;
@@ -92,14 +100,18 @@ internal class ClassCheck : ICheck
                     break;
                 }
                 default:
-                {
-                    Console.WriteLine($"Unexpected check: {check.GetType().Name}");
-                    break;
-                }
+                    throw CheckHelper.InvalidSubCheck(
+                        this,
+                        check);
             }
         }
-        Console.WriteLine($"Got class '{classEntity}'");
-        throw new NotImplementedException("Class Check was correct");
 
+        return new NodeCheckResult
+               {
+                   ChildrenCheckResults = subCheckResults,
+                   Correctness = !hasFailedSubCheck,
+                   FeedbackMessage = $"Found class '{classEntity}'",
+                   Priority = Priority.Knockout,
+               };
     }
 }

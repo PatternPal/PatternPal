@@ -3,16 +3,16 @@ using PatternPal.Recognizers.Models.Checks;
 
 namespace PatternPal.Core.Checks;
 
-internal class FieldCheck : ICheck
+internal class FieldCheck : CheckBase
 {
     private readonly IEnumerable<ICheck> _checks;
-    internal FieldCheck(
-        IEnumerable<ICheck> checks)
+    internal FieldCheck(Priority priority, 
+        IEnumerable<ICheck> checks) : base(priority)
     {
         _checks = checks;
     }
 
-    public ICheckResult Check(RecognizerContext ctx, INode node)
+    public override ICheckResult Check(RecognizerContext ctx, INode node)
     {
         if (node is not IField field)
         {

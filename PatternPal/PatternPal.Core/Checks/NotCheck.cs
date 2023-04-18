@@ -1,16 +1,16 @@
 ﻿namespace PatternPal.Core.Checks;
 
-internal class NotCheck : ICheck
+internal class NotCheck : CheckBase
 {
     private readonly ICheck _check;
 
-    internal NotCheck(
-        ICheck check)
+    internal NotCheck(Priority priority,
+        ICheck check) : base(priority)
     {
         _check = check;
     }
 
-    ICheckResult ICheck.Check(
+    public override ICheckResult Check(
         RecognizerContext ctx,
         INode node)
     {

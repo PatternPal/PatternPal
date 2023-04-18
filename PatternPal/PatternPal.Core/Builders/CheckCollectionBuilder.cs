@@ -6,27 +6,27 @@ enum CheckCollectionKind
     Any
 }
 
-internal class CheckCollectionBuilder : ICheckBuilder
+internal class CheckCollectionBuilder : CheckBuilderBase
 {
     private readonly CheckCollectionKind _checkCollectionKind;
     protected readonly IList< ICheckBuilder > CheckBuilders;
 
-    internal CheckCollectionBuilder(
-        CheckCollectionKind checkCollectionKind)
+    internal CheckCollectionBuilder(Priority priority,
+        CheckCollectionKind checkCollectionKind) : base(priority)
     {
         _checkCollectionKind = checkCollectionKind;
         CheckBuilders = new List< ICheckBuilder >();
     }
 
-    internal CheckCollectionBuilder(
+    internal CheckCollectionBuilder(Priority priority,
         CheckCollectionKind checkCollectionKind,
-        IEnumerable< ICheckBuilder > checkBuilders)
+        IEnumerable< ICheckBuilder > checkBuilders) : base(priority)
     {
         _checkCollectionKind = checkCollectionKind;
         CheckBuilders = checkBuilders as List< ICheckBuilder > ?? new List< ICheckBuilder >(checkBuilders);
     }
 
-    public virtual ICheck Build()
+    public override ICheck Build()
     {
         IList< ICheck > checks = new List< ICheck >(CheckBuilders.Count);
         foreach (ICheckBuilder checkBuilder in CheckBuilders)
@@ -34,8 +34,9 @@ internal class CheckCollectionBuilder : ICheckBuilder
             checks.Add(checkBuilder.Build());
         }
 
-        return new CheckCollection(
+        return new CheckCollection(Priority,
             _checkCollectionKind,
             checks);
     }
+    
 }

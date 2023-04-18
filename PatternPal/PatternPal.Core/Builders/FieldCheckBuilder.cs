@@ -3,14 +3,9 @@ internal class FieldCheckBuilder : CheckCollectionBuilder
 {
     private readonly FieldCheck _check;
 
-    internal FieldCheckBuilder(CheckCollectionKind checkCollectionKind) : base(checkCollectionKind)
+    internal FieldCheckBuilder(Priority priority, IEnumerable<ICheckBuilder> checkBuilders) : base(priority, CheckCollectionKind.All, checkBuilders)
     {
-        _check = new FieldCheck(CheckBuilders.Select(checkBuilder => checkBuilder.Build()));
-    }
-
-    internal FieldCheckBuilder(IEnumerable<ICheckBuilder> checkBuilders) : base(CheckCollectionKind.All, checkBuilders)
-    {
-        _check = new FieldCheck(CheckBuilders.Select(checkBuilder => checkBuilder.Build()));
+        _check = new FieldCheck(Priority, CheckBuilders.Select(checkBuilder => checkBuilder.Build()));
     }
 
     public override ICheck Build() => _check;

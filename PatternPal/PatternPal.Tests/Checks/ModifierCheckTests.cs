@@ -1,9 +1,6 @@
 ﻿#region
 
-using SyntaxTree.Abstractions;
 using SyntaxTree.Abstractions.Root;
-using SyntaxTree.Models;
-using SyntaxTree.Models.Root;
 using static PatternPal.Core.Builders.CheckBuilder;
 
 #endregion
@@ -21,7 +18,7 @@ public class ModifierCheckTests
 
         RecognizerContext ctx = new();
 
-        ModifierCheck modifierCheck = (ModifierCheck)Modifiers().Build();
+        ModifierCheck modifierCheck = (ModifierCheck)Modifiers(Priority.Low).Build();
 
         Assert.DoesNotThrow(
             () => modifierCheck.Check(
@@ -39,7 +36,7 @@ public class ModifierCheckTests
     {
         IClass classEntity = EntityNodeUtils.CreateClass();
 
-        ModifierCheck modifierCheck = (ModifierCheck)Modifiers(Modifier.Public).Build();
+        ModifierCheck modifierCheck = (ModifierCheck)Modifiers(Priority.Low, Modifier.Public).Build();
         RecognizerContext ctx = new();
 
         ICheckResult result = modifierCheck.Check(
@@ -54,7 +51,7 @@ public class ModifierCheckTests
     {
         IClass classEntity = EntityNodeUtils.CreateClass();
 
-        ModifierCheck modifierCheck = (ModifierCheck)Modifiers(Modifier.Private).Build();
+        ModifierCheck modifierCheck = (ModifierCheck)Modifiers(Priority.Low, Modifier.Private).Build();
         RecognizerContext ctx = new();
 
         ICheckResult result = modifierCheck.Check(

@@ -2,12 +2,26 @@
 
 internal interface ICheck
 {
+    Priority Priority { get; }
+
     ICheckResult Check(
         RecognizerContext ctx,
         INode node);
 }
 
-enum Priority
+internal abstract class CheckBase : ICheck
+{
+    public Priority Priority { get; init; }
+
+    protected CheckBase(Priority priority)
+    {
+        Priority = priority;
+    }
+	
+    public abstract ICheckResult Check(RecognizerContext ctx, INode node);
+}
+
+internal enum Priority
 {
     Knockout,
     High,
@@ -31,6 +45,18 @@ internal static class CheckHelper
         where T : INode => node is not T asT
         ? throw IncorrectNodeTypeException.From< T >()
         : asT;
+
+    /// <summary>
+    /// Creates a new <see cref="InvalidSubCheckException"/>, which represents an incorrectly nested check.
+    /// </summary>
+    /// <param name="parentCheck">The parent check.</param>
+    /// <param name="subCheck">The sub-check.</param>
+    /// <returns>The created <see cref="InvalidSubCheckException"/>.</returns>
+    internal static InvalidSubCheckException InvalidSubCheck(
+        ICheck parentCheck,
+        ICheck subCheck) => new(
+        parentCheck,
+        subCheck );
 }
 
 /// <summary>
@@ -52,4 +78,22 @@ internal sealed class IncorrectNodeTypeException : Exception
     /// Initializes a new instance of the <see cref="IncorrectNodeTypeException"/> class for the given <see cref="T"/>.
     /// </summary>
     internal static IncorrectNodeTypeException From< T >() => new( typeof( T ) );
+}
+
+/// <summary>
+/// Represents an error thrown when a check contains a sub-check which is not supported as a sub-check for that check.
+/// </summary>
+internal sealed class InvalidSubCheckException : Exception
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref="InvalidSubCheckException"/> class for the given <paramref name="parentCheck"/> and <paramref name="subCheck"/>.
+    /// </summary>
+    /// <param name="parentCheck">The parent check.</param>
+    /// <param name="subCheck">The sub-check.</param>
+    internal InvalidSubCheckException(
+        ICheck parentCheck,
+        ICheck subCheck)
+        : base($"'{parentCheck}' cannot contain a '{subCheck}' check")
+    {
+    }
 }
