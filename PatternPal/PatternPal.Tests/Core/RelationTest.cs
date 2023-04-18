@@ -3,6 +3,7 @@
 using NUnit.Framework;
 using SyntaxTree;
 using SyntaxTree.Abstractions;
+using SyntaxTree.Models.Members.Method;
 
 namespace PatternPal.Tests.Core
 {
@@ -22,8 +23,8 @@ namespace PatternPal.Tests.Core
             bool shouldBeValid
         )
         {
-            var code = FileUtils.FileToString("Relation\\" + filename);
-            var NameSpaceNode = "PatternPal.Tests.TestClasses.Relation";
+            var code = FileUtils.FileToString("Relation\\Entities\\" + filename);
+            var NameSpaceNode = "PatternPal.Tests.TestClasses.Relation.Entities";
 
             var graph = new SyntaxGraph();
             graph.AddFile(code, filename);
@@ -31,10 +32,10 @@ namespace PatternPal.Tests.Core
 
             var nodes = graph.GetAll();
 
-            var interfaceCheck = nodes[NameSpaceNode + "." + baseClass].GetRelations()
+            var interfaceCheck = nodes[NameSpaceNode + "." + baseClass].GetRelations(RelationTargetKind.Entity)
                 .Any(
                     x => x.GetRelationType() == RelationType.Implements &&
-                         x.GetDestination().GetName() == relatedClass
+                         x.GetDestinationName() == relatedClass
                 );
             Assert.AreEqual(shouldBeValid, interfaceCheck);
         }
@@ -53,8 +54,8 @@ namespace PatternPal.Tests.Core
             bool shouldBeValid
         )
         {
-            var code = FileUtils.FileToString("Relation\\" + filename);
-            var NameSpaceNode = "PatternPal.Tests.TestClasses.Relation";
+            var code = FileUtils.FileToString("Relation\\Entities\\" + filename);
+            var NameSpaceNode = "PatternPal.Tests.TestClasses.Relation.Entities";
 
             var graph = new SyntaxGraph();
             graph.AddFile(code, filename);
@@ -62,8 +63,9 @@ namespace PatternPal.Tests.Core
 
             var nodes = graph.GetAll();
 
-            var extendsCheck = nodes[NameSpaceNode + "." + baseClass].GetRelations()
-                .Any(x => x.GetRelationType() == RelationType.Extends && x.GetDestination().GetName() == relatedClass);
+            var extendsCheck = nodes[NameSpaceNode + "." + baseClass].GetRelations(RelationTargetKind.Entity)
+                .Any(x => x.GetRelationType() == RelationType.Extends && 
+                        x.GetDestinationName() == relatedClass);
             Assert.AreEqual(shouldBeValid, extendsCheck);
         }
 
@@ -81,8 +83,8 @@ namespace PatternPal.Tests.Core
             bool shouldBeValid
         )
         {
-            var code = FileUtils.FileToString("Relation\\" + filename);
-            var NameSpaceNode = "PatternPal.Tests.TestClasses.Relation";
+            var code = FileUtils.FileToString("Relation\\Entities\\" + filename);
+            var NameSpaceNode = "PatternPal.Tests.TestClasses.Relation.Entities";
 
             var graph = new SyntaxGraph();
             graph.AddFile(code, filename);
@@ -90,8 +92,9 @@ namespace PatternPal.Tests.Core
 
             var nodes = graph.GetAll();
 
-            var createCheck = nodes[NameSpaceNode + "." + baseClass].GetRelations()
-                .Any(x => x.GetRelationType() == RelationType.Creates && x.GetDestination().GetName() == relatedClass);
+            var createCheck = nodes[NameSpaceNode + "." + baseClass].GetRelations(RelationTargetKind.Entity)
+                .Any(x => x.GetRelationType() == RelationType.Creates &&
+                    x.GetDestinationName() == relatedClass);
             Assert.AreEqual(shouldBeValid, createCheck);
         }
 
@@ -110,8 +113,9 @@ namespace PatternPal.Tests.Core
             bool shouldBeValid
         )
         {
-            var code = FileUtils.FileToString("Relation\\" + filename);
-            var NameSpaceNode = "PatternPal.Tests.TestClasses.Relation";
+            var code = FileUtils.FileToString("Relation\\Entities\\" + filename);
+            var NameSpaceNode = "PatternPal.Tests.TestClasses.Relation.Entities";
+
 
             var graph = new SyntaxGraph();
             graph.AddFile(code, code);
@@ -119,9 +123,106 @@ namespace PatternPal.Tests.Core
 
             var nodes = graph.GetAll();
 
-            var usingCheck = nodes[NameSpaceNode + "." + baseClass].GetRelations()
-                .Any(x => x.GetRelationType() == RelationType.Uses && x.GetDestination().GetName() == relatedClass);
+            var usingCheck = nodes[NameSpaceNode + "." + baseClass].GetRelations(RelationTargetKind.Entity)
+                .Any(x => x.GetRelationType() == RelationType.Uses && 
+                          x.GetDestinationName() == relatedClass);
             Assert.AreEqual(shouldBeValid, usingCheck);
+        }
+
+        [Test]
+        [TestCase("MethodsRelations1.cs", "MethodsRelations1.displayID", false, "ClassWithMethod.GetID", true)]
+        [TestCase("MethodsRelations1.cs", "MethodsRelations1", true, "ClassWithMethod.GetID", true)]
+        [TestCase("MethodsRelations2.cs", "DoSomeMultiplication", true, "IDoSomething.Multiplication", true)]
+        [TestCase("MethodsRelations2.cs", "DoSomeMultiplication.LetsGO", false, "MethodsRelations2.Multiplication", false)]
+        [TestCase("MethodsRelations2.cs", "DoSomeMultiplication.LetsGO", false, "MethodsRelations2.Addition", false)]
+        public void Entity_Or_Method_Uses_Method(
+            string filename,
+            string entityOrMethod,
+            bool isEntity,
+            string method,
+            bool shouldBeValid
+        )
+        {
+            string code = FileUtils.FileToString("Relation\\MethodsAndEntities\\" + filename);
+            const string NAME_SPACE_NODE = "PatternPal.Tests.TestClasses.Relation.MethodsAndEntities";
+
+            SyntaxGraph graph = new();
+            graph.AddFile(code, code);
+            graph.CreateGraph();
+
+            //Here the entity or method node is retrieved from the graph
+            INode node;
+
+            if (isEntity)
+                node = graph.GetAll()[NAME_SPACE_NODE + "." + entityOrMethod];
+            else
+            {
+                string[] splitName = entityOrMethod.Split('.');
+                node = graph.GetAll()[NAME_SPACE_NODE + "." + splitName[0]].GetMethods().FirstOrDefault(x => x.GetName() == splitName[1]);
+            }
+
+            //Here the method node gets retrieved from the graph
+            string[] methodName = method.Split(".");
+            Method methodNode = (Method)graph.GetAll()[NAME_SPACE_NODE + "." + methodName[0]].GetMethods()
+                .FirstOrDefault(x => x.GetName() == methodName[1]);
+
+            //Checks whether the entity or method node uses the second method node
+            bool usingCheck = graph.GetRelations(node, RelationTargetKind.Method)
+                .Any(x => x.GetRelationType() == RelationType.Uses && x.Target.AsT1 == methodNode);
+            
+            //Checks whether the usedBy relation is also in place
+            bool usedByCheck = graph.GetRelations(methodNode, isEntity ? RelationTargetKind.Entity : RelationTargetKind.Method)
+                .Any(x => x.GetRelationType() == RelationType.UsedBy 
+                          && (x.Target.IsT0 ? x.Target.AsT0 == node : x.Target.AsT1 == node));
+
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual(shouldBeValid, usingCheck);
+                Assert.AreEqual(shouldBeValid, usedByCheck);
+            });
+        }
+
+        [Test]
+        [TestCase("MethodsRelations1.cs", "MethodsRelations1.displayID", "ClassWithMethod", true)]
+        [TestCase("MethodsRelations1.cs", "ClassWithMethod.GetID", "MethodsRelations1", false)]
+        [TestCase("MethodsRelations2.cs", "DoSomeMultiplication.LetsGO", "IDoSomething", false)]
+        [TestCase("MethodsRelations2.cs", "DoSomeMultiplication.LetsGO", "MethodsRelations2", true)]
+        [TestCase("MethodsRelations2.cs", "MethodsRelations2.Dividation", "DoSomeMultiplication", true)]
+        [TestCase("MethodsRelations2.cs", "MethodsRelations2.Dividation", "MethodsRelations2", false)]
+        public void Method_Creates_Entity(
+            string filename,
+            string method,
+            string entity,
+            bool shouldBeValid
+        )
+        {
+            string code = FileUtils.FileToString("Relation\\MethodsAndEntities\\" + filename);
+            string NameSpaceNode = "PatternPal.Tests.TestClasses.Relation.MethodsAndEntities";
+
+            SyntaxGraph graph = new();
+            graph.AddFile(code, code);
+            graph.CreateGraph();
+
+            Method methodNode;
+
+            //Here the method node gets retrieved from the graph
+            string[] splitName = method.Split('.');
+            methodNode = (Method)graph.GetAll()[NameSpaceNode + "." + splitName[0]].GetMethods()
+                .FirstOrDefault(x => x.GetName() == splitName[1]);
+
+            //Checks whether the method has a creates relation with the entity
+            bool createsCheck = graph.GetRelations(methodNode, RelationTargetKind.Entity).Any(x =>
+                x.GetRelationType() == RelationType.Creates && x.GetDestinationName() == entity);
+
+            //Checks whether the entity has a createdby relation with the method
+            bool createdByCheck = graph.GetAll()[NameSpaceNode + "." + entity].GetRelations(RelationTargetKind.Method)
+                .Any(x => x.GetRelationType() == RelationType.CreatedBy && x.GetDestinationName() == method.Split('.')[1]);
+
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual(shouldBeValid, createdByCheck);
+                Assert.AreEqual(shouldBeValid, createsCheck);
+            });
         }
     }
 }

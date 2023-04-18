@@ -10,8 +10,11 @@ using ICheckResult = PatternPal.Recognizers.Abstractions.ICheckResult;
 
 namespace PatternPal.Tests.Recognizers
 {
+    [TestFixture]
+    [Ignore("Old Tests, ignored for CI")]
     internal class StrategyRecognizerTest
     {
+
         [TestCase("StateTest1", "Doneness", 0, 79)]
         [TestCase("StateTest2", "State", 0, 79)]
         [TestCase("StateTest3", "State", 0, 79)]

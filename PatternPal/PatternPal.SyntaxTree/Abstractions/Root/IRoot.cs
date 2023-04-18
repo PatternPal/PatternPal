@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SyntaxTree.Abstractions.Entities;
 
 namespace SyntaxTree.Abstractions.Root
 {
@@ -12,7 +11,7 @@ namespace SyntaxTree.Abstractions.Root
         /// <returns>Filepath of the source</returns>
         string GetSource();
 
-        IEnumerable<IRelation> GetRelations(IEntity entity);
+        IEnumerable<Relation> GetRelations(INode node, RelationTargetKind type);
     }
 
     public interface INamespaceContainer : INode, IParent

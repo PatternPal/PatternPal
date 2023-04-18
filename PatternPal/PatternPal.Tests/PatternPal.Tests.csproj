@@ -18,6 +18,7 @@
     <PackageReference Include="NUnit.ConsoleRunner" Version="3.16.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.4.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
+    <PackageReference Include="OneOf" Version="3.0.243" />
     <PackageReference Include="System.Collections" Version="4.3.0" />
     <PackageReference Include="Verify.NUnit" Version="19.11.2" />
   </ItemGroup>

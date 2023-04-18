@@ -1,9 +1,7 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SyntaxTree.Abstractions;
-using SyntaxTree.Abstractions.Entities;
-using SyntaxTree.Abstractions.Members;
 using SyntaxTree.Utils;
 
 namespace SyntaxTree.Models.Members.Method
@@ -12,7 +10,6 @@ namespace SyntaxTree.Models.Members.Method
     {
         private readonly MethodDeclarationSyntax _methodDeclaration;
         private readonly IEntity _parent;
-
         public Method(MethodDeclarationSyntax node, IEntity parent) : base(node, parent?.GetRoot())
         {
             _methodDeclaration = node;
@@ -42,6 +39,11 @@ namespace SyntaxTree.Models.Members.Method
         public TypeSyntax GetReturnType()
         {
             return _methodDeclaration.ReturnType;
+        }
+
+        public MethodDeclarationSyntax GetDeclarationSyntax()
+        {
+            return _methodDeclaration;
         }
 
         public IEntity GetParent()

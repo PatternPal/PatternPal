@@ -86,13 +86,14 @@ namespace PatternPal.Recognizers.Recognizers
                                         new ElementCheck<IMethod>(x => x.CheckIfMethodCallsBase(), "MethodBaseCall")
                                     }, x => x.GetAllMethods(), "ConcreteDecoratorMethod")
                             },
-                            x => entityNode.GetRelations()
+                            x => entityNode.GetRelations(RelationTargetKind.Entity)
                                 .Where(y => y.GetRelationType().Equals(RelationType.ExtendedBy))
-                                .Select(y => y.GetDestination()), "DecoratorConcrete", GroupCheckType.Median)
+                                .Select(y => y.Target.AsT0), "DecoratorConcrete", GroupCheckType.Median)
                     },
-                    x => x.GetRelations()
+                    x => x.GetRelations(RelationTargetKind.Entity)
                         .Where(y => y.GetRelationType().Equals(RelationType.Implements) ||
-                                    y.GetRelationType().Equals(RelationType.Extends)).Select(y => y.GetDestination()),
+                                    y.GetRelationType().Equals(RelationType.Extends))
+                        .Select(y => y.Target.AsT0),
                     "DecoratorComponent")
             }, x => new List<IEntity> {entityNode}, "Decorator");
             var checkResult = decoratorCheck.Check(entityNode);

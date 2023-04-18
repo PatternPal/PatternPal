@@ -144,9 +144,9 @@ namespace PatternPal.StepByStep.InstructionSets
 
                 return new EntityCheck()
                     .Custom(
-                        m => m.GetRelations().Any(
-                            x => x.GetRelationType() == RelationType.Extends &&
-                                 x.GetDestination().GetName() == strategyAbstract.GetName()
+                        m => m.GetRelations(RelationTargetKind.Entity).Any(
+                            x => x.GetRelationType() == RelationType.Extends && 
+                                 x.GetDestinationName() == strategyAbstract.GetName()
                         ),
                         new ResourceMessage(
                             "StrategyInstructionCheckIfClassIsSubclassOfAbstractClass", entity.GetName(), strategyAbstract.GetName()
@@ -276,9 +276,9 @@ namespace PatternPal.StepByStep.InstructionSets
                     .Custom(
                         m =>
                         {
-                            return m.GetRelations().Any(
-                                x => x.GetRelationType() == RelationType.Implements &&
-                                     x.GetDestination().GetName() == strategyInterface.GetName()
+                            return m.GetRelations(RelationTargetKind.Entity).Any(
+                                x => x.GetRelationType() == RelationType.Implements 
+                                     && x.GetDestinationName() == strategyInterface.GetName()
                             );
                         },
                         new ResourceMessage(

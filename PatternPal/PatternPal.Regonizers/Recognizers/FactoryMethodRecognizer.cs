@@ -97,20 +97,20 @@ namespace PatternPal.Recognizers.Recognizers
                                                     )
                                                 }, x => node.GetAllMethods(), "FactoryAbstractCreatorMethod"
                                             )
-                                        }, x => x.GetRelations().Where(
+                                        }, x => x.GetRelations(RelationTargetKind.Entity).Where(
                                                 y => y.GetRelationType().Equals(RelationType.Extends) ||
                                                      y.GetRelationType().Equals(RelationType.Implements)
                                             )
-                                            .Select(y => y.GetDestination()), "Child"
+                                            .Select(y => y.Target.AsT0), "Child"
                                     )
-                                }, x => entityNode.GetRelations()
+                                }, x => entityNode.GetRelations(RelationTargetKind.Entity)
                                     .Where(y => y.GetRelationType().Equals(RelationType.Creates))
-                                    .Select(y => y.GetDestination()), "FactoryCreates"
+                                    .Select(y => y.Target.AsT0), "FactoryCreates"
                             )
                         },
-                        x => x.GetRelations()
+                        x => x.GetRelations(RelationTargetKind.Entity)
                             .Where(y => y.GetRelationType().Equals(RelationType.ExtendedBy))
-                            .Select(y => y.GetDestination()),
+                            .Select(y => y.Target.AsT0),
                         "FactoryConcreteCreator",
                         GroupCheckType.All
                     ),
@@ -145,8 +145,8 @@ namespace PatternPal.Recognizers.Recognizers
                                     )
                                 }, x => node.GetAllMethods(), "FactoryConcreteCreatorMethod"
                             )
-                        }, x => x.GetRelations().Where(y => y.GetRelationType().Equals(RelationType.Uses))
-                            .Select(y => y.GetDestination()), "ProductClass"
+                        }, x => x.GetRelations(RelationTargetKind.Entity).Where(y => y.GetRelationType().Equals(RelationType.Uses))
+                            .Select(y => y.Target.AsT0), "ProductClass"
                     )
                 }, x => new List<IEntity> { node }, "FactoryAbstractCreator"
             );

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using PatternPal.Recognizers.Abstractions;
 using PatternPal.Recognizers.Checks;
@@ -12,6 +13,11 @@ namespace PatternPal.Recognizers.Recognizers
 {
     public class AdapterRecognizer : IRecognizer
     {
+        public IResult Recognize(IEntity entityNode)
+        {
+            throw new NotImplementedException();
+        }
+        /*
         public IResult Recognize(IEntity entityNode)
         {
             var result = new Result();
@@ -29,17 +35,17 @@ namespace PatternPal.Recognizers.Recognizers
 
         private GroupCheck<IEntity, IEntity> GetObjectAdapterCheck(IEntity entityNode)
         {
-            IRelation currentRelation = null;
+            IRelation<IEntity> currentRelation = null;
             string currentField = null;
             var adapterCheck = new GroupCheck<IEntity, IEntity>(
                 new List<ICheck<IEntity>>
                 {
                     GetImplementsInterfaceOrExtendsClassCheck(),
-                    new GroupCheck<IEntity, IRelation>(
-                        new List<ICheck<IRelation>>
+                    new GroupCheck<IEntity, IRelation<IEntity>>(
+                        new List<ICheck<IRelation<IEntity>>>
                         {
                             //Is used by adapter
-                            new ElementCheck<IRelation>(
+                            new ElementCheck<IRelation<IEntity>>(
                                 x =>
                                 {
                                     currentRelation = x;
@@ -48,7 +54,7 @@ namespace PatternPal.Recognizers.Recognizers
                             ),
 
                             //Adapter has an adaptee field
-                            new GroupCheck<IRelation, IField>(
+                            new GroupCheck<IRelation<IEntity>, IField>(
                                 new List<ICheck<IField>>
                                 {
                                     new ElementCheck<IField>(
@@ -89,16 +95,16 @@ namespace PatternPal.Recognizers.Recognizers
 
         private GroupCheck<IEntity, IEntity> GetInheritanceAdapterCheck(IEntity entityNode)
         {
-            IRelation currentRelation = null;
+            IRelation<IEntity> currentRelation = null;
             var adapterCheck = new GroupCheck<IEntity, IEntity>(
                 new List<ICheck<IEntity>>
                 {
                     GetImplementsInterfaceOrExtendsClassCheck(),
-                    new GroupCheck<IEntity, IRelation>(
-                        new List<ICheck<IRelation>>
+                    new GroupCheck<IEntity, IRelation<IEntity>>(
+                        new List<ICheck<IRelation<IEntity>>>
                         {
                             //Is used by adapter (parent)
-                            new ElementCheck<IRelation>(
+                            new ElementCheck<IRelation<IEntity>>(
                                 x =>
                                 {
                                     currentRelation = x;
@@ -107,7 +113,7 @@ namespace PatternPal.Recognizers.Recognizers
                                         ;
                                 }, "AdapteeExtendsApter", 2
                             ),
-                            new GroupCheck<IRelation, IMethod>(
+                            new GroupCheck<IRelation<IEntity>, IMethod>(
                                 new List<ICheck<IMethod>>
                                 {
                                     new ElementCheck<IMethod>(
@@ -141,5 +147,6 @@ namespace PatternPal.Recognizers.Recognizers
                 "Parent"
             );
         }
+        */
     }
 }

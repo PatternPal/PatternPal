@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using SyntaxTree.Abstractions.Entities;
 
 namespace SyntaxTree.Abstractions.Members
 {

@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
     <RootNamespace>SyntaxTree</RootNamespace>
   </PropertyGroup>
 
@@ -16,10 +17,8 @@
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.0.1" />
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" Version="4.0.1" />
     <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="4.0.1" />
+    <PackageReference Include="OneOf" Version="3.0.243" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\Members"/>
-  </ItemGroup>
 
 </Project>

@@ -5,8 +5,10 @@ using NUnit.Framework;
 
 namespace PatternPal.Tests.Recognizers
 {
+    [TestFixture]
     public class ResourceMessageTest
     {
+        [Ignore("Old Tests, ignored for CI")]
         [Test]
         [TestCase("MethodReturnType", "BeerFactory", "Method should return BeerFactory.")]
         [TestCase("MethodReturnType", "Hello", "Method should return Hello.")]

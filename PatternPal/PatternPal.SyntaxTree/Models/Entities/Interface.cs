@@ -1,5 +1,5 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SyntaxTree.Abstractions.Entities;
+
 using SyntaxTree.Abstractions.Root;
 
 namespace SyntaxTree.Models.Entities

@@ -1,6 +1,4 @@
-﻿using SyntaxTree.Abstractions.Entities;
-
-namespace SyntaxTree.Abstractions.Members
+﻿namespace SyntaxTree.Abstractions.Members
 {
     public interface IMember : IModified, IChild<IEntity>
     {

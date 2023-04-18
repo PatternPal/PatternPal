@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -230,10 +230,9 @@ namespace PatternPal.Tests.Utils
             return new Dictionary< string, IEntity >();
         }
 
-        public IEnumerable< IRelation > GetRelations(
-            IEntity entity)
+        public IEnumerable<Relation> GetRelations(INode node, RelationTargetKind type)
         {
-            return Array.Empty< IRelation >();
+            return Array.Empty<Relation>();
         }
 
         public IEnumerable< INode > GetChildren() { return Array.Empty< INode >(); }

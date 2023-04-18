@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SyntaxTree.Abstractions;
-using SyntaxTree.Abstractions.Entities;
-using SyntaxTree.Abstractions.Members;
 using SyntaxTree.Abstractions.Root;
 using SyntaxTree.Models.Members.Constructor;
 using SyntaxTree.Models.Members.Method;
@@ -15,12 +14,12 @@ namespace SyntaxTree.Models.Entities
     public abstract class AbstractEntity : AbstractNode, IEntity
     {
         private readonly List<TypeSyntax> _bases;
-        private readonly List<IEntity> _entities = new List<IEntity>();
+        private readonly List<IEntity> _entities = new();
 
-        private readonly List<IMethod> _methods = new List<IMethod>();
+        private readonly List<IMethod> _methods = new();
 
         private readonly IEntitiesContainer _parent;
-        private readonly List<IProperty> _properties = new List<IProperty>();
+        private readonly List<IProperty> _properties = new();
         private readonly TypeDeclarationSyntax _typeDeclarationSyntax;
 
         protected AbstractEntity(TypeDeclarationSyntax node, IEntitiesContainer parent) : base(
@@ -47,6 +46,11 @@ namespace SyntaxTree.Models.Entities
             }
 
             _bases = node.BaseList?.Types.Select(t => t.Type).ToList() ?? new List<TypeSyntax>();
+        }
+
+        public TypeDeclarationSyntax GetTypeDeclarationSyntax()
+        {
+            return _typeDeclarationSyntax;
         }
 
         public override string GetName()
@@ -120,9 +124,9 @@ namespace SyntaxTree.Models.Entities
             return GetName();
         }
 
-        public IEnumerable<IRelation> GetRelations()
+        public IEnumerable<Relation> GetRelations(RelationTargetKind type)
         {
-            return _parent.GetRoot().GetRelations(this);
+            return _parent.GetRoot().GetRelations(this, type);
         }
 
         public virtual IEnumerable<IMethod> GetAllMethods()

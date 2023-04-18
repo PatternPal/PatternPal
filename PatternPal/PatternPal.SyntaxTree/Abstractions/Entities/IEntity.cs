@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SyntaxTree.Abstractions.Members;
+
 using SyntaxTree.Abstractions.Root;
 
 namespace SyntaxTree.Abstractions.Entities
 {
     public interface IEntity : IModified, IChild<IEntitiesContainer>, INamedEntitiesContainer
     {
+        TypeDeclarationSyntax GetTypeDeclarationSyntax();
         /// <summary>
         ///     Get a list of methods declared in this node
         /// </summary>
@@ -49,7 +51,7 @@ namespace SyntaxTree.Abstractions.Entities
         /// <returns></returns>
         string GetFullName();
 
-        IEnumerable<IRelation> GetRelations();
+        IEnumerable<Relation> GetRelations(RelationTargetKind type);
 
         /// <summary>
         ///     Gets all methods this includes getter and setter from properties and constructors

@@ -1,5 +1,4 @@
-﻿using Microsoft.CodeAnalysis;
-using SyntaxTree.Abstractions;
+﻿using SyntaxTree.Abstractions;
 
 namespace SyntaxTree.Models
 {

@@ -41,12 +41,13 @@
 
         public SingleTonTestCase5User()
         {
-            instance = SingleTonTestCase5.GetInstance();
         }
 
         public void DoSomethingWithSingleton()
         {
             instance.DoSomething();
+            instance = SingleTonTestCase5.GetInstance();
+
         }
     }
 }

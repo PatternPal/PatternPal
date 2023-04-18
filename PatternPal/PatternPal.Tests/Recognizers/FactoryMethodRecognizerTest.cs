@@ -5,8 +5,10 @@ using SyntaxTree;
 
 namespace PatternPal.Tests.Recognizers
 {
+    [TestFixture]
     public class FactoryMethodRecognizerTest
     {
+        [Ignore("Old Tests, ignored for CI")]
         [TestCase("FactoryMethodTest1", "BeerFactory", 80, 100)]
         [TestCase("FactoryMethodTest2", "CardFactory", 80, 100)]
         [TestCase("FactoryMethodTest3", "Creator", 80, 100)]

@@ -29,15 +29,10 @@ internal class UsesCheck : CheckBase
             throw new NotImplementedException("Uses Check was incorrect");
         }
 
-        foreach (IRelation relation in ctx.Graph.GetRelations(method.GetParent()))
+        if (ctx.Graph.GetRelations(method, RelationTargetKind.Method).Any(x => x.Target.AsT1 == usedMethod))
         {
-            if (relation.GetRelationType() == RelationType.Uses
-                && relation.GetDestination() == usedMethod.GetParent()
-                && method.GetParent() != usedMethod.GetParent())
-            {
                 Console.WriteLine($"Used method: '{usedMethod}' Used by: '{method}'");
                 throw new NotImplementedException("Uses Check was correct");
-            }
         }
 
         throw new NotImplementedException("Uses Check was incorrect");

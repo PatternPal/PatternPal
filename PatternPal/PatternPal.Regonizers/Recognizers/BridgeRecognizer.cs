@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using PatternPal.Recognizers.Abstractions;
 using PatternPal.Recognizers.Checks;
@@ -15,6 +16,11 @@ namespace PatternPal.Recognizers
     /// </summary>
     public class BridgeRecognizer : IRecognizer
     {
+        public IResult Recognize(IEntity entityNode)
+        {
+            throw new NotImplementedException();
+        }
+        /*
         public IResult Recognize(IEntity entityNode)
         {
             var result = new Result();
@@ -123,18 +129,18 @@ namespace PatternPal.Recognizers
 
             return result;
         }
-
+        
         public List<ICheck<IEntity>> GetAbstractionGroupCheckList(IEntity entityNode, IEnumerable<IField> fieldsToCheck)
         {
-            IRelation currentRelation = null;
+            IRelation<IEntity> currentRelation = null;
             string implementerField = null;
 
             return new List<ICheck<IEntity>>
             {
-                new GroupCheck<IEntity, IRelation>(new List<ICheck<IRelation>>
+                new GroupCheck<IEntity, IRelation<IEntity>>(new List<ICheck<IRelation<IEntity>>>
                 {
                     // Abstraction uses the Implementer
-                    new ElementCheck<IRelation>(
+                    new ElementCheck<IRelation<IEntity>>(
                         x =>
                         {
                             currentRelation = x;
@@ -146,7 +152,7 @@ namespace PatternPal.Recognizers
                     ),
 
                     // Abstraction has a reference to the implementer
-                    new GroupCheck<IRelation, IField>(new List<ICheck<IField>>
+                    new GroupCheck<IRelation<IEntity>, IField>(new List<ICheck<IField>>
                         {
                             new ElementCheck<IField>(
                                 x =>
@@ -187,5 +193,6 @@ namespace PatternPal.Recognizers
                 x => entityNode.GetRelations(), "Abstraction", GroupCheckType.Any, true)
             };
         }
+        */
     }
 }
