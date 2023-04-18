@@ -74,7 +74,7 @@ namespace SyntaxTree
             _methods.AddRange(
                 _entities.SelectMany(
                     y =>
-                        y.GetMembers().Where(x => x.GetType() == typeof( Method )).Cast< Method >()));
+                        y.GetMembers().OfType< IMethod >()));
 
             foreach (IEntity entity in _entities)
             {
@@ -83,7 +83,7 @@ namespace SyntaxTree
                 CreateUsingEdges(entity);
             }
 
-            foreach (Method method in _methods)
+            foreach (IMethod method in _methods)
             {
                 CreateCreationalEdges(method);
                 CreateUsingEdges(method);
@@ -136,11 +136,6 @@ namespace SyntaxTree
                 || relations.Any(r => r == relationReversed))
             {
                 return;
-            }
-
-            if (node1 is IEntity e2
-                && e2.GetName() == "RelationTestCase1")
-            {
             }
 
             StoreRelation(
