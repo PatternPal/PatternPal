@@ -14,27 +14,23 @@ internal class UsesCheck : CheckBase
         RecognizerContext ctx,
         INode node)
     {
-        if (node is not IMethod method)
-        {
-            throw new NotImplementedException("Uses Check was incorrect");
-        }
+        bool hasUsesRelation = ctx.Graph.GetRelations(node, RelationTargetKind.All).
+            Any(relation => relation.GetRelationType() == RelationType.Uses && 
+                            relation.Target.Match(entity => entity == _getNode(), method => method == _getNode()));
 
-        if (_getNode() is not IMethod usedMethod)
-        {
-            throw new NotImplementedException("Uses Check was incorrect");
-        }
+        return hasUsesRelation 
+            ? new LeafCheckResult
+              {
+                Correctness = true, 
+                Priority = Priority, 
+                FeedbackMessage = $"Node {node} correctly uses node {_getNode()}"
 
-        if (method == usedMethod)
-        {
-            throw new NotImplementedException("Uses Check was incorrect");
-        }
-
-        if (ctx.Graph.GetRelations(method, RelationTargetKind.Method).Any(x => x.Target.AsT1 == usedMethod))
-        {
-                Console.WriteLine($"Used method: '{usedMethod}' Used by: '{method}'");
-                throw new NotImplementedException("Uses Check was correct");
-        }
-
-        throw new NotImplementedException("Uses Check was incorrect");
+              } 
+            : new LeafCheckResult
+              { 
+                Correctness = false, 
+                Priority = Priority,
+                FeedbackMessage = $"No uses relation found."
+              };
     }
 }
