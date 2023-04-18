@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PatternPal.Tests.TestClasses.DecoratorTest4
+﻿namespace PatternPal.Tests.TestClasses.DecoratorTest4
 {
     internal abstract class Decorator : IComponent
     {

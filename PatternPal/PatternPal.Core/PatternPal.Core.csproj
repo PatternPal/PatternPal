@@ -2,9 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
     <DebugType>full</DebugType>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
     <RootNamespace>PatternPal.Core</RootNamespace>
   </PropertyGroup>
 
@@ -19,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PatternPal.Regonizers\PatternPal.Recognizers.csproj" />
+    <ProjectReference Include="..\PatternPal.SyntaxTree\PatternPal.SyntaxTree.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,11 +46,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="../../Protos/logging.proto" GrpcServices="Server" Link="Protos/logging.proto" />
-    <Protobuf Include="../../Protos/common.proto" GrpcServices="Server" Link="Protos/common.proto" />
-    <Protobuf Include="../../Protos/recognizer.proto" GrpcServices="Server" Link="Protos/recognizer.proto" />
-    <Protobuf Include="../../Protos/step_by_step.proto" GrpcServices="Server" Link="Protos/step_by_step.proto" />
     <Protobuf Include="../../PatternPal/PatternPal.LoggingServer/Protos/log.proto" GrpcServices="Client" Link="Protos/log.proto" />
+    <Protobuf Include="$(RepositoryRoot)Protos/common.proto" GrpcServices="Server" Link="Protos/common.proto" />
+    <Protobuf Include="$(RepositoryRoot)Protos/recognizer.proto" GrpcServices="Server;Client" Link="Protos/recognizer.proto" />
+    <Protobuf Include="$(RepositoryRoot)Protos/step_by_step.proto" GrpcServices="Server" Link="Protos/step_by_step.proto" />
+    <Protobuf Include="$(RepositoryRoot)Protos/logging.proto" GrpcServices="Server" Link="Protos/logging.proto" />
   </ItemGroup>
 
 </Project>

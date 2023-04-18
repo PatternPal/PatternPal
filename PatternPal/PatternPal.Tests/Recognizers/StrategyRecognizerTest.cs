@@ -1,10 +1,12 @@
-﻿using System;
-using PatternPal.CommonResources;
+﻿using PatternPal.CommonResources;
 using PatternPal.Recognizers.Abstractions;
 using PatternPal.Recognizers.Recognizers;
-using PatternPal.Tests.Utils;
+
 using NUnit.Framework;
+
 using SyntaxTree;
+
+using ICheckResult = PatternPal.Recognizers.Abstractions.ICheckResult;
 
 namespace PatternPal.Tests.Recognizers
 {
@@ -50,7 +52,7 @@ namespace PatternPal.Tests.Recognizers
             Assert.That(result.GetScore(), Is.InRange(minScore, maxScore));
         }
 
-        public static void PrintResult(ICheckResult result, int depth)
+        private static void PrintResult(PatternPal.Recognizers.Abstractions.ICheckResult result, int depth)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             var symbol = "X";

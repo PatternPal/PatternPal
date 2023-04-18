@@ -15,17 +15,15 @@ internal static class Program
 
         builder.Services.AddGrpc();
 
-
-
-
         builder.Services.AddDbContext<ProgSnap2ContextClass>(options => 
             options.UseNpgsql( builder.Configuration.GetConnectionString("PostgresConnection") )
         );
 
-        // Add the repository
         builder.Services.AddScoped<EventRepository, EventRepository>();
 
         WebApplication app = builder.Build();
+
+        DatabaseManagementService.MigrationInitialization(app); 
 
         app.MapGrpcService<LoggerService>();
 

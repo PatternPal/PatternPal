@@ -3,7 +3,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
@@ -57,7 +56,12 @@ namespace PatternPal.Extension.Grpc
 
         internal static void KillBackgroundService()
         {
-            _backgroundService?.Kill();
+            if (_backgroundService.HasExited)
+            {
+                return;
+            }
+
+            _backgroundService.Kill();
         }
     }
 }

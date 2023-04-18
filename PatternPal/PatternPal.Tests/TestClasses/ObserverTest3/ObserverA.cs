@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PatternPal.Tests.TestClasses.ObserverTest3
+﻿namespace PatternPal.Tests.TestClasses.ObserverTest3
 {
     internal class ObserverA : IObserver
     {

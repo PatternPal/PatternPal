@@ -13,7 +13,6 @@ namespace PatternPal.LoggingServer.Data
             _context = context;
         }
 
-
         public async Task<List<ProgSnap2Event>> GetAll()
         {
             return await _context.Events.ToListAsync();
@@ -40,7 +39,7 @@ namespace PatternPal.LoggingServer.Data
 
         public async Task<ProgSnap2Event> Delete(string id)
         {
-            var entity = await _context.Events.FindAsync(id);
+            ProgSnap2Event? entity = await _context.Events.FindAsync(id);
 
             if (entity == null)
             {
@@ -50,7 +49,6 @@ namespace PatternPal.LoggingServer.Data
             await _context.SaveChangesAsync();
             return entity;
         }
-
 
         public async Task<ProgSnap2Event?> GetBy(string column, string value)
         {

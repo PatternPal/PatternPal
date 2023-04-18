@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PatternPal.Tests.TestClasses.AdapterTest1
+﻿namespace PatternPal.Tests.TestClasses.AdapterTest1
 {
     /// <summary>
     ///     The 'Target' class

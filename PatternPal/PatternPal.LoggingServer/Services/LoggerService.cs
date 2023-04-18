@@ -1,13 +1,13 @@
-﻿using Grpc.Core;
+﻿using System.IO.Compression;
+using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using PatternPal.LoggingServer;
 using PatternPal.LoggingServer.Data;
 using PatternPal.LoggingServer.Data.Interfaces;
 using PatternPal.LoggingServer.Models;
-
 namespace PatternPal.LoggingServer.Services
 {
-    public class LoggerService : Log.LogBase
+    public class LoggerService : LogCollectorService.LogCollectorServiceBase
     {
         private readonly ILogger<LoggerService> _logger;
         private readonly EventRepository _eventRepository;
@@ -17,19 +17,39 @@ namespace PatternPal.LoggingServer.Services
             _eventRepository = repository;
         }
 
-        public override async Task<LogReply> Log(LogRequest request, ServerCallContext context)
+        public override async Task<LogResponse> Log(LogRequest request, ServerCallContext context)
         {
+            if (!Guid.TryParse(request.SessionId, out Guid sessionId))
+            {
+                Status status = new Status(StatusCode.InvalidArgument, "Invalid sessionID GUID format");
 
-            Guid sessionId = Guid.Parse(request.SessionId);
-            Guid subjectId = Guid.Parse(request.SubjectId);
+                throw new RpcException(status);
+            }
 
+            if (!Guid.TryParse(request.SubjectId, out Guid subjectId))
+            {
+                Status status = new Status(StatusCode.InvalidArgument, "Invalid subjectID GUID format");
+                throw new RpcException(status);
+            }
 
-            DateTimeOffset cDto = DateTimeOffset.Parse(request.ClientTimestamp);
-            
+            if (request.EventType == EventType.EtUnknown)
+            {
+                Status status = new Status(StatusCode.InvalidArgument, "Unknown event type");
+                throw new RpcException(status);
+            }
+
+            if (!DateTimeOffset.TryParse(request.ClientTimestamp, out DateTimeOffset cDto))
+            {
+                Status status = new Status(StatusCode.InvalidArgument, "Invalid datetime format ( ISO 8601 ) ");
+                throw new RpcException(status);
+            }
+
+            byte[] compressed = request.Data.ToByteArray();
+
+            // TODO: File processing (decompression, diff comparison, etc.)
+
             
             int order = await _eventRepository.GetNextOrder(sessionId, subjectId);
-            
-            
 
             ProgSnap2Event newEvent = new ProgSnap2Event
             {
@@ -46,9 +66,9 @@ namespace PatternPal.LoggingServer.Services
 
             await _eventRepository.Insert(newEvent);
 
-            return await Task.FromResult(new LogReply
+            return await Task.FromResult(new LogResponse
             {
-                ResponseMessage = "Logged"
+                Message = "Logged"
             });
         }
     }

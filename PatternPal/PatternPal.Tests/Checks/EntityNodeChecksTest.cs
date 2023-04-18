@@ -1,7 +1,5 @@
-using PatternPal.Recognizers.Checks;
-using PatternPal.Tests.Utils;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using PatternPal.Recognizers.Checks;
+
 using NUnit.Framework;
 using SyntaxTree;
 using SyntaxTree.Abstractions;
