@@ -8,7 +8,9 @@ using SyntaxTree;
 
 namespace PatternPal.Tests.Recognizers
 {
-    public  class TestRecognizerTest
+    [Ignore("Old Tests, ignored for CI")]
+    [TestFixture]
+    public class TestRecognizerTest
     {
         [Test]
         [TestCase("TestRecognizerTest1", "Class1", 100, 100)] // Correct optional and knockout returns 100

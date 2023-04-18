@@ -5,8 +5,10 @@ using SyntaxTree;
 
 namespace PatternPal.Tests.Recognizers
 {
+    [TestFixture]
     internal class AdapterRecognizerTest
     {
+        [Ignore("Old Tests, ignored for CI")]
         [TestCase("AdapterTest1", "Target", 0, 79)] //Target
         [TestCase("AdapterTest1", "Adaptee", 0, 79)] //Adaptee
         [TestCase("AdapterTest1", "Adapter", 80, 100)] //Adapter

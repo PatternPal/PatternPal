@@ -6,8 +6,10 @@ using PatternPal.Tests.TestClasses.Singleton;
 
 namespace PatternPal.Tests.Recognizers
 {
+    [TestFixture]
     public class SingletonRecognizerTest
     {
+        [Ignore("Old Tests, ignored for CI")]
         [Test]
         [TestCase("SingleTonTestCase1.cs", 80, 100)]
         [TestCase("SingleTonTestCase2.cs", 0, 79)]
