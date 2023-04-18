@@ -36,6 +36,9 @@ internal class MethodCheck : CheckBase
 
         Console.WriteLine($"Got method '{method}'");
         MatchedEntity = method;
+
+        return new NodeCheckResult{ChildrenCheckResults = new List<ICheckResult>(), Correctness = true, Priority = Priority, FeedbackMessage = "method found"};
+
         throw new NotImplementedException("Method Check was correct");
     }
 }
