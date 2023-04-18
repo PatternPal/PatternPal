@@ -17,7 +17,7 @@ namespace PatternPal.Recognizers.Recognizers
         public IResult Recognize(IEntity node)
         {
             result = new Result();
-            var relations = node.GetRelations(Relationable.Entity);
+            var relations = node.GetRelations(RelationTargetKind.Entity);
 
             var strategyPatternCheck = new GroupCheck<IEntity, IEntity>(
                 new List<ICheck<IEntity>>
@@ -67,8 +67,8 @@ namespace PatternPal.Recognizers.Recognizers
                                 }, x => x.GetFields(), "StrategyContextField", GroupCheckType.All
                             )
                         },
-                        x => x.GetRelations(Relationable.Entity).Where(y => y.GetRelationType().Equals(RelationType.UsedBy))
-                            .Select(y => y.Node2Entity), "StrategyContext"
+                        x => x.GetRelations(RelationTargetKind.Entity).Where(y => y.GetRelationType().Equals(RelationType.UsedBy))
+                            .Select(y => y.Target.AsT0), "StrategyContext"
                     ),
 
                     //check inheritance
@@ -76,16 +76,16 @@ namespace PatternPal.Recognizers.Recognizers
                         new List<ICheck<IEntity>>
                         {
                             new ElementCheck<IEntity>(
-                                x => x.GetRelations(Relationable.Entity).All(y => y.GetRelationType() != RelationType.Creates),
+                                x => x.GetRelations(RelationTargetKind.Entity).All(y => y.GetRelationType() != RelationType.Creates),
                                 "NodeDoesNotCreate", 2
                             ),
                             new ElementCheck<IEntity>(
-                                x => x.GetRelations(Relationable.Entity).All(y => y.GetRelationType() != RelationType.Uses),
+                                x => x.GetRelations(RelationTargetKind.Entity).All(y => y.GetRelationType() != RelationType.Uses),
                                 "NodeDoesNotUse", 1
                             )
-                        }, x => x.GetRelations(Relationable.Entity).Where(y => 
+                        }, x => x.GetRelations(RelationTargetKind.Entity).Where(y => 
                             y.GetRelationType().Equals(RelationType.ExtendedBy) || 
-                             y.GetRelationType().Equals(RelationType.ImplementedBy)).Select(y => y.Node2Entity), "StrategyConcrete", GroupCheckType.All
+                             y.GetRelationType().Equals(RelationType.ImplementedBy)).Select(y => y.Target.AsT0), "StrategyConcrete", GroupCheckType.All
                     )
                 }, x => new List<IEntity> {node}, "Strategy"
             );
@@ -95,8 +95,8 @@ namespace PatternPal.Recognizers.Recognizers
 
             result.RelatedSubTypes.Add(node, "AbstractStrategy");
 
-            foreach (var concrete in node.GetRelations(Relationable.Entity).Where(x => 
-                         (x.GetRelationType() is RelationType.ExtendedBy or RelationType.ImplementedBy)).Select(x => x.Node2Entity))
+            foreach (var concrete in node.GetRelations(RelationTargetKind.Entity).Where(x => 
+                         (x.GetRelationType() is RelationType.ExtendedBy or RelationType.ImplementedBy)).Select(x => x.Target.AsT0))
             {
                 result.RelatedSubTypes.Add(concrete, "ConcreteStrategy");
             }

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SyntaxTree.Abstractions;
-using SyntaxTree.Abstractions.Entities;
-using SyntaxTree.Abstractions.Members;
 using SyntaxTree.Abstractions.Root;
 using SyntaxTree.Models.Members.Constructor;
 using SyntaxTree.Models.Members.Method;
@@ -126,7 +124,7 @@ namespace SyntaxTree.Models.Entities
             return GetName();
         }
 
-        public IEnumerable<Relation> GetRelations(Relationable type)
+        public IEnumerable<Relation> GetRelations(RelationTargetKind type)
         {
             return _parent.GetRoot().GetRelations(this, type);
         }

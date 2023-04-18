@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SyntaxTree.Abstractions.Members;
+
 using SyntaxTree.Abstractions.Root;
 
 namespace SyntaxTree.Abstractions.Entities
@@ -51,7 +51,7 @@ namespace SyntaxTree.Abstractions.Entities
         /// <returns></returns>
         string GetFullName();
 
-        IEnumerable<Relation> GetRelations(Relationable type);
+        IEnumerable<Relation> GetRelations(RelationTargetKind type);
 
         /// <summary>
         ///     Gets all methods this includes getter and setter from properties and constructors

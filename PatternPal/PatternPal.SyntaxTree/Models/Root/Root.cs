@@ -2,7 +2,6 @@
 using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SyntaxTree.Abstractions;
-using SyntaxTree.Abstractions.Entities;
 using SyntaxTree.Abstractions.Root;
 using SyntaxTree.Utils;
 
@@ -51,7 +50,7 @@ namespace SyntaxTree.Models.Root
                 .ToDictionary(p => p.Key, p => p.Value);
         }
 
-        public IEnumerable<Relation> GetRelations(INode node, Relationable type)
+        public IEnumerable<Relation> GetRelations(INode node, RelationTargetKind type)
         {
             return _graph.GetRelations(node, type);
         }

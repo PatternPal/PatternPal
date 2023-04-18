@@ -144,7 +144,7 @@ namespace PatternPal.StepByStep.InstructionSets
 
                 return new EntityCheck()
                     .Custom(
-                        m => m.GetRelations(Relationable.Entity).Any(
+                        m => m.GetRelations(RelationTargetKind.Entity).Any(
                             x => x.GetRelationType() == RelationType.Extends && 
                                  x.GetDestinationName() == strategyAbstract.GetName()
                         ),
@@ -276,7 +276,7 @@ namespace PatternPal.StepByStep.InstructionSets
                     .Custom(
                         m =>
                         {
-                            return m.GetRelations(Relationable.Entity).Any(
+                            return m.GetRelations(RelationTargetKind.Entity).Any(
                                 x => x.GetRelationType() == RelationType.Implements 
                                      && x.GetDestinationName() == strategyInterface.GetName()
                             );

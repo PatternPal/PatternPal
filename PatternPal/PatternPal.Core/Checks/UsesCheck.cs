@@ -1,4 +1,4 @@
-namespace PatternPal.Core.Checks;
+﻿namespace PatternPal.Core.Checks;
 
 internal class UsesCheck : CheckBase
 {
@@ -29,7 +29,7 @@ internal class UsesCheck : CheckBase
             throw new NotImplementedException("Uses Check was incorrect");
         }
 
-        if (ctx.Graph.GetRelations(method, Relationable.Method).Any(x => x.Node2Method == usedMethod))
+        if (ctx.Graph.GetRelations(method, RelationTargetKind.Method).Any(x => x.Target.AsT1 == usedMethod))
         {
                 Console.WriteLine($"Used method: '{usedMethod}' Used by: '{method}'");
                 throw new NotImplementedException("Uses Check was correct");

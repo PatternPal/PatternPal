@@ -32,10 +32,10 @@ namespace PatternPal.Tests.Core
 
             var nodes = graph.GetAll();
 
-            var interfaceCheck = nodes[NameSpaceNode + "." + baseClass].GetRelations(Relationable.Entity)
+            var interfaceCheck = nodes[NameSpaceNode + "." + baseClass].GetRelations(RelationTargetKind.Entity)
                 .Any(
                     x => x.GetRelationType() == RelationType.Implements &&
-                         x.Node2Entity.GetName() == relatedClass
+                         x.GetDestinationName() == relatedClass
                 );
             Assert.AreEqual(shouldBeValid, interfaceCheck);
         }
@@ -63,9 +63,9 @@ namespace PatternPal.Tests.Core
 
             var nodes = graph.GetAll();
 
-            var extendsCheck = nodes[NameSpaceNode + "." + baseClass].GetRelations(Relationable.Entity)
+            var extendsCheck = nodes[NameSpaceNode + "." + baseClass].GetRelations(RelationTargetKind.Entity)
                 .Any(x => x.GetRelationType() == RelationType.Extends && 
-                        x.Node2Entity.GetName() == relatedClass);
+                        x.GetDestinationName() == relatedClass);
             Assert.AreEqual(shouldBeValid, extendsCheck);
         }
 
@@ -92,9 +92,9 @@ namespace PatternPal.Tests.Core
 
             var nodes = graph.GetAll();
 
-            var createCheck = nodes[NameSpaceNode + "." + baseClass].GetRelations(Relationable.Entity)
+            var createCheck = nodes[NameSpaceNode + "." + baseClass].GetRelations(RelationTargetKind.Entity)
                 .Any(x => x.GetRelationType() == RelationType.Creates &&
-                    x.Node2Entity.GetName() == relatedClass);
+                    x.GetDestinationName() == relatedClass);
             Assert.AreEqual(shouldBeValid, createCheck);
         }
 
@@ -123,7 +123,7 @@ namespace PatternPal.Tests.Core
 
             var nodes = graph.GetAll();
 
-            var usingCheck = nodes[NameSpaceNode + "." + baseClass].GetRelations(Relationable.Entity)
+            var usingCheck = nodes[NameSpaceNode + "." + baseClass].GetRelations(RelationTargetKind.Entity)
                 .Any(x => x.GetRelationType() == RelationType.Uses && 
                           x.GetDestinationName() == relatedClass);
             Assert.AreEqual(shouldBeValid, usingCheck);
@@ -135,7 +135,7 @@ namespace PatternPal.Tests.Core
         [TestCase("MethodsRelations2.cs", "DoSomeMultiplication", true, "IDoSomething.Multiplication", true)]
         [TestCase("MethodsRelations2.cs", "DoSomeMultiplication.LetsGO", false, "MethodsRelations2.Multiplication", false)]
         [TestCase("MethodsRelations2.cs", "DoSomeMultiplication.LetsGO", false, "MethodsRelations2.Addition", false)]
-        public void Entity_Or_Method_Use_Method(
+        public void Entity_Or_Method_Uses_Method(
             string filename,
             string entityOrMethod,
             bool isEntity,
@@ -144,7 +144,7 @@ namespace PatternPal.Tests.Core
         )
         {
             string code = FileUtils.FileToString("Relation\\MethodsAndEntities\\" + filename);
-            string NameSpaceNode = "PatternPal.Tests.TestClasses.Relation.MethodsAndEntities";
+            const string NAME_SPACE_NODE = "PatternPal.Tests.TestClasses.Relation.MethodsAndEntities";
 
             SyntaxGraph graph = new();
             graph.AddFile(code, code);
@@ -154,26 +154,26 @@ namespace PatternPal.Tests.Core
             INode node;
 
             if (isEntity)
-                node = graph.GetAll()[NameSpaceNode + "." + entityOrMethod];
+                node = graph.GetAll()[NAME_SPACE_NODE + "." + entityOrMethod];
             else
             {
                 string[] splitName = entityOrMethod.Split('.');
-                node = graph.GetAll()[NameSpaceNode + "." + splitName[0]].GetMethods().FirstOrDefault(x => x.GetName() == splitName[1]);
+                node = graph.GetAll()[NAME_SPACE_NODE + "." + splitName[0]].GetMethods().FirstOrDefault(x => x.GetName() == splitName[1]);
             }
 
             //Here the method node gets retrieved from the graph
             string[] methodName = method.Split(".");
-            Method methodNode = (Method)graph.GetAll()[NameSpaceNode + "." + methodName[0]].GetMethods()
+            Method methodNode = (Method)graph.GetAll()[NAME_SPACE_NODE + "." + methodName[0]].GetMethods()
                 .FirstOrDefault(x => x.GetName() == methodName[1]);
 
             //Checks whether the entity or method node uses the second method node
-            bool usingCheck = graph.GetRelations(node, Relationable.Method)
-                .Any(x => x.GetRelationType() == RelationType.Uses && x.Node2Method == methodNode);
+            bool usingCheck = graph.GetRelations(node, RelationTargetKind.Method)
+                .Any(x => x.GetRelationType() == RelationType.Uses && x.Target.AsT1 == methodNode);
             
             //Checks whether the usedBy relation is also in place
-            bool usedByCheck = graph.GetRelations(methodNode, isEntity ? Relationable.Entity : Relationable.Method)
+            bool usedByCheck = graph.GetRelations(methodNode, isEntity ? RelationTargetKind.Entity : RelationTargetKind.Method)
                 .Any(x => x.GetRelationType() == RelationType.UsedBy 
-                          && (isEntity ? x.Node2Entity == node : x.Node2Method == node));
+                          && (x.Target.IsT0 ? x.Target.AsT0 == node : x.Target.AsT1 == node));
 
             Assert.Multiple(() =>
             {
@@ -211,11 +211,11 @@ namespace PatternPal.Tests.Core
                 .FirstOrDefault(x => x.GetName() == splitName[1]);
 
             //Checks whether the method has a creates relation with the entity
-            bool createsCheck = graph.GetRelations(methodNode, Relationable.Entity).Any(x =>
+            bool createsCheck = graph.GetRelations(methodNode, RelationTargetKind.Entity).Any(x =>
                 x.GetRelationType() == RelationType.Creates && x.GetDestinationName() == entity);
 
             //Checks whether the entity has a createdby relation with the method
-            bool createdByCheck = graph.GetAll()[NameSpaceNode + "." + entity].GetRelations(Relationable.Method)
+            bool createdByCheck = graph.GetAll()[NameSpaceNode + "." + entity].GetRelations(RelationTargetKind.Method)
                 .Any(x => x.GetRelationType() == RelationType.CreatedBy && x.GetDestinationName() == method.Split('.')[1]);
 
             Assert.Multiple(() =>

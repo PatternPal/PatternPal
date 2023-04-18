@@ -2,8 +2,6 @@
 using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SyntaxTree.Abstractions;
-using SyntaxTree.Abstractions.Entities;
-using SyntaxTree.Abstractions.Members;
 using SyntaxTree.Abstractions.Root;
 using SyntaxTree.Models.Members.Constructor;
 using SyntaxTree.Models.Members.Field;

@@ -230,7 +230,7 @@ namespace PatternPal.Tests.Utils
             return new Dictionary< string, IEntity >();
         }
 
-        public IEnumerable<Relation> GetRelations(INode node, Relationable type)
+        public IEnumerable<Relation> GetRelations(INode node, RelationTargetKind type)
         {
             return Array.Empty<Relation>();
         }
