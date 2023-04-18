@@ -24,22 +24,19 @@ public class LoggingService : Protos.LoggingService.LoggingServiceBase
     public override Task<LogEventResponse> LogEvent(LogEventRequest receivedRequest, ServerCallContext context)
     {
         GrpcChannel grpcChannel = GrpcChannel.ForAddress(
-            "http://localhost:8001");
+            "http://localhost:8000");
 
-        //Create a log 
         LogRequest sendRequest = DetermineSpecificLog(receivedRequest);
+        LogCollectorService.LogCollectorServiceClient client = new LogCollectorService.LogCollectorServiceClient(grpcChannel);
+        LogResponse logReply = client.Log(sendRequest);
 
-        //Specify according to the EventType
-        Log.LogClient client = new Log.LogClient(grpcChannel);
-        LogReply logReply = client.Log(sendRequest);
-
-        //Send response back to frond-end to verify something has been received here
+        // Send response back to frond-end to verify something has been received here
         LogEventResponse response = new LogEventResponse { ResponseMessage = "a response message." };
         return Task.FromResult(response);
     }
 
     /// <summary>
-    /// Returns a log based on the event type
+    /// Returns a log in the right format for the logging server based on the event type.
     /// </summary>
     private LogRequest DetermineSpecificLog(LogEventRequest receivedRequest)
     {
@@ -82,7 +79,7 @@ public class LoggingService : Protos.LoggingService.LoggingServiceBase
     private LogRequest CompileLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
-        sendLog.EventType = LoggingServer.EventType.Compile;
+        sendLog.EventType = LoggingServer.EventType.EtCompile;
         sendLog.CompileResult = receivedRequest.CompileResult;
         return sendLog;
     }
@@ -90,7 +87,7 @@ public class LoggingService : Protos.LoggingService.LoggingServiceBase
     private LogRequest SessionStartLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
-        sendLog.EventType = LoggingServer.EventType.SessionStart;
+        sendLog.EventType = LoggingServer.EventType.EtSessionStart;
 
         return sendLog;
     }
@@ -99,7 +96,7 @@ public class LoggingService : Protos.LoggingService.LoggingServiceBase
     private LogRequest SessionEndLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
-        sendLog.EventType = LoggingServer.EventType.SessionEnd;
+        sendLog.EventType = LoggingServer.EventType.EtSessionEnd;
       
         return sendLog;
     }

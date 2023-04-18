@@ -40,65 +40,49 @@ namespace PatternPal.Extension.Commands
             _dte = dte;
             ThreadHelper.ThrowIfNotOnUIThread();
             _package = package;
-            //Initialize event listeners
-
-            // Link the Event when VS CLOSING                
-      
-          //  dte.Events.DTEEvents.OnBeginShutdown += OnSessionEnd;
 
             SetSubjectId();
             OnSessionStart();
-          //  _dte.Events.DTEEvents.OnBeginShutdown += OnSessionEnd; //TO DO: This is not firing!
-          //  SystemEvents.SessionEnding += OnSessionEnd;
             _dte.Events.BuildEvents.OnBuildDone += OnBuildDone;
-
-
         }
+
         private static void OnBuildDone(
             vsBuildScope Scope,
             vsBuildAction Action)
         {
-       
             if (!_package.DoLogData)
             {
                 return;
             }
 
-            //Check compile result
             ThreadHelper.ThrowIfNotOnUIThread();
             string outputMessage;
             if (_dte.Solution.SolutionBuild.LastBuildInfo != 0)
             {
                 outputMessage = string.Format("Build {0} with errors. See the output window for details.",
                     Action.ToString());
-                // Build failed, display error message
             }
             else
             {
                 outputMessage = string.Format("Build {0} succeeded.", Action.ToString());
-                // Build succeeded, display success message
             }
 
 
-            //Request to service
             LogEventRequest request = new LogEventRequest
             {
                 SubjectId = GetSubjectId(),
                 EventType = EventType.Compile,
                 CompileResult = outputMessage,
                 SessionId = _sessionId
-                
             };
 
             LoggingService.LoggingServiceClient client =
                 new LoggingService.LoggingServiceClient(GrpcHelper.Channel);
             LogEventResponse response = client.LogEvent(request);
-      
         }
 
         private static void OnSessionStart()
         {
-            //(Re)set the sessionID
             _sessionId = Guid.NewGuid().ToString();
 
             if (!_package.DoLogData)
@@ -106,48 +90,35 @@ namespace PatternPal.Extension.Commands
                 return;
             }
 
-            //Create request
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.SessionStart;
-
-            //Connection
             LoggingService.LoggingServiceClient client =
                 new LoggingService.LoggingServiceClient(GrpcHelper.Channel);
             LogEventResponse response = client.LogEvent(request);
-
         }
 
         public static void OnSessionEnd()
         {
-          
-
             if (!_package.DoLogData)
             {
                 return;
             }
-            //Create request
+
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.SessionEnd;
-
-            //Connection
             LoggingService.LoggingServiceClient client =
                 new LoggingService.LoggingServiceClient(GrpcHelper.Channel);
             LogEventResponse response = client.LogEvent(request);
-
         }
 
         static LogEventRequest CreateStandardLog()
         {
-            return new LogEventRequest
-            {
-                SubjectId = GetSubjectId(),
-                SessionId = _sessionId
-            };
+            return new LogEventRequest { SubjectId = GetSubjectId(), SessionId = _sessionId };
         }
 
         /// <summary>
         /// Sets the SubjectId of the user, if not set already, as a GUID.
-        /// It creates a folder and a file for this at the UserLocalDataPath in the PatternPal Extension folder.
+        /// It creates a folder and a file for this at the UserLocalDataPath in the PatternPal Extension folder as this place is unique per user.
         /// </summary>
         static void SetSubjectId()
         {
@@ -182,7 +153,5 @@ namespace PatternPal.Extension.Commands
             string filePath = Path.Combine(dataDir, fileName);
             return File.ReadAllText(filePath);
         }
-
-
     }
 }
