@@ -32,13 +32,13 @@ namespace SyntaxTree.Abstractions.Entities
         ///     Also includes wrappers for example the getter and setter of a property as an Method
         /// </summary>
         /// <returns>A list of Members</returns>
-        IEnumerable GetAllMembers();
+        IEnumerable<IMember> GetAllMembers();
 
         /// <summary>
         ///     Get a list of bases of this note (overrides / implementations)
         /// </summary>
         /// <returns>A list of types</returns>
-        IEnumerable GetBases();
+        IEnumerable<TypeSyntax> GetBases();
 
         /// <summary>
         ///     Gets the type of this entity

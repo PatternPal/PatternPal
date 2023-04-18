@@ -14,12 +14,12 @@ namespace SyntaxTree.Models.Entities
     public abstract class AbstractEntity : AbstractNode, IEntity
     {
         private readonly List<TypeSyntax> _bases;
-        private readonly List<IEntity> _entities = new List<IEntity>();
+        private readonly List<IEntity> _entities = new();
 
-        private readonly List<Method> _methods = new List<Method>();
+        private readonly List<IMethod> _methods = new();
 
         private readonly IEntitiesContainer _parent;
-        private readonly List<IProperty> _properties = new List<IProperty>();
+        private readonly List<IProperty> _properties = new();
         private readonly TypeDeclarationSyntax _typeDeclarationSyntax;
 
         protected AbstractEntity(TypeDeclarationSyntax node, IEntitiesContainer parent) : base(
@@ -75,7 +75,7 @@ namespace SyntaxTree.Models.Entities
 
         public virtual IEnumerable<IMember> GetMembers() { return _methods.Cast<IMember>().Concat(_properties); }
 
-        public IEnumerable GetAllMembers()
+        public IEnumerable<IMember> GetAllMembers()
         {
             var members = GetMembers().ToList();
             
@@ -98,7 +98,7 @@ namespace SyntaxTree.Models.Entities
             return _entities.AsReadOnly();
         }
 
-        public IEnumerable GetBases()
+        public IEnumerable<TypeSyntax> GetBases()
         {
             return _bases;
         }
