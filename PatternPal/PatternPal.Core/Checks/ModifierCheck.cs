@@ -24,10 +24,10 @@ internal class ModifierCheck : CheckBase
         {
             if (!modifiers.Contains(modifier))
             {
-                return new LeafCheckResult{FeedbackMessage = $"The node {node} does not have the {modifier} modifier.", Correctness = false, Priority = Priority.Low};
+                return new LeafCheckResult{FeedbackMessage = $"The node {node} does not have the {modifier} modifier.", Correctness = false, Priority = Priority.Undefined};
             }
         }
 
-        return new LeafCheckResult{FeedbackMessage = "Modifiers correctly implemented.", Correctness = true, Priority = Priority.Low};
+        return new LeafCheckResult{FeedbackMessage = "Modifiers correctly implemented.", Correctness = true, Priority = Priority.Undefined};
     }
 }

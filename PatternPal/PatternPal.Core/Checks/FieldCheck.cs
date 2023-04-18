@@ -6,10 +6,12 @@ namespace PatternPal.Core.Checks;
 internal class FieldCheck : CheckBase
 {
     private readonly IEnumerable<ICheck> _checks;
+    private List<ICheckResult> _childrenCheckResults;
     internal FieldCheck(Priority priority, 
         IEnumerable<ICheck> checks) : base(priority)
     {
         _checks = checks;
+        _childrenCheckResults = new();
     }
 
     public override ICheckResult Check(RecognizerContext ctx, INode node)
@@ -19,52 +21,38 @@ internal class FieldCheck : CheckBase
             throw new NotImplementedException("Field check was incorrect");
         }
 
-        foreach (ICheck check in _checks) 
+        bool correctness = true;
+        string feedbackMessage = "Field checks succeeded.";
+        foreach (ICheck check in _checks)
         {
+            ICheckResult checkResult;
             switch (check)
             {
                 case ModifierCheck modifierCheck:
                     {
-                        bool hasMatch = false;
-                        foreach (IModified modified in field.GetModifiers())
-                        {
-                            if (modifierCheck.Check
-                                (ctx,
-                                modified).Correctness)
-                            {
-                                hasMatch = true;
-                                break;
-                            }
-                        }
-                        if (!hasMatch)
-                        {
-                            throw new NotImplementedException("Modifier check was incorrect");
-                        }
+                        checkResult = modifierCheck.Check(ctx, field);
                         break;
                     }
                 case TypeCheck typeCheck:
                     {
-                        if (!check.Check(ctx, node).Correctness)
-                        {
-                            throw new NotImplementedException("Type check was incorrect");
-                        }
+                        checkResult = typeCheck.Check(ctx, field);
                         break;
-                    }
-                case FieldCheck fieldCheck:
-                    {
-                        throw new NotImplementedException("Field check is not yet implemented");
                     }
                 default:
                     {
-                        Console.WriteLine($"Unexpected check: {check.GetType().Name}");
-                        break;
+                        throw new NotImplementedException($"Unexpected check: {check.GetType().Name}");
                     }
             }
-            //Kan weg denk ik
-            //if (!check.Check(ctx, node).Correctness) throw new NotImplementedException("Field Check was incorrect");
+            if (!checkResult.Correctness)
+            {
+                feedbackMessage = "At least one of the field checks failed";
+                correctness = false;
+            }
+                _childrenCheckResults.Add(checkResult);
         }
-
-        Console.WriteLine($"Got field {field}");
-        throw new NotImplementedException("Field check was correct");
+        return new NodeCheckResult { ChildrenCheckResults = _childrenCheckResults,
+                                     Correctness = correctness,
+                                     FeedbackMessage = feedbackMessage,
+                                     Priority = Priority.Undefined };
     }
 }
