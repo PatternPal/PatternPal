@@ -15,5 +15,5 @@ internal class MethodCheckBuilder : CheckCollectionBuilder
 
     public override ICheck Build() => _check;
 
-    internal Func< INode > Result => () => _check.MatchedEntity!;
+    internal Func< List<INode> > Result => () => _check.MatchedEntities!;
 }

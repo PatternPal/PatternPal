@@ -100,9 +100,9 @@ internal static class CheckBuilder
 
     internal static UsesCheckBuilder Uses(
         Priority priority,
-        Func< INode > getMatchedEntity) => new(
+        Func< List<INode> > getMatchedEntities) => new(
         priority,
-        getMatchedEntity );
+        getMatchedEntities );
 
     internal static FieldCheckBuilder Field(
         Priority priority,

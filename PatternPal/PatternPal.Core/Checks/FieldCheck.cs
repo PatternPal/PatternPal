@@ -30,9 +30,7 @@ internal class FieldCheck : CheckBase
     public override ICheckResult Check(RecognizerContext ctx, INode node)
     {
         IField field = CheckHelper.ConvertNodeElseThrow<IField>(node);
-
-        bool correctness = true;
-        string feedbackMessage = "Field checks succeeded.";
+        
         foreach (ICheck check in _checks)
         {
             ICheckResult checkResult;
@@ -51,16 +49,10 @@ internal class FieldCheck : CheckBase
                 default:
                     throw CheckHelper.InvalidSubCheck(this, check);
             }
-            if (!checkResult.Correctness)
-            {
-                feedbackMessage = "At least one of the field checks failed";
-                correctness = false;
-            }
-                _childrenCheckResults.Add(checkResult);
+            _childrenCheckResults.Add(checkResult);
         }
         return new NodeCheckResult { ChildrenCheckResults = _childrenCheckResults,
-                                     Correctness = correctness,
-                                     FeedbackMessage = feedbackMessage,
+                                     FeedbackMessage = $"Found field: {field}",
                                      Priority = Priority };
     }
 }

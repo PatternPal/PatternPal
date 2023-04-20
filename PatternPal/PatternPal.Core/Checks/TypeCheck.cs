@@ -8,6 +8,7 @@
 internal class TypeCheck : CheckBase
 {
     // Used to get the node to compare against.
+    // TODO The Func part needs to be converted to a Func of a List of INodes.
     private readonly OneOf< Func< INode >, GetCurrentEntity > _getNode;
 
     /// <summary>
@@ -41,7 +42,7 @@ internal class TypeCheck : CheckBase
         return new LeafCheckResult
                {
                    Priority = Priority,
-                   Correctness = isMatch,
+                   Correct = isMatch,
                    FeedbackMessage = isMatch
                        ? $"Node '{node}' has correct type"
                        : $"Node '{node}' has incorrect type, expected '{nodeToMatch}'",

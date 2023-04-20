@@ -3,13 +3,13 @@
 // TODO CV: Relations can probably use the same check builder
 internal class UsesCheckBuilder : CheckBuilderBase
 {
-    private readonly Func< INode > _getNode;
+    private readonly Func< List<INode> > _getNodes;
 
     internal UsesCheckBuilder(Priority priority,
-        Func< INode > getNode) : base(priority)
+        Func< List<INode> > getNodes) : base(priority)
     {
-        _getNode = getNode;
+        _getNodes = getNodes;
     }
 
-    public override ICheck Build() => new UsesCheck(Priority, _getNode);
+    public override ICheck Build() => new UsesCheck(Priority, _getNodes);
 }
