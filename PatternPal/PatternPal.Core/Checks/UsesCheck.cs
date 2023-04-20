@@ -10,12 +10,21 @@ internal class UsesCheck : CheckBase
     //made a Func<> so that it works with lazy evaluation
     private readonly Func< INode > _getNode;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="UsesCheck"/> class.
+    /// </summary>
+    /// <param name="priority">Priority of the check.</param>
+    /// <param name="getNode">A functor to get the node to check for a uses relation</param>
     internal UsesCheck(Priority priority,
         Func< INode > getNode) : base(priority)
     {
         _getNode = getNode;
     }
-    
+
+    /// <summary>
+    /// This check is marked as correct when the given <paramref name="node"/>
+    /// uses the node provided.
+    /// </summary>
     public override ICheckResult Check(
         RecognizerContext ctx,
         INode node)

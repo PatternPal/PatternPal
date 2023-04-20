@@ -8,13 +8,20 @@ internal class ModifierCheck : CheckBase
 {
     // all modifiers the node should have
     private readonly List< IModifier > _modifiers;
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ModifierCheck"/> class. 
+    /// </summary>
+    /// <param name="priority">Priority of the check.</param>
+    /// <param name="modifiers">A list of modifiers the node should have</param>
     public ModifierCheck(Priority priority,
         List< IModifier > modifiers) : base(priority)
     {
         _modifiers = modifiers;
     }
-
+    /// <summary>
+    /// This check is marked as correct when the modifiers of the given <paramref name="node"/>
+    /// match the provided modifiers. 
+    /// </summary>
     public override ICheckResult Check(
         RecognizerContext ctx,
         INode node)
