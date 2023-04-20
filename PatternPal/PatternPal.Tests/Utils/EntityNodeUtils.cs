@@ -1,8 +1,8 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
-
+using SyntaxTree;
 using SyntaxTree.Abstractions;
 using SyntaxTree.Abstractions.Root;
 using SyntaxTree.Models.Members.Field;
@@ -80,6 +80,9 @@ namespace PatternPal.Tests.Utils
                 GetClassDeclaration(),
                 new TestRoot());
 
+        /// <summary>
+        /// Creates a <see cref="INamespace"/> instance which can be used in tests.
+        /// </summary>
         internal static INamespace CreateNamespace() =>
             new Namespace(
                 GetNamespaceDeclaration(),
@@ -102,6 +105,38 @@ namespace PatternPal.Tests.Utils
                 new Class(
                     classDeclaration,
                     new TestRoot()));
+        }
+
+        /// <summary>
+        /// Creates a SyntaxGraph containing a uses relation
+        /// </summary>
+        /// <returns>A <see cref="SyntaxGraph"/> to be used inside tests.</returns>
+        internal static SyntaxGraph CreateUsesRelation()
+        {
+            const string INPUT = """
+                                 public class Uses
+                                 {
+                                     private Used used = new();
+
+                                     internal void UsesFunction()
+                                     {
+                                         used.UsedFunction();
+                                     }
+                                 }
+                                 public class Used
+                                 {
+                                     internal void UsedFunction()
+                                     {
+                                     }
+                                 }
+                                 """;
+
+            SyntaxGraph graph = new();
+
+            graph.AddFile(INPUT, "0");
+            graph.CreateGraph();
+
+            return graph;
         }
 
         /// <summary>
@@ -135,6 +170,10 @@ namespace PatternPal.Tests.Utils
             return (ClassDeclarationSyntax)rootMember;
         }
 
+        /// <summary>
+        /// Gets a <see cref="NamespaceDeclarationSyntax"/>
+        /// </summary>
+        /// <returns>A <see cref="NamespaceDeclarationSyntax"/> to be used inside tests</returns>
         private static NamespaceDeclarationSyntax GetNamespaceDeclaration()
         {
             const string INPUT = """
