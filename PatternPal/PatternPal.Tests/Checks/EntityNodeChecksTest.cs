@@ -1,7 +1,6 @@
 ﻿using PatternPal.Recognizers.Checks;
 
 using NUnit.Framework;
-using SyntaxTree;
 
 namespace PatternPal.Tests.Checks
 {

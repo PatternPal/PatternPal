@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using PatternPal.StepByStep.Abstractions;
-
-using SyntaxTree;
+﻿using PatternPal.StepByStep.Abstractions;
 
 namespace PatternPal.Tests.StepByStep
 {

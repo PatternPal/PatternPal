@@ -1,7 +1,12 @@
 ﻿namespace PatternPal.Core.Checks;
 
+internal delegate IEntity GetCurrentEntity(
+    RecognizerContext ctx);
+
 internal interface ICheck
 {
+    internal static readonly GetCurrentEntity GetCurrentEntity = ctx => ctx.CurrentEntity;
+
     Priority Priority { get; }
 
     ICheckResult Check(
@@ -13,12 +18,15 @@ internal abstract class CheckBase : ICheck
 {
     public Priority Priority { get; init; }
 
-    protected CheckBase(Priority priority)
+    protected CheckBase(
+        Priority priority)
     {
         Priority = priority;
     }
-	
-    public abstract ICheckResult Check(RecognizerContext ctx, INode node);
+
+    public abstract ICheckResult Check(
+        RecognizerContext ctx,
+        INode node);
 }
 
 internal enum Priority
@@ -27,6 +35,104 @@ internal enum Priority
     High,
     Mid,
     Low
+}
+
+enum CheckCollectionKind
+{
+    All,
+    Any
+}
+
+internal static class CheckBuilder
+{
+    internal static CheckCollection Any(
+        Priority priority,
+        params ICheck[ ] checks) => new(
+        priority,
+        CheckCollectionKind.Any,
+        checks );
+
+    internal static NotCheck Not(
+        Priority priority,
+        ICheck check) => new(
+        priority,
+        check );
+
+    internal static ClassCheck Class(
+        Priority priority,
+        params ICheck[ ] checks) => new(
+        priority,
+        checks );
+
+    internal static ClassCheck AbstractClass(
+        Priority priority,
+        params ICheck[ ] checks) =>
+        new(
+            priority,
+            checks.Prepend(
+                Modifiers(
+                    priority,
+                    Modifier.Abstract)) );
+
+    internal static InterfaceCheck Interface(
+        Priority priority,
+        params ICheck[ ] checks) => new(
+        priority,
+        checks );
+
+    internal static MethodCheck Method(
+        Priority priority,
+        params ICheck[ ] checks) => new(
+        priority,
+        checks );
+
+    internal static PropertyCheck Property(
+        Priority priority,
+        params ICheck[ ] checks) => new(
+        priority,
+        checks );
+
+    internal static ModifierCheck Modifiers(
+        Priority priority,
+        params IModifier[ ] modifiers) => new(
+        priority,
+        modifiers );
+
+    internal static ParameterCheck Parameters(
+        Priority priority,
+        params TypeCheck[ ] parameterTypes) => new(
+        priority,
+        parameterTypes );
+
+    internal static TypeCheck Type(
+        Priority priority,
+        Func< List< INode > > getNode) => new(
+        priority,
+        getNode );
+
+    internal static TypeCheck Type(
+        Priority priority,
+        GetCurrentEntity getCurrentEntity) => new(
+        priority,
+        getCurrentEntity );
+
+    internal static UsesCheck Uses(
+        Priority priority,
+        Func< List< INode > > getMatchedEntities) => new(
+        priority,
+        getMatchedEntities );
+
+    internal static FieldCheck Field(
+        Priority priority,
+        params ICheck[ ] checks) => new(
+        priority,
+        checks );
+
+    internal static ConstructorCheck Constructor(
+        Priority priority,
+        params ICheck[ ] checks) => new(
+        priority,
+        checks );
 }
 
 /// <summary>

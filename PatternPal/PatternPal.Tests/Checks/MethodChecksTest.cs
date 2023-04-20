@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using PatternPal.Recognizers.Checks;
+﻿using PatternPal.Recognizers.Checks;
 
 using NUnit.Framework;
 

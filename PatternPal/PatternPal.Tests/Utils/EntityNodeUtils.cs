@@ -1,10 +1,7 @@
 ﻿#region
 
-using System.Linq;
-
 using Microsoft.CodeAnalysis;
 
-using SyntaxTree;
 using SyntaxTree.Abstractions.Root;
 using SyntaxTree.Models.Members.Field;
 using SyntaxTree.Models.Members.Method;
