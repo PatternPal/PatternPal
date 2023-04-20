@@ -32,7 +32,7 @@ internal class ModifierCheck : CheckBase
         IModified modified = CheckHelper.ConvertNodeElseThrow<IModified>(node);
 
         // all modifiers the node really has
-        List< IModifier > modifiers = modified.GetModifiers().ToList();
+        List<IModifier> modifiers = modified.GetModifiers().ToList();
 
         // TODO: This method is terribly inefficient, rewrite Modifiers to be a flags enum and just
         // check if a bit is set or not.
@@ -41,10 +41,20 @@ internal class ModifierCheck : CheckBase
         {
             if (!modifiers.Contains(modifier)) // if the needed modifier is not one of the node's modifiers
             {
-                return new LeafCheckResult{FeedbackMessage = $"The node {node} does not have the {modifier} modifier.", Correctness = false, Priority = Priority};
+                return new LeafCheckResult
+                {
+                    FeedbackMessage = $"The node {node} does not have the {modifier} modifier.",
+                    Correctness = false,
+                    Priority = Priority
+                };
             }
         }
 
-        return new LeafCheckResult{FeedbackMessage = "Modifiers correctly implemented.", Correctness = true, Priority = Priority};
+        return new LeafCheckResult
+        {
+            FeedbackMessage = "Modifiers correctly implemented.",
+            Correctness = true,
+            Priority = Priority
+        };
     }
 }

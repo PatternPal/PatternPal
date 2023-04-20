@@ -1,4 +1,4 @@
-﻿using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 namespace PatternPal.Core.Checks;
 internal class InterfaceCheck : CheckBase
@@ -69,4 +69,10 @@ internal class InterfaceCheck : CheckBase
             Priority = Priority,
         };
     }
+}
+
+    bool hasFailedSubCheck = false;
+    IList< ICheckResult> subCheckResults = new List< ICheckResult >();
+
+
 }
