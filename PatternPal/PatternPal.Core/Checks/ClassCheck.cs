@@ -99,6 +99,15 @@ internal class ClassCheck : CheckBase
 
                     break;
                 }
+                case UsesCheck usesCheck:
+                {
+                    ICheckResult subCheckResult = usesCheck.Check(
+                        ctx,
+                        classEntity);
+                    subCheckResults.Add(subCheckResult);
+                    hasFailedSubCheck = hasFailedSubCheck || !subCheckResult.Correctness;
+                    break;
+                }
                 default:
                     throw CheckHelper.InvalidSubCheck(
                         this,

@@ -30,12 +30,15 @@ internal class MethodCheck : CheckBase
                 ctx,
                 node).Correctness)
             {
-                throw new NotImplementedException("Method Check was incorrect");
+                return new NodeCheckResult { ChildrenCheckResults = new List<ICheckResult>(), Correctness = false, Priority = Priority, FeedbackMessage = "method not found" };
             }
         }
 
         Console.WriteLine($"Got method '{method}'");
         MatchedEntity = method;
+
+        return new NodeCheckResult{ChildrenCheckResults = new List<ICheckResult>(), Correctness = true, Priority = Priority, FeedbackMessage = "method found"};
+
         throw new NotImplementedException("Method Check was correct");
     }
 }

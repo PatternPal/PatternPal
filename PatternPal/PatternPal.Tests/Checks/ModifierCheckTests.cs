@@ -13,7 +13,9 @@ public class ModifierCheckTests
     [Test]
     public void Modifier_Check_Accepts_Only_ModifierChecks()
     {
+        //a class can have modifiers
         IClass classEntity = EntityNodeUtils.CreateClass();
+        //a namespace cannot have modifiers
         INamespace namespaceEntity = EntityNodeUtils.CreateNamespace();
 
         RecognizerContext ctx = new();
