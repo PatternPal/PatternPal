@@ -3,10 +3,20 @@ using PatternPal.Recognizers.Models.Checks;
 
 namespace PatternPal.Core.Checks;
 
+/// <summary>
+/// An instance in which you can execute <see cref="ModifierCheck"/>s and <see cref="TypeCheck"/>s via a list of <see cref="_checks"/> on a field.
+/// Results will be stored in <see cref="_childrenCheckResults"/>
+/// </summary>
 internal class FieldCheck : CheckBase
 {
     private readonly IEnumerable<ICheck> _checks;
     private List<ICheckResult> _childrenCheckResults;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FieldCheck"/> class. 
+    /// </summary>
+    /// <param name="priority">Priority of the check.</param>
+    /// <param name="checks">A list of subchecks that should be tested</param>
     internal FieldCheck(Priority priority, 
         IEnumerable<ICheck> checks) : base(priority)
     {
@@ -14,6 +24,9 @@ internal class FieldCheck : CheckBase
         _childrenCheckResults = new();
     }
 
+    /// <summary>
+    /// This method executes all the given <see cref="ModifierCheck"/>s and <see cref="TypeCheck"/>s on the <paramref name="node"/>
+    /// </summary>
     public override ICheckResult Check(RecognizerContext ctx, INode node)
     {
         IField field = CheckHelper.ConvertNodeElseThrow<IField>(node);

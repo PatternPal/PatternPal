@@ -8,6 +8,7 @@ internal class ModifierCheck : CheckBase
 {
     // all modifiers the node should have
     private readonly List< IModifier > _modifiers;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="ModifierCheck"/> class. 
     /// </summary>
@@ -18,6 +19,7 @@ internal class ModifierCheck : CheckBase
     {
         _modifiers = modifiers;
     }
+
     /// <summary>
     /// This check is marked as correct when the modifiers of the given <paramref name="node"/>
     /// match the provided modifiers. 
