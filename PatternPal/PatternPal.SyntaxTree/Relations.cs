@@ -203,7 +203,16 @@ namespace SyntaxTree
 
             SymbolInfo symbol = semanticModel.GetSymbolInfo(syntaxNode);
 
-            TypeDeclarationSyntax ? entityDeclaration = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as TypeDeclarationSyntax;
+            TypeDeclarationSyntax? entityDeclaration;
+
+            if (syntaxNode.Parent is MemberAccessExpressionSyntax && symbol.Symbol is IFieldSymbol fieldSymbol)
+            {
+                entityDeclaration = fieldSymbol.Type.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as TypeDeclarationSyntax;
+            }
+            else
+            {
+                entityDeclaration = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as TypeDeclarationSyntax;
+            }
 
             return _entities.FirstOrDefault(x => x.GetSyntaxNode().IsEquivalentTo(entityDeclaration));
         }
@@ -213,7 +222,7 @@ namespace SyntaxTree
         /// </summary>
         /// <param name="methodNode">The SyntaxNode from which we want the belonging Method instance.</param>
         /// <returns></returns>
-        private IMethod GetMethodByName(
+        private IMethod ? GetMethodByName(
             SyntaxNode methodNode)
         {
             SemanticModel semanticModel = SemanticModels.GetSemanticModel(
@@ -222,9 +231,9 @@ namespace SyntaxTree
 
             SymbolInfo symbol = semanticModel.GetSymbolInfo(methodNode);
 
-            MethodDeclarationSyntax methodDeclaration = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as MethodDeclarationSyntax;
+            MethodDeclarationSyntax? methodDeclaration = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as MethodDeclarationSyntax;
 
-            return _methods.FirstOrDefault(x => x.GetSyntaxNode().Equals(methodDeclaration));
+            return _methods.FirstOrDefault(x => x.GetSyntaxNode().IsEquivalentTo(methodDeclaration));
         }
 
         /// <summary>
@@ -324,7 +333,7 @@ namespace SyntaxTree
 
             foreach (IdentifierNameSyntax identifier in childNodes.OfType< IdentifierNameSyntax >())
             {
-                INode node2 = (INode)GetEntityByName(identifier) ?? GetMethodByName(identifier);
+                INode node2 = (INode?)GetEntityByName(identifier) ?? GetMethodByName(identifier);
 
                 AddRelation(
                     node,
