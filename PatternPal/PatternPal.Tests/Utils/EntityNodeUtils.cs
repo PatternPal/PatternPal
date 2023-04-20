@@ -1,14 +1,18 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
+
 using SyntaxTree;
-using SyntaxTree.Abstractions;
 using SyntaxTree.Abstractions.Root;
 using SyntaxTree.Models.Members.Field;
 using SyntaxTree.Models.Members.Method;
 using SyntaxTree.Models.Root;
 using SyntaxTree.Utils;
+
+#endregion
 
 namespace PatternPal.Tests.Utils
 {
@@ -133,7 +137,9 @@ namespace PatternPal.Tests.Utils
 
             SyntaxGraph graph = new();
 
-            graph.AddFile(INPUT, "0");
+            graph.AddFile(
+                INPUT,
+                "0");
             graph.CreateGraph();
 
             return graph;
@@ -191,7 +197,7 @@ namespace PatternPal.Tests.Utils
             CompilationUnitSyntax root = GetCompilationRoot(INPUT);
             MemberDeclarationSyntax rootMember = root.Members.First();
 
-            Assert.IsInstanceOf<NamespaceDeclarationSyntax>(rootMember);
+            Assert.IsInstanceOf< NamespaceDeclarationSyntax >(rootMember);
 
             return (NamespaceDeclarationSyntax)rootMember;
         }
@@ -269,9 +275,11 @@ namespace PatternPal.Tests.Utils
             return new Dictionary< string, IEntity >();
         }
 
-        public IEnumerable<Relation> GetRelations(INode node, RelationTargetKind type)
+        public IEnumerable< Relation > GetRelations(
+            INode node,
+            RelationTargetKind type)
         {
-            return Array.Empty<Relation>();
+            return Array.Empty< Relation >();
         }
 
         public IEnumerable< INode > GetChildren() { return Array.Empty< INode >(); }
