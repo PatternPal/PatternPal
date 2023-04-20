@@ -51,7 +51,7 @@ internal class MethodCheck : CheckBase
                 }
                 case NotCheck:
                 {
-                    throw new NotImplementedException("Class Check was incorrect");
+                    throw new NotImplementedException("Method Check was incorrect");
                 }
                 case UsesCheck usesCheck:
                 {
@@ -69,7 +69,7 @@ internal class MethodCheck : CheckBase
             }
         }
 
-        //add the checked method to the list of method adhering to _checks
+        //add the checked method to the list of found methods
         MatchedEntities.Add(methodEntity);
 
         return new NodeCheckResult{ChildrenCheckResults = subCheckResults, Priority = Priority, FeedbackMessage = $"Found method: {methodEntity}."};
