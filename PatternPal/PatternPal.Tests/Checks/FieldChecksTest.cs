@@ -1,46 +1,76 @@
 ﻿using System.Collections.Generic;
 using PatternPal.Recognizers.Checks;
+using static PatternPal.Core.Builders.CheckBuilder;
 
 using NUnit.Framework;
 
 namespace PatternPal.Tests.Checks
 {
-    public class FieldChecksTest
+    public class FieldCheckTests
     {
         [Test]
-        [TestCase("public", @"public string TestProperty", true)]
-        [TestCase("private", @"private int TestProperty", true)]
-        [TestCase("public", @"public static Class TestProperty", true)]
-        [TestCase("static", @"private static Class<T> TestProperty", true)]
-        [TestCase("private", @"static Class[] TestProperty", false)]
-        [TestCase("public", @"private var TestProperty", false)]
-        [TestCase("static", @"public bool TestProperty", false)]
-        public void CheckModifier_Should_Return_CorrectResponse(string modifier, string code, bool shouldBeValid)
+        public void Field_Check_Accepts_Only_Fields()
         {
-            var field = EntityNodeUtils.CreateField(code);
+            IField fieldEntity = EntityNodeUtils.CreateField();
+            IClass classEntity = EntityNodeUtils.CreateClass();
 
-            Assert.AreEqual(
-                shouldBeValid,
-                field.CheckMemberModifier(modifier)
-            );
+            FieldCheck fieldCheck = (FieldCheck)Field(Priority.Low).Build();
+            RecognizerContext ctx = new();
+
+            Assert.DoesNotThrow(
+                () => fieldCheck.Check(
+                    ctx, 
+                    fieldEntity));
+
+            Assert.Throws<IncorrectNodeTypeException>(
+                () => fieldCheck.Check(
+                    ctx,
+                    classEntity));
         }
 
         [Test]
-        [TestCase("string", @"public string TestProperty", true)]
-        [TestCase("int", @"private int TestProperty", true)]
-        [TestCase("Class", @"public static Class TestProperty", true)]
-        [TestCase("Class<T>", @"private static Class<T> TestProperty", true)]
-        [TestCase("var", @"static var TestProperty", true)]
-        [TestCase("T", @"private var TestProperty", false)]
-        [TestCase("int", @"public bool TestProperty", false)]
-        public void TypeCheck_Should_Return_CorrectResponse(string type, string code, bool shouldBeValid)
+        public Task Field_Check_Returns_Correct_Result()
         {
-            var field = EntityNodeUtils.CreateField(code);
+            IField fieldEntity = EntityNodeUtils.CreateField();
 
-            Assert.AreEqual(
-                shouldBeValid,
-                field.CheckFieldType(new List<string> {type})
-            );
+            FieldCheck fieldCheck = (FieldCheck)Field(Priority.Low).Build();
+            RecognizerContext ctx = new();
+
+            ICheckResult result = fieldCheck.Check(
+                ctx,
+                fieldEntity);
+
+            return Verifier.Verify(result);
         }
+
+        [Test]
+        public void Field_Check_Handles_Incorrect_Nested_Check()
+        {
+            IField fieldEntity = EntityNodeUtils.CreateField();
+
+            FieldCheck fieldCheck = (FieldCheck)Field(Priority.Low, Parameters(Priority.Low)).Build();
+            RecognizerContext ctx = new();
+
+            Assert.Throws<InvalidSubCheckException>(
+                () => fieldCheck.Check(
+                    ctx,
+                    fieldEntity));
+        }
+
+        [Test]
+        public Task Field_Check_Nested_Modifier_Check()
+        {
+            IField fieldEntity = EntityNodeUtils.CreateField();
+
+            FieldCheck fieldCheck = (FieldCheck)Field(Priority.Low, Modifiers(Priority.Low, Modifier.Public)).Build();
+            RecognizerContext ctx = new();
+
+            ICheckResult result = fieldCheck.Check(
+                ctx,
+                fieldEntity);
+
+            return Verifier.Verify(result);
+        }
+
     }
 }
