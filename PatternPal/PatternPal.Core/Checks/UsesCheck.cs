@@ -1,5 +1,9 @@
 ﻿namespace PatternPal.Core.Checks;
 
+/// <summary>
+/// Checks for a uses relation of an entity. Depending on the <see cref="Func{INode}"/> provided.
+/// It should go from the current <see cref="INode"/> being checked to the <see cref="Func{INode}"/> provided.
+/// </summary>
 internal class UsesCheck : CheckBase
 {
     //the node resulting from a check to which there should be a uses relation

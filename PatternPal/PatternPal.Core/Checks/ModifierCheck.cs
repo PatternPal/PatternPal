@@ -1,5 +1,9 @@
 ﻿namespace PatternPal.Core.Checks;
 
+/// <summary>
+/// Checks for the modifiers of an entity. Depending on the <see cref="List{T}"/> of <see cref="IModified"/> provided.
+/// It should match with the modifiers of the current <see cref="INode"/> being checked.
+/// </summary>
 internal class ModifierCheck : CheckBase
 {
     //all modifiers the node should have
