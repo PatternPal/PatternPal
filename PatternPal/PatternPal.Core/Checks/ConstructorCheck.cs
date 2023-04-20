@@ -17,18 +17,6 @@ internal class ConstructorCheck : CheckBase
         RecognizerContext ctx,
         INode node)
     {
-        if (node is not IConstructor constructor)
-        {
-            throw new NotImplementedException("Constructor check failed");
-        }
-
-        foreach (ICheck check in _checks)
-        {
-            if (!check.Check(ctx, node).Correctness) throw new NotImplementedException("Constructor Check was incorrect");
-        }
-
-        Console.WriteLine($"Got Constructor '{constructor}'");
-
         throw new NotImplementedException("Constructor Check was correct");
     }
 }

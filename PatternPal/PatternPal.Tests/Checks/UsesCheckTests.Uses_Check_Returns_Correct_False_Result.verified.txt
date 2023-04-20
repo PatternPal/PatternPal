@@ -1,5 +1,17 @@
 ﻿{
-  FeedbackMessage: method not found,
+  FeedbackMessage: Found method: UsedFunction().,
   Priority: Low,
-  Correctness: false
+  ChildrenCheckResults: [
+    {
+      FeedbackMessage: Found uses relations for UsedFunction().,
+      Priority: Low,
+      ChildrenCheckResults: [
+        {
+          FeedbackMessage: No uses relation found.,
+          Priority: Low,
+          Correct: false
+        }
+      ]
+    }
+  ]
 }

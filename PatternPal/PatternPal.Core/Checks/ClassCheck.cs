@@ -16,7 +16,6 @@ internal class ClassCheck : CheckBase
     {
         IClass classEntity = CheckHelper.ConvertNodeElseThrow< IClass >(node);
 
-        bool hasFailedSubCheck = false;
         IList< ICheckResult > subCheckResults = new List< ICheckResult >();
         foreach (ICheck check in _checks)
         {
@@ -24,88 +23,40 @@ internal class ClassCheck : CheckBase
             {
                 case ModifierCheck modifierCheck:
                 {
-                    ICheckResult subCheckResult = modifierCheck.Check(
-                        ctx,
-                        classEntity);
-                    subCheckResults.Add(subCheckResult);
-                    hasFailedSubCheck = hasFailedSubCheck || !subCheckResult.Correctness;
+                    subCheckResults.Add(modifierCheck.Check(ctx, classEntity));
                     break;
                 }
                 case MethodCheck methodCheck:
                 {
-                    bool hasMatch = false;
                     foreach (IMethod method in classEntity.GetMethods())
                     {
-                        if (methodCheck.Check(
-                            ctx,
-                            method).Correctness)
-                        {
-                            hasMatch = true;
-                            break;
-                        }
-                    }
-                    if (!hasMatch)
-                    {
-                        throw new NotImplementedException("Class Check was incorrect");
+                        subCheckResults.Add(methodCheck.Check(ctx, method));
                     }
                     break;
                 }
                 case FieldCheck fieldCheck:
                 {
-                    bool hasMatch = false;
                     foreach (IField field in classEntity.GetFields())
                     {
-                        if (fieldCheck.Check(
-                            ctx,
-                            field).Correctness)
-                        {
-                            hasMatch = true;
-                            break;
-                        }
-                    }
-                    if (!hasMatch)
-                    {
-                        throw new NotImplementedException("Class Check was incorrect");
+                        subCheckResults.Add(fieldCheck.Check(ctx, field));
                     }
                     break;
                 }
                 case ConstructorCheck constructorCheck:
                 {
-                    bool hasMatch = false;
                     foreach (IConstructor constructor in classEntity.GetConstructors())
                     {
-                        if (constructorCheck.Check(
-                            ctx,
-                            constructor).Correctness)
-                        {
-                            hasMatch = true;
-                            break;
-                        }
-                    }
-                    if (!hasMatch)
-                    {
-                        throw new NotImplementedException("Class Check was incorrect");
+                        subCheckResults.Add(constructorCheck.Check(ctx, constructor));
                     }
                     break;
                 }
                 case NotCheck:
                 {
-                    if (!check.Check(
-                        ctx,
-                        node).Correctness)
-                    {
-                        throw new NotImplementedException("Class Check was incorrect");
-                    }
-
-                    break;
+                    throw new NotImplementedException("Class Check was incorrect");
                 }
                 case UsesCheck usesCheck:
                 {
-                    ICheckResult subCheckResult = usesCheck.Check(
-                        ctx,
-                        classEntity);
-                    subCheckResults.Add(subCheckResult);
-                    hasFailedSubCheck = hasFailedSubCheck || !subCheckResult.Correctness;
+                    subCheckResults.Add(usesCheck.Check(ctx, classEntity));
                     break;
                 }
                 default:
@@ -118,9 +69,8 @@ internal class ClassCheck : CheckBase
         return new NodeCheckResult
                {
                    ChildrenCheckResults = subCheckResults,
-                   Correctness = !hasFailedSubCheck,
                    FeedbackMessage = $"Found class '{classEntity}'",
-                   Priority = Priority.Knockout,
+                   Priority = Priority
                };
     }
 }

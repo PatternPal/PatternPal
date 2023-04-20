@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace PatternPal.Tests.TestClasses.AdapterTest2
+﻿namespace PatternPal.Tests.TestClasses.AdapterTest2
 {
     /// <summary>
     ///     The 'Client' class

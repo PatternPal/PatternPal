@@ -15,7 +15,7 @@ internal class NotCheck : CheckBase
         INode node)
     {
         //Todo: add implememtation
-        // return !_check.Check( ctx, node).Correctness;
+        // return !_check.Check( ctx, node).Correct;
         throw new NotImplementedException("Not Check was incorrect");
     }
 }
