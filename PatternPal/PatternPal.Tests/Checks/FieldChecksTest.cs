@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using PatternPal.Recognizers.Checks;
+﻿using PatternPal.Recognizers.Checks;
 using static PatternPal.Core.Builders.CheckBuilder;
 
 using NUnit.Framework;

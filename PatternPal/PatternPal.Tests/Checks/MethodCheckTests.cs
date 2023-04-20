@@ -9,7 +9,7 @@ namespace PatternPal.Tests.Checks;
 internal class MethodCheckTests
 {
     [Test]
-    public void Method_Check_Accepts_Only_Classes()
+    public void Method_Check_Accepts_Only_Methods()
     {
         IClass classEntity = EntityNodeUtils.CreateClass();
         IMethod methodEntity = EntityNodeUtils.CreateMethod();

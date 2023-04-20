@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace PatternPal.Tests.TestClasses.StrategyFactoryMethodTest1
+﻿namespace PatternPal.Tests.TestClasses.StrategyFactoryMethodTest1
 {
     //Context class
     internal class DubbleFactory : BeerFactory

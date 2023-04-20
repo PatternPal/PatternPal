@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using PatternPal.Recognizers.Checks;
+﻿using PatternPal.Recognizers.Checks;
 
 using NUnit.Framework;
 using SyntaxTree.Models.Members.Property;

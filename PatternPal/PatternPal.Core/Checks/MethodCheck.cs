@@ -32,7 +32,6 @@ internal class MethodCheck : CheckBase
         RecognizerContext ctx,
         INode node)
     {
-        // cast node to IModified
         IMethod methodEntity = CheckHelper.ConvertNodeElseThrow<IMethod>(node);
         
         IList<ICheckResult> subCheckResults = new List<ICheckResult>();

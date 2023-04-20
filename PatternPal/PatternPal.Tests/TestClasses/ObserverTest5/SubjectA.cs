@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace PatternPal.Tests.TestClasses.ObserverTest5
+﻿namespace PatternPal.Tests.TestClasses.ObserverTest5
 {
     internal class SubjectA : ISubject
     {
