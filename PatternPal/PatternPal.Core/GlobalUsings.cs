@@ -5,6 +5,8 @@ global using System.Collections.Generic;
 global using System.Diagnostics;
 global using System.Linq;
 
+global using OneOf;
+
 global using PatternPal.Core.Builders;
 global using PatternPal.Core.Checks;
 

@@ -1,0 +1,5 @@
+﻿{
+  FeedbackMessage: Node 'Test' has correct type,
+  Priority: Low,
+  Correctness: true
+}
