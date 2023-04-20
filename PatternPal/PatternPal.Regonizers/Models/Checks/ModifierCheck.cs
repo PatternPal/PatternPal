@@ -34,29 +34,4 @@ namespace PatternPal.Recognizers.Models.Checks
             return new CheckResult(_modifiersFeedback, CheckModifiers(modified) ? Correct : Incorrect, modified, 1f);
         }
     }
-
-    class NotModifier : IModifier
-    {
-        private IModifier _modifier;
-        public NotModifier(IModifier modifier) { _modifier = modifier; }
-
-        public string GetName() => $"not {_modifier.GetName()}";
-
-        protected bool Equals(IModifier other) { return !_modifier.Equals(other); }
-
-        public override bool Equals(object obj)
-        {
-            return ReferenceEquals(this, obj) || obj is IModifier other && Equals(other);
-        }
-
-        public override int GetHashCode() { return GetName().GetHashCode(); }
-    }
-
-    public static class ModifierExtension
-    {
-        public static IModifier Not(this IModifier modifier)
-        {
-            return new NotModifier(modifier);
-        }
-    }
 }

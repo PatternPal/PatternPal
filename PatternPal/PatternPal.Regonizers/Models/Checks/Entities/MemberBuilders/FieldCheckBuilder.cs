@@ -28,12 +28,5 @@ namespace PatternPal.Recognizers.Models.Checks.Entities.MemberBuilders
             Check.Type(entity, includeGeneric);
             return This();
         }
-
-        /// <inheritdoc cref="FieldCheckBuilder.Type(string, bool)"/>
-        public FieldCheckBuilder Type(string type, bool includeGeneric = true)
-        {
-            Check.Type(type, includeGeneric);
-            return This();
-        }
     }
 }

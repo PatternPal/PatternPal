@@ -50,16 +50,6 @@ namespace PatternPal.Recognizers.Models.Checks.Entities
             return result;
         }
 
-        public IResult ToResult(IEntity entity)
-        {
-            var result = new Result();
-
-            var r = Check(entity);
-            result.Results = r.GetChildFeedback().ToList();
-
-            return result;
-        }
-
         /// <inheritdoc cref="AbstractMemberListCheck{T,R}.Modifiers"/>
         public EntityCheck Modifiers(params IModifier[] modifiers)
         {

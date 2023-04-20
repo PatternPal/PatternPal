@@ -21,19 +21,5 @@ namespace PatternPal.Recognizers.Models.Checks.Entities.MemberBuilders
         }
 
         protected override MethodCheckBuilder This() => this;
-
-        /// <inheritdoc cref="MethodCheck.ReturnType(SyntaxTree.Abstractions.Entities.IEntity)"/>
-        public MethodCheckBuilder ReturnType(IEntity entity)
-        {
-            Check.ReturnType(entity);
-            return This();
-        }
-
-        /// <inheritdoc cref="MethodCheck.ReturnType(string)"/>
-        public MethodCheckBuilder ReturnType(string entity)
-        {
-            Check.ReturnType(entity);
-            return This();
-        }
     }
 }
