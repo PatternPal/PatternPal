@@ -1,6 +1,6 @@
 ﻿namespace PatternPal.Tests.TestClasses.Singleton
 {
-    //This test is a WRONG singleton implementation
+    //This test is a possible "perfect" singleton implementation.
     /* Pattern:              Singleton
      * Original code source: -
      * 
@@ -10,30 +10,32 @@
      *            ✓  a) has no public/internal constructor
      *            ✓  b) has at least one private/protected constructor
      *            ✓  c) has a static, private field with the same type as the class
-     *               d) has a static, public/internal method that acts as a constructor in the following way\
+     *            ✓  d) has a static, public/internal method that acts as a constructor in the following way\
      *            ✓        1) if called and there is no instance saved in the private field, then it calls the private constructor
      *            ✓        2) if called and there is an instance saved in the private field it returns this instance
      *         Client
      *               a) the first call of the getInstance() of the Singleton class returns a new instance of this class
      *               b) the second and next calls of getInstance() of the Singleton class return the same instance of the Singleton class.
      */
-    internal class SingleTonTestCase10
+    public class SingleTonTestCase01
     {
-        private static SingleTonTestCase10 _instance;
+        private static SingleTonTestCase01 instance;
 
-        protected SingleTonTestCase10()
+        private SingleTonTestCase01()
         {
         }
 
-        private static SingleTonTestCase10 Instance()
+        public static SingleTonTestCase01 Instance
         {
-            if (_instance == null)
+            get
             {
-                _instance = new SingleTonTestCase10();
-            }
+                if (instance == null)
+                {
+                    instance = new SingleTonTestCase01();
+                }
 
-            return _instance;
+                return instance;
+            }
         }
     }
 }
-
