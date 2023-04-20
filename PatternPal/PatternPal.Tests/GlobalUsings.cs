@@ -8,11 +8,14 @@ global using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 global using NUnit.Framework;
 
+global using OneOf;
+
 global using PatternPal.Core;
 global using PatternPal.Core.Builders;
 global using PatternPal.Core.Checks;
 global using PatternPal.Tests.Utils;
 
+global using SyntaxTree.Abstractions;
 global using SyntaxTree.Abstractions.Entities;
 global using SyntaxTree.Abstractions.Members;
 global using SyntaxTree.Models;
