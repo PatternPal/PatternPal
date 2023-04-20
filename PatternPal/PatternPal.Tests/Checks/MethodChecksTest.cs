@@ -1,10 +1,11 @@
-using System.Linq;
+﻿using System.Linq;
 using PatternPal.Recognizers.Checks;
 
 using NUnit.Framework;
 
 namespace PatternPal.Tests.Checks
 {
+    [TestFixture]
     public class MethodTest
     {
         [Test]
