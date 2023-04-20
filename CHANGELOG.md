@@ -7,6 +7,29 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [3.2.0] - 2023-04-20
+
+### Added
+* TestRunner: Support installing as dotnet tool by @KnapSac in https://github.com/PatternPal/PatternPal/pull/165
+* Rec: Add new builders and checks approach by @KnapSac in https://github.com/PatternPal/PatternPal/pull/167
+* Rec: Added interface check by @ViciousDoormat in https://github.com/PatternPal/PatternPal/pull/169
+* Rec: Add PropertyCheck(Builder) by @KnapSac in https://github.com/PatternPal/PatternPal/pull/168
+* Tests: Added tests for communication with background service by @DanielvanDamme in https://github.com/PatternPal/PatternPal/pull/166
+* Rec: Parameter check and builder by @ViciousDoormat in https://github.com/PatternPal/PatternPal/pull/170
+* Rec: Add `ICheckResult` by @KnapSac in https://github.com/PatternPal/PatternPal/pull/172
+* Rec: Type check and builder by @ViciousDoormat in https://github.com/PatternPal/PatternPal/pull/173
+* Log: Initial setup of log server by @JustNireon in https://github.com/PatternPal/PatternPal/pull/156
+* Rec: Implemented Modifier.Check by @ViciousDoormat in https://github.com/PatternPal/PatternPal/pull/174
+* Tests: modifier check tests by @ViciousDoormat in https://github.com/PatternPal/PatternPal/pull/175
+* Core: Start implementation of `ClassCheck` by @KnapSac in https://github.com/PatternPal/PatternPal/pull/176
+
+### Improved
+* Rec: Relations expanded with methods, syntaxtree expanded with semantic model (roslyn) by @CaptainJeroen in https://github.com/PatternPal/PatternPal/pull/178
+* Rec: added priorities to builders and checks by @ViciousDoormat in https://github.com/PatternPal/PatternPal/pull/177
+
+### Meta
+* Tests: Ignore failing tests for now by @KnapSac in https://github.com/PatternPal/PatternPal/pull/171
+
 ## [3.1.0] - 2023-04-04
 
 ### Added
@@ -111,7 +134,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 The version developed by the previous team.
 
-[Unreleased]: https://github.com/PatternPal/PatternPal/compare/v3.1.0...HEAD
+[Unreleased]: https://github.com/PatternPal/PatternPal/compare/v3.2.0...HEAD
+
+[3.2.0]: https://github.com/PatternPal/PatternPal/compare/v3.1.0...v3.2.0
 
 [3.1.0]: https://github.com/PatternPal/PatternPal/compare/v3.0.0...v3.1.0
 
