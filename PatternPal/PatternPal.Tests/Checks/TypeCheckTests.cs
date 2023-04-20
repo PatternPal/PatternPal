@@ -4,77 +4,13 @@
 public class TypeCheckTests
 {
     [Test]
-    public void Type_Check_Cannot_Have_No_Functors()
-    {
-        TypeCheck typeCheck = new(
-            Priority.Low,
-            null,
-            null );
-
-        IClass classEntity = EntityNodeUtils.CreateClass();
-        RecognizerContext ctx = new();
-
-        Assert.Throws< ArgumentException >(
-            () => typeCheck.Check(
-                ctx,
-                classEntity));
-    }
-
-    [Test]
-    public void Type_Check_Cannot_Have_Two_Functors()
-    {
-        IClass classEntity = EntityNodeUtils.CreateClass();
-
-        TypeCheck typeCheck = new(
-            Priority.Low,
-            () => classEntity,
-            ctx => ctx.CurrentEntity );
-
-        RecognizerContext ctx = new();
-
-        Assert.Throws< ArgumentException >(
-            () => typeCheck.Check(
-                ctx,
-                classEntity));
-    }
-
-    [Test]
-    public void Type_Check_Has_One_Functor()
-    {
-        IClass classEntity = EntityNodeUtils.CreateClass();
-
-        TypeCheck typeCheck1 = new(
-            Priority.Low,
-            () => classEntity,
-            null );
-
-        TypeCheck typeCheck2 = new(
-            Priority.Low,
-            null,
-            ctx => ctx.CurrentEntity );
-
-        RecognizerContext ctx = new();
-
-        Assert.DoesNotThrow(
-            () => typeCheck1.Check(
-                ctx,
-                classEntity));
-
-        Assert.DoesNotThrow(
-            () => typeCheck2.Check(
-                ctx,
-                classEntity));
-    }
-
-    [Test]
     public Task Type_Check_Returns_Correct_Result()
     {
         IClass classEntity = EntityNodeUtils.CreateClass();
 
         TypeCheck typeCheck = new(
             Priority.Low,
-            () => classEntity,
-            null );
+            OneOf< Func< INode >, GetCurrentEntity >.FromT0(() => classEntity) );
 
         RecognizerContext ctx = new();
 
@@ -92,8 +28,7 @@ public class TypeCheckTests
 
         TypeCheck typeCheck = new(
             Priority.Low,
-            () => classEntity,
-            null );
+            OneOf< Func< INode >, GetCurrentEntity >.FromT0(() => classEntity) );
 
         RecognizerContext ctx = new();
 

@@ -7,30 +7,20 @@
 /// </summary>
 internal class TypeCheck : CheckBase
 {
-    // Can get the current entity which is being checked.
-    private readonly GetCurrentEntity ? _getCurrentEntity;
-
-    // Can get an arbitrary node.
-    private readonly Func< INode > ? _getNode;
+    // Used to get the node to compare against.
+    private readonly OneOf< Func< INode >, GetCurrentEntity > _getNode;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TypeCheck"/> class.
     /// </summary>
     /// <param name="priority">Priority of the check.</param>
-    /// <param name="getNode">
-    /// <see cref="Func{TResult}"/> which returns an arbitrary <see cref="INode"/> which is to be compared against the current <see cref="INode"/>.
-    /// </param>
-    /// <param name="getCurrentEntity">
-    /// <see cref="GetCurrentEntity"/> which returns the current <see cref="IEntity"/> being checked, which might not be the same as the current <see cref="INode"/>.
-    /// </param>
+    /// <param name="getNode">A functor to get the node to compare against.</param>
     internal TypeCheck(
         Priority priority,
-        Func< INode > ? getNode,
-        GetCurrentEntity ? getCurrentEntity)
+        OneOf< Func< INode >, GetCurrentEntity > getNode)
         : base(priority)
     {
         _getNode = getNode;
-        _getCurrentEntity = getCurrentEntity;
     }
 
     /// <summary>
@@ -41,32 +31,10 @@ internal class TypeCheck : CheckBase
         RecognizerContext ctx,
         INode node)
     {
-        // TODO: Should we use OneOf here?
-        // Check that exactly one of _getNode and _getCurrentEntity is set.
-        if (_getNode is null
-            && _getCurrentEntity is null)
-        {
-            throw new ArgumentException($"{nameof( _getNode )} and {nameof( _getCurrentEntity )} cannot both be null");
-        }
-
-        if (_getNode is not null
-            && _getCurrentEntity is not null)
-        {
-            throw new ArgumentException($"{nameof( _getNode )} and {nameof( _getCurrentEntity )} cannot both be present");
-        }
-
-        // KNOWN: Only one of the functors is set, so we can check them independently and store
-        // result of both, without having to worry about overwriting anything.
-        INode ? nodeToMatch = null;
-        if (_getNode is not null)
-        {
-            nodeToMatch = _getNode();
-        }
-
-        if (_getCurrentEntity is not null)
-        {
-            nodeToMatch = _getCurrentEntity(ctx);
-        }
+        // Get the node to match against.
+        INode nodeToMatch = _getNode.Match(
+            getNode => getNode(),
+            getCurrentEntity => getCurrentEntity(ctx));
 
         // Construct and return the check result.
         bool isMatch = node == nodeToMatch;

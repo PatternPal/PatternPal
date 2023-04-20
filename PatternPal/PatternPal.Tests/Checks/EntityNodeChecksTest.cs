@@ -2,7 +2,6 @@
 
 using NUnit.Framework;
 using SyntaxTree;
-using SyntaxTree.Abstractions;
 
 namespace PatternPal.Tests.Checks
 {

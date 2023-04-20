@@ -2,8 +2,7 @@
 
 internal class TypeCheckBuilder : CheckBuilderBase
 {
-    private readonly GetCurrentEntity ? _getCurrentEntity;
-    private readonly Func< INode > ? _getNode;
+    private readonly OneOf< Func< INode >, GetCurrentEntity > _getNode;
 
     internal TypeCheckBuilder(
         Priority priority,
@@ -18,11 +17,10 @@ internal class TypeCheckBuilder : CheckBuilderBase
         GetCurrentEntity getCurrentEntity)
         : base(priority)
     {
-        _getCurrentEntity = getCurrentEntity;
+        _getNode = getCurrentEntity;
     }
 
     public override ICheck Build() => new TypeCheck(
         Priority,
-        _getNode,
-        _getCurrentEntity);
+        _getNode);
 }
