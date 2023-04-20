@@ -1,0 +1,12 @@
+﻿{
+  FeedbackMessage: At least one of the field checks failed,
+  Priority: Low,
+  Correctness: false,
+  ChildrenCheckResults: [
+    {
+      FeedbackMessage: The node _test does not have the public modifier.,
+      Priority: Low,
+      Correctness: false
+    }
+  ]
+}

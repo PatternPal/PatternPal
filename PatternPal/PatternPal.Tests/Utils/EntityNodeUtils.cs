@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis;
@@ -172,10 +172,15 @@ namespace PatternPal.Tests.Utils
                 null);
         }
 
-        public static IField CreateField(
-            string field)
+        public static IField CreateField()
         {
-            CompilationUnitSyntax root = CSharpSyntaxTree.ParseText($"public class Test {{{field}}}").GetCompilationUnitRoot();
+            const string INPUT = """
+                                 public class Test
+                                 {
+                                     private int _test;
+                                 }
+                                 """;
+            CompilationUnitSyntax root = CSharpSyntaxTree.ParseText(INPUT).GetCompilationUnitRoot();
             FieldDeclarationSyntax fieldSyntax = root.DescendantNodes(n => true).OfType< FieldDeclarationSyntax >().First();
             if (fieldSyntax == null)
             {

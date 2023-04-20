@@ -26,8 +26,7 @@ internal enum Priority
     Knockout,
     High,
     Mid,
-    Low,
-    Undefined
+    Low
 }
 
 /// <summary>

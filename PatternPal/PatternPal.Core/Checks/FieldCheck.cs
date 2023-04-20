@@ -16,10 +16,7 @@ internal class FieldCheck : CheckBase
 
     public override ICheckResult Check(RecognizerContext ctx, INode node)
     {
-        if (node is not IField field)
-        {
-            throw new NotImplementedException("Field check was incorrect");
-        }
+        IField field = CheckHelper.ConvertNodeElseThrow<IField>(node);
 
         bool correctness = true;
         string feedbackMessage = "Field checks succeeded.";
@@ -39,9 +36,7 @@ internal class FieldCheck : CheckBase
                         break;
                     }
                 default:
-                    {
-                        throw new NotImplementedException($"Unexpected check: {check.GetType().Name}");
-                    }
+                    throw CheckHelper.InvalidSubCheck(this, check);
             }
             if (!checkResult.Correctness)
             {
@@ -53,6 +48,6 @@ internal class FieldCheck : CheckBase
         return new NodeCheckResult { ChildrenCheckResults = _childrenCheckResults,
                                      Correctness = correctness,
                                      FeedbackMessage = feedbackMessage,
-                                     Priority = Priority.Undefined };
+                                     Priority = Priority };
     }
 }
