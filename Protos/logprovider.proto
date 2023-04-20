@@ -2,11 +2,12 @@ syntax = "proto3";
 
 package patternpal;
 
+import "commonlog.proto";
 option csharp_namespace = "PatternPal.Protos";
 
 // Defines the API exposed by the PatternPal background service.
 // Snake case
-service LoggingService {
+service LogProviderService  {
     // Runs the recognizer(s) for a given file or project.
     rpc LogEvent (LogEventRequest) returns (LogEventResponse);
 }
@@ -15,7 +16,7 @@ service LoggingService {
 message LogEventRequest {
 
 // Specific columns 
-EventType event_type = 1;
+patternpal.EventType event_type = 1;
 string event_id = 2;
 string subject_id = 3;
 string tool_instances = 4;
@@ -29,8 +30,8 @@ string parent_event_id = 9;
 string session_id = 10;
 string project_id = 11;
 string code_state_section = 12;
-EventInitiator event_initiatior = 13;
-EditType edit_type = 14;
+patternpal.EventInitiator event_initiatior = 13;
+patternpal.EditType edit_type = 14;
 string compile_result = 15;
 string compile_message_type = 16;
 string compile_message_data = 17;
@@ -49,54 +50,4 @@ message LogEventResponse {
 
     string response_message = 1;
 
-}
-
-// The possible event types that are logged
-enum EventType
-{
-    SESSION_START = 0;
-    SESSION_END = 1;
-    PROJECT_OPEN = 2;
-    PROJECT_CLOSE = 3;
-    FILE_CREATE = 4;
-    FILE_DELETE = 5;
-    FILE_EDIT = 6;
-    COMPILE = 7;
-    COMPILE_ERROR = 8;
-    RUN_PROGRAM = 9;
-    DEBUG_PROGRAM = 10;
-    RUN_TEST = 11;
-    DEBUG_TEST = 12;
-    INTERVENTION = 13;
-    CUSTOM_EVENT_TYPE = 14;
-}
-
-// The possible event initiators
-enum EventInitiator
-{
-    USER_DIRECT_ACTION = 0;
-    USER_INDIRECT_ACTION = 1;
-    TOOL_REACTION = 2;
-    TOOL_TIMED_EVENT = 3;
-    INSTRUCTOR_DIRECT_ACTION = 4;
-    INSTRUCTOR_INDIRECT_ACTION = 5;
-    TEAM_MEMBER_DIRECT_ACTION = 6;
-    TEAM_MEMBER_INDIRECT_ACTION = 7;
-    CUSTOM_EVENT_INITIATOR = 8;
-}
-
-// The possible edit types
-enum EditType
-{
-    GENERIC_EDIT = 0;
-    INSERT = 1;
-    DELETE = 2;
-    REPLACE = 3;
-    MOVE = 4;
-    PASTE = 5;
-    UNDO = 6;
-    REDO = 7;
-    REFACTOR = 8;
-    RESET = 9;
-    CUSTOM_EDIT_TYPE = 10;
 }

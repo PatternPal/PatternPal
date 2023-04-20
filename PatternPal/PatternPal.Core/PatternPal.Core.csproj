@@ -46,8 +46,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="../../PatternPal/PatternPal.LoggingServer/Protos/logcollector.proto" GrpcServices="Client" Link="Protos/logcollector.proto" />
+    <Protobuf Include="$(RepositoryRoot)PatternPal/PatternPal.LoggingServer/Protos/logcollector.proto" GrpcServices="Client" Link="Protos/logcollector.proto" />
     <Protobuf Include="$(RepositoryRoot)Protos/common.proto" GrpcServices="Server" Link="Protos/common.proto" />
+    <Protobuf Include="$(RepositoryRoot)Protos/commonlog.proto" GrpcServices="Server" Link="Protos/commonlog.proto" />
     <Protobuf Include="$(RepositoryRoot)Protos/recognizer.proto" GrpcServices="Server;Client" Link="Protos/recognizer.proto" />
     <Protobuf Include="$(RepositoryRoot)Protos/step_by_step.proto" GrpcServices="Server" Link="Protos/step_by_step.proto" />
     <Protobuf Include="$(RepositoryRoot)Protos/logprovider.proto" GrpcServices="Server" Link="Protos/logprovider.proto" />

@@ -1,56 +1,9 @@
-﻿syntax = "proto3";
+syntax = "proto3";
 
-option csharp_namespace = "PatternPal.LoggingServer";
+package patternpal;
 
-package log;
+option csharp_namespace = "PatternPal.Protos";
 
-// The greeting service definition.
-
-service LogCollectorService {
-  // Sends a greeting
-  rpc Log (LogRequest) returns (LogResponse);
-}
-
-// Input arguments for recognizer request.
-message LogRequest {
-
-// Specific columns 
-EventType event_type = 1;
-string event_id = 2;
-string subject_id = 3;
-string tool_instances = 4;
-string code_state_id = 5;
-
-// Optional columns
-string client_timestamp = 6; // ISO 8601
-string experimental_condition = 7; 
-string logging_error_id = 8;
-string parent_event_id = 9;
-string session_id = 10;
-string project_id = 11;
-string code_state_section = 12;
-EventInitiator event_initiatior = 13;
-EditType edit_type = 14;
-string compile_result = 15;
-string compile_message_type = 16;
-string compile_message_data = 17;
-string source_location = 18;
-string execution_id = 19;
-string test_id = 20;
-string execution_result_id = 21;
-string intervention_category = 22;
-string intervention_type = 23;
-string intervention_message = 24;
-bytes data = 25;
-
-}
-
-// Input arguments for recognizer response.
-message LogResponse {
-
-    string message = 1;
-
-}
 
 // The possible event types that are logged
 

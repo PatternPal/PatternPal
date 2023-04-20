@@ -1,16 +1,7 @@
 ﻿#region
 
 using Grpc.Net.Client;
-using PatternPal.CommonResources;
-using PatternPal.Recognizers.Abstractions;
-using PatternPal.Recognizers.Models.Output;
-using PatternPal.Protos;
 using PatternPal.LoggingServer;
-using EditType = PatternPal.LoggingServer.EditType;
-using EventInitiator = PatternPal.LoggingServer.EventInitiator;
-using EventType = PatternPal.LoggingServer.EventType;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
 #endregion
 
 namespace PatternPal.Services;
@@ -19,7 +10,7 @@ namespace PatternPal.Services;
  * Implementation of contract defined in protocol buffer.
  * What to do with the received log and send to logging server.
  */
-public class LoggingService : Protos.LoggingService.LoggingServiceBase
+public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
 {
     public override Task<LogEventResponse> LogEvent(LogEventRequest receivedRequest, ServerCallContext context)
     {
@@ -42,11 +33,13 @@ public class LoggingService : Protos.LoggingService.LoggingServiceBase
     {
         switch (receivedRequest.EventType)
         {
-            case Protos.EventType.Compile:
+            case Protos.EventType.EvtCompile:
                 return CompileLog(receivedRequest);
-            case Protos.EventType.SessionStart:
+            case Protos.EventType.EvtCompileError:
+                return CompileErrorLog(receivedRequest);
+            case Protos.EventType.EvtSessionStart:
                 return SessionStartLog(receivedRequest);
-            case Protos.EventType.SessionEnd:
+            case Protos.EventType.EvtSessionEnd:
                 return SessionEndLog(receivedRequest);
             default:
                 return StandardLog(receivedRequest);
@@ -79,15 +72,23 @@ public class LoggingService : Protos.LoggingService.LoggingServiceBase
     private LogRequest CompileLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
-        sendLog.EventType = LoggingServer.EventType.EtCompile;
+        sendLog.EventType = LoggingServer.EventType.EvtCompile;
         sendLog.CompileResult = receivedRequest.CompileResult;
+        return sendLog;
+    }
+
+    private LogRequest CompileErrorLog(LogEventRequest receivedRequest)
+    {
+        //TO DO: add code state from which the compilation error occurred.
+        LogRequest sendLog = StandardLog(receivedRequest);
+        sendLog.EventType = LoggingServer.EventType.EvtCompileError;
         return sendLog;
     }
 
     private LogRequest SessionStartLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
-        sendLog.EventType = LoggingServer.EventType.EtSessionStart;
+        sendLog.EventType = LoggingServer.EventType.EvtSessionStart;
 
         return sendLog;
     }
@@ -96,7 +97,7 @@ public class LoggingService : Protos.LoggingService.LoggingServiceBase
     private LogRequest SessionEndLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
-        sendLog.EventType = LoggingServer.EventType.EtSessionEnd;
+        sendLog.EventType = LoggingServer.EventType.EvtSessionEnd;
       
         return sendLog;
     }

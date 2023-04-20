@@ -33,14 +33,16 @@ namespace PatternPal.Extension.Commands
 
         private static string _sessionId;
 
-        public static void Initialize(
+        private static string _pathToFolder;
+        public static void Initialize(  
             DTE dte,
             PatternPalExtensionPackage package)
         {
             _dte = dte;
             ThreadHelper.ThrowIfNotOnUIThread();
             _package = package;
-
+            _pathToFolder = Path.Combine(_package.UserLocalDataPath.ToString(), "Extensions", "Team PatternPal",
+                "PatternPal.Extension");
             SetSubjectId();
             OnSessionStart();
             _dte.Events.BuildEvents.OnBuildDone += OnBuildDone;
@@ -61,6 +63,9 @@ namespace PatternPal.Extension.Commands
             {
                 outputMessage = string.Format("Build {0} with errors. See the output window for details.",
                     Action.ToString());
+
+                // As the compilation led to an error, a separate  log is sent with the compile error diagnostics
+                // and the specific code section in which the compilation error occurred
             }
             else
             {
@@ -71,14 +76,20 @@ namespace PatternPal.Extension.Commands
             LogEventRequest request = new LogEventRequest
             {
                 SubjectId = GetSubjectId(),
-                EventType = EventType.Compile,
+                EventType = EventType.EvtCompile,
                 CompileResult = outputMessage,
                 SessionId = _sessionId
             };
 
-            LoggingService.LoggingServiceClient client =
-                new LoggingService.LoggingServiceClient(GrpcHelper.Channel);
+            LogProviderService.LogProviderServiceClient client =
+                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
             LogEventResponse response = client.LogEvent(request);
+
+            // When the compilation was an error, a Compile Error log needs to be send.
+            if (_dte.Solution.SolutionBuild.LastBuildInfo != 0)
+            {
+                CompileError(request);
+            }
         }
 
         private static void OnSessionStart()
@@ -91,13 +102,13 @@ namespace PatternPal.Extension.Commands
             }
 
             LogEventRequest request = CreateStandardLog();
-            request.EventType = EventType.SessionStart;
-            LoggingService.LoggingServiceClient client =
-                new LoggingService.LoggingServiceClient(GrpcHelper.Channel);
+            request.EventType = EventType.EvtSessionStart;
+            LogProviderService.LogProviderServiceClient client =
+                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
             LogEventResponse response = client.LogEvent(request);
         }
 
-        public static void OnSessionEnd()
+        internal static void OnSessionEnd()
         {
             if (!_package.DoLogData)
             {
@@ -105,13 +116,28 @@ namespace PatternPal.Extension.Commands
             }
 
             LogEventRequest request = CreateStandardLog();
-            request.EventType = EventType.SessionEnd;
-            LoggingService.LoggingServiceClient client =
-                new LoggingService.LoggingServiceClient(GrpcHelper.Channel);
+            request.EventType = EventType.EvtSessionEnd;
+            LogProviderService.LogProviderServiceClient client =
+                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
             LogEventResponse response = client.LogEvent(request);
         }
 
-        static LogEventRequest CreateStandardLog()
+        private static void CompileError(LogEventRequest parent)
+        {
+            if (!_package.DoLogData)
+            {
+                return;
+            }
+
+            LogEventRequest request = CreateStandardLog();
+            request.EventType = EventType.EvtCompileError;
+            request.ParentEventId = parent.EventId; //Dus the event id kan niet in server generate worden
+            LogProviderService.LogProviderServiceClient client =
+                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
+            LogEventResponse response = client.LogEvent(request);
+        }
+
+        private static LogEventRequest CreateStandardLog()
         {
             return new LogEventRequest { SubjectId = GetSubjectId(), SessionId = _sessionId };
         }
@@ -120,13 +146,11 @@ namespace PatternPal.Extension.Commands
         /// Sets the SubjectId of the user, if not set already, as a GUID.
         /// It creates a folder and a file for this at the UserLocalDataPath in the PatternPal Extension folder as this place is unique per user.
         /// </summary>
-        static void SetSubjectId()
+        private static void SetSubjectId()
         {
             if (!_package.DoLogData) return;
 
-            string pathToFolder = Path.Combine(_package.UserLocalDataPath.ToString(), "Extensions", "Team PatternPal",
-                "PatternPal.Extension");
-            string dataDir = Path.Combine(pathToFolder, "UserData");
+            string dataDir = Path.Combine(_pathToFolder, "UserData");
             if (Directory.Exists(dataDir))
             {
                 return;
@@ -143,11 +167,9 @@ namespace PatternPal.Extension.Commands
         /// Returns the SubjectId of this specific user. 
         /// </summary>
         /// <returns></returns>
-        static string GetSubjectId()
+        private static string GetSubjectId()
         {
-            string pathToFolder = Path.Combine(_package.UserLocalDataPath.ToString(), "Extensions", "Team PatternPal",
-                "PatternPal.Extension");
-            string dataDir = Path.Combine(pathToFolder, "UserData");
+            string dataDir = Path.Combine(_pathToFolder, "UserData");
             Directory.CreateDirectory(dataDir);
             string fileName = "subjectid.txt";
             string filePath = Path.Combine(dataDir, fileName);
