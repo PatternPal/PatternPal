@@ -2,11 +2,11 @@
 
 internal class TypeCheckBuilder : CheckBuilderBase
 {
-    private readonly OneOf< Func< INode >, GetCurrentEntity > _getNode;
+    private readonly OneOf< Func< List< INode > >, GetCurrentEntity > _getNode;
 
     internal TypeCheckBuilder(
         Priority priority,
-        Func< INode > getNode)
+        Func< List< INode > > getNode)
         : base(priority)
     {
         _getNode = getNode;
