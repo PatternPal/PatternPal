@@ -126,7 +126,7 @@ namespace PatternPal.ConsoleApp
                                                          progress.CurrentPercentage,
                                                          100);
 
-            IList< RecognitionResult > results = recognizerRunner.RunV2();
+            IList< RecognitionResult > results = recognizerRunner.Run();
 
             Console.WriteLine();
             PrintResults(
