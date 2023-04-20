@@ -3,22 +3,40 @@ using System.Text;
 
 namespace PatternPal.Tests.TestClasses.Strategy
 {
-    //this code is from https://refactoring.guru/design-patterns/strategy/csharp/example
-
-    /*This test is a possible "perfect" Strategy implementation, which is not used by a client.
-     * 1- It includes an interface
-     * 2- With a method
-     * 3- And is inherited by at least two classes
+    /* Pattern:              Strategy
+     * Original code source: https://refactoring.guru/design-patterns/strategy/csharp/example
+     * 
+     * 
+     * Requirements to fullfill the pattern:
+     *         Strategy Interface
+     *            ✓  a) is an interface	/ abstract class
+     *            ✓  b) has declared a method
+     *            ✓        1) if the class is an abstract instead of an interface the method has to be an abstract method
+     *            ✓  c) is used by another class
+     *            ✓  d) is implemented / inherited by at least one other class
+     *            ✓  e) is implemented / inherited by at least two other classes
+     *         Concrete strategy
+     *            ✓  a) is an implementation of the Strategy interface
+     *            ✓  b) if the class is used, it must be used via the context class
+     *               c) if the class is not used it should be used via the context class
+     *            ✓  d) is stored in the context class
+     *         Context
+     *            ✓  a) has a private field or property that has a Strategy class as type 
+     *            ✓  b) has a function setStrategy() to set the non-public field / property with parameter of type Strategy
+     *            ✓  c) has a function useStrategy() to execute the strategy. 
+     *         Client
+     *               a) has created an object of the type ConcreteStrategy
+     *               b) has used the setStrategy() in the Context class to store the ConcreteStrategy object
+     *               c) has executed the ConcreteStrategy via the Context class
      */
+
+    //Strategy Interface
     public interface IStrategy
     {
         object DoAlgorithm(object data);
     }
 
-    /*
-     * 4- It includes a class which inherits from the interface
-     * 5- And implements its method
-     */
+    //Concrete Stategy
     internal class ConcreteStrategyA : IStrategy
     {
         public object DoAlgorithm(object data)
@@ -30,10 +48,7 @@ namespace PatternPal.Tests.TestClasses.Strategy
         }
     }
 
-    /*
-    * 6- It includes a second class which inherits from the interface
-    * 7- And implements its method
-    */
+    //Concrete Strategy
     internal class ConcreteStrategyB : IStrategy
     {
         public object DoAlgorithm(object data)
@@ -46,13 +61,8 @@ namespace PatternPal.Tests.TestClasses.Strategy
         }
     }
 
-    /*
-    * 10- It includes a class which has a private field with as type the interface
-    * 11- And has a function to set that field to a concrete strategy
-    * 12- And has a function in which the field is used.
-    * 13- It has no direct calls to a concrete strategy.
-    */
-    internal class Context
+    //Context
+    file class Context
     {
         private IStrategy _strategy;
 
@@ -92,12 +102,8 @@ namespace PatternPal.Tests.TestClasses.Strategy
         }
     }
 
-    /*
-    * 14- It includes a class which has a private field with as type the context class
-    * 15- And uses its method to set its strategy
-    * 16- And uses its method to use its strategy
-    * MAYBE IT WOULD BE SMART TO MAKE THIS IMPLEMENTATION MORE LOGICAL; AKA ADD A WAY TO "CHOOSE" THE DESIRED STRATEGY
-    */
+
+    //Client
     /*internal class Client
     {
         private Context _context;
