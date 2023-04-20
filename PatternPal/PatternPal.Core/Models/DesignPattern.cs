@@ -1,10 +1,8 @@
 ﻿#region
 
+using PatternPal.Core.Recognizers;
 using PatternPal.Core.Resources;
 using PatternPal.Protos;
-using PatternPal.Recognizers;
-using PatternPal.Recognizers.Abstractions;
-using PatternPal.Recognizers.Recognizers;
 
 #endregion
 
@@ -16,51 +14,6 @@ namespace PatternPal.Core.Models;
 public class DesignPattern
 {
     /// <summary>
-    /// Adapter pattern.
-    /// </summary>
-    private static readonly DesignPattern s_Adapter = new(
-        DesignPatternNameResources.Adapter,
-        new AdapterRecognizer(),
-        WikiPageResources.Adapter,
-        Protos.Recognizer.Adapter );
-
-    /// <summary>
-    /// Bridge pattern.
-    /// </summary>
-    private static readonly DesignPattern s_Bridge = new(
-        DesignPatternNameResources.Bridge,
-        new BridgeRecognizer(),
-        WikiPageResources.Bridge,
-        Protos.Recognizer.Bridge );
-
-    /// <summary>
-    /// Decorator pattern.
-    /// </summary>
-    private static readonly DesignPattern s_Decorator = new(
-        DesignPatternNameResources.Decorator,
-        new DecoratorRecognizer(),
-        WikiPageResources.Decorator,
-        Protos.Recognizer.Decorator );
-
-    /// <summary>
-    /// Factory Method pattern.
-    /// </summary>
-    private static readonly DesignPattern s_FactoryMethod = new(
-        DesignPatternNameResources.FactoryMethod,
-        new FactoryMethodRecognizer(),
-        WikiPageResources.FactoryMethod,
-        Protos.Recognizer.FactoryMethod );
-
-    /// <summary>
-    /// Observer pattern.
-    /// </summary>
-    private static readonly DesignPattern s_Observer = new(
-        DesignPatternNameResources.Observer,
-        new ObserverRecognizer(),
-        WikiPageResources.Observer,
-        Protos.Recognizer.Observer );
-
-    /// <summary>
     /// Singleton pattern.
     /// </summary>
     private static readonly DesignPattern s_Singleton = new(
@@ -68,24 +21,6 @@ public class DesignPattern
         new SingletonRecognizer(),
         WikiPageResources.Singleton,
         Protos.Recognizer.Singleton );
-
-    /// <summary>
-    /// State pattern.
-    /// </summary>
-    private static readonly DesignPattern s_State = new(
-        DesignPatternNameResources.State,
-        new StateRecognizer(),
-        WikiPageResources.State,
-        Protos.Recognizer.State );
-
-    /// <summary>
-    /// Strategy pattern.
-    /// </summary>
-    private static readonly DesignPattern s_Strategy = new(
-        DesignPatternNameResources.Strategy,
-        new StrategyRecognizer(),
-        WikiPageResources.Strategy,
-        Protos.Recognizer.Strategy );
 
     /// <summary>
     /// Creates a new <see cref="DesignPattern"/> instance.
@@ -114,7 +49,7 @@ public class DesignPattern
     /// <summary>
     /// Implementation of the recognizer for this pattern.
     /// </summary>
-    public IRecognizer Recognizer { get; }
+    internal IRecognizer Recognizer { get; }
 
     /// <summary>
     /// Url of the Wikipedia page of this pattern.
@@ -131,13 +66,6 @@ public class DesignPattern
     /// </summary>
     public static DesignPattern[ ] SupportedPatterns => new[ ]
                                                         {
-                                                            s_Adapter,
-                                                            s_Bridge,
-                                                            s_Decorator,
-                                                            s_FactoryMethod,
-                                                            s_Observer,
                                                             s_Singleton,
-                                                            s_State,
-                                                            s_Strategy,
                                                         };
 }
