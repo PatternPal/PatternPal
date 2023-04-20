@@ -63,10 +63,29 @@ public class UsesCheckTests
         return Verifier.Verify(result);
     }
 
-    /*
+    
     [Test]
     public Task Uses_Check_Returns_Correct_False_Result()
     {
-       
-    }*/
+       //a syntax graph with a uses relation from UsesFunction to UsedFunction
+        SyntaxGraph graph = EntityNodeUtils.CreateUsesRelation();
+        RecognizerContext ctx = new() { Graph = graph };
+
+        //the UsesFunction node from the syntax graph 
+        INode usesNode = graph.GetAll()["Uses"].GetMethods().FirstOrDefault(x => x.GetName() == "UsesFunction");
+        //the UsedFunction node from the syntax graph 
+        INode usedNode = graph.GetAll()["Used"].GetMethods().FirstOrDefault(x => x.GetName() == "UsedFunction");
+
+        //check to find the UsesFunction
+        MethodCheckBuilder usesMethod = Method(Priority.Low);
+        //checking the check to set MatchedEntity to UsesFunction
+        usesMethod.Build().Check(ctx, usesNode);
+
+        //check for the UsedFunction referring to the UsesFunction, a relation which does not exist
+        MethodCheck usedMethod = (MethodCheck)Method(Priority.Low, Uses(Priority.Low, usesMethod.Result)).Build();
+
+        ICheckResult result = usedMethod.Check(ctx, usedNode);
+
+        return Verifier.Verify(result);
+    }
 }
