@@ -21,6 +21,7 @@ internal class PropertyCheck : CheckBase
     public PropertyCheck(Priority priority,
         IEnumerable< ICheck > checks) : base(priority)
     {
+        MatchedEntities = new List<INode>();
         _checks = checks;
     }
 
