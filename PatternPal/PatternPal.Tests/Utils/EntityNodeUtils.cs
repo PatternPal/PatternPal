@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis;
 
 using SyntaxTree;
 using SyntaxTree.Abstractions.Root;
+using SyntaxTree.Models.Members.Constructor;
 using SyntaxTree.Models.Members.Field;
 using SyntaxTree.Models.Members.Method;
 using SyntaxTree.Models.Root;
@@ -110,6 +111,22 @@ namespace PatternPal.Tests.Utils
                     new TestRoot()));
         }
 
+        internal static IConstructor CreateConstructor()
+        {
+            ClassDeclarationSyntax classDeclaration = GetClassDeclaration();
+            ConstructorDeclarationSyntax constructorSyntax = classDeclaration.DescendantNodes(_ => true).OfType<ConstructorDeclarationSyntax>().First();
+            if (constructorSyntax is null)
+            {
+                Assert.Fail();
+            }
+
+            return new Constructor(
+                constructorSyntax,
+                new Class(
+                    classDeclaration,
+                    new TestRoot()));
+        }
+
         /// <summary>
         /// Creates a SyntaxGraph containing a uses relation
         /// </summary>
@@ -161,6 +178,10 @@ namespace PatternPal.Tests.Utils
             const string INPUT = """
                                  public class Test
                                  {
+                                     public Test()
+                                     {
+                                     }
+
                                      internal void DoSomething()
                                      {
                                      }

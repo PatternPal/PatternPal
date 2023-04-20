@@ -21,6 +21,7 @@ internal class ConstructorCheck : CheckBase
     internal ConstructorCheck(Priority priority, 
         IEnumerable<ICheck> checks) : base(priority)
     {
+        MatchedEntities = new List<INode>();
         _checks = checks;
     }
 
