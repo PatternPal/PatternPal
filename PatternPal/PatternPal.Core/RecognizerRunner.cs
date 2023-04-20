@@ -104,9 +104,9 @@ public class RecognizerRunner
             foreach (IEntity entity in entities)
             {
                 //TODO make correct implementation using priorities
-                /*bool result = check.Check(
+                check.Check(
                     ctx,
-                    entity).Correctness;*/
+                    entity);
             }
             Console.WriteLine();
         }
