@@ -10,7 +10,7 @@ internal class MethodCheck : CheckBase
     //A list of checks needed to perform on the method.
     private readonly IEnumerable< ICheck > _checks;
 
-    //A list of all found instances adhering to _checks
+    //A list of all found instances
     internal List<INode> MatchedEntities { get; private set; }
 
     /// <summary>

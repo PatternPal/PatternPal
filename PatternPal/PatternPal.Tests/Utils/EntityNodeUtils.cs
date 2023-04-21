@@ -9,6 +9,7 @@ using SyntaxTree.Abstractions.Root;
 using SyntaxTree.Models.Members.Constructor;
 using SyntaxTree.Models.Members.Field;
 using SyntaxTree.Models.Members.Method;
+using SyntaxTree.Models.Members.Property;
 using SyntaxTree.Models.Root;
 using SyntaxTree.Utils;
 
@@ -128,6 +129,25 @@ namespace PatternPal.Tests.Utils
         }
 
         /// <summary>
+        /// Creates an <see cref="IProperty"/> instance which can be used in tests.
+        /// </summary>
+        internal static IProperty CreateProperty()
+        {
+            ClassDeclarationSyntax classDeclaration = GetClassDeclaration();
+            PropertyDeclarationSyntax propertySyntax = classDeclaration.DescendantNodes(_ => true).OfType<PropertyDeclarationSyntax>().First();
+            if (propertySyntax is null)
+            {
+                Assert.Fail();
+            }
+
+            return new Property(
+                propertySyntax,
+                new Class(
+                    classDeclaration,
+                    new TestRoot()));
+        }
+
+        /// <summary>
         /// Creates a SyntaxGraph containing a uses relation
         /// </summary>
         /// <returns>A <see cref="SyntaxGraph"/> to be used inside tests.</returns>
@@ -185,6 +205,8 @@ namespace PatternPal.Tests.Utils
                                      internal void DoSomething()
                                      {
                                      }
+
+                                     protected int TestProperty { get; set; }
                                  }
                                  """;
 
