@@ -1,4 +1,4 @@
-﻿using Microsoft.CodeAnalysis.VisualBasic;
+using Microsoft.CodeAnalysis.VisualBasic;
 using PatternPal.Recognizers.Models.Checks;
 
 namespace PatternPal.Core.Checks;
@@ -26,10 +26,8 @@ internal class FieldCheck : CheckBase
     /// </summary>
     public override ICheckResult Check(RecognizerContext ctx, INode node)
     {
-        IField fieldEntity = CheckHelper.ConvertNodeElseThrow<IField>(node);
-
-        bool hasFailedSubCheck = false;
-        IList< ICheckResult > subCheckResults = new List< ICheckResult >();
+        IField field = CheckHelper.ConvertNodeElseThrow<IField>(node);
+        
         foreach (ICheck check in _checks)
         {
             ICheckResult checkResult;
@@ -48,10 +46,7 @@ internal class FieldCheck : CheckBase
                 default:
                     throw CheckHelper.InvalidSubCheck(this, check);
             }
-            if (!checkResult.Correctness)
-                hasFailedSubCheck = true;
-
-            subCheckResults.Add(checkResult);
+            _childrenCheckResults.Add(checkResult);
         }
         return new NodeCheckResult
         {

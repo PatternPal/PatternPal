@@ -1,11 +1,17 @@
 ﻿{
   FeedbackMessage: Found class 'Uses',
-  Correctness: true,
+  Priority: Low,
   ChildrenCheckResults: [
     {
-      FeedbackMessage: Node Uses correctly uses node UsedFunction(),
+      FeedbackMessage: Found uses relations for Uses.,
       Priority: Low,
-      Correctness: true
+      ChildrenCheckResults: [
+        {
+          FeedbackMessage: Node Uses correctly uses node UsedFunction(),
+          Priority: Low,
+          Correct: true
+        }
+      ]
     }
   ]
 }

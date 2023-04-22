@@ -1,5 +1,5 @@
 ﻿{
-  FeedbackMessage: Found class 'Test',
+  FeedbackMessage: Found property: TestProperty.,
   Priority: Low,
   ChildrenCheckResults: [
     {

@@ -8,7 +8,7 @@
 internal class TypeCheck : CheckBase
 {
     // Used to get the node to compare against.
-    private readonly OneOf< Func< INode >, GetCurrentEntity > _getNode;
+    private readonly OneOf< Func< List< INode > >, GetCurrentEntity > _getNode;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TypeCheck"/> class.
@@ -17,7 +17,7 @@ internal class TypeCheck : CheckBase
     /// <param name="getNode">A functor to get the node to compare against.</param>
     internal TypeCheck(
         Priority priority,
-        OneOf< Func< INode >, GetCurrentEntity > getNode)
+        OneOf< Func< List< INode > >, GetCurrentEntity > getNode)
         : base(priority)
     {
         _getNode = getNode;
@@ -32,19 +32,44 @@ internal class TypeCheck : CheckBase
         INode node)
     {
         // Get the node to match against.
-        INode nodeToMatch = _getNode.Match(
-            getNode => getNode(),
-            getCurrentEntity => getCurrentEntity(ctx));
+        return _getNode.Match< ICheckResult >(
+            getNodes =>
+            {
+                List< ICheckResult > subResults = new();
+                foreach (INode getNode in getNodes())
+                {
+                    bool isMatch = node == getNode;
+                    subResults.Add(
+                        new LeafCheckResult
+                        {
+                            Priority = Priority,
+                            Correct = isMatch,
+                            FeedbackMessage = isMatch
+                                ? $"Node '{node}' has correct type"
+                                : $"Node '{node}' has incorrect type, expected '{getNode}'",
+                        });
+                }
 
-        // Construct and return the check result.
-        bool isMatch = node == nodeToMatch;
-        return new LeafCheckResult
-               {
-                   Priority = Priority,
-                   Correctness = isMatch,
-                   FeedbackMessage = isMatch
-                       ? $"Node '{node}' has correct type"
-                       : $"Node '{node}' has incorrect type, expected '{nodeToMatch}'",
-               };
+                return new NodeCheckResult
+                       {
+                           Priority = Priority,
+                           ChildrenCheckResults = subResults,
+                           FeedbackMessage = $"Found node '{node}'",
+                       };
+            },
+            getCurrentEntity =>
+            {
+                // Construct and return the check result.
+                INode nodeToMatch = getCurrentEntity(ctx);
+                bool isMatch = node == nodeToMatch;
+                return new LeafCheckResult
+                       {
+                           Priority = Priority,
+                           Correct = isMatch,
+                           FeedbackMessage = isMatch
+                               ? $"Node '{node}' has correct type"
+                               : $"Node '{node}' has incorrect type, expected '{nodeToMatch}'",
+                       };
+            });
     }
 }

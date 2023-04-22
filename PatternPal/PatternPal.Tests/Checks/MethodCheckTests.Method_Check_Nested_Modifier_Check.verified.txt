@@ -1,9 +1,9 @@
 ﻿{
-  FeedbackMessage: Found node 'Test',
+  FeedbackMessage: Found method: DoSomething().,
   Priority: Low,
   ChildrenCheckResults: [
     {
-      FeedbackMessage: Node 'Test' has correct type,
+      FeedbackMessage: Modifiers correctly implemented.,
       Priority: Low,
       Correct: true
     }

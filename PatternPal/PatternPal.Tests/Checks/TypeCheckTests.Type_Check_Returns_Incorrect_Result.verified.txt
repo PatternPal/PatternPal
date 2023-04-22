@@ -1,5 +1,11 @@
 ﻿{
-  FeedbackMessage: Node 'DoSomething()' has incorrect type, expected 'Test',
+  FeedbackMessage: Found node 'DoSomething()',
   Priority: Low,
-  Correctness: false
+  ChildrenCheckResults: [
+    {
+      FeedbackMessage: Node 'DoSomething()' has incorrect type, expected 'Test',
+      Priority: Low,
+      Correct: false
+    }
+  ]
 }

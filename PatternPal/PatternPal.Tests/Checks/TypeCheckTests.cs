@@ -10,7 +10,11 @@ public class TypeCheckTests
 
         TypeCheck typeCheck = new(
             Priority.Low,
-            OneOf< Func< INode >, GetCurrentEntity >.FromT0(() => classEntity) );
+            OneOf< Func< List< INode > >, GetCurrentEntity >.FromT0(
+                () => new List< INode >
+                      {
+                          classEntity
+                      }) );
 
         RecognizerContext ctx = new();
 
@@ -28,7 +32,11 @@ public class TypeCheckTests
 
         TypeCheck typeCheck = new(
             Priority.Low,
-            OneOf< Func< INode >, GetCurrentEntity >.FromT0(() => classEntity) );
+            OneOf< Func< List< INode > >, GetCurrentEntity >.FromT0(
+                () => new List< INode >
+                      {
+                          classEntity
+                      }) );
 
         RecognizerContext ctx = new();
 

@@ -6,7 +6,7 @@ using static PatternPal.Core.Builders.CheckBuilder;
 
 namespace PatternPal.Core.Recognizers;
 
-internal class SingletonRecognizer
+internal class SingletonRecognizer : IRecognizer
 {
     internal IEnumerable< ICheckBuilder > Create()
     {

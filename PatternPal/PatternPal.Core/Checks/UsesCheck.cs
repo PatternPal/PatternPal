@@ -8,17 +8,17 @@ internal class UsesCheck : CheckBase
 {
     //the node resulting from a check to which there should be a uses relation
     //made a Func<> so that it works with lazy evaluation
-    private readonly Func< INode > _getNode;
+    private readonly Func< List<INode> > _getNodes;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="UsesCheck"/> class.
     /// </summary>
     /// <param name="priority">Priority of the check.</param>
-    /// <param name="getNode">A functor to get the node to check for a uses relation</param>
+    /// <param name="getNodes">A functor to get the node to check for a uses relation</param>
     internal UsesCheck(Priority priority,
-        Func< INode > getNode) : base(priority)
+        Func< List<INode> > getNodes) : base(priority)
     {
-        _getNode = getNode;
+        _getNodes = getNodes;
     }
 
     /// <summary>
@@ -29,23 +29,27 @@ internal class UsesCheck : CheckBase
         RecognizerContext ctx,
         INode node)
     {
-        bool hasUsesRelation = ctx.Graph.GetRelations(node, RelationTargetKind.All). //get all relations the checked node has
-            Any(relation => relation.GetRelationType() == RelationType.Uses && //which are of type uses
-                            relation.Target.Match(entity => entity == _getNode(), method => method == _getNode())); //and go to the node which should be used
+        List < ICheckResult > usesResults = new();
+        foreach (INode getNode in _getNodes())
+        {
+            bool hasUsesRelation = ctx.Graph.GetRelations(node, RelationTargetKind.All). //get all relations the checked node has
+                Any(relation => relation.GetRelationType() == RelationType.Uses && //which are of type uses
+                                relation.Target.Match(entity => entity == getNode, method => method == getNode)); //and go to the node which should be used
 
-        return hasUsesRelation 
-            ? new LeafCheckResult
+                usesResults.Add(new LeafCheckResult
+                {
+                    Correct = hasUsesRelation,
+                    Priority = Priority,
+                    FeedbackMessage = hasUsesRelation ? $"Node {node} correctly uses node {getNode}" : $"No uses relation found."
+                });
+        }
+        
+
+        return new NodeCheckResult
               {
-                Correctness = true, 
-                Priority = Priority, 
-                FeedbackMessage = $"Node {node} correctly uses node {_getNode()}"
-
-              } 
-            : new LeafCheckResult
-              { 
-                Correctness = false, 
                 Priority = Priority,
-                FeedbackMessage = $"No uses relation found."
+                ChildrenCheckResults = usesResults,
+                FeedbackMessage = $"Found uses relations for {node}."
               };
     }
 }

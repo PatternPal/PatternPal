@@ -1,44 +1,77 @@
 ﻿namespace PatternPal.Core.Checks;
 
+/// <summary>
+/// Checks for a method of an entity, depending on the list of <see cref="_checks"/> provided.
+/// The checks performed can be a collection of <see cref="TypeCheck"/>s, <see cref="ModifierCheck"/>s,
+/// <see cref="ParameterCheck"/>s, <see cref="UsesCheck"/>s, etc.
+/// </summary>
 internal class MethodCheck : CheckBase
 {
+    //A list of checks needed to perform on the method.
     private readonly IEnumerable< ICheck > _checks;
 
-    // TODO CV: Handle multiple matches (e.g. a method check for a public method may match many methods).
-    internal IMethod ? MatchedEntity { get; private set; }
+    //A list of all found instances
+    internal List<INode> MatchedEntities { get; private set; }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MethodCheck"/> class.
+    /// </summary>
+    /// <param name="priority">Priority of the check.</param>
+    /// <param name="checks">A list of checks needed to perform on the method.</param>
     internal MethodCheck(Priority priority,
         IEnumerable< ICheck > checks) : base(priority)
     {
+        MatchedEntities = new List<INode>();
         _checks = checks;
     }
 
+    /// <summary>
+    /// This method executes all the given checks on the <paramref name="node"/>
+    /// </summary>
     public override ICheckResult Check(
         RecognizerContext ctx,
         INode node)
     {
-        if (node is not IMethod method)
-        {
-            throw new NotImplementedException("Method Check was incorrect");
-        }
-
-        ctx.ParentCheck = this;
-
+        IMethod methodEntity = CheckHelper.ConvertNodeElseThrow<IMethod>(node);
+        
+        IList<ICheckResult> subCheckResults = new List<ICheckResult>();
         foreach (ICheck check in _checks)
         {
-            if (!check.Check(
-                ctx,
-                node).Correctness)
+            switch (check)
             {
-                return new NodeCheckResult { ChildrenCheckResults = new List<ICheckResult>(), Correctness = false, Priority = Priority, FeedbackMessage = "method not found" };
+                case ModifierCheck modifierCheck:
+                    {
+                        subCheckResults.Add(modifierCheck.Check(ctx, methodEntity));
+                        break;
+                    }
+                case TypeCheck typeCheck:
+                {
+                    //TODO return type needs to be obtained from the methodEntity
+                    throw new NotImplementedException();
+                }
+                case NotCheck:
+                {
+                    throw new NotImplementedException("Method Check was incorrect");
+                }
+                case UsesCheck usesCheck:
+                {
+                    subCheckResults.Add(usesCheck.Check(ctx, methodEntity));
+                    break;
+                }
+                case ParameterCheck parameterCheck:
+                {
+                    throw new NotImplementedException();
+                }
+                default:
+                    throw CheckHelper.InvalidSubCheck(
+                        this,
+                        check);
             }
         }
 
-        Console.WriteLine($"Got method '{method}'");
-        MatchedEntity = method;
+        //add the checked method to the list of found methods
+        MatchedEntities.Add(methodEntity);
 
-        return new NodeCheckResult{ChildrenCheckResults = new List<ICheckResult>(), Correctness = true, Priority = Priority, FeedbackMessage = "method found"};
-
-        throw new NotImplementedException("Method Check was correct");
+        return new NodeCheckResult{ChildrenCheckResults = subCheckResults, Priority = Priority, FeedbackMessage = $"Found method: {methodEntity}."};
     }
 }

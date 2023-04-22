@@ -1,0 +1,4 @@
+﻿{
+  FeedbackMessage: Found property: TestProperty.,
+  Priority: Low
+}
