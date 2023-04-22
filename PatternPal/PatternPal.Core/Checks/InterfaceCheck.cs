@@ -1,54 +1,60 @@
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+﻿using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using PatternPal.Protos;
 
 namespace PatternPal.Core.Checks;
+/// <summary>
+/// An instance in which you can execute multiple checks via a list <see cref="_checks"/> on an interface.
+/// </summary>
 internal class InterfaceCheck : CheckBase
 {
     private readonly IEnumerable<ICheck> _checks;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="InterfaceCheck"/> class. 
+    /// </summary>
+    /// <param name="priority">Priority of the check.</param>
+    /// <param name="checks">A list of subchecks that should be tested</param>
     internal InterfaceCheck(Priority priority,
         IEnumerable<ICheck> checks) : base(priority)
     {
         _checks = checks;
     }
 
+    /// <summary>
+    /// This method executes all the given checks on the <paramref name="node"/>
+    /// </summary>
     public override ICheckResult Check(
          RecognizerContext ctx,
          INode node)
     {
         IInterface interfaceEntity = CheckHelper.ConvertNodeElseThrow<IInterface>(node);
 
-
-        bool hasFailedSubCheck = false;
         IList<ICheckResult> subCheckResults = new List<ICheckResult>();
-        foreach(ICheck check in _checks)
+        foreach (ICheck check in _checks)
         {
-            ICheckResult checkResult;
-            switch(check)
+            switch (check)
             {
                 case ModifierCheck modifierCheck:
                     {
-                        checkResult = modifierCheck.Check(ctx, interfaceEntity);
+                        subCheckResults.Add(modifierCheck.Check(ctx, interfaceEntity));
                         break;
                     }
                 case MethodCheck methodCheck:
                     {
-
-                        break;
-                    }
-                case FieldCheck fieldCheck:
-                    {
-                        break;
-                    }
-                case ConstructorCheck constructorCheck:
-                    {
+                        foreach (IMethod method in interfaceEntity.GetMethods())
+                        {
+                            subCheckResults.Add(methodCheck.Check(ctx, method));
+                        }
                         break;
                     }
                 case NotCheck notCheck:
                     {
+                        subCheckResults.Add(notCheck.Check(ctx, interfaceEntity));
                         break;
                     }
                 case UsesCheck usesCheck:
                     {
+                        subCheckResults.Add(usesCheck.Check(ctx, interfaceEntity));
                         break;
                     }
                 default:
@@ -56,23 +62,12 @@ internal class InterfaceCheck : CheckBase
                         throw CheckHelper.InvalidSubCheck(this, check);
                     }
             }
-
-            subCheckResults.Add(checkResult);
-            if (!checkResult.Correctness)
-                hasFailedSubCheck = true;
         }
         return new NodeCheckResult
         {
             ChildrenCheckResults = subCheckResults,
-            Correctness = !hasFailedSubCheck,
             FeedbackMessage = $"Found class '{interfaceEntity}'",
             Priority = Priority,
         };
     }
-}
-
-    bool hasFailedSubCheck = false;
-    IList< ICheckResult> subCheckResults = new List< ICheckResult >();
-
-
 }

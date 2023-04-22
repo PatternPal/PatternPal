@@ -1,4 +1,4 @@
-namespace PatternPal.Core.Checks;
+﻿namespace PatternPal.Core.Checks;
 
 /// <summary>
 /// Checks for the modifiers of an entity. Depending on the <see cref="List{T}"/> of <see cref="IModified"/> provided.
@@ -44,7 +44,7 @@ internal class ModifierCheck : CheckBase
                 return new LeafCheckResult
                 {
                     FeedbackMessage = $"The node {node} does not have the {modifier} modifier.",
-                    Correctness = false,
+                    Correct = false,
                     Priority = Priority
                 };
             }
@@ -53,7 +53,7 @@ internal class ModifierCheck : CheckBase
         return new LeafCheckResult
         {
             FeedbackMessage = "Modifiers correctly implemented.",
-            Correctness = true,
+            Correct = true,
             Priority = Priority
         };
     }

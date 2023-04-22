@@ -1,0 +1,4 @@
+﻿{
+  FeedbackMessage: Found class 'Test',
+  Priority: Low
+}
