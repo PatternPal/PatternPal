@@ -1,6 +1,6 @@
 ﻿#region
 
-using static PatternPal.Core.Builders.CheckBuilder;
+using static PatternPal.Core.Checks.CheckBuilder;
 
 #endregion
 
@@ -14,7 +14,7 @@ internal class ConstructorCheckTests
         IConstructor constructorEntity = EntityNodeUtils.CreateConstructor();
         IMethod methodEntity = EntityNodeUtils.CreateMethod();
 
-        ConstructorCheck constructorCheck = (ConstructorCheck)Constructor(Priority.Low).Build();
+        ConstructorCheck constructorCheck = Constructor(Priority.Low);
         RecognizerContext ctx = new();
 
         Assert.DoesNotThrow(
@@ -22,7 +22,7 @@ internal class ConstructorCheckTests
                 ctx,
                 constructorEntity));
 
-        Assert.Throws<IncorrectNodeTypeException>(
+        Assert.Throws< IncorrectNodeTypeException >(
             () => constructorCheck.Check(
                 ctx,
                 methodEntity));
@@ -33,7 +33,7 @@ internal class ConstructorCheckTests
     {
         IConstructor constructorEntity = EntityNodeUtils.CreateConstructor();
 
-        ConstructorCheck constructorCheck = (ConstructorCheck)Constructor(Priority.Low).Build();
+        ConstructorCheck constructorCheck = Constructor(Priority.Low);
         RecognizerContext ctx = new();
 
         ICheckResult result = constructorCheck.Check(
@@ -48,10 +48,12 @@ internal class ConstructorCheckTests
     {
         IConstructor constructorEntity = EntityNodeUtils.CreateConstructor();
 
-        ConstructorCheck constructorCheck = (ConstructorCheck)Constructor(Priority.Low, Class(Priority.Low)).Build();
+        ConstructorCheck constructorCheck = Constructor(
+            Priority.Low,
+            Class(Priority.Low));
         RecognizerContext ctx = new();
 
-        Assert.Throws<InvalidSubCheckException>(
+        Assert.Throws< InvalidSubCheckException >(
             () => constructorCheck.Check(
                 ctx,
                 constructorEntity));
@@ -62,7 +64,11 @@ internal class ConstructorCheckTests
     {
         IConstructor constructorEntity = EntityNodeUtils.CreateConstructor();
 
-        ConstructorCheck constructorCheck = (ConstructorCheck)Constructor(Priority.Low, Modifiers(Priority.Low, Modifier.Public)).Build();
+        ConstructorCheck constructorCheck = Constructor(
+            Priority.Low,
+            Modifiers(
+                Priority.Low,
+                Modifier.Public));
         RecognizerContext ctx = new();
 
         ICheckResult result = constructorCheck.Check(
