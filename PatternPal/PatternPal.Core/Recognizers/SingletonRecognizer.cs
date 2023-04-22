@@ -1,6 +1,6 @@
 ﻿#region
 
-using static PatternPal.Core.Builders.CheckBuilder;
+using static PatternPal.Core.Checks.CheckBuilder;
 
 #endregion
 
@@ -8,9 +8,9 @@ namespace PatternPal.Core.Recognizers;
 
 internal class SingletonRecognizer : IRecognizer
 {
-    internal IEnumerable< ICheckBuilder > Create()
+    internal IEnumerable< ICheck > Create()
     {
-        MethodCheckBuilder instanceMethod =
+        MethodCheck instanceMethod =
             Method(
                 Priority.Low,
                 Modifiers(
@@ -38,7 +38,7 @@ internal class SingletonRecognizer : IRecognizer
                 ),
                 Type(
                     Priority.Low,
-                    ICheckBuilder.GetCurrentEntity
+                    ICheck.GetCurrentEntity
                 )
             ),
             Constructor(

@@ -1,7 +1,8 @@
 ﻿#region
 
 using SyntaxTree.Abstractions.Root;
-using static PatternPal.Core.Builders.CheckBuilder;
+
+using static PatternPal.Core.Checks.CheckBuilder;
 
 #endregion
 
@@ -20,14 +21,14 @@ public class ModifierCheckTests
 
         RecognizerContext ctx = new();
 
-        ModifierCheck modifierCheck = (ModifierCheck)Modifiers(Priority.Low).Build();
+        ModifierCheck modifierCheck = Modifiers(Priority.Low);
 
         Assert.DoesNotThrow(
             () => modifierCheck.Check(
                 ctx,
                 classEntity));
 
-        Assert.Throws<IncorrectNodeTypeException>(
+        Assert.Throws< IncorrectNodeTypeException >(
             () => modifierCheck.Check(
                 ctx,
                 namespaceEntity));
@@ -38,7 +39,9 @@ public class ModifierCheckTests
     {
         IClass classEntity = EntityNodeUtils.CreateClass();
 
-        ModifierCheck modifierCheck = (ModifierCheck)Modifiers(Priority.Low, Modifier.Public).Build();
+        ModifierCheck modifierCheck = Modifiers(
+            Priority.Low,
+            Modifier.Public);
         RecognizerContext ctx = new();
 
         ICheckResult result = modifierCheck.Check(
@@ -53,7 +56,9 @@ public class ModifierCheckTests
     {
         IClass classEntity = EntityNodeUtils.CreateClass();
 
-        ModifierCheck modifierCheck = (ModifierCheck)Modifiers(Priority.Low, Modifier.Private).Build();
+        ModifierCheck modifierCheck = Modifiers(
+            Priority.Low,
+            Modifier.Private);
         RecognizerContext ctx = new();
 
         ICheckResult result = modifierCheck.Check(
@@ -62,4 +67,4 @@ public class ModifierCheckTests
 
         return Verifier.Verify(result);
     }
-}      
+}

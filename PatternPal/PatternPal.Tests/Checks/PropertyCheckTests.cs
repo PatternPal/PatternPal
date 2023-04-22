@@ -1,6 +1,6 @@
 ﻿#region
 
-using static PatternPal.Core.Builders.CheckBuilder;
+using static PatternPal.Core.Checks.CheckBuilder;
 
 #endregion
 
@@ -14,7 +14,7 @@ internal class PropertyCheckTests
         IProperty propertyEntity = EntityNodeUtils.CreateProperty();
         IMethod methodEntity = EntityNodeUtils.CreateMethod();
 
-        PropertyCheck propertyCheck = (PropertyCheck)Property(Priority.Low).Build();
+        PropertyCheck propertyCheck = Property(Priority.Low);
         RecognizerContext ctx = new();
 
         Assert.DoesNotThrow(
@@ -22,7 +22,7 @@ internal class PropertyCheckTests
                 ctx,
                 propertyEntity));
 
-        Assert.Throws<IncorrectNodeTypeException>(
+        Assert.Throws< IncorrectNodeTypeException >(
             () => propertyCheck.Check(
                 ctx,
                 methodEntity));
@@ -33,7 +33,7 @@ internal class PropertyCheckTests
     {
         IProperty propertyEntity = EntityNodeUtils.CreateProperty();
 
-        PropertyCheck propertyCheck = (PropertyCheck)Property(Priority.Low).Build();
+        PropertyCheck propertyCheck = Property(Priority.Low);
         RecognizerContext ctx = new();
 
         ICheckResult result = propertyCheck.Check(
@@ -48,10 +48,12 @@ internal class PropertyCheckTests
     {
         IProperty propertyEntity = EntityNodeUtils.CreateProperty();
 
-        PropertyCheck propertyCheck = (PropertyCheck)Property(Priority.Low, Class(Priority.Low)).Build();
+        PropertyCheck propertyCheck = Property(
+            Priority.Low,
+            Class(Priority.Low));
         RecognizerContext ctx = new();
 
-        Assert.Throws<InvalidSubCheckException>(
+        Assert.Throws< InvalidSubCheckException >(
             () => propertyCheck.Check(
                 ctx,
                 propertyEntity));
@@ -62,7 +64,11 @@ internal class PropertyCheckTests
     {
         IProperty propertyEntity = EntityNodeUtils.CreateProperty();
 
-        PropertyCheck propertyCheck = (PropertyCheck)Property(Priority.Low, Modifiers(Priority.Low, Modifier.Protected)).Build();
+        PropertyCheck propertyCheck = Property(
+            Priority.Low,
+            Modifiers(
+                Priority.Low,
+                Modifier.Protected));
         RecognizerContext ctx = new();
 
         ICheckResult result = propertyCheck.Check(

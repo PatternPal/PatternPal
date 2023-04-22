@@ -1,7 +1,8 @@
-﻿using PatternPal.Recognizers.Checks;
-using static PatternPal.Core.Builders.CheckBuilder;
+﻿#region
 
-using NUnit.Framework;
+using static PatternPal.Core.Checks.CheckBuilder;
+
+#endregion
 
 namespace PatternPal.Tests.Checks
 {
@@ -13,15 +14,15 @@ namespace PatternPal.Tests.Checks
             IField fieldEntity = EntityNodeUtils.CreateField();
             IClass classEntity = EntityNodeUtils.CreateClass();
 
-            FieldCheck fieldCheck = (FieldCheck)Field(Priority.Low).Build();
+            FieldCheck fieldCheck = Field(Priority.Low);
             RecognizerContext ctx = new();
 
             Assert.DoesNotThrow(
                 () => fieldCheck.Check(
-                    ctx, 
+                    ctx,
                     fieldEntity));
 
-            Assert.Throws<IncorrectNodeTypeException>(
+            Assert.Throws< IncorrectNodeTypeException >(
                 () => fieldCheck.Check(
                     ctx,
                     classEntity));
@@ -32,7 +33,7 @@ namespace PatternPal.Tests.Checks
         {
             IField fieldEntity = EntityNodeUtils.CreateField();
 
-            FieldCheck fieldCheck = (FieldCheck)Field(Priority.Low).Build();
+            FieldCheck fieldCheck = Field(Priority.Low);
             RecognizerContext ctx = new();
 
             ICheckResult result = fieldCheck.Check(
@@ -47,10 +48,12 @@ namespace PatternPal.Tests.Checks
         {
             IField fieldEntity = EntityNodeUtils.CreateField();
 
-            FieldCheck fieldCheck = (FieldCheck)Field(Priority.Low, Parameters(Priority.Low)).Build();
+            FieldCheck fieldCheck = Field(
+                Priority.Low,
+                Parameters(Priority.Low));
             RecognizerContext ctx = new();
 
-            Assert.Throws<InvalidSubCheckException>(
+            Assert.Throws< InvalidSubCheckException >(
                 () => fieldCheck.Check(
                     ctx,
                     fieldEntity));
@@ -61,7 +64,11 @@ namespace PatternPal.Tests.Checks
         {
             IField fieldEntity = EntityNodeUtils.CreateField();
 
-            FieldCheck fieldCheck = (FieldCheck)Field(Priority.Low, Modifiers(Priority.Low, Modifier.Public)).Build();
+            FieldCheck fieldCheck = Field(
+                Priority.Low,
+                Modifiers(
+                    Priority.Low,
+                    Modifier.Public));
             RecognizerContext ctx = new();
 
             ICheckResult result = fieldCheck.Check(
@@ -70,6 +77,5 @@ namespace PatternPal.Tests.Checks
 
             return Verifier.Verify(result);
         }
-
     }
 }

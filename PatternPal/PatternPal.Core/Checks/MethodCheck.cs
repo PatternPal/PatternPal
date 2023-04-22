@@ -8,7 +8,7 @@
 internal class MethodCheck : CheckBase
 {
     //A list of checks needed to perform on the method.
-    private readonly IEnumerable< ICheck > _checks;
+    private readonly IEnumerable<ICheck> _checks;
 
     //A list of all found instances
     internal List<INode> MatchedEntities { get; private set; }
@@ -18,12 +18,16 @@ internal class MethodCheck : CheckBase
     /// </summary>
     /// <param name="priority">Priority of the check.</param>
     /// <param name="checks">A list of checks needed to perform on the method.</param>
-    internal MethodCheck(Priority priority,
-        IEnumerable< ICheck > checks) : base(priority)
+    internal MethodCheck(
+        Priority priority,
+        IEnumerable<ICheck> checks)
+        : base(priority)
     {
         MatchedEntities = new List<INode>();
         _checks = checks;
     }
+
+    internal Func<List<INode>> Result => () => MatchedEntities;
 
     /// <summary>
     /// This method executes all the given checks on the <paramref name="node"/>
@@ -33,7 +37,7 @@ internal class MethodCheck : CheckBase
         INode node)
     {
         IMethod methodEntity = CheckHelper.ConvertNodeElseThrow<IMethod>(node);
-        
+
         IList<ICheckResult> subCheckResults = new List<ICheckResult>();
         foreach (ICheck check in _checks)
         {
@@ -41,27 +45,33 @@ internal class MethodCheck : CheckBase
             {
                 case ModifierCheck modifierCheck:
                     {
-                        subCheckResults.Add(modifierCheck.Check(ctx, methodEntity));
+                        subCheckResults.Add(
+                            modifierCheck.Check(
+                                ctx,
+                                methodEntity));
                         break;
                     }
                 case TypeCheck typeCheck:
-                {
-                    //TODO return type needs to be obtained from the methodEntity
-                    throw new NotImplementedException();
-                }
+                    {
+                        //TODO return type needs to be obtained from the methodEntity
+                        throw new NotImplementedException();
+                    }
                 case NotCheck:
-                {
-                    throw new NotImplementedException("Method Check was incorrect");
-                }
+                    {
+                        throw new NotImplementedException("Method Check was incorrect");
+                    }
                 case UsesCheck usesCheck:
-                {
-                    subCheckResults.Add(usesCheck.Check(ctx, methodEntity));
-                    break;
-                }
+                    {
+                        subCheckResults.Add(
+                            usesCheck.Check(
+                                ctx,
+                                methodEntity));
+                        break;
+                    }
                 case ParameterCheck parameterCheck:
-                {
-                    throw new NotImplementedException();
-                }
+                    {
+                        throw new NotImplementedException();
+                    }
                 default:
                     throw CheckHelper.InvalidSubCheck(
                         this,
@@ -72,6 +82,11 @@ internal class MethodCheck : CheckBase
         //add the checked method to the list of found methods
         MatchedEntities.Add(methodEntity);
 
-        return new NodeCheckResult{ChildrenCheckResults = subCheckResults, Priority = Priority, FeedbackMessage = $"Found method: {methodEntity}."};
+        return new NodeCheckResult
+        {
+            ChildrenCheckResults = subCheckResults,
+            Priority = Priority,
+            FeedbackMessage = $"Found method: {methodEntity}."
+        };
     }
 }
