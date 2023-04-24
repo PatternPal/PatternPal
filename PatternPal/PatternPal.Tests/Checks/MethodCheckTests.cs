@@ -1,6 +1,6 @@
 ﻿#region
 
-using static PatternPal.Core.Builders.CheckBuilder;
+using static PatternPal.Core.Checks.CheckBuilder;
 
 #endregion
 
@@ -14,7 +14,7 @@ internal class MethodCheckTests
         IClass classEntity = EntityNodeUtils.CreateClass();
         IMethod methodEntity = EntityNodeUtils.CreateMethod();
 
-        MethodCheck methodCheck = (MethodCheck)Method(Priority.Low).Build();
+        MethodCheck methodCheck = Method(Priority.Low);
         RecognizerContext ctx = new();
 
         Assert.DoesNotThrow(
@@ -22,7 +22,7 @@ internal class MethodCheckTests
                 ctx,
                 methodEntity));
 
-        Assert.Throws<IncorrectNodeTypeException>(
+        Assert.Throws< IncorrectNodeTypeException >(
             () => methodCheck.Check(
                 ctx,
                 classEntity));
@@ -33,7 +33,7 @@ internal class MethodCheckTests
     {
         IMethod methodEntity = EntityNodeUtils.CreateMethod();
 
-        MethodCheck methodCheck = (MethodCheck)Method(Priority.Low).Build();
+        MethodCheck methodCheck = Method(Priority.Low);
         RecognizerContext ctx = new();
 
         ICheckResult result = methodCheck.Check(
@@ -48,10 +48,12 @@ internal class MethodCheckTests
     {
         IMethod methodEntity = EntityNodeUtils.CreateMethod();
 
-        MethodCheck methodCheck = (MethodCheck)Method(Priority.Low, Class(Priority.Low)).Build();
+        MethodCheck methodCheck = Method(
+            Priority.Low,
+            Class(Priority.Low));
         RecognizerContext ctx = new();
 
-        Assert.Throws<InvalidSubCheckException>(
+        Assert.Throws< InvalidSubCheckException >(
             () => methodCheck.Check(
                 ctx,
                 methodEntity));
@@ -62,7 +64,11 @@ internal class MethodCheckTests
     {
         IMethod methodEntity = EntityNodeUtils.CreateMethod();
 
-        MethodCheck methodCheck = (MethodCheck)Method(Priority.Low, Modifiers(Priority.Low, Modifier.Internal)).Build();
+        MethodCheck methodCheck = Method(
+            Priority.Low,
+            Modifiers(
+                Priority.Low,
+                Modifier.Internal));
         RecognizerContext ctx = new();
 
         ICheckResult result = methodCheck.Check(

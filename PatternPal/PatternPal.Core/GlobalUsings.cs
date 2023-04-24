@@ -7,7 +7,6 @@ global using System.Linq;
 
 global using OneOf;
 
-global using PatternPal.Core.Builders;
 global using PatternPal.Core.Checks;
 
 global using SyntaxTree;

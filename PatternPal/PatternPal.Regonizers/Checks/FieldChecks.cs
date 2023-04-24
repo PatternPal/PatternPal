@@ -7,11 +7,6 @@ namespace PatternPal.Recognizers.Checks
 {
     public static class FieldChecks
     {
-        public static bool CheckFieldType(this IField fieldSyntax, IEnumerable<string> types)
-        {
-            return types.Any(x => x.Equals(fieldSyntax.GetFieldType().ToString()));
-        }
-
         public static bool CheckFieldTypeGeneric(this IField fieldSyntax, IEnumerable<string> types)
         {
             return CheckFieldTypeGeneric(fieldSyntax.GetFieldType(), types);
@@ -40,11 +35,6 @@ namespace PatternPal.Recognizers.Checks
             }
 
             return false;
-        }
-
-        public static bool CheckMemberModifier(this IField field, string modifier)
-        {
-            return field.GetModifiers().Any(x => x.ToString().CheckIfTwoStringsAreEqual(modifier));
         }
     }
 }

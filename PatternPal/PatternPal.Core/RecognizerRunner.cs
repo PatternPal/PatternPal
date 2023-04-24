@@ -90,17 +90,15 @@ public class RecognizerRunner
         SingletonRecognizer recognizer = new();
 
         // TODO CV: Put all check builders into 'All' operator.
-        IEnumerable< ICheckBuilder > checkBuilders = recognizer.Create();
+        IEnumerable< ICheck > checkBuilders = recognizer.Create();
         Dictionary< string, IEntity >.ValueCollection entities = _graph.GetAll().Values;
 
         RecognizerContext ctx = new()
                                 {
                                     Graph = _graph,
                                 };
-        foreach (ICheckBuilder checkBuilder in checkBuilders)
+        foreach (ICheck check in checkBuilders)
         {
-            ICheck check = checkBuilder.Build();
-
             foreach (IEntity entity in entities)
             {
                 //TODO make correct implementation using priorities
