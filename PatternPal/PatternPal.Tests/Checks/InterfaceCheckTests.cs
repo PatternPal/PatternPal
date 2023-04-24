@@ -71,7 +71,11 @@ public class InterfaceCheckTests
     {
         IInterface interfaceEntity = EntityNodeUtils.CreateInterface();
 
-        InterfaceCheck interfaceCheck = Interface(Priority.Low);
+        InterfaceCheck interfaceCheck = Interface(
+            Priority.Low,
+            Modifiers(
+                Priority.Low,
+                Modifier.Public));
         RecognizerContext ctx = new();
 
         ICheckResult result = interfaceCheck.Check(

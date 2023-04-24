@@ -1,4 +1,4 @@
 ﻿{
-  FeedbackMessage: Found class 'Test',
+  FeedbackMessage: Found interface 'Test',
   Priority: Low
 }

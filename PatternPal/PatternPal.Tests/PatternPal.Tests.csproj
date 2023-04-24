@@ -36,15 +36,4 @@
     </Compile>
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Checks\InterfaceCheckTests.Class_Check_Nested_Modifier_Check.verified.txt">
-      <ParentFile>$([System.String]::Copy('%(FileName)').Split('.')[0])</ParentFile>
-      <DependentUpon>InterfaceCheckTests.cs</DependentUpon>
-    </None>
-    <None Update="Checks\InterfaceCheckTests.Class_Check_Returns_Correct_Result.verified.txt">
-      <ParentFile>$([System.String]::Copy('%(FileName)').Split('.')[0])</ParentFile>
-      <DependentUpon>InterfaceCheckTests.cs</DependentUpon>
-    </None>
-  </ItemGroup>
-
 </Project>
