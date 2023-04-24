@@ -1,0 +1,11 @@
+﻿{
+  FeedbackMessage: Found interface 'Test',
+  Priority: Low,
+  ChildrenCheckResults: [
+    {
+      FeedbackMessage: Modifiers correctly implemented.,
+      Priority: Low,
+      Correct: true
+    }
+  ]
+}

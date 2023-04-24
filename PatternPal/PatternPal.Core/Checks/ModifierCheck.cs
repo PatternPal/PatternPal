@@ -56,7 +56,7 @@ internal class ModifierCheck : CheckBase
                {
                    FeedbackMessage = "Modifiers correctly implemented.",
                    Correct = true,
-                   Priority = Priority.Low
+                   Priority = Priority
                };
     }
 }
