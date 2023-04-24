@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="PatternPal/PatternPal.Extension/Resources/logo.png" alt="PatternPal" />
+</p>
+
 # PatternPal
 A Visual Studio extension that detects design patterns and helps users implement them.
 Documentation (as of 03/2023: outdated) on the [Wiki](https://github.com/PatternPal/PatternPal/wiki).
@@ -5,11 +9,11 @@ Documentation (as of 03/2023: outdated) on the [Wiki](https://github.com/Pattern
 ## Requirements
  - Visual Studio 2022
 
-## Installing
- - Download the latest vsix from [releases](https://github.com/PatternPal/PatternPal/releases).
- - Open the file vsix, this should open an installer.
- - Click install.
- - When finished open Visual Studio; the extension should be installed now.
+## Installation
+You can download the extension installer from the [releases page]. Unzip the `PatternPal` folder and
+run the included `PatternPal.Extension.vsix` installer. This will open a prompt to install
+PatternPal into your Visual Studio 2022 instance. After the installation has succeeded, you can
+access PatternPal from `View > Other Windows > PatternPal Extension`.
 
 ## Usage
 ### Opening extension
@@ -43,3 +47,5 @@ Project coordinator: [Hieke Keuning](https://github.com/hiekekeuning) (h.w.keuni
  - Tristan Heizenberg
  - Nick Chen
  - Shanna van Grevengoed
+
+[releases page]: https://github.com/PatternPal/PatternPal/releases/latest
