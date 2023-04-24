@@ -5,9 +5,13 @@
 /// </summary>
 internal interface ICheckResult
 {
-    //Explenation and context of the result of the check.
+    /// <summary>
+    /// Explenation and context of the result of the check.
+    /// </summary>
     string FeedbackMessage { get; init; }
-    //Priority of the checked check.
+    /// <summary>
+    /// Priority of the checked check.
+    /// </summary>
     Priority Priority { get; init; }
 }
 
@@ -16,11 +20,13 @@ internal interface ICheckResult
 /// </summary>
 internal class LeafCheckResult : ICheckResult
 {
-    //Explenation and context of the result of the check.
+    /// <inheritdoc />
     public required string FeedbackMessage { get; init; }
-    //Priority of the checked check.
+    /// <inheritdoc />
     public required Priority Priority { get; init; }
-    //Whether the check succeeded or failed.
+    /// <summary>
+    /// Whether the check succeeded or failed.
+    /// </summary>
     public required bool Correct { get; init; }
 }
 
@@ -29,10 +35,12 @@ internal class LeafCheckResult : ICheckResult
 /// </summary>
 internal class NodeCheckResult : ICheckResult
 {
-    //Explenation and context of the result of the check.
+    /// <inheritdoc />
     public required string FeedbackMessage { get; init; }
-    //Priority of the checked check.
+    /// <inheritdoc />
     public required Priority Priority { get; init; }
-    //Collection of the results of the childchecks, like the MethodCheck inside a ClassCheck
+    /// <summary>
+    /// Collection of the results of the childchecks, like the MethodCheck inside a ClassCheck
+    /// </summary>
     public required IList< ICheckResult > ChildrenCheckResults { get; init; }
 }
