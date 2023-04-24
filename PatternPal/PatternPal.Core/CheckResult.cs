@@ -6,7 +6,7 @@
 internal interface ICheckResult
 {
     /// <summary>
-    /// Explenation and context of the result of the check.
+    /// Explanation and context of the result of the check.
     /// </summary>
     string FeedbackMessage { get; init; }
     /// <summary>
