@@ -1,7 +1,6 @@
 ﻿#region
 
-using PatternPal.Core.Checks;
-using static PatternPal.Core.Builders.CheckBuilder;
+using static PatternPal.Core.Checks.CheckBuilder;
 
 #endregion
 
@@ -17,7 +16,7 @@ public class InterfaceCheckTests
         IMethod methodEntity = EntityNodeUtils.CreateMethod();
         IInterface interfaceEntity = EntityNodeUtils.CreateInterface();
 
-        InterfaceCheck interfaceCheck = (InterfaceCheck)Interface(Priority.Low).Build();
+        InterfaceCheck interfaceCheck = Interface(Priority.Low);
         RecognizerContext ctx = new();
 
         Assert.DoesNotThrow(
@@ -41,7 +40,7 @@ public class InterfaceCheckTests
     {
         IInterface interfaceEntity = EntityNodeUtils.CreateInterface();
 
-        InterfaceCheck interfaceCheck = (InterfaceCheck)Interface(Priority.Low).Build();
+        InterfaceCheck interfaceCheck = Interface(Priority.Low);
         RecognizerContext ctx = new();
 
         ICheckResult result = interfaceCheck.Check(
@@ -56,7 +55,9 @@ public class InterfaceCheckTests
     {
         IInterface interfaceEntity = EntityNodeUtils.CreateInterface();
 
-        InterfaceCheck interfaceCheck = (InterfaceCheck)Interface(Priority.Low, Parameters(Priority.Low)).Build();
+        InterfaceCheck interfaceCheck = Interface(
+            Priority.Low,
+            Parameters(Priority.Low));
         RecognizerContext ctx = new();
 
         Assert.Throws< InvalidSubCheckException >(
@@ -70,7 +71,7 @@ public class InterfaceCheckTests
     {
         IInterface interfaceEntity = EntityNodeUtils.CreateInterface();
 
-        InterfaceCheck interfaceCheck = (InterfaceCheck)Interface(Priority.Low).Build();
+        InterfaceCheck interfaceCheck = Interface(Priority.Low);
         RecognizerContext ctx = new();
 
         ICheckResult result = interfaceCheck.Check(
