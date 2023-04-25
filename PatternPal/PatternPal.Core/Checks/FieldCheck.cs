@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis.VisualBasic;
+
 using PatternPal.Recognizers.Models.Checks;
 
 namespace PatternPal.Core.Checks;
@@ -8,15 +9,17 @@ namespace PatternPal.Core.Checks;
 /// </summary>
 internal class FieldCheck : CheckBase
 {
-    private readonly IEnumerable<ICheck> _checks;
+    private readonly IEnumerable< ICheck > _checks;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FieldCheck"/> class. 
     /// </summary>
     /// <param name="priority">Priority of the check.</param>
     /// <param name="checks">A list of subchecks that should be tested</param>
-    internal FieldCheck(Priority priority, 
-        IEnumerable<ICheck> checks) : base(priority)
+    internal FieldCheck(
+        Priority priority,
+        IEnumerable< ICheck > checks)
+        : base(priority)
     {
         _checks = checks;
     }
@@ -24,36 +27,50 @@ internal class FieldCheck : CheckBase
     /// <summary>
     /// This method executes all the given <see cref="ModifierCheck"/>s and <see cref="TypeCheck"/>s on the <paramref name="node"/>
     /// </summary>
-    public override ICheckResult Check(RecognizerContext ctx, INode node)
+    public override ICheckResult Check(
+        RecognizerContext ctx,
+        INode node)
     {
-        IField fieldEntity= CheckHelper.ConvertNodeElseThrow<IField>(node);
-        IList<ICheckResult> subCheckResults = new List<ICheckResult>();
-        
+        IField fieldEntity = CheckHelper.ConvertNodeElseThrow< IField >(node);
+        IList< ICheckResult > subCheckResults = new List< ICheckResult >();
+
         foreach (ICheck check in _checks)
         {
             ICheckResult checkResult;
             switch (check)
             {
                 case ModifierCheck modifierCheck:
-                    {
-                        checkResult = modifierCheck.Check(ctx, fieldEntity);
-                        break;
-                    }
+                {
+                    checkResult = modifierCheck.Check(
+                        ctx,
+                        fieldEntity);
+                    break;
+                }
                 case TypeCheck typeCheck:
+                {
+                    IEntity fieldTypeEntity = ctx.Graph.Relations.GetEntityByName(fieldEntity.GetFieldType());
+                    if (fieldTypeEntity is null)
                     {
-                        checkResult = typeCheck.Check(ctx, fieldEntity);
-                        break;
+                        throw new ArgumentException($"Cannot find entity for field type of field '{fieldEntity}'");
                     }
+
+                    checkResult = typeCheck.Check(
+                        ctx,
+                        fieldTypeEntity);
+                    break;
+                }
                 default:
-                    throw CheckHelper.InvalidSubCheck(this, check);
+                    throw CheckHelper.InvalidSubCheck(
+                        this,
+                        check);
             }
             subCheckResults.Add(checkResult);
         }
         return new NodeCheckResult
-        {
-            ChildrenCheckResults = subCheckResults,
-            FeedbackMessage = $"Found field '{fieldEntity}'",
-            Priority = Priority
-        };
+               {
+                   ChildrenCheckResults = subCheckResults,
+                   FeedbackMessage = $"Found field '{fieldEntity}'",
+                   Priority = Priority
+               };
     }
 }

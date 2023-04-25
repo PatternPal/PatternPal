@@ -62,7 +62,7 @@ internal abstract class CheckBase : ICheck
 /// <summary>
 /// Represents the priority of a <see cref="ICheck"/>.
 /// </summary>
-internal enum Priority
+public enum Priority
 {
     /// <summary>
     /// This <see cref="ICheck"/> is required for the <see cref="Recognizers.IRecognizer"/> to succeed.
@@ -88,7 +88,7 @@ internal enum Priority
 /// <summary>
 /// Represents the behavior of a collection of <see cref="ICheck"/>s when deciding if it is correct.
 /// </summary>
-enum CheckCollectionKind
+public enum CheckCollectionKind
 {
     /// <summary>
     /// All sub-<see cref="ICheck"/>s must succeed for this <see cref="ICheck"/> to succeed.

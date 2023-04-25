@@ -37,7 +37,6 @@
 
         public void DoSomething()
         {
-
         }
     }
 
@@ -46,16 +45,9 @@
      */
     public class SingleTonTestCase5User
     {
-        SingleTonTestCase05 instance;
-
-        public SingleTonTestCase5User()
-        {
-            instance = SingleTonTestCase05.GetInstance();
-        }
-
         public void DoSomethingWithSingleton()
         {
-            instance.DoSomething();
+            SingleTonTestCase05.GetInstance();
         }
     }
 }

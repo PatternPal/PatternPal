@@ -3,7 +3,9 @@
 /// <summary>
 /// Represents the result of a check, which is the result of a <see cref="Recognizers.IRecognizer"/>.
 /// </summary>
-internal interface ICheckResult
+[JsonDerivedType(typeof( LeafCheckResult ))]
+[JsonDerivedType(typeof( NodeCheckResult ))]
+public interface ICheckResult
 {
     /// <summary>
     /// Explanation and context of the result of the check.
@@ -19,7 +21,7 @@ internal interface ICheckResult
 /// <summary>
 /// Represents the result of a check which is not a collection of other checks, like <see cref="ModifierCheck"/>, and <see cref="UsesCheck"/>.
 /// </summary>
-internal class LeafCheckResult : ICheckResult
+public class LeafCheckResult : ICheckResult
 {
     /// <inheritdoc />
     public required string FeedbackMessage { get; init; }
@@ -36,7 +38,7 @@ internal class LeafCheckResult : ICheckResult
 /// <summary>
 /// Represents the result of a check which is a collection of other checks, like <see cref="ClassCheck"/>, and <see cref="FieldCheck"/>.
 /// </summary>
-internal class NodeCheckResult : ICheckResult
+public class NodeCheckResult : ICheckResult
 {
     /// <inheritdoc />
     public required string FeedbackMessage { get; init; }

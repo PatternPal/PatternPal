@@ -159,6 +159,8 @@ internal class Program
             _fileManager.GetAllCSharpFilesFromDirectory(project.Directory),
             DesignPattern.SupportedPatterns );
 
+        throw new NotImplementedException();
+        /*
         foreach (RecognitionResult recognitionResult in runner.Run().Where(x => x.Result.GetScore() >= 50).OrderByDescending(x => x.Result.GetScore()).ToList())
         {
             result.Results.Add(
@@ -169,8 +171,9 @@ internal class Program
                     Score = recognitionResult.Result.GetScore(),
                 });
         }
+        */
 
-        return result;
+        //return result;
     }
 
     /// <summary>

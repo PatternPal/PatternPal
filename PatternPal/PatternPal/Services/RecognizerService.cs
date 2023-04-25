@@ -81,10 +81,11 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                                       Score = (uint)result.Result.GetScore()
                                   };
 
-            foreach (ICheckResult checkResult in result.Result.GetResults())
-            {
-                res.Results.Add(CreateCheckResult(checkResult));
-            }
+            throw new NotImplementedException();
+            //foreach (ICheckResult checkResult in result.Result.GetResults())
+            //{
+            //    res.Results.Add(CreateCheckResult(checkResult));
+            //}
 
             RecognizeResponse response = new()
                                          {
@@ -150,20 +151,20 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
     /// </summary>
     /// <param name="checkResult">The <see cref="ICheckResult"/> to convert.</param>
     /// <returns>The <see cref="CheckResult"/> instance created from the given <see cref="ICheckResult"/>.</returns>
-    private CheckResult CreateCheckResult(
-        ICheckResult checkResult)
-    {
-        CheckResult newCheckResult = new()
-                                     {
-                                         FeedbackType = (CheckResult.Types.FeedbackType)((int)checkResult.GetFeedbackType() + 1),
-                                         Hidden = checkResult.IsHidden,
-                                         Score = checkResult.GetScore(),
-                                         FeedbackMessage = ResourceUtils.ResultToString(checkResult),
-                                     };
-        foreach (ICheckResult childCheckResult in checkResult.GetChildFeedback())
-        {
-            newCheckResult.SubCheckResults.Add(CreateCheckResult(childCheckResult));
-        }
-        return newCheckResult;
-    }
+    //private CheckResult CreateCheckResult(
+    //    ICheckResult checkResult)
+    //{
+    //    CheckResult newCheckResult = new()
+    //                                 {
+    //                                     FeedbackType = (CheckResult.Types.FeedbackType)((int)checkResult.GetFeedbackType() + 1),
+    //                                     Hidden = checkResult.IsHidden,
+    //                                     Score = checkResult.GetScore(),
+    //                                     FeedbackMessage = ResourceUtils.ResultToString(checkResult),
+    //                                 };
+    //    foreach (ICheckResult childCheckResult in checkResult.GetChildFeedback())
+    //    {
+    //        newCheckResult.SubCheckResults.Add(CreateCheckResult(childCheckResult));
+    //    }
+    //    return newCheckResult;
+    //}
 }

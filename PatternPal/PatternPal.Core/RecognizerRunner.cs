@@ -79,37 +79,89 @@ public class RecognizerRunner
     /// Run the recognizers.
     /// </summary>
     /// <returns>A list of <see cref="RecognitionResult"/>, one per given design pattern.</returns>
-    public IList< RecognitionResult > Run()
+    public IList< ICheckResult > Run()
     {
         // If the graph is empty, we don't have to do any work.
         if (_graph.IsEmpty)
         {
-            return new List< RecognitionResult >();
+            return new List< ICheckResult >();
         }
 
         SingletonRecognizer recognizer = new();
 
-        // TODO CV: Put all check builders into 'All' operator.
-        IEnumerable< ICheck > checkBuilders = recognizer.Create();
-        Dictionary< string, IEntity >.ValueCollection entities = _graph.GetAll().Values;
-
+        // TODO: Create a new ctx object on every level of the checks tree, and set the current
+        // entity accordingly.
         RecognizerContext ctx = new()
                                 {
                                     Graph = _graph,
                                 };
-        foreach (ICheck check in checkBuilders)
+
+        // TODO: Handle priorities
+        // TODO: Return ICheckResult directly, no list required
+        IList< ICheckResult > results = new List< ICheckResult >();
+        foreach (ICheck check in recognizer.Create())
         {
-            foreach (IEntity entity in entities)
+            foreach (IEntity entity in _graph.GetAll().Values)
             {
-                //TODO make correct implementation using priorities
-                check.Check(
+                ICheckResult result = check.Check(
                     ctx,
                     entity);
+
+                if (CheckIsCorrect(result))
+                {
+                    results.Add(result);
+                }
             }
-            Console.WriteLine();
         }
 
-        return new List< RecognitionResult >();
+        return results;
+    }
+
+    // TODO: Handle returning partially correct results
+    // TODO: Construct check results to be returned by the service, instead of returning results of
+    // recognizers directly.
+    private bool CheckIsCorrect(
+        ICheckResult result)
+    {
+        switch (result)
+        {
+            case LeafCheckResult leafCheckResult:
+            {
+                return leafCheckResult.Correct;
+            }
+            case NodeCheckResult nodeCheckResult:
+            {
+                switch (nodeCheckResult.CollectionKind)
+                {
+                    case CheckCollectionKind.All:
+                    {
+                        foreach (ICheckResult childResult in nodeCheckResult.ChildrenCheckResults)
+                        {
+                            if (!CheckIsCorrect(childResult))
+                            {
+                                return false;
+                            }
+                        }
+                        return true;
+                    }
+                    case CheckCollectionKind.Any:
+                    {
+                        foreach (ICheckResult childResult in nodeCheckResult.ChildrenCheckResults)
+                        {
+                            if (CheckIsCorrect(childResult))
+                            {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                    default:
+                        throw new ArgumentException($"Unsupported CheckCollectionKind '{nodeCheckResult.CollectionKind}'");
+                }
+            }
+            default:
+                throw new ArgumentException($"Unsupported check result '{result.GetType()}'");
+        }
     }
 
     /// <summary>

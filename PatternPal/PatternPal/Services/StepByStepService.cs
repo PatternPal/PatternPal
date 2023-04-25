@@ -101,10 +101,12 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
                                   //Recognizer = 0,
                                   //ClassName = result.EntityNode.GetFullName(),
                               };
-        foreach (ICheckResult checkResult in instruction.Checks.Select(check => check.Correct(state)))
-        {
-            res.Results.Add(CreateCheckResult(checkResult));
-        }
+
+        throw new NotImplementedException();
+        //foreach (ICheckResult checkResult in instruction.Checks.Select(check => check.Correct(state)))
+        //{
+        //    res.Results.Add(CreateCheckResult(checkResult));
+        //}
 
         bool correct = res.Results.All(c => c.FeedbackType == CheckResult.Types.FeedbackType.FeedbackCorrect);
 
@@ -124,22 +126,22 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
         return Task.FromResult(response);
     }
 
-    private CheckResult CreateCheckResult(
-        ICheckResult checkResult)
-    {
-        CheckResult newCheckResult = new()
-                                     {
-                                         FeedbackType = (CheckResult.Types.FeedbackType)((int)checkResult.GetFeedbackType() + 1),
-                                         Hidden = checkResult.IsHidden,
-                                         Score = checkResult.GetScore(),
-                                         FeedbackMessage = ResourceUtils.ResultToString(checkResult),
-                                     };
-        foreach (ICheckResult childCheckResult in checkResult.GetChildFeedback())
-        {
-            newCheckResult.SubCheckResults.Add(CreateCheckResult(childCheckResult));
-        }
-        return newCheckResult;
-    }
+    //private CheckResult CreateCheckResult(
+    //    ICheckResult checkResult)
+    //{
+    //    CheckResult newCheckResult = new()
+    //                                 {
+    //                                     FeedbackType = (CheckResult.Types.FeedbackType)((int)checkResult.GetFeedbackType() + 1),
+    //                                     Hidden = checkResult.IsHidden,
+    //                                     Score = checkResult.GetScore(),
+    //                                     FeedbackMessage = ResourceUtils.ResultToString(checkResult),
+    //                                 };
+    //    foreach (ICheckResult childCheckResult in checkResult.GetChildFeedback())
+    //    {
+    //        newCheckResult.SubCheckResults.Add(CreateCheckResult(childCheckResult));
+    //    }
+    //    return newCheckResult;
+    //}
 
     private static class State
     {

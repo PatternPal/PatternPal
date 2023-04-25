@@ -4,6 +4,6 @@
 internal class RecognizerContext
 {
     internal SyntaxGraph Graph { get; init; }
-    internal IEntity CurrentEntity { get; init; }
+    internal IEntity CurrentEntity { get; set; }
     internal MethodCheck ParentCheck { get; set; }
 }
