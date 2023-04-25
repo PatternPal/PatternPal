@@ -9,6 +9,7 @@ internal interface ICheckResult
     /// Explanation and context of the result of the check.
     /// </summary>
     string FeedbackMessage { get; init; }
+
     /// <summary>
     /// Priority of the checked check.
     /// </summary>
@@ -22,8 +23,10 @@ internal class LeafCheckResult : ICheckResult
 {
     /// <inheritdoc />
     public required string FeedbackMessage { get; init; }
+
     /// <inheritdoc />
     public required Priority Priority { get; init; }
+
     /// <summary>
     /// Whether the check succeeded or failed.
     /// </summary>
@@ -37,10 +40,17 @@ internal class NodeCheckResult : ICheckResult
 {
     /// <inheritdoc />
     public required string FeedbackMessage { get; init; }
+
     /// <inheritdoc />
     public required Priority Priority { get; init; }
+
     /// <summary>
     /// Collection of the results of the childchecks, like the MethodCheck inside a ClassCheck
     /// </summary>
     public required IList< ICheckResult > ChildrenCheckResults { get; init; }
+
+    /// <summary>
+    /// Behavior of the collection of sub-<see cref="ICheck"/>s.
+    /// </summary>
+    public CheckCollectionKind CollectionKind { get; init; } = CheckCollectionKind.All;
 }
