@@ -70,6 +70,7 @@ internal class MethodCheck : CheckBase
                     }
                 case ParameterCheck parameterCheck:
                     {
+                        //TODO check parameters of methods
                         throw new NotImplementedException();
                     }
                 default:
@@ -79,7 +80,7 @@ internal class MethodCheck : CheckBase
             }
         }
 
-        //add the checked method to the list of found methods
+        // Add the checked method to the list of found methods
         MatchedEntities.Add(methodEntity);
 
         return new NodeCheckResult
