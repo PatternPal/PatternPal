@@ -194,7 +194,7 @@ namespace SyntaxTree
         /// </summary>
         /// <param name="syntaxNode">The SyntaxNode from which we want the belonging IEntity instance.</param>
         /// <returns></returns>
-        private IEntity ? GetEntityByName(
+        public IEntity ? GetEntityByName(
             SyntaxNode syntaxNode)
         {
             SemanticModel semanticModel = SemanticModels.GetSemanticModel(
