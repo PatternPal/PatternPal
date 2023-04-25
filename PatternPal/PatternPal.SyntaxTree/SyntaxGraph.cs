@@ -17,12 +17,12 @@ namespace SyntaxTree
     {
         private readonly Dictionary< string, IEntity > _all = new Dictionary< string, IEntity >();
 
-        private readonly Relations _relations;
+        public Relations Relations { get; }
         private readonly List< IRoot > _roots = new List< IRoot >();
 
         public SyntaxGraph()
         {
-            _relations = new Relations(this);
+            Relations = new Relations(this);
             SemanticModels.Reset();
         }
 
@@ -79,8 +79,8 @@ namespace SyntaxTree
         /// </summary>
         public void CreateGraph()
         {
-            _relations.Reset();
-            _relations.CreateEdges();
+            Relations.Reset();
+            Relations.CreateEdges();
         }
 
         /// <summary>
@@ -97,12 +97,12 @@ namespace SyntaxTree
             switch (node)
             {
                 case IEntity entity:
-                    _relations.EntityRelations.TryGetValue(
+                    Relations.EntityRelations.TryGetValue(
                         entity,
                         out relations);
                     break;
                 case IMethod method:
-                    _relations.MethodRelations.TryGetValue(
+                    Relations.MethodRelations.TryGetValue(
                         method,
                         out relations);
                     break;
