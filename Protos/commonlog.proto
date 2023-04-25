@@ -4,9 +4,6 @@ package patternpal;
 
 option csharp_namespace = "PatternPal.Protos";
 
-
-// The possible event types that are logged
-
 enum EventType
 {
     EVT_UNKNOWN = 0;
@@ -35,32 +32,32 @@ enum EventType
     EVT_CUSTOM = 23;
 }
 
-// The possible event initiators
 enum EventInitiator
 {
-    EI_USER_DIRECT_ACTION = 0;
-    EI_USER_INDIRECT_ACTION = 1;
-    EI_TOOL_REACTION = 2;
-    EI_TOOL_TIMED_EVENT = 3;
-    EI_INSTRUCTOR_DIRECT_ACTION = 4;
-    EI_INSTRUCTOR_INDIRECT_ACTION = 5;
-    EI_TEAM_MEMBER_DIRECT_ACTION = 6;
-    EI_TEAM_MEMBER_INDIRECT_ACTION = 7;
-    EI_CUSTOM_EVENT_INITIATOR = 8;
+    EI_UNKNOWN = 0;
+    EI_USER_DIRECT_ACTION = 1;
+    EI_USER_INDIRECT_ACTION = 2;
+    EI_TOOL_REACTION = 3;
+    EI_TOOL_TIMED_EVENT = 4;
+    EI_INSTRUCTOR_DIRECT_ACTION = 5;
+    EI_INSTRUCTOR_INDIRECT_ACTION = 6;
+    EI_TEAM_MEMBER_DIRECT_ACTION = 7;
+    EI_TEAM_MEMBER_INDIRECT_ACTION = 8;
+    EI_CUSTOM_EVENT_INITIATOR = 9;
 }
 
-// The possible edit types
 enum EditType
 {
-    ET_GENERIC_EDIT = 0;
-    ET_INSERT = 1;
-    ET_DELETE = 2;
-    ET_REPLACE = 3;
-    ET_MOVE = 4;
-    ET_PASTE = 5;
-    ET_UNDO = 6;
-    ET_REDO = 7;
-    ET_REFACTOR = 8;
-    ET_RESET = 9;
-    ET_CUSTOM_EDIT_TYPE = 10;
+    ET_UNKNOWN = 0;
+    ET_GENERIC_EDIT = 1;
+    ET_INSERT = 2;
+    ET_DELETE = 3;
+    ET_REPLACE = 4;
+    ET_MOVE = 5;
+    ET_PASTE = 6;
+    ET_UNDO = 7;
+    ET_REDO = 8;
+    ET_REFACTOR = 9;
+    ET_RESET = 10;
+    ET_CUSTOM_EDIT_TYPE = 11;
 }

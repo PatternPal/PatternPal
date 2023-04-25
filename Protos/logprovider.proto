@@ -5,17 +5,16 @@ package patternpal;
 import "commonlog.proto";
 option csharp_namespace = "PatternPal.Protos";
 
-// Defines the API exposed by the PatternPal background service.
-// Snake case
+// Defines the API exposed by the PatternPal background service
 service LogProviderService  {
-    // Runs the recognizer(s) for a given file or project.
+    // Runs the recognizer(s) for a given file or project
     rpc LogEvent (LogEventRequest) returns (LogEventResponse);
 }
 
-// Input arguments for recognizer request.
+// Input arguments for recognizer request
 message LogEventRequest {
 
-// Specific columns 
+// Required columns 
 patternpal.EventType event_type = 1;
 string event_id = 2;
 string subject_id = 3;
@@ -45,7 +44,7 @@ string intervention_message = 24;
 
 }
 
-// Input arguments for recognizer response.
+// Input arguments for recognizer response
 message LogEventResponse {
 
     string response_message = 1;

@@ -11,6 +11,11 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 using PatternPal.Extension.Commands;
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Threading;
+using Microsoft.VisualStudio.RpcContracts.Commands;
+using System.Management.Instrumentation;
+using System.Reflection.Metadata;
+using System.Runtime.Remoting.Contexts;
 
 namespace PatternPal.Extension
 {
@@ -93,13 +98,23 @@ namespace PatternPal.Extension
             DTE dte = (DTE)await GetServiceAsync(typeof(DTE));
             SubscribeEvents.Initialize(
                 dte,
-                this);
+                this, cancellationToken);
 
 
         }
+
+        /// <summary>
+        /// Overrides a package method executed when the extension is closed.
+        /// </summary>
+        /// <param name="canClose"></param>
+        /// <returns></returns>
         protected override int QueryClose(out bool canClose)
         {
-            SubscribeEvents.OnSessionEnd();
+            if (DoLogData)
+            {
+                SubscribeEvents.OnSessionEnd();
+            }
+
             canClose = true; 
             return VSConstants.S_OK;
         }
@@ -116,13 +131,24 @@ namespace PatternPal.Extension
         public bool DoLogData
         {
             get { return _doLogData; }
-            set { _doLogData = value; }
+            set
+            {
+                ThreadHelper.JoinableTaskFactory.Run(async () => {
+                    await (value
+                        ? SubscribeEvents.SubscribeEventHandlersAsync()
+                            : SubscribeEvents.UnsubscribeEventHandlersAsync());
+                });
+                _doLogData = value;
+            }
         }
-    }
+     }
+
 
     public enum Mode
     {
         Default,
         StepByStep
     }
+
 }
+
