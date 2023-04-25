@@ -1,0 +1,11 @@
+﻿{
+  FeedbackMessage: ,
+  Priority: Low,
+  ChildrenCheckResults: [
+    {
+      FeedbackMessage: Found class 'Test',
+      Priority: Low
+    }
+  ],
+  CollectionKind: Any
+}
