@@ -25,8 +25,10 @@ internal class NotCheck : CheckBase
 
         ICheckResult checkResult = _check.Check(ctx, node);
 
+        // If all Leafchecks succeed, the entity which should not be present is present.
         bool wrongImplementation = CheckHelper.CheckAllChildrenCorrect(checkResult);
 
+        // In this case we add the result of the check to the childResults, because this shows which entities are present which shouldn't be.
         if (wrongImplementation)
         {
             childResults.Add(checkResult);
