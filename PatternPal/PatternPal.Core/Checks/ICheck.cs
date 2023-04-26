@@ -312,9 +312,6 @@ internal static class CheckHelper
     /// <summary>
     /// This method checks the value of the leaf nodes and returns true if all the children are correct and false in other cases
     /// </summary>
-    /// <param name="checkResult"></param>
-    /// <returns>A bool</returns>
-    /// <exception cref="ArgumentException"></exception>
     internal static bool CheckAllChildrenCorrect(ICheckResult checkResult)
     {
         if (checkResult is LeafCheckResult leafResult)
