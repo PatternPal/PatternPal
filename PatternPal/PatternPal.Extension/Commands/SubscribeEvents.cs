@@ -21,6 +21,7 @@ using PatternPal.Protos;
 using PatternPal.Extension.Model;
 using Microsoft.VisualStudio.Threading;
 using System.Threading;
+using System.Collections;
 
 namespace PatternPal.Extension.Commands
 {
@@ -130,6 +131,31 @@ namespace PatternPal.Extension.Commands
             // When the compilation was an error, a Compile Error log needs to be send.
             if (_dte.Solution.SolutionBuild.LastBuildInfo != 0)
             {
+                Window errorListWindow = null;
+                foreach (Window window in _dte.Windows)
+                {
+                    if (window.Caption.Contains("Error List"))
+                    {
+                        errorListWindow = window;
+                        break;
+                    }
+                }
+
+                // Get the error items collection
+                if (errorListWindow != null)
+                {
+                    IEnumerator errorList = errorListWindow.Collection.GetEnumerator();
+   
+
+                    // Loop through the error and warning collection
+                    while (errorList.MoveNext())
+                    {
+                        ErrorItem item = (ErrorItem)errorList.Current;
+                       // string errorType = "Compile Error";
+                        string errorMessage = item.Description;
+                    }
+
+                }
                 OnCompileError(request);
             }
         }
@@ -168,6 +194,9 @@ namespace PatternPal.Extension.Commands
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtCompileError;
             request.ParentEventId = parent.EventId;
+            request.CompileMessageType = "";
+            request.CompileMessageData = "";
+            request.SourceLocation = "";
             LogProviderService.LogProviderServiceClient client =
                 new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
             LogEventResponse response = client.LogEvent(request);
@@ -208,7 +237,8 @@ namespace PatternPal.Extension.Commands
         /// <returns>The SubjectID - It returns the contents of the local file.</returns>
         private static string GetSubjectId()
         {
-            Directory.CreateDirectory(_pathToUserDataFolder);
+            // A SubjectID is only ever generated once per user. If the directory already exists, the SubjectID was already set.
+
             string fileName = "subjectid.txt";
             string filePath = Path.Combine(_pathToUserDataFolder, fileName);
             return File.ReadAllText(filePath);
