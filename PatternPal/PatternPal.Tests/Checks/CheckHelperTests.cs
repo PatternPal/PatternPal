@@ -35,8 +35,8 @@ public class CheckHelperTests
 
 
         // test the incorrect non-leaf node
-        bool nodeInCorrect = PatternPal.Core.Checks.CheckHelper.CheckAllChildrenCorrect(nodeIncorrectResult);
-        Assert.AreEqual(false, nodeInCorrect);
+        bool nodeIncorrect = PatternPal.Core.Checks.CheckHelper.CheckAllChildrenCorrect(nodeIncorrectResult);
+        Assert.AreEqual(false, nodeIncorrect);
 
         // test the correct non-leaf node
         bool nodeCorrect = PatternPal.Core.Checks.CheckHelper.CheckAllChildrenCorrect(nodeCorrectResult);
