@@ -60,10 +60,10 @@ internal class MethodCheck : CheckBase
                     {
                         throw new NotImplementedException("Method Check was incorrect");
                     }
-                case RelationCheck usesCheck:
+                case RelationCheck relationCheck:
                     {
                         subCheckResults.Add(
-                            usesCheck.Check(
+                            relationCheck.Check(
                                 ctx,
                                 methodEntity));
                         break;

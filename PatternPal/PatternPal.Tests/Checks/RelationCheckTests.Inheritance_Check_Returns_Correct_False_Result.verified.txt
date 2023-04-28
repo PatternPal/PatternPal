@@ -1,0 +1,17 @@
+﻿{
+  FeedbackMessage: Found class 'Used',
+  Priority: Low,
+  ChildrenCheckResults: [
+    {
+      FeedbackMessage: Found Extends relations for Used.,
+      Priority: Low,
+      ChildrenCheckResults: [
+        {
+          FeedbackMessage: No Extends relation found.,
+          Priority: Low,
+          Correct: false
+        }
+      ]
+    }
+  ]
+}

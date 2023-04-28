@@ -53,9 +53,9 @@ internal class ConstructorCheck : CheckBase
                 {
                     throw new NotImplementedException("Constructor Check was incorrect");
                 }
-                case RelationCheck usesCheck:
+                case RelationCheck relationCheck:
                 {
-                    subCheckResults.Add(usesCheck.Check(ctx, constructorEntity));
+                    subCheckResults.Add(relationCheck.Check(ctx, constructorEntity));
                     break;
                 }
                 case ParameterCheck parameterCheck:

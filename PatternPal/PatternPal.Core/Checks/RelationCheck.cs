@@ -35,18 +35,18 @@ internal class RelationCheck : CheckBase
         RecognizerContext ctx,
         INode node)
     {
-        List < ICheckResult > usesResults = new();
+        List < ICheckResult > results = new();
         foreach (INode getNode in _getNodes())
         {
-            bool hasUsesRelation = ctx.Graph.GetRelations(node, RelationTargetKind.All). //get all relations the checked node has
+            bool hasCorrectRelation = ctx.Graph.GetRelations(node, RelationTargetKind.All). //get all relations the checked node has
                 Any(relation => relation.GetRelationType() == _relationType && //which are of type uses
                                 relation.Target.Match(entity => entity == getNode, method => method == getNode)); //and go to the node which should be used
 
-                usesResults.Add(new LeafCheckResult
+            results.Add(new LeafCheckResult
                 {
-                    Correct = hasUsesRelation,
+                    Correct = hasCorrectRelation,
                     Priority = Priority,
-                    FeedbackMessage = hasUsesRelation ? $"Node {node} correctly uses node {getNode}" : $"No uses relation found."
+                    FeedbackMessage = hasCorrectRelation ? $"Node {node} has a {_relationType} relation with node {getNode}" : $"No {_relationType} relation found."
                 });
         }
         
@@ -54,8 +54,8 @@ internal class RelationCheck : CheckBase
         return new NodeCheckResult
               {
                 Priority = Priority,
-                ChildrenCheckResults = usesResults,
-                FeedbackMessage = $"Found uses relations for {node}."
+                ChildrenCheckResults = results,
+                FeedbackMessage = $"Found {_relationType} relations for {node}."
               };
     }
 }

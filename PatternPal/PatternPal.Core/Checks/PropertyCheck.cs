@@ -53,9 +53,9 @@ internal class PropertyCheck : CheckBase
                 {
                     throw new NotImplementedException("Property Check was incorrect");
                 }
-                case RelationCheck usesCheck:
+                case RelationCheck relationCheck:
                 {
-                    subCheckResults.Add(usesCheck.Check(ctx, propertyEntity));
+                    subCheckResults.Add(relationCheck.Check(ctx, propertyEntity));
                     break;
                 }
                 case ParameterCheck parameterCheck:
