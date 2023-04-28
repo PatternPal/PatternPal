@@ -49,10 +49,14 @@ internal class PropertyCheck : CheckBase
                     //TODO return type needs to be obtained from the propertyEntity
                     throw new NotImplementedException();
                 }
-                case NotCheck:
-                {
-                    throw new NotImplementedException("Property Check was incorrect");
-                }
+                case NotCheck notCheck:
+                    {
+                        subCheckResults.Add(
+                            notCheck.Check(
+                                ctx,
+                                propertyEntity));
+                        break;
+                    }
                 case UsesCheck usesCheck:
                 {
                     subCheckResults.Add(usesCheck.Check(ctx, propertyEntity));

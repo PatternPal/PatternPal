@@ -50,10 +50,14 @@ internal class ClassCheck : CheckBase
                     }
                     break;
                 }
-                case NotCheck:
-                {
-                    throw new NotImplementedException("Class Check was incorrect");
-                }
+                case NotCheck notCheck:
+                    {
+                        subCheckResults.Add(
+                            notCheck.Check(
+                                ctx,
+                                classEntity));
+                        break;
+                    }
                 case UsesCheck usesCheck:
                 {
                     subCheckResults.Add(usesCheck.Check(ctx, classEntity));

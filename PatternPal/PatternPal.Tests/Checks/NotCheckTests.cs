@@ -30,6 +30,19 @@ internal class NotCheckTests
         Assert.AreEqual(expectedResult2.GetType(), result2.GetType());
         Assert.AreEqual(expectedResult2.Priority, result2.Priority);
         Assert.AreEqual(expectedResult2.ChildrenCheckResults.Count, result2.ChildrenCheckResults.Count);
+
+        ClassCheck classCheck =
+            Class(
+                Priority.Low,
+                Not(
+                    Priority.Low,
+                    Modifiers(
+                        Priority.Low,
+                        Modifier.Private
+                    )
+                )
+            );
+        classCheck.Check(ctx, classEntity);
     }
 
     [Test]
@@ -83,6 +96,8 @@ internal class NotCheckTests
         Assert.AreEqual(expectedResult.GetType(), result.GetType());
         Assert.AreEqual(expectedResult.Priority, result.Priority);
         Assert.AreEqual(expectedResult.ChildrenCheckResults.Count, result.ChildrenCheckResults.Count);
+
+        
 
     }
 

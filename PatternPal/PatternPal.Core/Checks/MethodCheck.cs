@@ -56,9 +56,13 @@ internal class MethodCheck : CheckBase
                         //TODO return type needs to be obtained from the methodEntity
                         throw new NotImplementedException();
                     }
-                case NotCheck:
+                case NotCheck notCheck:
                     {
-                        throw new NotImplementedException("Method Check was incorrect");
+                        subCheckResults.Add(
+                            notCheck.Check(
+                                ctx,
+                                methodEntity));
+                        break;
                     }
                 case UsesCheck usesCheck:
                     {
