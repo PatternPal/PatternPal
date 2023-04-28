@@ -1,3 +1,6 @@
+﻿using PatternPal.Recognizers.Models.Checks.Members;
+using SyntaxTree.Models.Members.Constructor;
+
 namespace PatternPal.Core.Checks;
 
 internal class ClassCheck : CheckBase
@@ -47,6 +50,14 @@ internal class ClassCheck : CheckBase
                     foreach (IConstructor constructor in classEntity.GetConstructors())
                     {
                         subCheckResults.Add(constructorCheck.Check(ctx, constructor));
+                    }
+                    break;
+                }
+                case PropertyCheck propertyCheck:
+                {
+                    foreach (IProperty property in classEntity.GetProperties())
+                    {
+                        subCheckResults.Add(propertyCheck.Check(ctx, property));
                     }
                     break;
                 }
