@@ -54,7 +54,7 @@ internal class ClassCheck : CheckBase
                 {
                     throw new NotImplementedException("Class Check was incorrect");
                 }
-                case UsesCheck usesCheck:
+                case RelationCheck usesCheck:
                 {
                     subCheckResults.Add(usesCheck.Check(ctx, classEntity));
                     break;

@@ -3,7 +3,7 @@
 /// <summary>
 /// Checks for a method of an entity, depending on the list of <see cref="_checks"/> provided.
 /// The checks performed can be a collection of <see cref="TypeCheck"/>s, <see cref="ModifierCheck"/>s,
-/// <see cref="ParameterCheck"/>s, <see cref="UsesCheck"/>s, etc.
+/// <see cref="ParameterCheck"/>s, <see cref="RelationCheck"/>s, etc.
 /// </summary>
 internal class MethodCheck : CheckBase
 {
@@ -60,7 +60,7 @@ internal class MethodCheck : CheckBase
                     {
                         throw new NotImplementedException("Method Check was incorrect");
                     }
-                case UsesCheck usesCheck:
+                case RelationCheck usesCheck:
                     {
                         subCheckResults.Add(
                             usesCheck.Check(

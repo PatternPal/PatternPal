@@ -61,7 +61,7 @@ internal class InterfaceCheck : CheckBase
                             interfaceEntity));
                     break;
                 }
-                case UsesCheck usesCheck:
+                case RelationCheck usesCheck:
                 {
                     subCheckResults.Add(
                         usesCheck.Check(
