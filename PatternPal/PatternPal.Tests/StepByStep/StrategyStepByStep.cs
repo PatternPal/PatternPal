@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using PatternPal.Recognizers.Abstractions;
+﻿using PatternPal.Recognizers.Abstractions;
 using PatternPal.StepByStep.Abstractions;
 using PatternPal.StepByStep.InstructionSets;
 using PatternPal.StepByStep.Resources.Instructions;

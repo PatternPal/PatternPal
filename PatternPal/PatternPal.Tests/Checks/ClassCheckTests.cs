@@ -1,6 +1,6 @@
 ﻿#region
 
-using static PatternPal.Core.Builders.CheckBuilder;
+using static PatternPal.Core.Checks.CheckBuilder;
 
 #endregion
 
@@ -15,7 +15,7 @@ public class ClassCheckTests
         IClass classEntity = EntityNodeUtils.CreateClass();
         IMethod methodEntity = EntityNodeUtils.CreateMethod();
 
-        ClassCheck classCheck = (ClassCheck)Class(Priority.Low).Build();
+        ClassCheck classCheck = Class(Priority.Low);
         RecognizerContext ctx = new();
 
         Assert.DoesNotThrow(
@@ -34,7 +34,7 @@ public class ClassCheckTests
     {
         IClass classEntity = EntityNodeUtils.CreateClass();
 
-        ClassCheck classCheck = (ClassCheck)Class(Priority.Low).Build();
+        ClassCheck classCheck = Class(Priority.Low);
         RecognizerContext ctx = new();
 
         ICheckResult result = classCheck.Check(
@@ -49,7 +49,9 @@ public class ClassCheckTests
     {
         IClass classEntity = EntityNodeUtils.CreateClass();
 
-        ClassCheck classCheck = (ClassCheck)Class(Priority.Low, Parameters(Priority.Low)).Build();
+        ClassCheck classCheck = Class(
+            Priority.Low,
+            Parameters(Priority.Low));
         RecognizerContext ctx = new();
 
         Assert.Throws< InvalidSubCheckException >(
@@ -63,7 +65,11 @@ public class ClassCheckTests
     {
         IClass classEntity = EntityNodeUtils.CreateClass();
 
-        ClassCheck classCheck = (ClassCheck)Class(Priority.Low, Modifiers(Priority.Low, Modifier.Public)).Build();
+        ClassCheck classCheck = Class(
+            Priority.Low,
+            Modifiers(
+                Priority.Low,
+                Modifier.Public));
         RecognizerContext ctx = new();
 
         ICheckResult result = classCheck.Check(

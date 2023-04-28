@@ -1,11 +1,9 @@
 ﻿#region
 
-using System.Linq;
-
 using Microsoft.CodeAnalysis;
 
-using SyntaxTree;
 using SyntaxTree.Abstractions.Root;
+using SyntaxTree.Models.Members.Constructor;
 using SyntaxTree.Models.Members.Field;
 using SyntaxTree.Models.Members.Method;
 using SyntaxTree.Models.Members.Property;
@@ -85,6 +83,14 @@ namespace PatternPal.Tests.Utils
                 new TestRoot());
 
         /// <summary>
+        /// Creates an <see cref="IInterface"/> instance which can be used in tests.
+        /// </summary>
+        internal static IInterface CreateInterface() =>
+            new Interface(
+                GetInterfaceDeclaration(),
+                new TestRoot());
+
+        /// <summary>
         /// Creates a <see cref="INamespace"/> instance which can be used in tests.
         /// </summary>
         internal static INamespace CreateNamespace() =>
@@ -106,6 +112,22 @@ namespace PatternPal.Tests.Utils
 
             return new Method(
                 methodSyntax,
+                new Class(
+                    classDeclaration,
+                    new TestRoot()));
+        }
+
+        internal static IConstructor CreateConstructor()
+        {
+            ClassDeclarationSyntax classDeclaration = GetClassDeclaration();
+            ConstructorDeclarationSyntax constructorSyntax = classDeclaration.DescendantNodes(_ => true).OfType<ConstructorDeclarationSyntax>().First();
+            if (constructorSyntax is null)
+            {
+                Assert.Fail();
+            }
+
+            return new Constructor(
+                constructorSyntax,
                 new Class(
                     classDeclaration,
                     new TestRoot()));
@@ -181,6 +203,10 @@ namespace PatternPal.Tests.Utils
             const string INPUT = """
                                  public class Test
                                  {
+                                     public Test()
+                                     {
+                                     }
+
                                      internal void DoSomething()
                                      {
                                      }
@@ -195,6 +221,33 @@ namespace PatternPal.Tests.Utils
             Assert.IsInstanceOf< ClassDeclarationSyntax >(rootMember);
 
             return (ClassDeclarationSyntax)rootMember;
+        }
+
+        /// <summary>
+        /// Gets a <see cref="ClassDeclarationSyntax"/>.
+        /// </summary>
+        /// <returns>A <see cref="ClassDeclarationSyntax"/> to be used inside tests.</returns>
+        private static InterfaceDeclarationSyntax GetInterfaceDeclaration()
+        {
+            const string INPUT = """
+                                 public interface Test
+                                 {
+                                     void DoSomething()
+                                     {
+                                     }
+
+                                     int CalculateSomething();
+
+                                     protected int TestProperty { get; set; }
+                                 }
+                                 """;
+
+            CompilationUnitSyntax root = GetCompilationRoot(INPUT);
+            MemberDeclarationSyntax rootMember = root.Members.First();
+
+            Assert.IsInstanceOf<InterfaceDeclarationSyntax>(rootMember);
+
+            return (InterfaceDeclarationSyntax)rootMember;
         }
 
         /// <summary>

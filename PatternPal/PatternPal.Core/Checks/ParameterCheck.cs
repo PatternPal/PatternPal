@@ -2,14 +2,19 @@
 
 internal class ParameterCheck : CheckBase
 {
-    private readonly List<TypeCheck> _parameterTypes;
+    private readonly IEnumerable< TypeCheck > _parameterTypes;
 
-    public ParameterCheck(Priority priority,
-        List<TypeCheck> parameterTypes) : base(priority)
-    { 
+    internal ParameterCheck(
+        Priority priority,
+        IEnumerable< TypeCheck > parameterTypes)
+        : base(priority)
+    {
         _parameterTypes = parameterTypes;
     }
-    public override ICheckResult Check(RecognizerContext ctx, INode node)
+
+    public override ICheckResult Check(
+        RecognizerContext ctx,
+        INode node)
     {
         throw new NotImplementedException();
     }

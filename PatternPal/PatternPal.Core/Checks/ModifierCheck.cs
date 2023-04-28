@@ -1,4 +1,4 @@
-﻿namespace PatternPal.Core.Checks;
+﻿ namespace PatternPal.Core.Checks;
 
 /// <summary>
 /// Checks for the modifiers of an entity. Depending on the <see cref="List{T}"/> of <see cref="IModified"/> provided.
@@ -7,15 +7,17 @@
 internal class ModifierCheck : CheckBase
 {
     // all modifiers the node should have
-    private readonly List< IModifier > _modifiers;
+    private readonly IEnumerable< IModifier > _modifiers;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ModifierCheck"/> class. 
     /// </summary>
     /// <param name="priority">Priority of the check.</param>
     /// <param name="modifiers">A list of modifiers the node should have</param>
-    public ModifierCheck(Priority priority,
-        List< IModifier > modifiers) : base(priority)
+    public ModifierCheck(
+        Priority priority,
+        IEnumerable< IModifier > modifiers)
+        : base(priority)
     {
         _modifiers = modifiers;
     }
@@ -29,7 +31,7 @@ internal class ModifierCheck : CheckBase
         INode node)
     {
         // cast node to IModified
-        IModified modified = CheckHelper.ConvertNodeElseThrow<IModified>(node);
+        IModified modified = CheckHelper.ConvertNodeElseThrow< IModified >(node);
 
         // all modifiers the node really has
         List< IModifier > modifiers = modified.GetModifiers().ToList();
@@ -41,10 +43,20 @@ internal class ModifierCheck : CheckBase
         {
             if (!modifiers.Contains(modifier)) // if the needed modifier is not one of the node's modifiers
             {
-                return new LeafCheckResult{FeedbackMessage = $"The node {node} does not have the {modifier} modifier.", Correct = false, Priority = Priority};
+                return new LeafCheckResult
+                       {
+                           FeedbackMessage = $"The node {node} does not have the {modifier} modifier.",
+                           Correct = false,
+                           Priority = Priority
+                       };
             }
         }
 
-        return new LeafCheckResult{FeedbackMessage = "Modifiers correctly implemented.", Correct = true, Priority = Priority.Low};
+        return new LeafCheckResult
+               {
+                   FeedbackMessage = "Modifiers correctly implemented.",
+                   Correct = true,
+                   Priority = Priority
+               };
     }
 }
