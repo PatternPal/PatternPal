@@ -254,7 +254,6 @@ namespace PatternPal.Extension.Views
 
             CreateResultViewModels(results);
             SummaryControl.Text = "Recognizer is finished";
-
             ProgressStatusBlock.Text = "";
         }
 

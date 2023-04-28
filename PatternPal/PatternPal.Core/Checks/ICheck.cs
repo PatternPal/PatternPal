@@ -308,6 +308,25 @@ internal static class CheckHelper
         ICheck subCheck) => new(
         parentCheck,
         subCheck );
+
+    /// <summary>
+    /// This method checks the value of the leaf nodes and returns true if all the children are correct and false in other cases
+    /// </summary>
+    internal static bool CheckAllChildrenCorrect(ICheckResult checkResult)
+    {
+        if (checkResult is LeafCheckResult leafResult)
+        {
+            return leafResult.Correct;
+        }
+
+        if (checkResult is NodeCheckResult nodeResult)
+        {
+            return nodeResult.ChildrenCheckResults.All(childResult => CheckAllChildrenCorrect(childResult));
+        }
+
+        throw new ArgumentException($"Unknown ICheckResult type: {checkResult.GetType().Name}");
+
+    }
 }
 
 /// <summary>

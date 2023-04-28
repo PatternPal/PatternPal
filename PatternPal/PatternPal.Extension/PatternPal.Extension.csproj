@@ -70,7 +70,7 @@
       <DependentUpon>SummaryRescources.resx</DependentUpon>
     </Compile>
     <Compile Include="Stores\NavigationStore.cs" />
-    <Compile Include="Commands\SubscribeBuildEvents.cs" />
+    <Compile Include="Commands\SubscribeEvents.cs" />
     <Compile Include="UserControls\PatternCheckbox.xaml.cs">
       <DependentUpon>PatternCheckbox.xaml</DependentUpon>
     </Compile>
@@ -245,6 +245,7 @@
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />

@@ -1,0 +1,111 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "PatternPal.LoggingServer";
+
+package log;
+
+// The greeting service definition.
+
+service LogCollectorService {
+  // Sends a greeting
+  rpc Log (LogRequest) returns (LogResponse);
+}
+
+// Input arguments for recognizer request.
+message LogRequest {
+
+// Required columns 
+EventType event_type = 1;
+string event_id = 2;
+string subject_id = 3;
+string tool_instances = 4;
+string code_state_id = 5;
+
+// Optional columns
+string client_timestamp = 6;
+string experimental_condition = 7; 
+string logging_error_id = 8;
+string parent_event_id = 9;
+string session_id = 10;
+string project_id = 11;
+string code_state_section = 12;
+EventInitiator event_initiatior = 13;
+EditType edit_type = 14;
+string compile_result = 15;
+string compile_message_type = 16;
+string compile_message_data = 17;
+string source_location = 18;
+string execution_id = 19;
+string test_id = 20;
+string execution_result_id = 21;
+string intervention_category = 22;
+string intervention_type = 23;
+string intervention_message = 24;
+bytes data = 25;
+
+}
+
+// Input arguments for recognizer response
+message LogResponse {
+
+    string message = 1;
+
+}
+
+enum EventType
+{
+    EVT_UNKNOWN = 0;
+    EVT_SESSION_START = 1;
+    EVT_SESSION_END = 2;
+    EVT_PROJECT_OPEN = 3;
+    EVT_PROJECT_CLOSE = 4;
+    EVT_FILE_CREATE = 5;
+    EVT_FILE_DELETE = 6;
+    EVT_FILE_OPEN = 7;
+    EVT_FILE_CLOSE = 8;
+    EVT_FILE_FOCUS = 9;
+    EVT_FILE_RENAME = 10;
+    EVT_FILE_COPY = 11;
+    EVT_FILE_EDIT = 12;
+    EVT_COMPILE = 13;
+    EVT_COMPILE_ERROR = 14;
+    EVT_COMPILE_WARNING = 15;
+    EVT_SUBMIT = 16;
+    EVT_RUN_PROGRAM = 17;
+    EVT_DEBUG_PROGRAM = 18;
+    EVT_RUN_TEST = 19;
+    EVT_DEBUG_TEST = 20;
+    EVT_RESOURCE_VIEW = 21;
+    EVT_INTERVENTION = 22;
+    EVT_CUSTOM = 23;
+}
+
+enum EventInitiator
+{
+    EI_UNKNOWN = 0;
+    EI_USER_DIRECT_ACTION = 1;
+    EI_USER_INDIRECT_ACTION = 2;
+    EI_TOOL_REACTION = 3;
+    EI_TOOL_TIMED_EVENT = 4;
+    EI_INSTRUCTOR_DIRECT_ACTION = 5;
+    EI_INSTRUCTOR_INDIRECT_ACTION = 6;
+    EI_TEAM_MEMBER_DIRECT_ACTION = 7;
+    EI_TEAM_MEMBER_INDIRECT_ACTION = 8;
+    EI_CUSTOM_EVENT_INITIATOR = 9;
+}
+
+enum EditType
+{
+    ET_UNKNOWN = 0;
+    ET_GENERIC_EDIT = 1;
+    ET_INSERT = 2;
+    ET_DELETE = 3;
+    ET_REPLACE = 4;
+    ET_MOVE = 5;
+    ET_PASTE = 6;
+    ET_UNDO = 7;
+    ET_REDO = 8;
+    ET_REFACTOR = 9;
+    ET_RESET = 10;
+    ET_CUSTOM_EDIT_TYPE = 11;
+}
