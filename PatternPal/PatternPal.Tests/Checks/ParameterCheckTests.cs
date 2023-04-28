@@ -8,30 +8,48 @@ namespace PatternPal.Tests.Checks;
 public class ParameterCheckTests
 {
     [Test]
-    public void Parameter_Check_Method_No_Parameters()
+    public Task Parameter_Check_Method_Same_Type()
     {
         // Create graph, two classes with types. Method in class "Used" has three parameters two
         // of those are identical types.
         SyntaxGraph graph = EntityNodeUtils.CreateUsesRelation();
         RecognizerContext ctx = new() { Graph = graph };
 
-        // Obtain the uses class from syntax graph
-        IEnumerable<IMethod> usesNode = graph.GetAll()["Uses"].GetMethods();
-        // Obtain the used class from syntax graph
-        IEnumerable<IMethod> usedNode = graph.GetAll()["Used"].GetMethods();
+        // Obtain the uses method (0 parameters) from syntax graph
+        IMethod usesNode = 
+            graph.GetAll()["Uses"].GetMethods().FirstOrDefault(
+                x => x.GetName() == "UsesFunction");
+        // Obtain the used method (3 parameters) from syntax graph
+        IMethod usedNode = 
+            graph.GetAll()["Used"].GetMethods().FirstOrDefault(
+                x => x.GetName() == "UsedFunction");
 
-        // Maak methodcheck waarin je geeft de node de method met als return type de parameter type
-        // die je wil checken.
-        // MethodCheck { TypeCheck { Methode met als return type used } }
+        // Type of the "UsesFunction" is "Uses"
+        TypeCheck typeUsesNode = new TypeCheck(
+            Priority.Low,
+            OneOf<Func<List<INode>>, GetCurrentEntity>.FromT0(
+                () => new List<INode> { usesNode }));
+        // Type of the "UsesFunction" is "Used"
+        TypeCheck typeUsedNode = new TypeCheck(
+            Priority.Low,
+            OneOf<Func<List<INode>>, GetCurrentEntity>.FromT0(
+                () => new List<INode> { usedNode }));
 
-        // Maak tweede methodcheck, refereer naar 
+        // Parameter check with two typechecks of type "Uses" and "Used"
+        ParameterCheck usedParamCheck = 
+            new ParameterCheck(Priority.Low, new List<TypeCheck>
+            {
+                typeUsesNode,
+                typeUsedNode,
+            });
 
-        // Maak een parametercheck met de result van 
+        ICheckResult res = usedParamCheck.Check(ctx, usedNode);
+        return Verifier.Verify(res);
 
-        MethodCheck parameterCheck = Method(Priority.Low);
-        parameterCheck.Check(
-            ctx,
-            );
+        // TODO Vraag aan refactor team hoe dit werkt
+        // Eerste methodcheck { typecheck { Method met type "Uses"
+        // Maak tweede methodcheck, refereer naar vorige.
+        // Maak een parametercheck met de result van ??
 
     }
 }

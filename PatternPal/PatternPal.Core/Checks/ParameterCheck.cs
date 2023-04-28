@@ -89,14 +89,13 @@ internal class ParameterCheck : CheckBase
                     }
                 }
             }
-            
-            // TODO feedback message
-            return new NodeCheckResult
-            {
-                ChildrenCheckResults = subCheckResultsResults, 
-                FeedbackMessage = String.Empty, 
-                Priority = Priority
-            };
         }
+        // TODO feedback message
+        return new NodeCheckResult
+        {
+            ChildrenCheckResults = subCheckResultsResults, 
+            FeedbackMessage = String.Empty, 
+            Priority = Priority
+        };
     }
 }
