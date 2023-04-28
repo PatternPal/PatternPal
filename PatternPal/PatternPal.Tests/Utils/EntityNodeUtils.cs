@@ -170,7 +170,7 @@ namespace PatternPal.Tests.Utils
                                  }
                                  public class Used
                                  {
-                                     internal void UsedFunction()
+                                     internal void UsedFunction(Uses testParam1, Used testParam2, Used testParam3)
                                      {
                                      }
                                  }
