@@ -10,40 +10,56 @@ public class ParameterCheckTests
     [Test]
     public Task Parameter_Check_Method_Same_Type()
     {
-        // Create graph, two classes with types. Method in class "Used" has three parameters two
-        // of those are identical types.
-        SyntaxGraph graph = EntityNodeUtils.CreateUsesRelation();
+        SyntaxGraph graph = EntityNodeUtils.CreateMethodWithParamaters();
         RecognizerContext ctx = new() { Graph = graph };
 
-        // Obtain the uses method (0 parameters) from syntax graph
-        IMethod usesNode = 
-            graph.GetAll()["Uses"].GetMethods().FirstOrDefault(
-                x => x.GetName() == "UsesFunction");
-        // Obtain the used method (3 parameters) from syntax graph
-        IMethod usedNode = 
-            graph.GetAll()["Used"].GetMethods().FirstOrDefault(
-                x => x.GetName() == "UsedFunction");
+        // Obtain the StringTestFunction method (0 parameters)
+        IMethod stringNode = 
+            graph.GetAll()["StringTest"].GetMethods().FirstOrDefault(
+                x => x.GetName() == "StringTestFunction");
 
-        // Type of the "UsesFunction" is "Uses"
-        TypeCheck typeUsesNode = new TypeCheck(
+        // Obtain the IntTest method (1 parameter)
+        IMethod intNode = 
+            graph.GetAll()["IntTest"].GetMethods().FirstOrDefault(
+                x => x.GetName() == "IntTestFunction");
+
+        // TypeCheck of the StringTestFunction method (StringTest)
+        TypeCheck typeStringNode = new TypeCheck(
             Priority.Low,
             OneOf<Func<List<INode>>, GetCurrentEntity>.FromT0(
-                () => new List<INode> { usesNode }));
-        // Type of the "UsesFunction" is "Used"
-        TypeCheck typeUsedNode = new TypeCheck(
+                () => new List<INode> { stringNode }));
+        ICheckResult test = typeStringNode.Check(ctx, stringNode);//TODO deze klopt, dus ik geef verkeerd door aan typecheck
+
+        // TypeCheck of the IntTestFunction method (IntTest)
+        TypeCheck typeIntNode = new TypeCheck(
             Priority.Low,
             OneOf<Func<List<INode>>, GetCurrentEntity>.FromT0(
-                () => new List<INode> { usedNode }));
+                () => new List<INode> { intNode }));
 
-        // Parameter check with two typechecks of type "Uses" and "Used"
-        ParameterCheck usedParamCheck = 
-            new ParameterCheck(Priority.Low, new List<TypeCheck>
+        List<TypeCheck> collectiontest = new List<TypeCheck>
+        {
+            typeIntNode,
+            typeStringNode
+
+        };
+
+        ParameterCheck usedParamCheck = new ParameterCheck(Priority.Low, collectiontest);
+
+        MethodCheck method3 = new MethodCheck(
+            Priority.Low,
+            new List<ICheck>
             {
-                typeUsesNode,
-                typeUsedNode,
+                usedParamCheck
             });
 
-        ICheckResult res = usedParamCheck.Check(ctx, usedNode);
+        // Parameter check with two typechecks of type "Uses" and "Used"
+        //ParameterCheck usedParamCheck = 
+        //    new ParameterCheck(Priority.Low, new List<TypeCheck>
+        //    { 
+        //        typeStringNode
+        //    });
+
+        ICheckResult res = method3.Check(ctx, intNode);
         return Verifier.Verify(res);
 
         // TODO Vraag aan refactor team hoe dit werkt
@@ -51,5 +67,24 @@ public class ParameterCheckTests
         // Maak tweede methodcheck, refereer naar vorige.
         // Maak een parametercheck met de result van ??
 
+    }
+
+    [Test]
+    public Task Parameter_Check_No_Parameters()
+    {
+        SyntaxGraph graph = EntityNodeUtils.CreateMethodWithParamaters();
+        RecognizerContext ctx = new() { Graph = graph };
+
+        // Obtain method with 0 parameters from syntax graph.
+        IMethod stringNode =
+            graph.GetAll()["StringTest"].GetMethods().FirstOrDefault(
+                x => x.GetName() == "StringTestFunction");
+
+        // Empty list of typechecks because check returns when checking parameters.
+        ParameterCheck usedParamCheck =
+            new ParameterCheck(Priority.Low, new List<TypeCheck> { });
+
+        ICheckResult res = usedParamCheck.Check(ctx, stringNode);
+        return Verifier.Verify(res);
     }
 }

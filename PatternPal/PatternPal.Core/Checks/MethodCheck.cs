@@ -54,7 +54,11 @@ internal class MethodCheck : CheckBase
                 case TypeCheck typeCheck:
                     {
                         //TODO return type needs to be obtained from the methodEntity
-                        throw new NotImplementedException();
+                        subCheckResults.Add(
+                            typeCheck.Check(
+                                ctx,
+                                methodEntity));
+                        break;
                     }
                 case NotCheck:
                     {
@@ -71,7 +75,11 @@ internal class MethodCheck : CheckBase
                 case ParameterCheck parameterCheck:
                     {
                         //TODO check parameters of methods
-                        throw new NotImplementedException();
+                        subCheckResults.Add(
+                            parameterCheck.Check(
+                                ctx,
+                                methodEntity));
+                        break;
                     }
                 default:
                     throw CheckHelper.InvalidSubCheck(

@@ -3,7 +3,7 @@
 namespace PatternPal.Core.Checks;
 
 /// <summary>
-/// Checks the parameters of the entity node method 
+/// Checks if the parameters of the entity node method are type correct with list of TypeChecks
 /// </summary>
 internal class ParameterCheck : CheckBase
 {

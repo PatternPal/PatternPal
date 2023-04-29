@@ -186,6 +186,31 @@ namespace PatternPal.Tests.Utils
             return graph;
         }
 
+        internal static SyntaxGraph CreateMethodWithParamaters()
+        {
+            const string INPUT = """
+                                 public class StringTest
+                                 {
+                                    internal StringTest StringTestFunction()
+                                    {
+                                    }
+                                 }
+                                 public class IntTest
+                                 {
+                                    internal IntTest IntTestFunction(StringTest testParam1)
+                                    {
+                                    }
+                                 }
+                                 """;
+
+            SyntaxGraph graph = new();
+            graph.AddFile(
+                INPUT,
+                "0");
+            graph.CreateGraph();
+            return graph;
+        }
+
         /// <summary>
         /// Gets the root <see cref="CompilationUnitSyntax"/> from a string of valid C# code.
         /// </summary>
