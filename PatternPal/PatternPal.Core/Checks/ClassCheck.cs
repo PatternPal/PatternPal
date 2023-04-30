@@ -61,7 +61,7 @@ internal class ClassCheck : CheckBase
                     }
                     break;
                 }
-                case NotCheck:
+                case NotCheck notCheck:
                 {
                     subCheckResults.Add(
                         notCheck.Check(
