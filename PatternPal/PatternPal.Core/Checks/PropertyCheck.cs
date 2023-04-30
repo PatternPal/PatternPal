@@ -45,9 +45,10 @@ internal class PropertyCheck : CheckBase
                     break;
                 }
                 case TypeCheck typeCheck:
-                { 
-                    //TODO return type needs to be obtained from the propertyEntity
-                    throw new NotImplementedException();
+                {
+                    IEntity type = ctx.Graph.Relations.GetEntityByName(propertyEntity.GetPropertyType())!;
+                    subCheckResults.Add(typeCheck.Check(ctx, type));
+                    break;
                 }
                 case NotCheck:
                 {

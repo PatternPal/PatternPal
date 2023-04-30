@@ -53,8 +53,9 @@ internal class MethodCheck : CheckBase
                     }
                 case TypeCheck typeCheck:
                     {
-                        //TODO return type needs to be obtained from the methodEntity
-                        throw new NotImplementedException();
+                        IEntity type = ctx.Graph.Relations.GetEntityByName(methodEntity.GetReturnType())!;
+                        subCheckResults.Add(typeCheck.Check(ctx, type));
+                        break;
                     }
                 case NotCheck:
                     {
