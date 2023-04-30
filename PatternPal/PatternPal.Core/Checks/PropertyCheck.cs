@@ -50,9 +50,10 @@ internal class PropertyCheck : CheckBase
                     subCheckResults.Add(typeCheck.Check(ctx, type));
                     break;
                 }
-                case NotCheck:
+                case NotCheck notCheck:
                 {
-                    throw new NotImplementedException("Property Check was incorrect");
+                    subCheckResults.Add(notCheck.Check(ctx, propertyEntity));
+                    break;
                 }
                 case UsesCheck usesCheck:
                 {
@@ -64,9 +65,7 @@ internal class PropertyCheck : CheckBase
                     throw new NotImplementedException();
                 }
                 default:
-                    throw CheckHelper.InvalidSubCheck(
-                        this,
-                        check);
+                    throw CheckHelper.InvalidSubCheck(this, check);
             }
         }
 
