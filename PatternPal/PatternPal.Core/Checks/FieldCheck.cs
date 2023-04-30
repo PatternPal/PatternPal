@@ -34,23 +34,20 @@ internal class FieldCheck : CheckBase
             switch (check)
             {
                 case ModifierCheck modifierCheck:
-                    {
-                        subCheckResults.Add(modifierCheck.Check(ctx, fieldEntity));
-                        break;
-                    }
+                {
+                    subCheckResults.Add(modifierCheck.Check(ctx, fieldEntity));
+                    break;
+                }
                 case TypeCheck typeCheck:
-                    {
-                        subCheckResults.Add(typeCheck.Check(ctx, fieldEntity));
-                        break;
-                    }
+                {
+                    subCheckResults.Add(typeCheck.Check(ctx, fieldEntity));
+                    break;
+                }
                 case NotCheck notCheck:
-                    {
-                        subCheckResults.Add(
-                            notCheck.Check(
-                                ctx,
-                                fieldEntity));
-                        break;
-                    }
+                {
+                    subCheckResults.Add(notCheck.Check(ctx, fieldEntity));
+                    break;
+                }
                 default:
                     throw CheckHelper.InvalidSubCheck(this, check);
             }

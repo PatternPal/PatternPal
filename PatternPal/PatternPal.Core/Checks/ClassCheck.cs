@@ -1,4 +1,4 @@
-namespace PatternPal.Core.Checks;
+﻿namespace PatternPal.Core.Checks;
 
 internal class ClassCheck : CheckBase
 {
@@ -51,13 +51,13 @@ internal class ClassCheck : CheckBase
                     break;
                 }
                 case NotCheck notCheck:
-                    {
-                        subCheckResults.Add(
-                            notCheck.Check(
-                                ctx,
-                                classEntity));
-                        break;
-                    }
+                {
+                    subCheckResults.Add(
+                        notCheck.Check(
+                            ctx,
+                            classEntity));
+                    break;
+                }
                 case UsesCheck usesCheck:
                 {
                     subCheckResults.Add(usesCheck.Check(ctx, classEntity));
@@ -71,10 +71,10 @@ internal class ClassCheck : CheckBase
         }
 
         return new NodeCheckResult
-               {
-                   ChildrenCheckResults = subCheckResults,
-                   FeedbackMessage = $"Found class '{classEntity}'",
-                   Priority = Priority
-               };
+           {
+               ChildrenCheckResults = subCheckResults,
+               FeedbackMessage = $"Found class '{classEntity}'",
+               Priority = Priority
+           };
     }
 }

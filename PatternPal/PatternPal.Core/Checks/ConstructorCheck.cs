@@ -50,13 +50,13 @@ internal class ConstructorCheck : CheckBase
                     break;
                 }
                 case NotCheck notCheck:
-                    {
-                        subCheckResults.Add(
-                            notCheck.Check(
-                                ctx,
-                                constructorEntity));
-                        break;
-                    }
+                {
+                    subCheckResults.Add(
+                        notCheck.Check(
+                            ctx,
+                            constructorEntity));
+                    break;
+                }
                 case UsesCheck usesCheck:
                 {
                     subCheckResults.Add(usesCheck.Check(ctx, constructorEntity));

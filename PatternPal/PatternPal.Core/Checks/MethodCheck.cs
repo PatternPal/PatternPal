@@ -44,38 +44,38 @@ internal class MethodCheck : CheckBase
             switch (check)
             {
                 case ModifierCheck modifierCheck:
-                    {
-                        subCheckResults.Add(
-                            modifierCheck.Check(
-                                ctx,
-                                methodEntity));
-                        break;
-                    }
+                {
+                    subCheckResults.Add(
+                        modifierCheck.Check(
+                            ctx,
+                            methodEntity));
+                    break;
+                }
                 case TypeCheck typeCheck:
-                    {
-                        //TODO return type needs to be obtained from the methodEntity
-                        throw new NotImplementedException();
-                    }
+                {
+                    //TODO return type needs to be obtained from the methodEntity
+                    throw new NotImplementedException();
+                }
                 case NotCheck notCheck:
-                    {
-                        subCheckResults.Add(
-                            notCheck.Check(
-                                ctx,
-                                methodEntity));
-                        break;
-                    }
+                {
+                    subCheckResults.Add(
+                        notCheck.Check(
+                            ctx,
+                            methodEntity));
+                    break;
+                }
                 case UsesCheck usesCheck:
-                    {
-                        subCheckResults.Add(
-                            usesCheck.Check(
-                                ctx,
-                                methodEntity));
-                        break;
-                    }
+                {
+                    subCheckResults.Add(
+                        usesCheck.Check(
+                            ctx,
+                            methodEntity));
+                    break;
+                }
                 case ParameterCheck parameterCheck:
-                    {
-                        throw new NotImplementedException();
-                    }
+                {
+                    throw new NotImplementedException();
+                }
                 default:
                     throw CheckHelper.InvalidSubCheck(
                         this,
