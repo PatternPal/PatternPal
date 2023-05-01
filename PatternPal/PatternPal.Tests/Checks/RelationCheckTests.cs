@@ -264,7 +264,7 @@ public class RelationCheckTests
     [Test]
     public Task Creates_Check_Returns_Correct_True_Result()
     {
-        //a syntax graph with a uses relation from Uses to UsedFunction
+        //a syntax graph where the so called Uses class creates an instance of the so called Used class
         SyntaxGraph graph = EntityNodeUtils.CreateUsesRelation();
         RecognizerContext ctx = new()
         {
@@ -272,27 +272,27 @@ public class RelationCheckTests
         };
 
         //the Uses class node from the syntax graph 
-        INode usesNode = graph.GetAll()["Uses"];
+        INode creatingNode = graph.GetAll()["Uses"];
         //the Used class node from the syntax graph 
-        INode usedNode = graph.GetAll()["Used"];
+        INode createdNode = graph.GetAll()["Used"];
 
-        //check for the UsedFunction
-        ClassCheck usedClass = Class(Priority.Low);
-        //checking the check to set MatchedEntity to usednode
-        usedClass.Check(
+        //check for the created class
+        ClassCheck createdClass = Class(Priority.Low);
+        //checking the check to set MatchedEntity to createdNode
+        createdClass.Check(
             ctx,
-            usedNode);
+            createdNode);
 
-        //check for Uses creating the usednode
-        ClassCheck usesClass = Class(
+        //check for creating class, which creates the createdNode
+        ClassCheck creatingClass = Class(
             Priority.Low,
             Creates(
                 Priority.Low,
-                usedClass.Result));
+                createdClass.Result));
 
-        ICheckResult result = usesClass.Check(
+        ICheckResult result = creatingClass.Check(
             ctx,
-            usesNode);
+            creatingNode);
 
         return Verifier.Verify(result);
     }
@@ -300,7 +300,7 @@ public class RelationCheckTests
     [Test]
     public Task Creates_Check_Returns_Correct_False_Result()
     {
-        //a syntax graph with a uses relation from Uses to UsedFunction
+        //a syntax graph where the so called Used class does NOT create an instance of the so called Uses class
         SyntaxGraph graph = EntityNodeUtils.CreateUsesRelation();
         RecognizerContext ctx = new()
         {
@@ -308,27 +308,30 @@ public class RelationCheckTests
         };
 
         //the Uses class node from the syntax graph 
-        INode usesNode = graph.GetAll()["Uses"];
+        INode creatingNode = graph.GetAll()["Uses"];
         //the Used class node from the syntax graph 
-        INode usedNode = graph.GetAll()["Used"];
+        INode createdNode = graph.GetAll()["Used"];
 
-        //check for the UsedFunction
-        ClassCheck usedClass = Class(Priority.Low);
-        //checking the check to set MatchedEntity to usesnode
-        usedClass.Check(
+        //we check whether the createdNode creates an instance of the creatingNode. Something which is not the case
+
+        //check for the created class
+        ClassCheck createdClass = Class(Priority.Low);
+        //checking the check to set MatchedEntity to creatingNode
+        createdClass.Check(
             ctx,
-            usesNode);
+            creatingNode);
 
-        //check for Used creating the UsesFunction, which isnt the case
-        ClassCheck usesClass = Class(
+        //check for the creating class creating the created creatingNode, which isnt the case
+        ClassCheck creatingClass = Class(
             Priority.Low,
             Creates(
                 Priority.Low,
-                usedClass.Result));
+                //the result of the createdClass, which is the creatingNode
+                createdClass.Result));
 
-        ICheckResult result = usesClass.Check(
+        ICheckResult result = creatingClass.Check(
             ctx,
-            usedNode);
+            createdNode);
 
         return Verifier.Verify(result);
     }
