@@ -49,9 +49,13 @@ internal class ConstructorCheck : CheckBase
                     subCheckResults.Add(typeCheck.Check(ctx, constructorEntity.GetParent()));
                     break;
                 }
-                case NotCheck:
+                case NotCheck notCheck:
                 {
-                    throw new NotImplementedException("Constructor Check was incorrect");
+                    subCheckResults.Add(
+                        notCheck.Check(
+                            ctx,
+                            constructorEntity));
+                    break;
                 }
                 case UsesCheck usesCheck:
                 {

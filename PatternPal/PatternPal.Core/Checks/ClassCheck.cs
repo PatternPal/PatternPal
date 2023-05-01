@@ -1,3 +1,6 @@
+using PatternPal.Recognizers.Models.Checks.Members;
+using SyntaxTree.Models.Members.Constructor;
+
 namespace PatternPal.Core.Checks;
 
 internal class ClassCheck : CheckBase
@@ -50,9 +53,21 @@ internal class ClassCheck : CheckBase
                     }
                     break;
                 }
-                case NotCheck:
+                case PropertyCheck propertyCheck:
                 {
-                    throw new NotImplementedException("Class Check was incorrect");
+                    foreach (IProperty property in classEntity.GetProperties())
+                    {
+                        subCheckResults.Add(propertyCheck.Check(ctx, property));
+                    }
+                    break;
+                }
+                case NotCheck notCheck:
+                {
+                    subCheckResults.Add(
+                        notCheck.Check(
+                            ctx,
+                            classEntity));
+                    break;
                 }
                 case UsesCheck usesCheck:
                 {
@@ -67,10 +82,10 @@ internal class ClassCheck : CheckBase
         }
 
         return new NodeCheckResult
-               {
-                   ChildrenCheckResults = subCheckResults,
-                   FeedbackMessage = $"Found class '{classEntity}'",
-                   Priority = Priority
-               };
+           {
+               ChildrenCheckResults = subCheckResults,
+               FeedbackMessage = $"Found class '{classEntity}'",
+               Priority = Priority
+           };
     }
 }
