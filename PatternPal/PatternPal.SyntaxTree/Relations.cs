@@ -237,7 +237,7 @@ namespace SyntaxTree
         }
 
         /// <summary>
-        /// Tries to get a method from a <see cref="SyntaxGraph"/> by mathcing the method's name to all methods in a specific class
+        /// Tries to get a method from a <see cref="SyntaxGraph"/> by matching the method's name to all methods in a specific class
         /// </summary>
         /// <param name="graph">The <see cref="SyntaxGraph"/> in which the method can be found.</param>
         /// <param name="className">The name of the class in which the method resides</param>
