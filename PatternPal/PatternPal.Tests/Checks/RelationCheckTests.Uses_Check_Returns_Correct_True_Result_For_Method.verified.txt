@@ -3,11 +3,11 @@
   Priority: Low,
   ChildrenCheckResults: [
     {
-      FeedbackMessage: Found uses relations for UsesFunction().,
+      FeedbackMessage: Found Uses relations for UsesFunction().,
       Priority: Low,
       ChildrenCheckResults: [
         {
-          FeedbackMessage: Node UsesFunction() correctly uses node UsedFunction(),
+          FeedbackMessage: Node UsesFunction() has a Uses relation with node UsedFunction(),
           Priority: Low,
           Correct: true
         }

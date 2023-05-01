@@ -3,7 +3,7 @@
 /// <summary>
 /// Checks for a property of an entity, depending on the list of <see cref="_checks"/> provided.
 /// The checks performed can be a collection of <see cref="TypeCheck"/>s, <see cref="ModifierCheck"/>s,
-/// <see cref="ParameterCheck"/>s, <see cref="UsesCheck"/>s, etc.
+/// <see cref="ParameterCheck"/>s, <see cref="RelationCheck"/>s, etc.
 /// </summary>
 internal class PropertyCheck : CheckBase
 {
@@ -55,9 +55,9 @@ internal class PropertyCheck : CheckBase
                     subCheckResults.Add(notCheck.Check(ctx, propertyEntity));
                     break;
                 }
-                case UsesCheck usesCheck:
+                case RelationCheck relationCheck:
                 {
-                    subCheckResults.Add(usesCheck.Check(ctx, propertyEntity));
+                    subCheckResults.Add(relationCheck.Check(ctx, propertyEntity));
                     break;
                 }
                 case ParameterCheck parameterCheck:

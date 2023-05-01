@@ -1,0 +1,17 @@
+﻿{
+  FeedbackMessage: Found class 'Child',
+  Priority: Low,
+  ChildrenCheckResults: [
+    {
+      FeedbackMessage: Found Extends relations for Child.,
+      Priority: Low,
+      ChildrenCheckResults: [
+        {
+          FeedbackMessage: Node Child has a Extends relation with node Parent,
+          Priority: Low,
+          Correct: true
+        }
+      ]
+    }
+  ]
+}

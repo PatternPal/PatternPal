@@ -1,0 +1,17 @@
+﻿{
+  FeedbackMessage: Found interface 'Child',
+  Priority: Low,
+  ChildrenCheckResults: [
+    {
+      FeedbackMessage: Found Implements relations for Child.,
+      Priority: Low,
+      ChildrenCheckResults: [
+        {
+          FeedbackMessage: Node Child has a Implements relation with node Parent,
+          Priority: Low,
+          Correct: true
+        }
+      ]
+    }
+  ]
+}

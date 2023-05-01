@@ -176,6 +176,51 @@ namespace PatternPal.Tests.Utils
                                  }
                                  """;
 
+            return CreateGraphFromInput(INPUT);
+        }
+
+        /// <summary>
+        /// Creates a SyntaxGraph containing an inheritance relation
+        /// </summary>
+        /// <returns>A <see cref="SyntaxGraph"/> to be used inside tests.</returns>
+        internal static SyntaxGraph CreateInheritanceRelation()
+        {
+            const string INPUT = """
+                                 public class Parent
+                                 {                                 
+                                 }
+                                 public class Child : Parent
+                                 {
+                                 }
+                                 """;
+
+            return CreateGraphFromInput(INPUT);
+        }
+
+        /// <summary>
+        /// Creates a SyntaxGraph containing an implementation relation
+        /// </summary>
+        /// <returns>A <see cref="SyntaxGraph"/> to be used inside tests.</returns>
+        internal static SyntaxGraph CreateImplementationRelation()
+        {
+            const string INPUT = """
+                                 public interface Parent
+                                 {                                 
+                                 }
+                                 public interface Child : Parent
+                                 {
+                                 }
+                                 """;
+
+            return CreateGraphFromInput(INPUT);
+        }
+
+        /// <summary>
+        /// Creates a SyntaxGraph from a string representing a file
+        /// </summary>
+        /// <returns>A <see cref="SyntaxGraph"/> to be used inside tests.</returns>
+        private static SyntaxGraph CreateGraphFromInput(string INPUT)
+        {
             SyntaxGraph graph = new();
 
             graph.AddFile(

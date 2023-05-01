@@ -7,11 +7,17 @@ internal class ClassCheck : CheckBase
 {
     private readonly IEnumerable< ICheck > _checks;
 
+    //A list of all found instances
+    internal List<INode> MatchedEntities { get; private set; }
+
     internal ClassCheck(Priority priority,
         IEnumerable<ICheck> checks) : base(priority)
     {
         _checks = checks;
+        MatchedEntities = new List<INode>();
     }
+
+    internal Func<List<INode>> Result => () => MatchedEntities;
 
     public override ICheckResult Check(
         RecognizerContext ctx,
@@ -69,9 +75,9 @@ internal class ClassCheck : CheckBase
                             classEntity));
                     break;
                 }
-                case UsesCheck usesCheck:
+                case RelationCheck relationCheck:
                 {
-                    subCheckResults.Add(usesCheck.Check(ctx, classEntity));
+                    subCheckResults.Add(relationCheck.Check(ctx, classEntity));
                     break;
                 }
                 default:
@@ -80,6 +86,8 @@ internal class ClassCheck : CheckBase
                         check);
             }
         }
+
+        MatchedEntities.Add(classEntity);
 
         return new NodeCheckResult
            {

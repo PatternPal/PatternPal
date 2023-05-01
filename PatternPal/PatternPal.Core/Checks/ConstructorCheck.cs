@@ -3,7 +3,7 @@
 /// <summary>
 /// Checks for a constructor of an entity, depending on the list of <see cref="_checks"/> provided.
 /// The checks performed can be a collection of <see cref="ModifierCheck"/>s,
-/// <see cref="ParameterCheck"/>s, <see cref="UsesCheck"/>s, etc.
+/// <see cref="ParameterCheck"/>s, <see cref="RelationCheck"/>s, etc.
 /// </summary>
 internal class ConstructorCheck : CheckBase
 {
@@ -57,9 +57,9 @@ internal class ConstructorCheck : CheckBase
                             constructorEntity));
                     break;
                 }
-                case UsesCheck usesCheck:
+                case RelationCheck relationCheck:
                 {
-                    subCheckResults.Add(usesCheck.Check(ctx, constructorEntity));
+                    subCheckResults.Add(relationCheck.Check(ctx, constructorEntity));
                     break;
                 }
                 case ParameterCheck parameterCheck:
