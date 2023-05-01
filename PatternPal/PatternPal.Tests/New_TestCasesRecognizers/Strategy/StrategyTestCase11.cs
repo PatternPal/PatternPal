@@ -60,7 +60,7 @@ namespace PatternPal.Tests.TestClasses.Strategy
     //Context
     file class CompressionContext
     {
-        /*private */ICompression Compression;
+        public ICompression Compression;
 
         public CompressionContext(ICompression Compression)
         {

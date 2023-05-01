@@ -32,13 +32,13 @@ namespace PatternPal.Tests.TestClasses.Strategy
      */
 
     //Strategy interface
-    internal abstract class Strategy
+    file abstract class Strategy
     {
         public abstract void AlgorithmInterface();
     }
 
     //Concrete strategy
-    internal class ConcreteA : Strategy
+    file class ConcreteA : Strategy
     {
         public override void AlgorithmInterface()
         {
@@ -47,7 +47,7 @@ namespace PatternPal.Tests.TestClasses.Strategy
     }
 
     //Concrete strategy
-    internal class ConcreteB : Strategy
+    file class ConcreteB : Strategy
     {
         public override void AlgorithmInterface()
         {
@@ -56,7 +56,7 @@ namespace PatternPal.Tests.TestClasses.Strategy
     }
 
     //Concrete strategy
-    internal class ConcreteC : Strategy
+    file class ConcreteC : Strategy
     {
         public override void AlgorithmInterface()
         {
@@ -65,7 +65,7 @@ namespace PatternPal.Tests.TestClasses.Strategy
     }
 
     //Context
-    internal class TheContext
+    file class TheContext
     {
         private readonly Strategy _strategy;
 
@@ -81,7 +81,7 @@ namespace PatternPal.Tests.TestClasses.Strategy
     }
 
     //Client
-    internal class TheClient
+    file class TheClient
     {
         public TheClient()
         {

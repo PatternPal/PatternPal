@@ -32,7 +32,7 @@ namespace PatternPal.Tests.TestClasses.Strategy
      */
 
     //Strategy interface
-    file abstract class Strategy
+    abstract file class Strategy
     {
         public abstract void AlgorithmInterface();
     }
@@ -56,9 +56,9 @@ namespace PatternPal.Tests.TestClasses.Strategy
     //}
 
     //Concrete strategy
-    file class ConcreteC : Strategy
+    file class ConcreteC
     {
-        public override void AlgorithmInterface()
+        public static void AlgorithmInterface()
         {
             Console.WriteLine("Called ConcreteC.AlgorithmInterface()");
         }
@@ -67,7 +67,7 @@ namespace PatternPal.Tests.TestClasses.Strategy
     //Context
     file class TheContext
     {
-        private readonly Strategy _strategy;
+        private Strategy _strategy;
 
         public TheContext(Strategy strategy)
         {
@@ -78,21 +78,25 @@ namespace PatternPal.Tests.TestClasses.Strategy
         {
             _strategy.AlgorithmInterface();
         }
+
+        public void SetStrategy(Strategy strategy)
+        {
+            _strategy = strategy;
+        }
+
+        public void Useless()
+        {
+            ConcreteC c = new ConcreteC();
+        }
     }
 
     //Client
     file class TheClient
     {
-        private string input = "A";
         private TheContext _theContext;
         public TheClient()
         {
-            _theContext = input switch
-            {
-                _ => new TheContext(new ConcreteC())
-            };
-
-            _theContext.ContextInterface();
+            _theContext.Useless();
         }
     }
 }

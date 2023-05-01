@@ -1,6 +1,5 @@
 ﻿namespace PatternPal.Tests.TestClasses.Singleton
 {
-    //This test is a possible "perfect" singleton implementation.
     /* Pattern:              Singleton
      * Original code source: -
      * 
@@ -19,43 +18,28 @@
      */
 
     //Singleton
-    public class SingleTonTestCase05
+    file class SingleTon
     {
-        private static SingleTonTestCase05 _instance;
+        private static SingleTon _instance;
 
-        private SingleTonTestCase05()
+        private SingleTon()
         {
         }
 
-        public static SingleTonTestCase05 GetInstance()
+        public static SingleTon Instance()
         {
-            if (_instance == null)
-            {
-                _instance = new SingleTonTestCase05();
-            }
+            _instance ??= new SingleTon();
 
             return _instance;
         }
-
-        public void DoSomething()
-        {
-
-        }
     }
-    
+
     //Client
-    public class SingleTonTestCase5User
+    file class SingleTonClient
     {
-        SingleTonTestCase05 instance;
-
-        public SingleTonTestCase5User()
+        SingleTonClient()
         {
-            instance = SingleTonTestCase05.GetInstance();
-        }
-
-        public void DoSomethingWithSingleton()
-        {
-            instance.DoSomething();
+            SingleTon.Instance();
         }
     }
 }
