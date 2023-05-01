@@ -90,7 +90,7 @@ namespace PatternPal.Tests.TestClasses.Strategy
     //Client
     file class Program
     {
-        static void Main(string[] args)
+        static void EntryPoint(string[] args)
         {
             var reports = new List<DeveloperReport>
             {

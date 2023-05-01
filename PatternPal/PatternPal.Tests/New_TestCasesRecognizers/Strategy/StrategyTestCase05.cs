@@ -91,7 +91,7 @@ namespace PatternPal.Tests.TestClasses.Strategy
     //Client
     class MainApp
     {
-        static void Main()
+        static void EntryPoint()
         {
             CalculateClient client = new CalculateClient(new Minus());
             Console.Write("Minus: " + client.Calculate(7, 1).ToString());

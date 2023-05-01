@@ -86,7 +86,7 @@ namespace PatternPal.Tests.TestClasses.Strategy
     //Client
     class Program
     {
-        static void Main(string[] args)
+        static void EntryPoint(string[] args)
         {
             // client picks the default concrete strategy:
             Console.WriteLine("Sorting strategy has been set to alphabetical:");

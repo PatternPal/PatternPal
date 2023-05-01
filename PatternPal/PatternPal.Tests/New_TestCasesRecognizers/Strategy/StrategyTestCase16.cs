@@ -117,7 +117,7 @@ namespace PatternPal.Tests.TestClasses.Strategy
     //Client
     file class Program
     {
-        static void Main(string[] args)
+        static void EntryPoint(string[] args)
         {
 
             TeamContext strat = new TeamContext(new TeamLogging());

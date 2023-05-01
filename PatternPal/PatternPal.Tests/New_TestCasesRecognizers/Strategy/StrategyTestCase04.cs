@@ -65,7 +65,7 @@ namespace PatternPal.Tests.TestClasses.Strategy
     //Client
     file class Program
     {
-        static void Main(string[] args)
+        static void EntryPoint(string[] args)
         {
             CompressionContext ctx = new CompressionContext(new RarCompression());
             ctx.CreateArchive("DotNetDesignPattern");

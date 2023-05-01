@@ -32,13 +32,13 @@ namespace PatternPal.Tests.TestClasses.Strategy
          */
 
     //Strategy interface
-    public interface ICompression_
+    file interface ICompression
     {
         void CompressFolder(string compressedArchiveFileName);
     }
 
     //Concrete strategy
-    public class RarCompression_ : ICompression_
+    file class RarCompression : ICompression
     {
         public void CompressFolder(string compressedArchiveFileName)
         {
@@ -48,7 +48,7 @@ namespace PatternPal.Tests.TestClasses.Strategy
     }
 
     //Concrete strategy
-    public class ZipCompression_ : ICompression_
+    file class ZipCompression : ICompression
     {
         public void CompressFolder(string compressedArchiveFileName)
         {
@@ -58,15 +58,15 @@ namespace PatternPal.Tests.TestClasses.Strategy
     }
 
     //Context
-    public class CompressionContext_
+    file class CompressionContext
     {
-        /*private */ICompression_ Compression;
+        /*private */ICompression Compression;
 
-        public CompressionContext_(ICompression_ Compression)
+        public CompressionContext(ICompression Compression)
         {
             this.Compression = Compression;
         }
-        public void SetStrategy(ICompression_ Compression)
+        public void SetStrategy(ICompression Compression)
         {
             this.Compression = Compression;
         }
@@ -77,13 +77,13 @@ namespace PatternPal.Tests.TestClasses.Strategy
     }
 
     //Client
-    class Program_
+    file class Program
     {
-        static void Main4(string[] args)
+        static void EntryPoint(string[] args)
         {
-            CompressionContext_ ctx = new CompressionContext_(new ZipCompression_());
+            CompressionContext ctx = new CompressionContext(new ZipCompression());
             ctx.CreateArchive("DotNetDesignPattern");
-            ctx.SetStrategy(new RarCompression_());
+            ctx.SetStrategy(new RarCompression());
             ctx.CreateArchive("DotNetDesignPattern");
             Console.Read();
         }

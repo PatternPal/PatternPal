@@ -33,7 +33,7 @@ namespace PatternPal.Tests.TestClasses.Strategy
          */
 
     //Needed extra classes
-    public class DeveloperReport
+    file class DeveloperReport
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -43,20 +43,20 @@ namespace PatternPal.Tests.TestClasses.Strategy
         public double CalculateSalary() => WorkingHours * HourlyRate;
     }
 
-    public enum DeveloperLevel
+    file enum DeveloperLevel
     {
         Senior,
         Junior
     }
 
     //Strategy interface
-    public interface ISalaryCalculator
+    file interface ISalaryCalculator
     {
         double CalculateTotalSalary(IEnumerable<DeveloperReport> reports);
     }
 
     //Concrete strategy
-    public class JuniorDevSalaryCalculator : ISalaryCalculator
+    file class JuniorDevSalaryCalculator : ISalaryCalculator
     {
         public double CalculateTotalSalary(IEnumerable<DeveloperReport> reports) =>
             reports
@@ -66,7 +66,7 @@ namespace PatternPal.Tests.TestClasses.Strategy
     }
 
     //Concrete strategy
-    public class SeniorDevSalaryCalculator : ISalaryCalculator
+    file class SeniorDevSalaryCalculator : ISalaryCalculator
     {
         public double CalculateTotalSalary(IEnumerable<DeveloperReport> reports) =>
             reports
@@ -76,7 +76,7 @@ namespace PatternPal.Tests.TestClasses.Strategy
     }
 
     //Context
-    public class SalaryCalculator
+    file class SalaryCalculator
     {
         private ISalaryCalculator _calculator;
         public SalaryCalculator(ISalaryCalculator calculator)
@@ -88,9 +88,9 @@ namespace PatternPal.Tests.TestClasses.Strategy
     }
 
     //Client
-    class Program6
+    file class Program
     {
-        static void Main6(string[] args)
+        static void EntryPoint(string[] args)
         {
             var reports = new List<DeveloperReport>
             {
