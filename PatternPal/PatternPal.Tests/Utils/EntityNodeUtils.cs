@@ -191,7 +191,7 @@ namespace PatternPal.Tests.Utils
             const string INPUT = """
                                  public class StringTest
                                  {
-                                    internal StringTest StringTestFunction()
+                                    internal StringTest StringTestFunction(IntTest testParam1, IntTest testParam2, StringTest testParam3)
                                     {
                                     }
                                  }

@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using System.Linq;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace PatternPal.Core.Checks;
 
@@ -51,10 +52,27 @@ internal class ParameterCheck : CheckBase
         // and if so remove from method parameters list.
         foreach (TypeCheck typecheck in _parameterTypes)
         {
+            bool noneCorrect = true;
+
+            // There are no parameters to check with.   
+            if (methodParameters.Count == 0)
+            {
+                // TODO
+                ICheckResult temp = new LeafCheckResult
+                {
+                    Priority = Priority,
+                    Correct = false,
+                    FeedbackMessage = "There are less parameters than TypeChecks"
+                };
+                subCheckResultsResults.Add(temp);
+                break;
+            }
+
             for (int x = 0; x < methodParameters.Count(); x++)
             {
-                ICheckResult tempCheck = typecheck.Check(ctx, methodParameters.ElementAt(x));
-                subCheckResultsResults.Add( tempCheck );
+                var test = methodParameters[x];
+                ICheckResult tempCheck;
+                tempCheck = typecheck.Check(ctx, methodParameters.ElementAt(x));
 
                 switch (tempCheck)
                 {
@@ -62,34 +80,46 @@ internal class ParameterCheck : CheckBase
                     {
                         if (leafCheckResult.Correct)
                         {
+                            subCheckResultsResults.Add(tempCheck);
                             methodParameters.RemoveAt(x);
+                            noneCorrect = false;
+                            break;
                         }
-                        break;
+                        continue;
                     }
                     case NodeCheckResult nodeCheckResult:
                     {
-                        bool anyCorrect = true;
+                        bool anyFalse = false;
                         foreach (LeafCheckResult subcheck in nodeCheckResult.ChildrenCheckResults)
                         {
                             // One of the subchecks was incorrect.
                             if (!subcheck.Correct)
                             {
-                                anyCorrect = false;
+                                anyFalse = true;
                             }
                         }
-                        if (!anyCorrect)
+                        if (anyFalse)
                         {
                             break;
                         }
                         else
                         {
+                            subCheckResultsResults.Add(tempCheck);
                             methodParameters.RemoveAt(x);
+                            noneCorrect = false;
                             break;
                         }
                     }
                 }
+
+                // reached the last iteration none were correct
+                if (x == methodParameters.Count() - 1 && noneCorrect)
+                {
+                    subCheckResultsResults.Add(tempCheck);
+                }
             }
         }
+
         // TODO feedback message
         return new NodeCheckResult
         {

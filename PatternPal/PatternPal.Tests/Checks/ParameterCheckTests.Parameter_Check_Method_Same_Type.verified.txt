@@ -1,1 +1,23 @@
-﻿
+﻿{
+  FeedbackMessage: Found method: IntTestFunction().,
+  Priority: Low,
+  ChildrenCheckResults: [
+    {
+      FeedbackMessage: ,
+      Priority: Low,
+      ChildrenCheckResults: [
+        {
+          FeedbackMessage: Found node 'StringTest',
+          Priority: Low,
+          ChildrenCheckResults: [
+            {
+              FeedbackMessage: Node 'StringTest' has correct type,
+              Priority: Low,
+              Correct: true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -11,18 +11,7 @@
           Priority: Low,
           ChildrenCheckResults: [
             {
-              FeedbackMessage: Node 'StringTest' has incorrect type, expected 'IntTestFunction()',
-              Priority: Low,
-              Correct: false
-            }
-          ]
-        },
-        {
-          FeedbackMessage: Found node 'StringTest',
-          Priority: Low,
-          ChildrenCheckResults: [
-            {
-              FeedbackMessage: Node 'StringTest' has incorrect type, expected 'StringTestFunction()',
+              FeedbackMessage: Node 'StringTest' has incorrect type, expected 'IntTest',
               Priority: Low,
               Correct: false
             }

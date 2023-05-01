@@ -1,4 +1,4 @@
-namespace PatternPal.Core.Checks;
+﻿namespace PatternPal.Core.Checks;
 
 /// <summary>
 /// Checks for a method of an entity, depending on the list of <see cref="_checks"/> provided.
@@ -54,7 +54,8 @@ internal class MethodCheck : CheckBase
                 case TypeCheck typeCheck:
 
                 {
-                    IEntity type = ctx.Graph.Relations.GetEntityByName(methodEntity.GetReturnType())!;
+                    IEntity type = 
+                        ctx.Graph.Relations.GetEntityByName(methodEntity.GetReturnType())!;
                     subCheckResults.Add(typeCheck.Check(ctx, type));
                     break;
                 }
@@ -76,8 +77,14 @@ internal class MethodCheck : CheckBase
                 }
                 case ParameterCheck parameterCheck:
                 {
-                    throw new NotImplementedException();
-                }
+                    IEntity methodParamaterTypes =
+                        ctx.Graph.Relations.GetEntityByName(methodEntity.GetReturnType());
+                    subCheckResults.Add(
+                        parameterCheck.Check(
+                            ctx,
+                            methodEntity));
+                    break;
+                    }
                 default:
                     throw CheckHelper.InvalidSubCheck(
                         this,
