@@ -26,28 +26,31 @@ internal class FieldCheck : CheckBase
     /// </summary>
     public override ICheckResult Check(RecognizerContext ctx, INode node)
     {
-        IField fieldEntity= CheckHelper.ConvertNodeElseThrow<IField>(node);
+        IField fieldEntity = CheckHelper.ConvertNodeElseThrow<IField>(node);
         IList<ICheckResult> subCheckResults = new List<ICheckResult>();
         
         foreach (ICheck check in _checks)
         {
-            ICheckResult checkResult;
             switch (check)
             {
                 case ModifierCheck modifierCheck:
-                    {
-                        checkResult = modifierCheck.Check(ctx, fieldEntity);
-                        break;
-                    }
+                {
+                    subCheckResults.Add(modifierCheck.Check(ctx, fieldEntity));
+                    break;
+                }
                 case TypeCheck typeCheck:
-                    {
-                        checkResult = typeCheck.Check(ctx, fieldEntity);
-                        break;
-                    }
+                {
+                    subCheckResults.Add(typeCheck.Check(ctx, fieldEntity));
+                    break;
+                }
+                case NotCheck notCheck:
+                {
+                    subCheckResults.Add(notCheck.Check(ctx, fieldEntity));
+                    break;
+                }
                 default:
                     throw CheckHelper.InvalidSubCheck(this, check);
             }
-            subCheckResults.Add(checkResult);
         }
         return new NodeCheckResult
         {

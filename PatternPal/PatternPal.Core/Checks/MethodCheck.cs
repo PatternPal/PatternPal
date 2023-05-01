@@ -1,4 +1,4 @@
-﻿namespace PatternPal.Core.Checks;
+namespace PatternPal.Core.Checks;
 
 /// <summary>
 /// Checks for a method of an entity, depending on the list of <see cref="_checks"/> provided.
@@ -44,22 +44,13 @@ internal class MethodCheck : CheckBase
             switch (check)
             {
                 case ModifierCheck modifierCheck:
-                    {
-                        subCheckResults.Add(
-                            modifierCheck.Check(
-                                ctx,
-                                methodEntity));
-                        break;
-                    }
-                case TypeCheck typeCheck:
-                    {
-                        //TODO return type needs to be obtained from the methodEntity
-                        throw new NotImplementedException();
-                    }
-                case NotCheck:
-                    {
-                        throw new NotImplementedException("Method Check was incorrect");
-                    }
+                {
+                    subCheckResults.Add(
+                        modifierCheck.Check(
+                            ctx,
+                            methodEntity));
+                    break;
+                } 
                 case RelationCheck relationCheck:
                     {
                         subCheckResults.Add(
@@ -68,10 +59,24 @@ internal class MethodCheck : CheckBase
                                 methodEntity));
                         break;
                     }
+                case TypeCheck typeCheck:
+                {
+                    IEntity type = ctx.Graph.Relations.GetEntityByName(methodEntity.GetReturnType())!;
+                    subCheckResults.Add(typeCheck.Check(ctx, type));
+                    break;
+                }
+                case NotCheck notCheck:
+                {
+                    subCheckResults.Add(
+                        notCheck.Check(
+                            ctx,
+                            methodEntity));
+                    break;
+                }
                 case ParameterCheck parameterCheck:
-                    {
-                        throw new NotImplementedException();
-                    }
+                {
+                    throw new NotImplementedException();
+                }
                 default:
                     throw CheckHelper.InvalidSubCheck(
                         this,

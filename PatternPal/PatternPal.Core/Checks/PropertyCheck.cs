@@ -45,13 +45,15 @@ internal class PropertyCheck : CheckBase
                     break;
                 }
                 case TypeCheck typeCheck:
-                { 
-                    //TODO return type needs to be obtained from the propertyEntity
-                    throw new NotImplementedException();
-                }
-                case NotCheck:
                 {
-                    throw new NotImplementedException("Property Check was incorrect");
+                    IEntity type = ctx.Graph.Relations.GetEntityByName(propertyEntity.GetPropertyType())!;
+                    subCheckResults.Add(typeCheck.Check(ctx, type));
+                    break;
+                }
+                case NotCheck notCheck:
+                {
+                    subCheckResults.Add(notCheck.Check(ctx, propertyEntity));
+                    break;
                 }
                 case RelationCheck relationCheck:
                 {
@@ -63,9 +65,7 @@ internal class PropertyCheck : CheckBase
                     throw new NotImplementedException();
                 }
                 default:
-                    throw CheckHelper.InvalidSubCheck(
-                        this,
-                        check);
+                    throw CheckHelper.InvalidSubCheck(this, check);
             }
         }
 
