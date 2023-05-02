@@ -28,12 +28,12 @@ internal class ParameterCheck : CheckBase
         RecognizerContext ctx,
         INode node)
     {
-        IMethod method = CheckHelper.ConvertNodeElseThrow<IMethod>(node);
+        IParameterized hasParameters = CheckHelper.ConvertNodeElseThrow<IParameterized>(node);
 
         // Retrieve the parameters the method has to compare to list of TypeChecks and convert to
         // IEntities.
         List< IEntity > methodParameters =
-            method.GetParameters().Select(x => ctx.Graph.Relations.GetEntityByName(x)).ToList();
+            hasParameters.GetParameters().Select(x => ctx.Graph.Relations.GetEntityByName(x)).ToList();
 
         List<ICheckResult> subCheckResultsResults = new List<ICheckResult>();
 

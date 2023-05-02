@@ -77,8 +77,6 @@ internal class MethodCheck : CheckBase
                 }
                 case ParameterCheck parameterCheck:
                 {
-                    IEntity methodParamaterTypes =
-                        ctx.Graph.Relations.GetEntityByName(methodEntity.GetReturnType());
                     subCheckResults.Add(
                         parameterCheck.Check(
                             ctx,

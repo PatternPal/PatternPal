@@ -64,11 +64,6 @@ internal class ConstructorCheck : CheckBase
                 }
                 case ParameterCheck parameterCheck:
                 {
-                    // TODO getParameters voor constructor.
-                    //throw new NotImplementedException();
-                    IEntity methodParamaterTypes = 
-                        ctx.Graph.Relations.GetEntityByName(
-                            constructorEntity.GetReturnType());
                     subCheckResults.Add(
                         parameterCheck.Check(
                             ctx, 

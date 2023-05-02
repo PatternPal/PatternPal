@@ -9,8 +9,6 @@ namespace SyntaxTree.Abstractions.Members
 
         IEnumerable<string> GetArguments();
 
-        TypeSyntax GetReturnType();
-
         IMethod AsMethod();
 
         new IClass GetParent();
