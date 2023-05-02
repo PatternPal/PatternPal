@@ -84,4 +84,24 @@ public class InterfaceCheckTests
 
         return Verifier.Verify(result);
     }
+
+    [Test]
+    public Task Interface_Check_Nested_Method_Check()
+    {
+        IInterface interfaceEntity = EntityNodeUtils.CreateInterface();
+
+        InterfaceCheck interfaceCheck = Interface(
+            Priority.Low,
+            Method(
+                Priority.Low,
+                Modifiers(
+                    Priority.Mid, Modifier.Public)));
+        RecognizerContext ctx = new();
+
+        ICheckResult result = interfaceCheck.Check(
+            ctx,
+            interfaceEntity);
+
+        return Verifier.Verify(result);
+    }
 }

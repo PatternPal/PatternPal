@@ -78,4 +78,26 @@ public class ClassCheckTests
 
         return Verifier.Verify(result);
     }
+
+    [Test]
+    public Task Class_Check_Nested_Method_Check()
+    {
+        IClass classEntity = EntityNodeUtils.CreateClass();
+
+        ClassCheck classCheck = Class(
+            Priority.Mid,
+            Method(
+                Priority.Mid,
+                Modifiers(
+                    Priority.Mid,
+                    Modifier.Internal)
+                ));
+        RecognizerContext ctx = new();
+
+        ICheckResult result = classCheck.Check(
+            ctx,
+            classEntity);
+
+        return Verifier.Verify(result);
+    }
 }
