@@ -110,7 +110,7 @@ internal static class CheckBuilder
     /// Creates a new <see cref="CheckCollection"/> of kind <see cref="CheckCollectionKind.Any"/>.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="CheckCollection"/>.</param>
-    /// <param name="checks"/>The sub-<see cref="ICheck"/>s of this <see cref="CheckCollection"/>.</param>
+    /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="CheckCollection"/>.</param>
     /// <returns>The created <see cref="CheckCollection"/>.</returns>
     internal static CheckCollection Any(
         Priority priority,
@@ -118,6 +118,16 @@ internal static class CheckBuilder
         priority,
         CheckCollectionKind.Any,
         checks );
+
+    /// <summary>
+    /// Creates a new <see cref="CheckCollection"/> of kind <see cref="CheckCollectionKind.All"/>
+    /// </summary>
+    /// <param name="priority">The <see cref="Priority"/> of this <see cref="CheckCollection"/>.</param>
+    /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="CheckCollection"/>.</param>
+    /// <returns>The created <see cref="CheckCollection"/>.</returns>
+    internal static CheckCollection All(
+        Priority priority,
+        params ICheck[] checks) => new(priority, CheckCollectionKind.All, checks);
 
     /// <summary>
     /// Creates a new <see cref="NotCheck"/>.
@@ -211,7 +221,7 @@ internal static class CheckBuilder
     /// Creates a new <see cref="ParameterCheck"/>.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="ParameterCheck"/>.</param>
-    /// <param name="modifiers"><see cref="TypeCheck"/>s which are used to check the parameters.</param>
+    /// <param name="parameterTypes"><see cref="TypeCheck"/>s which are used to check the parameters.</param>
     /// <returns>The created <see cref="ParameterCheck"/>.</returns>
     internal static ParameterCheck Parameters(
         Priority priority,

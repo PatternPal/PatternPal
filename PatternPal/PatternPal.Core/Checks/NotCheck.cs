@@ -15,7 +15,7 @@ internal class NotCheck : CheckBase
 
     /// <summary>
     /// This method executes all the given checks on the <paramref name="node"/>
-    /// In the subCheckResults the instances that fail the test will be stored. Thus the user should want to have an empty childrenCheckResult List.
+    /// In the subCheckResults the instances that fail the test will be stored. Thus the test succeeds when there is an empty childrenCheckResult List.
     /// </summary>
     public override ICheckResult Check(
         RecognizerContext ctx,

@@ -1,15 +1,22 @@
-using PatternPal.Recognizers.Models.Checks.Members;
+﻿using PatternPal.Recognizers.Models.Checks.Members;
 using SyntaxTree.Models.Members.Constructor;
 
 namespace PatternPal.Core.Checks;
-
+/// <summary>
+/// An instance in which a <see cref="IClass"/> entity can be evaluated with other <see cref="ICheck"/>s
+/// </summary>
 internal class ClassCheck : CheckBase
 {
     private readonly IEnumerable< ICheck > _checks;
 
-    //A list of all found instances
+    //A list of all instances
     internal List<INode> MatchedEntities { get; private set; }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ClassCheck"/>
+    /// </summary>
+    /// <param name="priority">Priority of the check</param>
+    /// <param name="checks">A list of subchecks that should be checked</param>
     internal ClassCheck(Priority priority,
         IEnumerable<ICheck> checks) : base(priority)
     {
@@ -19,6 +26,7 @@ internal class ClassCheck : CheckBase
 
     internal Func<List<INode>> Result => () => MatchedEntities;
 
+    /// <inheritdoc />
     public override ICheckResult Check(
         RecognizerContext ctx,
         INode node)
