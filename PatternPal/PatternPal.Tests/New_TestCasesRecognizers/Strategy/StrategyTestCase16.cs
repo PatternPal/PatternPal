@@ -5,7 +5,7 @@ using System.Text;
 namespace PatternPal.Tests.TestClasses.Strategy
 {
     /* Pattern:              Strategy
-     * Original code source: -
+     * Original code source: None
      * 
      * 
      * Requirements to fullfill the pattern:

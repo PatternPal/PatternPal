@@ -1,7 +1,7 @@
 ﻿namespace PatternPal.Tests.TestClasses.Singleton
 {
     /* Pattern:              Singleton
-     * Original code source: -
+     * Original code source: None
      * 
      * 
      * Requirements to fullfill the pattern:

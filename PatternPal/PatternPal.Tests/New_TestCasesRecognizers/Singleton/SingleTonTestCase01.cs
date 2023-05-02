@@ -2,7 +2,7 @@
 {
     //This test is a possible "perfect" singleton implementation.
     /* Pattern:              Singleton
-     * Original code source: -
+     * Original code source: None
      * 
      * 
      * Requirements to fullfill the pattern:
