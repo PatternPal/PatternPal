@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace SyntaxTree.Abstractions.Members
 {
@@ -7,6 +8,8 @@ namespace SyntaxTree.Abstractions.Members
         string GetConstructorType();
 
         IEnumerable<string> GetArguments();
+
+        TypeSyntax GetReturnType();
 
         IMethod AsMethod();
 

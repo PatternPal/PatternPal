@@ -60,11 +60,20 @@ internal class ConstructorCheck : CheckBase
                 case UsesCheck usesCheck:
                 {
                     subCheckResults.Add(usesCheck.Check(ctx, constructorEntity));
-                    break;
+                    break; 
                 }
                 case ParameterCheck parameterCheck:
                 {
-                    throw new NotImplementedException();
+                    // TODO getParameters voor constructor.
+                    //throw new NotImplementedException();
+                    IEntity methodParamaterTypes = 
+                        ctx.Graph.Relations.GetEntityByName(
+                            constructorEntity.GetReturnType());
+                    subCheckResults.Add(
+                        parameterCheck.Check(
+                            ctx, 
+                            constructorEntity));
+                        break;
                 }
                 default:
                     throw CheckHelper.InvalidSubCheck(

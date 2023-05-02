@@ -84,7 +84,7 @@ internal class MethodCheck : CheckBase
                             ctx,
                             methodEntity));
                     break;
-                    }
+                }
                 default:
                     throw CheckHelper.InvalidSubCheck(
                         this,
