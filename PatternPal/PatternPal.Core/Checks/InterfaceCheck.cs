@@ -7,6 +7,9 @@ internal class InterfaceCheck : CheckBase
 {
     private readonly IEnumerable< ICheck > _checks;
 
+    //A list of all found instances
+    internal List<INode> MatchedEntities { get; private set; }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="InterfaceCheck"/> class. 
     /// </summary>
@@ -18,11 +21,12 @@ internal class InterfaceCheck : CheckBase
         : base(priority)
     {
         _checks = checks;
+        MatchedEntities = new List<INode>();
     }
 
-    /// <summary>
-    /// This method executes all the given checks on the <paramref name="node"/>
-    /// </summary>
+    internal Func<List<INode>> Result => () => MatchedEntities;
+
+    /// <inheritdoc />
     public override ICheckResult Check(
         RecognizerContext ctx,
         INode node)
@@ -61,10 +65,10 @@ internal class InterfaceCheck : CheckBase
                             interfaceEntity));
                     break;
                 }
-                case UsesCheck usesCheck:
+                case RelationCheck relationCheck:
                 {
                     subCheckResults.Add(
-                        usesCheck.Check(
+                        relationCheck.Check(
                             ctx,
                             interfaceEntity));
                     break;
@@ -77,6 +81,9 @@ internal class InterfaceCheck : CheckBase
                 }
             }
         }
+
+        MatchedEntities.Add(interfaceEntity);
+
         return new NodeCheckResult
                {
                    ChildrenCheckResults = subCheckResults,

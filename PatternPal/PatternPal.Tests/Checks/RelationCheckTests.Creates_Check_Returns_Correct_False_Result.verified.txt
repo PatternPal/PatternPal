@@ -1,0 +1,17 @@
+﻿{
+  FeedbackMessage: Found class 'Used',
+  Priority: Low,
+  ChildrenCheckResults: [
+    {
+      FeedbackMessage: Found Creates relations for Used.,
+      Priority: Low,
+      ChildrenCheckResults: [
+        {
+          FeedbackMessage: No Creates relation found.,
+          Priority: Low,
+          Correct: false
+        }
+      ]
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-﻿using Microsoft.CodeAnalysis.VisualBasic;
+using Microsoft.CodeAnalysis.VisualBasic;
 
 using PatternPal.Recognizers.Models.Checks;
 
@@ -25,38 +25,32 @@ internal class FieldCheck : CheckBase
     }
 
     /// <summary>
-    /// This method executes all the given <see cref="ModifierCheck"/>s and <see cref="TypeCheck"/>s on the <paramref name="node"/>
+    /// This method executes all the given <see cref="ModifierCheck"/>s, <see cref="NotCheck"/>s and <see cref="TypeCheck"/>s on the <paramref name="node"/>
     /// </summary>
     public override ICheckResult Check(
         RecognizerContext ctx,
         INode node)
     {
-        IField fieldEntity = CheckHelper.ConvertNodeElseThrow< IField >(node);
-        IList< ICheckResult > subCheckResults = new List< ICheckResult >();
-
+        IField fieldEntity = CheckHelper.ConvertNodeElseThrow<IField>(node);
+        IList<ICheckResult> subCheckResults = new List<ICheckResult>();
+        
         foreach (ICheck check in _checks)
         {
-            ICheckResult checkResult;
             switch (check)
             {
                 case ModifierCheck modifierCheck:
                 {
-                    checkResult = modifierCheck.Check(
-                        ctx,
-                        fieldEntity);
+                    subCheckResults.Add(modifierCheck.Check(ctx, fieldEntity));
                     break;
                 }
                 case TypeCheck typeCheck:
                 {
-                    IEntity fieldTypeEntity = ctx.Graph.Relations.GetEntityByName(fieldEntity.GetFieldType());
-                    if (fieldTypeEntity is null)
-                    {
-                        throw new ArgumentException($"Cannot find entity for field type of field '{fieldEntity}'");
-                    }
-
-                    checkResult = typeCheck.Check(
-                        ctx,
-                        fieldTypeEntity);
+                    subCheckResults.Add(typeCheck.Check(ctx, fieldEntity));
+                    break;
+                }
+                case NotCheck notCheck:
+                {
+                    subCheckResults.Add(notCheck.Check(ctx, fieldEntity));
                     break;
                 }
                 default:
@@ -64,7 +58,6 @@ internal class FieldCheck : CheckBase
                         this,
                         check);
             }
-            subCheckResults.Add(checkResult);
         }
         return new NodeCheckResult
                {

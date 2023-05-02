@@ -1,0 +1,17 @@
+﻿{
+  FeedbackMessage: Found method: UsesFunction().,
+  Priority: Low,
+  ChildrenCheckResults: [
+    {
+      FeedbackMessage: Found Uses relations for UsesFunction().,
+      Priority: Low,
+      ChildrenCheckResults: [
+        {
+          FeedbackMessage: Node UsesFunction() has a Uses relation with node UsedFunction(),
+          Priority: Low,
+          Correct: true
+        }
+      ]
+    }
+  ]
+}

@@ -3,7 +3,7 @@
 /// <summary>
 /// Checks for a property of an entity, depending on the list of <see cref="_checks"/> provided.
 /// The checks performed can be a collection of <see cref="TypeCheck"/>s, <see cref="ModifierCheck"/>s,
-/// <see cref="ParameterCheck"/>s, <see cref="UsesCheck"/>s, etc.
+/// <see cref="ParameterCheck"/>s, <see cref="RelationCheck"/>s, etc.
 /// </summary>
 internal class PropertyCheck : CheckBase
 {
@@ -25,9 +25,9 @@ internal class PropertyCheck : CheckBase
         _checks = checks;
     }
 
-    /// <summary>
-    /// This method executes all the given checks on the <paramref name="node"/>
-    /// </summary>
+    internal Func<List<INode>> Result => () => MatchedEntities;
+
+    /// <inheritdoc />
     public override ICheckResult Check(
         RecognizerContext ctx,
         INode node)
@@ -45,17 +45,19 @@ internal class PropertyCheck : CheckBase
                     break;
                 }
                 case TypeCheck typeCheck:
-                { 
-                    //TODO return type needs to be obtained from the propertyEntity
-                    throw new NotImplementedException();
-                }
-                case NotCheck:
                 {
-                    throw new NotImplementedException("Property Check was incorrect");
+                    IEntity type = ctx.Graph.Relations.GetEntityByName(propertyEntity.GetPropertyType())!;
+                    subCheckResults.Add(typeCheck.Check(ctx, type));
+                    break;
                 }
-                case UsesCheck usesCheck:
+                case NotCheck notCheck:
                 {
-                    subCheckResults.Add(usesCheck.Check(ctx, propertyEntity));
+                    subCheckResults.Add(notCheck.Check(ctx, propertyEntity));
+                    break;
+                }
+                case RelationCheck relationCheck:
+                {
+                    subCheckResults.Add(relationCheck.Check(ctx, propertyEntity));
                     break;
                 }
                 case ParameterCheck parameterCheck:
@@ -63,9 +65,7 @@ internal class PropertyCheck : CheckBase
                     throw new NotImplementedException();
                 }
                 default:
-                    throw CheckHelper.InvalidSubCheck(
-                        this,
-                        check);
+                    throw CheckHelper.InvalidSubCheck(this, check);
             }
         }
 

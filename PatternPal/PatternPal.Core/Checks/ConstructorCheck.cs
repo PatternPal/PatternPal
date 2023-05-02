@@ -3,7 +3,7 @@
 /// <summary>
 /// Checks for a constructor of an entity, depending on the list of <see cref="_checks"/> provided.
 /// The checks performed can be a collection of <see cref="ModifierCheck"/>s,
-/// <see cref="ParameterCheck"/>s, <see cref="UsesCheck"/>s, etc.
+/// <see cref="ParameterCheck"/>s, <see cref="RelationCheck"/>s, etc.
 /// </summary>
 internal class ConstructorCheck : CheckBase
 {
@@ -25,9 +25,9 @@ internal class ConstructorCheck : CheckBase
         _checks = checks;
     }
 
-    /// <summary>
-    /// This method executes all the given checks on the <paramref name="node"/>
-    /// </summary>
+    internal Func<List<INode>> Result => () => MatchedEntities;
+
+    /// <inheritdoc />
     public override ICheckResult Check(
         RecognizerContext ctx,
         INode node)
@@ -49,13 +49,17 @@ internal class ConstructorCheck : CheckBase
                     subCheckResults.Add(typeCheck.Check(ctx, constructorEntity.GetParent()));
                     break;
                 }
-                case NotCheck:
+                case NotCheck notCheck:
                 {
-                    throw new NotImplementedException("Constructor Check was incorrect");
+                    subCheckResults.Add(
+                        notCheck.Check(
+                            ctx,
+                            constructorEntity));
+                    break;
                 }
-                case UsesCheck usesCheck:
+                case RelationCheck relationCheck:
                 {
-                    subCheckResults.Add(usesCheck.Check(ctx, constructorEntity));
+                    subCheckResults.Add(relationCheck.Check(ctx, constructorEntity));
                     break;
                 }
                 case ParameterCheck parameterCheck:

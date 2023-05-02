@@ -1,9 +1,9 @@
-﻿namespace PatternPal.Core.Checks;
+namespace PatternPal.Core.Checks;
 
 /// <summary>
 /// Checks for a method of an entity, depending on the list of <see cref="_checks"/> provided.
 /// The checks performed can be a collection of <see cref="TypeCheck"/>s, <see cref="ModifierCheck"/>s,
-/// <see cref="ParameterCheck"/>s, <see cref="UsesCheck"/>s, etc.
+/// <see cref="ParameterCheck"/>s, <see cref="RelationCheck"/>s, etc.
 /// </summary>
 internal class MethodCheck : CheckBase
 {
@@ -29,9 +29,7 @@ internal class MethodCheck : CheckBase
 
     internal Func< List< INode > > Result => () => MatchedEntities;
 
-    /// <summary>
-    /// This method executes all the given checks on the <paramref name="node"/>
-    /// </summary>
+    /// <inheritdoc />
     public override ICheckResult Check(
         RecognizerContext ctx,
         INode node)
@@ -50,21 +48,25 @@ internal class MethodCheck : CheckBase
                             ctx,
                             methodEntity));
                     break;
+                } 
+                case RelationCheck relationCheck:
+                {
+                    subCheckResults.Add(
+                        relationCheck.Check(
+                            ctx,
+                            methodEntity));
+                    break;
                 }
                 case TypeCheck typeCheck:
                 {
-                    //TODO return type needs to be obtained from the methodEntity
-                    throw new NotImplementedException();
-                }
-                case NotCheck:
-                {
+                    IEntity type = ctx.Graph.Relations.GetEntityByName(methodEntity.GetReturnType())!;
+                    subCheckResults.Add(typeCheck.Check(ctx, type));
                     break;
-                    throw new NotImplementedException("Method Check was incorrect");
                 }
-                case UsesCheck usesCheck:
+                case NotCheck notCheck:
                 {
                     subCheckResults.Add(
-                        usesCheck.Check(
+                        notCheck.Check(
                             ctx,
                             methodEntity));
                     break;
