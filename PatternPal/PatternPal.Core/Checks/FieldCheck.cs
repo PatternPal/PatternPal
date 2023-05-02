@@ -22,7 +22,7 @@ internal class FieldCheck : CheckBase
     }
 
     /// <summary>
-    /// This method executes all the given <see cref="ModifierCheck"/>s and <see cref="TypeCheck"/>s on the <paramref name="node"/>
+    /// This method executes all the given <see cref="ModifierCheck"/>s, <see cref="NotCheck"/>s and <see cref="TypeCheck"/>s on the <paramref name="node"/>
     /// </summary>
     public override ICheckResult Check(RecognizerContext ctx, INode node)
     {

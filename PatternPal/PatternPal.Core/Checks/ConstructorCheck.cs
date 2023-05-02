@@ -25,9 +25,9 @@ internal class ConstructorCheck : CheckBase
         _checks = checks;
     }
 
-    /// <summary>
-    /// This method executes all the given checks on the <paramref name="node"/>
-    /// </summary>
+    internal Func<List<INode>> Result => () => MatchedEntities;
+
+    /// <inheritdoc />
     public override ICheckResult Check(
         RecognizerContext ctx,
         INode node)

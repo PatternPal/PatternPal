@@ -1,4 +1,4 @@
-namespace PatternPal.Core.Checks;
+﻿namespace PatternPal.Core.Checks;
 
 /// <summary>
 /// Checks for a method of an entity, depending on the list of <see cref="_checks"/> provided.
@@ -29,9 +29,7 @@ internal class MethodCheck : CheckBase
 
     internal Func<List<INode>> Result => () => MatchedEntities;
 
-    /// <summary>
-    /// This method executes all the given checks on the <paramref name="node"/>
-    /// </summary>
+    /// <inheritdoc />
     public override ICheckResult Check(
         RecognizerContext ctx,
         INode node)
@@ -52,13 +50,13 @@ internal class MethodCheck : CheckBase
                     break;
                 } 
                 case RelationCheck relationCheck:
-                    {
-                        subCheckResults.Add(
-                            relationCheck.Check(
-                                ctx,
-                                methodEntity));
-                        break;
-                    }
+                {
+                    subCheckResults.Add(
+                        relationCheck.Check(
+                            ctx,
+                            methodEntity));
+                    break;
+                }
                 case TypeCheck typeCheck:
                 {
                     IEntity type = ctx.Graph.Relations.GetEntityByName(methodEntity.GetReturnType())!;
