@@ -1,8 +1,5 @@
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.CodeAnalysis;
 using NUnit.Framework;
-using SyntaxTree;
 
 namespace PatternPal.Tests.Core
 {

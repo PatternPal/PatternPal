@@ -17,14 +17,6 @@ namespace PatternPal.Recognizers.Models.ElementChecks
 
         private readonly float _score;
 
-        public ElementCheck(Predicate<T> predicate, string description, float score = 1, CheckType checkType = CheckType.Optional)
-        {
-            _predicate = predicate;
-            _feedback = new ResourceMessage(description);
-            _score = score;
-            _checkType = checkType;
-        }
-
         public ElementCheck(Predicate<T> predicate, IResourceMessage feedback, float score = 1, CheckType checkType = CheckType.Optional)
         {
             _predicate = predicate;
@@ -32,10 +24,6 @@ namespace PatternPal.Recognizers.Models.ElementChecks
             _score = score;
             _checkType = checkType;
         }
-
-        public ElementCheck(Predicate<T> predicate, string description, CheckType checkType) : this(predicate, description, 1, checkType) { }
-
-        public ElementCheck(Predicate<T> predicate, IResourceMessage feedback, CheckType checkType) : this(predicate, feedback, 1, checkType) { }
 
         public ICheckResult Check(T elementToCheck)
         {

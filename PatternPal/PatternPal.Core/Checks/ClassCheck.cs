@@ -1,14 +1,23 @@
-﻿namespace PatternPal.Core.Checks;
+using PatternPal.Recognizers.Models.Checks.Members;
+using SyntaxTree.Models.Members.Constructor;
+
+namespace PatternPal.Core.Checks;
 
 internal class ClassCheck : CheckBase
 {
     private readonly IEnumerable< ICheck > _checks;
 
-    internal ClassCheck(Priority priority, 
+    //A list of all found instances
+    internal List<INode> MatchedEntities { get; private set; }
+
+    internal ClassCheck(Priority priority,
         IEnumerable<ICheck> checks) : base(priority)
     {
         _checks = checks;
+        MatchedEntities = new List<INode>();
     }
+
+    internal Func<List<INode>> Result => () => MatchedEntities;
 
     public override ICheckResult Check(
         RecognizerContext ctx,
@@ -16,7 +25,6 @@ internal class ClassCheck : CheckBase
     {
         IClass classEntity = CheckHelper.ConvertNodeElseThrow< IClass >(node);
 
-        bool hasFailedSubCheck = false;
         IList< ICheckResult > subCheckResults = new List< ICheckResult >();
         foreach (ICheck check in _checks)
         {
@@ -24,79 +32,52 @@ internal class ClassCheck : CheckBase
             {
                 case ModifierCheck modifierCheck:
                 {
-                    ICheckResult subCheckResult = modifierCheck.Check(
-                        ctx,
-                        classEntity);
-                    subCheckResults.Add(subCheckResult);
-                    hasFailedSubCheck = hasFailedSubCheck || !subCheckResult.Correctness;
+                    subCheckResults.Add(modifierCheck.Check(ctx, classEntity));
                     break;
                 }
                 case MethodCheck methodCheck:
                 {
-                    bool hasMatch = false;
                     foreach (IMethod method in classEntity.GetMethods())
                     {
-                        if (methodCheck.Check(
-                            ctx,
-                            method).Correctness)
-                        {
-                            hasMatch = true;
-                            break;
-                        }
-                    }
-                    if (!hasMatch)
-                    {
-                        throw new NotImplementedException("Class Check was incorrect");
+                        subCheckResults.Add(methodCheck.Check(ctx, method));
                     }
                     break;
                 }
                 case FieldCheck fieldCheck:
                 {
-                    bool hasMatch = false;
                     foreach (IField field in classEntity.GetFields())
                     {
-                        if (fieldCheck.Check(
-                            ctx,
-                            field).Correctness)
-                        {
-                            hasMatch = true;
-                            break;
-                        }
-                    }
-                    if (!hasMatch)
-                    {
-                        throw new NotImplementedException("Class Check was incorrect");
+                        subCheckResults.Add(fieldCheck.Check(ctx, field));
                     }
                     break;
                 }
                 case ConstructorCheck constructorCheck:
                 {
-                    bool hasMatch = false;
                     foreach (IConstructor constructor in classEntity.GetConstructors())
                     {
-                        if (constructorCheck.Check(
-                            ctx,
-                            constructor).Correctness)
-                        {
-                            hasMatch = true;
-                            break;
-                        }
-                    }
-                    if (!hasMatch)
-                    {
-                        throw new NotImplementedException("Class Check was incorrect");
+                        subCheckResults.Add(constructorCheck.Check(ctx, constructor));
                     }
                     break;
                 }
-                case NotCheck:
+                case PropertyCheck propertyCheck:
                 {
-                    if (!check.Check(
-                        ctx,
-                        node).Correctness)
+                    foreach (IProperty property in classEntity.GetProperties())
                     {
-                        throw new NotImplementedException("Class Check was incorrect");
+                        subCheckResults.Add(propertyCheck.Check(ctx, property));
                     }
-
+                    break;
+                }
+                case NotCheck notCheck:
+                {
+                    subCheckResults.Add(
+                        notCheck.Check(
+                            ctx,
+                            classEntity));
+                    break;
+                }
+                case RelationCheck relationCheck:
+                {
+                    subCheckResults.Add(relationCheck.Check(ctx, classEntity));
                     break;
                 }
                 default:
@@ -106,12 +87,13 @@ internal class ClassCheck : CheckBase
             }
         }
 
+        MatchedEntities.Add(classEntity);
+
         return new NodeCheckResult
-               {
-                   ChildrenCheckResults = subCheckResults,
-                   Correctness = !hasFailedSubCheck,
-                   FeedbackMessage = $"Found class '{classEntity}'",
-                   Priority = Priority.Knockout,
-               };
+           {
+               ChildrenCheckResults = subCheckResults,
+               FeedbackMessage = $"Found class '{classEntity}'",
+               Priority = Priority
+           };
     }
 }

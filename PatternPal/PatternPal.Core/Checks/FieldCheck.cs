@@ -3,68 +3,60 @@ using PatternPal.Recognizers.Models.Checks;
 
 namespace PatternPal.Core.Checks;
 
+/// <summary>
+/// An instance in which you can execute <see cref="ModifierCheck"/>s and <see cref="TypeCheck"/>s via a list of <see cref="_checks"/> on a field.
+/// </summary>
 internal class FieldCheck : CheckBase
 {
     private readonly IEnumerable<ICheck> _checks;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FieldCheck"/> class. 
+    /// </summary>
+    /// <param name="priority">Priority of the check.</param>
+    /// <param name="checks">A list of subchecks that should be tested</param>
     internal FieldCheck(Priority priority, 
         IEnumerable<ICheck> checks) : base(priority)
     {
         _checks = checks;
     }
 
+    /// <summary>
+    /// This method executes all the given <see cref="ModifierCheck"/>s and <see cref="TypeCheck"/>s on the <paramref name="node"/>
+    /// </summary>
     public override ICheckResult Check(RecognizerContext ctx, INode node)
     {
-        if (node is not IField field)
-        {
-            throw new NotImplementedException("Field check was incorrect");
-        }
-
-        foreach (ICheck check in _checks) 
+        IField fieldEntity = CheckHelper.ConvertNodeElseThrow<IField>(node);
+        IList<ICheckResult> subCheckResults = new List<ICheckResult>();
+        
+        foreach (ICheck check in _checks)
         {
             switch (check)
             {
                 case ModifierCheck modifierCheck:
-                    {
-                        bool hasMatch = false;
-                        foreach (IModified modified in field.GetModifiers())
-                        {
-                            if (modifierCheck.Check
-                                (ctx,
-                                modified).Correctness)
-                            {
-                                hasMatch = true;
-                                break;
-                            }
-                        }
-                        if (!hasMatch)
-                        {
-                            throw new NotImplementedException("Modifier check was incorrect");
-                        }
-                        break;
-                    }
+                {
+                    subCheckResults.Add(modifierCheck.Check(ctx, fieldEntity));
+                    break;
+                }
                 case TypeCheck typeCheck:
-                    {
-                        if (!check.Check(ctx, node).Correctness)
-                        {
-                            throw new NotImplementedException("Type check was incorrect");
-                        }
-                        break;
-                    }
-                case FieldCheck fieldCheck:
-                    {
-                        throw new NotImplementedException("Field check is not yet implemented");
-                    }
+                {
+                    subCheckResults.Add(typeCheck.Check(ctx, fieldEntity));
+                    break;
+                }
+                case NotCheck notCheck:
+                {
+                    subCheckResults.Add(notCheck.Check(ctx, fieldEntity));
+                    break;
+                }
                 default:
-                    {
-                        Console.WriteLine($"Unexpected check: {check.GetType().Name}");
-                        break;
-                    }
+                    throw CheckHelper.InvalidSubCheck(this, check);
             }
-            //Kan weg denk ik
-            //if (!check.Check(ctx, node).Correctness) throw new NotImplementedException("Field Check was incorrect");
         }
-
-        Console.WriteLine($"Got field {field}");
-        throw new NotImplementedException("Field check was correct");
+        return new NodeCheckResult
+        {
+            ChildrenCheckResults = subCheckResults,
+            FeedbackMessage = $"Found field '{fieldEntity}'",
+            Priority = Priority
+        };
     }
 }

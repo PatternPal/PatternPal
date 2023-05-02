@@ -194,7 +194,7 @@ namespace SyntaxTree
         /// </summary>
         /// <param name="syntaxNode">The SyntaxNode from which we want the belonging IEntity instance.</param>
         /// <returns></returns>
-        private IEntity ? GetEntityByName(
+        public IEntity ? GetEntityByName(
             SyntaxNode syntaxNode)
         {
             SemanticModel semanticModel = SemanticModels.GetSemanticModel(
@@ -203,7 +203,16 @@ namespace SyntaxTree
 
             SymbolInfo symbol = semanticModel.GetSymbolInfo(syntaxNode);
 
-            TypeDeclarationSyntax ? entityDeclaration = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as TypeDeclarationSyntax;
+            TypeDeclarationSyntax? entityDeclaration;
+
+            if (syntaxNode.Parent is MemberAccessExpressionSyntax && symbol.Symbol is IFieldSymbol fieldSymbol)
+            {
+                entityDeclaration = fieldSymbol.Type.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as TypeDeclarationSyntax;
+            }
+            else
+            {
+                entityDeclaration = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as TypeDeclarationSyntax;
+            }
 
             return _entities.FirstOrDefault(x => x.GetSyntaxNode().IsEquivalentTo(entityDeclaration));
         }
@@ -213,7 +222,7 @@ namespace SyntaxTree
         /// </summary>
         /// <param name="methodNode">The SyntaxNode from which we want the belonging Method instance.</param>
         /// <returns></returns>
-        private IMethod GetMethodByName(
+        private IMethod ? GetMethodByName(
             SyntaxNode methodNode)
         {
             SemanticModel semanticModel = SemanticModels.GetSemanticModel(
@@ -222,9 +231,21 @@ namespace SyntaxTree
 
             SymbolInfo symbol = semanticModel.GetSymbolInfo(methodNode);
 
-            MethodDeclarationSyntax methodDeclaration = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as MethodDeclarationSyntax;
+            MethodDeclarationSyntax? methodDeclaration = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as MethodDeclarationSyntax;
 
-            return _methods.FirstOrDefault(x => x.GetSyntaxNode().Equals(methodDeclaration));
+            return _methods.FirstOrDefault(x => x.GetSyntaxNode().IsEquivalentTo(methodDeclaration));
+        }
+
+        /// <summary>
+        /// Tries to get a method from a <see cref="SyntaxGraph"/> by matching the method's name to all methods in a specific class
+        /// </summary>
+        /// <param name="graph">The <see cref="SyntaxGraph"/> in which the method can be found.</param>
+        /// <param name="className">The name of the class in which the method resides</param>
+        /// <param name="methodName">The name of the method</param>
+        /// <returns></returns>
+        public static IMethod ? GetMethodFromGraph(SyntaxGraph graph, string className, string methodName)
+        {
+            return graph.GetAll()[className].GetMethods().FirstOrDefault(x => x.GetName() == methodName);
         }
 
         /// <summary>
@@ -324,7 +345,7 @@ namespace SyntaxTree
 
             foreach (IdentifierNameSyntax identifier in childNodes.OfType< IdentifierNameSyntax >())
             {
-                INode node2 = (INode)GetEntityByName(identifier) ?? GetMethodByName(identifier);
+                INode node2 = (INode?)GetEntityByName(identifier) ?? GetMethodByName(identifier);
 
                 AddRelation(
                     node,

@@ -36,4 +36,16 @@
     </Compile>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Checks\RelationCheckTests.Uses_Check_Returns_Correct_False_Result.verified.txt">
+      <DependentUpon>RelationCheckTests.cs</DependentUpon>
+    </None>
+    <None Update="Checks\RelationCheckTests.Uses_Check_Returns_Correct_True_Result_For_Entity.verified.txt">
+      <DependentUpon>RelationCheckTests.cs</DependentUpon>
+    </None>
+    <None Update="Checks\RelationCheckTests.Uses_Check_Returns_Correct_True_Result_For_Method.verified.txt">
+      <DependentUpon>RelationCheckTests.cs</DependentUpon>
+    </None>
+  </ItemGroup>
+
 </Project>

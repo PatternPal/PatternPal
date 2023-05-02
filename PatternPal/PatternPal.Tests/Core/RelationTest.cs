@@ -1,8 +1,5 @@
-﻿using System.Linq;
+﻿using NUnit.Framework;
 
-using NUnit.Framework;
-using SyntaxTree;
-using SyntaxTree.Abstractions;
 using SyntaxTree.Models.Members.Method;
 
 namespace PatternPal.Tests.Core

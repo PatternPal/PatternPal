@@ -1,0 +1,17 @@
+﻿{
+  FeedbackMessage: Found class 'Uses',
+  Priority: Low,
+  ChildrenCheckResults: [
+    {
+      FeedbackMessage: Found Creates relations for Uses.,
+      Priority: Low,
+      ChildrenCheckResults: [
+        {
+          FeedbackMessage: Node Uses has a Creates relation with node Used,
+          Priority: Low,
+          Correct: true
+        }
+      ]
+    }
+  ]
+}

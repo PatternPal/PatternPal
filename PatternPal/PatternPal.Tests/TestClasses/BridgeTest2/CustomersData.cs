@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace PatternPal.Tests.TestClasses.BridgeTest2
+﻿namespace PatternPal.Tests.TestClasses.BridgeTest2
 {
     /// <summary>
     /// The 'ConcreteImplementor' class

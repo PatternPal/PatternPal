@@ -1,14 +1,16 @@
-using System.Collections.Generic;
-using System.Linq;
+﻿#region
 
 using Microsoft.CodeAnalysis;
 
-using SyntaxTree.Abstractions;
 using SyntaxTree.Abstractions.Root;
+using SyntaxTree.Models.Members.Constructor;
 using SyntaxTree.Models.Members.Field;
 using SyntaxTree.Models.Members.Method;
+using SyntaxTree.Models.Members.Property;
 using SyntaxTree.Models.Root;
 using SyntaxTree.Utils;
+
+#endregion
 
 namespace PatternPal.Tests.Utils
 {
@@ -80,6 +82,17 @@ namespace PatternPal.Tests.Utils
                 GetClassDeclaration(),
                 new TestRoot());
 
+        /// <summary>
+        /// Creates an <see cref="IInterface"/> instance which can be used in tests.
+        /// </summary>
+        internal static IInterface CreateInterface() =>
+            new Interface(
+                GetInterfaceDeclaration(),
+                new TestRoot());
+
+        /// <summary>
+        /// Creates a <see cref="INamespace"/> instance which can be used in tests.
+        /// </summary>
         internal static INamespace CreateNamespace() =>
             new Namespace(
                 GetNamespaceDeclaration(),
@@ -104,6 +117,120 @@ namespace PatternPal.Tests.Utils
                     new TestRoot()));
         }
 
+        internal static IConstructor CreateConstructor()
+        {
+            ClassDeclarationSyntax classDeclaration = GetClassDeclaration();
+            ConstructorDeclarationSyntax constructorSyntax = classDeclaration.DescendantNodes(_ => true).OfType<ConstructorDeclarationSyntax>().First();
+            if (constructorSyntax is null)
+            {
+                Assert.Fail();
+            }
+
+            return new Constructor(
+                constructorSyntax,
+                new Class(
+                    classDeclaration,
+                    new TestRoot()));
+        }
+
+        /// <summary>
+        /// Creates an <see cref="IProperty"/> instance which can be used in tests.
+        /// </summary>
+        internal static IProperty CreateProperty()
+        {
+            ClassDeclarationSyntax classDeclaration = GetClassDeclaration();
+            PropertyDeclarationSyntax propertySyntax = classDeclaration.DescendantNodes(_ => true).OfType<PropertyDeclarationSyntax>().First();
+            if (propertySyntax is null)
+            {
+                Assert.Fail();
+            }
+
+            return new Property(
+                propertySyntax,
+                new Class(
+                    classDeclaration,
+                    new TestRoot()));
+        }
+
+        /// <summary>
+        /// Creates a SyntaxGraph containing a uses relation
+        /// </summary>
+        /// <returns>A <see cref="SyntaxGraph"/> to be used inside tests.</returns>
+        internal static SyntaxGraph CreateUsesRelation()
+        {
+            const string INPUT = """
+                                 public class Uses
+                                 {
+                                     private Used used = new();
+
+                                     internal void UsesFunction()
+                                     {
+                                         used.UsedFunction();
+                                     }
+                                 }
+                                 public class Used
+                                 {
+                                     internal void UsedFunction()
+                                     {
+                                     }
+                                 }
+                                 """;
+
+            return CreateGraphFromInput(INPUT);
+        }
+
+        /// <summary>
+        /// Creates a SyntaxGraph containing an inheritance relation
+        /// </summary>
+        /// <returns>A <see cref="SyntaxGraph"/> to be used inside tests.</returns>
+        internal static SyntaxGraph CreateInheritanceRelation()
+        {
+            const string INPUT = """
+                                 public class Parent
+                                 {                                 
+                                 }
+                                 public class Child : Parent
+                                 {
+                                 }
+                                 """;
+
+            return CreateGraphFromInput(INPUT);
+        }
+
+        /// <summary>
+        /// Creates a SyntaxGraph containing an implementation relation
+        /// </summary>
+        /// <returns>A <see cref="SyntaxGraph"/> to be used inside tests.</returns>
+        internal static SyntaxGraph CreateImplementationRelation()
+        {
+            const string INPUT = """
+                                 public interface Parent
+                                 {                                 
+                                 }
+                                 public interface Child : Parent
+                                 {
+                                 }
+                                 """;
+
+            return CreateGraphFromInput(INPUT);
+        }
+
+        /// <summary>
+        /// Creates a SyntaxGraph from a string representing a file
+        /// </summary>
+        /// <returns>A <see cref="SyntaxGraph"/> to be used inside tests.</returns>
+        private static SyntaxGraph CreateGraphFromInput(string INPUT)
+        {
+            SyntaxGraph graph = new();
+
+            graph.AddFile(
+                INPUT,
+                "0");
+            graph.CreateGraph();
+
+            return graph;
+        }
+
         /// <summary>
         /// Gets the root <see cref="CompilationUnitSyntax"/> from a string of valid C# code.
         /// </summary>
@@ -121,9 +248,15 @@ namespace PatternPal.Tests.Utils
             const string INPUT = """
                                  public class Test
                                  {
+                                     public Test()
+                                     {
+                                     }
+
                                      internal void DoSomething()
                                      {
                                      }
+
+                                     protected int TestProperty { get; set; }
                                  }
                                  """;
 
@@ -135,6 +268,37 @@ namespace PatternPal.Tests.Utils
             return (ClassDeclarationSyntax)rootMember;
         }
 
+        /// <summary>
+        /// Gets a <see cref="ClassDeclarationSyntax"/>.
+        /// </summary>
+        /// <returns>A <see cref="ClassDeclarationSyntax"/> to be used inside tests.</returns>
+        private static InterfaceDeclarationSyntax GetInterfaceDeclaration()
+        {
+            const string INPUT = """
+                                 public interface Test
+                                 {
+                                     void DoSomething()
+                                     {
+                                     }
+
+                                     int CalculateSomething();
+
+                                     protected int TestProperty { get; set; }
+                                 }
+                                 """;
+
+            CompilationUnitSyntax root = GetCompilationRoot(INPUT);
+            MemberDeclarationSyntax rootMember = root.Members.First();
+
+            Assert.IsInstanceOf<InterfaceDeclarationSyntax>(rootMember);
+
+            return (InterfaceDeclarationSyntax)rootMember;
+        }
+
+        /// <summary>
+        /// Gets a <see cref="NamespaceDeclarationSyntax"/>
+        /// </summary>
+        /// <returns>A <see cref="NamespaceDeclarationSyntax"/> to be used inside tests</returns>
         private static NamespaceDeclarationSyntax GetNamespaceDeclaration()
         {
             const string INPUT = """
@@ -152,7 +316,7 @@ namespace PatternPal.Tests.Utils
             CompilationUnitSyntax root = GetCompilationRoot(INPUT);
             MemberDeclarationSyntax rootMember = root.Members.First();
 
-            Assert.IsInstanceOf<NamespaceDeclarationSyntax>(rootMember);
+            Assert.IsInstanceOf< NamespaceDeclarationSyntax >(rootMember);
 
             return (NamespaceDeclarationSyntax)rootMember;
         }
@@ -172,10 +336,15 @@ namespace PatternPal.Tests.Utils
                 null);
         }
 
-        public static IField CreateField(
-            string field)
+        public static IField CreateField()
         {
-            CompilationUnitSyntax root = CSharpSyntaxTree.ParseText($"public class Test {{{field}}}").GetCompilationUnitRoot();
+            const string INPUT = """
+                                 public class Test
+                                 {
+                                     private int _test;
+                                 }
+                                 """;
+            CompilationUnitSyntax root = CSharpSyntaxTree.ParseText(INPUT).GetCompilationUnitRoot();
             FieldDeclarationSyntax fieldSyntax = root.DescendantNodes(n => true).OfType< FieldDeclarationSyntax >().First();
             if (fieldSyntax == null)
             {
@@ -230,9 +399,11 @@ namespace PatternPal.Tests.Utils
             return new Dictionary< string, IEntity >();
         }
 
-        public IEnumerable<Relation> GetRelations(INode node, RelationTargetKind type)
+        public IEnumerable< Relation > GetRelations(
+            INode node,
+            RelationTargetKind type)
         {
-            return Array.Empty<Relation>();
+            return Array.Empty< Relation >();
         }
 
         public IEnumerable< INode > GetChildren() { return Array.Empty< INode >(); }

@@ -1,0 +1,11 @@
+﻿{
+  FeedbackMessage: Found node 'Test',
+  Priority: Low,
+  ChildrenCheckResults: [
+    {
+      FeedbackMessage: Node 'Test' has correct type,
+      Priority: Low,
+      Correct: true
+    }
+  ]
+}

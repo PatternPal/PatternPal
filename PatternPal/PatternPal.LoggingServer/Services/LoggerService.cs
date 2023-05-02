@@ -47,7 +47,7 @@ namespace PatternPal.LoggingServer.Services
                 throw new RpcException(status);
             }
 
-            if (request.EventType == EventType.EtUnknown)
+            if (request.EventType == EventType.EvtUnknown)
             {
                 Status status = new Status(StatusCode.InvalidArgument, "Unknown event type");
                 throw new RpcException(status);

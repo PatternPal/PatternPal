@@ -1,55 +1,50 @@
 ﻿namespace PatternPal.Core.Checks;
 
+/// <summary>
+/// A collection of checks. The <see cref="CheckCollectionKind"/> determines when it is considered
+/// correct based on the results of the sub-<see cref="ICheck"/>s.
+/// </summary>
 internal class CheckCollection : CheckBase
 {
     private readonly CheckCollectionKind _checkCollectionKind;
     private readonly IList< ICheck > _checks;
 
-    internal CheckCollection(Priority priority,
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CheckCollection"/> class. 
+    /// </summary>
+    /// <param name="priority">Priority of the check.</param>
+    /// <param name="checkCollectionKind"><see cref="CheckCollectionKind"/> of this collection.</param>
+    /// <param name="checks">The sub-<see cref="ICheck"/>s of this collection.</param>
+    internal CheckCollection(
+        Priority priority,
         CheckCollectionKind checkCollectionKind,
-        IList< ICheck > checks) : base(priority)
+        IList< ICheck > checks)
+        : base(priority)
     {
         _checkCollectionKind = checkCollectionKind;
         _checks = checks;
     }
 
+    /// <inheritdoc />
     public override ICheckResult Check(
         RecognizerContext ctx,
         INode node)
     {
-        // TODO: Run check recursively on _checks and decide result based on _checkCollectionKind.
-        switch (_checkCollectionKind)
+        IList< ICheckResult > subCheckResults = new List< ICheckResult >();
+        foreach (ICheck check in _checks)
         {
-            case CheckCollectionKind.All:
-            {
-                foreach (ICheck check in _checks)
-                {
-                    if (!check.Check(
-                            ctx,
-                            node).Correctness)
-                    {
-                        throw new NotImplementedException("Check Check was incorrect");
-                    }
-                }
-
-                throw new NotImplementedException("Check Check was correct");
-            }
-            case CheckCollectionKind.Any:
-            {
-                foreach (ICheck check in _checks)
-                {
-                    if (check.Check(
-                        ctx,
-                        node).Correctness)
-                    {
-                        throw new NotImplementedException("CheckCollection check was correct");
-                    }
-                }
-
-                throw new NotImplementedException("CheckCollection check was incorrect");
-                }
-            default:
-                throw new NotImplementedException();
+            subCheckResults.Add(
+                check.Check(
+                    ctx,
+                    node));
         }
+
+        return new NodeCheckResult
+               {
+                   ChildrenCheckResults = subCheckResults,
+                   FeedbackMessage = string.Empty,
+                   Priority = Priority,
+                   CollectionKind = _checkCollectionKind,
+               };
     }
 }

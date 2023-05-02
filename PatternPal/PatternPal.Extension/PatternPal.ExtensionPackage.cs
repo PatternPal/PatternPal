@@ -2,7 +2,6 @@
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-
 using EnvDTE;
 
 using System.ComponentModel;
@@ -11,6 +10,12 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
 using PatternPal.Extension.Commands;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Threading;
+using Microsoft.VisualStudio.RpcContracts.Commands;
+using System.Management.Instrumentation;
+using System.Reflection.Metadata;
+using System.Runtime.Remoting.Contexts;
 
 namespace PatternPal.Extension
 {
@@ -86,17 +91,33 @@ namespace PatternPal.Extension
             CancellationToken cancellationToken,
             IProgress< ServiceProgressData > progress)
         {
-            // NOTE: This code is never called!
 
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-            DTE dte = (DTE)await GetServiceAsync(typeof( DTE ));
-            SubscribeBuildEvents.Initialize(
+            DTE dte = (DTE)await GetServiceAsync(typeof(DTE));
+            SubscribeEvents.Initialize(
                 dte,
-                this);
+                this, cancellationToken);
+
+
         }
 
+        /// <summary>
+        /// Overrides a package method executed when the extension is closed.
+        /// </summary>
+        /// <param name="canClose"></param>
+        /// <returns></returns>
+        protected override int QueryClose(out bool canClose)
+        {
+            if (DoLogData)
+            {
+                SubscribeEvents.OnSessionEnd();
+            }
+
+            canClose = true; 
+            return VSConstants.S_OK;
+        }
         #endregion
     }
 
@@ -110,13 +131,24 @@ namespace PatternPal.Extension
         public bool DoLogData
         {
             get { return _doLogData; }
-            set { _doLogData = value; }
+            set
+            {
+                ThreadHelper.JoinableTaskFactory.Run(async () => {
+                    await (value
+                        ? SubscribeEvents.SubscribeEventHandlersAsync()
+                            : SubscribeEvents.UnsubscribeEventHandlersAsync());
+                });
+                _doLogData = value;
+            }
         }
-    }
+     }
+
 
     public enum Mode
     {
         Default,
         StepByStep
     }
+
 }
+

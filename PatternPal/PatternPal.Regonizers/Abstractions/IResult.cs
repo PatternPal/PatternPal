@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using SyntaxTree.Abstractions.Entities;
 
 namespace PatternPal.Recognizers.Abstractions
@@ -19,5 +20,6 @@ namespace PatternPal.Recognizers.Abstractions
         IList<ICheckResult> GetResults();
 
         IDictionary<IEntity, string> GetRelatedSubTypes();
+
     }
 }
