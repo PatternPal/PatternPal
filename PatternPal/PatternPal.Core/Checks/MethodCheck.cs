@@ -60,7 +60,6 @@ internal class MethodCheck : CheckBase
                         break;
                     }
                 case TypeCheck typeCheck:
-
                 {
                     IEntity type = 
                         ctx.Graph.Relations.GetEntityByName(methodEntity.GetReturnType())!;
