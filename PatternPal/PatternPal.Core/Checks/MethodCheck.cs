@@ -3,7 +3,7 @@
 /// <summary>
 /// Checks for a method of an entity, depending on the list of <see cref="_checks"/> provided.
 /// The checks performed can be a collection of <see cref="TypeCheck"/>s, <see cref="ModifierCheck"/>s,
-/// <see cref="ParameterCheck"/>s, <see cref="UsesCheck"/>s, etc.
+/// <see cref="ParameterCheck"/>s, <see cref="RelationCheck"/>s, etc.
 /// </summary>
 internal class MethodCheck : CheckBase
 {
@@ -50,7 +50,15 @@ internal class MethodCheck : CheckBase
                             ctx,
                             methodEntity));
                     break;
-                }
+                } 
+                case RelationCheck relationCheck:
+                    {
+                        subCheckResults.Add(
+                            relationCheck.Check(
+                                ctx,
+                                methodEntity));
+                        break;
+                    }
                 case TypeCheck typeCheck:
 
                 {
@@ -63,14 +71,6 @@ internal class MethodCheck : CheckBase
                 {
                     subCheckResults.Add(
                         notCheck.Check(
-                            ctx,
-                            methodEntity));
-                    break;
-                }
-                case UsesCheck usesCheck:
-                {
-                    subCheckResults.Add(
-                        usesCheck.Check(
                             ctx,
                             methodEntity));
                     break;

@@ -17,7 +17,7 @@ internal interface ICheckResult
 }
 
 /// <summary>
-/// Represents the result of a check which is not a collection of other checks, like <see cref="ModifierCheck"/>, and <see cref="UsesCheck"/>.
+/// Represents the result of a check which is not a collection of other checks, like <see cref="ModifierCheck"/>, and <see cref="RelationCheck"/>.
 /// </summary>
 internal class LeafCheckResult : ICheckResult
 {

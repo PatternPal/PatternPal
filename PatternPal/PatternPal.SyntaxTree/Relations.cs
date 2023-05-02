@@ -237,6 +237,18 @@ namespace SyntaxTree
         }
 
         /// <summary>
+        /// Tries to get a method from a <see cref="SyntaxGraph"/> by matching the method's name to all methods in a specific class
+        /// </summary>
+        /// <param name="graph">The <see cref="SyntaxGraph"/> in which the method can be found.</param>
+        /// <param name="className">The name of the class in which the method resides</param>
+        /// <param name="methodName">The name of the method</param>
+        /// <returns></returns>
+        public static IMethod ? GetMethodFromGraph(SyntaxGraph graph, string className, string methodName)
+        {
+            return graph.GetAll()[className].GetMethods().FirstOrDefault(x => x.GetName() == methodName);
+        }
+
+        /// <summary>
         /// Creates the Extend, ExtendedBy, Implements and ImplementedBy relations between two IEntities.
         /// </summary>
         /// <param name="entity">The IEntity which parents will be evaluated.</param>
