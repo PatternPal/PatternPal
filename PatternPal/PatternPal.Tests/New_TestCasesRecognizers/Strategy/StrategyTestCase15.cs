@@ -1,37 +1,39 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace PatternPal.Tests.TestClasses.Strategy
 {
     /* Pattern:              Strategy
-         * Original code source: https://code-maze.com/strategy/
-         * 
-         * 
-         * Requirements to fullfill the pattern:
-         *         Strategy interface
-         *            ✓  a) is an interface	/ abstract class
-         *            ✓  b) has declared a method
-         *            ✓        1) if the class is an abstract instead of an interface the method has to be an abstract method
-         *            ✓  c) is used by another class
-         *            ✓  d) is implemented / inherited by at least one other class
-         *            ✓  e) is implemented / inherited by at least two other classes
-         *         Concrete strategy
-         *            ✓  a) is an implementation of the Strategy interface
-         *            ✓  b) if the class is used, it must be used via the context class
-         *            ✓  c) if the class is not used it should be used via the context class
-         *            ✓  d) is stored in the context class
-         *         Context
-         *            ✓  a) has a private field or property that has a Strategy class as type 
-         *            ✓  b) has a function setStrategy() to set the non-public field / property with parameter of type Strategy
-         *            ✓  c) has a function useStrategy() to execute the strategy. 
-         *         Client
-         *            ✓  a) has created an object of the type ConcreteStrategy
-         *            ✓  b) has used the setStrategy() in the Context class to store the ConcreteStrategy object
-         *            ✓  c) has executed the ConcreteStrategy via the Context class
-         */
+     * Original code source: https://code-maze.com/strategy/
+     * 
+     * 
+     * Requirements to fullfill the pattern:
+     *         Strategy interface
+     *            ✓  a) is an interface	/ abstract class
+     *            ✓  b) has declared a method
+     *            ✓        1) if the class is an abstract instead of an interface the method has to be an abstract method
+     *               c) is used by another class
+     *            ✓  d) is implemented / inherited by at least one other class
+     *            ✓  e) is implemented / inherited by at least two other classes
+     *         Concrete strategy
+     *            ✓  a) is an implementation of the Strategy interface
+     *            ✓  b) if the class is used, it must be used via the context class
+     *               c) if the class is not used it should be used via the context class
+     *            ✓  d) is stored in the context class
+     *         Context
+     *            ✓  a) has a private field or property that has a Strategy class as type 
+     *            ✓  b) has a function setStrategy() to set the non-public field / property with parameter of type Strategy
+     *               c) has a function useStrategy() to execute the strategy. 
+     *         Client
+     *            ✓  a) has created an object of the type ConcreteStrategy
+     *            ✓  b) has used the setStrategy() in the Context class to store the ConcreteStrategy object
+     *               c) has executed the ConcreteStrategy via the Context class
+     */
 
     //Needed extra classes
-    public class DeveloperReport
+    file class DeveloperReport
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -41,20 +43,20 @@ namespace PatternPal.Tests.TestClasses.Strategy
         public double CalculateSalary() => WorkingHours * HourlyRate;
     }
 
-    public enum DeveloperLevel
+    file enum DeveloperLevel
     {
         Senior,
         Junior
     }
 
     //Strategy interface
-    public interface ISalaryCalculator
+    file interface ISalaryCalculator
     {
         double CalculateTotalSalary(IEnumerable<DeveloperReport> reports);
     }
 
     //Concrete strategy
-    public class JuniorDevSalaryCalculator : ISalaryCalculator
+    file class JuniorDevSalaryCalculator : ISalaryCalculator
     {
         public double CalculateTotalSalary(IEnumerable<DeveloperReport> reports) =>
             reports
@@ -64,7 +66,7 @@ namespace PatternPal.Tests.TestClasses.Strategy
     }
 
     //Concrete strategy
-    public class SeniorDevSalaryCalculator : ISalaryCalculator
+    file class SeniorDevSalaryCalculator : ISalaryCalculator
     {
         public double CalculateTotalSalary(IEnumerable<DeveloperReport> reports) =>
             reports
@@ -74,7 +76,7 @@ namespace PatternPal.Tests.TestClasses.Strategy
     }
 
     //Context
-    public class SalaryCalculator
+    file class SalaryCalculator
     {
         private ISalaryCalculator _calculator;
         public SalaryCalculator(ISalaryCalculator calculator)
@@ -82,13 +84,13 @@ namespace PatternPal.Tests.TestClasses.Strategy
             _calculator = calculator;
         }
         public void SetCalculator(ISalaryCalculator calculator) => _calculator = calculator;
-        public double Calculate(IEnumerable<DeveloperReport> reports) => _calculator.CalculateTotalSalary(reports);
+        public double Calculate(IEnumerable<DeveloperReport> reports) { return 0.0; }
     }
 
     //Client
-    class Program6
+    file class Program
     {
-        static void Main6(string[] args)
+        static void EntryPoint(string[] args)
         {
             var reports = new List<DeveloperReport>
             {

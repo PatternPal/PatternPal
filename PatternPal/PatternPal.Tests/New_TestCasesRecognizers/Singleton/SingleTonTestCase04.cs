@@ -2,7 +2,7 @@
 {
     //This test is a possible "perfect" singleton implementation.
     /* Pattern:              Singleton
-     * Original code source: -
+     * Original code source: None
      * 
      * 
      * Requirements to fullfill the pattern:
@@ -14,48 +14,25 @@
      *            ✓        1) if called and there is no instance saved in the private field, then it calls the private constructor
      *            ✓        2) if called and there is an instance saved in the private field it returns this instance
      *         Client
-     *            ✓  a) the first call of the getInstance() of the Singleton class returns a new instance of this class
-     *            ✓  b) the second and next calls of getInstance() of the Singleton class return the same instance of the Singleton class.
+     *               a) the first call of the getInstance() of the Singleton class returns a new instance of this class
+     *               b) the second and next calls of getInstance() of the Singleton class return the same instance of the Singleton class.
      */
-    public class SingleTonTestCase05
+    internal class SingleTonTestCase04
     {
-        private static SingleTonTestCase05 _instance;
+        private static SingleTonTestCase04 _instance;
 
-        private SingleTonTestCase05()
+        protected SingleTonTestCase04()
         {
         }
 
-        public static SingleTonTestCase05 GetInstance()
+        public static SingleTonTestCase04 Instance()
         {
             if (_instance == null)
             {
-                _instance = new SingleTonTestCase05();
+                _instance = new SingleTonTestCase04();
             }
 
             return _instance;
-        }
-
-        public void DoSomething()
-        {
-
-        }
-    }
-
-    /*
-     * 7- And it gets used
-     */
-    public class SingleTonTestCase5User
-    {
-        SingleTonTestCase05 instance;
-
-        public SingleTonTestCase5User()
-        {
-            instance = SingleTonTestCase05.GetInstance();
-        }
-
-        public void DoSomethingWithSingleton()
-        {
-            instance.DoSomething();
         }
     }
 }

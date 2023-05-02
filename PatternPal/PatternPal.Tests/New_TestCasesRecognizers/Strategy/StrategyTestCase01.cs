@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace PatternPal.Tests.TestClasses.Strategy
 {
     /* Pattern:              Strategy
-     * Original code source: https://www.dofactory.com/net/strategy-design-pattern
+     * Original code source: https://github.com/exceptionnotfound/DesignPatterns/blob/master/Strategy/CookMethod.cs
      * 
      * 
      * Requirements to fullfill the pattern:
@@ -18,7 +19,7 @@ namespace PatternPal.Tests.TestClasses.Strategy
      *         Concrete strategy
      *            ✓  a) is an implementation of the Strategy interface
      *            ✓  b) if the class is used, it must be used via the context class
-     *            ✓  c) if the class is not used it should be used via the context class
+     *               c) if the class is not used it should be used via the context class
      *            ✓  d) is stored in the context class
      *         Context
      *            ✓  a) has a private field or property that has a Strategy class as type 
@@ -31,69 +32,71 @@ namespace PatternPal.Tests.TestClasses.Strategy
      */
 
     //Strategy interface
-    file abstract class Strategy
+    internal abstract class CookStrategy
     {
-        public abstract void AlgorithmInterface();
+        public abstract void Cook(string food);
     }
 
     //Concrete strategy
-    file class ConcreteA : Strategy
+    internal class OvenBaking : CookStrategy
     {
-        public override void AlgorithmInterface()
+        public override void Cook(string food)
         {
-            Console.WriteLine("Called ConcreteA.AlgorithmInterface()");
+            Console.WriteLine("\nCooking " + food + " by oven baking it.");
         }
     }
 
     //Concrete strategy
-    file class ConcreteB : Strategy
+    internal class Grilling : CookStrategy
     {
-        public override void AlgorithmInterface()
+        public override void Cook(string food)
         {
-            Console.WriteLine("Called ConcreteB.AlgorithmInterface()");
+            Console.WriteLine("\nCooking " + food + " by grilling it.");
         }
     }
 
     //Concrete strategy
-    file class ConcreteC : Strategy
+    internal class DeepFrying : CookStrategy
     {
-        public override void AlgorithmInterface()
+        public override void Cook(string food)
         {
-            Console.WriteLine("Called ConcreteC.AlgorithmInterface()");
+            Console.WriteLine("\nCooking " + food + " by deep frying it");
         }
     }
 
     //Context
-    file class TheContext
+    internal class CookingMethod
     {
-        private readonly Strategy _strategy;
+        private CookStrategy _cookStrategy;
+        private string _food;
 
-        public TheContext(Strategy strategy)
+        public void SetCookStrategy(CookStrategy cookStrategy)
         {
-            _strategy = strategy;
+            _cookStrategy = cookStrategy;
         }
 
-        public void ContextInterface()
+        public void SetFood(string food)
         {
-            _strategy.AlgorithmInterface();
+            _food = food;
+        }
+
+        public void Cook()
+        {
+            _cookStrategy.Cook(_food);
+            Console.WriteLine();
         }
     }
-
+    
     //Client
-    file class TheClient
+    internal class Kitchen
     {
-        private string input = "A";
-        private TheContext _theContext;
-        public TheClient()
+        private CookingMethod cookingMethod;
+        public Kitchen()
         {
-            _theContext = input switch
-            {
-                "A" => new TheContext(new ConcreteA()),
-                "B" => new TheContext(new ConcreteB()),
-                _ => new TheContext(new ConcreteC())
-            };
-
-            _theContext.ContextInterface();
+            cookingMethod = new CookingMethod();
+            cookingMethod.SetCookStrategy(new DeepFrying());
+            cookingMethod.SetFood("pizza");
+            cookingMethod.Cook();
         }
     }
 }

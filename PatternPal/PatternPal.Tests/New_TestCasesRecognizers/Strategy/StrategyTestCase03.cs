@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace PatternPal.Tests.TestClasses.Strategy
@@ -13,8 +14,8 @@ namespace PatternPal.Tests.TestClasses.Strategy
      *            ✓  b) has declared a method
      *            ✓        1) if the class is an abstract instead of an interface the method has to be an abstract method
      *            ✓  c) is used by another class
-     *               d) is implemented / inherited by at least one other class
-     *               e) is implemented / inherited by at least two other classes
+     *            ✓  d) is implemented / inherited by at least one other class
+     *            ✓  e) is implemented / inherited by at least two other classes
      *         Concrete strategy
      *            ✓  a) is an implementation of the Strategy interface
      *            ✓  b) if the class is used, it must be used via the context class
@@ -37,22 +38,22 @@ namespace PatternPal.Tests.TestClasses.Strategy
     }
 
     //Concrete strategy
-    //internal class ConcreteA : Strategy
-    //{
-    //    public override void AlgorithmInterface()
-    //    {
-    //        Console.WriteLine("Called ConcreteA.AlgorithmInterface()");
-    //    }
-    //}
+    file class ConcreteA : Strategy
+    {
+        public override void AlgorithmInterface()
+        {
+            Console.WriteLine("Called ConcreteA.AlgorithmInterface()");
+        }
+    }
 
     //Concrete strategy
-    //internal class ConcreteB : Strategy
-    //{
-    //    public override void AlgorithmInterface()
-    //    {
-    //        Console.WriteLine("Called ConcreteB.AlgorithmInterface()");
-    //    }
-    //}
+    file class ConcreteB : Strategy
+    {
+        public override void AlgorithmInterface()
+        {
+            Console.WriteLine("Called ConcreteB.AlgorithmInterface()");
+        }
+    }
 
     //Concrete strategy
     file class ConcreteC : Strategy
@@ -88,6 +89,8 @@ namespace PatternPal.Tests.TestClasses.Strategy
         {
             _theContext = input switch
             {
+                "A" => new TheContext(new ConcreteA()),
+                "B" => new TheContext(new ConcreteB()),
                 _ => new TheContext(new ConcreteC())
             };
 

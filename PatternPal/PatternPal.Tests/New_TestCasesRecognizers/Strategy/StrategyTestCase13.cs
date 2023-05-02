@@ -1,25 +1,26 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace PatternPal.Tests.TestClasses.Strategy
 {
     /* Pattern:              Strategy
-     * Original code source: -
+     * Original code source: None
      * 
      * 
      * Requirements to fullfill the pattern:
      *         Strategy interface
-     *               a) is an interface	/ abstract class
+     *            ✓  a) is an interface	/ abstract class
      *            ✓  b) has declared a method
-     *                     1) if the class is an abstract instead of an interface the method has to be an abstract method
+     *            ✓        1) if the class is an abstract instead of an interface the method has to be an abstract method
      *            ✓  c) is used by another class
      *            ✓  d) is implemented / inherited by at least one other class
      *            ✓  e) is implemented / inherited by at least two other classes
      *         Concrete strategy
      *            ✓  a) is an implementation of the Strategy interface
      *            ✓  b) if the class is used, it must be used via the context class
-     *            ✓  c) if the class is not used it should be used via the context class
-     *            ✓  d) is stored in the context class
+     *               c) if the class is not used it should be used via the context class
+     *               d) is stored in the context class
      *         Context
      *            ✓  a) has a private field or property that has a Strategy class as type 
      *            ✓  b) has a function setStrategy() to set the non-public field / property with parameter of type Strategy
@@ -31,16 +32,10 @@ namespace PatternPal.Tests.TestClasses.Strategy
      */
 
     //Strategy interface
-    public class TeamInformation
+    abstract file class TeamInformation
     {
-        public void ShowMembers()
-        {
-            Console.WriteLine("No i wont");
-        }
-        public void TellMeARisk()
-        {
-            Console.WriteLine("The earth could implode");
-        }
+        public abstract void ShowMembers();
+        public abstract void TellMeARisk();
 
         void SayVo()
         {
@@ -49,63 +44,56 @@ namespace PatternPal.Tests.TestClasses.Strategy
     }
 
     //Concrete strategy
-    class TeamRefactor : TeamInformation
+    file class TeamRefactor : TeamInformation
     {
-        public void ShowMembers()
+        public override void ShowMembers()
         {
             Console.WriteLine("Matteo, Linde and Jeroen");
         }
 
-        public void TellMeARisk()
+        public override void TellMeARisk()
         {
             Console.WriteLine("Rewriting the code takes too much time");
         }
     }
 
     //Concrete strategy
-    class TeamLogging : TeamInformation
+    file class TeamLogging : TeamInformation
     {
-        public void ShowMembers()
+        public override void ShowMembers()
         {
             Console.WriteLine("Olaf, Wing and Siem");
         }
 
-        public void TellMeARisk()
+        public override void TellMeARisk()
         {
             Console.WriteLine("The logging data could be too big for the server");
         }
     }
 
     //Concrete strategy
-    public class TeamService : TeamInformation
+    file class TeamService : TeamInformation
     {
-        public void ShowMembers()
+        public override void ShowMembers()
         {
             Console.WriteLine("Rutger, Casper and Daan");
         }
 
-        public void TellMeARisk()
+        public override void TellMeARisk()
         {
             Console.WriteLine("Someone could forget his laptop on the train...");
         }
     }
 
     //Context
-    class TeamContext
+    file class TeamContext
     {
-        private TeamInformation _teamInformation;
-
-        public TeamContext(TeamInformation teamInformation)
-        {
-            _teamInformation = teamInformation;
-        }
-
-        public void SetStrategy(TeamInformation strategy)
+        public void SetStrategy(TeamInformation strategy, TeamInformation _teamInformation)
         {
             _teamInformation = strategy;
         }
 
-        public void TellMeSomething()
+        public void TellMeSomething(TeamInformation _teamInformation)
         {
             _teamInformation.ShowMembers();
             _teamInformation.TellMeARisk();
@@ -114,17 +102,18 @@ namespace PatternPal.Tests.TestClasses.Strategy
     }
 
     //Client
-    file class Program
+    file class Main
     {
-        static void EntryPoint(string[] args)
-        {
+        private TeamInformation _teamInformation;
 
-            TeamContext strat = new TeamContext(new TeamLogging());
-            strat.TellMeSomething();
-            strat.SetStrategy(new TeamRefactor());
-            strat.TellMeSomething();
-            strat.SetStrategy(new TeamService());
-            strat.TellMeSomething();
+        static void Program(string[] args)
+        {
+            TeamInformation _teamInformation = new TeamLogging();
+
+            TeamContext strat = new TeamContext();
+            strat.TellMeSomething(_teamInformation);
+            strat.SetStrategy(new TeamRefactor(), _teamInformation);
+            strat.TellMeSomething(_teamInformation);
 
         }
     }

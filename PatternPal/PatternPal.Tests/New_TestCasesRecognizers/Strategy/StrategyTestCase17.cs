@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace PatternPal.Tests.TestClasses.Strategy
 {
     /* Pattern:              Strategy
-     * Original code source: https://github.com/exceptionnotfound/DesignPatterns/blob/master/Strategy/CookMethod.cs
+     * Original code source: https://www.dofactory.com/net/strategy-design-pattern
      * 
      * 
      * Requirements to fullfill the pattern:
@@ -25,77 +26,66 @@ namespace PatternPal.Tests.TestClasses.Strategy
      *            ✓  b) has a function setStrategy() to set the non-public field / property with parameter of type Strategy
      *            ✓  c) has a function useStrategy() to execute the strategy. 
      *         Client
-     *            ✓  a) has created an object of the type ConcreteStrategy
-     *            ✓  b) has used the setStrategy() in the Context class to store the ConcreteStrategy object
-     *            ✓  c) has executed the ConcreteStrategy via the Context class
+     *               a) has created an object of the type ConcreteStrategy
+     *               b) has used the setStrategy() in the Context class to store the ConcreteStrategy object
+     *               c) has executed the ConcreteStrategy via the Context class
      */
 
     //Strategy interface
-    internal abstract class CookStrategy
+    file abstract class Strategy
     {
-        public abstract void Cook(string food);
+        public abstract void AlgorithmInterface();
     }
 
     //Concrete strategy
-    internal class OvenBaking : CookStrategy
+    file class ConcreteA : Strategy
     {
-        public override void Cook(string food)
+        public override void AlgorithmInterface()
         {
-            Console.WriteLine("\nCooking " + food + " by oven baking it.");
+            Console.WriteLine("Called ConcreteA.AlgorithmInterface()");
         }
     }
 
     //Concrete strategy
-    internal class Grilling : CookStrategy
+    file class ConcreteB : Strategy
     {
-        public override void Cook(string food)
+        public override void AlgorithmInterface()
         {
-            Console.WriteLine("\nCooking " + food + " by grilling it.");
+            Console.WriteLine("Called ConcreteB.AlgorithmInterface()");
         }
     }
 
     //Concrete strategy
-    internal class DeepFrying : CookStrategy
+    file class ConcreteC : Strategy
     {
-        public override void Cook(string food)
+        public override void AlgorithmInterface()
         {
-            Console.WriteLine("\nCooking " + food + " by deep frying it");
+            Console.WriteLine("Called ConcreteC.AlgorithmInterface()");
         }
     }
 
     //Context
-    internal class CookingMethod
+    file class TheContext
     {
-        private CookStrategy _cookStrategy;
-        private string _food;
+        private readonly Strategy _strategy;
 
-        public void SetCookStrategy(CookStrategy cookStrategy)
+        public TheContext(Strategy strategy)
         {
-            _cookStrategy = cookStrategy;
+            _strategy = strategy;
         }
 
-        public void SetFood(string food)
+        public void ContextInterface()
         {
-            _food = food;
-        }
-
-        public void Cook()
-        {
-            _cookStrategy.Cook(_food);
-            Console.WriteLine();
+            _strategy.AlgorithmInterface();
         }
     }
-    
+
     //Client
-    internal class Kitchen
+    file class TheClient
     {
-        private CookingMethod cookingMethod;
-        public Kitchen()
+        public TheClient()
         {
-            cookingMethod = new CookingMethod();
-            cookingMethod.SetCookStrategy(new DeepFrying());
-            cookingMethod.SetFood("pizza");
-            cookingMethod.Cook();
+            Console.WriteLine("Do Nothing");
         }
     }
 }

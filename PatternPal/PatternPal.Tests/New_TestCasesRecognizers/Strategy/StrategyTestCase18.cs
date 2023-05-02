@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace PatternPal.Tests.TestClasses.Strategy
@@ -31,7 +32,7 @@ namespace PatternPal.Tests.TestClasses.Strategy
      */
 
     //Strategy interface
-    file abstract class CookStrategy
+    abstract file class CookStrategy
     {
         public abstract void Cook(string food);
     }

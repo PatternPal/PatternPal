@@ -1,8 +1,7 @@
 ﻿namespace PatternPal.Tests.TestClasses.Singleton
 {
-    //This test is a possible "perfect" singleton implementation.
     /* Pattern:              Singleton
-     * Original code source: -
+     * Original code source: None
      * 
      * 
      * Requirements to fullfill the pattern:
@@ -14,28 +13,33 @@
      *            ✓        1) if called and there is no instance saved in the private field, then it calls the private constructor
      *            ✓        2) if called and there is an instance saved in the private field it returns this instance
      *         Client
-     *               a) the first call of the getInstance() of the Singleton class returns a new instance of this class
-     *               b) the second and next calls of getInstance() of the Singleton class return the same instance of the Singleton class.
+     *            ✓  a) the first call of the getInstance() of the Singleton class returns a new instance of this class
+     *            ✓  b) the second and next calls of getInstance() of the Singleton class return the same instance of the Singleton class.
      */
-    public class SingleTonTestCase01
-    {
-        private static SingleTonTestCase01 instance;
 
-        private SingleTonTestCase01()
+    //Singleton
+    file class SingleTon
+    {
+        private static SingleTon _instance;
+
+        private SingleTon()
         {
         }
 
-        public static SingleTonTestCase01 Instance
+        public static SingleTon Instance()
         {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new SingleTonTestCase01();
-                }
+            _instance ??= new SingleTon();
 
-                return instance;
-            }
+            return _instance;
+        }
+    }
+
+    //Client
+    file class SingleTonClient
+    {
+        SingleTonClient()
+        {
+            SingleTon.Instance();
         }
     }
 }

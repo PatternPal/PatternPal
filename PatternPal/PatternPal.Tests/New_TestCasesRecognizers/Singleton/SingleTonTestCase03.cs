@@ -2,7 +2,7 @@
 {
     // This test is a WRONG implementation using an edge case.
     /* Pattern:              Singleton
-     * Original code source: -
+     * Original code source: None
      * 
      * 
      * Requirements to fullfill the pattern:

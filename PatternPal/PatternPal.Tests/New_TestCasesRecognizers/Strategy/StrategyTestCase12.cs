@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace PatternPal.Tests.TestClasses.Strategy
@@ -11,15 +12,15 @@ namespace PatternPal.Tests.TestClasses.Strategy
      *         Strategy interface
      *            ✓  a) is an interface	/ abstract class
      *            ✓  b) has declared a method
-     *            ✓        1) if the class is an abstract instead of an interface the method has to be an abstract method
-     *            ✓  c) is used by another class
-     *            ✓  d) is implemented / inherited by at least one other class
-     *            ✓  e) is implemented / inherited by at least two other classes
+     *                     1) if the class is an abstract instead of an interface the method has to be an abstract method
+     *               c) is used by another class
+     *               d) is implemented / inherited by at least one other class
+     *               e) is implemented / inherited by at least two other classes
      *         Concrete strategy
-     *            ✓  a) is an implementation of the Strategy interface
+     *               a) is an implementation of the Strategy interface
      *            ✓  b) if the class is used, it must be used via the context class
-     *               c) if the class is not used it should be used via the context class
-     *            ✓  d) is stored in the context class
+     *            ✓  c) if the class is not used it should be used via the context class
+     *               d) is stored in the context class
      *         Context
      *            ✓  a) has a private field or property that has a Strategy class as type 
      *            ✓  b) has a function setStrategy() to set the non-public field / property with parameter of type Strategy
@@ -31,43 +32,47 @@ namespace PatternPal.Tests.TestClasses.Strategy
      */
 
     //Strategy interface
-    internal abstract class Strategy
+    abstract file class Strategy
     {
         public abstract void AlgorithmInterface();
     }
 
     //Concrete strategy
-    internal class ConcreteA : Strategy
-    {
-        public override void AlgorithmInterface()
-        {
-            Console.WriteLine("Called ConcreteA.AlgorithmInterface()");
-        }
-    }
+    //internal class ConcreteA : Strategy
+    //{
+    //    public override void AlgorithmInterface()
+    //    {
+    //        Console.WriteLine("Called ConcreteA.AlgorithmInterface()");
+    //    }
+    //}
 
     //Concrete strategy
-    internal class ConcreteB : Strategy
-    {
-        public override void AlgorithmInterface()
-        {
-            Console.WriteLine("Called ConcreteB.AlgorithmInterface()");
-        }
-    }
+    //internal class ConcreteB : Strategy
+    //{
+    //    public override void AlgorithmInterface()
+    //    {
+    //        Console.WriteLine("Called ConcreteB.AlgorithmInterface()");
+    //    }
+    //}
 
     //Concrete strategy
-    internal class ConcreteC : Strategy
+    file class ConcreteC
     {
-        public override void AlgorithmInterface()
+        public static void AlgorithmInterface()
         {
             Console.WriteLine("Called ConcreteC.AlgorithmInterface()");
         }
     }
 
     //Context
-    internal class TheContext
+    file class TheContext
     {
-        private readonly Strategy _strategy;
+        private Strategy _strategy;
 
+        public TheContext()
+        {
+
+        }
         public TheContext(Strategy strategy)
         {
             _strategy = strategy;
@@ -77,14 +82,25 @@ namespace PatternPal.Tests.TestClasses.Strategy
         {
             _strategy.AlgorithmInterface();
         }
+
+        public void SetStrategy(Strategy strategy)
+        {
+            _strategy = strategy;
+        }
+
+        public void Useless()
+        {
+            ConcreteC c = new ConcreteC();
+        }
     }
 
     //Client
-    internal class TheClient
+    file class TheClient
     {
+        private TheContext _theContext = new();
         public TheClient()
         {
-            Console.WriteLine("Do Nothing");
+            _theContext.Useless();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace PatternPal.Tests.TestClasses.Strategy
@@ -111,7 +112,7 @@ namespace PatternPal.Tests.TestClasses.Strategy
     //Client
     file class Program
     {
-        static void Main13(string[] args)
+        static void EntryPoint(string[] args)
         {
             StrategyContext context = new StrategyContext(100);
             Console.WriteLine("Enter month number between 1 and 12");

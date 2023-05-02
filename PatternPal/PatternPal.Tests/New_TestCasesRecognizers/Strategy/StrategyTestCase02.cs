@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace PatternPal.Tests.TestClasses.Strategy
 {
@@ -101,16 +103,4 @@ namespace PatternPal.Tests.TestClasses.Strategy
         }
     }
 
-
-    //Client
-    /*internal class Client
-    {
-        private Context _context;
-        public Client()
-        {
-            _context = new Context();
-            _context.SetStrategy(new ConcreteStrategyA());
-            _context.DoSomeBusinessLogic();
-        }
-    }*/
 }
