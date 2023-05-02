@@ -6,10 +6,8 @@ package log;
 
 // The greeting service definition.
 service LogCollectorService {
-  // Sends a greeting
   rpc Log (LogRequest) returns (LogResponse);
 }
-
 
 enum EventType
 {
@@ -41,15 +39,25 @@ enum EventType
 
 // Client configuration message to log to the server
 message LogRequest {
-  string subject_id = 1;
+  // The subject id is once set per client and should not be changed
+  string subject_id = 1 ;
+  // The tool instances are the tools that are currently running on the client (IDE, Compiler, Programming Language, etc. )
   string tool_instances = 2;
+
+  // The event type is the type of event that is being logged
   EventType event_type = 3;
+
+  // The session id is the id of the session that is currently running on the client. This is set per launch of the extension
   string session_id = 4;
-  string client_timestamp = 5; // ISO 8601
+
+  // The client timestamp is the timestamp of the event that is being logged on the client it is in ISO 8601 format. It should also contain the timezone
+  string client_timestamp = 5;
+
+  // The data is the data that is being logged. It is a byte array so that it can be serialized and deserialized to any type of data
   bytes data = 6;
 }
 
-// Confirmation message 
+// Confirmation message, should not contain information since the Log Function is a void function
 message LogResponse {
   string message = 1; 
   // Simple message to return just to confirm that the server is up and running
