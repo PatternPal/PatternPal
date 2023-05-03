@@ -1,4 +1,4 @@
-using PatternPal.Recognizers.Models.Checks.Members;
+﻿using PatternPal.Recognizers.Models.Checks.Members;
 using SyntaxTree.Models.Members.Constructor;
 
 namespace PatternPal.Core.Checks;
@@ -118,6 +118,7 @@ internal class ClassCheck : CheckBase
                 }
                 case NotCheck notCheck:
                 {
+                    break; //Not entirely implemented
                     subCheckResults.Add(
                         notCheck.Check(
                             ctx,
@@ -137,6 +138,7 @@ internal class ClassCheck : CheckBase
         }
 
         MatchedEntities.Add(classEntity);
+        ctx.CurrentEntity = null;
 
         return new NodeCheckResult
            {

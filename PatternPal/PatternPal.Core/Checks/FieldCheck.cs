@@ -1,4 +1,4 @@
-using Microsoft.CodeAnalysis.VisualBasic;
+﻿using Microsoft.CodeAnalysis.VisualBasic;
 
 using PatternPal.Recognizers.Models.Checks;
 
@@ -45,7 +45,8 @@ internal class FieldCheck : CheckBase
                 }
                 case TypeCheck typeCheck:
                 {
-                    subCheckResults.Add(typeCheck.Check(ctx, fieldEntity));
+                    IEntity fieldTypeEntity = ctx.Graph.Relations.GetEntityByName(fieldEntity.GetFieldType())!;
+                    subCheckResults.Add(typeCheck.Check(ctx, fieldTypeEntity));
                     break;
                 }
                 case NotCheck notCheck:

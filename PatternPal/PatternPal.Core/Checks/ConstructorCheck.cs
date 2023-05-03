@@ -51,6 +51,7 @@ internal class ConstructorCheck : CheckBase
                 }
                 case NotCheck notCheck:
                 {
+                    break;
                     subCheckResults.Add(
                         notCheck.Check(
                             ctx,
