@@ -67,7 +67,6 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
             EventId = receivedRequest.EventId, //TO DO: Generate ID in Logging Server self
             SubjectId = receivedRequest.SubjectId,
             ToolInstances = Environment.Version.ToString(),
-            CodeStateSection = Directory.GetCurrentDirectory(),
             CodeStateId = Guid.NewGuid().ToString(),
             ClientTimestamp =
                 DateTime.UtcNow.ToString(

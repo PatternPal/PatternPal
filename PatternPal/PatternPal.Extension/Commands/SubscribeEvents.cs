@@ -9,6 +9,7 @@ using EnvDTE80;
 using PatternPal.Protos;
 using System.Threading;
 using System.Collections;
+using Microsoft.VisualStudio.Shell.Interop;
 
 
 namespace PatternPal.Extension.Commands
@@ -99,6 +100,7 @@ namespace PatternPal.Extension.Commands
             string outputMessage;
             if (_dte.Solution.SolutionBuild.LastBuildInfo != 0)
             {
+              
                 outputMessage = string.Format("Build {0} with errors. See the output window for details.",
                     Action.ToString());
 
@@ -111,8 +113,24 @@ namespace PatternPal.Extension.Commands
             }
 
             LogEventRequest request = CreateStandardLog();
+            string pathSolutionFullName = _dte.Solution.FullName;
+            string pathSolutionFile = _dte.Solution.FileName;
+            // Distinguish a sln file or just a csproj file to be opened
+            if (pathSolutionFullName == "")
+            {
+                // A csproj file was opened
+                Array startupProjects = (Array)_dte.Solution.SolutionBuild.StartupProjects;
+                request.CodeStateSection = (string)startupProjects.GetValue(0);
+            }
+            else
+            {
+                string pathSolutionDirectory = Path.GetDirectoryName(_dte.Solution.FullName);
+
+                request.CodeStateSection = GetRelativePath(pathSolutionDirectory, pathSolutionFile);
+            }
+        
             request.EventType = EventType.EvtCompile;
-            request.CompileResult = outputMessage;
+            request.CompileResult = outputMessage;  
 
             LogProviderService.LogProviderServiceClient client =
                 new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
