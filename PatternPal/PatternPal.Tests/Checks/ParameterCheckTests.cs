@@ -14,14 +14,10 @@ public class ParameterCheckTests
         RecognizerContext ctx = new() { Graph = graph };
 
         // Obtain the StringTestFunction method (3 parameters)
-        IMethod stringNode =
-            graph.GetAll()["StringTest"].GetMethods().FirstOrDefault(
-                x => x.GetName() == "StringTestFunction");
+        IMethod stringNode = Relations.GetMethodFromGraph(graph, "StringTest", "StringTestFunction");
 
         // Obtain the IntTest method (1 StringTest parameter)
-        IMethod intNode =
-            graph.GetAll()["IntTest"].GetMethods().FirstOrDefault(
-                x => x.GetName() == "IntTestFunction");
+        IMethod intNode = Relations.GetMethodFromGraph(graph, "IntTest", "IntTestFunction");
 
         // Create same typecheck for two different parameters and one other type parameter
         TypeCheck typeIntNode1 = new TypeCheck(
@@ -69,14 +65,10 @@ public class ParameterCheckTests
         RecognizerContext ctx = new() { Graph = graph };
 
         // Obtain the StringTestFunction method (3 parameters)
-        IMethod stringNode =
-            graph.GetAll()["StringTest"].GetMethods().FirstOrDefault(
-                x => x.GetName() == "StringTestFunction");
+        IMethod stringNode = Relations.GetMethodFromGraph(graph, "StringTest", "StringTestFunction");
 
         // Obtain the IntTest method (1 StringTest parameter)
-        IMethod intNode =
-            graph.GetAll()["IntTest"].GetMethods().FirstOrDefault(
-                x => x.GetName() == "IntTestFunction");
+        IMethod intNode = Relations.GetMethodFromGraph(graph, "IntTest", "IntTestFunction");
 
         // TypeCheck of the StringTestFunction method (return type is StringTest)
         TypeCheck typeIntNode = new TypeCheck(
@@ -113,15 +105,11 @@ public class ParameterCheckTests
         SyntaxGraph graph = EntityNodeUtils.CreateMethodWithParamaters();
         RecognizerContext ctx = new() { Graph = graph };
 
-        // Obtain the StringTestFunction method (0 parameters)
-        IMethod stringNode = 
-            graph.GetAll()["StringTest"].GetMethods().FirstOrDefault(
-                x => x.GetName() == "StringTestFunction");
+        // Obtain the StringTestFunction method (3 parameters)
+        IMethod stringNode = Relations.GetMethodFromGraph(graph, "StringTest", "StringTestFunction");
 
         // Obtain the IntTest method (1 StringTest parameter)
-        IMethod intNode = 
-            graph.GetAll()["IntTest"].GetMethods().FirstOrDefault(
-                x => x.GetName() == "IntTestFunction");
+        IMethod intNode = Relations.GetMethodFromGraph(graph, "IntTest", "IntTestFunction");
 
         // TypeCheck of the StringTestFunction method (return type is StringTest)
         TypeCheck typeStringNode = new TypeCheck(
@@ -156,9 +144,7 @@ public class ParameterCheckTests
         RecognizerContext ctx = new() { Graph = graph };
 
         // Obtain method with 0 parameters from syntax graph.
-        IMethod stringNode =
-            graph.GetAll()["Uses"].GetMethods().FirstOrDefault(
-                x => x.GetName() == "UsesFunction");
+        IMethod stringNode = Relations.GetMethodFromGraph(graph, "Uses", "UsesFunction");
 
         // Empty list of typechecks because check returns when checking parameters.
         ParameterCheck usedParamCheck =
@@ -174,15 +160,11 @@ public class ParameterCheckTests
         SyntaxGraph graph = EntityNodeUtils.CreateMethodWithParamaters();
         RecognizerContext ctx = new() { Graph = graph };
 
-        // Obtain the StringTestFunction method (0 parameters)
-        IMethod stringNode =
-            graph.GetAll()["StringTest"].GetMethods().FirstOrDefault(
-                x => x.GetName() == "StringTestFunction");
+        // Obtain the StringTestFunction method (3 parameters)
+        IMethod stringNode = Relations.GetMethodFromGraph(graph, "StringTest", "StringTestFunction");
 
         // Obtain the IntTest method (1 StringTest parameter)
-        IMethod intNode =
-            graph.GetAll()["IntTest"].GetMethods().FirstOrDefault(
-                x => x.GetName() == "IntTestFunction");
+        IMethod intNode = Relations.GetMethodFromGraph(graph, "IntTest", "IntTestFunction");
 
         // Create two typechecks for a parameter check on a method with one parameter
         TypeCheck typeIntNode = new TypeCheck(
