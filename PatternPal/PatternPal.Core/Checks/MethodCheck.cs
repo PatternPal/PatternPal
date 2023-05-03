@@ -59,7 +59,8 @@ internal class MethodCheck : CheckBase
                 }
                 case TypeCheck typeCheck:
                 {
-                    IEntity type = ctx.Graph.Relations.GetEntityByName(methodEntity.GetReturnType())!;
+                    IEntity type = 
+                        ctx.Graph.Relations.GetEntityByName(methodEntity.GetReturnType())!;
                     subCheckResults.Add(typeCheck.Check(ctx, type));
                     break;
                 }
@@ -73,7 +74,11 @@ internal class MethodCheck : CheckBase
                 }
                 case ParameterCheck parameterCheck:
                 {
-                    throw new NotImplementedException();
+                    subCheckResults.Add(
+                        parameterCheck.Check(
+                            ctx,
+                            methodEntity));
+                    break;
                 }
                 default:
                     throw CheckHelper.InvalidSubCheck(
@@ -82,7 +87,7 @@ internal class MethodCheck : CheckBase
             }
         }
 
-        //add the checked method to the list of found methods
+        // Add the checked method to the list of found methods
         MatchedEntities.Add(methodEntity);
 
         return new NodeCheckResult

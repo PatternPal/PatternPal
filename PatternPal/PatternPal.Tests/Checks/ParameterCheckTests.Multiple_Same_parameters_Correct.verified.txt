@@ -1,0 +1,45 @@
+﻿{
+  FeedbackMessage: Found method: StringTestFunction().,
+  Priority: Low,
+  ChildrenCheckResults: [
+    {
+      FeedbackMessage: Found parameters for following node: StringTestFunction().,
+      Priority: Low,
+      ChildrenCheckResults: [
+        {
+          FeedbackMessage: Found node 'IntTest',
+          Priority: Low,
+          ChildrenCheckResults: [
+            {
+              FeedbackMessage: Node 'IntTest' has correct type,
+              Priority: Low,
+              Correct: true
+            }
+          ]
+        },
+        {
+          FeedbackMessage: Found node 'IntTest',
+          Priority: Low,
+          ChildrenCheckResults: [
+            {
+              FeedbackMessage: Node 'IntTest' has correct type,
+              Priority: Low,
+              Correct: true
+            }
+          ]
+        },
+        {
+          FeedbackMessage: Found node 'StringTest',
+          Priority: Low,
+          ChildrenCheckResults: [
+            {
+              FeedbackMessage: Node 'StringTest' has correct type,
+              Priority: Low,
+              Correct: true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

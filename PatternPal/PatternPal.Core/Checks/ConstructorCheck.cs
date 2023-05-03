@@ -64,7 +64,11 @@ internal class ConstructorCheck : CheckBase
                 }
                 case ParameterCheck parameterCheck:
                 {
-                    throw new NotImplementedException();
+                    subCheckResults.Add(
+                        parameterCheck.Check(
+                            ctx, 
+                            constructorEntity));
+                        break;
                 }
                 default:
                     throw CheckHelper.InvalidSubCheck(
