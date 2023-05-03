@@ -3,7 +3,7 @@
   Priority: Low,
   ChildrenCheckResults: [
     {
-      FeedbackMessage: ,
+      FeedbackMessage: Found parameters for following node: StringTestFunction().,
       Priority: Low,
       ChildrenCheckResults: [
         {

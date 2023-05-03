@@ -4,18 +4,18 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace PatternPal.Core.Checks;
 
 /// <summary>
-/// Checks if the parameters of the entity node method are type correct with list of TypeChecks
+/// Checks if the parameters of a IParameterized node are type correct with list of <see cref="_parameterTypes"/>.
 /// </summary>
 internal class ParameterCheck : CheckBase
 {
-    // The types the parameters should have.
+    // Parameters of the provided INode should have types corresponding with this list of TypeChecks.
     private readonly IEnumerable< TypeCheck > _parameterTypes;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ParameterCheck"/> class.
     /// </summary>
     /// <param name="priority">Priority of the check.</param>
-    /// <param name="parameterTypes">A list of types the node method parameters should have.</param>
+    /// <param name="parameterTypes">A list of types the node parameters should have.</param>
     internal ParameterCheck(
         Priority priority,
         IEnumerable< TypeCheck > parameterTypes)
@@ -30,15 +30,15 @@ internal class ParameterCheck : CheckBase
     {
         IParameterized hasParameters = CheckHelper.ConvertNodeElseThrow<IParameterized>(node);
 
-        // Retrieve the parameters the method has to compare to list of TypeChecks and convert to
+        // Retrieve the parameters the node has to compare to list of TypeChecks and convert to
         // IEntities.
-        List< IEntity > methodParameters =
+        List< IEntity > nodeParameters =
             hasParameters.GetParameters().Select(x => ctx.Graph.Relations.GetEntityByName(x)).ToList();
 
         List<ICheckResult> subCheckResultsResults = new List<ICheckResult>();
 
-        // Method has no parameters
-        if (!methodParameters.Any())
+        // Node has no parameters
+        if (!nodeParameters.Any())
         {
             return new NodeCheckResult
             {
@@ -47,15 +47,25 @@ internal class ParameterCheck : CheckBase
                 Priority = Priority
             };
         }
+        // No TypeChecks were provided
+        if (!_parameterTypes.Any())
+        {
+            return new NodeCheckResult
+            {
+                ChildrenCheckResults = subCheckResultsResults,
+                FeedbackMessage = $"No TypeChecks were provided.",
+                Priority = Priority
+            };
+        }
 
-        // For each typecheck, check whether one of the parameters of method has the correct type
-        // and if so remove from method parameters list.
+        // For each typecheck, check whether one of the parameters of node has the correct type
+        // and if so remove from node parameters list.
         foreach (TypeCheck typecheck in _parameterTypes)
         {
             bool noneCorrect = true;
 
             // There are no parameters to check with.   
-            if (methodParameters.Count == 0)
+            if (nodeParameters.Count == 0)
             {
                 // TODO
                 ICheckResult temp = new LeafCheckResult
@@ -68,11 +78,11 @@ internal class ParameterCheck : CheckBase
                 break;
             }
 
-            for (int x = 0; x < methodParameters.Count(); x++)
+            for (int x = 0; x < nodeParameters.Count(); x++)
             {
-                var test = methodParameters[x];
+                var test = nodeParameters[x];
                 ICheckResult tempCheck;
-                tempCheck = typecheck.Check(ctx, methodParameters.ElementAt(x));
+                tempCheck = typecheck.Check(ctx, nodeParameters.ElementAt(x));
 
                 switch (tempCheck)
                 {
@@ -81,7 +91,7 @@ internal class ParameterCheck : CheckBase
                         if (leafCheckResult.Correct)
                         {
                             subCheckResultsResults.Add(tempCheck);
-                            methodParameters.RemoveAt(x);
+                            nodeParameters.RemoveAt(x);
                             noneCorrect = false;
                             break;
                         }
@@ -89,42 +99,41 @@ internal class ParameterCheck : CheckBase
                     }
                     case NodeCheckResult nodeCheckResult:
                     {
-                        bool anyFalse = false;
+                        bool anyTrue = false;
                         foreach (LeafCheckResult subcheck in nodeCheckResult.ChildrenCheckResults)
                         {
-                            // One of the subchecks was incorrect.
-                            if (!subcheck.Correct)
+                            // One of the subchecks was correct.
+                            if (subcheck.Correct)
                             {
-                                anyFalse = true;
+                                anyTrue = true;
                             }
                         }
-                        if (anyFalse)
+                        if (anyTrue)
                         {
-                            break;
+                            subCheckResultsResults.Add(tempCheck);
+                            nodeParameters.RemoveAt(x);
+                            noneCorrect = false;
+                            break; 
                         }
                         else
                         {
-                            subCheckResultsResults.Add(tempCheck);
-                            methodParameters.RemoveAt(x);
-                            noneCorrect = false;
                             break;
                         }
                     }
                 }
 
                 // reached the last iteration none were correct
-                if (x == methodParameters.Count() - 1 && noneCorrect)
+                if (x == nodeParameters.Count() - 1 && noneCorrect)
                 {
                     subCheckResultsResults.Add(tempCheck);
                 }
             }
         }
 
-        // TODO feedback message
         return new NodeCheckResult
         {
             ChildrenCheckResults = subCheckResultsResults, 
-            FeedbackMessage = String.Empty, 
+            FeedbackMessage = $"Found parameters for following node: {node}.", 
             Priority = Priority
         };
     }

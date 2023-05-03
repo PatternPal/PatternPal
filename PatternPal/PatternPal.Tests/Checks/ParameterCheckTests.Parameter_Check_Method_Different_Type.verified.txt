@@ -11,9 +11,9 @@
           Priority: Low,
           ChildrenCheckResults: [
             {
-              FeedbackMessage: Node 'StringTest' has correct type,
+              FeedbackMessage: Node 'StringTest' has incorrect type, expected 'IntTest',
               Priority: Low,
-              Correct: true
+              Correct: false
             }
           ]
         }

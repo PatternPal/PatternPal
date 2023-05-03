@@ -63,7 +63,7 @@ public class ParameterCheckTests
     }
 
     [Test]
-    public Task Parameter_Check_Method_Wrong_Type()
+    public Task Parameter_Check_Method_Different_Type()
     {
         SyntaxGraph graph = EntityNodeUtils.CreateMethodWithParamaters();
         RecognizerContext ctx = new() { Graph = graph };
@@ -101,6 +101,8 @@ public class ParameterCheckTests
                 usedParamCheck
             });
 
+        // Incorrect parameter type check because typecheck has different type from parameter
+        // of provided intNode.
         ICheckResult res = method3.Check(ctx, intNode);
         return Verifier.Verify(res);
     }
@@ -147,8 +149,6 @@ public class ParameterCheckTests
         return Verifier.Verify(res);
     }
 
-
-    // TODO add method in test file without parameters.
     [Test]
     public Task Parameter_Check_No_Parameters()
     {
@@ -169,7 +169,7 @@ public class ParameterCheckTests
     }
 
     [Test]
-    public Task Parameter_Less_Checks_Than_Parameters()
+    public Task Less_Parameters_Than_TypeChecks()
     {
         SyntaxGraph graph = EntityNodeUtils.CreateMethodWithParamaters();
         RecognizerContext ctx = new() { Graph = graph };
