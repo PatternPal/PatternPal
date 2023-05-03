@@ -102,7 +102,7 @@ internal class SingletonRecognizer : IRecognizer
                 new List<ICheck> {
                     Uses(
                         Priority.Mid,
-                        checkSingletonC.Result
+                        checkSingletonB.Result
                     )
                 }
             )
@@ -125,7 +125,7 @@ internal class SingletonRecognizer : IRecognizer
                 new List<ICheck> {
                     Uses(
                         Priority.Mid,
-                        checkSingletonB.Result
+                        checkSingletonC.Result
                     )
                 }
             )
