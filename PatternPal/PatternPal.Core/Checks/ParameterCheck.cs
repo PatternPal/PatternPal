@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace PatternPal.Core.Checks;
 
 /// <summary>
-/// Checks if the parameters of a IParameterized node are type correct with list of <see cref="_parameterTypes"/>.
+/// Checks if the parameters of an <see cref="IParameterized"/> are in accorance with the types in <see cref="_parameterTypes"/>.
 /// </summary>
 internal class ParameterCheck : CheckBase
 {
