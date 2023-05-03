@@ -1,33 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using PatternPal.Extension.Commands;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-using Grpc.Core;
 using PatternPal.Extension.Grpc;
-using StreamJsonRpc;
 using EnvDTE;
-using PatternPal.Extension.UserControls;
-using PatternPal.Extension.ViewModels;
 using EnvDTE80;
-using Microsoft.Win32;
 using PatternPal.Protos;
-using PatternPal.Extension.Model;
-using Microsoft.VisualStudio.Threading;
 using System.Threading;
 using System.Collections;
-using System.Management.Instrumentation;
-using Microsoft.VisualStudio.OLE.Interop;
+
 
 namespace PatternPal.Extension.Commands
 {
-
     /// <summary>
     /// A static class which is responsible for subscribing logged events.
     /// </summary>
@@ -82,8 +67,9 @@ namespace PatternPal.Extension.Commands
             _dteSolution = _dte.Solution;
             // Code that interacts with UI elements goes here
             _dte.Events.BuildEvents.OnBuildDone += OnCompileDone;
+            _dte.Events.SolutionEvents.Opened += OnProjectOpen;
             _dte.Events.SolutionEvents.BeforeClosing += OnProjectClose;
-            _dte.Events.DebuggerEvents.OnEnterRunMode += OnRunProgram;
+            _dte.Events.DebuggerEvents.OnEnterDesignMode += OnRunProgram; //Not triggering...
         }
 
 
@@ -92,11 +78,13 @@ namespace PatternPal.Extension.Commands
         /// </summary>
         public static async Task UnsubscribeEventHandlersAsync()
         {
-
             await _package.JoinableTaskFactory.SwitchToMainThreadAsync(_cancellationToken);
             _dte.Events.BuildEvents.OnBuildDone -= OnCompileDone;
             _dte.Events.SolutionEvents.BeforeClosing -= OnProjectClose;
         }
+
+
+        #region MyRegion
 
         /// <summary>
         /// The event handler for handling the Compile Event. The given parameters are part of the event listener input and among other things necessary to give the right output message.
@@ -107,7 +95,6 @@ namespace PatternPal.Extension.Commands
             vsBuildScope Scope,
             vsBuildAction Action)
         {
-
             ThreadHelper.ThrowIfNotOnUIThread();
             string outputMessage;
             if (_dte.Solution.SolutionBuild.LastBuildInfo != 0)
@@ -134,24 +121,23 @@ namespace PatternPal.Extension.Commands
             // When the compilation was an error, a Compile Error log needs to be send.
             if (_dte.Solution.SolutionBuild.LastBuildInfo != 0)
             {
-
                 Window window = _dte.Windows.Item(WindowKinds.vsWindowKindErrorList);
                 ErrorList errorListWindow = (ErrorList)window.Selection;
-   
+
                 for (int i = 1; i <= errorListWindow.ErrorItems.Count; i++)
                 {
                     ErrorItem errorItem = errorListWindow.ErrorItems.Item(i);
                     string errorType = errorItem.ErrorLevel.ToString();
                     string errorMessage = errorItem.Description;
-                    string errorSourceLocation = String.Concat("Text:"+errorItem.Line);
+                    string errorSourceLocation = String.Concat("Text:" + errorItem.Line);
 
                     // The relative path of the source file for the error is required for the ProgSnap format
-                    string projectFolderName = Path.GetDirectoryName(_dte.Solution.Projects.Item(errorItem.Project).FullName);
+                    string projectFolderName =
+                        Path.GetDirectoryName(_dte.Solution.Projects.Item(errorItem.Project).FullName);
                     string codeStateSection = GetRelativePath(projectFolderName, errorItem.FileName);
 
                     OnCompileError(request, errorType, errorMessage, errorSourceLocation, codeStateSection);
                 }
-
             }
         }
 
@@ -184,7 +170,8 @@ namespace PatternPal.Extension.Commands
         /// <summary>
         /// The event handler for handling the Compile.Error Event. This is strictly a complementary event to the regular Compile event for each separate error.
         /// </summary>
-        private static void OnCompileError(LogEventRequest parent, string compileMessagetype, string compileMessageData, string sourceLocation, string codeStateSection)
+        private static void OnCompileError(LogEventRequest parent, string compileMessagetype, string compileMessageData,
+            string sourceLocation, string codeStateSection)
         {
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtCompileError;
@@ -193,6 +180,43 @@ namespace PatternPal.Extension.Commands
             request.CompileMessageData = compileMessageData;
             request.SourceLocation = sourceLocation;
             request.CodeStateSection = codeStateSection;
+            LogProviderService.LogProviderServiceClient client =
+                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
+            LogEventResponse response = client.LogEvent(request);
+        }
+
+        /// <summary>
+        /// The event handler for handling the Project.Open Event.
+        /// </summary>
+        private static void OnProjectOpen()
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            Projects projects = _dte.Solution.Projects;
+
+            // Distinguish whether only a csproj file was opened initially, or a solution file.
+            // For a csproj, _dte.Solution.FullName returns an empty string and the projects inside
+            // have to be iterated (which is only 1 project, the csproj file).
+            string nametest = _dte.Solution.FullName;
+
+            if (nametest == "")
+            {
+                List<Project> list = new List<Project>();
+                IEnumerator item = projects.GetEnumerator();
+                while (item.MoveNext())
+                {
+                    Project project = item.Current as Project;
+                    if (project == null)
+                    {
+                        continue;
+                    }
+
+                    nametest = project.FullName;
+                }
+            }
+
+            LogEventRequest request = CreateStandardLog();
+            request.EventType = EventType.EvtProjectOpen;
+            request.ProjectId = nametest;
             LogProviderService.LogProviderServiceClient client =
                 new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
             LogEventResponse response = client.LogEvent(request);
@@ -236,25 +260,36 @@ namespace PatternPal.Extension.Commands
         }
 
         /// <summary>
-        /// The event handler for handling the Project.Close Event.
+        /// The event handler for handling the Run.Program Event.
         /// </summary>
         private static void OnRunProgram(dbgEventReason reason)
         {
-            dbgEventReason r = reason;
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtRunProgram;
+
+            if (reason == dbgEventReason.dbgEventReasonExceptionThrown ||
+                reason == dbgEventReason.dbgEventReasonExceptionNotHandled)
+            {
+                request.ExecutionResult = ExecutionResult.ExtError;
+            }
+
             LogProviderService.LogProviderServiceClient client =
                 new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
             LogEventResponse response = client.LogEvent(request);
+            System.Diagnostics.Process process = new System.Diagnostics.Process();
         }
 
+        #endregion
         /// <summary>
         /// Creates a standard log format with set fields that are always generated. Consequently, it is used by all other specific logs.
         /// </summary>
         /// <returns>The standard log format.</returns>
         private static LogEventRequest CreateStandardLog()
         {
-            return new LogEventRequest {EventId = Guid.NewGuid().ToString(), SubjectId = GetSubjectId(), SessionId = _sessionId };
+            return new LogEventRequest
+            {
+                EventId = Guid.NewGuid().ToString(), SubjectId = GetSubjectId(), SessionId = _sessionId
+            };
         }
 
         /// <summary>
@@ -263,7 +298,6 @@ namespace PatternPal.Extension.Commands
         /// </summary>
         private static void SaveSubjectId()
         {
-
             // A SubjectID is only ever generated once per user. If the directory already exists, the SubjectID was already set.
             if (Directory.Exists(_pathToUserDataFolder))
             {
@@ -299,11 +333,13 @@ namespace PatternPal.Extension.Commands
         public static string GetRelativePath(string relativeTo, string path)
         {
             Uri uri = new Uri(relativeTo);
-            string rel = Uri.UnescapeDataString(uri.MakeRelativeUri(new Uri(path)).ToString()).Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+            string rel = Uri.UnescapeDataString(uri.MakeRelativeUri(new Uri(path)).ToString())
+                .Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
             if (rel.Contains(Path.DirectorySeparatorChar.ToString()) == false)
             {
                 rel = $".{Path.DirectorySeparatorChar}{rel}";
             }
+
             return rel;
         }
     }

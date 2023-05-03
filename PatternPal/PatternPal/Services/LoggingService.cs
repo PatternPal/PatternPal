@@ -2,9 +2,7 @@
 
 using Grpc.Net.Client;
 using PatternPal.LoggingServer;
-using EditType = PatternPal.LoggingServer.EditType;
-using EventInitiator = PatternPal.LoggingServer.EventInitiator;
-using EventType = PatternPal.LoggingServer.EventType;
+using ExecutionResult = PatternPal.LoggingServer.ExecutionResult;
 
 #endregion
 
@@ -41,6 +39,8 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
                 return CompileLog(receivedRequest);
             case Protos.EventType.EvtCompileError:
                 return CompileErrorLog(receivedRequest);
+            case Protos.EventType.EvtProjectOpen:
+                return ProjectOpenLog(receivedRequest);
             case Protos.EventType.EvtProjectClose:
                 return ProjectCloseLog(receivedRequest);
             case Protos.EventType.EvtRunProgram:
@@ -77,6 +77,7 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
         };
     }
 
+    #region Log types
     private LogRequest CompileLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
@@ -87,7 +88,6 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
 
     private LogRequest CompileErrorLog(LogEventRequest receivedRequest)
     {
-        //TO DO: add code state from which the compilation error occurred.
         LogRequest sendLog = StandardLog(receivedRequest);
         sendLog.EventType = LoggingServer.EventType.EvtCompileError;
         sendLog.CompileMessageData = receivedRequest.CompileMessageData;
@@ -105,14 +105,20 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
         return sendLog;
     }
 
+    private LogRequest ProjectOpenLog(LogEventRequest receivedRequest)
+    {
+        LogRequest sendLog = StandardLog(receivedRequest);
+        sendLog.EventType = LoggingServer.EventType.EvtProjectOpen;
+        sendLog.ProjectId = receivedRequest.ProjectId;
+        return sendLog;
+    }
+
     private LogRequest RunProgramLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
         sendLog.EventType = LoggingServer.EventType.EvtRunProgram;
         sendLog.ExecutionId = receivedRequest.ExecutionId;
-        sendLog.ExecutionResult = receivedRequest.ExecutionResult;
-        //ExecutionID
-        //Execution Result
+        sendLog.ExecutionResult = (ExecutionResult)receivedRequest.ExecutionResult;
 
         return sendLog;
     }
@@ -123,8 +129,6 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
 
         return sendLog;
     }
-
-
     private LogRequest SessionEndLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
@@ -132,6 +136,7 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
       
         return sendLog;
     }
+    #endregion
 }
 
 

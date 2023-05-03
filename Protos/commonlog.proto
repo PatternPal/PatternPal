@@ -61,3 +61,12 @@ enum EditType
     ET_RESET = 10;
     ET_CUSTOM_EDIT_TYPE = 11;
 }
+
+enum ExecutionResult
+{
+    EXT_UNKNOWN = 0;
+    EXT_SUCCES = 1;
+    EXT_TIMEOUT = 2;
+    EXT_ERROR = 3;
+    EXT_TESTFAILED = 4;
+}
