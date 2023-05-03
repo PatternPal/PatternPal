@@ -76,17 +76,17 @@ internal class SingletonRecognizer : IRecognizer
         MethodCheck getInstanceMethod = Method(
             Priority.Knockout,
             Modifiers(
-                Priority.Low,
+                Priority.Knockout,
                 Modifier.Static
             ),
             Any(
-                Priority.Low,
+                Priority.Knockout,
                 Modifiers(
-                    Priority.Low,
+                    Priority.Knockout,
                     Modifier.Public
                 ),
                 Modifiers(
-                    Priority.Mid,
+                    Priority.Knockout,
                     Modifier.Internal
                 )
             )
@@ -94,9 +94,47 @@ internal class SingletonRecognizer : IRecognizer
 
         //Singleton d1) if called and there is no instance saved in the private field, then it calls the private constructor
         //TODO: implement
+        MethodCheck checkNoInstanceConstructor = Method(
+            Priority.Mid,
+            new IfThenOperatorCheck(
+                Priority.Mid,
+                new List<ICheck>(), //TODO: replace empty list with requirement
+                new List<ICheck> {
+                    Uses(
+                        Priority.Mid,
+                        checkSingletonC.Result
+                    )
+                }
+            )
+        );
+
+        MethodCheck checkSingletonD1 = Method(
+            Priority.Mid,
+            getInstanceMethod,
+            checkNoInstanceConstructor
+        );
+
 
         //Singleton d2) if called and there is an instance saved in the private field it returns this instance
         //TODO: implement
+        MethodCheck checkInstanceConstructor = Method(
+            Priority.Mid,
+            new IfThenOperatorCheck(
+                Priority.Mid,
+                new List<ICheck>(), //TODO: replace empty list with requirement
+                new List<ICheck> {
+                    Uses(
+                        Priority.Mid,
+                        checkSingletonB.Result
+                    )
+                }
+            )
+        );
+        MethodCheck checkSingletonD2 = Method(
+            Priority.Mid,
+            getInstanceMethod,
+            checkInstanceConstructor
+        );
 
         //Client a) calls the getInstance() method of the singleton class
         MethodCheck checkClientA = Method(
@@ -112,7 +150,9 @@ internal class SingletonRecognizer : IRecognizer
             checkSingletonA,
             checkSingletonB,
             checkSingletonC,
-            getInstanceMethod
+            getInstanceMethod, //checkSingletonD
+            checkSingletonD1,
+            checkSingletonD2
         );
 
         yield return Class(
