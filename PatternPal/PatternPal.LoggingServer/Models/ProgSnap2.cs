@@ -18,6 +18,17 @@ namespace PatternPal.LoggingServer.Models
         public Guid CodeStateId { get; set; }
         public EventType EventType { get; set; }
 
+        public Guid? ParentId { get; set; }
+
+        public string? ProjectId { get; set; }
+
+        public string? CompileMessageType { get; set; } 
+
+        public string? CompileMessage { get; set; }
+        public string? SourceLocation { get; set; }
+
+        public string? CodeStateSection { get; set; }
+
         public DateTimeOffset ServerDatetime { get; set; }
         public DateTimeOffset ClientDatetime { get; set; }
 
