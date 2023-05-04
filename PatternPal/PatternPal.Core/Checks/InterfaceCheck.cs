@@ -26,9 +26,7 @@ internal class InterfaceCheck : CheckBase
 
     internal Func<List<INode>> Result => () => MatchedEntities;
 
-    /// <summary>
-    /// This method executes all the given checks on the <paramref name="node"/>
-    /// </summary>
+    /// <inheritdoc />
     public override ICheckResult Check(
         RecognizerContext ctx,
         INode node)

@@ -18,7 +18,7 @@ internal class RelationCheck : CheckBase
     /// </summary>
     /// <param name="priority">Priority of the check.</param>
     /// <param name="relationType">The type of relation.</param>
-    /// <param name="getNodes">A functor to get the node to check for a <see cref"_relationType"/> relation.</param>
+    /// <param name="getNodes">A functor to get the node to check for a <see cref="_relationType"/> relation.</param>
     internal RelationCheck(Priority priority,
         RelationType relationType,
         Func< List<INode> > getNodes) : base(priority)

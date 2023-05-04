@@ -57,5 +57,34 @@ namespace PatternPal.LoggingServer.Models
         /// The date and time of the event, in the client's time zone.
         /// </summary>
         public DateTimeOffset ClientDatetime { get; set; }
+        /// <summary>
+        /// The ID of the parent event, if any. Used in cases such as compile.error, where the parent event is compile.
+        /// </summary>
+        public Guid? ParentId { get; set; }
+
+        /// <summary>
+        /// The ID of the project associated. This is generated per project, and is the same for all events in the same project.
+        /// </summary>
+        public string? ProjectId { get; set; }
+
+        /// <summary>
+        /// The type of compile message, such as "error", "warning", or "message".
+        /// </summary>
+        public string? CompileMessageType { get; set; }
+
+        /// <summary>
+        /// The content of the compile message.
+        /// </summary>
+        public string? CompileMessage { get; set; }
+
+        /// <summary>
+        /// The source location associated with this compile event, if any.
+        /// </summary>
+        public string? SourceLocation { get; set; }
+
+        /// <summary>
+        /// The section of the code state associated with this compile event. For example in compile.error, this would be the section of code that caused the error.
+        /// </summary>
+        public string? CodeStateSection { get; set; }
     }
 }

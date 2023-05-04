@@ -1,0 +1,17 @@
+﻿{
+  FeedbackMessage: Found class 'Test',
+  Priority: Mid,
+  ChildrenCheckResults: [
+    {
+      FeedbackMessage: Found method: DoSomething().,
+      Priority: Mid,
+      ChildrenCheckResults: [
+        {
+          FeedbackMessage: Modifiers correctly implemented.,
+          Priority: Mid,
+          Correct: true
+        }
+      ]
+    }
+  ]
+}

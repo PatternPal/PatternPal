@@ -34,17 +34,35 @@ namespace PatternPal.LoggingServer.Migrations
                     b.Property<Guid>("CodeStateId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("CodeStateSection")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CompileMessage")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CompileMessageType")
+                        .HasColumnType("text");
+
                     b.Property<int>("EventType")
                         .HasColumnType("integer");
 
                     b.Property<int>("Order")
                         .HasColumnType("integer");
 
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ProjectId")
+                        .HasColumnType("text");
+
                     b.Property<DateTimeOffset>("ServerDatetime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("SessionId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("SourceLocation")
+                        .HasColumnType("text");
 
                     b.Property<Guid>("SubjectId")
                         .HasColumnType("uuid");

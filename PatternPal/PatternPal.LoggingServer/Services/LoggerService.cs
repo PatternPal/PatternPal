@@ -47,6 +47,12 @@ namespace PatternPal.LoggingServer.Services
                 throw new RpcException(status);
             }
 
+            Guid parentEventId = Guid.Empty;
+            if (request.ParentEventId != "" && !Guid.TryParse(request.ParentEventId, out parentEventId))
+            {
+                Status status = new Status(StatusCode.InvalidArgument, "Invalid parentEventID GUID format");
+                throw new RpcException(status);
+            }
             if (request.EventType == EventType.EvtUnknown)
             {
                 Status status = new Status(StatusCode.InvalidArgument, "Unknown event type");
@@ -76,7 +82,14 @@ namespace PatternPal.LoggingServer.Services
                 CodeStateId = Guid.NewGuid(), // TODO: implement code state
                 ClientDatetime = cDto,
                 ServerDatetime = DateTimeOffset.Now,
-                SessionId = sessionId
+                SessionId = sessionId,
+                ProjectId = request.ProjectId,
+                ParentId = parentEventId,
+                CompileMessage = request.CompileMessageData,
+                CompileMessageType = request.CompileMessageType,
+                SourceLocation = request.SourceLocation,
+                CodeStateSection = request.CodeStateSection
+
             };
 
             await _eventRepository.Insert(newEvent);

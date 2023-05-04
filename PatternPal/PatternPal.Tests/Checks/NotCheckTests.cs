@@ -9,7 +9,7 @@ namespace PatternPal.Tests.Checks;
 internal class NotCheckTests
 {
     [Test]
-    public void Single_Modifier_Correct_Not_Check_Test()
+    public void Single_Modifier_Correct_NotCheck_Test()
     {
         // create classEntity and RecognizerContext
         IClass classEntity = EntityNodeUtils.CreateClass();
@@ -33,7 +33,7 @@ internal class NotCheckTests
     }
 
     [Test]
-    public void Single_Modifier_Incorrect_Not_Check_Test()
+    public void Single_Modifier_Incorrect_NotCheck_Test()
     {
         // create classEntity and RecognizerContext
         IClass classEntity = EntityNodeUtils.CreateClass();
