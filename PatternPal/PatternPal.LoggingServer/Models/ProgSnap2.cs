@@ -7,36 +7,55 @@ using PatternPal.LoggingServer.Models;
 namespace PatternPal.LoggingServer.Models
 {
 
+    /// <summary>
+    /// Represents an event in ProgSnap2, including information about the session, subject, tool instances, code state, and timing.
+    /// </summary>
     public class ProgSnap2Event
     {
-        // Primary key for events, This must be UNIQ
+        /// <summary>
+        /// The primary key for the event. This must be unique.
+        /// </summary>
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid EventId { get; set; }
 
-
-        // Order of event in session, starting at 0
+        /// <summary>
+        /// The order of the event within the session, starting at 0.
+        /// </summary>
         public int Order { get; set; }
 
-        // ID of the session this event belongs to. So every extension launch is a new session.
+        /// <summary>
+        /// The ID of the session that this event belongs to. Every extension launch is a new session.
+        /// </summary>
         public Guid SessionId { get; set; }
 
-        // ID of the subject this event belongs to. So every new extension installation is a new subject.
+        /// <summary>
+        /// The ID of the subject that this event belongs to. Every new extension installation is a new subject.
+        /// </summary>
         public Guid SubjectId { get; set; }
 
-        // Infomration about the IDE, Compiler, OS, Programming lanuage etc.
+        /// <summary>
+        /// Information about the IDE, compiler, OS, programming language, and other tool instances.
+        /// </summary>
         public string ToolInstances { get; set; }
 
-        // Refers to folder where the code state can be found. 
+        /// <summary>
+        /// The ID of the code state that this event refers to.
+        /// </summary>
         public Guid CodeStateId { get; set; }
 
+        /// <summary>
+        /// The type of event.
+        /// </summary>
         public EventType EventType { get; set; }
 
-        // Datetime of event considering the server timezone
+        /// <summary>
+        /// The date and time of the event, in the server's time zone.
+        /// </summary>
         public DateTimeOffset ServerDatetime { get; set; }
 
-        // Datetime of event considering the client timezone.
+        /// <summary>
+        /// The date and time of the event, in the client's time zone.
+        /// </summary>
         public DateTimeOffset ClientDatetime { get; set; }
-
     }
-
 }

@@ -22,7 +22,6 @@ namespace PatternPal.LoggingServer.Data
                 optionsBuilder.UseNpgsql(Configuration.GetConnectionString("PostgresConnection"));
             }
 
-            /// The table of events in the database is called "Events" and this is how we cast it to a C# object we can modify.
             public DbSet<ProgSnap2Event> Events { get; set; }
         }
 }
