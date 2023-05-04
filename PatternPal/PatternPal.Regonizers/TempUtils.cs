@@ -6,6 +6,8 @@ using SyntaxTree.Abstractions.Members;
 
 namespace PatternPal.Recognizers
 {
+    // TODO QA: Either delete or do not mark as obsolete.
+    // TODO QA: XML-comment
     [Obsolete]
     public static class TempUtils
     {

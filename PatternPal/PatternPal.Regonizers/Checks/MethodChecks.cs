@@ -1,19 +1,24 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-
 using SyntaxTree.Abstractions.Members;
 
 namespace PatternPal.Recognizers.Checks
 {
+    // TODO QA: XML-comment
     public static class MethodChecks
     {
         public static bool CheckCreationType(this IMethod methodSyntax, string creationType)
         {
-            var body = methodSyntax.GetBody();
+            CSharpSyntaxNode body = methodSyntax.GetBody();
 
-            if (body == null) return false;
+            if (body == null)
+            {
+                return false;
+            }
 
-            var creations = body.DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
+            IEnumerable<ObjectCreationExpressionSyntax> creations = body.DescendantNodes().OfType<ObjectCreationExpressionSyntax>();
 
             return creations
                 .Where(

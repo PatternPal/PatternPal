@@ -7,6 +7,7 @@ using static PatternPal.Recognizers.Abstractions.FeedbackType;
 
 namespace PatternPal.Recognizers.Models.Checks
 {
+    // TODO QA: XML-comment
     public class ModifierCheck : ICheck<IModified>
     {
         private readonly IResourceMessage _modifiersFeedback;
@@ -29,7 +30,10 @@ namespace PatternPal.Recognizers.Models.Checks
 
         public ICheckResult Check(IModified modified)
         {
-            if (modified == null) return new CheckResult(_modifiersFeedback, Incorrect, null, 1f);
+            if (modified == null)
+            {
+                return new CheckResult(_modifiersFeedback, Incorrect, null, 1f);
+            }
 
             return new CheckResult(_modifiersFeedback, CheckModifiers(modified) ? Correct : Incorrect, modified, 1f);
         }

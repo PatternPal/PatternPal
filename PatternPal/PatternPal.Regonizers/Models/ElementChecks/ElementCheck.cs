@@ -5,6 +5,8 @@ using SyntaxTree.Abstractions;
 
 namespace PatternPal.Recognizers.Models.ElementChecks
 {
+    // TODO QA: XML-comment
+
     /// <summary>
     ///     A class for defining a check on an element with a predicate
     /// </summary>
@@ -30,9 +32,9 @@ namespace PatternPal.Recognizers.Models.ElementChecks
             //Support checking without input (To create false result)
             if (elementToCheck != null)
             {
-                var isValid = _predicate(elementToCheck);
-                var feedback = isValid ? FeedbackType.Correct : FeedbackType.Incorrect;
-                var checkResult = new CheckResult(_feedback, feedback, elementToCheck, _score);
+                bool isValid = _predicate(elementToCheck);
+                FeedbackType feedback = isValid ? FeedbackType.Correct : FeedbackType.Incorrect;
+                CheckResult checkResult = new CheckResult(_feedback, feedback, elementToCheck, _score);
 
                 if (feedback == FeedbackType.Incorrect && _checkType == CheckType.KnockOut)
                 {

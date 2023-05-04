@@ -10,6 +10,7 @@ using SyntaxTree.Abstractions.Members;
 
 namespace PatternPal.Recognizers.Models.Checks.Entities
 {
+    // TODO QA: XML-comment
     public class EntityCheck : AbstractListCheck<IEntity, EntityCheck>, ICheckBuilder<IEntity>, ICheck<IEntity>
     {
         public EntityCheck()
@@ -32,9 +33,9 @@ namespace PatternPal.Recognizers.Models.Checks.Entities
         {
             List<ICheckResult> results = _checks.Select(c => c.Check(elementToCheck)).ToList();
 
-            foreach (var group in Groups)
+            foreach (MemberGroupCheck group in Groups)
             {
-                foreach (var check in group)
+                foreach (IMemberCheckBuilder check in group)
                 {
                     List<IMember> members = check.GetCheckable(elementToCheck).ToList();
 
@@ -46,7 +47,7 @@ namespace PatternPal.Recognizers.Models.Checks.Entities
                 }
             }
 
-            var result = new CheckResult("", FeedbackType.Correct, elementToCheck) { ChildFeedback = results };
+            CheckResult result = new CheckResult("", FeedbackType.Correct, elementToCheck) { ChildFeedback = results };
             return result;
         }
 
@@ -65,6 +66,8 @@ namespace PatternPal.Recognizers.Models.Checks.Entities
 
     public interface ICheckBuilder<T> where T : INode
     {
+        // TODO QA: Add returns to xml-comment!
+
         /// <summary>
         /// Any member should match
         /// </summary>

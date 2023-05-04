@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using SyntaxTree.Abstractions.Entities;
 
 namespace PatternPal.Recognizers.Abstractions
@@ -19,7 +18,8 @@ namespace PatternPal.Recognizers.Abstractions
         /// <returns>A list of suggestions</returns>
         IList<ICheckResult> GetResults();
 
+        // TODO QA: XML-comment
+        // TODO QA: Method is not referenced; unnecessary?
         IDictionary<IEntity, string> GetRelatedSubTypes();
-
     }
 }

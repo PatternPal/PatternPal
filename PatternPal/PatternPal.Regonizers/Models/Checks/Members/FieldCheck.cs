@@ -6,6 +6,7 @@ using SyntaxTree.Abstractions.Members;
 
 namespace PatternPal.Recognizers.Models.Checks.Members
 {
+    // TODO QA: XML-comment
     public class FieldCheck : AbstractMemberListCheck<IField, FieldCheck>
     {
         //TODO make a interface for real typed members
@@ -22,7 +23,8 @@ namespace PatternPal.Recognizers.Models.Checks.Members
                     x => x.CheckFieldTypeGeneric(new List<string> { entity }),
                     new ResourceMessage("FieldType", entity)
                 );
-            else return base.Type(entity);
+            
+            return base.Type(entity);
         }
 
         protected override FieldCheck This() => this;

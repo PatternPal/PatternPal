@@ -8,6 +8,7 @@ using SyntaxTree.Abstractions.Members;
 
 namespace PatternPal.Recognizers.Models.Checks.Entities.GroupChecks
 {
+    // TODO QA: XML-comment
     public abstract class MemberGroupCheck : IEnumerable<IMemberCheckBuilder>
     {
         private readonly ICheckBuilder<IEntity> _root;
@@ -25,7 +26,7 @@ namespace PatternPal.Recognizers.Models.Checks.Entities.GroupChecks
 
         public MethodCheckBuilder Method(ResourceMessage message, bool variants = false)
         {
-            var builder = new MethodCheckBuilder(_root, message, variants);
+            MethodCheckBuilder builder = new MethodCheckBuilder(_root, message, variants);
             _builders.Add(builder);
             return builder;
         }
@@ -37,7 +38,7 @@ namespace PatternPal.Recognizers.Models.Checks.Entities.GroupChecks
 
         public FieldCheckBuilder Field(ResourceMessage message, bool variants = false)
         {
-            var builder = new FieldCheckBuilder(_root, message, variants);
+            FieldCheckBuilder builder = new FieldCheckBuilder(_root, message, variants);
             _builders.Add(builder);
             return builder;
         }
@@ -49,7 +50,7 @@ namespace PatternPal.Recognizers.Models.Checks.Entities.GroupChecks
 
         public ConstructorCheckBuilder Constructor(ResourceMessage message)
         {
-            var builder = new ConstructorCheckBuilder(_root, message);
+            ConstructorCheckBuilder builder = new ConstructorCheckBuilder(_root, message);
             _builders.Add(builder);
             return builder;
         }

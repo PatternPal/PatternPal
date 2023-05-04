@@ -6,6 +6,7 @@ using SyntaxTree.Abstractions.Members;
 
 namespace PatternPal.Recognizers.Models.Checks.Entities.MemberBuilders
 {
+    // TODO QA: XML-comment
     public class FieldCheckBuilder : AbstractMemberCheckBuilder<IField, FieldCheckBuilder, FieldCheck>
     {
         private readonly bool _variants;

@@ -5,6 +5,7 @@ using SyntaxTree.Abstractions.Members;
 
 namespace PatternPal.Recognizers.Checks
 {
+    // TODO QA: XML-comment
     public static class FieldChecks
     {
         public static bool CheckFieldTypeGeneric(this IField fieldSyntax, IEnumerable<string> types)
@@ -14,19 +15,19 @@ namespace PatternPal.Recognizers.Checks
 
         private static bool CheckFieldTypeGeneric(TypeSyntax type, IEnumerable<string> types)
         {
-            var list = types.ToList();
+            List<string> list = types.ToList();
             if (list.Any(x => x.Equals(type.ToString())))
             {
                 return true;
             }
 
-            var genericTypeIfApplicable = type as GenericNameSyntax;
+            GenericNameSyntax genericTypeIfApplicable = type as GenericNameSyntax;
             if (genericTypeIfApplicable == null)
             {
                 return false;
             }
 
-            foreach (var typeSyntax in genericTypeIfApplicable.TypeArgumentList.Arguments)
+            foreach (TypeSyntax typeSyntax in genericTypeIfApplicable.TypeArgumentList.Arguments)
             {
                 if (CheckFieldTypeGeneric(typeSyntax, list))
                 {
