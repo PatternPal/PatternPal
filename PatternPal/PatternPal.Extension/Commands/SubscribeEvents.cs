@@ -69,8 +69,8 @@ namespace PatternPal.Extension.Commands
             // Code that interacts with UI elements goes here
             _dte.Events.BuildEvents.OnBuildDone += OnCompileDone;
             _dte.Events.SolutionEvents.Opened += OnProjectOpen;
-            _dte.Events.SolutionEvents.BeforeClosing += OnProjectClose;
-            _dte.Events.DebuggerEvents.OnEnterDesignMode += OnRunProgram; //Not triggering...
+            _dte.Events.SolutionEvents.BeforeClosing += OnProjectClose; 
+            _dte.Events.DebuggerEvents.OnEnterDesignMode += OnRunProgram; // TODO: Not triggering...
         }
 
 
