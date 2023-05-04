@@ -42,7 +42,7 @@ internal class CheckCollection : CheckBase
         return new NodeCheckResult
                {
                    ChildrenCheckResults = subCheckResults,
-                   FeedbackMessage = string.Empty,
+                   FeedbackMessage = $"Found the required checks for: {node}.",
                    Priority = Priority,
                    CollectionKind = _checkCollectionKind,
                };
