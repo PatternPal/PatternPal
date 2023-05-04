@@ -85,7 +85,7 @@ namespace PatternPal.Extension.Commands
         }
 
 
-        #region MyRegion
+        #region Events
 
         /// <summary>
         /// The event handler for handling the Compile Event. The given parameters are part of the event listener input and among other things necessary to give the right output message.
@@ -214,9 +214,9 @@ namespace PatternPal.Extension.Commands
             // Distinguish whether only a csproj file was opened initially, or a solution file.
             // For a csproj, _dte.Solution.FullName returns an empty string and the projects inside
             // have to be iterated (which is only 1 project, the csproj file).
-            string nametest = _dte.Solution.FullName;
+            string nameTest = _dte.Solution.FullName;
 
-            if (nametest == "")
+            if (nameTest == "")
             {
                 List<Project> list = new List<Project>();
                 IEnumerator item = projects.GetEnumerator();
@@ -228,13 +228,13 @@ namespace PatternPal.Extension.Commands
                         continue;
                     }
 
-                    nametest = project.FullName;
+                    nameTest = project.FullName;
                 }
             }
 
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtProjectOpen;
-            request.ProjectId = nametest;
+            request.ProjectId = nameTest;
             LogProviderService.LogProviderServiceClient client =
                 new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
             LogEventResponse response = client.LogEvent(request);
@@ -251,9 +251,9 @@ namespace PatternPal.Extension.Commands
             // Distinguish whether only a csproj file was opened initially, or a solution file.
             // For a csproj, _dte.Solution.FullName returns an empty string and the projects inside
             // have to be iterated (which is only 1 project, the csproj file).
-            string nametest = _dte.Solution.FullName;
+            string nameTest = _dte.Solution.FullName;
 
-            if (nametest == "")
+            if (nameTest == "")
             {
                 List<Project> list = new List<Project>();
                 IEnumerator item = projects.GetEnumerator();
@@ -265,13 +265,13 @@ namespace PatternPal.Extension.Commands
                         continue;
                     }
 
-                    nametest = project.FullName;
+                    nameTest = project.FullName;
                 }
             }
 
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtProjectClose;
-            request.ProjectId = nametest;
+            request.ProjectId = nameTest;
             LogProviderService.LogProviderServiceClient client =
                 new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
             LogEventResponse response = client.LogEvent(request);
