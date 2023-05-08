@@ -16,6 +16,7 @@ using Microsoft.VisualStudio.RpcContracts.Commands;
 using System.Management.Instrumentation;
 using System.Reflection.Metadata;
 using System.Runtime.Remoting.Contexts;
+using static Microsoft.VisualStudio.Shell.ThreadedWaitDialogHelper;
 
 namespace PatternPal.Extension
 {
@@ -135,12 +136,29 @@ namespace PatternPal.Extension
             get { return _doLogData; }
             set
             {
+                // Set is triggered both when changing the field value, as well as when clicking on the OK button.
+                // This prevents the code from being triggered twice.
+                if (value == _doLogData) return;    
+
                 ThreadHelper.JoinableTaskFactory.Run(async () => {
                     await (value
                         ? SubscribeEvents.SubscribeEventHandlersAsync()
                             : SubscribeEvents.UnsubscribeEventHandlersAsync());
                 });
+
+                // The SessionId has to be reset if the option for logging data is changed to prevent logging without a session id. 
+                // In other words, a new session has to be started.
+                if (!_doLogData && value)
+                {
+                    SubscribeEvents.SessionId = Guid.NewGuid().ToString();
+                    SubscribeEvents.OnSessionStart();
+                } else if (DoLogData && !value)
+                {
+                    SubscribeEvents.OnSessionEnd();
+                }
+
                 _doLogData = value;
+
             }
         }
      }

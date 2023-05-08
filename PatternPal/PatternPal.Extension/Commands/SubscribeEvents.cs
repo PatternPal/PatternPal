@@ -30,6 +30,12 @@ namespace PatternPal.Extension.Commands
 
         private static string _sessionId;
 
+        public static string SessionId
+        {
+            get { return _sessionId; }
+            set { _sessionId = value; }
+        }
+
         private static string _pathToUserDataFolder;
 
         private static CancellationToken _cancellationToken;
@@ -51,16 +57,13 @@ namespace PatternPal.Extension.Commands
             _cancellationToken = cancellationToken;
             SaveSubjectId();
 
-
-            // These events are not handled with an event listener, and thus need to be checked separately whether logging is enabled.
-            if (_package.DoLogData)
-            {
-                OnSessionStart();
-            }
+            // Initialization, as otherwise the handlers will never get started.
+            bool _ = package.DoLogData;
         }
 
         /// <summary>
         /// Subscribes the event handlers for logging data.
+        /// Be careful with calling this method. This method should only be called once.
         /// </summary>
         public static async Task SubscribeEventHandlersAsync()
         {
@@ -69,8 +72,8 @@ namespace PatternPal.Extension.Commands
             // Code that interacts with UI elements goes here
             _dte.Events.BuildEvents.OnBuildDone += OnCompileDone;
             _dte.Events.SolutionEvents.Opened += OnProjectOpen;
-            _dte.Events.SolutionEvents.BeforeClosing += OnProjectClose; 
-            _dte.Events.DebuggerEvents.OnEnterDesignMode += OnRunProgram; // TODO: Not triggering...
+            _dte.Events.SolutionEvents.BeforeClosing += OnProjectClose;
+           // _dte.Events.DebuggerEvents.OnEnterDesignMode += OnRunProgram; //Not triggering...
         }
 
 
@@ -81,6 +84,7 @@ namespace PatternPal.Extension.Commands
         {
             await _package.JoinableTaskFactory.SwitchToMainThreadAsync(_cancellationToken);
             _dte.Events.BuildEvents.OnBuildDone -= OnCompileDone;
+            _dte.Events.SolutionEvents.Opened -= OnProjectOpen;
             _dte.Events.SolutionEvents.BeforeClosing -= OnProjectClose;
         }
 
@@ -162,9 +166,9 @@ namespace PatternPal.Extension.Commands
         /// <summary>
         /// The event handler for handling the Session.Start Event. When a new session starts, a (new) sessionID is generated .
         /// </summary>
-        private static void OnSessionStart()
+        internal static void OnSessionStart()
         {
-            _sessionId = Guid.NewGuid().ToString();
+            SessionId = Guid.NewGuid().ToString();
 
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtSessionStart;
@@ -360,5 +364,7 @@ namespace PatternPal.Extension.Commands
 
             return rel;
         }
+
+
     }
 }
