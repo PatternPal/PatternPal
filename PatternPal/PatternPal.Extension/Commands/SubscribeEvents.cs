@@ -132,7 +132,7 @@ namespace PatternPal.Extension.Commands
             request.EventType = EventType.EvtCompile;
             request.CompileResult = outputMessage;  
 
-            LogProviderService.LogProviderServiceClient client =
+             LogProviderService.LogProviderServiceClient client =
                 new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
             LogEventResponse response = client.LogEvent(request);
 
@@ -211,14 +211,9 @@ namespace PatternPal.Extension.Commands
             ThreadHelper.ThrowIfNotOnUIThread();
             Projects projects = _dte.Solution.Projects;
 
-            // Distinguish whether only a csproj file was opened initially, or a solution file.
-            // For a csproj, _dte.Solution.FullName returns an empty string and the projects inside
-            // have to be iterated (which is only 1 project, the csproj file).
-            string nameTest = _dte.Solution.FullName;
+            // Iterate through all projects and log for each of them, as a solution can contain multiple csproj. files
 
-            if (nameTest == "")
-            {
-                List<Project> list = new List<Project>();
+            List<Project> list = new List<Project>();
                 IEnumerator item = projects.GetEnumerator();
                 while (item.MoveNext())
                 {
@@ -227,17 +222,14 @@ namespace PatternPal.Extension.Commands
                     {
                         continue;
                     }
-
-                    nameTest = project.FullName;
+                    LogEventRequest request = CreateStandardLog();
+                    request.EventType = EventType.EvtProjectOpen;
+                    request.ProjectId = project.FullName;
+                    LogProviderService.LogProviderServiceClient client =
+                        new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
+                    LogEventResponse response = client.LogEvent(request);
                 }
-            }
 
-            LogEventRequest request = CreateStandardLog();
-            request.EventType = EventType.EvtProjectOpen;
-            request.ProjectId = nameTest;
-            LogProviderService.LogProviderServiceClient client =
-                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-            LogEventResponse response = client.LogEvent(request);
         }
 
         /// <summary>
@@ -248,13 +240,7 @@ namespace PatternPal.Extension.Commands
             ThreadHelper.ThrowIfNotOnUIThread();
             Projects projects = _dte.Solution.Projects;
 
-            // Distinguish whether only a csproj file was opened initially, or a solution file.
-            // For a csproj, _dte.Solution.FullName returns an empty string and the projects inside
-            // have to be iterated (which is only 1 project, the csproj file).
-            string nameTest = _dte.Solution.FullName;
-
-            if (nameTest == "")
-            {
+                // Iterate through all projects and log for each of them, as a solution can contain multiple csproj. files
                 List<Project> list = new List<Project>();
                 IEnumerator item = projects.GetEnumerator();
                 while (item.MoveNext())
@@ -265,16 +251,14 @@ namespace PatternPal.Extension.Commands
                         continue;
                     }
 
-                    nameTest = project.FullName;
+                    LogEventRequest request = CreateStandardLog();
+                    request.EventType = EventType.EvtProjectClose;
+                    request.ProjectId = project.FullName;
+                    LogProviderService.LogProviderServiceClient client =
+                        new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
+                    LogEventResponse response = client.LogEvent(request);
                 }
-            }
 
-            LogEventRequest request = CreateStandardLog();
-            request.EventType = EventType.EvtProjectClose;
-            request.ProjectId = nameTest;
-            LogProviderService.LogProviderServiceClient client =
-                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-            LogEventResponse response = client.LogEvent(request);
         }
 
         /// <summary>
