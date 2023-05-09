@@ -177,7 +177,6 @@ internal abstract class NodeCheck< TNode > : CheckBase
 
     /// <summary>
     /// Gets the <see cref="IEntity"/> to pass to a <see cref="TypeCheck"/>.
-    /// Which <see cref="IEntity"/> is returned depends on the implementation in the derived <see cref="ICheck"/>s.
     /// </summary>
     /// <param name="ctx">The current <see cref="RecognizerContext"/>.</param>
     /// <param name="node">The <see cref="INode"/> to be checked.</param>
