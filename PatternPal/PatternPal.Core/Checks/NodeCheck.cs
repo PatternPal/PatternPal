@@ -29,7 +29,8 @@ internal abstract class NodeCheck< TNode > : CheckBase
     /// Initializes a new instance of the <see cref="NodeCheck{TNode}"/> class.
     /// </summary>
     /// <param name="priority"><see cref="Priority"/> of the check.</param>
-    /// <param name="checks">A list of sub-<see cref="ICheck"/>s that should be checked.</param>
+    /// <param name="subChecks">A list of sub-<see cref="ICheck"/>s that should be checked.</param>
+    /// <param name="kind">The <see cref="CheckCollectionKind"/> to use for the sub-<see cref="ICheck"/>s.</param>
     protected NodeCheck(
         Priority priority,
         IEnumerable< ICheck > subChecks,
