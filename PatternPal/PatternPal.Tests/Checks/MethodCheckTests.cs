@@ -53,7 +53,7 @@ internal class MethodCheckTests
             Class(Priority.Low));
         RecognizerContext ctx = new();
 
-        Assert.Throws< InvalidSubCheckException >(
+        Assert.Throws< IncorrectNodeTypeException >(
             () => methodCheck.Check(
                 ctx,
                 methodEntity));

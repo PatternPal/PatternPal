@@ -54,7 +54,7 @@ public class ClassCheckTests
             Parameters(Priority.Low));
         RecognizerContext ctx = new();
 
-        Assert.Throws< InvalidSubCheckException >(
+        Assert.Throws< IncorrectNodeTypeException >(
             () => classCheck.Check(
                 ctx,
                 classEntity));
