@@ -53,7 +53,7 @@ internal class ConstructorCheckTests
             Class(Priority.Low));
         RecognizerContext ctx = new();
 
-        Assert.Throws< InvalidSubCheckException >(
+        Assert.Throws< IncorrectNodeTypeException >(
             () => constructorCheck.Check(
                 ctx,
                 constructorEntity));

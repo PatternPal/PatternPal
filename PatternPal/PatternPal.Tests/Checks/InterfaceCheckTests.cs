@@ -60,7 +60,7 @@ public class InterfaceCheckTests
             Parameters(Priority.Low));
         RecognizerContext ctx = new();
 
-        Assert.Throws< InvalidSubCheckException >(
+        Assert.Throws< IncorrectNodeTypeException >(
             () => interfaceCheck.Check(
                 ctx,
                 interfaceEntity));

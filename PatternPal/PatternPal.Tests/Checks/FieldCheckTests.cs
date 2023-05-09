@@ -53,7 +53,7 @@ namespace PatternPal.Tests.Checks
                 Parameters(Priority.Low));
             RecognizerContext ctx = new();
 
-            Assert.Throws< InvalidSubCheckException >(
+            Assert.Throws< IncorrectNodeTypeException >(
                 () => fieldCheck.Check(
                     ctx,
                     fieldEntity));

@@ -53,7 +53,7 @@ internal class PropertyCheckTests
             Class(Priority.Low));
         RecognizerContext ctx = new();
 
-        Assert.Throws< InvalidSubCheckException >(
+        Assert.Throws< IncorrectNodeTypeException >(
             () => propertyCheck.Check(
                 ctx,
                 propertyEntity));
