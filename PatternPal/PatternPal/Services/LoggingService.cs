@@ -2,6 +2,8 @@
 
 using Grpc.Net.Client;
 using PatternPal.LoggingServer;
+using ExecutionResult = PatternPal.LoggingServer.ExecutionResult;
+
 #endregion
 
 namespace PatternPal.Services;
@@ -37,6 +39,12 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
                 return CompileLog(receivedRequest);
             case Protos.EventType.EvtCompileError:
                 return CompileErrorLog(receivedRequest);
+            case Protos.EventType.EvtProjectOpen:
+                return ProjectOpenLog(receivedRequest);
+            case Protos.EventType.EvtProjectClose:
+                return ProjectCloseLog(receivedRequest);
+            case Protos.EventType.EvtRunProgram:
+                return RunProgramLog(receivedRequest);
             case Protos.EventType.EvtSessionStart:
                 return SessionStartLog(receivedRequest);
             case Protos.EventType.EvtSessionEnd:
@@ -56,10 +64,9 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
     {
         return new LogRequest
         {
-            EventId = Guid.NewGuid().ToString(), //TO DO: Generate ID in Logging Server self
+            EventId = receivedRequest.EventId, //TO DO: Generate ID in Logging Server self
             SubjectId = receivedRequest.SubjectId,
             ToolInstances = Environment.Version.ToString(),
-            CodeStateSection = Directory.GetCurrentDirectory(),
             CodeStateId = Guid.NewGuid().ToString(),
             ClientTimestamp =
                 DateTime.UtcNow.ToString(
@@ -69,6 +76,7 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
         };
     }
 
+    #region Log types
     private LogRequest CompileLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
@@ -79,12 +87,40 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
 
     private LogRequest CompileErrorLog(LogEventRequest receivedRequest)
     {
-        //TO DO: add code state from which the compilation error occurred.
         LogRequest sendLog = StandardLog(receivedRequest);
         sendLog.EventType = LoggingServer.EventType.EvtCompileError;
+        sendLog.CompileMessageData = receivedRequest.CompileMessageData;
+        sendLog.CompileMessageType = receivedRequest.CompileMessageType;
+        sendLog.CodeStateSection = receivedRequest.CodeStateSection;
+        sendLog.ParentEventId = receivedRequest.ParentEventId;
+        sendLog.SourceLocation = receivedRequest.SourceLocation;
+        return sendLog;
+    }
+    private LogRequest ProjectCloseLog(LogEventRequest receivedRequest)
+    {
+        LogRequest sendLog = StandardLog(receivedRequest);
+        sendLog.EventType = LoggingServer.EventType.EvtProjectClose;
+        sendLog.ProjectId = receivedRequest.ProjectId;
         return sendLog;
     }
 
+    private LogRequest ProjectOpenLog(LogEventRequest receivedRequest)
+    {
+        LogRequest sendLog = StandardLog(receivedRequest);
+        sendLog.EventType = LoggingServer.EventType.EvtProjectOpen;
+        sendLog.ProjectId = receivedRequest.ProjectId;
+        return sendLog;
+    }
+
+    private LogRequest RunProgramLog(LogEventRequest receivedRequest)
+    {
+        LogRequest sendLog = StandardLog(receivedRequest);
+        sendLog.EventType = LoggingServer.EventType.EvtRunProgram;
+        sendLog.ExecutionId = receivedRequest.ExecutionId;
+        sendLog.ExecutionResult = (ExecutionResult)receivedRequest.ExecutionResult;
+
+        return sendLog;
+    }
     private LogRequest SessionStartLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
@@ -92,8 +128,6 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
 
         return sendLog;
     }
-
-
     private LogRequest SessionEndLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
@@ -101,6 +135,7 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
       
         return sendLog;
     }
+    #endregion
 }
 
 

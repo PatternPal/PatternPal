@@ -37,7 +37,7 @@ string compile_message_data = 17;
 string source_location = 18;
 string execution_id = 19;
 string test_id = 20;
-string execution_result_id = 21;
+ExecutionResult execution_result = 21;
 string intervention_category = 22;
 string intervention_type = 23;
 string intervention_message = 24;
@@ -108,4 +108,13 @@ enum EditType
     ET_REFACTOR = 9;
     ET_RESET = 10;
     ET_CUSTOM_EDIT_TYPE = 11;
+}
+
+enum ExecutionResult
+{
+    EXT_UNKNOWN = 0;
+    EXT_SUCCES = 1;
+    EXT_TIMEOUT = 2;
+    EXT_ERROR = 3;
+    EXT_TESTFAILED = 4;
 }

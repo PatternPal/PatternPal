@@ -165,12 +165,12 @@ namespace PatternPal.Tests.Utils
 
                                      internal void UsesFunction()
                                      {
-                                         used.UsedFunction();
+                                         used.UsedFunction(new Uses(), new Used(), new Used());
                                      }
                                  }
                                  public class Used
                                  {
-                                     internal void UsedFunction()
+                                     internal void UsedFunction(Uses testParam1, Used testParam2, Used testParam3)
                                      {
                                      }
                                  }
@@ -228,6 +228,31 @@ namespace PatternPal.Tests.Utils
                 "0");
             graph.CreateGraph();
 
+            return graph;
+        }
+
+        internal static SyntaxGraph CreateMethodWithParamaters()
+        {
+            const string INPUT = """
+                                 public class StringTest
+                                 {
+                                    internal StringTest StringTestFunction(IntTest testParam1, IntTest testParam2, StringTest testParam3)
+                                    {
+                                    }
+                                 }
+                                 public class IntTest
+                                 {
+                                    internal IntTest IntTestFunction(StringTest testParam1)
+                                    {
+                                    }
+                                 }
+                                 """;
+
+            SyntaxGraph graph = new();
+            graph.AddFile(
+                INPUT,
+                "0");
+            graph.CreateGraph();
             return graph;
         }
 

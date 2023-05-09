@@ -118,6 +118,8 @@ namespace PatternPal.Extension
             canClose = true; 
             return VSConstants.S_OK;
         }
+
+  
         #endregion
     }
 
