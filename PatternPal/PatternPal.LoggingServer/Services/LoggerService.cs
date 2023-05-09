@@ -51,7 +51,7 @@ namespace PatternPal.LoggingServer.Services
             }
 
             byte[] compressed = request.Data.ToByteArray();
-
+            Guid codeStateId = Guid.NewGuid();
             if (compressed.Length == 0)
             {
                 Status status = new Status(StatusCode.InvalidArgument, "No data received");
@@ -59,26 +59,32 @@ namespace PatternPal.LoggingServer.Services
             }
             else
             {
-                Guid codeStateId = Guid.NewGuid();
-
-                string basepath = Path.Combine(Directory.GetCurrentDirectory(), "CodeStates");
-
-                string path = Path.Combine(basepath, codeStateId.ToString());
-
-                if (!Directory.Exists(path))
+                string basePath = Path.Combine(Directory.GetCurrentDirectory(), "CodeStates");
+                string codeStatePath = Path.Combine(basePath, codeStateId.ToString());
+                // Create the directory if it does not exist
+                if (!Directory.Exists(codeStatePath))
                 {
-                    Directory.CreateDirectory(path);
+                    Directory.CreateDirectory(codeStatePath);
                 }
+
+                // Convert the byte array to a zip file and extract it
                 using (MemoryStream ms = new MemoryStream(compressed))
                 {
                     using (ZipArchive archive = new ZipArchive(ms))
-                    {   // ensure subfolders are created first
+                    {
 
                         foreach (ZipArchiveEntry entry in archive.Entries)
                         {
-                            string fullPath = Path.Combine(path, entry.FullName);
-                            Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
-                            if (entry.FullName.EndsWith("/") || !entry.FullName.EndsWith(".cs"))
+                            string fullPath = Path.Combine(codeStatePath, entry.FullName);
+                            string? directory = Path.GetDirectoryName(fullPath);
+                            // Create the directory if it does not exist (for nested directories). This does not need to check for existence because it will just continue if it does exist already.4
+                            if (directory != null)
+                            {
+                                Directory.CreateDirectory(directory);
+                            }
+
+                            // Skip non-cs files
+                            if (!entry.FullName.EndsWith(".cs"))
                             {
                                 continue;
                             }
@@ -89,7 +95,6 @@ namespace PatternPal.LoggingServer.Services
                 }
             }
 
-            // TODO: File processing (decompression, diff comparison, etc.)
 
             
             int order = await _eventRepository.GetNextOrder(sessionId, subjectId);
@@ -101,7 +106,7 @@ namespace PatternPal.LoggingServer.Services
                 EventId = Guid.NewGuid(),
                 SubjectId = subjectId,
                 ToolInstances = request.ToolInstances,
-                CodeStateId = Guid.NewGuid(), // TODO: implement code state
+                CodeStateId = codeStateId,
                 ClientDatetime = cDto,
                 ServerDatetime = DateTimeOffset.Now,
                 SessionId = sessionId,
