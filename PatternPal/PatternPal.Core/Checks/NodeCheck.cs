@@ -50,129 +50,141 @@ internal abstract class NodeCheck< TNode > : CheckBase
         // Verify that the node can be handled by this check.
         TNode castNode = CheckHelper.ConvertNodeElseThrow< TNode >(node);
 
+        // Run the sub-checks.
         IList< ICheckResult > subCheckResults = new List< ICheckResult >();
         foreach (ICheck subCheck in _subChecks)
         {
-            _currentSubCheck = subCheck;
-            switch (subCheck)
-            {
-                case ClassCheck classCheck:
-                {
-                    subCheckResults.Add(
-                        classCheck.Check(
-                            ctx,
-                            castNode));
-                    break;
-                }
-                case CheckCollection checkCollection:
-                {
-                    subCheckResults.Add(
-                        checkCollection.Check(
-                            ctx,
-                            castNode));
-                    break;
-                }
-                case ModifierCheck modifierCheck:
-                {
-                    subCheckResults.Add(
-                        modifierCheck.Check(
-                            ctx,
-                            castNode));
-                    break;
-                }
-                case MethodCheck methodCheck:
-                {
-                    IEntity entity = CheckHelper.ConvertNodeElseThrow< IEntity >(node);
-                    foreach (IMethod method in entity.GetMethods())
-                    {
-                        subCheckResults.Add(
-                            methodCheck.Check(
-                                ctx,
-                                method));
-                    }
-                    break;
-                }
-                case FieldCheck fieldCheck:
-                {
-                    IClass classEntity = CheckHelper.ConvertNodeElseThrow< IClass >(node);
-                    foreach (IField field in classEntity.GetFields())
-                    {
-                        subCheckResults.Add(
-                            fieldCheck.Check(
-                                ctx,
-                                field));
-                    }
-                    break;
-                }
-                case ConstructorCheck constructorCheck:
-                {
-                    IClass classEntity = CheckHelper.ConvertNodeElseThrow< IClass >(node);
-                    foreach (IConstructor constructor in classEntity.GetConstructors())
-                    {
-                        subCheckResults.Add(
-                            constructorCheck.Check(
-                                ctx,
-                                constructor));
-                    }
-                    break;
-                }
-                case PropertyCheck propertyCheck:
-                {
-                    IClass classEntity = CheckHelper.ConvertNodeElseThrow< IClass >(node);
-                    foreach (IProperty property in classEntity.GetProperties())
-                    {
-                        subCheckResults.Add(
-                            propertyCheck.Check(
-                                ctx,
-                                property));
-                    }
-                    break;
-                }
-                case NotCheck notCheck:
-                {
-                    throw new NotImplementedException();
-                }
-                case TypeCheck typeCheck:
-                {
-                    subCheckResults.Add(
-                        typeCheck.Check(
-                            ctx,
-                            GetType4TypeCheck(
-                                ctx,
-                                castNode)));
-                    break;
-                }
-                case RelationCheck relationCheck:
-                {
-                    subCheckResults.Add(
-                        relationCheck.Check(
-                            ctx,
-                            castNode));
-                    break;
-                }
-                case ParameterCheck parameterCheck:
-                {
-                    subCheckResults.Add(
-                        parameterCheck.Check(
-                            ctx,
-                            castNode));
-                    break;
-                }
-                default:
-                    throw CheckHelper.InvalidSubCheck(
-                        this,
-                        subCheck);
-            }
+            subCheckResults.Add(
+                RunCheck(
+                    ctx,
+                    castNode,
+                    subCheck));
         }
 
+        // Store the matched entity.
         _matchedEntities.Add(castNode);
 
+        // Return the result.
         return new NodeCheckResult
                {
                    ChildrenCheckResults = subCheckResults,
                    FeedbackMessage = GetFeedbackMessage(castNode),
                    CollectionKind = _kind,
                    Priority = Priority
+               };
+    }
+
+    /// <summary>
+    /// Run the given <paramref name="subCheck"/> on the given <paramref name="castNode"/>.
+    /// </summary>
+    /// <param name="ctx">The current <see cref="RecognizerContext"/>.</param>
+    /// <param name="castNode">The <see cref="INode"/> to run the <paramref name="subCheck"></param> on.</param>
+    /// <param name="subCheck">The <see cref="ICheck"/> to run.</param>
+    /// <returns>The <see cref="ICheckResult"/> of the <paramref name="subCheck"/>.</returns>
+    private ICheckResult RunCheck(
+        RecognizerContext ctx,
+        TNode castNode,
+        ICheck subCheck)
+    {
+        // Store the current sub-check. This is used for the InvalidSubCheckException.
+        _currentSubCheck = subCheck;
+
+        switch (subCheck)
+        {
+            // These don't require any special handling.
+            case ClassCheck:
+            case CheckCollection:
+            case ModifierCheck:
+            case RelationCheck:
+            case ParameterCheck:
+                return subCheck.Check(
+                    ctx,
+                    castNode);
+
+            // These checks can match multiple entities, the results are wrapped in a
+            // NodeCheckResult.
+            case MethodCheck methodCheck:
+                return RunCheckWithMultipleMatches(
+                    ctx,
+                    CheckHelper.ConvertNodeElseThrow< IEntity >(castNode).GetMethods(),
+                    methodCheck);
+            case FieldCheck fieldCheck:
+                return RunCheckWithMultipleMatches(
+                    ctx,
+                    CheckHelper.ConvertNodeElseThrow< IClass >(castNode).GetFields(),
+                    fieldCheck);
+            case ConstructorCheck constructorCheck:
+                return RunCheckWithMultipleMatches(
+                    ctx,
+                    CheckHelper.ConvertNodeElseThrow< IClass >(castNode).GetConstructors(),
+                    constructorCheck);
+            case PropertyCheck propertyCheck:
+                return RunCheckWithMultipleMatches(
+                    ctx,
+                    CheckHelper.ConvertNodeElseThrow< IEntity >(castNode).GetProperties(),
+                    propertyCheck);
+
+            // Call this method recursively with the check wrapped by the NotCheck. This is
+            // necessary because otherwise the wrapped check won't receive the correct entities.
+            case NotCheck notCheck:
+                return new NotCheckResult
+                       {
+                           FeedbackMessage = string.Empty,
+                           NestedResult = RunCheck(
+                               ctx,
+                               castNode,
+                               notCheck.NestedCheck),
+                           Priority = notCheck.Priority,
+                       };
+
+            // The type to pass to the TypeCheck depends on the implementation in derived classes of
+            // this class.
+            case TypeCheck typeCheck:
+                return typeCheck.Check(
+                    ctx,
+                    GetType4TypeCheck(
+                        ctx,
+                        castNode));
+
+            // Ensure all checks are handled.
+            default:
+                throw CheckHelper.InvalidSubCheck(
+                    this,
+                    subCheck);
+        }
+    }
+
+    /// <summary>
+    /// Run the given <paramref name="nodeCheck"/> on the given <paramref name="nodes"/>.
+    /// </summary>
+    /// <param name="ctx">The current <see cref="RecognizerContext"/>.</param>
+    /// <param name="nodes">The <see cref="INode"/>s to run the <see cref="nodeCheck"/> on.</param>
+    /// <param name="nodeCheck">The <see cref="ICheck"/> to run.</param>
+    /// <returns>The <see cref="ICheckResult"/> of the <paramref name="nodeCheck"/>.</returns>
+    private static ICheckResult RunCheckWithMultipleMatches< T >(
+        RecognizerContext ctx,
+        IEnumerable< T > nodes,
+        NodeCheck< T > nodeCheck)
+        where T : INode
+    {
+        // Run the check on the nodes.
+        IList< ICheckResult > results = new List< ICheckResult >();
+        foreach (T method in nodes)
+        {
+            results.Add(
+                nodeCheck.Check(
+                    ctx,
+                    method));
+        }
+
+        // TODO: Do we want to create a dedicated result type here (to indicate that these results originated from one check)?
+        // Return the result.
+        return new NodeCheckResult
+               {
+                   ChildrenCheckResults = results,
+                   CollectionKind = CheckCollectionKind.All,
+                   FeedbackMessage = string.Empty,
+                   Priority = nodeCheck.Priority,
                };
     }
 

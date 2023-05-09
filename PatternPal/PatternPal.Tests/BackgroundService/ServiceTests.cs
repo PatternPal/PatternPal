@@ -1,6 +1,5 @@
 ﻿#region
 
-using System.Diagnostics;
 using System.IO;
 
 using Grpc.Core;

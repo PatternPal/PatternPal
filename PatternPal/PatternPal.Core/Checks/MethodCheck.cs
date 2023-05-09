@@ -19,10 +19,7 @@ internal class MethodCheck : NodeCheck< IMethod >
     /// <returns>The <see cref="IEntity"/> which represents the return type of the <see cref="IMethod"/>.</returns>
     protected override IEntity GetType4TypeCheck(
         RecognizerContext ctx,
-        IMethod node)
-    {
-        return ctx.Graph.Relations.GetEntityByName(node.GetReturnType())!;
-    }
+        IMethod node) => ctx.Graph.Relations.GetEntityByName(node.GetReturnType())!;
 
     /// <inheritdoc />
     protected override string GetFeedbackMessage(
