@@ -73,7 +73,7 @@ namespace PatternPal.Extension.Commands
             _dte.Events.BuildEvents.OnBuildDone += OnCompileDone;
             _dte.Events.SolutionEvents.Opened += OnProjectOpen;
             _dte.Events.SolutionEvents.BeforeClosing += OnProjectClose;
-           // _dte.Events.DebuggerEvents.OnEnterDesignMode += OnRunProgram; //Not triggering...
+            // _dte.Events.DebuggerEvents.OnEnterDesignMode += OnRunProgram; //Not triggering...
         }
 
 
@@ -104,7 +104,6 @@ namespace PatternPal.Extension.Commands
             string outputMessage;
             if (_dte.Solution.SolutionBuild.LastBuildInfo != 0)
             {
-              
                 outputMessage = string.Format("Build {0} with errors. See the output window for details.",
                     Action.ToString());
 
@@ -132,9 +131,9 @@ namespace PatternPal.Extension.Commands
 
                 request.CodeStateSection = GetRelativePath(pathSolutionDirectory, pathSolutionFile);
             }
-        
+
             request.EventType = EventType.EvtCompile;
-            request.CompileResult = outputMessage;  
+            request.CompileResult = outputMessage;
 
             LogProviderService.LogProviderServiceClient client =
                 new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
@@ -302,6 +301,7 @@ namespace PatternPal.Extension.Commands
         }
 
         #endregion
+
         /// <summary>
         /// Creates a standard log format with set fields that are always generated. Consequently, it is used by all other specific logs.
         /// </summary>
@@ -364,7 +364,5 @@ namespace PatternPal.Extension.Commands
 
             return rel;
         }
-
-
     }
 }
