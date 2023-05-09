@@ -344,4 +344,6 @@ ASALocalRun/
 
 # PatternPal background service publish output folder which is included in the VSIX
 PatternPal/PatternPal.Extension/PatternPal/
-PatternPal/PatternPal.Console/Properties/launchSettings.json
+PatternPal/PatternPal.Console/Properties/launchSettings.json`
+PatternPal/PatternPal.LoggingServer/CodeStates/*
+!PatternPal/PatterPal.LoggingServer/CodeStates/.gitkeep

@@ -52,6 +52,43 @@ namespace PatternPal.LoggingServer.Services
 
             byte[] compressed = request.Data.ToByteArray();
 
+            if (compressed.Length == 0)
+            {
+                Status status = new Status(StatusCode.InvalidArgument, "No data received");
+                throw new RpcException(status);
+            }
+            else
+            {
+                Guid codeStateId = Guid.NewGuid();
+
+                string basepath = Path.Combine(Directory.GetCurrentDirectory(), "CodeStates");
+
+                string path = Path.Combine(basepath, codeStateId.ToString());
+
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                using (MemoryStream ms = new MemoryStream(compressed))
+                {
+                    using (ZipArchive archive = new ZipArchive(ms))
+                    {   // ensure subfolders are created first
+
+                        foreach (ZipArchiveEntry entry in archive.Entries)
+                        {
+                            string fullPath = Path.Combine(path, entry.FullName);
+                            Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
+                            if (entry.FullName.EndsWith("/") || !entry.FullName.EndsWith(".cs"))
+                            {
+                                continue;
+                            }
+                            
+                            entry.ExtractToFile(fullPath, true);
+                        }
+                    }
+                }
+            }
+
             // TODO: File processing (decompression, diff comparison, etc.)
 
             
