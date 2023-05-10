@@ -169,12 +169,12 @@ internal abstract class NodeCheck< TNode > : CheckBase
     {
         // Run the check on the nodes.
         IList< ICheckResult > results = new List< ICheckResult >();
-        foreach (T method in nodes)
+        foreach (T child in nodes)
         {
             results.Add(
                 nodeCheck.Check(
                     ctx,
-                    method));
+                    child));
         }
 
         // TODO: Do we want to create a dedicated result type here (to indicate that these results originated from one check)?
@@ -194,7 +194,7 @@ internal abstract class NodeCheck< TNode > : CheckBase
     /// <param name="ctx">The current <see cref="RecognizerContext"/>.</param>
     /// <param name="node">The <see cref="INode"/> to be checked.</param>
     /// <returns>The <see cref="IEntity"/> to pass to the <see cref="TypeCheck"/>.</returns>
-    protected virtual IEntity GetType4TypeCheck(
+    protected virtual IEntity? GetType4TypeCheck(
         RecognizerContext ctx,
         TNode node)
     {

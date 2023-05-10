@@ -20,6 +20,7 @@
     file class SingleTon
     {
         private static SingleTon _instance;
+        private static int thisIsNotAnInstance;
 
         private SingleTon()
         {

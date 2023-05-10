@@ -1,4 +1,6 @@
-﻿namespace PatternPal.Core.Checks;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+namespace PatternPal.Core.Checks;
 
 /// <summary>
 /// <see cref="ICheck"/> implementation for <see cref="IField"/> entities.
@@ -14,6 +16,21 @@ internal class FieldCheck : NodeCheck< IField >
             checks)
     {
     }
+
+    /// <inheritdoc path="//summary|//param" />
+    /// <returns>The <see cref="IEntity"/> which represents the type constructed by the <see cref="IConstructor"/>.</returns>
+    protected override IEntity? GetType4TypeCheck(
+        RecognizerContext ctx,
+        IField node)
+    {
+        if (node.GetFieldType() is IdentifierNameSyntax identifier)
+        {
+            return ctx.Graph.Relations.GetEntityByName(identifier);
+        }
+
+        return null;
+    }
+
 
     /// <inheritdoc />
     protected override string GetFeedbackMessage(
