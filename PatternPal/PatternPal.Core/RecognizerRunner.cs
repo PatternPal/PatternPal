@@ -3,6 +3,7 @@
 using PatternPal.Core.Models;
 using PatternPal.Core.Recognizers;
 using PatternPal.Protos;
+using PatternPal.Recognizers.Abstractions;
 
 #endregion
 
@@ -92,10 +93,7 @@ public class RecognizerRunner
         IEnumerable< ICheck > checkBuilders = recognizer.Create();
         Dictionary< string, IEntity >.ValueCollection entities = _graph.GetAll().Values;
 
-        //List<ICheck> leastToMostDependantChecks = flattenChecks(new List<ICheck>(), checkBuilders.ToArray());
-
-        
-        
+        List<ICheckResult> results = new();
 
         RecognizerContext ctx = new()
                                 {
@@ -105,44 +103,19 @@ public class RecognizerRunner
         {
             foreach (IEntity entity in entities)
             {
-                //TODO make correct implementation using priorities
-                check.Check(
+                results.Add(check.Check(
                     ctx,
-                    entity);
+                    entity));
             }
-            Console.WriteLine();
         }
+
+        List<ICheckResult> leastToMostDependableResults = new();
 
         return new List< RecognitionResult >();
     }
 
-    private List<ICheck> flattenChecks(List<ICheck> flattened, ICheck[] toFlatten)
+    List<ICheckResult> flattenCheckResults(List<ICheckResult> flattened, List<ICheckResult> toFlatten)
     {
-        for(int i = 0; i < toFlatten.Length; i++)
-        {
-            ICheck check = toFlatten[i];
-            switch (check)
-            {
-                case ClassCheck classCheck:
-                    //flattened.AddRange(flattenChecks(flattened, classCheck.));
-                    flattened.Add(toFlatten[i]);
-                    break;
-                case CheckCollection:
-                case ModifierCheck:
-                case RelationCheck:
-                case ParameterCheck:
-                case MethodCheck methodCheck:
-                case FieldCheck fieldCheck:
-                case ConstructorCheck constructorCheck:
-                case PropertyCheck propertyCheck:
-                case NotCheck notCheck:
-                case TypeCheck typeCheck:
-
-                // Ensure all checks are handled.
-                default:
-                    throw new ArgumentException("This check doesn't exist.");
-            }
-        }
         return flattened;
     }
 

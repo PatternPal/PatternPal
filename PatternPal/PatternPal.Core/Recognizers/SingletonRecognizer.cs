@@ -79,12 +79,10 @@ internal class SingletonRecognizer : IRecognizer
 
         yield return Class(
             Priority.Low,
-            Method(
+            Uses(
                 Priority.Low,
-                Uses(
-                    Priority.Low,
-                    instanceMethod.Result)
-            )
-        );
+                instanceMethod.Result
+                )
+            );
     }
 }
