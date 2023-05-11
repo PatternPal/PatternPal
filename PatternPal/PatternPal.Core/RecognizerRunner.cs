@@ -109,14 +109,7 @@ public class RecognizerRunner
             }
         }
 
-        List<ICheckResult> leastToMostDependableResults = new();
-
         return new List< RecognitionResult >();
-    }
-
-    List<ICheckResult> flattenCheckResults(List<ICheckResult> flattened, List<ICheckResult> toFlatten)
-    {
-        return flattened;
     }
 
     /// <summary>
