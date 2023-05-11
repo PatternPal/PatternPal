@@ -1,5 +1,4 @@
 using PatternPal.Recognizers.Abstractions;
-using PatternPal.SyntaxTree.Abstractions.Entities;
 
 namespace PatternPal.Core.Models
 {

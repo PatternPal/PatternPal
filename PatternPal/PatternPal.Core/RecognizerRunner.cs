@@ -5,7 +5,6 @@ using PatternPal.Core.Recognizers;
 using PatternPal.Protos;
 using PatternPal.Recognizers.Abstractions;
 using PatternPal.SyntaxTree;
-using PatternPal.SyntaxTree.Abstractions.Entities;
 
 #endregion
 
