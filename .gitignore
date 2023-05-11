@@ -1,3 +1,7 @@
+# docfx
+docs/api
+_site
+
 *.db
 
 ## Ignore Visual Studio temporary files, build results, and

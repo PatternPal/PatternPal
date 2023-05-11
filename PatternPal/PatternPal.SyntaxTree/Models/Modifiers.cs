@@ -1,6 +1,6 @@
-﻿using SyntaxTree.Abstractions;
+﻿using PatternPal.SyntaxTree.Abstractions;
 
-namespace SyntaxTree.Models
+namespace PatternPal.SyntaxTree.Models
 {
     public class Modifier : IModifier
     {

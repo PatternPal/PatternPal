@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+using PatternPal.SyntaxTree.Abstractions.Entities;
+
 namespace PatternPal.Core.Checks;
 
 /// <summary>

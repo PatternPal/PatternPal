@@ -1,4 +1,7 @@
-﻿namespace PatternPal.Services;
+﻿using PatternPal.SyntaxTree;
+using PatternPal.SyntaxTree.Abstractions.Entities;
+
+namespace PatternPal.Services;
 
 public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
 {

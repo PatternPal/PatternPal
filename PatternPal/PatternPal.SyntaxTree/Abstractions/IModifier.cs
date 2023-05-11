@@ -1,4 +1,4 @@
-﻿namespace SyntaxTree.Abstractions
+﻿namespace PatternPal.SyntaxTree.Abstractions
 {
     public interface IModifier
     {
