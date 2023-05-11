@@ -1,6 +1,4 @@
-﻿using PatternPal.SyntaxTree.Abstractions.Members;
-
-namespace PatternPal.Core.Checks;
+﻿namespace PatternPal.Core.Checks;
 
 /// <summary>
 /// <see cref="ICheck"/> implementation for <see cref="IField"/> entities.
@@ -16,6 +14,13 @@ internal class FieldCheck : NodeCheck< IField >
             checks)
     {
     }
+
+    /// <inheritdoc path="//summary|//param" />
+    /// <returns>The <see cref="IEntity"/> which represents the type constructed by the <see cref="IField"/>.</returns>
+    protected override IEntity GetType4TypeCheck(
+        RecognizerContext ctx,
+        IField node) => ctx.Graph.Relations.GetEntityByName(node.GetFieldType())!;
+
 
     /// <inheritdoc />
     protected override string GetFeedbackMessage(

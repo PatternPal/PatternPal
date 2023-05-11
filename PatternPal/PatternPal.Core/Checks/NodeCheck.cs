@@ -1,5 +1,3 @@
-﻿using PatternPal.SyntaxTree.Abstractions.Entities;
-
 namespace PatternPal.Core.Checks;
 
 /// <summary>

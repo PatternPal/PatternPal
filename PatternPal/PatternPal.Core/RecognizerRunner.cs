@@ -3,8 +3,8 @@
 using PatternPal.Core.Models;
 using PatternPal.Core.Recognizers;
 using PatternPal.Protos;
+using PatternPal.Recognizers.Abstractions;
 using PatternPal.SyntaxTree;
-using PatternPal.SyntaxTree.Abstractions.Entities;
 
 #endregion
 
@@ -91,9 +91,10 @@ public class RecognizerRunner
 
         SingletonRecognizer recognizer = new();
 
-        // TODO CV: Put all check builders into 'All' operator.
         IEnumerable< ICheck > checkBuilders = recognizer.Create();
         Dictionary< string, IEntity >.ValueCollection entities = _graph.GetAll().Values;
+
+        List<ICheckResult> results = new();
 
         RecognizerContext ctx = new()
                                 {
@@ -103,12 +104,10 @@ public class RecognizerRunner
         {
             foreach (IEntity entity in entities)
             {
-                //TODO make correct implementation using priorities
-                check.Check(
+                results.Add(check.Check(
                     ctx,
-                    entity);
+                    entity));
             }
-            Console.WriteLine();
         }
 
         return new List< RecognitionResult >();
