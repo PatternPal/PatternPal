@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SyntaxTree.Abstractions.Entities;
-using SyntaxTree.Abstractions.Members;
+
+using PatternPal.SyntaxTree.Abstractions.Entities;
+using PatternPal.SyntaxTree.Abstractions.Members;
 
 namespace PatternPal.Recognizers
 {

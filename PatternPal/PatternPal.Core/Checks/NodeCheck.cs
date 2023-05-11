@@ -1,4 +1,6 @@
-﻿namespace PatternPal.Core.Checks;
+﻿using PatternPal.SyntaxTree.Abstractions.Entities;
+
+namespace PatternPal.Core.Checks;
 
 /// <summary>
 /// Base class for <see cref="ICheck"/>s which can have sub-<see cref="ICheck"/>s.

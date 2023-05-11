@@ -8,12 +8,7 @@ global using System.Linq;
 global using OneOf;
 
 global using PatternPal.Core.Checks;
-
-global using SyntaxTree;
-global using SyntaxTree.Abstractions;
-global using SyntaxTree.Abstractions.Entities;
-global using SyntaxTree.Abstractions.Members;
-global using SyntaxTree.Models;
+global using PatternPal.SyntaxTree.Abstractions;
 
 using System.Runtime.CompilerServices;
 

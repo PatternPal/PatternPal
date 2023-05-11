@@ -1,10 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-using SyntaxTree.Abstractions.Root;
+using PatternPal.SyntaxTree.Abstractions.Members;
+using PatternPal.SyntaxTree.Abstractions.Root;
 
-namespace SyntaxTree.Abstractions.Entities
+namespace PatternPal.SyntaxTree.Abstractions.Entities
 {
     public interface IEntity : IModified, IChild<IEntitiesContainer>, INamedEntitiesContainer
     {

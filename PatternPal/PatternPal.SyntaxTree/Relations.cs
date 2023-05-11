@@ -6,12 +6,14 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-using SyntaxTree.Abstractions;
-using SyntaxTree.Models.Members.Method;
+using PatternPal.SyntaxTree.Abstractions;
+using PatternPal.SyntaxTree.Abstractions.Entities;
+using PatternPal.SyntaxTree.Abstractions.Members;
+using PatternPal.SyntaxTree.Models.Members.Method;
 
 #endregion
 
-namespace SyntaxTree
+namespace PatternPal.SyntaxTree
 {
     public class Relations
     {

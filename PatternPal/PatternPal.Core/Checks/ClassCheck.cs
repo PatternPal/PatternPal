@@ -1,4 +1,6 @@
-﻿namespace PatternPal.Core.Checks;
+﻿using PatternPal.SyntaxTree.Abstractions.Entities;
+
+namespace PatternPal.Core.Checks;
 
 /// <summary>
 /// <see cref="ICheck"/> implementation for <see cref="IClass"/> entities.

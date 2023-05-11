@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <RootNamespace>SyntaxTree</RootNamespace>
+    <RootNamespace>PatternPal.SyntaxTree</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

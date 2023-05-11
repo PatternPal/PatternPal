@@ -3,6 +3,8 @@
 using PatternPal.Core.Models;
 using PatternPal.Core.Recognizers;
 using PatternPal.Protos;
+using PatternPal.SyntaxTree;
+using PatternPal.SyntaxTree.Abstractions.Entities;
 
 #endregion
 
