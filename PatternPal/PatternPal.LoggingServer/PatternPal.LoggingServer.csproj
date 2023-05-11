@@ -9,6 +9,13 @@
     <ContainerImageName>dotnet-logserver-image</ContainerImageName>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="CodeStates\**" />
+    <Content Remove="CodeStates\**" />
+    <EmbeddedResource Remove="CodeStates\**" />
+    <None Remove="CodeStates\**" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="30.0.1" />
     <PackageReference Include="Google.Protobuf" Version="3.22.4" />
