@@ -14,15 +14,15 @@ The **singleton** class declares the static method getInstance() that returns th
 
 ## Requirements
 _Client Class_
-* calls the method that acts as a constructor of the singleton class
+a. calls the method that acts as a constructor of the singleton class
 
 _Singleton class_ 
-* has no public/internal constructor
-* has at least one private/protected constructor
-* has a static, private field with the same type as the class
-* has a static, public/internal method that acts as a constructor in the following way:
-  * if called and there is no instance saved in the private field, then it calls the private constructor
-  * if called and there is an instance saved in the private field it returns this instance
+a. has no public/internal constructor
+b. has at least one private/protected constructor
+c. has a static, private field with the same type as the class
+d. has a static, public/internal method that acts as a constructor in the following way:
+  i. if called and there is no instance saved in the private field, then it calls the private constructor
+  ii. if called and there is an instance saved in the private field it returns this instance
 
 ## References
 The following sources are used to determine the requirements:
