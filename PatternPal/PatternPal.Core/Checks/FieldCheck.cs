@@ -20,17 +20,9 @@ internal class FieldCheck : NodeCheck< IField >
 
     /// <inheritdoc path="//summary|//param" />
     /// <returns>The <see cref="IEntity"/> which represents the type constructed by the <see cref="IField"/>.</returns>
-    protected override IEntity? GetType4TypeCheck(
+    protected override IEntity GetType4TypeCheck(
         RecognizerContext ctx,
-        IField node)
-    {
-        if (node.GetFieldType() is IdentifierNameSyntax identifier)
-        {
-            return ctx.Graph.Relations.GetEntityByName(identifier);
-        }
-
-        return null;
-    }
+        IField node) => ctx.Graph.Relations.GetEntityByName(node.GetFieldType())!;
 
 
     /// <inheritdoc />
