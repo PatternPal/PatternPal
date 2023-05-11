@@ -1,10 +1,10 @@
-namespace PatternPal.Core.Checks;
+﻿namespace PatternPal.Core.Checks;
 
 /// <summary>
 /// Base class for <see cref="ICheck"/>s which can have sub-<see cref="ICheck"/>s.
 /// </summary>
 /// <typeparam name="TNode">The <see cref="INode"/> type which this <see cref="ICheck"/> supports.</typeparam>
-internal abstract class NodeCheck< TNode > : CheckBase
+internal class NodeCheck< TNode > : CheckBase
     where TNode : INode
 {
     // The sub-checks of the current check.
@@ -31,7 +31,7 @@ internal abstract class NodeCheck< TNode > : CheckBase
     /// <param name="priority"><see cref="Priority"/> of the check.</param>
     /// <param name="subChecks">A list of sub-<see cref="ICheck"/>s that should be checked.</param>
     /// <param name="kind">The <see cref="CheckCollectionKind"/> to use for the sub-<see cref="ICheck"/>s.</param>
-    protected NodeCheck(
+    internal NodeCheck(
         Priority priority,
         IEnumerable< ICheck > subChecks,
         CheckCollectionKind kind = CheckCollectionKind.All)
@@ -93,7 +93,6 @@ internal abstract class NodeCheck< TNode > : CheckBase
         {
             // These don't require any special handling.
             case ClassCheck:
-            case CheckCollection:
             case ModifierCheck:
             case RelationCheck:
             case ParameterCheck:
@@ -208,6 +207,6 @@ internal abstract class NodeCheck< TNode > : CheckBase
     /// </summary>
     /// <param name="node">The <see cref="INode"/> on which the check is run.</param>
     /// <returns>The feedback message.</returns>
-    protected abstract string GetFeedbackMessage(
-        TNode node);
+    protected virtual string GetFeedbackMessage(
+        TNode node) => $"Found the required checks for: {node}.";
 }

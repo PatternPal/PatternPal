@@ -1,5 +1,6 @@
 ﻿#region
 
+using PatternPal.SyntaxTree.Abstractions;
 using PatternPal.SyntaxTree.Abstractions.Entities;
 using PatternPal.SyntaxTree.Models;
 
@@ -35,7 +36,7 @@ internal class NotCheckTests
         IClass classEntity = EntityNodeUtils.CreateClass();
         RecognizerContext ctx = new();
 
-        CheckCollection checkCollection = Any(
+        NodeCheck< INode > checkCollection = Any(
             Priority.Low,
             Not(
                 Priority.Low,
@@ -55,7 +56,7 @@ internal class NotCheckTests
         IClass classEntity = EntityNodeUtils.CreateClass();
         RecognizerContext ctx = new();
 
-        CheckCollection checkCollection = Any(
+        NodeCheck< INode > checkCollection = Any(
             Priority.Low,
             Not(
                 Priority.Low,
