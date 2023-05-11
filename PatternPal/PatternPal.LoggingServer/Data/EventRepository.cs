@@ -69,5 +69,15 @@ namespace PatternPal.LoggingServer.Data
             }
             return lastEvent.Order + 1;
         }
+
+        public async Task<Guid> GetPreviousCodeState(Guid sessionId, Guid subjectId, string projectId)
+        {
+            ProgSnap2Event? lastEvent = await _context.Events.Where(e => e.SessionId == sessionId && e.SubjectId == subjectId && e.ProjectId == projectId).OrderByDescending(e => e.Order).FirstOrDefaultAsync();
+            if (lastEvent == null)
+            {
+                return Guid.Empty;
+            }
+            return lastEvent.CodeStateId;
+        }
     }
 }

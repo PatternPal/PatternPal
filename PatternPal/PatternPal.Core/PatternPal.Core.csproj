@@ -54,8 +54,4 @@
     <Protobuf Include="$(RepositoryRoot)Protos/logprovider.proto" GrpcServices="Server" Link="Protos/logprovider.proto" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="CodeStates\" />
-  </ItemGroup>
-
 </Project>
