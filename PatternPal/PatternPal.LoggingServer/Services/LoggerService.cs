@@ -50,15 +50,11 @@ namespace PatternPal.LoggingServer.Services
                 throw new RpcException(status);
             }
 
-            byte[] compressed = request.Data.ToByteArray();
+            
             Guid codeStateId = Guid.NewGuid();
-            if (compressed.Length == 0)
+            if (request.HasData)
             {
-                Status status = new Status(StatusCode.InvalidArgument, "No data received");
-                throw new RpcException(status);
-            }
-            else
-            {
+                byte[] compressed = request.Data.ToByteArray();
                 string basePath = Path.Combine(Directory.GetCurrentDirectory(), "CodeStates");
                 string codeStatePath = Path.Combine(basePath, codeStateId.ToString());
                 // Create the directory if it does not exist
