@@ -1,7 +1,7 @@
 ﻿using PatternPal.Recognizers.Models.Checks.Members;
 using PatternPal.Recognizers.Models.Output;
-using SyntaxTree.Abstractions.Entities;
-using SyntaxTree.Abstractions.Members;
+using PatternPal.SyntaxTree.Abstractions.Entities;
+using PatternPal.SyntaxTree.Abstractions.Members;
 
 namespace PatternPal.Recognizers.Models.Checks.Entities.MemberBuilders
 {

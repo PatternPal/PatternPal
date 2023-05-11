@@ -1,4 +1,4 @@
-﻿using SyntaxTree.Abstractions.Members;
+﻿using PatternPal.SyntaxTree.Abstractions.Members;
 
 namespace PatternPal.Recognizers.Models.Checks.Members
 {

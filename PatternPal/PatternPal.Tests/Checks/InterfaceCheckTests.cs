@@ -1,5 +1,9 @@
 ﻿#region
 
+using PatternPal.SyntaxTree.Abstractions.Entities;
+using PatternPal.SyntaxTree.Abstractions.Members;
+using PatternPal.SyntaxTree.Models;
+
 using static PatternPal.Core.Checks.CheckBuilder;
 
 #endregion
@@ -60,7 +64,7 @@ public class InterfaceCheckTests
             Parameters(Priority.Low));
         RecognizerContext ctx = new();
 
-        Assert.Throws< InvalidSubCheckException >(
+        Assert.Throws< IncorrectNodeTypeException >(
             () => interfaceCheck.Check(
                 ctx,
                 interfaceEntity));

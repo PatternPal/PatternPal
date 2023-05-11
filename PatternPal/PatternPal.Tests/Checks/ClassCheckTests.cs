@@ -1,5 +1,9 @@
 ﻿#region
 
+using PatternPal.SyntaxTree.Abstractions.Entities;
+using PatternPal.SyntaxTree.Abstractions.Members;
+using PatternPal.SyntaxTree.Models;
+
 using static PatternPal.Core.Checks.CheckBuilder;
 
 #endregion
@@ -54,7 +58,7 @@ public class ClassCheckTests
             Parameters(Priority.Low));
         RecognizerContext ctx = new();
 
-        Assert.Throws< InvalidSubCheckException >(
+        Assert.Throws< IncorrectNodeTypeException >(
             () => classCheck.Check(
                 ctx,
                 classEntity));

@@ -1,0 +1,51 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "src": "../",
+          "files": [
+            "PatternPal/PatternPal/PatternPal.csproj",
+            "PatternPal/PatternPal.CommonResources/PatternPal.CommonResources.csproj",
+            "PatternPal/PatternPal.Console/PatternPal.ConsoleApp.csproj",
+            "PatternPal/PatternPal.Core/PatternPal.Core.csproj",
+            "PatternPal/PatternPal.LoggingServer/PatternPal.LoggingServer.csproj",
+            "PatternPal/PatternPal.Regonizers/PatternPal.Recognizers.csproj",
+            "PatternPal/PatternPal.StepByStep/PatternPal.StepByStep.csproj",
+            "PatternPal/PatternPal.SyntaxTree/PatternPal.SyntaxTree.csproj",
+            "PatternPal/PatternPal.TestRunner/PatternPal.TestRunner.csproj"
+          ]
+        }
+      ],
+      "dest": "api",
+      "includePrivateMembers": true,
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false,
+      "noRestore": false,
+      "namespaceLayout": "nested",
+      "memberLayout": "samePage",
+      "allowCompilationErrors": false
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": ["**/*.{md,yml}"],
+        "exclude": ["_site/**", "obj/**"]
+      }
+    ],
+    "resource": [
+      {
+        "files": ["**/images/**"],
+        "exclude": ["_site/**", "obj/**"]
+      }
+    ],
+    "output": "_site",
+    "globalMetadataFiles": [],
+    "fileMetadataFiles": [],
+    "template": ["default", "modern"],
+    "postProcessors": [],
+    "keepFileLink": false,
+    "disableGitFeatures": false
+  }
+}

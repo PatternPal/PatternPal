@@ -3,8 +3,7 @@
 using System.Collections.Generic;
 
 using PatternPal.StepByStep.Abstractions;
-
-using SyntaxTree.Abstractions.Entities;
+using PatternPal.SyntaxTree.Abstractions.Entities;
 
 #endregion
 

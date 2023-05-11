@@ -1,5 +1,8 @@
 ﻿#region
 
+using PatternPal.SyntaxTree.Abstractions.Members;
+using PatternPal.SyntaxTree.Models;
+
 using static PatternPal.Core.Checks.CheckBuilder;
 
 #endregion
@@ -53,7 +56,7 @@ internal class PropertyCheckTests
             Class(Priority.Low));
         RecognizerContext ctx = new();
 
-        Assert.Throws< InvalidSubCheckException >(
+        Assert.Throws< IncorrectNodeTypeException >(
             () => propertyCheck.Check(
                 ctx,
                 propertyEntity));

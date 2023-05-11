@@ -1,4 +1,7 @@
-﻿namespace PatternPal.Core.Checks;
+﻿using PatternPal.SyntaxTree;
+using PatternPal.SyntaxTree.Models;
+
+namespace PatternPal.Core.Checks;
 
 /// <summary>
 /// Function which can be called to get an <see cref="IEntity"/>.

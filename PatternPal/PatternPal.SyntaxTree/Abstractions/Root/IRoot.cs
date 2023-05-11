@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace SyntaxTree.Abstractions.Root
+using PatternPal.SyntaxTree.Abstractions.Entities;
+
+namespace PatternPal.SyntaxTree.Abstractions.Root
 {
     public interface IRoot : IEntitiesContainer, INamespaceContainer, IUsingContainer
     {
