@@ -18,7 +18,7 @@ internal class FieldCheck : NodeCheck< IField >
     }
 
     /// <inheritdoc path="//summary|//param" />
-    /// <returns>The <see cref="IEntity"/> which represents the type constructed by the <see cref="IConstructor"/>.</returns>
+    /// <returns>The <see cref="IEntity"/> which represents the type constructed by the <see cref="IField"/>.</returns>
     protected override IEntity? GetType4TypeCheck(
         RecognizerContext ctx,
         IField node)
