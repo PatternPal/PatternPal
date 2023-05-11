@@ -1,6 +1,8 @@
 ﻿using NUnit.Framework;
 
-using SyntaxTree.Models.Members.Method;
+using PatternPal.SyntaxTree;
+using PatternPal.SyntaxTree.Abstractions;
+using PatternPal.SyntaxTree.Models.Members.Method;
 
 namespace PatternPal.Tests.Core
 {

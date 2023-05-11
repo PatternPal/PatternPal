@@ -2,13 +2,18 @@
 
 using Microsoft.CodeAnalysis;
 
-using SyntaxTree.Abstractions.Root;
-using SyntaxTree.Models.Members.Constructor;
-using SyntaxTree.Models.Members.Field;
-using SyntaxTree.Models.Members.Method;
-using SyntaxTree.Models.Members.Property;
-using SyntaxTree.Models.Root;
-using SyntaxTree.Utils;
+using PatternPal.SyntaxTree;
+using PatternPal.SyntaxTree.Abstractions;
+using PatternPal.SyntaxTree.Abstractions.Entities;
+using PatternPal.SyntaxTree.Abstractions.Members;
+using PatternPal.SyntaxTree.Abstractions.Root;
+using PatternPal.SyntaxTree.Models.Entities;
+using PatternPal.SyntaxTree.Models.Members.Constructor;
+using PatternPal.SyntaxTree.Models.Members.Field;
+using PatternPal.SyntaxTree.Models.Members.Method;
+using PatternPal.SyntaxTree.Models.Members.Property;
+using PatternPal.SyntaxTree.Models.Root;
+using PatternPal.SyntaxTree.Utils;
 
 #endregion
 

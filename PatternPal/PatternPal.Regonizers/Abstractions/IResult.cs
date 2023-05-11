@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using SyntaxTree.Abstractions.Entities;
+
+using PatternPal.SyntaxTree.Abstractions.Entities;
 
 namespace PatternPal.Recognizers.Abstractions
 {

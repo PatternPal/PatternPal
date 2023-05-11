@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-using SyntaxTree.Abstractions.Members;
+using PatternPal.SyntaxTree.Abstractions.Members;
 
 namespace PatternPal.Recognizers.Checks
 {

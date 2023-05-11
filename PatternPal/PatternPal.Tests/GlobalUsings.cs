@@ -17,11 +17,4 @@ global using PatternPal.Core;
 global using PatternPal.Core.Checks;
 global using PatternPal.Tests.Utils;
 
-global using SyntaxTree;
-global using SyntaxTree.Abstractions;
-global using SyntaxTree.Abstractions.Entities;
-global using SyntaxTree.Abstractions.Members;
-global using SyntaxTree.Models;
-global using SyntaxTree.Models.Entities;
-
 global using VerifyNUnit;

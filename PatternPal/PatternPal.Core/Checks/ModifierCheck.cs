@@ -1,4 +1,4 @@
-﻿ namespace PatternPal.Core.Checks;
+﻿  namespace PatternPal.Core.Checks;
 
 /// <summary>
 /// Checks for the modifiers of an entity. Depending on the <see cref="List{T}"/> of <see cref="IModified"/> provided.

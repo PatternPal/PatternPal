@@ -1,4 +1,6 @@
-﻿namespace PatternPal.Core.Checks;
+using PatternPal.SyntaxTree.Abstractions.Entities;
+
+namespace PatternPal.Core.Checks;
 
 /// <summary>
 /// Base class for <see cref="ICheck"/>s which can have sub-<see cref="ICheck"/>s.
@@ -169,12 +171,12 @@ internal abstract class NodeCheck< TNode > : CheckBase
     {
         // Run the check on the nodes.
         IList< ICheckResult > results = new List< ICheckResult >();
-        foreach (T child in nodes)
+        foreach (T node in nodes)
         {
             results.Add(
                 nodeCheck.Check(
                     ctx,
-                    child));
+                    node));
         }
 
         // TODO: Do we want to create a dedicated result type here (to indicate that these results originated from one check)?

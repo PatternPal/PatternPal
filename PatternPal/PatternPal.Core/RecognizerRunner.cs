@@ -1,4 +1,4 @@
-﻿#region
+#region
 
 using PatternPal.Core.Models;
 using PatternPal.Core.Recognizers;
