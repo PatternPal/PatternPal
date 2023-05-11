@@ -12,7 +12,7 @@ An example case that shows the need of the pattern is when someone uses a route 
 
 The **Context** is the class from where the code gets executed. It maintains a reference to one of the concrete strategies and communicates with the object only via the Strategy interface.
 
-The **Strategy** is an interface. This interface needs to contain a method which will be used to execute the algorithm as defined in the ConcreteStrategie classes.
+The **Strategy** is an interface. This interface needs to contain a method that will be used to execute the algorithm as defined in the ConcreteStrategie classes.
 
 The **ConcreteStrategy** class is designed for one specific purpose and inherits the interface Strategy. This class defines the execute() function and implements the algorithm in its own way.
 
