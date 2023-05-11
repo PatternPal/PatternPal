@@ -21,7 +21,7 @@ public class InterfaceCheckTests
         IInterface interfaceEntity = EntityNodeUtils.CreateInterface();
 
         InterfaceCheck interfaceCheck = Interface(Priority.Low);
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         Assert.DoesNotThrow(
             () => interfaceCheck.Check(
@@ -45,7 +45,7 @@ public class InterfaceCheckTests
         IInterface interfaceEntity = EntityNodeUtils.CreateInterface();
 
         InterfaceCheck interfaceCheck = Interface(Priority.Low);
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         ICheckResult result = interfaceCheck.Check(
             ctx,
@@ -62,7 +62,7 @@ public class InterfaceCheckTests
         InterfaceCheck interfaceCheck = Interface(
             Priority.Low,
             Parameters(Priority.Low));
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         Assert.Throws< IncorrectNodeTypeException >(
             () => interfaceCheck.Check(
@@ -80,7 +80,7 @@ public class InterfaceCheckTests
             Modifiers(
                 Priority.Low,
                 Modifier.Public));
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         ICheckResult result = interfaceCheck.Check(
             ctx,
@@ -99,8 +99,9 @@ public class InterfaceCheckTests
             Method(
                 Priority.Low,
                 Modifiers(
-                    Priority.Mid, Modifier.Public)));
-        RecognizerContext ctx = new();
+                    Priority.Mid,
+                    Modifier.Public)));
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         ICheckResult result = interfaceCheck.Check(
             ctx,

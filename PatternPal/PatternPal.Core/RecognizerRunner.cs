@@ -1,10 +1,12 @@
 ﻿#region
 
+using Microsoft.CodeAnalysis;
+
 using PatternPal.Core.Models;
 using PatternPal.Core.Recognizers;
 using PatternPal.Protos;
-using PatternPal.Recognizers.Abstractions;
 using PatternPal.SyntaxTree;
+using PatternPal.SyntaxTree.Abstractions.Root;
 
 #endregion
 
@@ -75,8 +77,6 @@ public class RecognizerRunner
         _graph.CreateGraph();
     }
 
-    public event EventHandler< RecognizerProgress > OnProgressUpdate;
-
     /// <summary>
     /// Run the recognizers.
     /// </summary>
@@ -91,43 +91,99 @@ public class RecognizerRunner
 
         SingletonRecognizer recognizer = new();
 
-        IEnumerable< ICheck > checkBuilders = recognizer.Create();
-        Dictionary< string, IEntity >.ValueCollection entities = _graph.GetAll().Values;
+        ICheck rootCheck = new NodeCheck< INode >(
+            Priority.Knockout,
+            recognizer.Create());
 
-        List<ICheckResult> results = new();
+        IRecognizerContext ctx = new RecognizerContext
+                                 {
+                                     Graph = _graph,
+                                     CurrentEntity = null!,
+                                     ParentCheck = rootCheck,
+                                 };
 
-        RecognizerContext ctx = new()
-                                {
-                                    Graph = _graph,
-                                };
-        foreach (ICheck check in checkBuilders)
-        {
-            foreach (IEntity entity in entities)
-            {
-                results.Add(check.Check(
-                    ctx,
-                    entity));
-            }
-        }
+        rootCheck.Check(
+            ctx,
+            new RootNode());
 
         return new List< RecognitionResult >();
     }
+}
+
+/// <summary>
+/// Contains state for the <see cref="ICheck"/> which is currently being processed.
+/// </summary>
+internal interface IRecognizerContext
+{
+    /// <summary>
+    /// The <see cref="SyntaxGraph"/> on which the <see cref="ICheck"/>s are being processed.
+    /// </summary>
+    internal SyntaxGraph Graph { get; }
 
     /// <summary>
-    /// Report a progress update.
+    /// The current <see cref="IEntity"/> being processed.
     /// </summary>
-    /// <param name="percentage">The current progress as a percentage.</param>
-    /// <param name="status">A status message associated with the current progress.</param>
-    private void ReportProgress(
-        int percentage,
-        string status)
-    {
-        OnProgressUpdate?.Invoke(
-            this,
-            new RecognizerProgress
-            {
-                CurrentPercentage = percentage,
-                Status = status
-            });
-    }
+    /// <remarks>
+    /// Example: When the current <see cref="ICheck"/> is a <see cref="MethodCheck"/>,
+    /// <see cref="CurrentEntity"/> contains the parent <see cref="IEntity"/> of the <see cref="IMethod"/>.
+    /// </remarks>
+    internal IEntity CurrentEntity { get; }
+
+    /// <summary>
+    /// The <see cref="ICheck"/> which is the direct parent of the current <see cref="ICheck"/>.
+    /// </summary>
+    internal ICheck ParentCheck { get; }
+
+    /// <summary>
+    /// Create a new <see cref="IRecognizerContext"/> instance from an existing one, overwriting the
+    /// old properties with the new ones.
+    /// </summary>
+    /// <param name="oldCtx">The existing <see cref="IRecognizerContext"/> from which to copy properties.</param>
+    /// <param name="currentNode">
+    /// The current <see cref="INode"/> being processed. If <paramref name="currentNode"/> is an <see cref="IEntity"/>,
+    /// it will be stored in <see cref="CurrentEntity"/>, otherwise the previous value of <see cref="CurrentEntity"/> is kept.
+    /// </param>
+    /// <param name="parentCheck">The current <see cref="ICheck"/>, of which the sub-<see cref="ICheck"/>s are going to be processed.</param>
+    /// <returns>The created <see cref="IRecognizerContext"/>.</returns>
+    internal static IRecognizerContext From(
+        IRecognizerContext oldCtx,
+        INode currentNode,
+        ICheck parentCheck) => new RecognizerContext
+                               {
+                                   Graph = oldCtx.Graph,
+                                   CurrentEntity = currentNode as IEntity ?? oldCtx.CurrentEntity,
+                                   ParentCheck = parentCheck
+                               };
+}
+
+/// <summary>
+/// Implementation of an <see cref="IRecognizerContext"/>. This type is <see langword="file"/>
+/// scoped to ensure we keep control over when a new instance is created.
+/// </summary>
+file class RecognizerContext : IRecognizerContext
+{
+    /// <inheritdoc />
+    public required SyntaxGraph Graph { get; init; }
+
+    /// <inheritdoc />
+    public required IEntity CurrentEntity { get; init; }
+
+    /// <inheritdoc />
+    public required ICheck ParentCheck { get; init; }
+}
+
+/// <summary>
+/// This <see cref="INode"/> implementation serves as a sentinel value to be passed to the root <see
+/// cref="ICheck"/>, without adding nullability into the APIs everywhere.
+/// </summary>
+file class RootNode : INode
+{
+    /// <inheritdoc />
+    string INode.GetName() => throw new UnreachableException();
+
+    /// <inheritdoc />
+    SyntaxNode INode.GetSyntaxNode() => throw new UnreachableException();
+
+    /// <inheritdoc />
+    IRoot INode.GetRoot() => throw new UnreachableException();
 }

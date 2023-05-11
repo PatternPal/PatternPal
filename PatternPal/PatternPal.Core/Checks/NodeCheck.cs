@@ -44,7 +44,7 @@ internal class NodeCheck< TNode > : CheckBase
 
     /// <inheritdoc />
     public override ICheckResult Check(
-        RecognizerContext ctx,
+        IRecognizerContext ctx,
         INode node)
     {
         // Verify that the node can be handled by this check.
@@ -77,22 +77,27 @@ internal class NodeCheck< TNode > : CheckBase
     /// <summary>
     /// Run the given <paramref name="subCheck"/> on the given <paramref name="castNode"/>.
     /// </summary>
-    /// <param name="ctx">The current <see cref="RecognizerContext"/>.</param>
+    /// <param name="ctx">The current <see cref="IRecognizerContext"/>.</param>
     /// <param name="castNode">The <see cref="INode"/> to run the <paramref name="subCheck"></param> on.</param>
     /// <param name="subCheck">The <see cref="ICheck"/> to run.</param>
     /// <returns>The <see cref="ICheckResult"/> of the <paramref name="subCheck"/>.</returns>
     private ICheckResult RunCheck(
-        RecognizerContext ctx,
+        IRecognizerContext oldCtx,
         TNode castNode,
         ICheck subCheck)
     {
         // Store the current sub-check. This is used for the InvalidSubCheckException.
         _currentSubCheck = subCheck;
 
+        // Create the new recognizer context.
+        IRecognizerContext ctx = IRecognizerContext.From(
+            oldCtx,
+            castNode,
+            this);
+
         switch (subCheck)
         {
             // These don't require any special handling.
-            case ClassCheck:
             case ModifierCheck:
             case RelationCheck:
             case ParameterCheck:
@@ -102,6 +107,22 @@ internal class NodeCheck< TNode > : CheckBase
 
             // These checks can match multiple entities, the results are wrapped in a
             // NodeCheckResult.
+            case ClassCheck classCheck:
+                ThrowIfNested(
+                    ctx,
+                    subCheck);
+                return RunCheckWithMultipleMatches(
+                    ctx,
+                    ctx.Graph.GetAll().Values.OfType< IClass >(),
+                    classCheck);
+            case InterfaceCheck interfaceCheck:
+                ThrowIfNested(
+                    ctx,
+                    subCheck);
+                return RunCheckWithMultipleMatches(
+                    ctx,
+                    ctx.Graph.GetAll().Values.OfType< IInterface >(),
+                    interfaceCheck);
             case MethodCheck methodCheck:
                 return RunCheckWithMultipleMatches(
                     ctx,
@@ -154,14 +175,34 @@ internal class NodeCheck< TNode > : CheckBase
     }
 
     /// <summary>
+    /// Throws an <see cref="InvalidSubCheckException"/> if <paramref name="subCheck"/> is not a root <see cref="ICheck"/>.
+    /// </summary>
+    /// <param name="ctx">The current <see cref="IRecognizerContext"/>.</param>
+    /// <param name="subCheck">The current <see cref="ICheck"/>.</param>
+    /// <exception cref="InvalidSubCheckException">Thrown if <paramref name="subCheck"/> is not a root <see cref="ICheck"/>.</exception>
+    private void ThrowIfNested(
+        IRecognizerContext ctx,
+        ICheck subCheck)
+    {
+        // Being nested inside an 'Any' or 'All' check is allowed, as this doesn't influence which
+        // entities are passed to the check.
+        if (ctx.ParentCheck.GetType() != typeof( NodeCheck< INode > ))
+        {
+            throw CheckHelper.InvalidSubCheck(
+                this,
+                subCheck);
+        }
+    }
+
+    /// <summary>
     /// Run the given <paramref name="nodeCheck"/> on the given <paramref name="nodes"/>.
     /// </summary>
-    /// <param name="ctx">The current <see cref="RecognizerContext"/>.</param>
+    /// <param name="ctx">The current <see cref="IRecognizerContext"/>.</param>
     /// <param name="nodes">The <see cref="INode"/>s to run the <see cref="nodeCheck"/> on.</param>
     /// <param name="nodeCheck">The <see cref="ICheck"/> to run.</param>
     /// <returns>The <see cref="ICheckResult"/> of the <paramref name="nodeCheck"/>.</returns>
     private static ICheckResult RunCheckWithMultipleMatches< T >(
-        RecognizerContext ctx,
+        IRecognizerContext ctx,
         IEnumerable< T > nodes,
         NodeCheck< T > nodeCheck)
         where T : INode
@@ -190,11 +231,11 @@ internal class NodeCheck< TNode > : CheckBase
     /// <summary>
     /// Gets the <see cref="IEntity"/> to pass to a <see cref="TypeCheck"/>.
     /// </summary>
-    /// <param name="ctx">The current <see cref="RecognizerContext"/>.</param>
+    /// <param name="ctx">The current <see cref="IRecognizerContext"/>.</param>
     /// <param name="node">The <see cref="INode"/> to be checked.</param>
     /// <returns>The <see cref="IEntity"/> to pass to the <see cref="TypeCheck"/>.</returns>
     protected virtual IEntity GetType4TypeCheck(
-        RecognizerContext ctx,
+        IRecognizerContext ctx,
         TNode node)
     {
         throw new InvalidSubCheckException(

@@ -14,7 +14,7 @@
         }
 
         public override ICheckResult Check(
-            RecognizerContext ctx,
+            IRecognizerContext ctx,
             INode entityNode)
         {
             throw new NotImplementedException();

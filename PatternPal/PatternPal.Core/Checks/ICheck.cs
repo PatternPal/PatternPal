@@ -7,7 +7,7 @@ namespace PatternPal.Core.Checks;
 /// Function which can be called to get an <see cref="IEntity"/>.
 /// </summary>
 internal delegate IEntity GetCurrentEntity(
-    RecognizerContext ctx);
+    IRecognizerContext ctx);
 
 /// <summary>
 /// Represents a check, which is a part of a <see cref="Recognizers.IRecognizer"/> responsible for checking
@@ -35,7 +35,7 @@ internal interface ICheck
     /// <param name="node">The <see cref="INode"/> to be checked.</param>
     /// <returns>An <see cref="ICheckResult"/> which represents the result of the check.</returns>
     ICheckResult Check(
-        RecognizerContext ctx,
+        IRecognizerContext ctx,
         INode node);
 }
 
@@ -58,7 +58,7 @@ internal abstract class CheckBase : ICheck
 
     /// <inheritdoc />
     public abstract ICheckResult Check(
-        RecognizerContext ctx,
+        IRecognizerContext ctx,
         INode node);
 }
 
@@ -349,7 +349,7 @@ internal static class CheckHelper
     internal static T ConvertNodeElseThrow< T >(
         INode node)
         where T : INode => node is not T asT
-        ? throw IncorrectNodeTypeException.From< T >()
+        ? throw IncorrectNodeTypeException.From< T >(node)
         : asT;
 
     /// <summary>
@@ -393,16 +393,22 @@ internal sealed class IncorrectNodeTypeException : Exception
     /// Initializes a new instance of the <see cref="IncorrectNodeTypeException"/> class for the given <paramref name="type"/>
     /// </summary>
     /// <param name="type">The type to which the instance could not be converted.</param>
+    /// <param name="node">The <see cref="INode"/> which could not be converted.</param>
     private IncorrectNodeTypeException(
-        Type type)
-        : base($"Node must be of type '{type}'")
+        Type type,
+        INode ? node)
+        : base($"Node must be of type '{type}', but is of type '{(node is null ? "<null>" : node.GetType())}'")
     {
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="IncorrectNodeTypeException"/> class for the given <see cref="T"/>.
     /// </summary>
-    internal static IncorrectNodeTypeException From< T >() => new( typeof( T ) );
+    /// <param name="node">The <see cref="INode"/> which could not be converted.</param>
+    internal static IncorrectNodeTypeException From< T >(
+        INode ? node) => new(
+        typeof( T ),
+        node );
 }
 
 /// <summary>

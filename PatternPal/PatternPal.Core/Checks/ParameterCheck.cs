@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-
-namespace PatternPal.Core.Checks;
+﻿namespace PatternPal.Core.Checks;
 
 /// <summary>
 /// Checks if the parameters of an <see cref="IParameterized"/> are in accorance with the types in <see cref="_parameterTypes"/>.
@@ -25,37 +22,37 @@ internal class ParameterCheck : CheckBase
     }
 
     public override ICheckResult Check(
-        RecognizerContext ctx,
+        IRecognizerContext ctx,
         INode node)
     {
-        IParameterized hasParameters = CheckHelper.ConvertNodeElseThrow<IParameterized>(node);
+        IParameterized hasParameters = CheckHelper.ConvertNodeElseThrow< IParameterized >(node);
 
         // Retrieve the parameters the node has to compare to list of TypeChecks and convert to
         // IEntities.
         List< IEntity > nodeParameters =
             hasParameters.GetParameters().Select(x => ctx.Graph.Relations.GetEntityByName(x)).ToList();
 
-        List<ICheckResult> subCheckResultsResults = new List<ICheckResult>();
+        List< ICheckResult > subCheckResultsResults = new List< ICheckResult >();
 
         // Node has no parameters
         if (!nodeParameters.Any())
         {
             return new NodeCheckResult
-            {
-                ChildrenCheckResults = subCheckResultsResults,
-                FeedbackMessage = $"The method has no parameters.",
-                Priority = Priority
-            };
+                   {
+                       ChildrenCheckResults = subCheckResultsResults,
+                       FeedbackMessage = $"The method has no parameters.",
+                       Priority = Priority
+                   };
         }
         // No TypeChecks were provided
         if (!_parameterTypes.Any())
         {
             return new NodeCheckResult
-            {
-                ChildrenCheckResults = subCheckResultsResults,
-                FeedbackMessage = $"No TypeChecks were provided.",
-                Priority = Priority
-            };
+                   {
+                       ChildrenCheckResults = subCheckResultsResults,
+                       FeedbackMessage = $"No TypeChecks were provided.",
+                       Priority = Priority
+                   };
         }
 
         // For each typecheck, check whether one of the parameters of node has the correct type
@@ -69,20 +66,24 @@ internal class ParameterCheck : CheckBase
             {
                 // TODO
                 ICheckResult temp = new LeafCheckResult
-                {
-                    Priority = Priority,
-                    Correct = false,
-                    FeedbackMessage = "There are less parameters than TypeChecks"
-                };
+                                    {
+                                        Priority = Priority,
+                                        Correct = false,
+                                        FeedbackMessage = "There are less parameters than TypeChecks"
+                                    };
                 subCheckResultsResults.Add(temp);
                 break;
             }
 
-            for (int x = 0; x < nodeParameters.Count(); x++)
+            for (int x = 0;
+                 x < nodeParameters.Count();
+                 x++)
             {
-                var test = nodeParameters[x];
+                var test = nodeParameters[ x ];
                 ICheckResult tempCheck;
-                tempCheck = typecheck.Check(ctx, nodeParameters.ElementAt(x));
+                tempCheck = typecheck.Check(
+                    ctx,
+                    nodeParameters.ElementAt(x));
 
                 switch (tempCheck)
                 {
@@ -113,7 +114,7 @@ internal class ParameterCheck : CheckBase
                             subCheckResultsResults.Add(tempCheck);
                             nodeParameters.RemoveAt(x);
                             noneCorrect = false;
-                            break; 
+                            break;
                         }
                         else
                         {
@@ -131,10 +132,10 @@ internal class ParameterCheck : CheckBase
         }
 
         return new NodeCheckResult
-        {
-            ChildrenCheckResults = subCheckResultsResults, 
-            FeedbackMessage = $"Found parameters for following node: {node}.", 
-            Priority = Priority
-        };
+               {
+                   ChildrenCheckResults = subCheckResultsResults,
+                   FeedbackMessage = $"Found parameters for following node: {node}.",
+                   Priority = Priority
+               };
     }
 }
