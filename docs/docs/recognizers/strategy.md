@@ -14,9 +14,9 @@ The **Context** is the class from where the code gets executed. It maintains a r
 
 The **Strategy** is an interface. This interface needs to contain a method that will be used to execute the algorithm as defined in the ConcreteStrategie classes.
 
-The **ConcreteStrategy** class is designed for one specific purpose and inherits the interface Strategy. This class defines the execute() function and implements the algorithm in its own way.
+The **ConcreteStrategy** class is designed for one specific purpose and implements the interface Strategy. This class defines the execute() function and implements the algorithm in its own way.
 
-The **Client** creates a ConcreteStrategy object and passes it to the Context. The Context exposes a setter setStrategy() which lets clients replace the strategy associated with the context at runtime
+The **Client** creates a ConcreteStrategy object and passes it to the Context. The Context exposes a setter setStrategy() which lets clients replace the strategy associated with the context at runtime.
 
 ## Requirements
 _Client class_
@@ -25,14 +25,14 @@ b. has used the setStrategy() in the Context class to store the ConcreteStrategy
 c. has executed the ConcreteStrategy via the Context class	
 
 _Context class_
-a. has a private field or property that has a Strategy class as type 
-b. has a function setStrategy() to set the private field / property with parameter of type Strategy	interface
+a. has a private field or property that has the Strategy class as type 
+b. has a function setStrategy() to set the private field / property with a parameter of type Strategy
 c. has a function useStrategy() to execute the strategy.
 
 _Strategy interface_
 a. is an interface / abstract class	(duplicate if 4.d holds and the implementation / inheritance is correct)
 b. has declared a method
-  i. if the class is an abstract instead of an interface the method has to be an abstract method.
+  i. if the class is an abstract class instead of an interface, this method has to be an abstract method.
 c. is used by another class
 d. is implemented / inherited by at least one other class
 e. is implemented / inherited by at least two other classes
