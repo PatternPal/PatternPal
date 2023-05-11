@@ -196,7 +196,7 @@ internal abstract class NodeCheck< TNode > : CheckBase
     /// <param name="ctx">The current <see cref="RecognizerContext"/>.</param>
     /// <param name="node">The <see cref="INode"/> to be checked.</param>
     /// <returns>The <see cref="IEntity"/> to pass to the <see cref="TypeCheck"/>.</returns>
-    protected virtual IEntity? GetType4TypeCheck(
+    protected virtual IEntity GetType4TypeCheck(
         RecognizerContext ctx,
         TNode node)
     {
