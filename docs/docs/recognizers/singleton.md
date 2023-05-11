@@ -22,7 +22,7 @@ b. has at least one private/protected constructor
 c. has a static, private field with the same type as the class
 d. has a static, public/internal method that acts as a constructor in the following way:
   i. if called and there is no instance saved in the private field, then it calls the private constructor
-  ii. if called and there is an instance saved in the private field it returns this instance
+  ii. if called and there is an instance saved in the private field it returns that instance
 
 ## References
 The following sources are used to determine the requirements:
