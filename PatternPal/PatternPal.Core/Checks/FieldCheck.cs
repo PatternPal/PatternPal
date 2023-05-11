@@ -1,4 +1,3 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using PatternPal.SyntaxTree.Abstractions.Entities;
 using PatternPal.SyntaxTree.Abstractions.Members;
 namespace PatternPal.Core.Checks;
