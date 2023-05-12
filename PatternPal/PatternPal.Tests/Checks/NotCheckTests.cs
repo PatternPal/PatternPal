@@ -1,5 +1,6 @@
 ﻿#region
 
+using PatternPal.SyntaxTree.Abstractions;
 using PatternPal.SyntaxTree.Abstractions.Entities;
 using PatternPal.SyntaxTree.Models;
 
@@ -21,7 +22,7 @@ internal class NotCheckTests
                 Modifier.Abstract));
 
         IClass classEntity = EntityNodeUtils.CreateClass();
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         Assert.Throws< UnreachableException >(
             () => notCheck.Check(
@@ -33,9 +34,9 @@ internal class NotCheckTests
     public Task Single_Modifier_Correct_NotCheck_Test()
     {
         IClass classEntity = EntityNodeUtils.CreateClass();
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
-        CheckCollection checkCollection = Any(
+        NodeCheck< INode > checkCollection = Any(
             Priority.Low,
             Not(
                 Priority.Low,
@@ -53,9 +54,9 @@ internal class NotCheckTests
     public Task Single_Modifier_Incorrect_NotCheck_Test()
     {
         IClass classEntity = EntityNodeUtils.CreateClass();
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
-        CheckCollection checkCollection = Any(
+        NodeCheck< INode > checkCollection = Any(
             Priority.Low,
             Not(
                 Priority.Low,

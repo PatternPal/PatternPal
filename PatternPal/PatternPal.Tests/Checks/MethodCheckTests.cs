@@ -19,7 +19,7 @@ internal class MethodCheckTests
         IMethod methodEntity = EntityNodeUtils.CreateMethod();
 
         MethodCheck methodCheck = Method(Priority.Low);
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         Assert.DoesNotThrow(
             () => methodCheck.Check(
@@ -38,7 +38,7 @@ internal class MethodCheckTests
         IMethod methodEntity = EntityNodeUtils.CreateMethod();
 
         MethodCheck methodCheck = Method(Priority.Low);
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         ICheckResult result = methodCheck.Check(
             ctx,
@@ -55,9 +55,9 @@ internal class MethodCheckTests
         MethodCheck methodCheck = Method(
             Priority.Low,
             Class(Priority.Low));
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
-        Assert.Throws< IncorrectNodeTypeException >(
+        Assert.Throws< InvalidSubCheckException >(
             () => methodCheck.Check(
                 ctx,
                 methodEntity));
@@ -73,7 +73,7 @@ internal class MethodCheckTests
             Modifiers(
                 Priority.Low,
                 Modifier.Internal));
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         ICheckResult result = methodCheck.Check(
             ctx,

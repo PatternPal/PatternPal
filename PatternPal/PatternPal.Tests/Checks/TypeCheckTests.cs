@@ -20,7 +20,7 @@ public class TypeCheckTests
                           classEntity
                       }) );
 
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         ICheckResult result = typeCheck.Check(
             ctx,
@@ -42,7 +42,7 @@ public class TypeCheckTests
                           classEntity
                       }) );
 
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         ICheckResult result = typeCheck.Check(
             ctx,
