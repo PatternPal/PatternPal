@@ -13,7 +13,7 @@ composing modular checks using the fluent design pattern.
 ## Leaf Checks
 
 Leaf checks examine a single aspect of an entity (see
-JEROEN) and compare it to a specific value. They do
+the [syntax graph explanation](syntax_graph.md)) and compare it to a specific value. They do
 not contain other checks.
 
 ### ModifierCheck
@@ -173,7 +173,7 @@ The recognizers are run on the code base of the user in the Run()
 function of the RecognizerRunner.\
 The Runner creates a SyntaxGraph of the code base. Here the code base
 gets represented as a graph of entities (see
-JEROEN. It also creates a RecognizerContext which
+the [syntax graph explanation](syntax_graph.md)). It also creates a RecognizerContext which
 gets a reference to this graph. Then it goes through each recognizer and
 gives each entity of the graph in turn, as root entity, together with
 the context, to the recognizer. The recognizer then runs all of its
