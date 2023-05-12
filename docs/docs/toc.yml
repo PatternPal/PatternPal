@@ -5,6 +5,8 @@
 - name: Recognizers
 - name: How a recognizer works
   href: recognizers/recognizer.md
+- name: Syntax graph
+  href: recognizers/syntax_graph.md
 - name: Singleton
   href: recognizers/singleton.md
 
