@@ -166,6 +166,50 @@ be used by a recognizer to create checks in a fluid way.
 
 This recognizer checks whether there is a class which has a static,
 non-private method which is used by one of its other methods.
+```csharp
+internal class ExampleRecognizer : IRecognizer
+{
+  internal IEnumerable< ICheck > Create()
+  {
+     MethodCheck instanceMethod =
+            //this starts a collection of checks for a method
+            Method( 
+                Priority.Knockout,
+                //the first check in the collection is a modifier check
+                Modifiers( 
+                    Priority.Knockout,
+                    //requiring the method to be static
+                    Modifier.Static 
+                ),
+                //the second check in the collection is a not check
+                Not( 
+                    Priority.Mid,
+                    Modifiers(
+                        Priority.Low,
+                        //requiring that this method is not private
+                        Modifier.Private 
+                    )
+                )
+            );
+
+    //this starts a collection of checks for a class
+    yield return Class( 
+            Priority.Knockout,
+            //the first check is the previously defined method check
+            instanceMethod,
+            //the second check in de collection is also a method check
+            Method( //this starts a new collection of checks
+                Priority.Low,
+                //the first check in this collection is a uses check
+                Uses( 
+                    Priority.Low,
+                    //requiring the method to use the other method 
+                    instanceMethod.Result 
+                )
+            )
+  }
+}
+```
 
 ## Running a recognizer
 
