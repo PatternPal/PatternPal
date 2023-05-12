@@ -1,6 +1,6 @@
 # Functioning of the recognizers
 
-The [appendix](#Appendix) can be used as a tool accompanying the reading of this section.
+The [appendix](#appendix) can be used as a tool accompanying the reading of this section.
 
 ## What is a recognizer
 
