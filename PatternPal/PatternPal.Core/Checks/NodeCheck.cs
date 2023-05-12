@@ -101,6 +101,7 @@ internal class NodeCheck< TNode > : CheckBase
             case ModifierCheck:
             case RelationCheck:
             case ParameterCheck:
+            case NodeCheck< INode >:
                 return subCheck.Check(
                     ctx,
                     castNode);
