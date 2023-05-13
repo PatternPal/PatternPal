@@ -10,7 +10,7 @@ An example of use could be some sort of database. There should be global access 
 ## Explanation of Architecture
 ![UML Singleton](https://refactoring.guru/images/patterns/diagrams/singleton/structure-en-indexed.png?id=b0217ae066cd3b757677d119551f9a8f)
 
-The **singleton** class declares the static method getInstance() that returns the same instance of its own class. The constructor of the class should be hidden from the client code and is only called on the first time that the getInstance() method is called. All the next times that the getInstance() is called it returns the created and saved instance.
+The **singleton** class declares the static method getInstance() that returns an instance of its own class. The constructor of the class should be hidden from the client code and should only be called the first time the getInstance() method is called. All other times it returns this instance.
 
 ## Requirements
 _Client Class_

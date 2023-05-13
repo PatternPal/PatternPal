@@ -10,11 +10,11 @@ An example case that shows the need of the pattern is when someone uses a route 
 ## Explanation of Architecture
 ![UML Strategy](https://refactoring.guru/images/patterns/diagrams/strategy/structure.png)
 
-The **Context** is the class from where the code gets executed. It maintains a reference to one of the concrete strategies and communicates with the object only via the Strategy interface.
+The **Context** is the class from where the code gets executed. It stores a reference to one of the concrete strategies. It only communicates with the object via the methods in the Strategy.
 
-The **Strategy** is an interface. This interface needs to contain a method that will be used to execute the algorithm as defined in the ConcreteStrategie classes.
+The **Strategy** could be an interface or an abstract class. This instance needs to contain a (abstract) method that will be used to execute the algorithm as implemented in the ConcreteStrategie classes.
 
-The **ConcreteStrategy** class is designed for one specific purpose and implements the interface Strategy. This class defines the execute() function and implements the algorithm in its own way.
+The **ConcreteStrategy** class is designed for one specific purpose and implements/inherits the interface Strategy. This class implements the execute() function and with that defines the algorithm in its own way.
 
 The **Client** creates a ConcreteStrategy object and passes it to the Context. The Context exposes a setter setStrategy() which lets clients replace the strategy associated with the context at runtime.
 
@@ -26,14 +26,15 @@ c. has executed the ConcreteStrategy via the Context class
 
 _Context class_
 a. has a private field or property that has the Strategy class as type 
-b. has a function setStrategy() to set the private field / property with a parameter of type Strategy
-c. has a function useStrategy() to execute the strategy.
+b. has a function setStrategy() to set the private field / property
+  i. if the reference is stored in a field the function must have a parameter of type Strategy
+c. has a function useStrategy() that calls the execute() function in Strategy.
 
 _Strategy interface_
 a. is an interface / abstract class	(duplicate if 4.d holds and the implementation / inheritance is correct)
 b. has declared a method
   i. if the class is an abstract class instead of an interface, this method has to be an abstract method.
-c. is used by another class
+c. is used by the context class
 d. is implemented / inherited by at least one other class
 e. is implemented / inherited by at least two other classes
 
