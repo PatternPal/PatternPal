@@ -9,6 +9,8 @@
   href: recognizers/syntax_graph.md
 - name: Singleton
   href: recognizers/singleton.md
+  name: Strategy
+  href: recognizers/strategy.md
 
 - name: How to
 - name: Implement a Recognizer
