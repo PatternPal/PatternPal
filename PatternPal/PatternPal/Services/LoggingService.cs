@@ -117,6 +117,7 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
         LogRequest sendLog = StandardLog(receivedRequest);
         sendLog.EventType = LoggingServer.EventType.EvtDebugProgram;
         sendLog.ExecutionId = receivedRequest.ExecutionId;
+        sendLog.ExecutionResult = (ExecutionResult)receivedRequest.ExecutionResult;
 
         return sendLog;
     }

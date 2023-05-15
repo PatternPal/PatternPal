@@ -34,6 +34,8 @@ namespace PatternPal.Extension.Commands
 
         private static string _sessionId;
 
+        private static bool _unhandledExceptionThrown;
+
         public static string SessionId
         {
             get { return _sessionId; }
@@ -58,7 +60,7 @@ namespace PatternPal.Extension.Commands
             _dteDebugEvents = _dte.Events.DebuggerEvents;
             _dteSolutionEvents = _dte.Events.SolutionEvents;
             _dteBuildEvents = _dte.Events.BuildEvents;
-           _package = package;
+            _package = package;
             _pathToUserDataFolder = Path.Combine(_package.UserLocalDataPath.ToString(), "Extensions", "Team PatternPal",
                 "PatternPal.Extension", "UserData");
             _cancellationToken = cancellationToken;
@@ -79,7 +81,8 @@ namespace PatternPal.Extension.Commands
             _dteBuildEvents.OnBuildDone += OnCompileDone;
             _dteSolutionEvents.Opened += OnProjectOpen;
             _dteSolutionEvents.BeforeClosing += OnProjectClose;
-            _dteDebugEvents.OnEnterRunMode += OnDebugProgram;
+            _dteDebugEvents.OnEnterBreakMode += OnExceptionUnhandled; // OnEnterBreakMode is triggered for both breakpoints as well as exceptions, with the reason parameter specifying this.
+            _dteDebugEvents.OnEnterDesignMode += OnDebugProgram;
         }
 
 
@@ -92,7 +95,8 @@ namespace PatternPal.Extension.Commands
             _dteBuildEvents.OnBuildDone -= OnCompileDone;
             _dteSolutionEvents.Opened -= OnProjectOpen;
             _dteSolutionEvents.BeforeClosing -= OnProjectClose;
-            _dteDebugEvents.OnEnterRunMode -= OnDebugProgram;
+            _dteDebugEvents.OnEnterBreakMode -= OnExceptionUnhandled; 
+            _dteDebugEvents.OnEnterDesignMode -= OnDebugProgram;
         }
 
 
@@ -296,6 +300,16 @@ namespace PatternPal.Extension.Commands
             request.EventType = EventType.EvtDebugProgram;
             request.ExecutionId = Guid.NewGuid().ToString();
 
+            if (_unhandledExceptionThrown)
+            {
+                request.ExecutionResult = ExecutionResult.ExtError;
+                _unhandledExceptionThrown = false;
+            }
+            else
+            {
+                request.ExecutionResult = ExecutionResult.ExtSucces;
+            }
+
             LogProviderService.LogProviderServiceClient client =
                 new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
             LogEventResponse response = client.LogEvent(request);
@@ -365,6 +379,19 @@ namespace PatternPal.Extension.Commands
             }
 
             return rel;
+        }
+
+        /// <summary>
+        /// Event handler for when an exception is unhandled. This is used to determine in the user's last debug session
+        /// whether there were any unhandled exceptions. Although creating a separate method might seem redundant
+        /// for the actual logic used here, it is necessary for the adding and removing from any used event listeners.
+        /// </summary>
+        public static void OnExceptionUnhandled(dbgEventReason reason, ref dbgExecutionAction executionAction)
+        {
+            if (reason == dbgEventReason.dbgEventReasonExceptionNotHandled)
+            {
+                _unhandledExceptionThrown = true;
+            }
         }
     }
 }
