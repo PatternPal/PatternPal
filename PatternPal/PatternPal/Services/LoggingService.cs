@@ -17,7 +17,7 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
     public override Task<LogEventResponse> LogEvent(LogEventRequest receivedRequest, ServerCallContext context)
     {
         GrpcChannel grpcChannel = GrpcChannel.ForAddress(
-            "http://localhost:8000");
+            "http://178.128.140.163:8080");
 
         LogRequest sendRequest = DetermineSpecificLog(receivedRequest);
         LogCollectorService.LogCollectorServiceClient client = new LogCollectorService.LogCollectorServiceClient(grpcChannel);

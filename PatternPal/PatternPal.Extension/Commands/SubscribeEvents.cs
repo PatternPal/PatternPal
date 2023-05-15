@@ -56,6 +56,7 @@ namespace PatternPal.Extension.Commands
             if (_package.DoLogData)
             {
                 OnSessionStart();
+                OnProjectOpen();
             }
         }
 
@@ -69,7 +70,7 @@ namespace PatternPal.Extension.Commands
             // Code that interacts with UI elements goes here
             _dte.Events.BuildEvents.OnBuildDone += OnCompileDone;
             _dte.Events.SolutionEvents.Opened += OnProjectOpen;
-            _dte.Events.SolutionEvents.BeforeClosing += OnProjectClose; 
+            _dte.Events.SolutionEvents.BeforeClosing += OnProjectClose;
             _dte.Events.DebuggerEvents.OnEnterDesignMode += OnRunProgram; // TODO: Not triggering...
         }
 
@@ -100,7 +101,6 @@ namespace PatternPal.Extension.Commands
             string outputMessage;
             if (_dte.Solution.SolutionBuild.LastBuildInfo != 0)
             {
-              
                 outputMessage = string.Format("Build {0} with errors. See the output window for details.",
                     Action.ToString());
 
@@ -128,11 +128,11 @@ namespace PatternPal.Extension.Commands
 
                 request.CodeStateSection = GetRelativePath(pathSolutionDirectory, pathSolutionFile);
             }
-        
-            request.EventType = EventType.EvtCompile;
-            request.CompileResult = outputMessage;  
 
-             LogProviderService.LogProviderServiceClient client =
+            request.EventType = EventType.EvtCompile;
+            request.CompileResult = outputMessage;
+
+            LogProviderService.LogProviderServiceClient client =
                 new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
             LogEventResponse response = client.LogEvent(request);
 
@@ -209,27 +209,9 @@ namespace PatternPal.Extension.Commands
         private static void OnProjectOpen()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            Projects projects = _dte.Solution.Projects;
-
-            // Iterate through all projects and log for each of them, as a solution can contain multiple csproj. files
-
-            List<Project> list = new List<Project>();
-                IEnumerator item = projects.GetEnumerator();
-                while (item.MoveNext())
-                {
-                    Project project = item.Current as Project;
-                    if (project == null)
-                    {
-                        continue;
-                    }
-                    LogEventRequest request = CreateStandardLog();
-                    request.EventType = EventType.EvtProjectOpen;
-                    request.ProjectId = project.FullName;
-                    LogProviderService.LogProviderServiceClient client =
-                        new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-                    LogEventResponse response = client.LogEvent(request);
-                }
-
+            LogEventRequest request = CreateStandardLog();
+            request.EventType = EventType.EvtProjectOpen;
+            LogEachProject(request);
         }
 
         /// <summary>
@@ -238,27 +220,9 @@ namespace PatternPal.Extension.Commands
         private static void OnProjectClose()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            Projects projects = _dte.Solution.Projects;
-
-                // Iterate through all projects and log for each of them, as a solution can contain multiple csproj. files
-                List<Project> list = new List<Project>();
-                IEnumerator item = projects.GetEnumerator();
-                while (item.MoveNext())
-                {
-                    Project project = item.Current as Project;
-                    if (project == null)
-                    {
-                        continue;
-                    }
-
-                    LogEventRequest request = CreateStandardLog();
-                    request.EventType = EventType.EvtProjectClose;
-                    request.ProjectId = project.FullName;
-                    LogProviderService.LogProviderServiceClient client =
-                        new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-                    LogEventResponse response = client.LogEvent(request);
-                }
-
+            LogEventRequest request = CreateStandardLog();
+            request.EventType = EventType.EvtProjectClose;
+            LogEachProject(request);
         }
 
         /// <summary>
@@ -282,6 +246,7 @@ namespace PatternPal.Extension.Commands
         }
 
         #endregion
+
         /// <summary>
         /// Creates a standard log format with set fields that are always generated. Consequently, it is used by all other specific logs.
         /// </summary>
@@ -290,7 +255,9 @@ namespace PatternPal.Extension.Commands
         {
             return new LogEventRequest
             {
-                EventId = Guid.NewGuid().ToString(), SubjectId = GetSubjectId(), SessionId = _sessionId
+                EventId = Guid.NewGuid().ToString(),
+                SubjectId = GetSubjectId(),
+                SessionId = _sessionId
             };
         }
 
@@ -344,5 +311,29 @@ namespace PatternPal.Extension.Commands
 
             return rel;
         }
+
+        /// <summary>
+        /// Cycles through all active projects and log the given event for each of these projects.
+        /// </summary>
+        private static void LogEachProject(LogEventRequest request)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            Projects projects = _dte.Solution.Projects;
+
+            foreach (Project project in projects)
+            {
+                if (project == null)
+                {
+                    continue;
+                }
+
+                request.ProjectId = project.FullName;
+
+                LogProviderService.LogProviderServiceClient client =
+                    new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
+                LogEventResponse response = client.LogEvent(request);
+            }
+        }
+
     }
 }
