@@ -34,6 +34,23 @@ internal class LeafCheckResult : ICheckResult
 }
 
 /// <summary>
+/// Represents the result of a <see cref="NotCheck"/>.
+/// </summary>
+internal class NotCheckResult : ICheckResult
+{
+    /// <inheritdoc />
+    public required string FeedbackMessage { get; init; }
+
+    /// <inheritdoc />
+    public required Priority Priority { get; init; }
+
+    /// <summary>
+    /// The <see cref="ICheckResult"/> of the <see cref="ICheck"/> nested in the <see cref="NotCheck"/>.
+    /// </summary>
+    public required ICheckResult NestedResult { get; init; }
+}
+
+/// <summary>
 /// Represents the result of a check which is a collection of other checks, like <see cref="ClassCheck"/>, and <see cref="FieldCheck"/>.
 /// </summary>
 internal class NodeCheckResult : ICheckResult

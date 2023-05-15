@@ -28,7 +28,7 @@ internal class TypeCheck : CheckBase
     /// provided by either of the functors which are set using the constructors.
     /// </summary>
     public override ICheckResult Check(
-        RecognizerContext ctx,
+        IRecognizerContext ctx,
         INode node)
     {
         // Get the node to match against.

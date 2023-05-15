@@ -1,5 +1,9 @@
 ﻿#region
 
+using PatternPal.SyntaxTree.Abstractions.Entities;
+using PatternPal.SyntaxTree.Abstractions.Members;
+using PatternPal.SyntaxTree.Models;
+
 using static PatternPal.Core.Checks.CheckBuilder;
 
 #endregion
@@ -15,7 +19,7 @@ internal class MethodCheckTests
         IMethod methodEntity = EntityNodeUtils.CreateMethod();
 
         MethodCheck methodCheck = Method(Priority.Low);
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         Assert.DoesNotThrow(
             () => methodCheck.Check(
@@ -34,7 +38,7 @@ internal class MethodCheckTests
         IMethod methodEntity = EntityNodeUtils.CreateMethod();
 
         MethodCheck methodCheck = Method(Priority.Low);
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         ICheckResult result = methodCheck.Check(
             ctx,
@@ -51,7 +55,7 @@ internal class MethodCheckTests
         MethodCheck methodCheck = Method(
             Priority.Low,
             Class(Priority.Low));
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         Assert.Throws< InvalidSubCheckException >(
             () => methodCheck.Check(
@@ -69,7 +73,7 @@ internal class MethodCheckTests
             Modifiers(
                 Priority.Low,
                 Modifier.Internal));
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         ICheckResult result = methodCheck.Check(
             ctx,
