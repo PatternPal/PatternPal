@@ -288,7 +288,7 @@ namespace PatternPal.Extension.Commands
         }
 
         /// <summary>
-        /// The event handler for handling the Run.Program Event.
+        /// The event handler for handling the Debug.Program Event.
         /// </summary>
         private static void OnDebugProgram(dbgEventReason reason)
         {
