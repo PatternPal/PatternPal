@@ -5,9 +5,13 @@
         private readonly List< ICheck > _ifChecks;
         private readonly List< ICheck > _thenChecks;
 
-        public IfThenOperatorCheck(Priority priority,
+        public override int DependencyCount => throw new NotImplementedException();
+
+        public IfThenOperatorCheck(
+            Priority priority,
             List< ICheck > ifChecks,
-            List< ICheck > thenChecks) : base(priority)
+            List< ICheck > thenChecks)
+            : base(priority)
         {
             _ifChecks = ifChecks;
             _thenChecks = thenChecks;

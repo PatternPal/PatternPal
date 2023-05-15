@@ -104,7 +104,7 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
                                   //Recognizer = 0,
                                   //ClassName = result.EntityNode.GetFullName(),
                               };
-        foreach (ICheckResult checkResult in instruction.Checks.Select(check => check.Correct(state)))
+        foreach (PatternPal.Recognizers.Abstractions.ICheckResult checkResult in instruction.Checks.Select(check => check.Correct(state)))
         {
             res.Results.Add(CreateCheckResult(checkResult));
         }
@@ -128,7 +128,7 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
     }
 
     private CheckResult CreateCheckResult(
-        ICheckResult checkResult)
+        PatternPal.Recognizers.Abstractions.ICheckResult checkResult)
     {
         CheckResult newCheckResult = new()
                                      {
@@ -137,7 +137,7 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
                                          Score = checkResult.GetScore(),
                                          FeedbackMessage = ResourceUtils.ResultToString(checkResult),
                                      };
-        foreach (ICheckResult childCheckResult in checkResult.GetChildFeedback())
+        foreach (PatternPal.Recognizers.Abstractions.ICheckResult childCheckResult in checkResult.GetChildFeedback())
         {
             newCheckResult.SubCheckResults.Add(CreateCheckResult(childCheckResult));
         }

@@ -81,7 +81,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                                       Score = (uint)result.Result.GetScore()
                                   };
 
-            foreach (ICheckResult checkResult in result.Result.GetResults())
+            foreach (PatternPal.Recognizers.Abstractions.ICheckResult checkResult in result.Result.GetResults())
             {
                 res.Results.Add(CreateCheckResult(checkResult));
             }
@@ -151,7 +151,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
     /// <param name="checkResult">The <see cref="ICheckResult"/> to convert.</param>
     /// <returns>The <see cref="CheckResult"/> instance created from the given <see cref="ICheckResult"/>.</returns>
     private CheckResult CreateCheckResult(
-        ICheckResult checkResult)
+        PatternPal.Recognizers.Abstractions.ICheckResult checkResult)
     {
         CheckResult newCheckResult = new()
                                      {
@@ -160,7 +160,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                                          Score = checkResult.GetScore(),
                                          FeedbackMessage = ResourceUtils.ResultToString(checkResult),
                                      };
-        foreach (ICheckResult childCheckResult in checkResult.GetChildFeedback())
+        foreach (PatternPal.Recognizers.Abstractions.ICheckResult childCheckResult in checkResult.GetChildFeedback())
         {
             newCheckResult.SubCheckResults.Add(CreateCheckResult(childCheckResult));
         }

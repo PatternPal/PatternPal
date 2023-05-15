@@ -17,7 +17,10 @@ namespace PatternPal.Core;
 /// </summary>
 public class RecognizerRunner
 {
+    // TODO: Refactor DesignPattern so its properties are defined directly on the IRecognizer implementation.
     private readonly IList< DesignPattern > _patterns;
+
+    // The syntax graph of the code currently being recognized.
     private SyntaxGraph _graph;
 
     /// <summary>
@@ -107,6 +110,62 @@ public class RecognizerRunner
             new RootNode());
 
         return new List< RecognitionResult >();
+    }
+
+    /// <summary>
+    /// Runs the configured <see cref="IRecognizer"/>s.
+    /// </summary>
+    /// <returns>The result of the <see cref="IRecognizer"/>, or <see langword="null"/> if the <see cref="SyntaxGraph"/> is empty.</returns>
+    public ICheckResult ? RunV2()
+    {
+        // If the graph is empty, we don't have to do any work.
+        if (_graph.IsEmpty)
+        {
+            // TODO: Return empty result?
+            return null;
+        }
+
+        IRecognizer recognizer = new SingletonRecognizer();
+
+        ICheck rootCheck = recognizer.CreateRootCheck();
+
+        IRecognizerContext ctx = new RecognizerContext
+                                 {
+                                     Graph = _graph,
+                                     CurrentEntity = null!,
+                                     ParentCheck = rootCheck,
+                                 };
+
+        NodeCheckResult rootResult = (NodeCheckResult)rootCheck.Check(
+            ctx,
+            new RootNode());
+
+        // TODO: Define least and most dependable and reference that definition here.
+
+        // Sort the check results from least to most dependable.
+        SortCheckResults(rootResult);
+
+        return rootResult;
+    }
+
+    /// <summary>
+    /// Sorts the child <see cref="ICheckResult"/>s of a <see cref="NodeCheckResult"/> from least to most dependable, based on their <see cref="ICheckResult.DependencyCount"/>.
+    /// </summary>
+    /// <param name="result">The <see cref="NodeCheckResult"/> whose child <see cref="ICheckResult"/>s to sort.</param>
+    private void SortCheckResults(
+        NodeCheckResult result)
+    {
+        // Sort the child results of `result` recursively.
+        foreach (NodeCheckResult nodeCheckResults in result.ChildrenCheckResults.OfType< NodeCheckResult >())
+        {
+            SortCheckResults(nodeCheckResults);
+        }
+
+        // Sort the child results of `result` itself.
+        ((List< ICheckResult >)result.ChildrenCheckResults).Sort(
+            (
+                x,
+                y) => x.DependencyCount.CompareTo(y.DependencyCount));
     }
 }
 

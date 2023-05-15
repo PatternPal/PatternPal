@@ -25,6 +25,34 @@ internal class NodeCheck< TNode > : CheckBase
     /// <returns>A <see cref="List{T}"/> of matched <see cref="IEntity"/>s.</returns>
     internal Func< List< INode > > Result => () => _matchedEntities;
 
+    // The dependency count, declared as nullable so we can check whether we have calculated it
+    // already.
+    private int ? _dependencyCount;
+
+    /// <summary>
+    /// The dependencies to other <see cref="INode"/>s this check has.
+    /// While calculating the dependencies, it calculates the dependencies of its <see cref="_SubChecks"/>.
+    /// </summary>
+    public override int DependencyCount
+    {
+        get
+        {
+            // Only compute the dependency count if we haven't done so already.
+            if (_dependencyCount is null)
+            {
+                int dependencyCount = 0;
+                foreach (ICheck subCheck in _subChecks)
+                {
+                    dependencyCount += subCheck.DependencyCount;
+                }
+
+                _dependencyCount = dependencyCount;
+            }
+
+            return _dependencyCount.Value;
+        }
+    }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="NodeCheck{TNode}"/> class.
     /// </summary>
@@ -70,7 +98,9 @@ internal class NodeCheck< TNode > : CheckBase
                    ChildrenCheckResults = subCheckResults,
                    FeedbackMessage = GetFeedbackMessage(castNode),
                    CollectionKind = _kind,
-                   Priority = Priority
+                   Priority = Priority,
+                   DependencyCount = DependencyCount,
+                   MatchedNode = castNode,
                };
     }
 
@@ -148,15 +178,20 @@ internal class NodeCheck< TNode > : CheckBase
             // Call this method recursively with the check wrapped by the NotCheck. This is
             // necessary because otherwise the wrapped check won't receive the correct entities.
             case NotCheck notCheck:
+            {
+                ICheckResult nestedResult = RunCheck(
+                    ctx,
+                    castNode,
+                    notCheck.NestedCheck);
                 return new NotCheckResult
                        {
                            FeedbackMessage = string.Empty,
-                           NestedResult = RunCheck(
-                               ctx,
-                               castNode,
-                               notCheck.NestedCheck),
+                           NestedResult = nestedResult,
                            Priority = notCheck.Priority,
+                           DependencyCount = notCheck.DependencyCount,
+                           MatchedNode = nestedResult.MatchedNode,
                        };
+            }
 
             // The type to pass to the TypeCheck depends on the implementation in derived classes of
             // this class.
@@ -226,6 +261,8 @@ internal class NodeCheck< TNode > : CheckBase
                    CollectionKind = CheckCollectionKind.All,
                    FeedbackMessage = string.Empty,
                    Priority = nodeCheck.Priority,
+                   DependencyCount = nodeCheck.DependencyCount,
+                   MatchedNode = null
                };
     }
 
