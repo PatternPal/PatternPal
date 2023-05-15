@@ -34,12 +34,15 @@ jobs:
 
   build:
     if: github.event.pull_request.draft == false && needs.should_run.outputs.status == 'success'
+    needs: should_run
     uses: ./.github/workflows/build.yml
 
   test:
     if: github.event.pull_request.draft == false && needs.should_run.outputs.status == 'success'
+    needs: should_run
     uses: ./.github/workflows/test.yml
 
   lint:
     if: github.event.pull_request.draft == false && needs.should_run.outputs.status == 'success'
+    needs: should_run
     uses: ./.github/workflows/lint.yml
