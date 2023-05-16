@@ -9,9 +9,17 @@
         {
           FeedbackMessage: No Implements relation found.,
           Priority: Low,
-          Correct: false
+          Correct: false,
+          DependencyCount: 1,
+          MatchedNode: Child
         }
-      ]
+      ],
+      DependencyCount: 1,
+      MatchedNode: Parent,
+      NodeCheckCollectionWrapper: false
     }
-  ]
+  ],
+  DependencyCount: 1,
+  MatchedNode: Parent,
+  NodeCheckCollectionWrapper: false
 }

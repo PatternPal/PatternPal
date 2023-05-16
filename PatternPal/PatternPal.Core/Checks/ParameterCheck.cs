@@ -8,6 +8,23 @@ internal class ParameterCheck : CheckBase
     // Parameters of the provided INode should have types corresponding with this list of TypeChecks.
     private readonly IEnumerable< TypeCheck > _parameterTypes;
 
+    // The dependency count, declared as nullable so we can check whether we have calculated it
+    // already.
+    private int ? _dependencyCount;
+
+    /// <summary>
+    /// As a <see cref="TypeCheck"/> is a dependency to another <see cref="INode"/>, all <see cref="TypeCheck"/>s
+    /// in <see cref="_parameterTypes"/> are dependencies.
+    /// </summary>
+    public override int DependencyCount
+    {
+        get
+        {
+            _dependencyCount ??= _parameterTypes.Count();
+            return _dependencyCount.Value;
+        }
+    }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="ParameterCheck"/> class.
     /// </summary>
@@ -41,7 +58,9 @@ internal class ParameterCheck : CheckBase
                    {
                        ChildrenCheckResults = subCheckResultsResults,
                        FeedbackMessage = $"The method has no parameters.",
-                       Priority = Priority
+                       Priority = Priority,
+                       DependencyCount = DependencyCount,
+                       MatchedNode = node,
                    };
         }
         // No TypeChecks were provided
@@ -51,7 +70,9 @@ internal class ParameterCheck : CheckBase
                    {
                        ChildrenCheckResults = subCheckResultsResults,
                        FeedbackMessage = $"No TypeChecks were provided.",
-                       Priority = Priority
+                       Priority = Priority,
+                       DependencyCount = DependencyCount,
+                       MatchedNode = node,
                    };
         }
 
@@ -69,7 +90,9 @@ internal class ParameterCheck : CheckBase
                                     {
                                         Priority = Priority,
                                         Correct = false,
-                                        FeedbackMessage = "There are less parameters than TypeChecks"
+                                        FeedbackMessage = "There are less parameters than TypeChecks",
+                                        DependencyCount = typecheck.DependencyCount,
+                                        MatchedNode = node,
                                     };
                 subCheckResultsResults.Add(temp);
                 break;
@@ -135,7 +158,9 @@ internal class ParameterCheck : CheckBase
                {
                    ChildrenCheckResults = subCheckResultsResults,
                    FeedbackMessage = $"Found parameters for following node: {node}.",
-                   Priority = Priority
+                   Priority = Priority,
+                   DependencyCount = DependencyCount,
+                   MatchedNode = node,
                };
     }
 }

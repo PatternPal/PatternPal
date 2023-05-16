@@ -3,7 +3,6 @@
 using Microsoft.CodeAnalysis;
 
 using PatternPal.SyntaxTree;
-using PatternPal.SyntaxTree.Abstractions;
 using PatternPal.SyntaxTree.Abstractions.Entities;
 using PatternPal.SyntaxTree.Abstractions.Members;
 using PatternPal.SyntaxTree.Abstractions.Root;

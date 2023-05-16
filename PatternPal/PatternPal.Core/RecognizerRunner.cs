@@ -17,7 +17,10 @@ namespace PatternPal.Core;
 /// </summary>
 public class RecognizerRunner
 {
+    // TODO: Refactor DesignPattern so its properties are defined directly on the IRecognizer implementation.
     private readonly IList< DesignPattern > _patterns;
+
+    // The syntax graph of the code currently being recognized.
     private SyntaxGraph _graph;
 
     /// <summary>
@@ -107,6 +110,193 @@ public class RecognizerRunner
             new RootNode());
 
         return new List< RecognitionResult >();
+    }
+
+    /// <summary>
+    /// Runs the configured <see cref="IRecognizer"/>s.
+    /// </summary>
+    /// <returns>The result of the <see cref="IRecognizer"/>, or <see langword="null"/> if the <see cref="SyntaxGraph"/> is empty.</returns>
+    public ICheckResult ? RunV2()
+    {
+        // If the graph is empty, we don't have to do any work.
+        if (_graph.IsEmpty)
+        {
+            // TODO: Return empty result?
+            return null;
+        }
+
+        IRecognizer recognizer = new SingletonRecognizer();
+
+        ICheck rootCheck = recognizer.CreateRootCheck();
+
+        IRecognizerContext ctx = new RecognizerContext
+                                 {
+                                     Graph = _graph,
+                                     CurrentEntity = null!,
+                                     ParentCheck = rootCheck,
+                                 };
+
+        NodeCheckResult rootResult = (NodeCheckResult)rootCheck.Check(
+            ctx,
+            new RootNode());
+
+        // TODO: Define least and most dependable and reference that definition here.
+
+        // Sort the check results from least to most dependable.
+        SortCheckResults(rootResult);
+
+        // Filter the results.
+        FilterResults(rootResult);
+
+        return rootResult;
+    }
+
+    /// <summary>
+    /// Sorts the child <see cref="ICheckResult"/>s of a <see cref="NodeCheckResult"/> from least to most dependable, based on their <see cref="ICheckResult.DependencyCount"/>.
+    /// </summary>
+    /// <param name="result">The <see cref="NodeCheckResult"/> whose child <see cref="ICheckResult"/>s to sort.</param>
+    private void SortCheckResults(
+        NodeCheckResult result)
+    {
+        // Sort the child results of `result` recursively.
+        foreach (NodeCheckResult nodeCheckResults in result.ChildrenCheckResults.OfType< NodeCheckResult >())
+        {
+            SortCheckResults(nodeCheckResults);
+        }
+
+        // Sort the child results of `result` itself.
+        ((List< ICheckResult >)result.ChildrenCheckResults).Sort(
+            (
+                x,
+                y) => x.DependencyCount.CompareTo(y.DependencyCount));
+    }
+
+    /// <summary>
+    /// Filters the sub-<see cref="ICheckResult"/>s of <paramref name="parentCheckResult" /> by
+    /// removing any results which can be safely pruned.
+    /// </summary>
+    /// <returns><see langword="true"/> if <paramref name="parentCheckResult"/> should also be pruned.</returns>
+    /// <remarks>
+    /// Results filtering is done in 2 passes.<br/>
+    /// 1. Collect results to be pruned.<br/>
+    /// 2. Prune results.<br/>
+    /// <br/>
+    /// Filtering is done recursively. Once we encounter a <see cref="NodeCheckResult"/>, we filter
+    /// its sub-<see cref="ICheckResult"/>s recursively. If the <see cref="NodeCheckResult"/>
+    /// becomes empty because all its sub-<see cref="ICheckResult"/>s are pruned, we can also prune
+    /// the <see cref="NodeCheckResult"/> itself.
+    /// </remarks>
+    private bool FilterResults(
+        NodeCheckResult parentCheckResult)
+    {
+        // TODO: Properly handle CheckCollectionKind.
+        // TODO: Properly handle Priorities.
+
+        // Pass 1: Collect results to be pruned.
+
+        // The results which should be pruned.
+        List< ICheckResult > resultsToBePruned = new();
+
+        foreach (ICheckResult checkResult in parentCheckResult.ChildrenCheckResults)
+        {
+            switch (checkResult)
+            {
+                case LeafCheckResult leafCheckResult:
+                {
+                    // If the leaf check is correct, it shouldn't be pruned.
+                    if (leafCheckResult.Correct)
+                    {
+                        continue;
+                    }
+
+                    // Only prune the incorrect leaf check if its priority is Knockout.
+                    if (leafCheckResult.Priority == Priority.Knockout)
+                    {
+                        resultsToBePruned.Add(leafCheckResult);
+                    }
+                    break;
+                }
+                case NodeCheckResult nodeCheckResult:
+                {
+                    // Filter the results recursively. If `FilterResults` returns true, the node
+                    // check itself should also be pruned.
+                    if (FilterResults(nodeCheckResult))
+                    {
+                        resultsToBePruned.Add(nodeCheckResult);
+                    }
+                    break;
+                }
+                case NotCheckResult notCheckResult:
+                {
+                    switch (notCheckResult.NestedResult)
+                    {
+                        case LeafCheckResult leafCheckResult:
+                        {
+                            // If the leaf check is incorrect, this means the not check is
+                            // correct, so it shouldn't be pruned.
+                            if (!leafCheckResult.Correct)
+                            {
+                                continue;
+                            }
+
+                            // If the leaf check is correct, the not check is incorrect. If the not
+                            // check has priority Knockout, it should be pruned.
+                            if (notCheckResult.Priority == Priority.Knockout)
+                            {
+                                resultsToBePruned.Add(notCheckResult);
+                            }
+                            break;
+                        }
+                        case NodeCheckResult nodeCheckResult:
+                        {
+                            // If `FilterResults` returns false, this means the node check shouldn't
+                            // be pruned (because it has correct children). Because it's wrapped in
+                            // a not check, this not check is incorrect and should be pruned if it
+                            // has priority Knockout.
+                            if (!FilterResults(nodeCheckResult)
+                                && notCheckResult.Priority == Priority.Knockout)
+                            {
+                                resultsToBePruned.Add(nodeCheckResult);
+                            }
+                            break;
+                        }
+                        case NotCheckResult nestedNotCheckResult:
+                        {
+                            // TODO: Check this during check creation?
+                            throw new ArgumentException("Nested not checks not supported");
+                        }
+                        default:
+                            throw new ArgumentException(
+                                $"Unknown check result '{notCheckResult.NestedResult}'",
+                                nameof( notCheckResult.NestedResult ));
+                    }
+                    break;
+                }
+                default:
+                    throw new ArgumentException(
+                        $"Unknown check result '{checkResult}'",
+                        nameof( checkResult ));
+            }
+        }
+
+        // Pass 2: Prune results.
+
+        // If parentCheck becomes empty => also prune parent. The parent is pruned by the caller if
+        // we return `true`.
+        if (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count)
+        {
+            // Parent becomes empty.
+            return true;
+        }
+
+        // Prune the results.
+        foreach (ICheckResult checkResult in resultsToBePruned)
+        {
+            parentCheckResult.ChildrenCheckResults.Remove(checkResult);
+        }
+
+        // Parent doesn't become empty, so it shouldn't be pruned by the caller.
+        return false;
     }
 }
 

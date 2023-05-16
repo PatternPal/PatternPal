@@ -1,6 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
 
-using PatternPal.SyntaxTree.Abstractions;
 using PatternPal.SyntaxTree.Abstractions.Root;
 
 namespace PatternPal.Tests.Utils;
