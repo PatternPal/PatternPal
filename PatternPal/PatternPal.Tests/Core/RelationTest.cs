@@ -3,6 +3,7 @@ using NUnit.Framework;
 
 using PatternPal.SyntaxTree;
 using PatternPal.SyntaxTree.Abstractions;
+using PatternPal.SyntaxTree.Abstractions.Members;
 using Method = PatternPal.SyntaxTree.Models.Members.Method.Method;
 
 namespace PatternPal.Tests.Core
@@ -225,14 +226,28 @@ namespace PatternPal.Tests.Core
             });
         }
 
+
         [Test]
+        //true
         [TestCase("ConstructorUsed.cs", "Uses.Uses", false, "Used.UsedFunction", true)]
-        [TestCase("MethodsRelations1.cs", "MethodsRelations1", true, "ClassWithMethod.GetID", false)]
-        public void Entity_Or_Method_Uses_Constructor(
+        [TestCase("MemberRelations.cs", "MemberRelations", true, "ClassWithField.TestFuncionality", true)]
+        [TestCase("MemberRelations.cs", "MemberRelations.MemberRelations", false, "ClassWithField.TestFuncionality", true)]
+        [TestCase("MemberRelations.cs", "MemberRelations.MemberRelations", false, "MemberRelations.fieldClass", true)]
+        [TestCase("MemberRelations.cs", "ClassWithField", true, "ClassWithField._count", true)]
+        [TestCase("MemberRelations.cs", "ClassWithField.GetCount", false, "ClassWithField._count", true)]
+        [TestCase("MemberRelations.cs", "MemberRelations.CheckCount", false, "MemberRelations.fieldClass", true)]
+
+        //false
+        [TestCase("MemberRelations.cs", "ClassWithField.TestFuncionality", false, "MemberRelations.fieldClass", false)]
+        [TestCase("MemberRelations.cs", "MemberRelations.CheckCount", false, "MemberRelations.DoNothing", false)]
+        [TestCase("MemberRelations.cs", "ClassWithField", true, "MemberRelations.DoNothing", false)]
+        [TestCase("MemberRelations.cs", "MemberRelations.MemberRelations", false, "ClassWithField.GetCount", false)]
+        [TestCase("MemberRelations.cs", "MemberRelations.CheckCount", false, "ClassWithField._count", false)]
+        public void Entity_Or_Member_Uses_Member(
             string filename,
-            string entityOrMethod,
+            string entityOrMember,
             bool isEntity,
-            string method,
+            string member,
             bool shouldBeValid
         )
         {
@@ -243,28 +258,28 @@ namespace PatternPal.Tests.Core
             graph.AddFile(code, code);
             graph.CreateGraph();
 
-            //Here the entity or method node is retrieved from the graph
+            //Here the entity or member node is retrieved from the graph
             INode node;
 
             if (isEntity)
-                node = graph.GetAll()[NAME_SPACE_NODE + "." + entityOrMethod];
+                node = graph.GetAll()[NAME_SPACE_NODE + "." + entityOrMember];
             else
             {
-                string[] splitName = entityOrMethod.Split('.');
+                string[] splitName = entityOrMember.Split('.');
                 node = graph.GetAll()[NAME_SPACE_NODE + "." + splitName[0]].GetMembers().FirstOrDefault(x => x.GetName() == splitName[1]);
             }
 
-            //Here the method node gets retrieved from the graph
-            string[] methodName = method.Split(".");
-            Method methodNode = (Method)graph.GetAll()[NAME_SPACE_NODE + "." + methodName[0]].GetMembers()
-                .FirstOrDefault(x => x.GetName() == methodName[1]);
+            //Here the member node gets retrieved from the graph
+            string[] memberName = member.Split(".");
+            IMember memberNode = graph.GetAll()[NAME_SPACE_NODE + "." + memberName[0]].GetMembers()
+                .FirstOrDefault(x => x.GetName() == memberName[1]);
 
-            //Checks whether the entity or method node uses the second method node
+            //Checks whether the entity or member node uses the second member node
             bool usingCheck = graph.GetRelations(node, RelationTargetKind.Member)
-                .Any(x => x.GetRelationType() == RelationType.Uses && x.Target.AsT1 == methodNode);
+                .Any(x => x.GetRelationType() == RelationType.Uses && x.Target.AsT1 == memberNode);
 
             //Checks whether the usedBy relation is also in place
-            bool usedByCheck = graph.GetRelations(methodNode, isEntity ? RelationTargetKind.Entity : RelationTargetKind.Member)
+            bool usedByCheck = graph.GetRelations(memberNode, isEntity ? RelationTargetKind.Entity : RelationTargetKind.Member)
                 .Any(x => x.GetRelationType() == RelationType.UsedBy
                           && (x.Target.IsT0 ? x.Target.AsT0 == node : x.Target.AsT1 == node));
 

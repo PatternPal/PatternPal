@@ -66,7 +66,7 @@ namespace PatternPal.SyntaxTree
         }
 
         /// <summary>
-        /// Creates Relations between entities and nodes.
+        /// Creates <see cref="Relation"/>'s between <see cref="IEntity"/>'s and <see cref="INode"/>'s.
         /// </summary>
         public void CreateEdges()
         {
@@ -93,12 +93,12 @@ namespace PatternPal.SyntaxTree
         }
 
         /// <summary>
-        /// Adds a relation from node1 to node2. It also adds the reversed relation from node2 to node1.
+        /// Adds a <see cref="Relation"/> from node1 to node2. It also adds the reversed <see cref="Relation"/> from node2 to node1.
         /// </summary>
-        /// <param name="node1">INode, can be IEntity or Member.</param>
-        /// <param name="node2">INode, can be IEntity or Member.</param>
-        /// <param name="type">The RelationType of the relation</param>
-        /// <exception cref="ArgumentException">Throws exception when trying to add a relation to or from a not supported type.</exception>
+        /// <param name="node1"><see cref="INode"/>, can be <see cref="IEntity"/> or <see cref="IMember"/>.</param>
+        /// <param name="node2"><see cref="INode"/>, can be <see cref="IEntity"/> or <see cref="IMember"/>.</param>
+        /// <param name="type">The <see cref="RelationType"/> of the <see cref="Relation"/></param>
+        /// <exception cref="ArgumentException">Throws exception when trying to add a <see cref="Relation"/> to or from a not supported type.</exception>
         private void AddRelation(
             INode ? node1,
             INode ? node2,
@@ -152,6 +152,12 @@ namespace PatternPal.SyntaxTree
             relations.Add(relationReversed);
         }
 
+        /// <summary>
+        /// Helper function for <see cref="AddRelation"/>. This stores the <see cref="Relation"/> in the right place.
+        /// </summary>
+        /// <param name="node">The source of the <see cref="Relation"/></param>
+        /// <param name="relation">The <see cref="Relation"/> to store.</param>
+        /// <exception cref="ArgumentException">Throws exception when trying to add a <see cref="Relation"/> with a not supported <see cref="INode"/>.</exception>
         private void StoreRelation(
             INode node,
             Relation relation)
@@ -192,10 +198,10 @@ namespace PatternPal.SyntaxTree
         }
 
         /// <summary>
-        /// Gets the IEntity instance saved in the SyntaxGraph by analyzing the SemanticModel of the SyntaxTree (Roslyn).
+        /// Gets the <see cref="IEntity"/> instance saved in the <see cref="SyntaxGraph"/> by analyzing the <see cref="SemanticModel"/> of the <see cref="Microsoft.CodeAnalysis.SyntaxTree"/> (Roslyn).
         /// </summary>
-        /// <param name="syntaxNode">The SyntaxNode from which we want the belonging IEntity instance.</param>
-        /// <returns></returns>
+        /// <param name="syntaxNode">The <see cref="SyntaxNode"/> from which we want the belonging <see cref="IEntity"/> instance.</param>
+        /// <returns>The matched <see cref="IEntity"/></returns>
         public IEntity ? GetEntityByName(
             SyntaxNode syntaxNode)
         {
@@ -207,23 +213,16 @@ namespace PatternPal.SyntaxTree
 
             TypeDeclarationSyntax? entityDeclaration;
 
-            if (syntaxNode.Parent is MemberAccessExpressionSyntax && symbol.Symbol is IFieldSymbol fieldSymbol)
-            {
-                entityDeclaration = fieldSymbol.Type.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as TypeDeclarationSyntax;
-            }
-            else
-            {
-                entityDeclaration = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as TypeDeclarationSyntax;
-            }
-
+            entityDeclaration = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as TypeDeclarationSyntax;
+            
             return _entities.FirstOrDefault(x => x.GetSyntaxNode().IsEquivalentTo(entityDeclaration));
         }
 
         /// <summary>
-        /// Gets the Member instance saved in the SyntaxGraph by analyzing the SemanticModel of the SyntaxTree (Roslyn).
+        /// Gets the <see cref="IMember"/> instance saved in the <see cref="SyntaxGraph"/> by analyzing the <see cref="SemanticModel"/> of the <see cref="Microsoft.CodeAnalysis.SyntaxTree"/> (Roslyn).
         /// </summary>
-        /// <param name="memberNode">The SyntaxNode from which we want the belonging Member instance.</param>
-        /// <returns></returns>
+        /// <param name="memberNode">The <see cref="SyntaxNode"/> from which we want the belonging <see cref="IMember"/> instance.</param>
+        /// <returns>The matched <see cref="IMember"/></returns>
         private IMember ? GetMemberByName(
             SyntaxNode memberNode)
         {
@@ -233,7 +232,19 @@ namespace PatternPal.SyntaxTree
 
             SymbolInfo symbol = semanticModel.GetSymbolInfo(memberNode);
 
-            MemberDeclarationSyntax? memberDeclaration = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as MemberDeclarationSyntax;
+            MemberDeclarationSyntax? memberDeclaration;
+
+            SyntaxNode? declarationNode = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax();
+
+            //When a field is already declared, the DeclaringSyntaxReferences is a VariableDeclaratorSyntax
+            if (declarationNode is VariableDeclaratorSyntax)
+            {
+                memberDeclaration = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax().Parent?.Parent as MemberDeclarationSyntax;
+            }
+            else
+            {
+                memberDeclaration = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as MemberDeclarationSyntax;
+            }
 
             return _members.FirstOrDefault(x => x.GetSyntaxNode().IsEquivalentTo(memberDeclaration));
         }
@@ -251,9 +262,9 @@ namespace PatternPal.SyntaxTree
         }
 
         /// <summary>
-        /// Creates the Extend, ExtendedBy, Implements and ImplementedBy relations between two IEntities.
+        /// Creates the Extend, ExtendedBy, Implements and ImplementedBy relations between two <see cref="IEntity"/>'s.
         /// </summary>
-        /// <param name="entity">The IEntity which parents will be evaluated.</param>
+        /// <param name="entity">The <see cref="IEntity"/> which parents will be evaluated.</param>
         private void CreateParentEdges(
             IEntity entity)
         {
@@ -293,9 +304,9 @@ namespace PatternPal.SyntaxTree
         }
 
         /// <summary>
-        /// Creates the Creates and CreatedBy relations between IEntities and Members.
+        /// Creates the Creates and CreatedBy relations between <see cref="IEntity"/>'s and <see cref="IMember"/>'s.
         /// </summary>
-        /// <param name="node">The IEntity or Member which descendant nodes will be evaluated</param>
+        /// <param name="node">The <see cref="IEntity"/> or <see cref="IMember"/> which descendant nodes will be evaluated</param>
         private void CreateCreationalEdges(
             INode node)
         {
@@ -337,9 +348,9 @@ namespace PatternPal.SyntaxTree
         }
 
         /// <summary>
-        /// Creates the Uses and UsedBy relations between IEntities and Members
+        /// Creates the Uses and UsedBy relations between <see cref="IEntity"/>'s and <see cref="IMember"/>'s.
         /// </summary>
-        /// <param name="node">The IEntity or Member which descendant nodes will be evaluated</param>
+        /// <param name="node">The <see cref="IEntity"/> or <see cref="IMember"/> which descendant nodes will be evaluated</param>
         private void CreateUsingEdges(
             INode node)
         {
@@ -359,7 +370,8 @@ namespace PatternPal.SyntaxTree
         /// <summary>
         /// Helper function to retrieve all descendant nodes of a node.
         /// </summary>
-        /// /// <param name="node">The IEntity or Member which descendant nodes will be found</param>
+        /// <param name="node">The <see cref="IEntity"/> or <see cref="IMember"/> which descendant <see cref="SyntaxNode"/>'s will be found</param>
+        /// <returns>List of descendant <see cref="SyntaxNode"/>'s of an <see cref="INode"/></returns>
         private List< SyntaxNode > GetChildNodes(
             INode node)
         {
@@ -380,7 +392,7 @@ namespace PatternPal.SyntaxTree
         }
 
         /// <summary>
-        /// Resets the relation lists.
+        /// Resets the lists of <see cref="Relation"/>'s.
         /// </summary>
         public void Reset()
         {
