@@ -163,7 +163,7 @@ namespace PatternPal.Tests.Core
 
             //Here the method node gets retrieved from the graph
             string[] methodName = method.Split(".");
-            Method methodNode = (Method)graph.GetAll()[NAME_SPACE_NODE + "." + methodName[0]].GetMethods()
+            IMethod methodNode = graph.GetAll()[NAME_SPACE_NODE + "." + methodName[0]].GetMethods()
                 .FirstOrDefault(x => x.GetName() == methodName[1]);
 
             //Checks whether the entity or method node uses the second method node
@@ -203,11 +203,11 @@ namespace PatternPal.Tests.Core
             graph.AddFile(code, code);
             graph.CreateGraph();
 
-            Method methodNode;
+            IMethod methodNode;
 
             //Here the method node gets retrieved from the graph
             string[] splitName = method.Split('.');
-            methodNode = (Method)graph.GetAll()[NameSpaceNode + "." + splitName[0]].GetMethods()
+            methodNode = graph.GetAll()[NameSpaceNode + "." + splitName[0]].GetMethods()
                 .FirstOrDefault(x => x.GetName() == splitName[1]);
 
             //Checks whether the method has a creates relation with the entity
