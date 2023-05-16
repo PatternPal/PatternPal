@@ -87,9 +87,9 @@ namespace PatternPal.LoggingServer.Models
         /// </summary>
         public string? CodeStateSection { get; set; }
 
-        public DateTimeOffset ServerDatetime { get; set; }
-        public DateTimeOffset ClientDatetime { get; set; }
-
+        /// <summary>
+        /// Result in case of debug.run event. Value can be "success", "failure", "timeout", "error", "unknown".
+        /// </summary>
         public ExecutionResult? ExecutionResult { get; set; }
 
     }
