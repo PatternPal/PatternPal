@@ -1,10 +1,9 @@
-﻿using Google.Protobuf.WellKnownTypes;
+using Google.Protobuf.WellKnownTypes;
 using NUnit.Framework;
 
 using PatternPal.SyntaxTree;
 using PatternPal.SyntaxTree.Abstractions;
 using PatternPal.SyntaxTree.Abstractions.Members;
-using Method = PatternPal.SyntaxTree.Models.Members.Method.Method;
 
 namespace PatternPal.Tests.Core
 {

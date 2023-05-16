@@ -6,6 +6,17 @@
 internal class NotCheck : CheckBase
 {
     /// <summary>
+    /// The nested <see cref="ICheck"/> which should not pass.
+    /// </summary>
+    internal ICheck NestedCheck { get; }
+
+    /// <summary>
+    /// A <see cref="NotCheck"/> does not add any dependencies on top of the ones its <see cref="NestedCheck"/> has.
+    /// Thus its amount of dependencies is equal to the amount of dependencies its <see cref="NestedCheck"/> has.
+    /// </summary>
+    public override int DependencyCount => NestedCheck.DependencyCount;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="NotCheck"/> class.
     /// </summary>
     /// <param name="priority"><see cref="Priority"/> of the check.</param>
@@ -17,11 +28,6 @@ internal class NotCheck : CheckBase
     {
         NestedCheck = check;
     }
-
-    /// <summary>
-    /// <see cref="ICheck"/> which should not pass.
-    /// </summary>
-    internal ICheck NestedCheck { get; }
 
     /// <inheritdoc />
     public override ICheckResult Check(

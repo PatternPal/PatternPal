@@ -22,9 +22,9 @@ namespace PatternPal.Extension.ViewModels
 
         public RecognizeResult Result { get; set; }
         public string PatternName => Result.Recognizer.ToString();
-        public int Score => (int)Result.Score;
+        public int Score => 100;
 
-        public SolidColorBrush Color => GetColor((int)Result.Score);
+        public SolidColorBrush Color => GetColor(100);
 
         public IEnumerable< CheckResultViewModel > Results =>
             Result.Results.Select(
@@ -40,17 +40,6 @@ namespace PatternPal.Extension.ViewModels
 
         public FeedbackType GetFeedbackType()
         {
-            uint score = Result.Score;
-            if (score < 40)
-            {
-                return FeedbackType.FeedbackIncorrect;
-            }
-
-            if (score < 80)
-            {
-                return FeedbackType.FeedbackSemiCorrect;
-            }
-
             return FeedbackType.FeedbackCorrect;
         }
     }

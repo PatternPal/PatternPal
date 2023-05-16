@@ -13,9 +13,12 @@
             {
               FeedbackMessage: The node DoSomething() does not have the public modifier.,
               Priority: Mid,
-              Correct: false
+              Correct: false,
+              MatchedNode: DoSomething
             }
-          ]
+          ],
+          MatchedNode: DoSomething,
+          NodeCheckCollectionWrapper: false
         },
         {
           FeedbackMessage: Found method: CalculateSomething().,
@@ -24,11 +27,18 @@
             {
               FeedbackMessage: The node CalculateSomething() does not have the public modifier.,
               Priority: Mid,
-              Correct: false
+              Correct: false,
+              MatchedNode: CalculateSomething
             }
-          ]
+          ],
+          MatchedNode: CalculateSomething,
+          NodeCheckCollectionWrapper: false
         }
-      ]
+      ],
+      CollectionKind: Any,
+      NodeCheckCollectionWrapper: true
     }
-  ]
+  ],
+  MatchedNode: Test,
+  NodeCheckCollectionWrapper: false
 }
