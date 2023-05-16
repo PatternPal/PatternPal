@@ -186,7 +186,7 @@ public class RecognizerRunner
     /// becomes empty because all its sub-<see cref="ICheckResult"/>s are pruned, we can also prune
     /// the <see cref="NodeCheckResult"/> itself.
     /// </remarks>
-    private bool FilterResults(
+    internal static bool FilterResults(
         NodeCheckResult parentCheckResult)
     {
         // TODO: Properly handle CheckCollectionKind.
@@ -256,7 +256,7 @@ public class RecognizerRunner
                             if (!FilterResults(nodeCheckResult)
                                 && notCheckResult.Priority == Priority.Knockout)
                             {
-                                resultsToBePruned.Add(nodeCheckResult);
+                                resultsToBePruned.Add(notCheckResult);
                             }
                             break;
                         }
