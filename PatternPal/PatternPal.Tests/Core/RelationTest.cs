@@ -164,11 +164,11 @@ namespace PatternPal.Tests.Core
                 .FirstOrDefault(x => x.GetName() == methodName[1]);
 
             //Checks whether the entity or method node uses the second method node
-            bool usingCheck = graph.GetRelations(node, RelationTargetKind.Method)
+            bool usingCheck = graph.GetRelations(node, RelationTargetKind.Member)
                 .Any(x => x.GetRelationType() == RelationType.Uses && x.Target.AsT1 == methodNode);
             
             //Checks whether the usedBy relation is also in place
-            bool usedByCheck = graph.GetRelations(methodNode, isEntity ? RelationTargetKind.Entity : RelationTargetKind.Method)
+            bool usedByCheck = graph.GetRelations(methodNode, isEntity ? RelationTargetKind.Entity : RelationTargetKind.Member)
                 .Any(x => x.GetRelationType() == RelationType.UsedBy 
                           && (x.Target.IsT0 ? x.Target.AsT0 == node : x.Target.AsT1 == node));
 
@@ -212,7 +212,7 @@ namespace PatternPal.Tests.Core
                 x.GetRelationType() == RelationType.Creates && x.GetDestinationName() == entity);
 
             //Checks whether the entity has a createdby relation with the method
-            bool createdByCheck = graph.GetAll()[NameSpaceNode + "." + entity].GetRelations(RelationTargetKind.Method)
+            bool createdByCheck = graph.GetAll()[NameSpaceNode + "." + entity].GetRelations(RelationTargetKind.Member)
                 .Any(x => x.GetRelationType() == RelationType.CreatedBy && x.GetDestinationName() == method.Split('.')[1]);
 
             Assert.Multiple(() =>

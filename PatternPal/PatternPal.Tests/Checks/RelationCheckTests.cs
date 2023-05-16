@@ -58,7 +58,7 @@ public class RelationCheckTests
         //the Uses class node from the syntax graph 
         INode usesNode = graph.GetAll()[ "Uses" ];
         //the UsedFunction node from the syntax graph 
-        INode usedNode = Relations.GetMethodFromGraph(graph, "Used", "UsedFunction");
+        INode usedNode = Relations.GetMemberFromGraph(graph, "Used", "UsedFunction");
 
         //check for the UsedFunction
         MethodCheck usedMethod = Method(Priority.Low);
@@ -92,9 +92,9 @@ public class RelationCheckTests
                                 };
 
         //the UsesFunction node from the syntax graph 
-        INode usesNode = Relations.GetMethodFromGraph(graph, "Uses", "UsesFunction");
+        INode usesNode = Relations.GetMemberFromGraph(graph, "Uses", "UsesFunction");
         //the UsedFunction node from the syntax graph 
-        INode usedNode = Relations.GetMethodFromGraph(graph, "Used", "UsedFunction");
+        INode usedNode = Relations.GetMemberFromGraph(graph, "Used", "UsedFunction");
 
         //check to find the UsesFunction
         MethodCheck usesMethod = Method(Priority.Low);

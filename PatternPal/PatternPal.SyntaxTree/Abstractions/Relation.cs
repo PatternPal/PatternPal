@@ -4,13 +4,13 @@ public class Relation
 {
     private readonly RelationType _type;
 
-    public OneOf< IEntity, IMethod > Source { get; }
-    public OneOf< IEntity, IMethod > Target { get; }
+    public OneOf< IEntity, IMember > Source { get; }
+    public OneOf< IEntity, IMember > Target { get; }
 
     internal Relation(
         RelationType relationType,
-        OneOf< IEntity, IMethod > source,
-        OneOf< IEntity, IMethod > target)
+        OneOf< IEntity, IMember > source,
+        OneOf< IEntity, IMember > target)
     {
         _type = relationType;
         Source = source;
@@ -34,7 +34,7 @@ public class Relation
     {
         return Target.Match(
             entity => entity.GetName(),
-            method => method.GetName());
+            member => member.GetName());
     }
 }
 
@@ -60,5 +60,5 @@ public enum RelationTargetKind
 {
     All,
     Entity,
-    Method
+    Member
 }
