@@ -19,7 +19,6 @@ namespace PatternPal.LoggingServer.Models
         public EventType EventType { get; set; }
 
         public Guid? ParentId { get; set; }
-
         public string? ProjectId { get; set; }
 
         public string? CompileMessageType { get; set; } 
@@ -31,6 +30,8 @@ namespace PatternPal.LoggingServer.Models
 
         public DateTimeOffset ServerDatetime { get; set; }
         public DateTimeOffset ClientDatetime { get; set; }
+
+        public ExecutionResult? ExecutionResult { get; set; }
 
     }
 

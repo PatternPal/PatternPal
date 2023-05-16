@@ -26,8 +26,14 @@ internal static class Program
 
         builder.Services.AddScoped<EventRepository, EventRepository>();
 
+
+        // add migration
+
+
+
         WebApplication app = builder.Build();
 
+        DatabaseManagementService.MigrationInitialization(app);
         app.MapGrpcService<LoggerService>();
 
         app.Run();
