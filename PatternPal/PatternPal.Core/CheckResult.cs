@@ -27,6 +27,11 @@ public interface ICheckResult
     /// The <see cref="INode"/> on which the <see cref="ICheck"/> was run.
     /// </summary>
     INode ? MatchedNode { get; init; }
+
+    /// <summary>
+    /// The <see cref="ICheck"/> from which this <see cref="ICheckResult"/> originates.
+    /// </summary>
+    ICheck Check { get; init; }
 }
 
 /// <summary>
@@ -50,6 +55,9 @@ public class LeafCheckResult : ICheckResult
 
     /// <inheritdoc />
     public required INode ? MatchedNode { get; init; }
+
+    /// <inheritdoc />
+    public required ICheck Check { get; init; }
 }
 
 /// <summary>
@@ -73,6 +81,9 @@ public class NotCheckResult : ICheckResult
 
     /// <inheritdoc />
     public required INode ? MatchedNode { get; init; }
+
+    /// <inheritdoc />
+    public required ICheck Check { get; init; }
 }
 
 /// <summary>
@@ -114,4 +125,7 @@ public class NodeCheckResult : ICheckResult
     /// to <see langword="true"/>.
     /// </remarks>
     public bool NodeCheckCollectionWrapper { get; set; }
+
+    /// <inheritdoc />
+    public required ICheck Check { get; init; }
 }

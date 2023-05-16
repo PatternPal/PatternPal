@@ -65,6 +65,7 @@ internal class RelationCheck : CheckBase
                         : $"No {_relationType} relation found.",
                     DependencyCount = DependencyCount,
                     MatchedNode = getNode,
+                    Check = this,
                 });
         }
 
@@ -72,9 +73,11 @@ internal class RelationCheck : CheckBase
                {
                    Priority = Priority,
                    ChildrenCheckResults = results,
+                   NodeCheckCollectionWrapper = true,
                    FeedbackMessage = $"Found {_relationType} relations for {node}.",
                    DependencyCount = DependencyCount,
                    MatchedNode = node,
+                   Check = this,
                };
     }
 }

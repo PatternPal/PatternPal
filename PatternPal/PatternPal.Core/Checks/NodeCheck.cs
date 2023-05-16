@@ -101,6 +101,7 @@ internal class NodeCheck< TNode > : CheckBase
                    Priority = Priority,
                    DependencyCount = DependencyCount,
                    MatchedNode = castNode,
+                   Check = this,
                };
     }
 
@@ -190,6 +191,7 @@ internal class NodeCheck< TNode > : CheckBase
                            Priority = notCheck.Priority,
                            DependencyCount = notCheck.DependencyCount,
                            MatchedNode = nestedResult.MatchedNode,
+                           Check = notCheck,
                        };
             }
 
@@ -262,7 +264,8 @@ internal class NodeCheck< TNode > : CheckBase
                    FeedbackMessage = string.Empty,
                    Priority = nodeCheck.Priority,
                    DependencyCount = nodeCheck.DependencyCount,
-                   MatchedNode = null
+                   MatchedNode = null,
+                   Check = nodeCheck,
                };
     }
 

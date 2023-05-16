@@ -14,7 +14,7 @@ internal delegate IEntity GetCurrentEntity(
 /// something in the <see cref="SyntaxGraph"/>, e.g. the modifiers of a method, or the type of a
 /// property.
 /// </summary>
-internal interface ICheck
+public interface ICheck
 {
     /// <summary>
     /// Function which will return the current <see cref="IEntity"/> being checked.
