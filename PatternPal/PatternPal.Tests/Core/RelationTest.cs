@@ -1,8 +1,9 @@
-﻿using NUnit.Framework;
+﻿using Google.Protobuf.WellKnownTypes;
+using NUnit.Framework;
 
 using PatternPal.SyntaxTree;
 using PatternPal.SyntaxTree.Abstractions;
-using PatternPal.SyntaxTree.Models.Members.Method;
+using Method = PatternPal.SyntaxTree.Models.Members.Method.Method;
 
 namespace PatternPal.Tests.Core
 {
@@ -221,6 +222,56 @@ namespace PatternPal.Tests.Core
             {
                 Assert.AreEqual(shouldBeValid, createdByCheck);
                 Assert.AreEqual(shouldBeValid, createsCheck);
+            });
+        }
+
+        [Test]
+        [TestCase("ConstructorUsed.cs", "Uses.Uses", false, "Used.UsedFunction", true)]
+        [TestCase("MethodsRelations1.cs", "MethodsRelations1", true, "ClassWithMethod.GetID", false)]
+        public void Entity_Or_Method_Uses_Constructor(
+            string filename,
+            string entityOrMethod,
+            bool isEntity,
+            string method,
+            bool shouldBeValid
+        )
+        {
+            string code = FileUtils.FileToString("Relation\\MethodsAndEntities\\" + filename);
+            const string NAME_SPACE_NODE = "PatternPal.Tests.TestClasses.Relation.MethodsAndEntities";
+
+            SyntaxGraph graph = new();
+            graph.AddFile(code, code);
+            graph.CreateGraph();
+
+            //Here the entity or method node is retrieved from the graph
+            INode node;
+
+            if (isEntity)
+                node = graph.GetAll()[NAME_SPACE_NODE + "." + entityOrMethod];
+            else
+            {
+                string[] splitName = entityOrMethod.Split('.');
+                node = graph.GetAll()[NAME_SPACE_NODE + "." + splitName[0]].GetMembers().FirstOrDefault(x => x.GetName() == splitName[1]);
+            }
+
+            //Here the method node gets retrieved from the graph
+            string[] methodName = method.Split(".");
+            Method methodNode = (Method)graph.GetAll()[NAME_SPACE_NODE + "." + methodName[0]].GetMembers()
+                .FirstOrDefault(x => x.GetName() == methodName[1]);
+
+            //Checks whether the entity or method node uses the second method node
+            bool usingCheck = graph.GetRelations(node, RelationTargetKind.Member)
+                .Any(x => x.GetRelationType() == RelationType.Uses && x.Target.AsT1 == methodNode);
+
+            //Checks whether the usedBy relation is also in place
+            bool usedByCheck = graph.GetRelations(methodNode, isEntity ? RelationTargetKind.Entity : RelationTargetKind.Member)
+                .Any(x => x.GetRelationType() == RelationType.UsedBy
+                          && (x.Target.IsT0 ? x.Target.AsT0 == node : x.Target.AsT1 == node));
+
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual(shouldBeValid, usingCheck);
+                Assert.AreEqual(shouldBeValid, usedByCheck);
             });
         }
     }

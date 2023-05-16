@@ -72,7 +72,7 @@ namespace PatternPal.SyntaxTree
         {
             _entities = _graph.GetAll().Values.ToList();
 
-            //Get all methods
+            // Get all members
             _members.AddRange(
                 _entities.SelectMany(
                     y =>
@@ -233,7 +233,7 @@ namespace PatternPal.SyntaxTree
 
             SymbolInfo symbol = semanticModel.GetSymbolInfo(memberNode);
 
-            MethodDeclarationSyntax? memberDeclaration = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as MethodDeclarationSyntax;
+            MemberDeclarationSyntax? memberDeclaration = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as MemberDeclarationSyntax;
 
             return _members.FirstOrDefault(x => x.GetSyntaxNode().IsEquivalentTo(memberDeclaration));
         }
