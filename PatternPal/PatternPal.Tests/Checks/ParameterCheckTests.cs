@@ -1,4 +1,4 @@
-﻿#region
+#region
 
 using PatternPal.SyntaxTree;
 using PatternPal.SyntaxTree.Abstractions.Members;
@@ -76,6 +76,12 @@ public class ParameterCheckTests
     {
         SyntaxGraph graph = EntityNodeUtils.CreateMethodWithParamaters();
         IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
+
+        // Obtain the StringTestFunction method (3 parameters)
+        IMember stringNode = Relations.GetMemberFromGraph(
+            graph,
+            "StringTest",
+            "StringTestFunction");
 
         // Obtain the IntTest method (1 StringTest parameter)
         IMethod intNode = EntityNodeUtils.GetMemberFromGraph<IMethod>(
