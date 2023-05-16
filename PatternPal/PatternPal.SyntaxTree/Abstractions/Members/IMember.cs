@@ -7,6 +7,11 @@ namespace PatternPal.SyntaxTree.Abstractions.Members
     /// </summary>
     public interface IMember : IModified, IChild<IEntity>
     {
+        /// <summary>
+        /// Returns, if available, the return type of the member.
+        /// Else it returns the type of the member.
+        /// </summary>
+        /// <returns>The <see cref="SyntaxNode"/> of the return type of the member.</returns>
         SyntaxNode GetReturnType();
     }
 
