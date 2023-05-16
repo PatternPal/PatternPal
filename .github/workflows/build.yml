@@ -2,11 +2,16 @@ name: Build
 
 on:
   workflow_call:
+    inputs:
+      should_run:
+        required: true
+        type: boolean
   workflow_dispatch:
 
 jobs:
   Build_Logserver:
     runs-on: ubuntu-latest
+    if: inputs.should_run
     steps:
       - uses: actions/checkout@v3
       - name: Set up docker BuildX
@@ -19,6 +24,7 @@ jobs:
 
   Build:
     runs-on: windows-latest
+    if: inputs.should_run
     steps:
       - uses: actions/checkout@v3
 
