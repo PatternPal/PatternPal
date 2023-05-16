@@ -25,7 +25,7 @@ internal class NotCheck : CheckBase
 
     /// <inheritdoc />
     public override ICheckResult Check(
-        RecognizerContext ctx,
+        IRecognizerContext ctx,
         INode node)
     {
         throw new UnreachableException();

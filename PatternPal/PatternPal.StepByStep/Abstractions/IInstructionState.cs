@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-using SyntaxTree.Abstractions.Entities;
+using PatternPal.SyntaxTree.Abstractions.Entities;
 
 #endregion
 

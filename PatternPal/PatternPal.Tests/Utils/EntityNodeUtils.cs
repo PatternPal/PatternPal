@@ -2,13 +2,17 @@
 
 using Microsoft.CodeAnalysis;
 
-using SyntaxTree.Abstractions.Root;
-using SyntaxTree.Models.Members.Constructor;
-using SyntaxTree.Models.Members.Field;
-using SyntaxTree.Models.Members.Method;
-using SyntaxTree.Models.Members.Property;
-using SyntaxTree.Models.Root;
-using SyntaxTree.Utils;
+using PatternPal.SyntaxTree;
+using PatternPal.SyntaxTree.Abstractions;
+using PatternPal.SyntaxTree.Abstractions.Entities;
+using PatternPal.SyntaxTree.Abstractions.Members;
+using PatternPal.SyntaxTree.Abstractions.Root;
+using PatternPal.SyntaxTree.Models.Entities;
+using PatternPal.SyntaxTree.Models.Members.Field;
+using PatternPal.SyntaxTree.Models.Members.Method;
+using PatternPal.SyntaxTree.Models.Members.Property;
+using PatternPal.SyntaxTree.Models.Root;
+using PatternPal.SyntaxTree.Utils;
 
 #endregion
 
@@ -77,9 +81,10 @@ namespace PatternPal.Tests.Utils
         /// <summary>
         /// Creates an <see cref="IClass"/> instance which can be used in tests.
         /// </summary>
-        internal static IClass CreateClass() =>
+        internal static IClass CreateClass(
+            string ? input = null) =>
             new Class(
-                GetClassDeclaration(),
+                GetClassDeclaration(input),
                 new TestRoot());
 
         /// <summary>
@@ -105,10 +110,7 @@ namespace PatternPal.Tests.Utils
         {
             ClassDeclarationSyntax classDeclaration = GetClassDeclaration();
             MethodDeclarationSyntax methodSyntax = classDeclaration.DescendantNodes(_ => true).OfType< MethodDeclarationSyntax >().First();
-            if (methodSyntax is null)
-            {
-                Assert.Fail();
-            }
+            Assert.IsNotNull(methodSyntax);
 
             return new Method(
                 methodSyntax,
@@ -117,20 +119,21 @@ namespace PatternPal.Tests.Utils
                     new TestRoot()));
         }
 
-        internal static IConstructor CreateConstructor()
+        internal static IConstructor CreateConstructor(
+            out SyntaxGraph graph)
         {
-            ClassDeclarationSyntax classDeclaration = GetClassDeclaration();
-            ConstructorDeclarationSyntax constructorSyntax = classDeclaration.DescendantNodes(_ => true).OfType<ConstructorDeclarationSyntax>().First();
-            if (constructorSyntax is null)
-            {
-                Assert.Fail();
-            }
+            graph = CreateGraphFromInput(
+                """
+                public class Test
+                {
+                    public Test()
+                    {
+                    }
+                }
+                """);
 
-            return new Constructor(
-                constructorSyntax,
-                new Class(
-                    classDeclaration,
-                    new TestRoot()));
+            IClass classEntity = (IClass)graph.GetAll().Values.First();
+            return classEntity.GetConstructors().First();
         }
 
         /// <summary>
@@ -139,11 +142,8 @@ namespace PatternPal.Tests.Utils
         internal static IProperty CreateProperty()
         {
             ClassDeclarationSyntax classDeclaration = GetClassDeclaration();
-            PropertyDeclarationSyntax propertySyntax = classDeclaration.DescendantNodes(_ => true).OfType<PropertyDeclarationSyntax>().First();
-            if (propertySyntax is null)
-            {
-                Assert.Fail();
-            }
+            PropertyDeclarationSyntax propertySyntax = classDeclaration.DescendantNodes(_ => true).OfType< PropertyDeclarationSyntax >().First();
+            Assert.IsNotNull(propertySyntax);
 
             return new Property(
                 propertySyntax,
@@ -219,12 +219,13 @@ namespace PatternPal.Tests.Utils
         /// Creates a SyntaxGraph from a string representing a file
         /// </summary>
         /// <returns>A <see cref="SyntaxGraph"/> to be used inside tests.</returns>
-        private static SyntaxGraph CreateGraphFromInput(string INPUT)
+        private static SyntaxGraph CreateGraphFromInput(
+            string input)
         {
             SyntaxGraph graph = new();
 
             graph.AddFile(
-                INPUT,
+                input,
                 "0");
             graph.CreateGraph();
 
@@ -268,9 +269,10 @@ namespace PatternPal.Tests.Utils
         /// Gets a <see cref="ClassDeclarationSyntax"/>.
         /// </summary>
         /// <returns>A <see cref="ClassDeclarationSyntax"/> to be used inside tests.</returns>
-        private static ClassDeclarationSyntax GetClassDeclaration()
+        private static ClassDeclarationSyntax GetClassDeclaration(
+            string ? input = null)
         {
-            const string INPUT = """
+            input ??= """
                                  public class Test
                                  {
                                      public Test()
@@ -285,7 +287,7 @@ namespace PatternPal.Tests.Utils
                                  }
                                  """;
 
-            CompilationUnitSyntax root = GetCompilationRoot(INPUT);
+            CompilationUnitSyntax root = GetCompilationRoot(input);
             MemberDeclarationSyntax rootMember = root.Members.First();
 
             Assert.IsInstanceOf< ClassDeclarationSyntax >(rootMember);
@@ -315,7 +317,7 @@ namespace PatternPal.Tests.Utils
             CompilationUnitSyntax root = GetCompilationRoot(INPUT);
             MemberDeclarationSyntax rootMember = root.Members.First();
 
-            Assert.IsInstanceOf<InterfaceDeclarationSyntax>(rootMember);
+            Assert.IsInstanceOf< InterfaceDeclarationSyntax >(rootMember);
 
             return (InterfaceDeclarationSyntax)rootMember;
         }
@@ -346,21 +348,6 @@ namespace PatternPal.Tests.Utils
             return (NamespaceDeclarationSyntax)rootMember;
         }
 
-        public static IMethod CreateMethod(
-            string method)
-        {
-            CompilationUnitSyntax root = CSharpSyntaxTree.ParseText($"public class Test {{{method}}}").GetCompilationUnitRoot();
-            MethodDeclarationSyntax methodSyntax = root.DescendantNodes(n => true).OfType< MethodDeclarationSyntax >().First();
-            if (methodSyntax == null)
-            {
-                Assert.Fail();
-            }
-
-            return new Method(
-                methodSyntax,
-                null);
-        }
-
         public static IField CreateField()
         {
             const string INPUT = """
@@ -370,15 +357,12 @@ namespace PatternPal.Tests.Utils
                                  }
                                  """;
             CompilationUnitSyntax root = CSharpSyntaxTree.ParseText(INPUT).GetCompilationUnitRoot();
-            FieldDeclarationSyntax fieldSyntax = root.DescendantNodes(n => true).OfType< FieldDeclarationSyntax >().First();
-            if (fieldSyntax == null)
-            {
-                Assert.Fail();
-            }
+            FieldDeclarationSyntax fieldSyntax = root.DescendantNodes(_ => true).OfType< FieldDeclarationSyntax >().First();
+            Assert.IsNotNull(fieldSyntax);
 
             return new Field(
                 fieldSyntax,
-                null);
+                CreateClass(INPUT));
         }
     }
 
@@ -391,7 +375,7 @@ namespace PatternPal.Tests.Utils
 
         public SyntaxNode GetSyntaxNode()
         {
-            return null;
+            throw new NotImplementedException();
         }
 
         public IRoot GetRoot()

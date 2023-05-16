@@ -5,13 +5,15 @@ using System.Linq;
 
 using Microsoft.CodeAnalysis.CSharp;
 
-using SyntaxTree.Abstractions;
-using SyntaxTree.Abstractions.Root;
-using SyntaxTree.Models.Root;
+using PatternPal.SyntaxTree.Abstractions;
+using PatternPal.SyntaxTree.Abstractions.Entities;
+using PatternPal.SyntaxTree.Abstractions.Members;
+using PatternPal.SyntaxTree.Abstractions.Root;
+using PatternPal.SyntaxTree.Models.Root;
 
 #endregion
 
-namespace SyntaxTree
+namespace PatternPal.SyntaxTree
 {
     public class SyntaxGraph
     {

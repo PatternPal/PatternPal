@@ -11,17 +11,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="CodeStates\**" />
+    <Content Remove="CodeStates\**" />
+    <EmbeddedResource Remove="CodeStates\**" />
+    <None Remove="CodeStates\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="CsvHelper" Version="30.0.1" />
-    <PackageReference Include="Google.Protobuf" Version="3.22.1" />
-    <PackageReference Include="Grpc.AspNetCore" Version="2.52.0" />
-    <PackageReference Include="Grpc.AspNetCore.Server" Version="2.52.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.4">
+    <PackageReference Include="Google.Protobuf" Version="3.22.4" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.53.0" />
+    <PackageReference Include="Grpc.AspNetCore.HealthChecks" Version="2.53.0" />
+    <PackageReference Include="Grpc.AspNetCore.Server" Version="2.53.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.3" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
   </ItemGroup>
 
   <ItemGroup>

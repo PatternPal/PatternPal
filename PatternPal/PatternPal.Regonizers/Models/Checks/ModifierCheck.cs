@@ -2,7 +2,8 @@
 using System.Linq;
 using PatternPal.Recognizers.Abstractions;
 using PatternPal.Recognizers.Models.Output;
-using SyntaxTree.Abstractions;
+using PatternPal.SyntaxTree.Abstractions;
+
 using static PatternPal.Recognizers.Abstractions.FeedbackType;
 
 namespace PatternPal.Recognizers.Models.Checks

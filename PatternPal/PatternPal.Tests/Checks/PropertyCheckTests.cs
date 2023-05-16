@@ -1,5 +1,8 @@
 ﻿#region
 
+using PatternPal.SyntaxTree.Abstractions.Members;
+using PatternPal.SyntaxTree.Models;
+
 using static PatternPal.Core.Checks.CheckBuilder;
 
 #endregion
@@ -15,7 +18,7 @@ internal class PropertyCheckTests
         IMethod methodEntity = EntityNodeUtils.CreateMethod();
 
         PropertyCheck propertyCheck = Property(Priority.Low);
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         Assert.DoesNotThrow(
             () => propertyCheck.Check(
@@ -34,7 +37,7 @@ internal class PropertyCheckTests
         IProperty propertyEntity = EntityNodeUtils.CreateProperty();
 
         PropertyCheck propertyCheck = Property(Priority.Low);
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         ICheckResult result = propertyCheck.Check(
             ctx,
@@ -51,9 +54,9 @@ internal class PropertyCheckTests
         PropertyCheck propertyCheck = Property(
             Priority.Low,
             Class(Priority.Low));
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
-        Assert.Throws< IncorrectNodeTypeException >(
+        Assert.Throws< InvalidSubCheckException >(
             () => propertyCheck.Check(
                 ctx,
                 propertyEntity));
@@ -69,7 +72,7 @@ internal class PropertyCheckTests
             Modifiers(
                 Priority.Low,
                 Modifier.Protected));
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         ICheckResult result = propertyCheck.Check(
             ctx,

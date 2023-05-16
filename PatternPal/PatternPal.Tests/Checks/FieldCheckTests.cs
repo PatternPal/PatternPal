@@ -1,5 +1,9 @@
 ﻿#region
 
+using PatternPal.SyntaxTree.Abstractions.Entities;
+using PatternPal.SyntaxTree.Abstractions.Members;
+using PatternPal.SyntaxTree.Models;
+
 using static PatternPal.Core.Checks.CheckBuilder;
 
 #endregion
@@ -15,7 +19,7 @@ namespace PatternPal.Tests.Checks
             IClass classEntity = EntityNodeUtils.CreateClass();
 
             FieldCheck fieldCheck = Field(Priority.Low);
-            RecognizerContext ctx = new();
+            IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
             Assert.DoesNotThrow(
                 () => fieldCheck.Check(
@@ -34,7 +38,7 @@ namespace PatternPal.Tests.Checks
             IField fieldEntity = EntityNodeUtils.CreateField();
 
             FieldCheck fieldCheck = Field(Priority.Low);
-            RecognizerContext ctx = new();
+            IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
             ICheckResult result = fieldCheck.Check(
                 ctx,
@@ -51,7 +55,7 @@ namespace PatternPal.Tests.Checks
             FieldCheck fieldCheck = Field(
                 Priority.Low,
                 Parameters(Priority.Low));
-            RecognizerContext ctx = new();
+            IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
             Assert.Throws< IncorrectNodeTypeException >(
                 () => fieldCheck.Check(
@@ -69,7 +73,7 @@ namespace PatternPal.Tests.Checks
                 Modifiers(
                     Priority.Low,
                     Modifier.Public));
-            RecognizerContext ctx = new();
+            IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
             ICheckResult result = fieldCheck.Check(
                 ctx,

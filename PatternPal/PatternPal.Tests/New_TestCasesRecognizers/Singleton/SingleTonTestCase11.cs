@@ -17,9 +17,18 @@
      */
 
     //Singleton
+    static file class NothingRelevant
+    {
+        public static void EatSpaghetti()
+        {
+
+        }
+    }
+
     file class SingleTon
     {
         private static SingleTon _instance;
+        private static int thisIsNotAnInstance;
 
         private SingleTon()
         {
@@ -39,6 +48,8 @@
         SingleTonClient()
         {
             SingleTon.Instance();
+            NothingRelevant.EatSpaghetti();
         }
     }
+
 }

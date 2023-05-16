@@ -118,13 +118,6 @@ namespace PatternPal.ConsoleApp
             RecognizerRunner recognizerRunner = new(
                 selectedFiles,
                 selectedPatterns );
-            recognizerRunner.OnProgressUpdate += (
-                                                         sender,
-                                                         progress) =>
-                                                     DrawTextProgressBar(
-                                                         progress.Status,
-                                                         progress.CurrentPercentage,
-                                                         100);
 
             IList< RecognitionResult > results = recognizerRunner.Run();
 

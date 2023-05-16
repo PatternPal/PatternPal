@@ -1,7 +1,7 @@
 ﻿using System;
 using PatternPal.Recognizers.Abstractions;
 using PatternPal.Recognizers.Models.Output;
-using SyntaxTree.Abstractions;
+using PatternPal.SyntaxTree.Abstractions;
 
 namespace PatternPal.Recognizers.Models.ElementChecks
 {

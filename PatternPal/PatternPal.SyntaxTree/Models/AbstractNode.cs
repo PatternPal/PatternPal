@@ -1,7 +1,7 @@
-﻿using SyntaxTree.Abstractions;
-using SyntaxTree.Abstractions.Root;
+﻿using PatternPal.SyntaxTree.Abstractions;
+using PatternPal.SyntaxTree.Abstractions.Root;
 
-namespace SyntaxTree.Models
+namespace PatternPal.SyntaxTree.Models
 {
     public abstract class AbstractNode : INode
     {

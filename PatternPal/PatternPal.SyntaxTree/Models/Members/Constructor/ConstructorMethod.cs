@@ -1,10 +1,14 @@
 ﻿using System.Collections.Generic;
+
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SyntaxTree.Abstractions;
-using SyntaxTree.Abstractions.Root;
 
-namespace SyntaxTree.Models.Members.Constructor
+using PatternPal.SyntaxTree.Abstractions;
+using PatternPal.SyntaxTree.Abstractions.Entities;
+using PatternPal.SyntaxTree.Abstractions.Members;
+using PatternPal.SyntaxTree.Abstractions.Root;
+
+namespace PatternPal.SyntaxTree.Models.Members.Constructor
 {
     public class ConstructorMethod : IMethod
     {
