@@ -136,7 +136,12 @@ internal class StrategyRecognizer : IRecognizer
 
     }
 
-    private ICheck UsedExecuteStrategyMethodCheck(MethodCheck executeStrategyMethod)
+    /// <summary>
+    /// Creates a <see cref="RelationCheck"/> that checks whether an entity uses a method that corresponds with the <paramref name="executeStrategyMethod"/>.
+    /// </summary>
+    /// <param name="executeStrategyMethod">A <see cref="MethodCheck"/> that corresponds with the executeStrategy method in the Context class </param>
+    /// <returns>A <see cref="RelationCheck"/> that is used to check the usage of the executeStrategy method in the Context class</returns>
+    private RelationCheck UsedExecuteStrategyMethodCheck(MethodCheck executeStrategyMethod)
     {
         return Uses(
             Priority.Low,
@@ -144,28 +149,48 @@ internal class StrategyRecognizer : IRecognizer
         );
     }
 
-    private ICheck UsedSetStrategyMethodCheck(MethodCheck setStrategyMethod)
+    /// <summary>
+    /// Creates a <see cref="RelationCheck"/> that checks whether an entity uses a method that corresponds with the <paramref name="setStrategyMethod"/>.
+    /// </summary>
+    /// <param name="setStrategyMethod">A <see cref="MethodCheck"/> that corresponds with the setStrategy method in the Context class </param>
+    /// <returns>A <see cref="RelationCheck"/> that is used to check the usage of the setStrategy method in the Context class</returns>
+    private RelationCheck UsedSetStrategyMethodCheck(MethodCheck setStrategyMethod)
     {
         return Uses(
             Priority.Low,
-            setStrategyMethod.Result)
+            setStrategyMethod.Result);
     }
 
-    private ICheck CreatedConcreteStrategyCheck(ClassCheck concreteClassCheck)
+    /// <summary>
+    /// Creates a <see cref="RelationCheck"/> that checks whether the entity creates a <paramref name="concreteClassCheck"/> object.
+    /// </summary>
+    /// <param name="concreteClassCheck">A <see cref="ClassCheck"/> that corresponds with the Concrete Strategy class requirements</param>
+    /// <returns>A <see cref="RelationCheck"/> that is used to check if the entity creates a <paramref name="concreteClassCheck"/> object. </returns>
+    private RelationCheck CreatedConcreteStrategyCheck(ClassCheck concreteClassCheck)
     {
         return Creates(
             Priority.Mid,
             concreteClassCheck.Result);
     }
 
-    private ICheck StoredInContextClass(ClassCheck contextClassCheck)
+    /// <summary>
+    /// Creates a <see cref="RelationCheck"/> that checks whether the entity is used by the results of the <paramref name="contextClassCheck"/>.
+    /// </summary>
+    /// <param name="contextClassCheck"> A <see cref="ClassCheck"/> that corresponds with the Context class requirements</param>
+    /// <returns>A <see cref="RelationCheck"/> that is used to check if an object of the class is stored in the <paramref name="contextClassCheck"/>. </returns>
+    private RelationCheck StoredInContextClass(ClassCheck contextClassCheck)
     {
         return UsedBy(
             Priority.Mid,
             contextClassCheck.Result);
     }
 
-    private ICheck UsageContextClass(ClassCheck contextClassCheck)
+    /// <summary>
+    /// Creates a <see cref="RelationCheck"/> that checks whether the entity is used by the results of the <paramref name="contextClassCheck"/>.
+    /// </summary>
+    /// <param name="contextClassCheck"> A <see cref="ClassCheck"/> that corresponds with the Context class requirements</param>
+    /// <returns>A <see cref="RelationCheck"/> that is used to check if a class is used by the <paramref name="contextClassCheck"/>. </returns>
+    private RelationCheck UsageContextClass(ClassCheck contextClassCheck)
     {
         // combination of 5b + bc
         return Any(
@@ -178,9 +203,19 @@ internal class StrategyRecognizer : IRecognizer
                 Priority.Mid,
                 contextClassCheck.Result
             )
-        )
+        );
     }
 
+    /// <summary>
+    /// Creates a <see cref="ICheck"/> that checks whether a class is an implementation of the <paramref name="strategyInterfaceCheck"/> or inherits
+    /// from the <paramref name="strategyAbstractClassCheck"/>.
+    /// </summary>
+    /// <param name="strategyInterfaceCheck"> A <see cref="InterfaceCheck"/> that corresponds with the
+    /// Strategy Interface requirements.</param>
+    /// <param name="strategyAbstractClassCheck"> A <see cref="ClassCheck"/> that corresponds with the
+    /// Strategy Abstract class requirements.</param>
+    /// <returns>A <see cref="ICheck"/> that is used to check if a class is an implementation of the Strategy Interface or inherits from the
+    /// Strategy Abstract class.</returns>
     private ICheck ImplementOrInherit(InterfaceCheck strategyInterfaceCheck, ClassCheck strategyAbstractClassCheck)
     {
         return Any(
@@ -194,6 +229,14 @@ internal class StrategyRecognizer : IRecognizer
         );
     }
 
+    /// <summary>
+    /// Creates a <see cref="MethodCheck"/> that checks whether there is a method that either uses the
+    /// executeStrategy method, entities that are results of the <paramref name="strategyInterfaceMethodCheck"/> or <paramref name="strategyAbstractMethodClassCheck"/>.
+    /// </summary>
+    /// <param name="strategyInterfaceMethodCheck"> A <see cref="MethodCheck"/> that checks whether there is a method in the Strategy Interface requirements.</param>
+    /// <param name="strategyAbstractMethodClassCheck"> A <see cref="MethodCheck"/> that checks whether there is an abstract method in
+    /// the Strategy Abstract class requirements.</param>
+    /// <returns>A <see cref="MethodCheck"/> that checks the usage of this method.</returns>
     private MethodCheck ExecuteStrategyMethodCheck(MethodCheck strategyInterfaceMethodCheck, MethodCheck strategyAbstractMethodClassCheck)
     {
         // Todo: Don't think this is complete 
@@ -213,9 +256,18 @@ internal class StrategyRecognizer : IRecognizer
         );
     }
 
+    /// <summary>
+    /// Creates a <see cref="MethodCheck"/> that checks whether there is a method that has
+    /// a parameter with the type of either the <paramref name="strategyInterfaceCheck"/> or the <paramref name="strategyAbstractClassCheck"/> entities.
+    /// </summary>
+    /// <param name="strategyInterfaceCheck"> A <see cref="InterfaceCheck"/> that corresponds with the
+    /// Strategy Interface requirements.</param>
+    /// <param name="strategyAbstractClassCheck"> A <see cref="ClassCheck"/> that corresponds with the
+    /// Strategy Abstract class requirements.</param>
+    /// <returns>A <see cref="MethodCheck"/> that checks for the existence of a setStrategy method in the Context class.</returns>
     private MethodCheck SetStrategyMethodCheck(InterfaceCheck strategyInterfaceCheck, ClassCheck strategyAbstractClassCheck)
     {
-        // Todo: Add relations between methods and fields/properties 
+        // Todo: Add relations between methods and fields/properties to create a more solid check
         return Method(
             Priority.High,
             Any(
@@ -232,6 +284,15 @@ internal class StrategyRecognizer : IRecognizer
         );
     }
 
+    /// <summary>
+    /// Creates <see cref="CheckCollectionKind.Any"/> that checks whether there is a field or property with the type of the entities
+    /// matched with the <paramref name="strategyInterfaceCheck"/> or the <paramref name="strategyAbstractClassCheck"/> type.
+    /// </summary>
+    /// <param name="strategyInterfaceCheck"> A <see cref="InterfaceCheck"/> that corresponds with the
+    /// Strategy Interface requirements</param>
+    /// <param name="strategyAbstractClassCheck"> A <see cref="ClassCheck"/> that corresponds with the
+    /// Strategy Abstract class requirements</param>
+    /// <returns>A <see cref="ICheck"/> that is used to check for a field or property in the Context class</returns>
     private ICheck FieldOrPropertyContextClass(InterfaceCheck strategyInterfaceCheck, ClassCheck strategyAbstractClassCheck)
     {
         return Any(
@@ -271,6 +332,10 @@ internal class StrategyRecognizer : IRecognizer
         );
     }
 
+    /// <summary>
+    /// Creates a <see cref="MethodCheck"/> that checks that there is an abstract method in a certain entity.
+    /// </summary>
+    /// <returns>A <see cref="MethodCheck"/> with a check for an abstract modifier</returns>
     private MethodCheck AbstractMethodExecuteStrategy()
     {
         return Method(
@@ -281,6 +346,10 @@ internal class StrategyRecognizer : IRecognizer
         );
     }
 
+    /// <summary>
+    /// Creates a <see cref="MethodCheck"/> that checks that there is a method in a certain entity.
+    /// </summary>
+    /// <returns>A <see cref="MethodCheck"> to denote if there is a method</see>/></returns>
     private MethodCheck InterfaceMethodExecuteStrategy()
     {
         return Method(Priority.High);
