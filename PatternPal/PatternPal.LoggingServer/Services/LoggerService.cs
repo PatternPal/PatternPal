@@ -45,13 +45,6 @@ namespace PatternPal.LoggingServer.Services
                 throw new RpcException(status);
             }
 
-            ExecutionResult? executionResult = null;
-            if (!request.HasExecutionResult)
-            {
-                executionResult = request.ExecutionResult;
-            }
-
-            
             Guid codeStateId = await _eventRepository.GetPreviousCodeState(sessionId, subjectId, request.ProjectId);
             if (request.HasData)
             {
@@ -109,7 +102,7 @@ namespace PatternPal.LoggingServer.Services
                 CompileMessageType = request.CompileMessageType,
                 SourceLocation = request.SourceLocation,
                 CodeStateSection = request.CodeStateSection,
-                ExecutionResult = executionResult,
+                ExecutionResult = request.ExecutionResult,
 
             };
 
