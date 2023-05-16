@@ -253,12 +253,12 @@ internal class NodeCheck< TNode > : CheckBase
                     node));
         }
 
-        // TODO: Do we want to create a dedicated result type here (to indicate that these results originated from one check)?
         // Return the result.
         return new NodeCheckResult
                {
                    ChildrenCheckResults = results,
-                   CollectionKind = CheckCollectionKind.All,
+                   CollectionKind = CheckCollectionKind.Any,
+                   NodeCheckCollectionWrapper = true,
                    FeedbackMessage = string.Empty,
                    Priority = nodeCheck.Priority,
                    DependencyCount = nodeCheck.DependencyCount,

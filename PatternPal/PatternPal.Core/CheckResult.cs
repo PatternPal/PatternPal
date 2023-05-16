@@ -24,7 +24,7 @@ public interface ICheckResult
     int DependencyCount { get; init; }
 
     /// <summary>
-    /// The <see cref="INode"/> matched by the <see cref="ICheck"/>.
+    /// The <see cref="INode"/> on which the <see cref="ICheck"/> was run.
     /// </summary>
     INode ? MatchedNode { get; init; }
 }
@@ -101,4 +101,9 @@ internal class NodeCheckResult : ICheckResult
 
     /// <inheritdoc />
     public required INode ? MatchedNode { get; init; }
+
+    /// <summary>
+    /// All sub-<see cref="ICheckResult"/>s are the result of a <see cref="NodeCheck{TNode}"/>.
+    /// </summary>
+    public bool NodeCheckCollectionWrapper { get; set; }
 }
