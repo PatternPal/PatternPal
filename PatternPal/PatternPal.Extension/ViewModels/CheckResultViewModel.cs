@@ -13,7 +13,7 @@ namespace PatternPal.Extension.ViewModels
     {
         public CheckResult Result { get; set; }
         public string Message { get; set; }
-        public float Score => (float)Result.Score;
+        public float Score => 100;
         public CheckResult.Types.FeedbackType ChildrenFeedbackType { get; set; }
         public IEnumerable< CheckResultViewModel > SubResults => GetSubResults();
 

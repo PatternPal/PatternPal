@@ -12,11 +12,8 @@ message RecognizeResult {
     // Name of the class on which the pattern was detected.
     string class_name = 2;
 
-    // The score is a value between 0 and 100 which indicates how well the pattern is implemented.
-    uint32 score = 3;
-
     // The results for the individual checks which make up the recognizer.
-    repeated CheckResult results = 4;
+    repeated CheckResult results = 3;
 }
 
 // Result of one specific check inside a recognizer.
@@ -27,14 +24,11 @@ message CheckResult {
     // The feedback message to be presented to the user.
     string feedback_message = 2;
 
-    // The score is a value between 0 and 10 which indicates how well the check is implemented.
-    double score = 3;
-
     // Indicates whether the check should be hidden in the results view.
-    bool hidden = 4;
+    bool hidden = 3;
 
     // The results for any sub-checks which may be contained in this check.
-    repeated CheckResult sub_check_results = 5;
+    repeated CheckResult sub_check_results = 4;
 
     // The type of feedback for the current check.
     enum FeedbackType {

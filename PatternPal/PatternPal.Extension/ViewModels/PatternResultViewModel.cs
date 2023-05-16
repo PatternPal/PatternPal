@@ -70,7 +70,7 @@ namespace PatternPal.Extension.ViewModels
         /// <summary>
         /// Completion score. 100 means all requirements are fulfilled.
         /// </summary>
-        public int Score => (int)Result.Score;
+        public int Score => 100;
 
         public bool Expanded { get; set; } = false;
 
