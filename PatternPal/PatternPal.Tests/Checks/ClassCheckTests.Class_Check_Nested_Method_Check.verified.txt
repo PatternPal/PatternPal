@@ -13,11 +13,18 @@
             {
               FeedbackMessage: Modifiers correctly implemented.,
               Priority: Mid,
-              Correct: true
+              Correct: true,
+              MatchedNode: DoSomething
             }
-          ]
+          ],
+          MatchedNode: DoSomething,
+          NodeCheckCollectionWrapper: false
         }
-      ]
+      ],
+      CollectionKind: Any,
+      NodeCheckCollectionWrapper: true
     }
-  ]
+  ],
+  MatchedNode: Test,
+  NodeCheckCollectionWrapper: false
 }

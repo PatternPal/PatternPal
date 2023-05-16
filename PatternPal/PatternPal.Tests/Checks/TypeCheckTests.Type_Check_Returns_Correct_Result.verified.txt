@@ -5,7 +5,12 @@
     {
       FeedbackMessage: Node 'Test' has correct type,
       Priority: Low,
-      Correct: true
+      Correct: true,
+      DependencyCount: 1,
+      MatchedNode: Test
     }
-  ]
+  ],
+  DependencyCount: 1,
+  MatchedNode: Test,
+  NodeCheckCollectionWrapper: false
 }

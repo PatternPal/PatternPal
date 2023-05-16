@@ -9,9 +9,17 @@
         {
           FeedbackMessage: Node Child has a Implements relation with node Parent,
           Priority: Low,
-          Correct: true
+          Correct: true,
+          DependencyCount: 1,
+          MatchedNode: Parent
         }
-      ]
+      ],
+      DependencyCount: 1,
+      MatchedNode: Child,
+      NodeCheckCollectionWrapper: false
     }
-  ]
+  ],
+  DependencyCount: 1,
+  MatchedNode: Child,
+  NodeCheckCollectionWrapper: false
 }

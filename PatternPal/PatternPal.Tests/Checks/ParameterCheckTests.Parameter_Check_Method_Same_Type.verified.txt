@@ -13,11 +13,22 @@
             {
               FeedbackMessage: Node 'StringTest' has correct type,
               Priority: Low,
-              Correct: true
+              Correct: true,
+              DependencyCount: 1,
+              MatchedNode: StringTest
             }
-          ]
+          ],
+          DependencyCount: 1,
+          MatchedNode: StringTest,
+          NodeCheckCollectionWrapper: false
         }
-      ]
+      ],
+      DependencyCount: 1,
+      MatchedNode: IntTestFunction,
+      NodeCheckCollectionWrapper: false
     }
-  ]
+  ],
+  DependencyCount: 1,
+  MatchedNode: IntTestFunction,
+  NodeCheckCollectionWrapper: false
 }
