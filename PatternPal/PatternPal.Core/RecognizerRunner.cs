@@ -155,7 +155,7 @@ public class RecognizerRunner
     /// Sorts the child <see cref="ICheckResult"/>s of a <see cref="NodeCheckResult"/> from least to most dependable, based on their <see cref="ICheckResult.DependencyCount"/>.
     /// </summary>
     /// <param name="result">The <see cref="NodeCheckResult"/> whose child <see cref="ICheckResult"/>s to sort.</param>
-    private void SortCheckResults(
+    internal static void SortCheckResults(
         NodeCheckResult result)
     {
         // Sort the child results of `result` recursively.

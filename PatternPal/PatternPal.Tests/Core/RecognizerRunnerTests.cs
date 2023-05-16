@@ -433,4 +433,137 @@ public class RecognizerRunnerTests
         // Root check still contains the not check.
         Assert.IsInstanceOf< NotCheckResult >(rootCheckResult.ChildrenCheckResults[ 0 ]);
     }
+
+    [Test]
+    public void Results_Are_Sorted_Based_On_Dependency_Count()
+    {
+        LeafCheckResult result1 = new()
+                                  {
+                                      FeedbackMessage = string.Empty,
+                                      Priority = Priority.Knockout,
+                                      Correct = false,
+                                      DependencyCount = 1,
+                                      MatchedNode = null
+                                  };
+        LeafCheckResult result2 = new()
+                                  {
+                                      FeedbackMessage = string.Empty,
+                                      Priority = Priority.Knockout,
+                                      Correct = true,
+                                      DependencyCount = 0,
+                                      MatchedNode = null
+                                  };
+
+        NodeCheckResult rootCheckResult =
+            new()
+            {
+                FeedbackMessage = string.Empty,
+                ChildrenCheckResults =
+                    new List< ICheckResult >
+                    {
+                        result1,
+                        result2
+                    },
+                Priority = Priority.Low,
+                DependencyCount = 0,
+                MatchedNode = null
+            };
+
+        // Guarantee order.
+        Assert.Greater(
+            result1.DependencyCount,
+            result2.DependencyCount);
+
+        RecognizerRunner.SortCheckResults(rootCheckResult);
+
+        // Results are sorted.
+        Assert.AreEqual(
+            result2,
+            rootCheckResult.ChildrenCheckResults[ 0 ]);
+        Assert.AreEqual(
+            result1,
+            rootCheckResult.ChildrenCheckResults[ 1 ]);
+    }
+
+    [Test]
+    public void Results_Are_Sorted_Recursively()
+    {
+        LeafCheckResult result1 = new()
+                                  {
+                                      FeedbackMessage = string.Empty,
+                                      Priority = Priority.Knockout,
+                                      Correct = false,
+                                      DependencyCount = 1,
+                                      MatchedNode = null
+                                  };
+        LeafCheckResult result2 = new()
+                                  {
+                                      FeedbackMessage = string.Empty,
+                                      Priority = Priority.Knockout,
+                                      Correct = true,
+                                      DependencyCount = 0,
+                                      MatchedNode = null
+                                  };
+
+        NodeCheckResult nestedNodeCheckResult = new()
+                                                {
+                                                    FeedbackMessage = string.Empty,
+                                                    ChildrenCheckResults =
+                                                        new List< ICheckResult >
+                                                        {
+                                                            result1,
+                                                            result2
+                                                        },
+                                                    Priority = Priority.Low,
+                                                    DependencyCount = 3,
+                                                    MatchedNode = null
+                                                };
+
+        NodeCheckResult rootCheckResult =
+            new()
+            {
+                FeedbackMessage = string.Empty,
+                ChildrenCheckResults =
+                    new List< ICheckResult >
+                    {
+                        nestedNodeCheckResult,
+                        result1,
+                        result2
+                    },
+                Priority = Priority.Low,
+                DependencyCount = 0,
+                MatchedNode = null
+            };
+
+        // Guarantee order.
+        Assert.Greater(
+            nestedNodeCheckResult.DependencyCount,
+            result1.DependencyCount);
+
+        // Guarantee order.
+        Assert.Greater(
+            result1.DependencyCount,
+            result2.DependencyCount);
+
+        RecognizerRunner.SortCheckResults(rootCheckResult);
+
+        // Top-level results are sorted.
+        Assert.AreEqual(
+            result2,
+            rootCheckResult.ChildrenCheckResults[ 0 ]);
+        Assert.AreEqual(
+            result1,
+            rootCheckResult.ChildrenCheckResults[ 1 ]);
+        Assert.AreEqual(
+            nestedNodeCheckResult,
+            rootCheckResult.ChildrenCheckResults[ 2 ]);
+
+        // Results are sorted recursively.
+        Assert.AreEqual(
+            result2,
+            nestedNodeCheckResult.ChildrenCheckResults[ 0 ]);
+        Assert.AreEqual(
+            result1,
+            nestedNodeCheckResult.ChildrenCheckResults[ 1 ]);
+    }
 }
