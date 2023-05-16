@@ -6,9 +6,8 @@
 /// </summary>
 internal class RelationCheck : CheckBase
 {
-    // The node resulting from a check to which there should be a relation,
-    // made a Func<> so that it works with lazy evaluation.
-    private readonly Func< List< INode > > _getNodes;
+    // The check which checks for the node to which there should be a relation.
+    private readonly ICheck _relatedNodeCheck;
 
     // The type of relation which should be present.
     private readonly RelationType _relationType;
@@ -23,14 +22,15 @@ internal class RelationCheck : CheckBase
     /// </summary>
     /// <param name="priority">Priority of the check.</param>
     /// <param name="relationType">The type of relation.</param>
-    /// <param name="getNodes">A functor to get the node to check for a <see cref="_relationType"/> relation.</param>
+    /// <param name="relatedNodeCheck">The <see cref="ICheck"/> which checks for the node
+    /// to which there should be a <see cref="_relationType"/> relation.</param>
     internal RelationCheck(
         Priority priority,
         RelationType relationType,
-        Func< List< INode > > getNodes)
+        ICheck relatedNodeCheck)
         : base(priority)
     {
-        _getNodes = getNodes;
+        _relatedNodeCheck = relatedNodeCheck;
         _relationType = relationType;
     }
 
@@ -43,7 +43,7 @@ internal class RelationCheck : CheckBase
         INode node)
     {
         List< ICheckResult > results = new();
-        foreach (INode getNode in _getNodes())
+        foreach (INode getNode in _relatedNodeCheck.Result())
         {
             bool hasCorrectRelation = ctx.Graph.GetRelations(
                                               node,
@@ -66,6 +66,7 @@ internal class RelationCheck : CheckBase
                     DependencyCount = DependencyCount,
                     MatchedNode = getNode,
                     Check = this,
+                    RelatedCheck = _relatedNodeCheck
                 });
         }
 

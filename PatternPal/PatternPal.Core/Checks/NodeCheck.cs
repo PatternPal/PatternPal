@@ -13,17 +13,17 @@ internal class NodeCheck< TNode > : CheckBase
     // The kind of this collection of checks.
     private readonly CheckCollectionKind _kind;
 
-    // The entities matched by this check.
-    private readonly List< INode > _matchedEntities;
-
-    // The current sub-check being checked.
-    private ICheck ? _currentSubCheck;
-
     /// <summary>
     /// Gets a <see cref="Func{TResult}"/> which returns a <see cref="List{T}"/> of <see cref="IEntity"/>s matched by this <see cref="ICheck"/>.
     /// </summary>
     /// <returns>A <see cref="List{T}"/> of matched <see cref="IEntity"/>s.</returns>
-    internal Func< List< INode > > Result => () => _matchedEntities;
+    public override Func<List<INode>> Result => () => _matchedEntities;
+
+    // The current sub-check being checked.
+    private ICheck ? _currentSubCheck;
+
+    // The entities matched by this check.
+    private readonly List<INode> _matchedEntities;
 
     // The dependency count, declared as nullable so we can check whether we have calculated it
     // already.

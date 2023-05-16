@@ -19,7 +19,8 @@ public class RecognizerRunnerTests
                             Priority = Priority.Knockout,
                             Correct = false,
                             DependencyCount = 0,
-                            MatchedNode = null
+                            MatchedNode = null,
+                            Check = null
                         },
                         new LeafCheckResult
                         {
@@ -27,15 +28,17 @@ public class RecognizerRunnerTests
                             Priority = Priority.Knockout,
                             Correct = true,
                             DependencyCount = 0,
-                            MatchedNode = null
+                            MatchedNode = null,
+                            Check = null
                         }
                     },
                 Priority = Priority.Low,
                 DependencyCount = 0,
-                MatchedNode = null
+                MatchedNode = null,
+                Check = null
             };
 
-        RecognizerRunner.FilterResults(rootCheckResult);
+        RecognizerRunner.FilterResults(null, rootCheckResult);
 
         // One child is pruned.
         Assert.AreEqual(
@@ -59,15 +62,17 @@ public class RecognizerRunnerTests
                             Priority = Priority.Knockout,
                             Correct = true,
                             DependencyCount = 0,
-                            MatchedNode = null
+                            MatchedNode = null,
+                            Check = null
                         }
                     },
                 Priority = Priority.Low,
                 DependencyCount = 0,
-                MatchedNode = null
+                MatchedNode = null,
+                Check = null
             };
 
-        RecognizerRunner.FilterResults(rootCheckResult);
+        RecognizerRunner.FilterResults(null, rootCheckResult);
 
         // The child is not pruned.
         Assert.AreEqual(
@@ -91,15 +96,17 @@ public class RecognizerRunnerTests
                             Priority = Priority.Knockout,
                             Correct = false,
                             DependencyCount = 0,
-                            MatchedNode = null
+                            MatchedNode = null,
+                            Check = null
                         }
                     },
                 Priority = Priority.Low,
                 DependencyCount = 0,
-                MatchedNode = null
+                MatchedNode = null,
+                Check = null
             };
 
-        bool parentShouldBePruned = RecognizerRunner.FilterResults(rootCheckResult);
+        bool parentShouldBePruned = RecognizerRunner.FilterResults(null, rootCheckResult);
 
         // The root node should be pruned.
         Assert.IsTrue(parentShouldBePruned);
@@ -126,7 +133,8 @@ public class RecognizerRunnerTests
                             Priority = Priority.Knockout,
                             Correct = true,
                             DependencyCount = 0,
-                            MatchedNode = null
+                            MatchedNode = null,
+                            Check = null
                         },
                         new NodeCheckResult
                         {
@@ -140,20 +148,23 @@ public class RecognizerRunnerTests
                                         Priority = Priority.Knockout,
                                         Correct = false,
                                         DependencyCount = 0,
-                                        MatchedNode = null
+                                        MatchedNode = null,
+                                        Check = null
                                     }
                                 },
                             Priority = Priority.Low,
                             DependencyCount = 0,
-                            MatchedNode = null
+                            MatchedNode = null,
+                            Check = null
                         }
                     },
                 Priority = Priority.Low,
                 DependencyCount = 0,
-                MatchedNode = null
+                MatchedNode = null,
+                Check = null
             };
 
-        bool rootShouldBePruned = RecognizerRunner.FilterResults(rootCheckResult);
+        bool rootShouldBePruned = RecognizerRunner.FilterResults(null, rootCheckResult);
 
         // Root should not be pruned.
         Assert.IsFalse(rootShouldBePruned);
@@ -192,22 +203,26 @@ public class RecognizerRunnerTests
                                                        Priority = Priority.Knockout,
                                                        Correct = true,
                                                        DependencyCount = 0,
-                                                       MatchedNode = null
+                                                       MatchedNode = null,
+                                                       Check = null
                                                    },
                                                DependencyCount = 0,
-                                               MatchedNode = null
+                                               MatchedNode = null,
+                                               Check = null
                                            },
                             DependencyCount = 0,
-                            MatchedNode = null
+                            MatchedNode = null,
+                            Check = null
                         }
                     },
                 Priority = Priority.Low,
                 DependencyCount = 0,
-                MatchedNode = null
+                MatchedNode = null,
+                Check = null
             };
 
         // Nested not check throws ArgumentException.
-        Assert.Throws< ArgumentException >(() => RecognizerRunner.FilterResults(rootCheckResult));
+        Assert.Throws< ArgumentException >(() => RecognizerRunner.FilterResults(null, rootCheckResult));
     }
 
     [Test]
@@ -230,10 +245,12 @@ public class RecognizerRunnerTests
                                                Priority = Priority.Knockout,
                                                Correct = false,
                                                DependencyCount = 0,
-                                               MatchedNode = null
+                                               MatchedNode = null,
+                                               Check = null
                                            },
                             DependencyCount = 0,
-                            MatchedNode = null
+                            MatchedNode = null,
+                            Check = null
                         },
                         new LeafCheckResult
                         {
@@ -241,15 +258,17 @@ public class RecognizerRunnerTests
                             Priority = Priority.Knockout,
                             Correct = true,
                             DependencyCount = 0,
-                            MatchedNode = null
+                            MatchedNode = null,
+                            Check = null
                         }
                     },
                 Priority = Priority.Low,
                 DependencyCount = 0,
-                MatchedNode = null
+                MatchedNode = null,
+                Check = null
             };
 
-        RecognizerRunner.FilterResults(rootCheckResult);
+        RecognizerRunner.FilterResults(null, rootCheckResult);
 
         // Not check itself is not pruned.
         Assert.AreEqual(
@@ -280,10 +299,12 @@ public class RecognizerRunnerTests
                                                Priority = Priority.Knockout,
                                                Correct = true,
                                                DependencyCount = 0,
-                                               MatchedNode = null
+                                               MatchedNode = null,
+                                               Check = null
                                            },
                             DependencyCount = 0,
-                            MatchedNode = null
+                            MatchedNode = null,
+                            Check = null
                         },
                         new LeafCheckResult
                         {
@@ -291,15 +312,17 @@ public class RecognizerRunnerTests
                             Priority = Priority.Knockout,
                             Correct = true,
                             DependencyCount = 0,
-                            MatchedNode = null
+                            MatchedNode = null,
+                            Check = null
                         }
                     },
                 Priority = Priority.Low,
                 DependencyCount = 0,
-                MatchedNode = null
+                MatchedNode = null,
+                Check = null
             };
 
-        RecognizerRunner.FilterResults(rootCheckResult);
+        RecognizerRunner.FilterResults(null, rootCheckResult);
 
         // Not check itself is pruned.
         Assert.AreEqual(
@@ -337,15 +360,18 @@ public class RecognizerRunnerTests
                                                 Priority = Priority.Knockout,
                                                 Correct = true,
                                                 DependencyCount = 0,
-                                                MatchedNode = null
+                                                MatchedNode = null,
+                                                Check = null
                                             }
                                         },
                                     Priority = Priority.Low,
                                     DependencyCount = 0,
-                                    MatchedNode = null
+                                    MatchedNode = null,
+                                    Check = null
                                 },
                             DependencyCount = 0,
-                            MatchedNode = null
+                            MatchedNode = null,
+                            Check = null
                         },
                         new LeafCheckResult
                         {
@@ -353,15 +379,17 @@ public class RecognizerRunnerTests
                             Priority = Priority.Knockout,
                             Correct = true,
                             DependencyCount = 0,
-                            MatchedNode = null
+                            MatchedNode = null,
+                            Check = null
                         }
                     },
                 Priority = Priority.Low,
                 DependencyCount = 0,
-                MatchedNode = null
+                MatchedNode = null,
+                Check = null
             };
 
-        RecognizerRunner.FilterResults(rootCheckResult);
+        RecognizerRunner.FilterResults(null, rootCheckResult);
 
         // Not check is pruned.
         Assert.AreEqual(
@@ -399,15 +427,18 @@ public class RecognizerRunnerTests
                                                 Priority = Priority.Knockout,
                                                 Correct = false,
                                                 DependencyCount = 0,
-                                                MatchedNode = null
+                                                MatchedNode = null,
+                                                Check = null
                                             }
                                         },
                                     Priority = Priority.Low,
                                     DependencyCount = 0,
-                                    MatchedNode = null
+                                    MatchedNode = null,
+                                    Check = null
                                 },
                             DependencyCount = 0,
-                            MatchedNode = null
+                            MatchedNode = null,
+                            Check = null
                         },
                         new LeafCheckResult
                         {
@@ -415,15 +446,17 @@ public class RecognizerRunnerTests
                             Priority = Priority.Knockout,
                             Correct = true,
                             DependencyCount = 0,
-                            MatchedNode = null
+                            MatchedNode = null,
+                            Check = null
                         }
                     },
                 Priority = Priority.Low,
                 DependencyCount = 0,
-                MatchedNode = null
+                MatchedNode = null,
+                Check = null
             };
 
-        RecognizerRunner.FilterResults(rootCheckResult);
+        RecognizerRunner.FilterResults(null, rootCheckResult);
 
         // Not check is not pruned.
         Assert.AreEqual(
@@ -443,16 +476,18 @@ public class RecognizerRunnerTests
                                       Priority = Priority.Knockout,
                                       Correct = false,
                                       DependencyCount = 1,
-                                      MatchedNode = null
-                                  };
+                                      MatchedNode = null,
+                                      Check = null
+        };
         LeafCheckResult result2 = new()
                                   {
                                       FeedbackMessage = string.Empty,
                                       Priority = Priority.Knockout,
                                       Correct = true,
                                       DependencyCount = 0,
-                                      MatchedNode = null
-                                  };
+                                      MatchedNode = null,
+                                      Check = null
+        };
 
         NodeCheckResult rootCheckResult =
             new()
@@ -466,7 +501,8 @@ public class RecognizerRunnerTests
                     },
                 Priority = Priority.Low,
                 DependencyCount = 0,
-                MatchedNode = null
+                MatchedNode = null,
+                Check = null
             };
 
         // Guarantee order.
@@ -494,7 +530,8 @@ public class RecognizerRunnerTests
                                       Priority = Priority.Knockout,
                                       Correct = false,
                                       DependencyCount = 1,
-                                      MatchedNode = null
+                                      MatchedNode = null,
+                                      Check = null
                                   };
         LeafCheckResult result2 = new()
                                   {
@@ -502,7 +539,8 @@ public class RecognizerRunnerTests
                                       Priority = Priority.Knockout,
                                       Correct = true,
                                       DependencyCount = 0,
-                                      MatchedNode = null
+                                      MatchedNode = null,
+                                      Check = null
                                   };
 
         NodeCheckResult nestedNodeCheckResult = new()
@@ -516,7 +554,8 @@ public class RecognizerRunnerTests
                                                         },
                                                     Priority = Priority.Low,
                                                     DependencyCount = 3,
-                                                    MatchedNode = null
+                                                    MatchedNode = null,
+                                                    Check = null
                                                 };
 
         NodeCheckResult rootCheckResult =
@@ -532,7 +571,8 @@ public class RecognizerRunnerTests
                     },
                 Priority = Priority.Low,
                 DependencyCount = 0,
-                MatchedNode = null
+                MatchedNode = null,
+                Check = null
             };
 
         // Guarantee order.

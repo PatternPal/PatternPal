@@ -236,6 +236,7 @@ public class RecognizerRunner
                     if (leafCheckResult.Priority == Priority.Knockout)
                     {
                         resultsToBePruned.Add(leafCheckResult);
+                        leafCheckResult.Pruned = true;
                     }
                     break;
                 }
@@ -248,6 +249,7 @@ public class RecognizerRunner
                         nodeCheckResult))
                     {
                         resultsToBePruned.Add(nodeCheckResult);
+                        nodeCheckResult.Pruned = true;
                     }
                     break;
                 }
@@ -269,6 +271,7 @@ public class RecognizerRunner
                             if (notCheckResult.Priority == Priority.Knockout)
                             {
                                 resultsToBePruned.Add(notCheckResult);
+                                notCheckResult.Pruned = true;
                             }
                             break;
                         }
@@ -284,6 +287,7 @@ public class RecognizerRunner
                                 && notCheckResult.Priority == Priority.Knockout)
                             {
                                 resultsToBePruned.Add(notCheckResult);
+                                notCheckResult.Pruned = true;
                             }
                             break;
                         }
@@ -338,6 +342,14 @@ public class RecognizerRunner
                     throw new ArgumentException($"Unexpected check type '{relationCheckResult.GetType()}', expected '{typeof( LeafCheckResult )}'");
                 }
 
+                resultsByNode.TryGetValue(relationResult.MatchedNode, out resultsToBePruned);
+                ICheckResult relevantResult =
+                    resultsToBePruned.FirstOrDefault((result) => result.Check == relationResult.RelatedCheck);
+                if (relevantResult.Pruned)
+                {
+                    resultsToBePruned.Add(relationResult);
+                    relationResult.Pruned = true;
+                }
             }
         }
 

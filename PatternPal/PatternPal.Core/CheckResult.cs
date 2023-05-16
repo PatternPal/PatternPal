@@ -32,6 +32,11 @@ public interface ICheckResult
     /// The <see cref="ICheck"/> from which this <see cref="ICheckResult"/> originates.
     /// </summary>
     ICheck Check { get; init; }
+
+    /// <summary>
+    /// Whether the result is marked as to-be-pruned
+    /// </summary>
+    bool Pruned { get; set; }
 }
 
 /// <summary>
@@ -58,6 +63,16 @@ public class LeafCheckResult : ICheckResult
 
     /// <inheritdoc />
     public required ICheck Check { get; init; }
+
+    /// <inheritdoc />
+    public required bool Pruned { get; set; }
+
+    public ICheck RelatedCheck { get; init; }
+
+    internal LeafCheckResult()
+    {
+        Pruned = false;
+    }
 }
 
 /// <summary>
@@ -84,6 +99,14 @@ public class NotCheckResult : ICheckResult
 
     /// <inheritdoc />
     public required ICheck Check { get; init; }
+
+    /// <inheritdoc />
+    public required bool Pruned { get; set; }
+
+    internal NotCheckResult()
+    {
+        Pruned = false;
+    }
 }
 
 /// <summary>
@@ -128,4 +151,12 @@ public class NodeCheckResult : ICheckResult
 
     /// <inheritdoc />
     public required ICheck Check { get; init; }
+
+    /// <inheritdoc />
+    public required bool Pruned { get; set; }
+
+    internal NodeCheckResult()
+    {
+        Pruned = false;
+    }
 }

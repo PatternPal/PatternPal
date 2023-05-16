@@ -35,7 +35,7 @@ public class RelationCheckTests
             Priority.Low,
             Uses(
                 Priority.Low,
-                usedMethod.Result));
+                usedMethod));
 
         ICheckResult result = usesMethod.Check(
             ctx,
@@ -71,7 +71,7 @@ public class RelationCheckTests
             Priority.Low,
             Uses(
                 Priority.Low,
-                usedMethod.Result));
+                usedMethod));
 
         ICheckResult result = usesClass.Check(
             ctx,
@@ -110,7 +110,7 @@ public class RelationCheckTests
             Priority.Low,
             Uses(
                 Priority.Low,
-                usesMethod.Result));
+                usesMethod));
 
         ICheckResult result = usedMethod.Check(
             ctx,
@@ -143,7 +143,7 @@ public class RelationCheckTests
             Priority.Low,
             Inherits(
                 Priority.Low,
-                parentClass.Result));
+                parentClass));
 
         ICheckResult result = childClass.Check(
             ctx,
@@ -176,7 +176,7 @@ public class RelationCheckTests
             Priority.Low,
             Inherits(
                 Priority.Low,
-                usesClass.Result));
+                usesClass));
 
         ICheckResult result = usedClass.Check(
             ctx,
@@ -209,7 +209,7 @@ public class RelationCheckTests
             Priority.Low,
             Implements(
                 Priority.Low,
-                parentInterfaceCheck.Result));
+                parentInterfaceCheck));
 
         ICheckResult result = childInterfaceCheck.Check(
             ctx,
@@ -242,7 +242,7 @@ public class RelationCheckTests
             Priority.Low,
             Implements(
                 Priority.Low,
-                parentInterfaceCheck.Result));
+                parentInterfaceCheck));
 
         ICheckResult result = childInterfaceCheck.Check(
             ctx,
@@ -275,7 +275,7 @@ public class RelationCheckTests
             Priority.Low,
             Creates(
                 Priority.Low,
-                createdClass.Result));
+                createdClass));
 
         ICheckResult result = creatingClass.Check(
             ctx,
@@ -311,7 +311,7 @@ public class RelationCheckTests
             Creates(
                 Priority.Low,
                 //the result of the createdClass, which is the creatingNode
-                createdClass.Result));
+                createdClass));
 
         ICheckResult result = creatingClass.Check(
             ctx,
