@@ -34,6 +34,10 @@ public class RecognizerRunner
     {
         CreateGraph(files);
 
+        // Because we currently haven't implemented all recognizers, this will crash. To prevent
+        // that, we skip this. When we have the recognizers reimplemented, this can be enabled
+        // again.
+
         // Get the design patterns which correspond to the given recognizers.
         //_patterns = new List< DesignPattern >();
         //foreach (Recognizer recognizer in recognizers)

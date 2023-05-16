@@ -145,6 +145,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                                          FeedbackMessage = checkResult.FeedbackMessage
                                      };
 
+        // Convert sub-check results.
         switch (checkResult)
         {
             case NodeCheckResult nodeCheckResult:
@@ -158,6 +159,12 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
             case NotCheckResult notCheckResult:
             {
                 newCheckResult.SubCheckResults.Add(CreateCheckResult(notCheckResult.NestedResult));
+                break;
+            }
+            case LeafCheckResult:
+            default:
+            {
+                // A LeafCheckResult doesn't have any sub-checks.
                 break;
             }
         }
