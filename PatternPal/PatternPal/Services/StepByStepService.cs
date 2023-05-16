@@ -104,7 +104,7 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
                                   //Recognizer = 0,
                                   //ClassName = result.EntityNode.GetFullName(),
                               };
-        foreach (PatternPal.Recognizers.Abstractions.ICheckResult checkResult in instruction.Checks.Select(check => check.Correct(state)))
+        foreach (Recognizers.Abstractions.ICheckResult checkResult in instruction.Checks.Select(check => check.Correct(state)))
         {
             res.Results.Add(CreateCheckResult(checkResult));
         }
@@ -127,17 +127,16 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
         return Task.FromResult(response);
     }
 
-    private CheckResult CreateCheckResult(
-        PatternPal.Recognizers.Abstractions.ICheckResult checkResult)
+    private static CheckResult CreateCheckResult(
+        Recognizers.Abstractions.ICheckResult checkResult)
     {
         CheckResult newCheckResult = new()
                                      {
                                          FeedbackType = (CheckResult.Types.FeedbackType)((int)checkResult.GetFeedbackType() + 1),
                                          Hidden = checkResult.IsHidden,
-                                         Score = checkResult.GetScore(),
                                          FeedbackMessage = ResourceUtils.ResultToString(checkResult),
                                      };
-        foreach (PatternPal.Recognizers.Abstractions.ICheckResult childCheckResult in checkResult.GetChildFeedback())
+        foreach (Recognizers.Abstractions.ICheckResult childCheckResult in checkResult.GetChildFeedback())
         {
             newCheckResult.SubCheckResults.Add(CreateCheckResult(childCheckResult));
         }
@@ -146,6 +145,6 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
 
     private static class State
     {
-        internal static Dictionary< string, string > StateKeyed = new();
+        internal static readonly Dictionary< string, string > StateKeyed = new();
     }
 }

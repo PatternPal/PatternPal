@@ -35,18 +35,18 @@ public class RecognizerRunner
         CreateGraph(files);
 
         // Get the design patterns which correspond to the given recognizers.
-        _patterns = new List< DesignPattern >();
-        foreach (Recognizer recognizer in recognizers)
-        {
-            // `Recognizer.Unknown` is the default value of the `Recognizer` enum, as required
-            // by the Protocol Buffer spec. This value should never be used.
-            if (recognizer == Recognizer.Unknown)
-            {
-                continue;
-            }
+        //_patterns = new List< DesignPattern >();
+        //foreach (Recognizer recognizer in recognizers)
+        //{
+        //    // `Recognizer.Unknown` is the default value of the `Recognizer` enum, as required
+        //    // by the Protocol Buffer spec. This value should never be used.
+        //    if (recognizer == Recognizer.Unknown)
+        //    {
+        //        continue;
+        //    }
 
-            _patterns.Add(DesignPattern.SupportedPatterns[ ((int)recognizer) - 1 ]);
-        }
+        //    _patterns.Add(DesignPattern.SupportedPatterns[ ((int)recognizer) - 1 ]);
+        //}
     }
 
     /// <summary>

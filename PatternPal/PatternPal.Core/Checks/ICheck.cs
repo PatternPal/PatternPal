@@ -99,7 +99,7 @@ public enum Priority
 /// <summary>
 /// Represents the behavior of a collection of <see cref="ICheck"/>s when deciding if it is correct.
 /// </summary>
-enum CheckCollectionKind
+public enum CheckCollectionKind
 {
     /// <summary>
     /// All sub-<see cref="ICheck"/>s must succeed for this <see cref="ICheck"/> to succeed.
