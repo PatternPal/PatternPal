@@ -66,8 +66,12 @@ namespace PatternPal.Extension.Commands
             _cancellationToken = cancellationToken;
             SaveSubjectId();
 
-            // Initialization, as otherwise the handlers will never get started.
-            bool _ = package.DoLogData;
+            // These events are not handled with an event listener, and thus need to be checked separately whether logging is enabled.
+            if (_package.DoLogData)
+            {
+                OnSessionStart();
+                OnProjectOpen();
+            }
         }
 
         /// <summary>
@@ -223,35 +227,9 @@ namespace PatternPal.Extension.Commands
         private static void OnProjectOpen()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            Projects projects = _dte.Solution.Projects;
-
-            // Distinguish whether only a csproj file was opened initially, or a solution file.
-            // For a csproj, _dte.Solution.FullName returns an empty string and the projects inside
-            // have to be iterated (which is only 1 project, the csproj file).
-            string nameTest = _dte.Solution.FullName;
-
-            if (nameTest == "")
-            {
-                List<Project> list = new List<Project>();
-                IEnumerator item = projects.GetEnumerator();
-                while (item.MoveNext())
-                {
-                    Project project = item.Current as Project;
-                    if (project == null)
-                    {
-                        continue;
-                    }
-
-                    nameTest = project.FullName;
-                }
-            }
-
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtProjectOpen;
-            request.ProjectId = nameTest;
-            LogProviderService.LogProviderServiceClient client =
-                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-            LogEventResponse response = client.LogEvent(request);
+            LogEachProject(request);
         }
 
         /// <summary>
@@ -260,35 +238,9 @@ namespace PatternPal.Extension.Commands
         private static void OnProjectClose()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            Projects projects = _dte.Solution.Projects;
-
-            // Distinguish whether only a csproj file was opened initially, or a solution file.
-            // For a csproj, _dte.Solution.FullName returns an empty string and the projects inside
-            // have to be iterated (which is only 1 project, the csproj file).
-            string nameTest = _dte.Solution.FullName;
-
-            if (nameTest == "")
-            {
-                List<Project> list = new List<Project>();
-                IEnumerator item = projects.GetEnumerator();
-                while (item.MoveNext())
-                {
-                    Project project = item.Current as Project;
-                    if (project == null)
-                    {
-                        continue;
-                    }
-
-                    nameTest = project.FullName;
-                }
-            }
-
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtProjectClose;
-            request.ProjectId = nameTest;
-            LogProviderService.LogProviderServiceClient client =
-                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-            LogEventResponse response = client.LogEvent(request);
+            LogEachProject(request);
         }
 
         /// <summary>
@@ -326,7 +278,9 @@ namespace PatternPal.Extension.Commands
         {
             return new LogEventRequest
             {
-                EventId = Guid.NewGuid().ToString(), SubjectId = GetSubjectId(), SessionId = _sessionId
+                EventId = Guid.NewGuid().ToString(),
+                SubjectId = GetSubjectId(),
+                SessionId = _sessionId
             };
         }
 
@@ -382,6 +336,28 @@ namespace PatternPal.Extension.Commands
         }
 
         /// <summary>
+        /// Cycles through all active projects and log the given event for each of these projects.
+        /// </summary>
+        private static void LogEachProject(LogEventRequest request)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            Projects projects = _dte.Solution.Projects;
+
+            foreach (Project project in projects)
+            {
+                if (project == null)
+                {
+                    continue;
+                }
+
+                request.ProjectId = project.FullName;
+
+                LogProviderService.LogProviderServiceClient client =
+                    new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
+                LogEventResponse response = client.LogEvent(request);
+            }
+        }
+
         /// Event handler for when an exception is unhandled. This is used to determine in the user's last debug session
         /// whether there were any unhandled exceptions. Although creating a separate method might seem redundant
         /// for the actual logic used here, it is necessary for the adding and removing from any used event listeners.

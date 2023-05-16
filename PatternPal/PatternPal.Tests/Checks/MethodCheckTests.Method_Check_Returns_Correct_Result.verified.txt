@@ -1,4 +1,6 @@
 ﻿{
   FeedbackMessage: Found method: DoSomething().,
-  Priority: Low
+  Priority: Low,
+  MatchedNode: DoSomething,
+  NodeCheckCollectionWrapper: false
 }

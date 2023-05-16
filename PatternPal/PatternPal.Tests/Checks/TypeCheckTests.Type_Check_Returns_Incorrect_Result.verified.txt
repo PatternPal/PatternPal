@@ -5,7 +5,12 @@
     {
       FeedbackMessage: Node 'DoSomething()' has incorrect type, expected 'Test',
       Priority: Low,
-      Correct: false
+      Correct: false,
+      DependencyCount: 1,
+      MatchedNode: Test
     }
-  ]
+  ],
+  DependencyCount: 1,
+  MatchedNode: DoSomething,
+  NodeCheckCollectionWrapper: false
 }

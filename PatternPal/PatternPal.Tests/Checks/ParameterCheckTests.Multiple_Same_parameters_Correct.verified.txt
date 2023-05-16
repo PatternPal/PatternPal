@@ -13,9 +13,14 @@
             {
               FeedbackMessage: Node 'IntTest' has correct type,
               Priority: Low,
-              Correct: true
+              Correct: true,
+              DependencyCount: 1,
+              MatchedNode: IntTest
             }
-          ]
+          ],
+          DependencyCount: 1,
+          MatchedNode: IntTest,
+          NodeCheckCollectionWrapper: false
         },
         {
           FeedbackMessage: Found node 'IntTest',
@@ -24,9 +29,14 @@
             {
               FeedbackMessage: Node 'IntTest' has correct type,
               Priority: Low,
-              Correct: true
+              Correct: true,
+              DependencyCount: 1,
+              MatchedNode: IntTest
             }
-          ]
+          ],
+          DependencyCount: 1,
+          MatchedNode: IntTest,
+          NodeCheckCollectionWrapper: false
         },
         {
           FeedbackMessage: Found node 'StringTest',
@@ -35,11 +45,22 @@
             {
               FeedbackMessage: Node 'StringTest' has correct type,
               Priority: Low,
-              Correct: true
+              Correct: true,
+              DependencyCount: 1,
+              MatchedNode: StringTest
             }
-          ]
+          ],
+          DependencyCount: 1,
+          MatchedNode: StringTest,
+          NodeCheckCollectionWrapper: false
         }
-      ]
+      ],
+      DependencyCount: 3,
+      MatchedNode: StringTestFunction,
+      NodeCheckCollectionWrapper: false
     }
-  ]
+  ],
+  DependencyCount: 3,
+  MatchedNode: StringTestFunction,
+  NodeCheckCollectionWrapper: false
 }

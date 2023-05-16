@@ -14,6 +14,11 @@ internal class RelationCheck : CheckBase
     private readonly RelationType _relationType;
 
     /// <summary>
+    /// A <see cref="RelationCheck"/> is dependent on the <see cref="INode"/> to which it has an <see cref="Relation"/>.
+    /// </summary>
+    public override int DependencyCount => 1;
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="RelationCheck"/> class.
     /// </summary>
     /// <param name="priority">Priority of the check.</param>
@@ -57,7 +62,9 @@ internal class RelationCheck : CheckBase
                     Priority = Priority,
                     FeedbackMessage = hasCorrectRelation
                         ? $"Node {node} has a {_relationType} relation with node {getNode}"
-                        : $"No {_relationType} relation found."
+                        : $"No {_relationType} relation found.",
+                    DependencyCount = DependencyCount,
+                    MatchedNode = getNode,
                 });
         }
 
@@ -65,7 +72,9 @@ internal class RelationCheck : CheckBase
                {
                    Priority = Priority,
                    ChildrenCheckResults = results,
-                   FeedbackMessage = $"Found {_relationType} relations for {node}."
+                   FeedbackMessage = $"Found {_relationType} relations for {node}.",
+                   DependencyCount = DependencyCount,
+                   MatchedNode = node,
                };
     }
 }

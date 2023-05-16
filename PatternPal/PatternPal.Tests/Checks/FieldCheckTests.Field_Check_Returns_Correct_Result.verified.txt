@@ -1,4 +1,6 @@
 ﻿{
   FeedbackMessage: Found field '_test',
-  Priority: Low
+  Priority: Low,
+  MatchedNode: _test,
+  NodeCheckCollectionWrapper: false
 }

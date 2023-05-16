@@ -1,4 +1,6 @@
 ﻿{
   FeedbackMessage: Found interface 'Test',
-  Priority: Low
+  Priority: Low,
+  MatchedNode: Test,
+  NodeCheckCollectionWrapper: false
 }

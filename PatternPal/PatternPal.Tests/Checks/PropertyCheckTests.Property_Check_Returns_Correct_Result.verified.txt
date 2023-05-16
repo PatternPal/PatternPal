@@ -1,4 +1,6 @@
 ﻿{
   FeedbackMessage: Found property: TestProperty.,
-  Priority: Low
+  Priority: Low,
+  MatchedNode: TestProperty,
+  NodeCheckCollectionWrapper: false
 }

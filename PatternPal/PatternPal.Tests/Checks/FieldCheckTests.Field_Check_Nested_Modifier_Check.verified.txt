@@ -5,7 +5,10 @@
     {
       FeedbackMessage: The node _test does not have the public modifier.,
       Priority: Low,
-      Correct: false
+      Correct: false,
+      MatchedNode: _test
     }
-  ]
+  ],
+  MatchedNode: _test,
+  NodeCheckCollectionWrapper: false
 }

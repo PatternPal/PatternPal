@@ -2,11 +2,16 @@ name: Lint
 
 on:
   workflow_call:
+    inputs:
+      should_run:
+        required: true
+        type: boolean
   workflow_dispatch:
 
 jobs:
   inspection:
     runs-on: windows-latest
+    if: inputs.should_run
     name: Inspection
     steps:
       - name: Checkout

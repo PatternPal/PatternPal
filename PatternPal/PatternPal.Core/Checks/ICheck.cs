@@ -29,6 +29,11 @@ internal interface ICheck
     Priority Priority { get; }
 
     /// <summary>
+    /// The dependencies to other <see cref="INode"/>s this check has.
+    /// </summary>
+    int DependencyCount { get; }
+
+    /// <summary>
     /// Runs the current check on the given <see cref="INode"/>.
     /// </summary>
     /// <param name="ctx">The current <see cref="RecognizerContext"/>.</param>
@@ -46,6 +51,9 @@ internal abstract class CheckBase : ICheck
 {
     /// <inheritdoc />
     public Priority Priority { get; }
+
+    /// <inheritdoc />
+    public abstract int DependencyCount { get; }
 
     /// <summary>
     /// Sets the priority.
@@ -65,7 +73,7 @@ internal abstract class CheckBase : ICheck
 /// <summary>
 /// Represents the priority of a <see cref="ICheck"/>.
 /// </summary>
-internal enum Priority
+public enum Priority
 {
     /// <summary>
     /// This <see cref="ICheck"/> is required for the <see cref="Recognizers.IRecognizer"/> to succeed.
@@ -363,25 +371,6 @@ internal static class CheckHelper
         ICheck subCheck) => new(
         parentCheck,
         subCheck );
-
-    /// <summary>
-    /// This method checks the value of the leaf nodes and returns true if all the children are correct and false in other cases
-    /// </summary>
-    internal static bool CheckAllChildrenCorrect(
-        ICheckResult checkResult)
-    {
-        if (checkResult is LeafCheckResult leafResult)
-        {
-            return leafResult.Correct;
-        }
-
-        if (checkResult is NodeCheckResult nodeResult)
-        {
-            return nodeResult.ChildrenCheckResults.All(childResult => CheckAllChildrenCorrect(childResult));
-        }
-
-        throw new ArgumentException($"Unknown ICheckResult type: {checkResult.GetType().Name}");
-    }
 }
 
 /// <summary>

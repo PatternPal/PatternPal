@@ -1,4 +1,6 @@
 ﻿{
   FeedbackMessage: The method has no parameters.,
-  Priority: Low
+  Priority: Low,
+  MatchedNode: UsesFunction,
+  NodeCheckCollectionWrapper: false
 }

@@ -13,6 +13,10 @@ namespace PatternPal.LoggingServer.Data
                 Configuration = configuration;
             }
 
+            /// <summary>
+            /// When initializing the context, use the connection string from appsettings.json. When in development with docker, this will be the connection string to the postgres container and host should be "postgres". Otherwise it will be the connection string to the postgres database.
+            /// </summary>
+            /// <param name="optionsBuilder"></param>
             protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             {
                 optionsBuilder.UseNpgsql(Configuration.GetConnectionString("PostgresConnection"));
