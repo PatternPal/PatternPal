@@ -159,7 +159,7 @@ public class RecognizerRunner
     /// Sorts the child <see cref="ICheckResult"/>s of a <see cref="NodeCheckResult"/> from least to most dependable, based on their <see cref="ICheckResult.DependencyCount"/>.
     /// </summary>
     /// <param name="result">The <see cref="NodeCheckResult"/> whose child <see cref="ICheckResult"/>s to sort.</param>
-    private void SortCheckResults(
+    internal static void SortCheckResults(
         NodeCheckResult result)
     {
         // Sort the child results of `result` recursively.
@@ -190,7 +190,7 @@ public class RecognizerRunner
     /// becomes empty because all its sub-<see cref="ICheckResult"/>s are pruned, we can also prune
     /// the <see cref="NodeCheckResult"/> itself.
     /// </remarks>
-    private bool FilterResults(
+    internal static bool FilterResults(
         NodeCheckResult parentCheckResult)
     {
         // TODO: Properly handle CheckCollectionKind.
@@ -260,7 +260,7 @@ public class RecognizerRunner
                             if (!FilterResults(nodeCheckResult)
                                 && notCheckResult.Priority == Priority.Knockout)
                             {
-                                resultsToBePruned.Add(nodeCheckResult);
+                                resultsToBePruned.Add(notCheckResult);
                             }
                             break;
                         }
