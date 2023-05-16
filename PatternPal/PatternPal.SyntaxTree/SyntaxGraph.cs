@@ -103,9 +103,9 @@ namespace PatternPal.SyntaxTree
                         entity,
                         out relations);
                     break;
-                case IMethod method:
-                    Relations.MethodRelations.TryGetValue(
-                        method,
+                case IMember member:
+                    Relations.MemberRelations.TryGetValue(
+                        member,
                         out relations);
                     break;
             }
@@ -118,7 +118,7 @@ namespace PatternPal.SyntaxTree
             return type switch
             {
                 RelationTargetKind.Entity => relations.Where(x => x.Target.IsT0),
-                RelationTargetKind.Method => relations.Where(x => x.Target.IsT1),
+                RelationTargetKind.Member => relations.Where(x => x.Target.IsT1),
                 _ => relations
             };
         }

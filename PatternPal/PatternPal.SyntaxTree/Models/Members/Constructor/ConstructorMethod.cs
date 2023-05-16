@@ -46,14 +46,14 @@ namespace PatternPal.SyntaxTree.Models.Members.Constructor
             return constructor.GetBody();
         }
 
-        public TypeSyntax GetReturnType()
-        {
-            return null;
-        }
-
         public IEntity GetParent()
         {
             return constructor.GetParent();
+        }
+
+        public SyntaxNode GetReturnType()
+        {
+            return GetParent().GetSyntaxNode();
         }
 
         public override string ToString()

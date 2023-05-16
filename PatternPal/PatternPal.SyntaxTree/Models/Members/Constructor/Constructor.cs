@@ -63,6 +63,11 @@ namespace PatternPal.SyntaxTree.Models.Members.Constructor
             return _parent;
         }
 
+        public SyntaxNode GetReturnType()
+        {
+            return GetParent().GetSyntaxNode();
+        }
+
         IEntity IChild<IEntity>.GetParent() { return GetParent(); }
 
         public override string ToString()

@@ -53,11 +53,11 @@ namespace PatternPal.SyntaxTree
         internal Dictionary< IEntity, List< Relation > > EntityRelations = new();
 
         //Dictionary to access relations of methods fast
-        internal Dictionary< IMethod, List< Relation > > MethodRelations = new();
+        internal Dictionary< IMember, List< Relation > > MemberRelations = new();
 
         private readonly SyntaxGraph _graph;
         private List< IEntity > _entities;
-        private List< IMethod > _methods = new();
+        private List< IMember > _members = new();
 
         public Relations(
             SyntaxGraph graph)
@@ -66,17 +66,17 @@ namespace PatternPal.SyntaxTree
         }
 
         /// <summary>
-        /// Creates Relations between entities and nodes.
+        /// Creates <see cref="Relation"/>'s between <see cref="IEntity"/>'s and <see cref="INode"/>'s.
         /// </summary>
         public void CreateEdges()
         {
             _entities = _graph.GetAll().Values.ToList();
 
-            //Get all methods
-            _methods.AddRange(
+            // Get all members
+            _members.AddRange(
                 _entities.SelectMany(
                     y =>
-                        y.GetMembers().OfType< IMethod >()));
+                        y.GetMembers()));
 
             foreach (IEntity entity in _entities)
             {
@@ -85,20 +85,20 @@ namespace PatternPal.SyntaxTree
                 CreateUsingEdges(entity);
             }
 
-            foreach (IMethod method in _methods)
+            foreach (IMember member in _members)
             {
-                CreateCreationalEdges(method);
-                CreateUsingEdges(method);
+                CreateCreationalEdges(member);
+                CreateUsingEdges(member);
             }
         }
 
         /// <summary>
-        /// Adds a relation from node1 to node2. It also adds the reversed relation from node2 to node1.
+        /// Adds a <see cref="Relation"/> from node1 to node2. It also adds the reversed <see cref="Relation"/> from node2 to node1.
         /// </summary>
-        /// <param name="node1">INode, can be IEntity or Method.</param>
-        /// <param name="node2">INode, can be IEntity or Method.</param>
-        /// <param name="type">The RelationType of the relation</param>
-        /// <exception cref="ArgumentException">Throws exception when trying to add a relation to or from a not supported type.</exception>
+        /// <param name="node1"><see cref="INode"/>, can be <see cref="IEntity"/> or <see cref="IMember"/>.</param>
+        /// <param name="node2"><see cref="INode"/>, can be <see cref="IEntity"/> or <see cref="IMember"/>.</param>
+        /// <param name="type">The <see cref="RelationType"/> of the <see cref="Relation"/></param>
+        /// <exception cref="ArgumentException">Throws exception when trying to add a <see cref="Relation"/> to or from a not supported type.</exception>
         private void AddRelation(
             INode ? node1,
             INode ? node2,
@@ -110,17 +110,17 @@ namespace PatternPal.SyntaxTree
                 return;
             }
 
-            OneOf< IEntity, IMethod > source = node1 switch
+            OneOf< IEntity, IMember > source = node1 switch
             {
-                IEntity entity => OneOf< IEntity, IMethod >.FromT0(entity),
-                IMethod method => OneOf< IEntity, IMethod >.FromT1(method),
+                IEntity entity => OneOf< IEntity, IMember >.FromT0(entity),
+                IMember member => OneOf< IEntity, IMember >.FromT1(member),
                 _ => throw new ArgumentException()
             };
 
-            OneOf< IEntity, IMethod > target = node2 switch
+            OneOf< IEntity, IMember > target = node2 switch
             {
-                IEntity entity => OneOf< IEntity, IMethod >.FromT0(entity),
-                IMethod method => OneOf< IEntity, IMethod >.FromT1(method),
+                IEntity entity => OneOf< IEntity, IMember >.FromT0(entity),
+                IMember member => OneOf< IEntity, IMember >.FromT1(member),
                 _ => throw new ArgumentException()
             };
 
@@ -152,6 +152,12 @@ namespace PatternPal.SyntaxTree
             relations.Add(relationReversed);
         }
 
+        /// <summary>
+        /// Helper function for <see cref="AddRelation"/>. This stores the <see cref="Relation"/> in the right place.
+        /// </summary>
+        /// <param name="node">The source of the <see cref="Relation"/></param>
+        /// <param name="relation">The <see cref="Relation"/> to store.</param>
+        /// <exception cref="ArgumentException">Throws exception when trying to add a <see cref="Relation"/> with a not supported <see cref="INode"/>.</exception>
         private void StoreRelation(
             INode node,
             Relation relation)
@@ -172,18 +178,18 @@ namespace PatternPal.SyntaxTree
                     entityRelations.Add(relation);
                     break;
                 }
-                case IMethod method:
+                case IMember member:
                 {
-                    if (!MethodRelations.TryGetValue(
-                        method,
-                        out List< Relation > ? methodRelations))
+                    if (!MemberRelations.TryGetValue(
+                        member,
+                        out List< Relation > ? memberRelations))
                     {
-                        methodRelations = new List< Relation >();
-                        MethodRelations.Add(
-                            method,
-                            methodRelations);
+                        memberRelations = new List< Relation >();
+                        MemberRelations.Add(
+                            member,
+                            memberRelations);
                     }
-                    methodRelations.Add(relation);
+                    memberRelations.Add(relation);
                     break;
                 }
                 default:
@@ -192,10 +198,10 @@ namespace PatternPal.SyntaxTree
         }
 
         /// <summary>
-        /// Gets the IEntity instance saved in the SyntaxGraph by analyzing the SemanticModel of the SyntaxTree (Roslyn).
+        /// Gets the <see cref="IEntity"/> instance saved in the <see cref="SyntaxGraph"/> by analyzing the <see cref="SemanticModel"/> of the <see cref="Microsoft.CodeAnalysis.SyntaxTree"/> (Roslyn).
         /// </summary>
-        /// <param name="syntaxNode">The SyntaxNode from which we want the belonging IEntity instance.</param>
-        /// <returns></returns>
+        /// <param name="syntaxNode">The <see cref="SyntaxNode"/> from which we want the belonging <see cref="IEntity"/> instance.</param>
+        /// <returns>The matched <see cref="IEntity"/></returns>
         public IEntity ? GetEntityByName(
             SyntaxNode syntaxNode)
         {
@@ -207,53 +213,58 @@ namespace PatternPal.SyntaxTree
 
             TypeDeclarationSyntax? entityDeclaration;
 
-            if (syntaxNode.Parent is MemberAccessExpressionSyntax && symbol.Symbol is IFieldSymbol fieldSymbol)
-            {
-                entityDeclaration = fieldSymbol.Type.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as TypeDeclarationSyntax;
-            }
-            else
-            {
-                entityDeclaration = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as TypeDeclarationSyntax;
-            }
-
+            entityDeclaration = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as TypeDeclarationSyntax;
+            
             return _entities.FirstOrDefault(x => x.GetSyntaxNode().IsEquivalentTo(entityDeclaration));
         }
 
         /// <summary>
-        /// Gets the Method instance saved in the SyntaxGraph by analyzing the SemanticModel of the SyntaxTree (Roslyn).
+        /// Gets the <see cref="IMember"/> instance saved in the <see cref="SyntaxGraph"/> by analyzing the <see cref="SemanticModel"/> of the <see cref="Microsoft.CodeAnalysis.SyntaxTree"/> (Roslyn).
         /// </summary>
-        /// <param name="methodNode">The SyntaxNode from which we want the belonging Method instance.</param>
-        /// <returns></returns>
-        private IMethod ? GetMethodByName(
-            SyntaxNode methodNode)
+        /// <param name="memberNode">The <see cref="SyntaxNode"/> from which we want the belonging <see cref="IMember"/> instance.</param>
+        /// <returns>The matched <see cref="IMember"/></returns>
+        private IMember ? GetMemberByName(
+            SyntaxNode memberNode)
         {
             SemanticModel semanticModel = SemanticModels.GetSemanticModel(
-                methodNode.SyntaxTree,
+                memberNode.SyntaxTree,
                 false);
 
-            SymbolInfo symbol = semanticModel.GetSymbolInfo(methodNode);
+            SymbolInfo symbol = semanticModel.GetSymbolInfo(memberNode);
 
-            MethodDeclarationSyntax? methodDeclaration = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as MethodDeclarationSyntax;
+            MemberDeclarationSyntax? memberDeclaration;
 
-            return _methods.FirstOrDefault(x => x.GetSyntaxNode().IsEquivalentTo(methodDeclaration));
+            SyntaxNode? declarationNode = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax();
+
+            //When a field is already declared, the DeclaringSyntaxReferences is a VariableDeclaratorSyntax
+            if (declarationNode is VariableDeclaratorSyntax)
+            {
+                memberDeclaration = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax().Parent?.Parent as MemberDeclarationSyntax;
+            }
+            else
+            {
+                memberDeclaration = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as MemberDeclarationSyntax;
+            }
+
+            return _members.FirstOrDefault(x => x.GetSyntaxNode().IsEquivalentTo(memberDeclaration));
         }
 
         /// <summary>
-        /// Tries to get a method from a <see cref="SyntaxGraph"/> by matching the method's name to all methods in a specific class
+        /// Tries to get a method from a <see cref="SyntaxGraph"/> by matching the member's name to all members in a specific class
         /// </summary>
-        /// <param name="graph">The <see cref="SyntaxGraph"/> in which the method can be found.</param>
-        /// <param name="className">The name of the class in which the method resides</param>
-        /// <param name="methodName">The name of the method</param>
+        /// <param name="graph">The <see cref="SyntaxGraph"/> in which the member can be found.</param>
+        /// <param name="className">The name of the class in which the member resides</param>
+        /// <param name="memberName">The name of the member</param>
         /// <returns></returns>
-        public static IMethod ? GetMethodFromGraph(SyntaxGraph graph, string className, string methodName)
+        public static IMember ? GetMemberFromGraph(SyntaxGraph graph, string className, string memberName)
         {
-            return graph.GetAll()[className].GetMethods().FirstOrDefault(x => x.GetName() == methodName);
+            return graph.GetAll()[className].GetMembers().FirstOrDefault(x => x.GetName() == memberName);
         }
 
         /// <summary>
-        /// Creates the Extend, ExtendedBy, Implements and ImplementedBy relations between two IEntities.
+        /// Creates the Extend, ExtendedBy, Implements and ImplementedBy relations between two <see cref="IEntity"/>'s.
         /// </summary>
-        /// <param name="entity">The IEntity which parents will be evaluated.</param>
+        /// <param name="entity">The <see cref="IEntity"/> which parents will be evaluated.</param>
         private void CreateParentEdges(
             IEntity entity)
         {
@@ -293,9 +304,9 @@ namespace PatternPal.SyntaxTree
         }
 
         /// <summary>
-        /// Creates the Creates and CreatedBy relations between IEntities en Methods.
+        /// Creates the Creates and CreatedBy relations between <see cref="IEntity"/>'s and <see cref="IMember"/>'s.
         /// </summary>
-        /// <param name="node">The IEntity or Method which descendant nodes will be evaluated</param>
+        /// <param name="node">The <see cref="IEntity"/> or <see cref="IMember"/> which descendant nodes will be evaluated</param>
         private void CreateCreationalEdges(
             INode node)
         {
@@ -337,9 +348,9 @@ namespace PatternPal.SyntaxTree
         }
 
         /// <summary>
-        /// Creates the Uses and UsedBy relations between IEntities and Methods
+        /// Creates the Uses and UsedBy relations between <see cref="IEntity"/>'s and <see cref="IMember"/>'s.
         /// </summary>
-        /// <param name="node">The IEntity or Method which descendant nodes will be evaluated</param>
+        /// <param name="node">The <see cref="IEntity"/> or <see cref="IMember"/> which descendant nodes will be evaluated</param>
         private void CreateUsingEdges(
             INode node)
         {
@@ -347,7 +358,7 @@ namespace PatternPal.SyntaxTree
 
             foreach (IdentifierNameSyntax identifier in childNodes.OfType< IdentifierNameSyntax >())
             {
-                INode node2 = (INode?)GetEntityByName(identifier) ?? GetMethodByName(identifier);
+                INode node2 = (INode?)GetEntityByName(identifier) ?? GetMemberByName(identifier);
 
                 AddRelation(
                     node,
@@ -359,8 +370,8 @@ namespace PatternPal.SyntaxTree
         /// <summary>
         /// Helper function to retrieve all descendant nodes of a node.
         /// </summary>
-        /// <param name="node"></param>
-        /// <returns></returns>
+        /// <param name="node">The <see cref="IEntity"/> or <see cref="IMember"/> which descendant <see cref="SyntaxNode"/>'s will be found</param>
+        /// <returns>List of descendant <see cref="SyntaxNode"/>'s of an <see cref="INode"/></returns>
         private List< SyntaxNode > GetChildNodes(
             INode node)
         {
@@ -373,21 +384,21 @@ namespace PatternPal.SyntaxTree
                         childNodes.AddRange(member.GetSyntaxNode().DescendantNodes());
                     }
                     break;
-                case Method methodNode:
-                    childNodes.AddRange(methodNode.GetSyntaxNode().DescendantNodes());
+                case IMember memberNode:
+                    childNodes.AddRange(memberNode.GetSyntaxNode().DescendantNodes());
                     break;
             }
             return childNodes;
         }
 
         /// <summary>
-        /// Resets the relation lists.
+        /// Resets the lists of <see cref="Relation"/>'s.
         /// </summary>
         public void Reset()
         {
             relations = new List< Relation >();
             EntityRelations = new Dictionary< IEntity, List< Relation > >();
-            MethodRelations = new Dictionary< IMethod, List< Relation > >();
+            MemberRelations = new Dictionary< IMember, List< Relation > >();
         }
     }
 }
