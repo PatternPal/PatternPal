@@ -1,12 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SyntaxTree.Abstractions;
-using SyntaxTree.Abstractions.Root;
-using SyntaxTree.Models.Members.Constructor;
-using SyntaxTree.Models.Members.Field;
 
-namespace SyntaxTree.Models.Entities
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+using PatternPal.SyntaxTree.Abstractions;
+using PatternPal.SyntaxTree.Abstractions.Entities;
+using PatternPal.SyntaxTree.Abstractions.Members;
+using PatternPal.SyntaxTree.Abstractions.Root;
+using PatternPal.SyntaxTree.Models.Members.Constructor;
+using PatternPal.SyntaxTree.Models.Members.Field;
+
+namespace PatternPal.SyntaxTree.Models.Entities
 {
     public class Class : AbstractEntity, IClass
     {

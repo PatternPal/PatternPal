@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using PatternPal.LoggingServer.Models;
-
+using PatternPal.LoggingServer;
 namespace PatternPal.LoggingServer.Models
 {
 

@@ -3,24 +3,30 @@
   Priority: Low,
   ChildrenCheckResults: [
     {
-      FeedbackMessage: Found method: DoSomething().,
+      FeedbackMessage: ,
       Priority: Low,
       ChildrenCheckResults: [
         {
-          FeedbackMessage: The node DoSomething() does not have the public modifier.,
-          Priority: Mid,
-          Correct: false
-        }
-      ]
-    },
-    {
-      FeedbackMessage: Found method: CalculateSomething().,
-      Priority: Low,
-      ChildrenCheckResults: [
+          FeedbackMessage: Found method: DoSomething().,
+          Priority: Low,
+          ChildrenCheckResults: [
+            {
+              FeedbackMessage: The node DoSomething() does not have the public modifier.,
+              Priority: Mid,
+              Correct: false
+            }
+          ]
+        },
         {
-          FeedbackMessage: The node CalculateSomething() does not have the public modifier.,
-          Priority: Mid,
-          Correct: false
+          FeedbackMessage: Found method: CalculateSomething().,
+          Priority: Low,
+          ChildrenCheckResults: [
+            {
+              FeedbackMessage: The node CalculateSomething() does not have the public modifier.,
+              Priority: Mid,
+              Correct: false
+            }
+          ]
         }
       ]
     }

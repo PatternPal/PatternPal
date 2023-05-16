@@ -3,12 +3,9 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using EnvDTE;
-
 using System.ComponentModel;
-
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-
 using PatternPal.Extension.Commands;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Threading;
@@ -16,6 +13,7 @@ using Microsoft.VisualStudio.RpcContracts.Commands;
 using System.Management.Instrumentation;
 using System.Reflection.Metadata;
 using System.Runtime.Remoting.Contexts;
+using static Microsoft.VisualStudio.Shell.ThreadedWaitDialogHelper;
 
 namespace PatternPal.Extension
 {
@@ -45,7 +43,7 @@ namespace PatternPal.Extension
         AllowsBackgroundLoading = true)]
     [Guid(PackageGuidString)]
     [ProvideOptionPage(
-        typeof( PatternPalOptionPageGrid ),
+        typeof(PatternPalOptionPageGrid),
         "PatternPal",
         "Privacy",
         0,
@@ -69,7 +67,8 @@ namespace PatternPal.Extension
         {
             get
             {
-                PatternPalOptionPageGrid page = (PatternPalOptionPageGrid)GetDialogPage(typeof( PatternPalOptionPageGrid ));
+                PatternPalOptionPageGrid page =
+                    (PatternPalOptionPageGrid)GetDialogPage(typeof(PatternPalOptionPageGrid));
                 return page.DoLogData;
             }
         }
@@ -89,9 +88,8 @@ namespace PatternPal.Extension
         /// </returns>
         protected override async Task InitializeAsync(
             CancellationToken cancellationToken,
-            IProgress< ServiceProgressData > progress)
+            IProgress<ServiceProgressData> progress)
         {
-
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
@@ -99,8 +97,6 @@ namespace PatternPal.Extension
             SubscribeEvents.Initialize(
                 dte,
                 this, cancellationToken);
-
-
         }
 
         /// <summary>
@@ -115,11 +111,10 @@ namespace PatternPal.Extension
                 SubscribeEvents.OnSessionEnd();
             }
 
-            canClose = true; 
+            canClose = true;
             return VSConstants.S_OK;
         }
 
-  
         #endregion
     }
 
@@ -129,21 +124,39 @@ namespace PatternPal.Extension
 
         [Category("Privacy")]
         [DisplayName("Log data")]
-        [Description("Whether PatternPal can log your data. The data which gets logged are your actions and your source code. This is used for research. This option is turned off by default.")]
+        [Description(
+            "Whether PatternPal can log your data. The data which gets logged are your actions and your source code. This is used for research. This option is turned off by default.")]
         public bool DoLogData
         {
             get { return _doLogData; }
             set
             {
-                ThreadHelper.JoinableTaskFactory.Run(async () => {
+                // Set is triggered both when changing the field value, as well as when clicking on the OK button.
+                // This prevents the code from being triggered twice.
+                if (value == _doLogData) return;
+
+                ThreadHelper.JoinableTaskFactory.Run(async () =>
+                {
                     await (value
                         ? SubscribeEvents.SubscribeEventHandlersAsync()
-                            : SubscribeEvents.UnsubscribeEventHandlersAsync());
+                        : SubscribeEvents.UnsubscribeEventHandlersAsync());
                 });
+
+                // The SessionId has to be reset if the option for logging data is changed to prevent logging without a session id. 
+                // In other words, a new session has to be started.
+                if (value)
+                {
+                    SubscribeEvents.OnSessionStart();
+                }
+                else
+                {
+                    SubscribeEvents.OnSessionEnd();
+                }
+
                 _doLogData = value;
             }
         }
-     }
+    }
 
 
     public enum Mode
@@ -151,6 +164,4 @@ namespace PatternPal.Extension
         Default,
         StepByStep
     }
-
 }
-

@@ -1,8 +1,9 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-using SyntaxTree.Abstractions.Root;
+using PatternPal.SyntaxTree.Abstractions.Entities;
+using PatternPal.SyntaxTree.Abstractions.Root;
 
-namespace SyntaxTree.Models.Entities
+namespace PatternPal.SyntaxTree.Models.Entities
 {
     public class Interface : AbstractEntity, IInterface
     {

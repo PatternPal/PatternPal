@@ -13,9 +13,11 @@ using PatternPal.StepByStep.Models;
 using PatternPal.StepByStep.Resources.Instructions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SyntaxTree.Abstractions;
-using SyntaxTree.Abstractions.Entities;
-using SyntaxTree.Models;
+
+using PatternPal.SyntaxTree.Abstractions;
+using PatternPal.SyntaxTree.Abstractions.Entities;
+using PatternPal.SyntaxTree.Models;
+
 using static PatternPal.Core.Resources.DesignPatternNameResources;
 
 namespace PatternPal.StepByStep.InstructionSets

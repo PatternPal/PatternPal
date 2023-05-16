@@ -1,62 +1,28 @@
-﻿using Microsoft.CodeAnalysis.VisualBasic;
-using PatternPal.Recognizers.Models.Checks;
-
-namespace PatternPal.Core.Checks;
+﻿namespace PatternPal.Core.Checks;
 
 /// <summary>
-/// An instance in which you can execute <see cref="ModifierCheck"/>s and <see cref="TypeCheck"/>s via a list of <see cref="_checks"/> on a field.
+/// <see cref="ICheck"/> implementation for <see cref="IField"/> entities.
 /// </summary>
-internal class FieldCheck : CheckBase
+internal class FieldCheck : NodeCheck< IField >
 {
-    private readonly IEnumerable<ICheck> _checks;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="FieldCheck"/> class. 
-    /// </summary>
-    /// <param name="priority">Priority of the check.</param>
-    /// <param name="checks">A list of subchecks that should be tested</param>
-    internal FieldCheck(Priority priority, 
-        IEnumerable<ICheck> checks) : base(priority)
+    /// <inheritdoc cref="NodeCheck{TNode}"/>
+    internal FieldCheck(
+        Priority priority,
+        IEnumerable< ICheck > checks)
+        : base(
+            priority,
+            checks)
     {
-        _checks = checks;
     }
 
-    /// <summary>
-    /// This method executes all the given <see cref="ModifierCheck"/>s, <see cref="NotCheck"/>s and <see cref="TypeCheck"/>s on the <paramref name="node"/>
-    /// </summary>
-    public override ICheckResult Check(RecognizerContext ctx, INode node)
-    {
-        IField fieldEntity = CheckHelper.ConvertNodeElseThrow<IField>(node);
-        IList<ICheckResult> subCheckResults = new List<ICheckResult>();
-        
-        foreach (ICheck check in _checks)
-        {
-            switch (check)
-            {
-                case ModifierCheck modifierCheck:
-                {
-                    subCheckResults.Add(modifierCheck.Check(ctx, fieldEntity));
-                    break;
-                }
-                case TypeCheck typeCheck:
-                {
-                    subCheckResults.Add(typeCheck.Check(ctx, fieldEntity));
-                    break;
-                }
-                case NotCheck notCheck:
-                {
-                    subCheckResults.Add(notCheck.Check(ctx, fieldEntity));
-                    break;
-                }
-                default:
-                    throw CheckHelper.InvalidSubCheck(this, check);
-            }
-        }
-        return new NodeCheckResult
-        {
-            ChildrenCheckResults = subCheckResults,
-            FeedbackMessage = $"Found field '{fieldEntity}'",
-            Priority = Priority
-        };
-    }
+    /// <inheritdoc path="//summary|//param" />
+    /// <returns>The <see cref="IEntity"/> which represents the type constructed by the <see cref="IField"/>.</returns>
+    protected override IEntity GetType4TypeCheck(
+        IRecognizerContext ctx,
+        IField node) => ctx.Graph.Relations.GetEntityByName(node.GetFieldType())!;
+
+
+    /// <inheritdoc />
+    protected override string GetFeedbackMessage(
+        IField node) => $"Found field '{node}'";
 }

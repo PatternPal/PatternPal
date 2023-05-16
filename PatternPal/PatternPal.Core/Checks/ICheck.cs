@@ -1,10 +1,13 @@
-﻿namespace PatternPal.Core.Checks;
+﻿using PatternPal.SyntaxTree;
+using PatternPal.SyntaxTree.Models;
+
+namespace PatternPal.Core.Checks;
 
 /// <summary>
 /// Function which can be called to get an <see cref="IEntity"/>.
 /// </summary>
 internal delegate IEntity GetCurrentEntity(
-    RecognizerContext ctx);
+    IRecognizerContext ctx);
 
 /// <summary>
 /// Represents a check, which is a part of a <see cref="Recognizers.IRecognizer"/> responsible for checking
@@ -32,7 +35,7 @@ internal interface ICheck
     /// <param name="node">The <see cref="INode"/> to be checked.</param>
     /// <returns>An <see cref="ICheckResult"/> which represents the result of the check.</returns>
     ICheckResult Check(
-        RecognizerContext ctx,
+        IRecognizerContext ctx,
         INode node);
 }
 
@@ -55,7 +58,7 @@ internal abstract class CheckBase : ICheck
 
     /// <inheritdoc />
     public abstract ICheckResult Check(
-        RecognizerContext ctx,
+        IRecognizerContext ctx,
         INode node);
 }
 
@@ -112,12 +115,12 @@ internal static class CheckBuilder
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="CheckCollection"/>.</param>
     /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="CheckCollection"/>.</param>
     /// <returns>The created <see cref="CheckCollection"/>.</returns>
-    internal static CheckCollection Any(
+    internal static NodeCheck< INode > Any(
         Priority priority,
         params ICheck[ ] checks) => new(
         priority,
-        CheckCollectionKind.Any,
-        checks );
+        checks,
+        CheckCollectionKind.Any );
 
     /// <summary>
     /// Creates a new <see cref="CheckCollection"/> of kind <see cref="CheckCollectionKind.All"/>
@@ -125,9 +128,11 @@ internal static class CheckBuilder
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="CheckCollection"/>.</param>
     /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="CheckCollection"/>.</param>
     /// <returns>The created <see cref="CheckCollection"/>.</returns>
-    internal static CheckCollection All(
+    internal static NodeCheck< INode > All(
         Priority priority,
-        params ICheck[] checks) => new(priority, CheckCollectionKind.All, checks);
+        params ICheck[ ] checks) => new(
+        priority,
+        checks );
 
     /// <summary>
     /// Creates a new <see cref="NotCheck"/>.
@@ -274,10 +279,10 @@ internal static class CheckBuilder
     /// <returns>The created <see cref="RelationCheck"/>.</returns>
     internal static RelationCheck Inherits(
         Priority priority,
-        Func<List<INode>> getMatchedNodes) => new(
+        Func< List< INode > > getMatchedNodes) => new(
         priority,
         RelationType.Extends,
-        getMatchedNodes);
+        getMatchedNodes );
 
     /// <summary>
     /// Creates a new <see cref="RelationCheck"/> for an implements relation.
@@ -287,10 +292,10 @@ internal static class CheckBuilder
     /// <returns>The created <see cref="RelationCheck"/>.</returns>
     internal static RelationCheck Implements(
         Priority priority,
-        Func<List<INode>> getMatchedNodes) => new(
+        Func< List< INode > > getMatchedNodes) => new(
         priority,
         RelationType.Implements,
-        getMatchedNodes);
+        getMatchedNodes );
 
     /// <summary>
     /// Creates a new <see cref="RelationCheck"/> for a creation relation.
@@ -300,10 +305,10 @@ internal static class CheckBuilder
     /// <returns>The created <see cref="RelationCheck"/>.</returns>
     internal static RelationCheck Creates(
         Priority priority,
-        Func<List<INode>> getMatchedNodes) => new(
+        Func< List< INode > > getMatchedNodes) => new(
         priority,
         RelationType.Creates,
-        getMatchedNodes);
+        getMatchedNodes );
 
     /// <summary>
     /// Creates a new <see cref="FieldCheck"/>.
@@ -344,7 +349,7 @@ internal static class CheckHelper
     internal static T ConvertNodeElseThrow< T >(
         INode node)
         where T : INode => node is not T asT
-        ? throw IncorrectNodeTypeException.From< T >()
+        ? throw IncorrectNodeTypeException.From< T >(node)
         : asT;
 
     /// <summary>
@@ -362,7 +367,8 @@ internal static class CheckHelper
     /// <summary>
     /// This method checks the value of the leaf nodes and returns true if all the children are correct and false in other cases
     /// </summary>
-    internal static bool CheckAllChildrenCorrect(ICheckResult checkResult)
+    internal static bool CheckAllChildrenCorrect(
+        ICheckResult checkResult)
     {
         if (checkResult is LeafCheckResult leafResult)
         {
@@ -375,7 +381,6 @@ internal static class CheckHelper
         }
 
         throw new ArgumentException($"Unknown ICheckResult type: {checkResult.GetType().Name}");
-
     }
 }
 
@@ -388,16 +393,22 @@ internal sealed class IncorrectNodeTypeException : Exception
     /// Initializes a new instance of the <see cref="IncorrectNodeTypeException"/> class for the given <paramref name="type"/>
     /// </summary>
     /// <param name="type">The type to which the instance could not be converted.</param>
+    /// <param name="node">The <see cref="INode"/> which could not be converted.</param>
     private IncorrectNodeTypeException(
-        Type type)
-        : base($"Node must be of type '{type}'")
+        Type type,
+        INode ? node)
+        : base($"Node must be of type '{type}', but is of type '{(node is null ? "<null>" : node.GetType())}'")
     {
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="IncorrectNodeTypeException"/> class for the given <see cref="T"/>.
     /// </summary>
-    internal static IncorrectNodeTypeException From< T >() => new( typeof( T ) );
+    /// <param name="node">The <see cref="INode"/> which could not be converted.</param>
+    internal static IncorrectNodeTypeException From< T >(
+        INode ? node) => new(
+        typeof( T ),
+        node );
 }
 
 /// <summary>

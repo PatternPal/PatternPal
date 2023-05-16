@@ -1,6 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace SyntaxTree.Abstractions.Members
+namespace PatternPal.SyntaxTree.Abstractions.Members
 {
     public interface IField : IMember
     {

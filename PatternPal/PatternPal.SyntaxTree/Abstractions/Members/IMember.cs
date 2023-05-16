@@ -1,4 +1,6 @@
-﻿namespace SyntaxTree.Abstractions.Members
+﻿using PatternPal.SyntaxTree.Abstractions.Entities;
+
+namespace PatternPal.SyntaxTree.Abstractions.Members
 {
     public interface IMember : IModified, IChild<IEntity>
     {

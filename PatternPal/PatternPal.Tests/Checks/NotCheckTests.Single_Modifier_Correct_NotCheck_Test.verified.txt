@@ -1,0 +1,16 @@
+﻿{
+  FeedbackMessage: Found the required checks for: Test.,
+  Priority: Low,
+  ChildrenCheckResults: [
+    {
+      FeedbackMessage: ,
+      Priority: Low,
+      NestedResult: {
+        FeedbackMessage: The node Test does not have the private modifier.,
+        Priority: Low,
+        Correct: false
+      }
+    }
+  ],
+  CollectionKind: Any
+}

@@ -1,10 +1,14 @@
 ﻿using System.Collections.Generic;
+
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SyntaxTree.Abstractions;
-using SyntaxTree.Utils;
 
-namespace SyntaxTree.Models.Members.Method
+using PatternPal.SyntaxTree.Abstractions;
+using PatternPal.SyntaxTree.Abstractions.Entities;
+using PatternPal.SyntaxTree.Abstractions.Members;
+using PatternPal.SyntaxTree.Utils;
+
+namespace PatternPal.SyntaxTree.Models.Members.Method
 {
     public class Method : AbstractNode, IMethod
     {
