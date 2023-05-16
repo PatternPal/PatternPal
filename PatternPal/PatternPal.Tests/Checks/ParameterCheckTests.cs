@@ -19,13 +19,13 @@ public class ParameterCheckTests
         IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
 
         // Obtain the StringTestFunction method (3 parameters)
-        IMethod stringNode = Relations.GetMethodFromGraph(
+        IMethod stringNode = EntityNodeUtils.GetMemberFromGraph<IMethod>(
             graph,
             "StringTest",
             "StringTestFunction");
 
         // Obtain the IntTest method (1 StringTest parameter)
-        IMethod intNode = Relations.GetMethodFromGraph(
+        IMethod intNode = EntityNodeUtils.GetMemberFromGraph<IMethod>(
             graph,
             "IntTest",
             "IntTestFunction");
@@ -77,14 +77,8 @@ public class ParameterCheckTests
         SyntaxGraph graph = EntityNodeUtils.CreateMethodWithParamaters();
         IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
 
-        // Obtain the StringTestFunction method (3 parameters)
-        IMethod stringNode = Relations.GetMethodFromGraph(
-            graph,
-            "StringTest",
-            "StringTestFunction");
-
         // Obtain the IntTest method (1 StringTest parameter)
-        IMethod intNode = Relations.GetMethodFromGraph(
+        IMethod intNode = EntityNodeUtils.GetMemberFromGraph<IMethod>(
             graph,
             "IntTest",
             "IntTestFunction");
@@ -130,14 +124,12 @@ public class ParameterCheckTests
         IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
 
         // Obtain the StringTestFunction method (3 parameters)
-        IMethod stringNode = Relations.GetMethodFromGraph(
-            graph,
+        IMethod stringNode = EntityNodeUtils.GetMemberFromGraph<IMethod>(graph,
             "StringTest",
             "StringTestFunction");
 
         // Obtain the IntTest method (1 StringTest parameter)
-        IMethod intNode = Relations.GetMethodFromGraph(
-            graph,
+        IMethod intNode = EntityNodeUtils.GetMemberFromGraph<IMethod>(graph,
             "IntTest",
             "IntTestFunction");
 
@@ -179,7 +171,8 @@ public class ParameterCheckTests
         IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
 
         // Obtain method with 0 parameters from syntax graph.
-        IMethod stringNode = Relations.GetMethodFromGraph(
+
+        IMethod stringNode = EntityNodeUtils.GetMemberFromGraph<IMethod>(
             graph,
             "Uses",
             "UsesFunction");
@@ -205,13 +198,13 @@ public class ParameterCheckTests
         IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
 
         // Obtain the StringTestFunction method (3 parameters)
-        IMethod stringNode = Relations.GetMethodFromGraph(
+        IMethod stringNode = EntityNodeUtils.GetMemberFromGraph<IMethod>(
             graph,
             "StringTest",
             "StringTestFunction");
 
         // Obtain the IntTest method (1 StringTest parameter)
-        IMethod intNode = Relations.GetMethodFromGraph(
+        IMethod intNode = EntityNodeUtils.GetMemberFromGraph<IMethod>(
             graph,
             "IntTest",
             "IntTestFunction");

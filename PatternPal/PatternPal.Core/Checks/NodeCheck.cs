@@ -1,4 +1,4 @@
-﻿namespace PatternPal.Core.Checks;
+namespace PatternPal.Core.Checks;
 
 /// <summary>
 /// Base class for <see cref="ICheck"/>s which can have sub-<see cref="ICheck"/>s.
@@ -185,7 +185,7 @@ internal class NodeCheck< TNode > : CheckBase
                     notCheck.NestedCheck);
                 return new NotCheckResult
                        {
-                           FeedbackMessage = string.Empty,
+                           FeedbackMessage = "Executing NOT-check",
                            NestedResult = nestedResult,
                            Priority = notCheck.Priority,
                            DependencyCount = notCheck.DependencyCount,

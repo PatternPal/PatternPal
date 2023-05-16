@@ -1,0 +1,172 @@
+﻿[
+  {
+    FeedbackMessage: Found class 'MockClass1',
+    Priority: Low,
+    ChildrenCheckResults: [
+      {
+        FeedbackMessage: ,
+        Priority: Low,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found method: GetInstance().,
+            Priority: Low,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: Found Uses relations for GetInstance().,
+                Priority: Mid,
+                DependencyCount: 1,
+                MatchedNode: GetInstance,
+                NodeCheckCollectionWrapper: false
+              }
+            ],
+            DependencyCount: 1,
+            MatchedNode: GetInstance,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        DependencyCount: 1,
+        NodeCheckCollectionWrapper: true
+      }
+    ],
+    DependencyCount: 1,
+    MatchedNode: MockClass1,
+    NodeCheckCollectionWrapper: false
+  },
+  {
+    FeedbackMessage: Found class 'MockClass2',
+    Priority: Low,
+    ChildrenCheckResults: [
+      {
+        FeedbackMessage: ,
+        Priority: Low,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found method: GetInstance().,
+            Priority: Low,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: Found Uses relations for GetInstance().,
+                Priority: Mid,
+                DependencyCount: 1,
+                MatchedNode: GetInstance,
+                NodeCheckCollectionWrapper: false
+              }
+            ],
+            DependencyCount: 1,
+            MatchedNode: GetInstance,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        DependencyCount: 1,
+        NodeCheckCollectionWrapper: true
+      }
+    ],
+    DependencyCount: 1,
+    MatchedNode: MockClass2,
+    NodeCheckCollectionWrapper: false
+  },
+  {
+    FeedbackMessage: Found class 'MockClass3',
+    Priority: Low,
+    ChildrenCheckResults: [
+      {
+        FeedbackMessage: ,
+        Priority: Low,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found method: GetInstance().,
+            Priority: Low,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: Found Uses relations for GetInstance().,
+                Priority: Mid,
+                DependencyCount: 1,
+                MatchedNode: GetInstance,
+                NodeCheckCollectionWrapper: false
+              }
+            ],
+            DependencyCount: 1,
+            MatchedNode: GetInstance,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        DependencyCount: 1,
+        NodeCheckCollectionWrapper: true
+      }
+    ],
+    DependencyCount: 1,
+    MatchedNode: MockClass3,
+    NodeCheckCollectionWrapper: false
+  },
+  {
+    FeedbackMessage: Found class 'MockClass4',
+    Priority: Low,
+    ChildrenCheckResults: [
+      {
+        FeedbackMessage: ,
+        Priority: Low,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found method: GetInstance().,
+            Priority: Low,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: Found Uses relations for GetInstance().,
+                Priority: Mid,
+                DependencyCount: 1,
+                MatchedNode: GetInstance,
+                NodeCheckCollectionWrapper: false
+              }
+            ],
+            DependencyCount: 1,
+            MatchedNode: GetInstance,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        DependencyCount: 1,
+        NodeCheckCollectionWrapper: true
+      }
+    ],
+    DependencyCount: 1,
+    MatchedNode: MockClass4,
+    NodeCheckCollectionWrapper: false
+  },
+  {
+    FeedbackMessage: Found class 'MockClass5',
+    Priority: Low,
+    ChildrenCheckResults: [
+      {
+        FeedbackMessage: ,
+        Priority: Low,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found method: GetInstance().,
+            Priority: Low,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: Found Uses relations for GetInstance().,
+                Priority: Mid,
+                DependencyCount: 1,
+                MatchedNode: GetInstance,
+                NodeCheckCollectionWrapper: false
+              }
+            ],
+            DependencyCount: 1,
+            MatchedNode: GetInstance,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        DependencyCount: 1,
+        NodeCheckCollectionWrapper: true
+      }
+    ],
+    DependencyCount: 1,
+    MatchedNode: MockClass5,
+    NodeCheckCollectionWrapper: false
+  }
+]

@@ -1,0 +1,146 @@
+﻿[
+  {
+    FeedbackMessage: Found class 'MockClass1',
+    Priority: Low,
+    ChildrenCheckResults: [
+      {
+        FeedbackMessage: ,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found field 'name',
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: Modifiers correctly implemented.,
+                Correct: true,
+                MatchedNode: name
+              },
+              {
+                FeedbackMessage: Node 'MockClass1' has correct type,
+                Correct: true,
+                DependencyCount: 1,
+                MatchedNode: MockClass1
+              }
+            ],
+            DependencyCount: 1,
+            MatchedNode: name,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        DependencyCount: 1,
+        NodeCheckCollectionWrapper: true
+      }
+    ],
+    DependencyCount: 1,
+    MatchedNode: MockClass1,
+    NodeCheckCollectionWrapper: false
+  },
+  {
+    FeedbackMessage: Found class 'MockClass2',
+    Priority: Low,
+    ChildrenCheckResults: [
+      {
+        FeedbackMessage: ,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found field 'name',
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: The node name does not have the static modifier.,
+                Correct: false,
+                MatchedNode: name
+              },
+              {
+                FeedbackMessage: Node 'MockClass2' has correct type,
+                Correct: true,
+                DependencyCount: 1,
+                MatchedNode: MockClass2
+              }
+            ],
+            DependencyCount: 1,
+            MatchedNode: name,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        DependencyCount: 1,
+        NodeCheckCollectionWrapper: true
+      }
+    ],
+    DependencyCount: 1,
+    MatchedNode: MockClass2,
+    NodeCheckCollectionWrapper: false
+  },
+  {
+    FeedbackMessage: Found class 'MockClass3',
+    Priority: Low,
+    ChildrenCheckResults: [
+      {
+        FeedbackMessage: ,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found field 'name',
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: The node name does not have the private modifier.,
+                Correct: false,
+                MatchedNode: name
+              },
+              {
+                FeedbackMessage: Node 'MockClass3' has correct type,
+                Correct: true,
+                DependencyCount: 1,
+                MatchedNode: MockClass3
+              }
+            ],
+            DependencyCount: 1,
+            MatchedNode: name,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        DependencyCount: 1,
+        NodeCheckCollectionWrapper: true
+      }
+    ],
+    DependencyCount: 1,
+    MatchedNode: MockClass3,
+    NodeCheckCollectionWrapper: false
+  },
+  {
+    FeedbackMessage: Found class 'MockClass4',
+    Priority: Low,
+    ChildrenCheckResults: [
+      {
+        FeedbackMessage: ,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found field 'name',
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: Modifiers correctly implemented.,
+                Correct: true,
+                MatchedNode: name
+              },
+              {
+                FeedbackMessage: Node 'MockClass1' has incorrect type, expected 'MockClass4',
+                Correct: false,
+                DependencyCount: 1,
+                MatchedNode: MockClass1
+              }
+            ],
+            DependencyCount: 1,
+            MatchedNode: name,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        DependencyCount: 1,
+        NodeCheckCollectionWrapper: true
+      }
+    ],
+    DependencyCount: 1,
+    MatchedNode: MockClass4,
+    NodeCheckCollectionWrapper: false
+  }
+]
