@@ -65,7 +65,7 @@ public class LeafCheckResult : ICheckResult
     public required ICheck Check { get; init; }
 
     /// <inheritdoc />
-    public required bool Pruned { get; set; }
+    public bool Pruned { get; set; }
 
     public ICheck RelatedCheck { get; init; }
 
@@ -101,7 +101,6 @@ public class NotCheckResult : ICheckResult
     public required ICheck Check { get; init; }
 
     /// <inheritdoc />
-    public required bool Pruned { get; set; }
 
     internal NotCheckResult()
     {
@@ -153,7 +152,7 @@ public class NodeCheckResult : ICheckResult
     public required ICheck Check { get; init; }
 
     /// <inheritdoc />
-    public required bool Pruned { get; set; }
+    public  bool Pruned { get; set; }
 
     internal NodeCheckResult()
     {
