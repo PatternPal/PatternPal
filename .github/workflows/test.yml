@@ -1,25 +1,20 @@
 name: Test
 
 on:
-  push:
-    branches:
-      - master
-      - develop
-    paths:
-      - 'PatternPal/**'
-  pull_request:
-    types: [ opened, synchronize, reopened, ready_for_review ]
-    paths:
-      - 'PatternPal/**'
+  workflow_call:
+    inputs:
+      should_run:
+        required: true
+        type: boolean
   workflow_dispatch:
-    
+
 jobs:
   Test:
     runs-on: windows-latest
-    if: github.event.pull_request.draft == false
+    if: inputs.should_run
     steps:
       - uses: actions/checkout@v3
-      
+
       - uses: actions/cache@v3
         with:
           path: ~/.nuget/packages
@@ -27,7 +22,7 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
-      
+
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1.3.1
         with:
@@ -35,10 +30,10 @@ jobs:
 
       - name: Remove extension
         run: dotnet sln PatternPal/PatternPal.sln remove PatternPal/PatternPal.Extension/PatternPal.Extension.csproj
-           
+
       - name: Restore NuGet Packages
         run: nuget restore PatternPal/PatternPal.sln
-        
+
       - name: Build
         run: msbuild PatternPal/PatternPal.sln
 

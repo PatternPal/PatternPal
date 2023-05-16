@@ -1,0 +1,51 @@
+# This is the root GH action, which in turn calls the specific GH actions for building, testing, ect.
+# The reason the GH actions are organized in this way is to support skipping them when there are
+# only changes in the `docs/` folder. To make the step which checks this reusable across workflows,
+# we use this root workflow to wrap the other workflows. If there are only changes in the `docs/`
+# folder, or if the PR is in draft mode, we skip all the other actions.
+
+name: PatternPal
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
+
+jobs:
+  should_run:
+    outputs:
+      status: ${{ steps.has-changes.conclusion }}
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - uses: actions/checkout@v3
+      - uses: tj-actions/changed-files@v35
+        id: changed-files
+        with:
+          files: PatternPal/**
+      - name: Check for changed files
+        if: steps.changed-files.outputs.any_changed == 'true'
+        id: has-changes
+        run: echo PatternPal has changed files
+
+  build:
+    needs: should_run
+    uses: ./.github/workflows/build.yml
+    with:
+      should_run: ${{ needs.should_run.outputs.status == 'success' }}
+
+  test:
+    needs: should_run
+    uses: ./.github/workflows/test.yml
+    with:
+      should_run: ${{ needs.should_run.outputs.status == 'success' }}
+
+  lint:
+    needs: should_run
+    uses: ./.github/workflows/lint.yml
+    with:
+      should_run: ${{ needs.should_run.outputs.status == 'success' }}

@@ -1,4 +1,6 @@
 ﻿{
   FeedbackMessage: Found class 'Test',
-  Priority: Low
+  Priority: Low,
+  MatchedNode: Test,
+  NodeCheckCollectionWrapper: false
 }

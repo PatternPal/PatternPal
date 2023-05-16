@@ -1,44 +1,39 @@
-﻿using Microsoft.CodeAnalysis.Operations;
+﻿namespace PatternPal.Core.Checks;
 
-namespace PatternPal.Core.Checks;
-
+/// <summary>
+/// Placeholder for a not-<see cref="ICheck"/>. The actual implementation lives in <see cref="NodeCheck{TNode}"/>.
+/// </summary>
 internal class NotCheck : CheckBase
 {
-    private readonly ICheck _check;
-
-    internal NotCheck(Priority priority,
-        ICheck check) : base(priority)
-    {
-        _check = check;
-    }
-
+    /// <summary>
+    /// The nested <see cref="ICheck"/> which should not pass.
+    /// </summary>
+    internal ICheck NestedCheck { get; }
 
     /// <summary>
-    /// This method executes all the given checks on the <paramref name="node"/>
-    /// In the subCheckResults the instances that fail the test will be stored. Thus the test succeeds when there is an empty childrenCheckResult List.
+    /// A <see cref="NotCheck"/> does not add any dependencies on top of the ones its <see cref="NestedCheck"/> has.
+    /// Thus its amount of dependencies is equal to the amount of dependencies its <see cref="NestedCheck"/> has.
     /// </summary>
+    public override int DependencyCount => NestedCheck.DependencyCount;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="NotCheck"/> class.
+    /// </summary>
+    /// <param name="priority"><see cref="Priority"/> of the check.</param>
+    /// <param name="check"><see cref="ICheck"/> which should not pass.</param>
+    internal NotCheck(
+        Priority priority,
+        ICheck check)
+        : base(priority)
+    {
+        NestedCheck = check;
+    }
+
+    /// <inheritdoc />
     public override ICheckResult Check(
-        RecognizerContext ctx,
+        IRecognizerContext ctx,
         INode node)
     {
-        List<ICheckResult> childResults = new List<ICheckResult>();
-
-        ICheckResult checkResult = _check.Check(ctx, node);
-
-        // If all Leafchecks succeed, the entity which should not be present is present.
-        bool wrongImplementation = CheckHelper.CheckAllChildrenCorrect(checkResult);
-
-        // In this case we add the result of the check to the childResults, because this shows which entities are present which shouldn't be.
-        if (wrongImplementation)
-        {
-            childResults.Add(checkResult);
-        }
-
-        return new NodeCheckResult
-        {
-            ChildrenCheckResults = childResults,
-            Priority = Priority,
-            FeedbackMessage = wrongImplementation ? $"Node {node} is a wrong implementation" : $"Node {node} was correctly implemented"
-        };
+        throw new UnreachableException();
     }
 }

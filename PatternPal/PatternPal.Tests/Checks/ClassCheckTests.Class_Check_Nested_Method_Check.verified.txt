@@ -3,15 +3,28 @@
   Priority: Mid,
   ChildrenCheckResults: [
     {
-      FeedbackMessage: Found method: DoSomething().,
+      FeedbackMessage: ,
       Priority: Mid,
       ChildrenCheckResults: [
         {
-          FeedbackMessage: Modifiers correctly implemented.,
+          FeedbackMessage: Found method: DoSomething().,
           Priority: Mid,
-          Correct: true
+          ChildrenCheckResults: [
+            {
+              FeedbackMessage: Modifiers correctly implemented.,
+              Priority: Mid,
+              Correct: true,
+              MatchedNode: DoSomething
+            }
+          ],
+          MatchedNode: DoSomething,
+          NodeCheckCollectionWrapper: false
         }
-      ]
+      ],
+      CollectionKind: Any,
+      NodeCheckCollectionWrapper: true
     }
-  ]
+  ],
+  MatchedNode: Test,
+  NodeCheckCollectionWrapper: false
 }

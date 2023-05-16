@@ -1,5 +1,9 @@
 ﻿#region
 
+using PatternPal.SyntaxTree.Abstractions.Entities;
+using PatternPal.SyntaxTree.Abstractions.Members;
+using PatternPal.SyntaxTree.Models;
+
 using static PatternPal.Core.Checks.CheckBuilder;
 
 #endregion
@@ -16,7 +20,7 @@ public class ClassCheckTests
         IMethod methodEntity = EntityNodeUtils.CreateMethod();
 
         ClassCheck classCheck = Class(Priority.Low);
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         Assert.DoesNotThrow(
             () => classCheck.Check(
@@ -35,7 +39,7 @@ public class ClassCheckTests
         IClass classEntity = EntityNodeUtils.CreateClass();
 
         ClassCheck classCheck = Class(Priority.Low);
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         ICheckResult result = classCheck.Check(
             ctx,
@@ -52,9 +56,9 @@ public class ClassCheckTests
         ClassCheck classCheck = Class(
             Priority.Low,
             Parameters(Priority.Low));
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
-        Assert.Throws< InvalidSubCheckException >(
+        Assert.Throws< IncorrectNodeTypeException >(
             () => classCheck.Check(
                 ctx,
                 classEntity));
@@ -70,7 +74,7 @@ public class ClassCheckTests
             Modifiers(
                 Priority.Low,
                 Modifier.Public));
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         ICheckResult result = classCheck.Check(
             ctx,
@@ -91,8 +95,8 @@ public class ClassCheckTests
                 Modifiers(
                     Priority.Mid,
                     Modifier.Internal)
-                ));
-        RecognizerContext ctx = new();
+            ));
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         ICheckResult result = classCheck.Check(
             ctx,

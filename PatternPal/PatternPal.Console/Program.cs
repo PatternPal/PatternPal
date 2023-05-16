@@ -2,16 +2,16 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 using NDesk.Options;
 
-using PatternPal.CommonResources;
 using PatternPal.Core;
 using PatternPal.Core.Models;
-using PatternPal.Recognizers.Abstractions;
 
 #endregion
 
@@ -118,19 +118,17 @@ namespace PatternPal.ConsoleApp
             RecognizerRunner recognizerRunner = new(
                 selectedFiles,
                 selectedPatterns );
-            recognizerRunner.OnProgressUpdate += (
-                                                         sender,
-                                                         progress) =>
-                                                     DrawTextProgressBar(
-                                                         progress.Status,
-                                                         progress.CurrentPercentage,
-                                                         100);
 
-            IList< RecognitionResult > results = recognizerRunner.Run();
+            ICheckResult result = recognizerRunner.RunV2();
+            if (result is null)
+            {
+                Console.WriteLine("No results.");
+                return;
+            }
 
             Console.WriteLine();
             PrintResults(
-                results,
+                result,
                 selectedDirectories);
         }
 
@@ -143,115 +141,24 @@ namespace PatternPal.ConsoleApp
         }
 
         private static void PrintResults(
-            IList< RecognitionResult > results,
+            ICheckResult result,
             List< string > selectedDirectories)
         {
             Console.WriteLine("\nResults:");
 
-            results = results.Where(x => x.Result.GetScore() >= 80).ToList();
-
-            for (int i = 0;
-                 i < results.Count;
-                 i++)
-            {
-                string name = results[ i ].EntityNode.GetName();
-
-                //If a directory was selected, show from which subdirectories the entitynode originated
-                if (selectedDirectories.Count > 0)
-                {
-                    foreach (string item in selectedDirectories)
-                    {
-                        if (results[ i ].EntityNode.GetRoot().GetSource().Contains(item))
-                        {
-                            name = results[ i ].EntityNode.GetRoot().GetSource().Replace(
-                                item,
-                                "");
-                            break;
-                        }
-                    }
-                }
-
-                Console.WriteLine($"{i}) {name} | {results[ i ].Pattern.Name}");
-                Trace.WriteLine($"{i}) {name} | {results[ i ].Pattern.Name}");
-
-                Console.ForegroundColor = ConsoleColor.Red;
-
-                foreach (ICheckResult result in results[ i ].Result.GetResults())
-                {
-                    PrintResult(
-                        result,
-                        1);
-                }
-
-                Console.ForegroundColor = ConsoleColor.White;
-            }
-        }
-
-        public static void PrintResult(
-            ICheckResult result,
-            int depth)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            string symbol = "X";
-
-            switch (result.GetFeedbackType())
-            {
-                case FeedbackType.SemiCorrect:
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    symbol = "-";
-                    break;
-                case FeedbackType.Correct:
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    symbol = "✓";
-                    break;
-            }
-
-            string text = new string(
-                              '\t',
-                              depth)
-                          + symbol
-                          + $" {ResourceUtils.ResultToString(result)}";
-
-            Console.WriteLine(text);
-            Trace.WriteLine(text);
-
-            foreach (ICheckResult child in result.GetChildFeedback())
-            {
-                PrintResultRecursive(
-                    child,
-                    depth + 1);
-            }
-        }
-
-        private static void PrintResultRecursive(
-            ICheckResult result,
-            int depth)
-        {
-            if (result.IsHidden)
-            {
-                foreach (ICheckResult sub in result.GetChildFeedback())
-                {
-                    PrintResultRecursive(
-                        sub,
-                        depth);
-                }
-            }
-            else
-            {
-                PrintResult(
+            Console.WriteLine(
+                JsonSerializer.Serialize(
                     result,
-                    depth);
-            }
-        }
-
-        private static void PrintScore(
-            int score)
-        {
-            Console.ForegroundColor =
-                score < 40 ? ConsoleColor.Red : score < 80 ? ConsoleColor.Yellow : ConsoleColor.Green;
-            Console.WriteLine(score);
-            Trace.WriteLine(score);
-            Console.ForegroundColor = ConsoleColor.White;
+                    new JsonSerializerOptions
+                    {
+                        Converters =
+                        {
+                            new JsonStringEnumConverter()
+                        },
+                        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                        WriteIndented = true,
+                    }));
+            Console.WriteLine();
         }
 
         public static void DrawTextProgressBar(

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace SyntaxTree.Abstractions.Entities
+using PatternPal.SyntaxTree.Abstractions.Members;
+
+namespace PatternPal.SyntaxTree.Abstractions.Entities
 {
     public interface IClass : IEntity
     {

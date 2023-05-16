@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SyntaxTree.Abstractions;
-using SyntaxTree.Abstractions.Root;
-using SyntaxTree.Utils;
 
-namespace SyntaxTree.Models.Root
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+using PatternPal.SyntaxTree.Abstractions;
+using PatternPal.SyntaxTree.Abstractions.Entities;
+using PatternPal.SyntaxTree.Abstractions.Root;
+using PatternPal.SyntaxTree.Utils;
+
+namespace PatternPal.SyntaxTree.Models.Root
 {
     public class Namespace : AbstractNode, INamespace
     {

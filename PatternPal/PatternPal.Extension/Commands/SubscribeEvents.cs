@@ -26,9 +26,21 @@ namespace PatternPal.Extension.Commands
 
         private static DTE _dte;
 
-        private static Solution _dteSolution;
+        private static DebuggerEvents _dteDebugEvents;
+
+        private static SolutionEvents _dteSolutionEvents;
+
+        private static BuildEvents _dteBuildEvents;
 
         private static string _sessionId;
+
+        private static bool _unhandledExceptionThrown;
+
+        public static string SessionId
+        {
+            get { return _sessionId; }
+            set { _sessionId = value; }
+        }
 
         private static string _pathToUserDataFolder;
 
@@ -45,12 +57,14 @@ namespace PatternPal.Extension.Commands
         {
             _dte = dte;
             ThreadHelper.ThrowIfNotOnUIThread();
+            _dteDebugEvents = _dte.Events.DebuggerEvents;
+            _dteSolutionEvents = _dte.Events.SolutionEvents;
+            _dteBuildEvents = _dte.Events.BuildEvents;
             _package = package;
             _pathToUserDataFolder = Path.Combine(_package.UserLocalDataPath.ToString(), "Extensions", "Team PatternPal",
                 "PatternPal.Extension", "UserData");
             _cancellationToken = cancellationToken;
             SaveSubjectId();
-
 
             // These events are not handled with an event listener, and thus need to be checked separately whether logging is enabled.
             if (_package.DoLogData)
@@ -62,16 +76,17 @@ namespace PatternPal.Extension.Commands
 
         /// <summary>
         /// Subscribes the event handlers for logging data.
+        /// Be careful with calling this method. This method should only be called once.
         /// </summary>
         public static async Task SubscribeEventHandlersAsync()
         {
             await _package.JoinableTaskFactory.SwitchToMainThreadAsync(_cancellationToken);
-            _dteSolution = _dte.Solution;
             // Code that interacts with UI elements goes here
-            _dte.Events.BuildEvents.OnBuildDone += OnCompileDone;
-            _dte.Events.SolutionEvents.Opened += OnProjectOpen;
-            _dte.Events.SolutionEvents.BeforeClosing += OnProjectClose;
-            _dte.Events.DebuggerEvents.OnEnterDesignMode += OnRunProgram; // TODO: Not triggering...
+            _dteBuildEvents.OnBuildDone += OnCompileDone;
+            _dteSolutionEvents.Opened += OnProjectOpen;
+            _dteSolutionEvents.BeforeClosing += OnProjectClose;
+            _dteDebugEvents.OnEnterBreakMode += OnExceptionUnhandled; // OnEnterBreakMode is triggered for both breakpoints as well as exceptions, with the reason parameter specifying this.
+            _dteDebugEvents.OnEnterDesignMode += OnDebugProgram;
         }
 
 
@@ -81,8 +96,11 @@ namespace PatternPal.Extension.Commands
         public static async Task UnsubscribeEventHandlersAsync()
         {
             await _package.JoinableTaskFactory.SwitchToMainThreadAsync(_cancellationToken);
-            _dte.Events.BuildEvents.OnBuildDone -= OnCompileDone;
-            _dte.Events.SolutionEvents.BeforeClosing -= OnProjectClose;
+            _dteBuildEvents.OnBuildDone -= OnCompileDone;
+            _dteSolutionEvents.Opened -= OnProjectOpen;
+            _dteSolutionEvents.BeforeClosing -= OnProjectClose;
+            _dteDebugEvents.OnEnterBreakMode -= OnExceptionUnhandled; 
+            _dteDebugEvents.OnEnterDesignMode -= OnDebugProgram;
         }
 
 
@@ -162,9 +180,9 @@ namespace PatternPal.Extension.Commands
         /// <summary>
         /// The event handler for handling the Session.Start Event. When a new session starts, a (new) sessionID is generated .
         /// </summary>
-        private static void OnSessionStart()
+        internal static void OnSessionStart()
         {
-            _sessionId = Guid.NewGuid().ToString();
+            SessionId = Guid.NewGuid().ToString();
 
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtSessionStart;
@@ -226,17 +244,22 @@ namespace PatternPal.Extension.Commands
         }
 
         /// <summary>
-        /// The event handler for handling the Run.Program Event.
+        /// The event handler for handling the Debug.Program Event.
         /// </summary>
-        private static void OnRunProgram(dbgEventReason reason)
+        private static void OnDebugProgram(dbgEventReason reason)
         {
             LogEventRequest request = CreateStandardLog();
-            request.EventType = EventType.EvtRunProgram;
+            request.EventType = EventType.EvtDebugProgram;
+            request.ExecutionId = Guid.NewGuid().ToString();
 
-            if (reason == dbgEventReason.dbgEventReasonExceptionThrown ||
-                reason == dbgEventReason.dbgEventReasonExceptionNotHandled)
+            if (_unhandledExceptionThrown)
             {
                 request.ExecutionResult = ExecutionResult.ExtError;
+                _unhandledExceptionThrown = false;
+            }
+            else
+            {
+                request.ExecutionResult = ExecutionResult.ExtSucces;
             }
 
             LogProviderService.LogProviderServiceClient client =
@@ -335,5 +358,16 @@ namespace PatternPal.Extension.Commands
             }
         }
 
+        /// Event handler for when an exception is unhandled. This is used to determine in the user's last debug session
+        /// whether there were any unhandled exceptions. Although creating a separate method might seem redundant
+        /// for the actual logic used here, it is necessary for the adding and removing from any used event listeners.
+        /// </summary>
+        public static void OnExceptionUnhandled(dbgEventReason reason, ref dbgExecutionAction executionAction)
+        {
+            if (reason == dbgEventReason.dbgEventReasonExceptionNotHandled)
+            {
+                _unhandledExceptionThrown = true;
+            }
+        }
     }
 }

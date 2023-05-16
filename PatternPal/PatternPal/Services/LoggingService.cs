@@ -43,8 +43,8 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
                 return ProjectOpenLog(receivedRequest);
             case Protos.EventType.EvtProjectClose:
                 return ProjectCloseLog(receivedRequest);
-            case Protos.EventType.EvtRunProgram:
-                return RunProgramLog(receivedRequest);
+            case Protos.EventType.EvtDebugProgram:
+                return DebugProgramLog(receivedRequest);
             case Protos.EventType.EvtSessionStart:
                 return SessionStartLog(receivedRequest);
             case Protos.EventType.EvtSessionEnd:
@@ -112,10 +112,10 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
         return sendLog;
     }
 
-    private LogRequest RunProgramLog(LogEventRequest receivedRequest)
+    private LogRequest DebugProgramLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
-        sendLog.EventType = LoggingServer.EventType.EvtRunProgram;
+        sendLog.EventType = LoggingServer.EventType.EvtDebugProgram;
         sendLog.ExecutionId = receivedRequest.ExecutionId;
         sendLog.ExecutionResult = (ExecutionResult)receivedRequest.ExecutionResult;
 

@@ -1,6 +1,8 @@
 ﻿#region
 
-using SyntaxTree.Abstractions.Root;
+using PatternPal.SyntaxTree.Abstractions.Entities;
+using PatternPal.SyntaxTree.Abstractions.Root;
+using PatternPal.SyntaxTree.Models;
 
 using static PatternPal.Core.Checks.CheckBuilder;
 
@@ -19,7 +21,7 @@ public class ModifierCheckTests
         //a namespace cannot have modifiers
         INamespace namespaceEntity = EntityNodeUtils.CreateNamespace();
 
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         ModifierCheck modifierCheck = Modifiers(Priority.Low);
 
@@ -42,7 +44,7 @@ public class ModifierCheckTests
         ModifierCheck modifierCheck = Modifiers(
             Priority.Low,
             Modifier.Public);
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         ICheckResult result = modifierCheck.Check(
             ctx,
@@ -59,7 +61,7 @@ public class ModifierCheckTests
         ModifierCheck modifierCheck = Modifiers(
             Priority.Low,
             Modifier.Private);
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         ICheckResult result = modifierCheck.Check(
             ctx,

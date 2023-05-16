@@ -1,5 +1,7 @@
 ﻿#region
 
+using PatternPal.SyntaxTree.Models;
+
 using static PatternPal.Core.Checks.CheckBuilder;
 
 #endregion
@@ -8,7 +10,7 @@ namespace PatternPal.Core.Recognizers;
 
 internal class SingletonRecognizer : IRecognizer
 {
-    internal IEnumerable< ICheck > Create()
+    public IEnumerable< ICheck > Create()
     {
         MethodCheck instanceMethod =
             Method(

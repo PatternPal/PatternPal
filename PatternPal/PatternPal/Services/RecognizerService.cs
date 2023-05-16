@@ -5,7 +5,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
 {
     // The threshold for always showing a result. Results with a score below the threshold are only
     // shown if the user presses the 'show all' button in the UI.
-    private const int SCORE_THRESHOLD_FOR_SHOW_ALL = 80;
+    private const int ScoreThresholdForShowAll = 80;
 
     /// <inheritdoc />
     public override Task< GetSupportedRecognizersResponse > GetSupportedRecognizers(
@@ -66,7 +66,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
             // KNOWN: We sorted the results above, so if we only want to return the top results
             // (this is controlled by request.ShowAllResults), we can stop as soon as we encounter a
             // result which has a score below the threshold.
-            if (result.Result.GetScore() < SCORE_THRESHOLD_FOR_SHOW_ALL
+            if (result.Result.GetScore() < ScoreThresholdForShowAll
                 && !request.ShowAllResults)
             {
                 break;
@@ -81,14 +81,14 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                                       Score = (uint)result.Result.GetScore()
                                   };
 
-            foreach (ICheckResult checkResult in result.Result.GetResults())
+            foreach (Recognizers.Abstractions.ICheckResult checkResult in result.Result.GetResults())
             {
                 res.Results.Add(CreateCheckResult(checkResult));
             }
 
             RecognizeResponse response = new()
                                          {
-                                             Result = res,
+                                             Result = res
                                          };
             responseStream.WriteAsync(response);
         }
@@ -101,7 +101,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
     /// </summary>
     /// <returns><see langword="null"/> if the request contains no valid file or project directory,
     /// or a list of files otherwise.</returns>
-    private IList< string > ? GetFiles(
+    private static IList< string > ? GetFiles(
         RecognizeRequest request)
     {
         switch (request.FileOrProjectCase)
@@ -137,6 +137,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                     "*.cs",
                     SearchOption.AllDirectories).ToList();
             }
+            case RecognizeRequest.FileOrProjectOneofCase.None:
             default:
             {
                 return null;
@@ -145,13 +146,13 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
     }
 
     /// <summary>
-    /// Converts an <see cref="ICheckResult"/> to a <see cref="CheckResult"/>, which can be sent
+    /// Converts an <see cref="Recognizers.Abstractions.ICheckResult"/> to a <see cref="CheckResult"/>, which can be sent
     /// over the wire.
     /// </summary>
-    /// <param name="checkResult">The <see cref="ICheckResult"/> to convert.</param>
-    /// <returns>The <see cref="CheckResult"/> instance created from the given <see cref="ICheckResult"/>.</returns>
+    /// <param name="checkResult">The <see cref="Recognizers.Abstractions.ICheckResult"/> to convert.</param>
+    /// <returns>The <see cref="CheckResult"/> instance created from the given <see cref="Recognizers.Abstractions.ICheckResult"/>.</returns>
     private CheckResult CreateCheckResult(
-        ICheckResult checkResult)
+        Recognizers.Abstractions.ICheckResult checkResult)
     {
         CheckResult newCheckResult = new()
                                      {
@@ -160,7 +161,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                                          Score = checkResult.GetScore(),
                                          FeedbackMessage = ResourceUtils.ResultToString(checkResult),
                                      };
-        foreach (ICheckResult childCheckResult in checkResult.GetChildFeedback())
+        foreach (Recognizers.Abstractions.ICheckResult childCheckResult in checkResult.GetChildFeedback())
         {
             newCheckResult.SubCheckResults.Add(CreateCheckResult(childCheckResult));
         }

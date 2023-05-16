@@ -1,4 +1,7 @@
-﻿namespace PatternPal.Tests.Checks;
+﻿using PatternPal.SyntaxTree.Abstractions.Entities;
+using PatternPal.SyntaxTree.Abstractions.Members;
+
+namespace PatternPal.Tests.Checks;
 
 [TestFixture]
 public class TypeCheckTests
@@ -16,7 +19,7 @@ public class TypeCheckTests
                           classEntity
                       }) );
 
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         ICheckResult result = typeCheck.Check(
             ctx,
@@ -38,7 +41,7 @@ public class TypeCheckTests
                           classEntity
                       }) );
 
-        RecognizerContext ctx = new();
+        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         ICheckResult result = typeCheck.Check(
             ctx,

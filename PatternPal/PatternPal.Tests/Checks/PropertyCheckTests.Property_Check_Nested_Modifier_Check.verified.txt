@@ -5,7 +5,10 @@
     {
       FeedbackMessage: Modifiers correctly implemented.,
       Priority: Low,
-      Correct: true
+      Correct: true,
+      MatchedNode: TestProperty
     }
-  ]
+  ],
+  MatchedNode: TestProperty,
+  NodeCheckCollectionWrapper: false
 }

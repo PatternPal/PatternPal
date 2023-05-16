@@ -1,4 +1,4 @@
-﻿ namespace PatternPal.Core.Checks;
+﻿namespace PatternPal.Core.Checks;
 
 /// <summary>
 /// Checks for the modifiers of an entity. Depending on the <see cref="List{T}"/> of <see cref="IModified"/> provided.
@@ -6,8 +6,13 @@
 /// </summary>
 internal class ModifierCheck : CheckBase
 {
-    // all modifiers the node should have
+    // All modifiers the node should have.
     private readonly IEnumerable< IModifier > _modifiers;
+
+    /// <summary>
+    /// An <see cref="IModifier"/> is not a dependency to another <see cref="INode"/>.
+    /// </summary>
+    public override int DependencyCount => 0;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ModifierCheck"/> class. 
@@ -27,7 +32,7 @@ internal class ModifierCheck : CheckBase
     /// match the provided modifiers. 
     /// </summary>
     public override ICheckResult Check(
-        RecognizerContext ctx,
+        IRecognizerContext ctx,
         INode node)
     {
         // cast node to IModified
@@ -47,7 +52,9 @@ internal class ModifierCheck : CheckBase
                        {
                            FeedbackMessage = $"The node {node} does not have the {modifier} modifier.",
                            Correct = false,
-                           Priority = Priority
+                           Priority = Priority,
+                           DependencyCount = DependencyCount,
+                           MatchedNode = node,
                        };
             }
         }
@@ -56,7 +63,9 @@ internal class ModifierCheck : CheckBase
                {
                    FeedbackMessage = "Modifiers correctly implemented.",
                    Correct = true,
-                   Priority = Priority
+                   Priority = Priority,
+                   DependencyCount = DependencyCount,
+                   MatchedNode = node,
                };
     }
 }
