@@ -101,6 +101,7 @@ public class NotCheckResult : ICheckResult
     public required ICheck Check { get; init; }
 
     /// <inheritdoc />
+    public bool Pruned { get; set; }
 
     internal NotCheckResult()
     {
@@ -152,7 +153,7 @@ public class NodeCheckResult : ICheckResult
     public required ICheck Check { get; init; }
 
     /// <inheritdoc />
-    public  bool Pruned { get; set; }
+    public bool Pruned { get; set; }
 
     internal NodeCheckResult()
     {
