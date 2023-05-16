@@ -193,7 +193,8 @@ internal class ExampleRecognizer : IRecognizer
             );
 
     //this starts a collection of checks for a class
-    yield return Class( 
+    yield return 
+        Class( 
             Priority.Knockout,
             //the first check is the previously defined method check
             instanceMethod,
@@ -207,6 +208,7 @@ internal class ExampleRecognizer : IRecognizer
                     instanceMethod.Result 
                 )
             )
+        );
   }
 }
 ```

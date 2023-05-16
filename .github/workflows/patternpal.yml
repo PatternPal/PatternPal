@@ -33,16 +33,19 @@ jobs:
         run: echo PatternPal has changed files
 
   build:
-    if: github.event.pull_request.draft == false && needs.should_run.outputs.status == 'success'
     needs: should_run
     uses: ./.github/workflows/build.yml
+    with:
+      should_run: ${{ needs.should_run.outputs.status == 'success' }}
 
   test:
-    if: github.event.pull_request.draft == false && needs.should_run.outputs.status == 'success'
     needs: should_run
     uses: ./.github/workflows/test.yml
+    with:
+      should_run: ${{ needs.should_run.outputs.status == 'success' }}
 
   lint:
-    if: github.event.pull_request.draft == false && needs.should_run.outputs.status == 'success'
     needs: should_run
     uses: ./.github/workflows/lint.yml
+    with:
+      should_run: ${{ needs.should_run.outputs.status == 'success' }}
