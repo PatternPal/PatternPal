@@ -40,7 +40,7 @@ namespace PatternPal.SyntaxTree.Models.Members.Method
             return (CSharpSyntaxNode)_methodDeclaration.Body ?? _methodDeclaration.ExpressionBody;
         }
 
-        public TypeSyntax GetReturnType()
+        public SyntaxNode GetReturnType()
         {
             return _methodDeclaration.ReturnType;
         }

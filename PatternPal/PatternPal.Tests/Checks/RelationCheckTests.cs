@@ -55,7 +55,7 @@ public class RelationCheckTests
         //the Uses class node from the syntax graph 
         INode usesNode = graph.GetAll()[ "Uses" ];
         //the UsedFunction node from the syntax graph 
-        INode usedNode = Relations.GetMethodFromGraph(
+        INode usedNode = Relations.GetMemberFromGraph(
             graph,
             "Used",
             "UsedFunction");
@@ -89,12 +89,12 @@ public class RelationCheckTests
         IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
 
         //the UsesFunction node from the syntax graph 
-        INode usesNode = Relations.GetMethodFromGraph(
+        INode usesNode = Relations.GetMemberFromGraph(
             graph,
             "Uses",
             "UsesFunction");
         //the UsedFunction node from the syntax graph 
-        INode usedNode = Relations.GetMethodFromGraph(
+        INode usedNode = Relations.GetMemberFromGraph(
             graph,
             "Used",
             "UsedFunction");

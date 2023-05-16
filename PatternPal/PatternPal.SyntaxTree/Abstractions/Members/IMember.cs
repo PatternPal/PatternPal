@@ -4,6 +4,8 @@ namespace PatternPal.SyntaxTree.Abstractions.Members
 {
     public interface IMember : IModified, IChild<IEntity>
     {
+        //SyntaxNode GetReturnType();
+        SyntaxNode GetReturnType();
     }
 
     public static class MemberExtension

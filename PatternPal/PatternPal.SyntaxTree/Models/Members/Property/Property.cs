@@ -47,6 +47,11 @@ namespace PatternPal.SyntaxTree.Models.Members.Property
             return _parent;
         }
 
+        public SyntaxNode GetReturnType()
+        {
+            return GetPropertyType();
+        }
+
         public bool HasGetter()
         {
             if (propertyDeclarationSyntax.ExpressionBody != null)

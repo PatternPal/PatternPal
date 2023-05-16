@@ -30,6 +30,11 @@ namespace PatternPal.SyntaxTree.Models.Members.Property
             return _property.GetParent();
         }
 
+        public SyntaxNode GetReturnType()
+        {
+            return _property.GetReturnType();
+        }
+
         public IEnumerable<IModifier> GetModifiers()
         {
             return _property.GetModifiers();

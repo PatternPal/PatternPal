@@ -24,7 +24,7 @@ namespace PatternPal.SyntaxTree.Models.Members.Property
 
         public abstract string GetName();
         public abstract IEnumerable<TypeSyntax> GetParameters();
-        public abstract TypeSyntax GetReturnType();
+        public abstract SyntaxNode GetReturnType();
 
         public SyntaxNode GetSyntaxNode()
         {

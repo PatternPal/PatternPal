@@ -43,6 +43,11 @@ namespace PatternPal.SyntaxTree.Models.Members.Field
             return _parent;
         }
 
+        public SyntaxNode GetReturnType()
+        {
+            return GetFieldType();
+        }
+
         public override string ToString()
         {
             return GetName();
