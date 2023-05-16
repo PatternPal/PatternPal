@@ -103,7 +103,15 @@ internal class NodeCheckResult : ICheckResult
     public required INode ? MatchedNode { get; init; }
 
     /// <summary>
-    /// All sub-<see cref="ICheckResult"/>s are the result of a <see cref="NodeCheck{TNode}"/>.
+    /// <see langword="true"/> if the sub-<see cref="ICheckResult"/>s are the result of one
+    /// <see cref="NodeCheck{TNode}"/>.
     /// </summary>
+    /// <remarks>
+    /// For example, a <see cref="MethodCheck"/> is run on multiple <see cref="IMethod"/>s. For each
+    /// <see cref="IMethod"/> the <see cref="MethodCheck"/> is run on, a
+    /// <see cref="NodeCheckResult"/> is created. All these results are wrapped in a
+    /// <see cref="NodeCheckResult"/>, with <see cref="NodeCheckCollectionWrapper"/> set
+    /// to <see langword="true"/>.
+    /// </remarks>
     public bool NodeCheckCollectionWrapper { get; set; }
 }
