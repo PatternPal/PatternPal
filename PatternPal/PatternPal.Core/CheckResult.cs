@@ -67,12 +67,17 @@ public class LeafCheckResult : ICheckResult
     /// <inheritdoc />
     public bool Pruned { get; set; }
 
-    public ICheck RelatedCheck { get; init; }
-
-    internal LeafCheckResult()
-    {
-        Pruned = false;
-    }
+    /// <summary>
+    /// If this <see cref="LeafCheckResult"/> belongs to a <see cref="RelationCheck"/>,
+    /// this <see cref="ICheck"/> gets set to the <see cref="ICheck"/> which searches
+    /// for the <see cref="INode"/> to which there should be a relation.
+    /// </summary>
+    /// <example>
+    /// In the Strategy pattern, If this is the LeafCheckResult belonging to the
+    /// RelationCheck which checks whether their is a uses relation from Context
+    /// to Strategy, this field gets set to to Check which searches for the Strategy
+    /// </example>
+    public ICheck ? RelatedCheck { get; init; }
 }
 
 /// <summary>
@@ -102,11 +107,6 @@ public class NotCheckResult : ICheckResult
 
     /// <inheritdoc />
     public bool Pruned { get; set; }
-
-    internal NotCheckResult()
-    {
-        Pruned = false;
-    }
 }
 
 /// <summary>
@@ -154,9 +154,4 @@ public class NodeCheckResult : ICheckResult
 
     /// <inheritdoc />
     public bool Pruned { get; set; }
-
-    internal NodeCheckResult()
-    {
-        Pruned = false;
-    }
 }

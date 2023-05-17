@@ -342,9 +342,20 @@ public class RecognizerRunner
                     throw new ArgumentException($"Unexpected check type '{relationCheckResult.GetType()}', expected '{typeof( LeafCheckResult )}'");
                 }
 
-                resultsByNode.TryGetValue(relationResult.MatchedNode, out resultsToBePruned);
-                ICheckResult relevantResult =
-                    resultsToBePruned.FirstOrDefault((result) => result.Check == relationResult.RelatedCheck);
+                if (relationResult.RelatedCheck is null)
+                {
+                    throw new ArgumentNullException($"RelatedCheck of CheckResult '{relationResult}' is null, while it should reference the ICheck belonging to the INode it has a relation to.");
+                }
+
+                // Get the CheckResults belonging to the node to which there should be a relation.
+                List<ICheckResult> resultsOfNode = resultsByNode[relationResult.MatchedNode!];
+                // Find the CheckResult linked to the check which searched for the Node to which there should be a relation.
+                ICheckResult relevantResult = resultsOfNode.FirstOrDefault((result) => result.Check == relationResult.RelatedCheck)!;
+
+                // If this node gets pruned, it does not have the required attributes to be the node belonging to the
+                // check which searched for the node to which there should be a relation. Therefore, even though the
+                // relation might be found, it is not the relation directed to the node to which there should be one.
+                // Therefore this relation is not the required one, and thus the relationResult gets pruned.
                 if (relevantResult.Pruned)
                 {
                     resultsToBePruned.Add(relationResult);

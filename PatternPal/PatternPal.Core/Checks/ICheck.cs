@@ -55,8 +55,7 @@ internal abstract class CheckBase : ICheck
     public Priority Priority { get; }
 
     //public Func<List<INode>> Result => () => throw new ArgumentException("Not a NodeCheck");
-    public virtual Func<List<INode>> Result =>
-        () => throw new NotSupportedException($"this check '{this}' is not a NodeCheck");
+    public virtual Func<List<INode>> Result => throw new NotSupportedException($"this check '{this}' is not a NodeCheck");
 
     /// <inheritdoc />
     public abstract int DependencyCount { get; }
