@@ -122,7 +122,8 @@ namespace PatternPal.LoggingServer.Services
                 SourceLocation = request.SourceLocation,
                 CodeStateSection = request.CodeStateSection,
                 RecognizerConfig = recognizeConfig,
-                RecognizerResult = recognizeResult
+                RecognizerResult = recognizeResult,
+                ExecutionResult = request.ExecutionResult
 
             };
 

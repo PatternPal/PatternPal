@@ -88,6 +88,12 @@ namespace PatternPal.LoggingServer.Models
         public string? CodeStateSection { get; set; }
 
         /// <summary>
+        /// Result in case of debug.run event. Value can be "success", "failure", "timeout", "error", "unknown".
+        /// </summary>
+        public ExecutionResult? ExecutionResult { get; set; }
+
+
+        /// <summary>
         /// The results of the recognizer run, if any. This is a JSON string.
         /// </summary>
         public string? RecognizerResult { get; set; }
