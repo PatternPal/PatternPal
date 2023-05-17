@@ -57,6 +57,12 @@ namespace PatternPal.LoggingServer.Services
                 throw new RpcException(status);
             }
 
+            string? recognizeResult = null, recognizeConfig = null;
+            if (request.EventType == EventType.EvtXRecognizerRun)
+            {
+                recognizeResult = request.RecognizerResult;
+                recognizeConfig = request.RecognizerConfig;
+            }
             
             Guid codeStateId = await _eventRepository.GetPreviousCodeState(sessionId, subjectId, request.ProjectId);
             if (request.HasData)
@@ -114,7 +120,9 @@ namespace PatternPal.LoggingServer.Services
                 CompileMessage = request.CompileMessageData,
                 CompileMessageType = request.CompileMessageType,
                 SourceLocation = request.SourceLocation,
-                CodeStateSection = request.CodeStateSection
+                CodeStateSection = request.CodeStateSection,
+                RecognizerConfig = recognizeConfig,
+                RecognizerResult = recognizeResult
 
             };
 
@@ -134,12 +142,13 @@ namespace PatternPal.LoggingServer.Services
         /// <exception cref="RpcException">Exception when parsing fails</exception>
         private static Guid GetGuid(string guidString, string guidName)
         {
-            if (!Guid.TryParse(guidString, out Guid guid))
+            if (Guid.TryParse(guidString, out Guid guid))
             {
-                Status status = new Status(StatusCode.InvalidArgument, $"Invalid {guidName} GUID format");
-                throw new RpcException(status);
+                return guid;
             }
-            return guid;
+
+            Status status = new Status(StatusCode.InvalidArgument, $"Invalid {guidName} GUID format");
+            throw new RpcException(status);
         }
     }
 }

@@ -49,6 +49,8 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
                 return SessionStartLog(receivedRequest);
             case Protos.EventType.EvtSessionEnd:
                 return SessionEndLog(receivedRequest);
+            case Protos.EventType.EvtXRecognizerRun:
+                return RecognizeLog(receivedRequest);
             default:
                 return StandardLog(receivedRequest);
         }
@@ -75,8 +77,17 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
                 receivedRequest.SessionId 
         };
     }
-
+    
     #region Log types
+
+    private LogRequest RecognizeLog(LogEventRequest receivedRequest)
+    {
+        LogRequest sendLog = StandardLog(receivedRequest);
+        sendLog.EventType = LoggingServer.EventType.EvtXRecognizerRun;
+        sendLog.RecognizerResult = receivedRequest.RecognizerResult;
+        sendLog.RecognizerConfig = receivedRequest.RecognizerConfig;
+        return sendLog;
+    }
     private LogRequest CompileLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
@@ -135,6 +146,7 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
       
         return sendLog;
     }
+
     #endregion
 }
 

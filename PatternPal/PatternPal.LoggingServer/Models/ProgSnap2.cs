@@ -86,5 +86,15 @@ namespace PatternPal.LoggingServer.Models
         /// The section of the code state associated with this compile event. For example in compile.error, this would be the section of code that caused the error.
         /// </summary>
         public string? CodeStateSection { get; set; }
+
+        /// <summary>
+        /// The results of the recognizer run, if any. This is a JSON string.
+        /// </summary>
+        public string? RecognizerResult { get; set; }
+
+        /// <summary>
+        /// The configuration of the recognizer run, if any. This is a JSON string.
+        /// </summary>
+        public string? RecognizerConfig { get; set; }
     }
 }

@@ -41,6 +41,9 @@ patternpal.ExecutionResult execution_result = 21;
 string intervention_category = 22;
 string intervention_type = 23;
 string intervention_message = 24;
+string recognizer_result = 25;
+string recognizer_config = 26;
+bytes data = 27;
 }
 
 // Input arguments for recognizer response
