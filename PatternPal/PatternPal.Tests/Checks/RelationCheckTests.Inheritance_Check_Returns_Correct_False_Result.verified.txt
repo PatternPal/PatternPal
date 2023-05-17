@@ -16,7 +16,7 @@
       ],
       DependencyCount: 1,
       MatchedNode: Used,
-      NodeCheckCollectionWrapper: false
+      NodeCheckCollectionWrapper: true
     }
   ],
   DependencyCount: 1,
