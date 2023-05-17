@@ -66,12 +66,8 @@ namespace PatternPal.Extension.Commands
             _cancellationToken = cancellationToken;
             SaveSubjectId();
 
-            // These events are not handled with an event listener, and thus need to be checked separately whether logging is enabled.
-            if (_package.DoLogData)
-            {
-                OnSessionStart();
-                OnProjectOpen();
-            }
+            // This activates the DoLogData, necessary here in Initialize to kickstart the Session and Project Open events.
+            bool _ = _package.DoLogData;
         }
 
         /// <summary>
@@ -85,7 +81,8 @@ namespace PatternPal.Extension.Commands
             _dteBuildEvents.OnBuildDone += OnCompileDone;
             _dteSolutionEvents.Opened += OnProjectOpen;
             _dteSolutionEvents.BeforeClosing += OnProjectClose;
-            _dteDebugEvents.OnEnterBreakMode += OnExceptionUnhandled; // OnEnterBreakMode is triggered for both breakpoints as well as exceptions, with the reason parameter specifying this.
+            _dteDebugEvents.OnEnterBreakMode +=
+                OnExceptionUnhandled; // OnEnterBreakMode is triggered for both breakpoints as well as exceptions, with the reason parameter specifying this.
             _dteDebugEvents.OnEnterDesignMode += OnDebugProgram;
         }
 
@@ -99,7 +96,7 @@ namespace PatternPal.Extension.Commands
             _dteBuildEvents.OnBuildDone -= OnCompileDone;
             _dteSolutionEvents.Opened -= OnProjectOpen;
             _dteSolutionEvents.BeforeClosing -= OnProjectClose;
-            _dteDebugEvents.OnEnterBreakMode -= OnExceptionUnhandled; 
+            _dteDebugEvents.OnEnterBreakMode -= OnExceptionUnhandled;
             _dteDebugEvents.OnEnterDesignMode -= OnDebugProgram;
         }
 
@@ -224,23 +221,19 @@ namespace PatternPal.Extension.Commands
         /// <summary>
         /// The event handler for handling the Project.Open Event.
         /// </summary>
-        private static void OnProjectOpen()
+        internal static void OnProjectOpen()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            LogEventRequest request = CreateStandardLog();
-            request.EventType = EventType.EvtProjectOpen;
-            LogEachProject(request);
+            LogEachProject(EventType.EvtProjectOpen);
         }
 
         /// <summary>
         /// The event handler for handling the Project.Close Event.
         /// </summary>
-        private static void OnProjectClose()
+        internal static void OnProjectClose()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            LogEventRequest request = CreateStandardLog();
-            request.EventType = EventType.EvtProjectClose;
-            LogEachProject(request);
+            LogEachProject(EventType.EvtProjectClose);
         }
 
         /// <summary>
@@ -278,9 +271,7 @@ namespace PatternPal.Extension.Commands
         {
             return new LogEventRequest
             {
-                EventId = Guid.NewGuid().ToString(),
-                SubjectId = GetSubjectId(),
-                SessionId = _sessionId
+                EventId = Guid.NewGuid().ToString(), SubjectId = GetSubjectId(), SessionId = _sessionId
             };
         }
 
@@ -337,8 +328,8 @@ namespace PatternPal.Extension.Commands
 
         /// <summary>
         /// Cycles through all active projects and log the given event for each of these projects.
-        /// </summary>
-        private static void LogEachProject(LogEventRequest request)
+        /// </summary>e
+        private static void LogEachProject(EventType eventType)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             Projects projects = _dte.Solution.Projects;
@@ -350,6 +341,8 @@ namespace PatternPal.Extension.Commands
                     continue;
                 }
 
+                LogEventRequest request = CreateStandardLog();
+                request.EventType = eventType;
                 request.ProjectId = project.FullName;
 
                 LogProviderService.LogProviderServiceClient client =
