@@ -336,7 +336,7 @@ namespace PatternPal.Tests.Utils
                                     {
                                     }
 
-                                    private MockClass5()
+                                    private MockClass5(int i)
                                     {
                                     }
                                  }

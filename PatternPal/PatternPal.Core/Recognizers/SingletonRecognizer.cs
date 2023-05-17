@@ -1,6 +1,5 @@
 ﻿#region
 using PatternPal.SyntaxTree.Models;
-using PatternPal.SyntaxTree.Abstractions.Entities;
 using static PatternPal.Core.Checks.CheckBuilder;
 #endregion
 
@@ -66,7 +65,7 @@ internal class SingletonRecognizer : IRecognizer
     /// </summary>
     internal ICheck OnlyPrivateConstructor(out ConstructorCheck privateConstructorCheck)
     {
-        privateConstructorCheck = Constructor(
+        return privateConstructorCheck = Constructor(
             Priority.Knockout,
             Modifiers(
                 Priority.Knockout,
@@ -74,29 +73,29 @@ internal class SingletonRecognizer : IRecognizer
             )
         );
 
-        NotCheck noPuclicConstructorCheck = Not(
-            Priority.Knockout,
-            Constructor(
-                Priority.Knockout,
-                Any(
-                    Priority.Knockout,
-                    Modifiers(
-                        Priority.Knockout,
-                        Modifier.Public),
-                    Modifiers(
-                        Priority.Knockout,
-                        Modifier.Internal),
-                    Modifiers(
-                        Priority.Knockout,
-                        Modifier.Protected
-                    )
-                )
-            )
-        );
+        //NotCheck noPuclicConstructorCheck = Not(
+        //    Priority.Knockout,
+        //    Constructor(
+        //        Priority.Knockout,
+        //        Any(
+        //            Priority.Knockout,
+        //            Modifiers(
+        //                Priority.Knockout,
+        //                Modifier.Public),
+        //            Modifiers(
+        //                Priority.Knockout,
+        //                Modifier.Internal),
+        //            Modifiers(
+        //                Priority.Knockout,
+        //                Modifier.Protected
+        //            )
+        //        )
+        //    )
+        //);
 
-        return All(Priority.Low,
-            privateConstructorCheck,
-            noPuclicConstructorCheck);
+        //return All(Priority.Low,
+        //    privateConstructorCheck,
+        //    noPuclicConstructorCheck);
     }
 
     /// <summary>

@@ -5,6 +5,25 @@
     ChildrenCheckResults: [
       {
         FeedbackMessage: ,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found constructor: MockClass1().,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: Modifiers correctly implemented.,
+                Correct: true,
+                MatchedNode: MockClass1
+              }
+            ],
+            MatchedNode: MockClass1,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        NodeCheckCollectionWrapper: true
+      },
+      {
+        FeedbackMessage: ,
         Priority: Low,
         ChildrenCheckResults: [
           {
@@ -14,6 +33,15 @@
               {
                 FeedbackMessage: Found Uses relations for GetInstance().,
                 Priority: Mid,
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: No Uses relation found.,
+                    Priority: Mid,
+                    Correct: false,
+                    DependencyCount: 1,
+                    MatchedNode: MockClass1
+                  }
+                ],
                 DependencyCount: 1,
                 MatchedNode: GetInstance,
                 NodeCheckCollectionWrapper: false
@@ -39,6 +67,11 @@
     ChildrenCheckResults: [
       {
         FeedbackMessage: ,
+        CollectionKind: Any,
+        NodeCheckCollectionWrapper: true
+      },
+      {
+        FeedbackMessage: ,
         Priority: Low,
         ChildrenCheckResults: [
           {
@@ -48,6 +81,15 @@
               {
                 FeedbackMessage: Found Uses relations for GetInstance().,
                 Priority: Mid,
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: No Uses relation found.,
+                    Priority: Mid,
+                    Correct: false,
+                    DependencyCount: 1,
+                    MatchedNode: MockClass1
+                  }
+                ],
                 DependencyCount: 1,
                 MatchedNode: GetInstance,
                 NodeCheckCollectionWrapper: false
@@ -73,6 +115,11 @@
     ChildrenCheckResults: [
       {
         FeedbackMessage: ,
+        CollectionKind: Any,
+        NodeCheckCollectionWrapper: true
+      },
+      {
+        FeedbackMessage: ,
         Priority: Low,
         ChildrenCheckResults: [
           {
@@ -82,6 +129,15 @@
               {
                 FeedbackMessage: Found Uses relations for GetInstance().,
                 Priority: Mid,
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: No Uses relation found.,
+                    Priority: Mid,
+                    Correct: false,
+                    DependencyCount: 1,
+                    MatchedNode: MockClass1
+                  }
+                ],
                 DependencyCount: 1,
                 MatchedNode: GetInstance,
                 NodeCheckCollectionWrapper: false
@@ -107,6 +163,25 @@
     ChildrenCheckResults: [
       {
         FeedbackMessage: ,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found constructor: MockClass4().,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: Modifiers correctly implemented.,
+                Correct: true,
+                MatchedNode: MockClass4
+              }
+            ],
+            MatchedNode: MockClass4,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        NodeCheckCollectionWrapper: true
+      },
+      {
+        FeedbackMessage: ,
         Priority: Low,
         ChildrenCheckResults: [
           {
@@ -116,6 +191,22 @@
               {
                 FeedbackMessage: Found Uses relations for GetInstance().,
                 Priority: Mid,
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: No Uses relation found.,
+                    Priority: Mid,
+                    Correct: false,
+                    DependencyCount: 1,
+                    MatchedNode: MockClass1
+                  },
+                  {
+                    FeedbackMessage: No Uses relation found.,
+                    Priority: Mid,
+                    Correct: false,
+                    DependencyCount: 1,
+                    MatchedNode: MockClass4
+                  }
+                ],
                 DependencyCount: 1,
                 MatchedNode: GetInstance,
                 NodeCheckCollectionWrapper: false
@@ -141,6 +232,11 @@
     ChildrenCheckResults: [
       {
         FeedbackMessage: ,
+        CollectionKind: Any,
+        NodeCheckCollectionWrapper: true
+      },
+      {
+        FeedbackMessage: ,
         Priority: Low,
         ChildrenCheckResults: [
           {
@@ -150,6 +246,22 @@
               {
                 FeedbackMessage: Found Uses relations for GetInstance().,
                 Priority: Mid,
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: No Uses relation found.,
+                    Priority: Mid,
+                    Correct: false,
+                    DependencyCount: 1,
+                    MatchedNode: MockClass1
+                  },
+                  {
+                    FeedbackMessage: No Uses relation found.,
+                    Priority: Mid,
+                    Correct: false,
+                    DependencyCount: 1,
+                    MatchedNode: MockClass4
+                  }
+                ],
                 DependencyCount: 1,
                 MatchedNode: GetInstance,
                 NodeCheckCollectionWrapper: false

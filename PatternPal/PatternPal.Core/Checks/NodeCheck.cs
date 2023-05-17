@@ -1,4 +1,4 @@
-namespace PatternPal.Core.Checks;
+﻿namespace PatternPal.Core.Checks;
 
 /// <summary>
 /// Base class for <see cref="ICheck"/>s which can have sub-<see cref="ICheck"/>s.
@@ -251,6 +251,7 @@ internal class NodeCheck< TNode > : CheckBase
                 nodeCheck.Check(
                     ctx,
                     node));
+            //nodeCheck._matchedEntities.Add(node);
         }
 
         // Return the result.

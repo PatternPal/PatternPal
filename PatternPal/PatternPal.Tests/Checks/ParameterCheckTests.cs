@@ -78,7 +78,7 @@ public class ParameterCheckTests
         IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
 
         // Obtain the StringTestFunction method (3 parameters)
-        IMember stringNode = Relations.GetMemberFromGraph(
+        IMember stringNode = EntityNodeUtils.GetMemberFromGraph<IMethod>(
             graph,
             "StringTest",
             "StringTestFunction");

@@ -1,0 +1,149 @@
+﻿[
+  {
+    FeedbackMessage: Found class 'MockClass1',
+    Priority: Low,
+    ChildrenCheckResults: [
+      {
+        FeedbackMessage: ,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found constructor: MockClass1().,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: Modifiers correctly implemented.,
+                Correct: true,
+                MatchedNode: MockClass1
+              }
+            ],
+            MatchedNode: MockClass1,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        NodeCheckCollectionWrapper: true
+      }
+    ],
+    MatchedNode: MockClass1,
+    NodeCheckCollectionWrapper: false
+  },
+  {
+    FeedbackMessage: Found class 'MockClass2',
+    Priority: Low,
+    ChildrenCheckResults: [
+      {
+        FeedbackMessage: ,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found constructor: MockClass2().,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: The node MockClass2() does not have the private modifier.,
+                Correct: false,
+                MatchedNode: MockClass2
+              }
+            ],
+            MatchedNode: MockClass2,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        NodeCheckCollectionWrapper: true
+      }
+    ],
+    MatchedNode: MockClass2,
+    NodeCheckCollectionWrapper: false
+  },
+  {
+    FeedbackMessage: Found class 'MockClass3',
+    Priority: Low,
+    ChildrenCheckResults: [
+      {
+        FeedbackMessage: ,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found constructor: MockClass3().,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: The node MockClass3() does not have the private modifier.,
+                Correct: false,
+                MatchedNode: MockClass3
+              }
+            ],
+            MatchedNode: MockClass3,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        NodeCheckCollectionWrapper: true
+      }
+    ],
+    MatchedNode: MockClass3,
+    NodeCheckCollectionWrapper: false
+  },
+  {
+    FeedbackMessage: Found class 'MockClass4',
+    Priority: Low,
+    ChildrenCheckResults: [
+      {
+        FeedbackMessage: ,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found constructor: MockClass4().,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: The node MockClass4() does not have the private modifier.,
+                Correct: false,
+                MatchedNode: MockClass4
+              }
+            ],
+            MatchedNode: MockClass4,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        NodeCheckCollectionWrapper: true
+      }
+    ],
+    MatchedNode: MockClass4,
+    NodeCheckCollectionWrapper: false
+  },
+  {
+    FeedbackMessage: Found class 'MockClass5',
+    Priority: Low,
+    ChildrenCheckResults: [
+      {
+        FeedbackMessage: ,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found constructor: MockClass5().,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: The node MockClass5() does not have the private modifier.,
+                Correct: false,
+                MatchedNode: MockClass5
+              }
+            ],
+            MatchedNode: MockClass5,
+            NodeCheckCollectionWrapper: false
+          },
+          {
+            FeedbackMessage: Found constructor: MockClass5().,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: Modifiers correctly implemented.,
+                Correct: true,
+                MatchedNode: MockClass5
+              }
+            ],
+            MatchedNode: MockClass5,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        NodeCheckCollectionWrapper: true
+      }
+    ],
+    MatchedNode: MockClass5,
+    NodeCheckCollectionWrapper: false
+  }
+]
