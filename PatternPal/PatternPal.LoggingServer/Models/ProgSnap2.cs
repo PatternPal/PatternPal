@@ -86,5 +86,11 @@ namespace PatternPal.LoggingServer.Models
         /// The section of the code state associated with this compile event. For example in compile.error, this would be the section of code that caused the error.
         /// </summary>
         public string? CodeStateSection { get; set; }
+
+        /// <summary>
+        /// Result in case of debug.run event. Value can be "success", "failure", "timeout", "error", "unknown".
+        /// </summary>
+        public ExecutionResult? ExecutionResult { get; set; }
+
     }
 }
