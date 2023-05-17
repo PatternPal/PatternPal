@@ -1,4 +1,4 @@
-using Google.Protobuf.WellKnownTypes;
+﻿using Google.Protobuf.WellKnownTypes;
 using NUnit.Framework;
 
 using PatternPal.SyntaxTree;
@@ -235,6 +235,8 @@ namespace PatternPal.Tests.Core
         [TestCase("MemberRelations.cs", "ClassWithField", true, "ClassWithField._count", true)]
         [TestCase("MemberRelations.cs", "ClassWithField.GetCount", false, "ClassWithField._count", true)]
         [TestCase("MemberRelations.cs", "MemberRelations.CheckCount", false, "MemberRelations.fieldClass", true)]
+        [TestCase("MemberRelations.cs", "MemberRelations.fieldClass", false, "ClassWithField.ClassWithField", true)]
+
 
         //false
         [TestCase("MemberRelations.cs", "ClassWithField.TestFuncionality", false, "MemberRelations.fieldClass", false)]

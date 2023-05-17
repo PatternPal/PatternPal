@@ -1,11 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-
 using PatternPal.SyntaxTree.Abstractions;
-using PatternPal.SyntaxTree.Abstractions.Entities;
 using PatternPal.SyntaxTree.Abstractions.Members;
 using PatternPal.SyntaxTree.Utils;
 
@@ -20,6 +16,12 @@ namespace PatternPal.SyntaxTree.Models.Members.Constructor
         {
             _constructor = node;
             _parent = parent;
+        }
+
+        /// <inheritdoc />
+        public ConstructorDeclarationSyntax GetConstructorDeclarationSyntax()
+        {
+            return _constructor;
         }
 
         public override string GetName()

@@ -1,4 +1,4 @@
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using NUnit.Framework;
 
 using PatternPal.SyntaxTree;
