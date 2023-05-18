@@ -2,8 +2,6 @@
 
 using PatternPal.SyntaxTree;
 
-using static PatternPal.Core.Checks.CheckBuilder;
-
 #endregion
 
 namespace PatternPal.Tests.Checks;

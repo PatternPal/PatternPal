@@ -1,4 +1,4 @@
-﻿namespace PatternPal.Tests.Core;
+﻿namespace PatternPal.Tests.Core.RecognizerRunnerTests;
 
 [TestFixture]
 public class RecognizerRunnerTests
