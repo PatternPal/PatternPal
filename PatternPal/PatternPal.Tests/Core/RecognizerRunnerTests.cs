@@ -10,6 +10,7 @@ public class RecognizerRunnerTests
             new()
             {
                 FeedbackMessage = string.Empty,
+                CollectionKind = CheckCollectionKind.Any,
                 ChildrenCheckResults =
                     new List< ICheckResult >
                     {
@@ -124,6 +125,7 @@ public class RecognizerRunnerTests
             new()
             {
                 FeedbackMessage = string.Empty,
+                CollectionKind = CheckCollectionKind.Any,
                 ChildrenCheckResults =
                     new List< ICheckResult >
                     {
@@ -286,6 +288,7 @@ public class RecognizerRunnerTests
             new()
             {
                 FeedbackMessage = string.Empty,
+                CollectionKind = CheckCollectionKind.Any,
                 ChildrenCheckResults =
                     new List< ICheckResult >
                     {
@@ -340,6 +343,7 @@ public class RecognizerRunnerTests
             new()
             {
                 FeedbackMessage = string.Empty,
+                CollectionKind = CheckCollectionKind.Any,
                 ChildrenCheckResults =
                     new List< ICheckResult >
                     {
