@@ -10,123 +10,12 @@ examining the static code and identifying the critical parts of the
 detected design pattern. These recognizers are created by dynamically
 composing modular checks using the fluent design pattern.
 
-## Leaf Checks
+### Checks
+A recognizer is build from multiple checks which are also build from other checks, each check 
+searches through the SyntaxGraph to look for specific nodes or relations between nodes.
+More information about the individual checks can be found [here](checks.md).
 
-Leaf checks examine a single aspect of an entity (see
-the [syntax graph explanation](syntax_graph.md)) and compare it to a specific value. They do
-not contain other checks.
-
-### ModifierCheck
-
-A modifier check examines the modifiers (public, private, static,
-abstract, etc.) of an entity and compares them to the ones specified in
-the check. For instance, a modifier check for the Singleton design
-pattern would include a check for a private constructor.
-
-### TypeCheck
-
-A type check verifies that the type of an entity matches a specific
-type, as defined by the design pattern being recognized. For instance,
-in the Singleton design pattern, a type check could verify that the
-return type of the GetInstance method is the same as the type of the
-class which contains it.
-
-### ParameterCheck
-
-A parameter check examines the parameters of an entity like a method or
-constructor and compares them to the expected ones in the design pattern
-being recognized. For instance, in the Strategy design pattern, a
-parameter check could verify that the SetStrategy method of the Context
-class has a parameter of type Strategy. This is done with a list of
-TypeChecks.
-
-### RelationCheck
-
-A relation check examines a specific relation between two entities in
-the code and compares it to the expected relationships in the design
-pattern being recognized. Different types of relations that can be
-checked are usage, creation, inheritance, and implementation. For
-example, a check for the Adapter design pattern would include a relation
-check confirming that the Adapter class uses the Adaptee class.
-
-## Node Checks
-
-A Node check examines an entity. It combines Node and Leaf checks into a
-more complex check for the entity being checked.
-
-### NodeCheck
-
-A NodeCheck is a class encompassing the behavior of a node check, i.e.
-the possibility to run a collection of subchecks. It is the base of all
-node checks. It achieves this with the use of a template method
-implementation of the Check() function. For each check where different
-implementations are possible, this function calls a virtual method that
-can be implemented by the specific node checks. For example, what the
-type of a node represents differs per node. The type of a method is its
-return type, while the type of a constructor is its parent type. Thus
-there is a virtual function that gets the type of field and is
-implemented in the specific node checks, and said function is used in
-the Check() function in the case of a subcheck of type TypeCheck.
-
-### FieldCheck
-
-A field is a globally defined variable. A FieldCheck examines whether
-there is a certain field in the entity being examined that complies with
-the child checks of the FieldCheck. A FieldCheck can compose TypeChecks,
-ModifierChecks, and operator checks.
-
-### MethodCheck
-
-A MethodCheck examines whether there is a certain method in the entity
-being examined that complies with the child checks of the MethodCheck. A
-MethodCheck can compose ModifierChecks, ParameterChecks, RelationChecks,
-TypeChecks, and operator checks. The Typechecks examine the return type
-of the method.
-
-### ConstructorCheck
-
-A ConstructorCheck examines whether there is a certain constructor in
-the entity being examined that complies with the child checks of the
-ConstructorCheck. A ConstructorCheck can compose ModifierChecks,
-ParameterChecks, RelationChecks, TypeChecks, and operator checks. The
-TypeChecks examine the return type of the constructor, which is equal to
-the type of the entity that composes it.
-
-### PropertyCheck
-
-A PropertyCheck examines whether there is a certain property in the
-entity being examined that complies with the child checks of the
-PropertyCheck. A PropertyCheck can compose ModifierChecks,
-RelationChecks, TypeChecks, and operator checks. The Typechecks examine
-the return type of the property.
-
-### ClassCheck
-
-A ClassCheck examines whether there is a certain class that complies
-with the checks of the ClassCheck. A ClassCheck can compose
-MethodChecks, PropertyChecks, ConstructorChecks, ModifierChecks,
-RelationChecks, and operator checks.
-
-### InterfaceCheck
-
-An InterfaceCheck examines whether there is a certain interface that
-complies with the checks of the InterfaceCheck. An InterfaceCheck can
-compose MethodChecks, PropertyChecks, ModifierChecks, RelationChecks,
-and operator checks.
-
-## Operator Checks
-
-Some checks are similar to logical operators. They combine the result of
-their collection of checks in a way similar to how logical operators
-combine boolean values. Currently, the only implemented operator check
-is NotCheck.
-
-### NotCheck
-
-NotCheck contains a check and negates its result. This can be used for
-example when instead of requiring a specific modifier, you exclude one.
-
-## Priority
+### Priority
 
 Each check has a priority. This indicates the importance of the
 characteristic the check validates being present in the design pattern.
@@ -142,7 +31,7 @@ rather function as qualifiers for assessing the level of proficiency in
 the implementation of the design pattern. They are used as final pattern
 qualifiers and serve as points for further improvement.
 
-## CheckResult
+### CheckResult
 
 A CheckResult is the result of a check. Similar to how a check can be a
 collection of checks, the result of a check can be a collection of
@@ -154,7 +43,7 @@ did succeed or did not. Therefore, it has a Correctness property. A node
 check corresponds to a NodeCheckResult. It has a list of
 NodeCheckResults and LeafCheckResults.
 
-## CheckBuilder
+### CheckBuilder
 
 The CheckBuilder is a static class that makes it possible to make a
 collection of checks for a recognizer. It contains a number of static

@@ -2,18 +2,24 @@
 - name: Home
   href: ../index.md
 
-- name: Recognizers
-- name: How a recognizer works
-  href: recognizers/recognizer.md
-- name: Syntax graph
-  href: recognizers/syntax_graph.md
+- name: Context explanation 
 - name: Singleton
-  href: recognizers/singleton.md
+  href: context/singleton.md
 - name: Strategy
-  href: recognizers/strategy.md
+  href: context/strategy.md
+
+- name: Technical explanation
+- name: Recognizer 
+  href: technical/recognizer.md
+- name: Checks
+  href: technical/checks.md
+- name: Syntax Graph
+  href: technical/syntax_graph
 
 - name: How to
 - name: Implement a Recognizer
   href: how-to/implement_recognizer.md
 - name: Implement an Extension
   href: how-to/implement_extension.md
+
+
