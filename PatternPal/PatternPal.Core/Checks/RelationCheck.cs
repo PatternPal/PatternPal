@@ -79,6 +79,7 @@ internal class RelationCheck : CheckBase
                    DependencyCount = DependencyCount,
                    MatchedNode = node,
                    Check = this,
+                   CollectionKind = CheckCollectionKind.Any,
                };
     }
 }

@@ -93,10 +93,8 @@ internal class NodeCheck< TNode > : CheckBase
         }
 
         // Store the matched entity.
-        _matchedEntities = new List< INode >
-                           {
-                               castNode
-                           };
+        _matchedEntities ??= new List< INode >();
+        _matchedEntities.Add(castNode);
 
         // Return the result.
         return new NodeCheckResult

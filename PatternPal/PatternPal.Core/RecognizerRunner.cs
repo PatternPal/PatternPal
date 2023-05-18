@@ -277,6 +277,7 @@ public class RecognizerRunner
                         }
                         case NodeCheckResult nodeCheckResult:
                         {
+                            // TODO: Fix this using priorities (only works if all sub-checks are knockout.
                             // If `FilterResults` returns false, this means the node check shouldn't
                             // be pruned (because it has correct children). Because it's wrapped in
                             // a not check, this not check is incorrect and should be pruned if it
@@ -314,23 +315,19 @@ public class RecognizerRunner
 
         // If parentCheck becomes empty => also prune parent. The parent is pruned by the caller if
         // we return `true`.
-        if (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count)
+        if (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count
+            || (parentCheckResult.CollectionKind == CheckCollectionKind.All && resultsToBePruned.Count > 0))
         {
             // Parent becomes empty.
+            parentCheckResult.ChildrenCheckResults.Clear();
             return true;
-        }
-
-        // Prune the results.
-        foreach (ICheckResult checkResult in resultsToBePruned)
-        {
-            parentCheckResult.ChildrenCheckResults.Remove(checkResult);
         }
 
         if (parentCheckResult is
             {
                 NodeCheckCollectionWrapper: true,
                 Priority: Priority.Knockout,
-                Check: RelationCheck relationCheck
+                Check: RelationCheck
             })
         {
             // We're currently processing the NodeCheckResult of a RelationCheck.
@@ -386,6 +383,12 @@ public class RecognizerRunner
                     relationResult.Pruned = true;
                 }
             }
+        }
+
+        // Prune the results.
+        foreach (ICheckResult checkResult in resultsToBePruned)
+        {
+            parentCheckResult.ChildrenCheckResults.Remove(checkResult);
         }
 
         // Parent doesn't become empty, so it shouldn't be pruned by the caller.
