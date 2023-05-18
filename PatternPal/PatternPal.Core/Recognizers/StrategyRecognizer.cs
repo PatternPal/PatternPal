@@ -50,11 +50,11 @@ internal class StrategyRecognizer : IRecognizer
 
         // Strategy Abstract Class - b0
         MethodCheck abstractMethodExecuteStrategy = AbstractMethodExecuteStrategy();
-        
+
         // Todo: Strategy - e
 
         // Strategy Interface - option a
-        InterfaceCheck interfaceCheck = Interface(
+        InterfaceCheck interfaceStrategyCheck = Interface(
             Priority.Knockout,
             interfaceMethodExecuteStrategy
         );
@@ -66,19 +66,15 @@ internal class StrategyRecognizer : IRecognizer
         );
 
         // Strategy - a
-        yield return Any(
-            Priority.Knockout,
-            interfaceCheck,
-            abstractClassCheck
-        );
+        yield return CheckStrategy(interfaceStrategyCheck, abstractClassCheck);
 
 
         // Context Class - a
-        ICheck fieldOrProperty = FieldOrPropertyContextClass(interfaceCheck, abstractClassCheck);
+        ICheck fieldOrProperty = FieldOrPropertyContextClass(interfaceStrategyCheck, abstractClassCheck);
 
         // Context Class - b
         // Todo: Implement a setBy relation between method and property/field
-        MethodCheck setStrategyMethod = SetStrategyMethodCheck(interfaceCheck, abstractClassCheck);
+        MethodCheck setStrategyMethod = SetStrategyMethodCheck(interfaceStrategyCheck, abstractClassCheck);
 
         // Context Class - c
         MethodCheck executeStrategyMethod = ExecuteStrategyMethodCheck(interfaceMethodExecuteStrategy, abstractMethodExecuteStrategy);
@@ -92,9 +88,10 @@ internal class StrategyRecognizer : IRecognizer
         );
         yield return contextClassCheck;
 
+        // Todo: Check if methods are implemented 
 
         // Concrete Strategy - a
-        ICheck implementationOrInherit = ImplementOrInherit(interfaceCheck, abstractClassCheck);
+        ICheck implementationOrInherit = ImplementOrInherit(interfaceStrategyCheck, abstractClassCheck);
 
         // Concrete Strategy - b
         // Todo: Ask Matteo how to check
@@ -207,22 +204,22 @@ internal class StrategyRecognizer : IRecognizer
     }
 
     /// <summary>
-    /// Creates a <see cref="ICheck"/> that checks whether a class is an implementation of the <paramref name="strategyInterfaceCheck"/> or inherits
+    /// Creates a <see cref="ICheck"/> that checks whether a class is an implementation of the <paramref name="strategyinterfaceStrategyCheck"/> or inherits
     /// from the <paramref name="strategyAbstractClassCheck"/>.
     /// </summary>
-    /// <param name="strategyInterfaceCheck"> A <see cref="InterfaceCheck"/> that corresponds with the
+    /// <param name="interfaceStrategyCheck"> A <see cref="InterfaceCheck"/> that corresponds with the
     /// Strategy Interface requirements.</param>
     /// <param name="strategyAbstractClassCheck"> A <see cref="ClassCheck"/> that corresponds with the
     /// Strategy Abstract class requirements.</param>
     /// <returns>A <see cref="ICheck"/> that is used to check if a class is an implementation of the Strategy Interface or inherits from the
     /// Strategy Abstract class.</returns>
-    private ICheck ImplementOrInherit(InterfaceCheck strategyInterfaceCheck, ClassCheck strategyAbstractClassCheck)
+    private ICheck ImplementOrInherit(InterfaceCheck interfaceStrategyCheck, ClassCheck strategyAbstractClassCheck)
     {
         return Any(
             Priority.Knockout,
             Implements(
                 Priority.Knockout,
-                strategyInterfaceCheck.Result),
+                interfaceStrategyCheck.Result),
             Inherits(
                 Priority.Knockout,
                 strategyAbstractClassCheck.Result)
@@ -258,14 +255,14 @@ internal class StrategyRecognizer : IRecognizer
 
     /// <summary>
     /// Creates a <see cref="MethodCheck"/> that checks whether there is a method that has
-    /// a parameter with the type of either the <paramref name="strategyInterfaceCheck"/> or the <paramref name="strategyAbstractClassCheck"/> entities.
+    /// a parameter with the type of either the <paramref name="interfaceStrategyCheck"/> or the <paramref name="strategyAbstractClassCheck"/> entities.
     /// </summary>
-    /// <param name="strategyInterfaceCheck"> A <see cref="InterfaceCheck"/> that corresponds with the
+    /// <param name="interfaceStrategyCheck"> A <see cref="InterfaceCheck"/> that corresponds with the
     /// Strategy Interface requirements.</param>
     /// <param name="strategyAbstractClassCheck"> A <see cref="ClassCheck"/> that corresponds with the
     /// Strategy Abstract class requirements.</param>
     /// <returns>A <see cref="MethodCheck"/> that checks for the existence of a setStrategy method in the Context class.</returns>
-    private MethodCheck SetStrategyMethodCheck(InterfaceCheck strategyInterfaceCheck, ClassCheck strategyAbstractClassCheck)
+    private MethodCheck SetStrategyMethodCheck(InterfaceCheck interfaceStrategyCheck, ClassCheck strategyAbstractClassCheck)
     {
         // Todo: Add relations between methods and fields/properties to create a more solid check
         return Method(
@@ -274,7 +271,7 @@ internal class StrategyRecognizer : IRecognizer
                 Priority.High,
                 Parameters(
                     Priority.High, 
-                    Type(Priority.High, strategyInterfaceCheck.Result)
+                    Type(Priority.High, interfaceStrategyCheck.Result)
                 ),
                 Parameters(
                     Priority.High, 
@@ -286,14 +283,14 @@ internal class StrategyRecognizer : IRecognizer
 
     /// <summary>
     /// Creates <see cref="CheckCollectionKind.Any"/> that checks whether there is a field or property with the type of the entities
-    /// matched with the <paramref name="strategyInterfaceCheck"/> or the <paramref name="strategyAbstractClassCheck"/> type.
+    /// matched with the <paramref name="strategyinterfaceStrategyCheck"/> or the <paramref name="strategyAbstractClassCheck"/> type.
     /// </summary>
-    /// <param name="strategyInterfaceCheck"> A <see cref="InterfaceCheck"/> that corresponds with the
+    /// <param name="interfaceStrategyCheck"> A <see cref="InterfaceCheck"/> that corresponds with the
     /// Strategy Interface requirements</param>
     /// <param name="strategyAbstractClassCheck"> A <see cref="ClassCheck"/> that corresponds with the
     /// Strategy Abstract class requirements</param>
     /// <returns>A <see cref="ICheck"/> that is used to check for a field or property in the Context class</returns>
-    private ICheck FieldOrPropertyContextClass(InterfaceCheck strategyInterfaceCheck, ClassCheck strategyAbstractClassCheck)
+    private ICheck FieldOrPropertyContextClass(InterfaceCheck interfaceStrategyCheck, ClassCheck strategyAbstractClassCheck)
     {
         return Any(
             Priority.Knockout,
@@ -303,7 +300,7 @@ internal class StrategyRecognizer : IRecognizer
                     Priority.Knockout,
                     Type(
                         Priority.Knockout,
-                        strategyInterfaceCheck.Result),
+                        interfaceStrategyCheck.Result),
                     Type(
                         Priority.Knockout,
                         strategyAbstractClassCheck.Result)
@@ -319,7 +316,7 @@ internal class StrategyRecognizer : IRecognizer
                     Priority.Knockout,
                     Type(
                         Priority.Knockout,
-                        strategyInterfaceCheck.Result),
+                        interfaceStrategyCheck.Result),
                     Type(
                         Priority.Knockout,
                         strategyAbstractClassCheck.Result)
@@ -354,4 +351,45 @@ internal class StrategyRecognizer : IRecognizer
     {
         return Method(Priority.High);
     }
+
+
+
+    // Step 1 - create Strategy
+    private ICheck CheckStrategyExistence()
+    {
+        return Any(
+            Priority.Knockout,
+            AbstractClass(Priority.Knockout),
+            Interface(Priority.Knockout)
+        );
+    }
+
+    // Step 2 - create executeStrategy() (abstract) method
+    private ICheck CheckStrategy(InterfaceCheck interfaceStrategyCheck, ClassCheck abstractClassCheck)
+    {
+        return Any(
+            Priority.Knockout,
+            interfaceStrategyCheck,
+            abstractClassCheck
+        );
+    }
+
+    // Step 3 - create "Concrete Strategy" class
+    private ICheck CheckConcreteStrategyExistence(ICheck implementationOrInherit)
+    {
+        return Class(
+            Priority.Knockout,
+            implementationOrInherit
+        );
+    }
+
+    // Step 4 - implement / overwrite executeStrategy()
+    // ToDo should be checked in implementation/inherit
+    private ICheck CheckExecuteStrategy()
+    {
+
+    }
+
+
+    private ICheck CheckFieldOrProperty(){}
 }
