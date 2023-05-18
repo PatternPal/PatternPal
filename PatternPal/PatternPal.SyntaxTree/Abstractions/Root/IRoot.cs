@@ -12,7 +12,7 @@ namespace PatternPal.SyntaxTree.Abstractions.Root
     public interface IRoot : IEntitiesContainer, INamespaceContainer, IUsingContainer
     {
         /// <summary>
-        /// Get the filepath of the source file where this node is found in.
+        /// Gets the filepath of the source file where this node is found in.
         /// </summary>
         string GetSource();
 
@@ -25,7 +25,7 @@ namespace PatternPal.SyntaxTree.Abstractions.Root
     public interface INamespaceContainer : INode, IParent
     {
         /// <summary>
-        /// Get all Namespaces in the current node.
+        /// Gets all Namespaces in the current node.
         /// </summary>
         IEnumerable<INamespace> GetNamespaces();
     }
@@ -36,7 +36,7 @@ namespace PatternPal.SyntaxTree.Abstractions.Root
     public interface IUsingContainer : INode
     {
         /// <summary>
-        /// Get all usings in the current node.
+        /// Gets all usings in the current node.
         /// </summary>
         IEnumerable<UsingDirectiveSyntax> GetUsing();
     }

@@ -81,7 +81,7 @@ namespace PatternPal.SyntaxTree.Abstractions
     /// <summary>
     /// Represents a node which can be a child of another node.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The parent of the node</typeparam>
     public interface IChild<out T> where T : INode, IParent
     {
         /// <summary>

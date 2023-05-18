@@ -32,6 +32,9 @@ namespace PatternPal.SyntaxTree.Models
             return _node;
         }
 
+        /// <summary>
+        /// Returns the Z<see cref="IRoot"/> this node belongs to.
+        /// </summary>
         public IRoot GetRoot()
         {
             return _root;

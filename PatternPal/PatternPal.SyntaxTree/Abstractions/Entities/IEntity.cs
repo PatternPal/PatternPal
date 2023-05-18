@@ -7,66 +7,67 @@ using PatternPal.SyntaxTree.Abstractions.Root;
 
 namespace PatternPal.SyntaxTree.Abstractions.Entities
 {
+    /// <summary>
+    /// An <see cref="INode"/> which contains <see cref="IMember"/>s.
+    /// </summary>
     public interface IEntity : IModified, IChild<IEntitiesContainer>, INamedEntitiesContainer
     {
         TypeDeclarationSyntax GetTypeDeclarationSyntax();
         /// <summary>
-        ///     Get a list of methods declared in this node
+        /// Gets a list of <see cref="IMethod"/>s declared in this entity.
         /// </summary>
-        /// <returns>A list of methods</returns>
         IEnumerable<IMethod> GetMethods();
 
         /// <summary>
-        ///     Get a list of properties declared in this node
+        /// Gets a list of <see cref="IProperty"/>s declared in this entity.
         /// </summary>
-        /// <returns>A list of properties</returns>
         IEnumerable<IProperty> GetProperties();
 
         /// <summary>
-        ///     Gets a list of all methods, field, properties and constructors. Maybe more in the futher
+        /// Gets a list of all <see cref="IMember"/>s declared in this entity.
         /// </summary>
-        /// <returns>A list of Members</returns>
         IEnumerable<IMember> GetMembers();
-        
+
         /// <summary>
-        ///     Gets a list of all methods, field, properties and constructors.
-        ///     Also includes wrappers for example the getter and setter of a property as an Method
+        /// Gets a list of all <see cref="IMember"/>s declared in this entity.
+        /// Also includes wrappers for example the getter and setter of a <see cref="IProperty"/> as a <see cref="IMethod"/>.
         /// </summary>
-        /// <returns>A list of Members</returns>
         IEnumerable<IMember> GetAllMembers();
 
         /// <summary>
-        ///     Get a list of bases of this note (overrides / implementations)
+        /// Gets a list of bases of this entity (overrides / implementations).
         /// </summary>
-        /// <returns>A list of types</returns>
         IEnumerable<TypeSyntax> GetBases();
 
         /// <summary>
-        ///     Gets the type of this entity
+        /// Gets the type of this entity.
         /// </summary>
         EntityType GetEntityType();
 
         /// <summary>
-        ///     Get the name with included namespace
+        /// Gets the name of this entity, namespaces included.
         /// </summary>
-        /// <returns></returns>
         string GetFullName();
 
+        /// <summary>
+        /// Gets all <see cref="Relation"/>s that this entity has, filtered on the type of the destination node of the relation.
+        /// </summary>
         IEnumerable<Relation> GetRelations(RelationTargetKind type);
 
         /// <summary>
-        ///     Gets all methods this includes getter and setter from properties and constructors
+        /// Gets all methods. This includes getter and setter from <see cref="IProperty"/>s and <see cref="IConstructor"/>s.
         /// </summary>
-        /// <returns>A list of methods</returns>
         IEnumerable<IMethod> GetAllMethods();
 
         /// <summary>
-        ///     Gets all fields this includes getters from properties
+        /// Gets all fields. This includes getters from properties.
         /// </summary>
-        /// <returns>A list of methods</returns>
         IEnumerable<IField> GetAllFields();
     }
-
+    
+    /// <summary>
+    /// The possible types of entities that can exist.
+    /// </summary>
     public enum EntityType
     {
         Class, Interface

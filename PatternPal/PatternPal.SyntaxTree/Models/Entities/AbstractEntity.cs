@@ -127,6 +127,9 @@ namespace PatternPal.SyntaxTree.Models.Entities
             return GetName();
         }
 
+        /// <summary>
+        /// Gets all <see cref="Relation"/>s that this <see cref="INode"/> has, filtered on the type of the destination node of the relation.
+        /// </summary>
         public IEnumerable<Relation> GetRelations(RelationTargetKind type)
         {
             return _parent.GetRoot().GetRelations(this, type);

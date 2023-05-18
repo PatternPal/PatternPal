@@ -105,7 +105,7 @@ namespace PatternPal.SyntaxTree
         }
 
         /// <summary>
-        /// Get all <see cref="Relation"/>s that an <see cref="INode"/> has, filtered on the type of the destination node of the relation.
+        /// Gets all <see cref="Relation"/>s that an <see cref="INode"/> has, filtered on the type of the destination node of the relation.
         /// </summary>
         /// <param name="node">The <see cref="INode"/> from which you want to know the relations</param>
         /// <param name="type">The type of the destination <see cref="INode"/></param>

@@ -71,6 +71,9 @@ namespace PatternPal.SyntaxTree.Models.Root
                 .ToDictionary(p => p.Key, p => p.Value);
         }
 
+        /// <summary>
+        /// Gets all <see cref="Relation"/>s from an <see cref="INode"/>, filtered on the type of the destination node of the relation.
+        /// </summary>
         public IEnumerable<Relation> GetRelations(INode node, RelationTargetKind type)
         {
             return _graph.GetRelations(node, type);

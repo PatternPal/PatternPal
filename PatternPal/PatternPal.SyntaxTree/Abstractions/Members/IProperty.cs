@@ -2,6 +2,9 @@
 
 namespace PatternPal.SyntaxTree.Abstractions.Members
 {
+    /// <summary>
+    /// An <see cref="INode"/> which represents a property.
+    /// </summary>
     public interface IProperty : IMember
     {
         bool HasGetter();
