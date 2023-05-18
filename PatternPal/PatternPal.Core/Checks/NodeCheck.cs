@@ -17,13 +17,17 @@ internal class NodeCheck< TNode > : CheckBase
     /// Gets a <see cref="Func{TResult}"/> which returns a <see cref="List{T}"/> of <see cref="IEntity"/>s matched by this <see cref="ICheck"/>.
     /// </summary>
     /// <returns>A <see cref="List{T}"/> of matched <see cref="IEntity"/>s.</returns>
-    public override Func<List<INode>> Result => () => _matchedEntities;
+    public override Func< List< INode > > Result => () => _matchedEntities
+                                                          ?? throw new ArgumentNullException(
+                                                              nameof( _matchedEntities ),
+                                                              $"'{this}' is not yet evaluated, make sure to evaluate this check before you try to access it results!");
 
     // The current sub-check being checked.
     private ICheck ? _currentSubCheck;
 
-    // The entities matched by this check.
-    private readonly List<INode> _matchedEntities;
+    // The entities matched by this check. This list is set when the check is evaluated, before then
+    // it is null. When the list is set but empty, no entities were matched by this check.
+    private List< INode > ? _matchedEntities;
 
     // The dependency count, declared as nullable so we can check whether we have calculated it
     // already.
@@ -67,7 +71,6 @@ internal class NodeCheck< TNode > : CheckBase
     {
         _subChecks = subChecks;
         _kind = kind;
-        _matchedEntities = new List< INode >();
     }
 
     /// <inheritdoc />
@@ -90,7 +93,10 @@ internal class NodeCheck< TNode > : CheckBase
         }
 
         // Store the matched entity.
-        _matchedEntities.Add(castNode);
+        _matchedEntities = new List< INode >
+                           {
+                               castNode
+                           };
 
         // Return the result.
         return new NodeCheckResult

@@ -15,7 +15,7 @@ internal class RelationCheck : CheckBase
     /// <summary>
     /// A <see cref="RelationCheck"/> is dependent on the <see cref="INode"/> to which it has an <see cref="Relation"/>.
     /// </summary>
-    public override int DependencyCount => 1;
+    public override int DependencyCount => 1 + _relatedNodeCheck.DependencyCount;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RelationCheck"/> class.

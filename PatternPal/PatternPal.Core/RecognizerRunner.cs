@@ -344,22 +344,43 @@ public class RecognizerRunner
 
                 if (relationResult.RelatedCheck is null)
                 {
-                    throw new ArgumentNullException($"RelatedCheck of CheckResult '{relationResult}' is null, while it should reference the ICheck belonging to the INode it has a relation to.");
+                    throw new ArgumentNullException(
+                        nameof( relationResult.RelatedCheck ),
+                        $"RelatedCheck of CheckResult '{relationResult}' is null, while it should reference the ICheck belonging to the INode it has a relation to.");
+                }
+
+                // If the RelationCheck did not match any nodes, it won't have any child results. As
+                // such, we won't reach this code. If we do reach this code, but
+                // `relationResult.MatchedNode` is null, this is an error.
+                if (relationResult.MatchedNode is null)
+                {
+                    throw new ArgumentNullException(
+                        nameof( relationResult.MatchedNode ),
+                        "Relation check did not match any nodes");
                 }
 
                 // Get the CheckResults belonging to the node to which there should be a relation.
-                List< ICheckResult > resultsOfNode = resultsByNode[ relationResult.MatchedNode! ];
+                List< ICheckResult > resultsOfNode = resultsByNode[ relationResult.MatchedNode ];
+
                 // Find the CheckResult linked to the check which searched for the Node to which there should be a relation.
                 ICheckResult ? relevantResult = resultsOfNode.FirstOrDefault(
                     (
                         result) => result.Check == relationResult.RelatedCheck);
 
+                // This should not be possible for the same reason `relationResult.MatchedNode`
+                // should not be null.
+                if (relevantResult is null)
+                {
+                    throw new ArgumentNullException(
+                        nameof( relevantResult ),
+                        "Relation check did not match any nodes");
+                }
+
                 // If this node gets pruned, it does not have the required attributes to be the node belonging to the
                 // check which searched for the node to which there should be a relation. Therefore, even though the
                 // relation might be found, it is not the relation directed to the node to which there should be one.
                 // Therefore this relation is not the required one, and thus the relationResult gets pruned.
-                if (relevantResult is not null
-                    && relevantResult.Pruned)
+                if (relevantResult.Pruned)
                 {
                     resultsToBePruned.Add(relationResult);
                     relationResult.Pruned = true;
