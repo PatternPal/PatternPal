@@ -10,7 +10,7 @@ public static class ResourceUtils
     private static ResourceManager _resourceMan;
     private static readonly Regex Regex = new(@"\{\d+\}");
 
-    public static ResourceManager ResourceManager
+    private static ResourceManager ResourceManager
     {
         get
         {
@@ -30,7 +30,7 @@ public static class ResourceUtils
 
     public static CultureInfo Culture { get; set; }
 
-    public static string GetResourceFromString(string name)
+    private static string GetResourceFromString(string name)
     {
         return ResourceManager.GetString(name, Culture);
     }
