@@ -12,7 +12,7 @@ namespace PatternPal.Services;
  * Implementation of contract defined in protocol buffer.
  * What to do with the received log and send to logging server.
  */
-public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
+public class LoggingService : LogProviderService.LogProviderServiceBase
 {
     public override Task<LogEventResponse> LogEvent(LogEventRequest receivedRequest, ServerCallContext context)
     {
@@ -20,38 +20,30 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
             "http://178.128.140.163:8080");
 
         LogRequest sendRequest = DetermineSpecificLog(receivedRequest);
-        LogCollectorService.LogCollectorServiceClient client = new LogCollectorService.LogCollectorServiceClient(grpcChannel);
-        LogResponse logReply = client.Log(sendRequest);
+        LogCollectorService.LogCollectorServiceClient client = new(grpcChannel);
+        client.Log(sendRequest);
 
         // Send response back to frond-end to verify something has been received here
-        LogEventResponse response = new LogEventResponse { ResponseMessage = "a response message." };
+        LogEventResponse response = new() { ResponseMessage = "a response message." };
         return Task.FromResult(response);
     }
 
     /// <summary>
     /// Returns a log in the right format for the logging server based on the event type.
     /// </summary>
-    private LogRequest DetermineSpecificLog(LogEventRequest receivedRequest)
+    private static LogRequest DetermineSpecificLog(LogEventRequest receivedRequest)
     {
-        switch (receivedRequest.EventType)
+        return receivedRequest.EventType switch
         {
-            case Protos.EventType.EvtCompile:
-                return CompileLog(receivedRequest);
-            case Protos.EventType.EvtCompileError:
-                return CompileErrorLog(receivedRequest);
-            case Protos.EventType.EvtProjectOpen:
-                return ProjectOpenLog(receivedRequest);
-            case Protos.EventType.EvtProjectClose:
-                return ProjectCloseLog(receivedRequest);
-            case Protos.EventType.EvtDebugProgram:
-                return DebugProgramLog(receivedRequest);
-            case Protos.EventType.EvtSessionStart:
-                return SessionStartLog(receivedRequest);
-            case Protos.EventType.EvtSessionEnd:
-                return SessionEndLog(receivedRequest);
-            default:
-                return StandardLog(receivedRequest);
-        }
+            Protos.EventType.EvtCompile => CompileLog(receivedRequest),
+            Protos.EventType.EvtCompileError => CompileErrorLog(receivedRequest),
+            Protos.EventType.EvtProjectOpen => ProjectOpenLog(receivedRequest),
+            Protos.EventType.EvtProjectClose => ProjectCloseLog(receivedRequest),
+            Protos.EventType.EvtDebugProgram => DebugProgramLog(receivedRequest),
+            Protos.EventType.EvtSessionStart => SessionStartLog(receivedRequest),
+            Protos.EventType.EvtSessionEnd => SessionEndLog(receivedRequest),
+            _ => StandardLog(receivedRequest)
+        };
     }
 
 
@@ -60,7 +52,7 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
     /// </summary>
     /// <param name="receivedRequest"></param>
     /// <returns></returns>
-    private LogRequest StandardLog(LogEventRequest receivedRequest)
+    private static LogRequest StandardLog(LogEventRequest receivedRequest)
     {
         return new LogRequest
         {
@@ -77,7 +69,7 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
     }
 
     #region Log types
-    private LogRequest CompileLog(LogEventRequest receivedRequest)
+    private static LogRequest CompileLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
         sendLog.EventType = LoggingServer.EventType.EvtCompile;
@@ -85,7 +77,7 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
         return sendLog;
     }
 
-    private LogRequest CompileErrorLog(LogEventRequest receivedRequest)
+    private static LogRequest CompileErrorLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
         sendLog.EventType = LoggingServer.EventType.EvtCompileError;
@@ -96,7 +88,7 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
         sendLog.SourceLocation = receivedRequest.SourceLocation;
         return sendLog;
     }
-    private LogRequest ProjectCloseLog(LogEventRequest receivedRequest)
+    private static LogRequest ProjectCloseLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
         sendLog.EventType = LoggingServer.EventType.EvtProjectClose;
@@ -104,7 +96,7 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
         return sendLog;
     }
 
-    private LogRequest ProjectOpenLog(LogEventRequest receivedRequest)
+    private static LogRequest ProjectOpenLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
         sendLog.EventType = LoggingServer.EventType.EvtProjectOpen;
@@ -112,7 +104,7 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
         return sendLog;
     }
 
-    private LogRequest DebugProgramLog(LogEventRequest receivedRequest)
+    private static LogRequest DebugProgramLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
         sendLog.EventType = LoggingServer.EventType.EvtDebugProgram;
@@ -121,14 +113,14 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
 
         return sendLog;
     }
-    private LogRequest SessionStartLog(LogEventRequest receivedRequest)
+    private static LogRequest SessionStartLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
         sendLog.EventType = LoggingServer.EventType.EvtSessionStart;
 
         return sendLog;
     }
-    private LogRequest SessionEndLog(LogEventRequest receivedRequest)
+    private static LogRequest SessionEndLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
         sendLog.EventType = LoggingServer.EventType.EvtSessionEnd;

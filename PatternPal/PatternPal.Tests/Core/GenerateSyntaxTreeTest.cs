@@ -1,7 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
 using NUnit.Framework;
-
-using PatternPal.SyntaxTree;
 using PatternPal.SyntaxTree.Abstractions.Entities;
 
 namespace PatternPal.Tests.Core
