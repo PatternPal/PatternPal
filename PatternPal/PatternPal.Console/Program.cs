@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 
 using NDesk.Options;
 
@@ -157,6 +158,26 @@ namespace PatternPal.ConsoleApp
                         },
                         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
                         WriteIndented = true,
+                        // NOTE: Workaround to ignore the required `ICheckResult.Check` property.
+                        // See: https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/required-properties
+                        TypeInfoResolver = new DefaultJsonTypeInfoResolver()
+                                           {
+                                               Modifiers =
+                                               {
+                                                   static ti =>
+                                                   {
+                                                       if (ti.Kind != JsonTypeInfoKind.Object)
+                                                       {
+                                                           return;
+                                                       }
+
+                                                       foreach (JsonPropertyInfo propertyInfo in ti.Properties)
+                                                       {
+                                                           propertyInfo.IsRequired = false;
+                                                       }
+                                                   }
+                                               }
+                                           }
                     }));
             Console.WriteLine();
         }

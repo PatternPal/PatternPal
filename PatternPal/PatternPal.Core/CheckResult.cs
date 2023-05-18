@@ -31,6 +31,7 @@ public interface ICheckResult
     /// <summary>
     /// The <see cref="ICheck"/> from which this <see cref="ICheckResult"/> originates.
     /// </summary>
+    [JsonIgnore]
     ICheck Check { get; init; }
 
     /// <summary>
@@ -62,6 +63,7 @@ public class LeafCheckResult : ICheckResult
     public required INode ? MatchedNode { get; init; }
 
     /// <inheritdoc />
+    [JsonIgnore]
     public required ICheck Check { get; init; }
 
     /// <inheritdoc />
@@ -77,6 +79,7 @@ public class LeafCheckResult : ICheckResult
     /// RelationCheck which checks whether their is a uses relation from Context
     /// to Strategy, this field gets set to to Check which searches for the Strategy
     /// </example>
+    [JsonIgnore]
     public ICheck ? RelatedCheck { get; init; }
 }
 
@@ -103,6 +106,7 @@ public class NotCheckResult : ICheckResult
     public required INode ? MatchedNode { get; init; }
 
     /// <inheritdoc />
+    [JsonIgnore]
     public required ICheck Check { get; init; }
 
     /// <inheritdoc />
@@ -150,6 +154,7 @@ public class NodeCheckResult : ICheckResult
     public bool NodeCheckCollectionWrapper { get; set; }
 
     /// <inheritdoc />
+    [JsonIgnore]
     public required ICheck Check { get; init; }
 
     /// <inheritdoc />
