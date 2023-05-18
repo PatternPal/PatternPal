@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-
 using PatternPal.SyntaxTree.Abstractions;
-using PatternPal.SyntaxTree.Abstractions.Entities;
 using PatternPal.SyntaxTree.Abstractions.Root;
 using PatternPal.SyntaxTree.Models;
 using PatternPal.SyntaxTree.Models.Entities;

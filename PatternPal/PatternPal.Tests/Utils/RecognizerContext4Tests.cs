@@ -1,5 +1,4 @@
-﻿using PatternPal.SyntaxTree;
-using PatternPal.SyntaxTree.Abstractions.Entities;
+﻿using PatternPal.SyntaxTree.Abstractions.Entities;
 
 namespace PatternPal.Tests.Utils;
 

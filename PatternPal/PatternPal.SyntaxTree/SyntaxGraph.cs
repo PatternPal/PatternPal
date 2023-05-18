@@ -1,12 +1,10 @@
 ﻿#region
 
-using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.CodeAnalysis.CSharp;
 
 using PatternPal.SyntaxTree.Abstractions;
-using PatternPal.SyntaxTree.Abstractions.Entities;
 using PatternPal.SyntaxTree.Abstractions.Members;
 using PatternPal.SyntaxTree.Abstractions.Root;
 using PatternPal.SyntaxTree.Models.Root;

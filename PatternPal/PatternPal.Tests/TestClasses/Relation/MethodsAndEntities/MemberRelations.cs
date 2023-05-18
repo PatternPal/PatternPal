@@ -29,6 +29,11 @@ namespace PatternPal.Tests.TestClasses.Relation.MethodsAndEntities
     internal class ClassWithField
     {
         private int _count = 0;
+
+        public ClassWithField()
+        {
+            Console.WriteLine("I am a constructor");
+        }
         public void TestFuncionality()
         {
             _count++;

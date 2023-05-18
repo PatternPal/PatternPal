@@ -1,14 +1,10 @@
 ﻿#region
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-
 using PatternPal.SyntaxTree.Abstractions;
-using PatternPal.SyntaxTree.Abstractions.Entities;
 using PatternPal.SyntaxTree.Abstractions.Members;
+using PatternPal.SyntaxTree.Models.Entities;
 using PatternPal.SyntaxTree.Models.Members.Method;
 
 #endregion
@@ -364,6 +360,16 @@ namespace PatternPal.SyntaxTree
                     node,
                     node2,
                     RelationType.Uses);
+
+                if (identifier.Parent is ObjectCreationExpressionSyntax parent && node2 is Class classNode)
+                {
+                    IMember? matchedConstructor = GetMemberByName(parent);
+
+                    AddRelation(
+                        node,
+                        matchedConstructor,
+                        RelationType.Uses);
+                }
             }
         }
 
