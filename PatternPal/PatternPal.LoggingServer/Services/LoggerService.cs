@@ -57,7 +57,6 @@ namespace PatternPal.LoggingServer.Services
                 throw new RpcException(status);
             }
 
-            
             Guid codeStateId = await _eventRepository.GetPreviousCodeState(sessionId, subjectId, request.ProjectId);
             if (request.HasData)
             {
@@ -114,7 +113,8 @@ namespace PatternPal.LoggingServer.Services
                 CompileMessage = request.CompileMessageData,
                 CompileMessageType = request.CompileMessageType,
                 SourceLocation = request.SourceLocation,
-                CodeStateSection = request.CodeStateSection
+                CodeStateSection = request.CodeStateSection,
+                ExecutionResult = request.ExecutionResult,
 
             };
 
