@@ -15,8 +15,13 @@ using PatternPal.SyntaxTree.Models.Members.Method;
 
 namespace PatternPal.SyntaxTree
 {
+    /// <summary>
+    /// Makes and keeps a collection of all <see cref="Relation"/>s of the <see cref="SyntaxGraph"/>,
+    /// and makes it possible to search for specific relations
+    /// </summary>
     public class Relations
     {
+        // Reverses the type of relation.
         private static readonly Dictionary< RelationType, RelationType > ReversedTypes =
             new Dictionary< RelationType, RelationType >
             {
@@ -46,19 +51,22 @@ namespace PatternPal.SyntaxTree
                 }
             };
 
-        //List with all relations in graph
+        // List with all relations in the graph.
         internal List< Relation > relations = new();
 
-        //Dictionary to access relations of entities fast
+        // Dictionary to access relations of entities fast.
         internal Dictionary< IEntity, List< Relation > > EntityRelations = new();
 
-        //Dictionary to access relations of methods fast
+        // Dictionary to access relations of members fast.
         internal Dictionary< IMember, List< Relation > > MemberRelations = new();
 
         private readonly SyntaxGraph _graph;
         private List< IEntity > _entities;
         private List< IMember > _members = new();
 
+        /// <summary>
+        /// Returns an instance of <see cref="Relations"/>.
+        /// </summary>
         public Relations(
             SyntaxGraph graph)
         {
@@ -66,13 +74,14 @@ namespace PatternPal.SyntaxTree
         }
 
         /// <summary>
-        /// Creates <see cref="Relation"/>'s between <see cref="IEntity"/>'s and <see cref="INode"/>'s.
+        /// Creates <see cref="Relation"/>s between <see cref="IEntity"/>s and <see cref="IMember"/>s.
         /// </summary>
         public void CreateEdges()
         {
+            // Get all entities
             _entities = _graph.GetAll().Values.ToList();
 
-            // Get all members
+            // Get all members.
             _members.AddRange(
                 _entities.SelectMany(
                     y =>
@@ -104,6 +113,7 @@ namespace PatternPal.SyntaxTree
             INode ? node2,
             RelationType type)
         {
+            // node1 and node2 can be null when the node searched does not exist.
             if (node1 is null
                 || node2 is null)
             {
@@ -124,6 +134,7 @@ namespace PatternPal.SyntaxTree
                 _ => throw new ArgumentException()
             };
 
+            // Create the relation of type 'type' between the node1 and node2.
             Relation relation = new(
                 type,
                 source,
@@ -133,7 +144,8 @@ namespace PatternPal.SyntaxTree
                 target,
                 source );
 
-            // TODO: This requires the custom Equals method.
+            // TODO: This requires the custom Equals method. Does not yet work
+            // If the relation is already stored, do not add it again.
             if (relations.Any(r => r == relation)
                 || relations.Any(r => r == relationReversed))
             {
@@ -157,7 +169,7 @@ namespace PatternPal.SyntaxTree
         /// </summary>
         /// <param name="node">The source of the <see cref="Relation"/></param>
         /// <param name="relation">The <see cref="Relation"/> to store.</param>
-        /// <exception cref="ArgumentException">Throws exception when trying to add a <see cref="Relation"/> with a not supported <see cref="INode"/>.</exception>
+        /// <exception cref="ArgumentException">Throws an exception when trying to add a <see cref="Relation"/> with a not supported <see cref="INode"/>.</exception>
         private void StoreRelation(
             INode node,
             Relation relation)
@@ -250,15 +262,15 @@ namespace PatternPal.SyntaxTree
         }
 
         /// <summary>
-        /// Tries to get a method from a <see cref="SyntaxGraph"/> by matching the member's name to all members in a specific class
+        /// Tries to get an <see cref="IMember"/> from a <see cref="SyntaxGraph"/> by matching the member's name to all members in a specific class.
         /// </summary>
-        /// <param name="graph">The <see cref="SyntaxGraph"/> in which the member can be found.</param>
-        /// <param name="className">The name of the class in which the member resides</param>
-        /// <param name="memberName">The name of the member</param>
-        /// <returns></returns>
-        public static IMember ? GetMemberFromGraph(SyntaxGraph graph, string className, string memberName)
+        /// <param name="graph">The <see cref="SyntaxGraph"/> in which the <see cref="IMember"/> can be found.</param>
+        /// <param name="entityName">The name of the <see cref="IEntity"/> in which the <see cref="IMember"/> resides</param>
+        /// <param name="memberName">The name of the <see cref="IMember"/></param>
+        /// <returns>The matched <see cref="IMember"/></returns>
+        public static IMember ? GetMemberFromGraph(SyntaxGraph graph, string entityName, string memberName)
         {
-            return graph.GetAll()[className].GetMembers().FirstOrDefault(x => x.GetName() == memberName);
+            return graph.GetAll()[entityName].GetMembers().FirstOrDefault(x => x.GetName() == memberName);
         }
 
         /// <summary>
@@ -271,7 +283,6 @@ namespace PatternPal.SyntaxTree
             foreach (TypeSyntax type in entity.GetBases())
             {
                 //TODO check generic
-                //string typeName = type.ToString();
 
                 IEntity ? edgeNode = GetEntityByName(type);
                 if (edgeNode is null)

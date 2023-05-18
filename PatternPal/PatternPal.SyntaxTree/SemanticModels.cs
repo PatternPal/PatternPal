@@ -6,9 +6,14 @@ using Microsoft.CodeAnalysis.CSharp;
 
 namespace PatternPal.SyntaxTree
 {
+    /// <summary>
+    /// A collection of all <see cref="SemanticModel"/>s of the <see cref="SyntaxGraph"/>.
+    /// Updated when a file is added to the <see cref="SyntaxGraph"/>.
+    /// </summary>
     public static class SemanticModels
     {
-        //This is the CSharpCompilation class which represents the entire SyntaxGraph. It is initialized to an empty class, and SyntaxTrees are added while files are added.
+        //This is the CSharpCompilation class which represents the entire SyntaxGraph.
+        //It is initialized to an empty class, and SyntaxTrees are added while files are added.
         private static CSharpCompilation _compilation = CSharpCompilation.Create(
             Guid.NewGuid().ToString(),
             null,
@@ -19,7 +24,7 @@ namespace PatternPal.SyntaxTree
         );
 
         /// <summary>
-        ///     Adds roslyn SyntaxTrees to the CSharpCompilation class. This is done when a new file is added to the SyntaxGraph. Each file has it's own SyntaxTree.
+        /// Adds roslyn SyntaxTrees to the CSharpCompilation class. This is done when a new file is added to the SyntaxGraph. Each file has it's own SyntaxTree.
         /// </summary>
         /// <param name="trees">The SyntaxTrees to be added.</param>
         public static void AddTreesToCompilation(params Microsoft.CodeAnalysis.SyntaxTree[] trees)
@@ -34,7 +39,7 @@ namespace PatternPal.SyntaxTree
         }
 
         /// <summary>
-        ///     Gets the SemanticModel for a specific SyntaxTree in the CSharpCompilation class.
+        /// Gets the SemanticModel for a specific SyntaxTree in the CSharpCompilation class.
         /// </summary>
         /// <param name="tree">The SyntaxTree to get the SemanticModel for.</param>
         /// <param name="ignoreAccessibility">Whether to include items in the SemanticModel which are inaccessible for the given SyntaxTree.</param>
