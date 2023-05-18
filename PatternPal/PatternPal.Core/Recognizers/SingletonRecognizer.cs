@@ -1,4 +1,7 @@
 ﻿#region
+
+using System.Linq;
+using Google.Protobuf.WellKnownTypes;
 using PatternPal.SyntaxTree.Models;
 using static PatternPal.Core.Checks.CheckBuilder;
 #endregion
@@ -41,10 +44,15 @@ internal class SingletonRecognizer : IRecognizer
         ICheck checkMethodActsAsConstructorBehaviour = CheckMethodAcsAsConstructorBehaviour(
             privateConstructorCheck,
             staticPrivateFieldOfTypeClass,
-            out MethodCheck hasStaticPublicInternalMethod);
+            out ICheck[] hasStaticPublicInternalMethod);
 
         // Step 4: Check for requirement Client a
-        MethodCheck checkClientA = ClientCallsMethodActsAsConstructor(hasStaticPublicInternalMethod);
+        RelationCheck checkClientA = ClientCallsMethodActsAsConstructor(
+            Method(
+                Priority.Low,
+                hasStaticPublicInternalMethod
+            )
+        );
 
         yield return Class(
             Priority.Low,
@@ -65,7 +73,7 @@ internal class SingletonRecognizer : IRecognizer
     /// </summary>
     internal ICheck OnlyPrivateConstructor(out ConstructorCheck privateConstructorCheck)
     {
-        return privateConstructorCheck = Constructor(
+        privateConstructorCheck = Constructor(
             Priority.Knockout,
             Modifiers(
                 Priority.Knockout,
@@ -73,29 +81,29 @@ internal class SingletonRecognizer : IRecognizer
             )
         );
 
-        //NotCheck noPuclicConstructorCheck = Not(
-        //    Priority.Knockout,
-        //    Constructor(
-        //        Priority.Knockout,
-        //        Any(
-        //            Priority.Knockout,
-        //            Modifiers(
-        //                Priority.Knockout,
-        //                Modifier.Public),
-        //            Modifiers(
-        //                Priority.Knockout,
-        //                Modifier.Internal),
-        //            Modifiers(
-        //                Priority.Knockout,
-        //                Modifier.Protected
-        //            )
-        //        )
-        //    )
-        //);
+        NotCheck noPuclicConstructorCheck = Not(
+            Priority.Knockout,
+            Constructor(
+                Priority.Knockout,
+                Any(
+                    Priority.Knockout,
+                    Modifiers(
+                        Priority.Knockout,
+                        Modifier.Public),
+                    Modifiers(
+                        Priority.Knockout,
+                        Modifier.Internal),
+                    Modifiers(
+                        Priority.Knockout,
+                        Modifier.Protected
+                    )
+                )
+            )
+        );
 
-        //return All(Priority.Low,
-        //    privateConstructorCheck,
-        //    noPuclicConstructorCheck);
+        return All(Priority.Low,
+            privateConstructorCheck,
+            noPuclicConstructorCheck);
     }
 
     /// <summary>
@@ -121,10 +129,10 @@ internal class SingletonRecognizer : IRecognizer
     /// <summary>
     /// A collection of <see cref="ICheck"/>s that together determine that the class has a static and public/internal method
     /// </summary>
-    internal MethodCheck HasStaticPublicInternalMethod()
+    internal ICheck[] HasStaticPublicInternalMethod()
     {
-        return Method(
-            Priority.Knockout,
+        return new ICheck[]
+        {
             Modifiers(
                 Priority.Knockout,
                 Modifier.Static
@@ -140,11 +148,11 @@ internal class SingletonRecognizer : IRecognizer
                     Modifier.Internal
                 )
             )
-        );
+        };
     }
 
     /// <summary>
-    /// A collection of <see cref="ICheck"/>s that together determine that if a specific field is empty it calls the private constructor
+    /// A collection of <see cref="ICheck"/>s that together determine that there exists a method which adheres to the requirement of Singleton d1
     /// </summary>
     internal RelationCheck CallsPrivateConstructor(ConstructorCheck constructor)
     {
@@ -171,25 +179,13 @@ internal class SingletonRecognizer : IRecognizer
     }
 
     /// <summary>
-    /// A collection of <see cref="ICheck"/>s that together determine that there exists a method which adheres to the requirement of Singleton d1
+    /// A collection of <see cref="ICheck"/>s that together determine that there exists a method which adheres to the requirement of Singleton d2
     /// </summary>
-    internal MethodCheck CheckSingletonD1(MethodCheck getInstanceMethod, ICheck checkNoInstanceConstructor)
-    {
-        return Method(
-            Priority.Mid,
-            getInstanceMethod,
-            checkNoInstanceConstructor
-        );
-    }
-
-    /// <summary>
-    /// A collection of <see cref="ICheck"/>s that together determine that if a specific field is not empty it returns that field
-    /// </summary>
-    internal ICheck ReturnsPrivateField(FieldCheck checkSingletonC)
+    internal ICheck[] ReturnsPrivateField(FieldCheck checkSingletonC)
     {
         //Right now it only checks if the field is called somewhere in a method and if the return type is the same as the class, not at which conditions
-        return All(
-            Priority.Mid,
+        return new ICheck[]
+        {
             Uses(
                 Priority.Mid,
                 checkSingletonC.Result
@@ -198,7 +194,8 @@ internal class SingletonRecognizer : IRecognizer
                 Priority.Knockout,
                 ICheck.GetCurrentEntity
             )
-        );
+        };
+
 
         /*TODO: fix and use 'correct' implementation below
         //return Method(
@@ -217,55 +214,39 @@ internal class SingletonRecognizer : IRecognizer
     }
 
     /// <summary>
-    /// A collection of <see cref="ICheck"/>s that together determine that there exists a method which adheres to the requirement of Singleton d2
-    /// </summary>
-    internal MethodCheck CheckSingletonD2(MethodCheck getInstanceMethod, ICheck checkInstanceConstructor)
-    {
-        return Method(
-            Priority.Mid,
-            getInstanceMethod,
-            checkInstanceConstructor
-        );
-    }
-
-    /// <summary>
     /// A collection of <see cref="ICheck"/>s that checks if the behaviour of an method in the singleton class adheres to requirements Singleton d0, d1 and d2
     /// </summary>
     internal ICheck CheckMethodAcsAsConstructorBehaviour(
         ConstructorCheck privateConstructorCheck,
         FieldCheck staticPrivateFieldOfTypeClass,
-        out MethodCheck hasStaticPublicInternalMethod)
+        out ICheck[] hasStaticPublicInternalMethod)
     {
         // check d0
         hasStaticPublicInternalMethod = HasStaticPublicInternalMethod();
 
         // check d1
-        MethodCheck checkSingletonD1 =
-            CheckSingletonD1(hasStaticPublicInternalMethod, CallsPrivateConstructor(privateConstructorCheck));
+        RelationCheck checkNoInstanceConstructor = CallsPrivateConstructor(privateConstructorCheck);
 
-        //TODO: implement
-        ICheck checkInstanceConstructor = ReturnsPrivateField(staticPrivateFieldOfTypeClass);
-        MethodCheck checkSingletonD2 =
-            CheckSingletonD2(hasStaticPublicInternalMethod, checkInstanceConstructor);
+        // check d2
+        ICheck[] checkInstanceConstructor = ReturnsPrivateField(staticPrivateFieldOfTypeClass);
 
-        return All(
+        return Method(
             Priority.Low,
-            hasStaticPublicInternalMethod,
-            checkSingletonD1,
-            checkSingletonD2);
+            hasStaticPublicInternalMethod.Append(
+                checkNoInstanceConstructor).Concat(
+                    checkInstanceConstructor).ToArray()
+            
+            );
     }
 
     /// <summary>
     /// A collection of <see cref="ICheck"/>s that together determine if the client class calls the method which acts as a constructor in Singleton
     /// </summary>
-    internal MethodCheck ClientCallsMethodActsAsConstructor(MethodCheck getInstanceMethod)
+    internal RelationCheck ClientCallsMethodActsAsConstructor(MethodCheck getInstanceMethod)
     {
-        return Method(
+        return Uses(
             Priority.Mid,
-            Uses(
-                Priority.Mid,
-                getInstanceMethod.Result
-            )
+            getInstanceMethod.Result
         );
     }
 }

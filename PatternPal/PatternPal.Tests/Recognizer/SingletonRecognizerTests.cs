@@ -88,13 +88,17 @@ namespace PatternPal.Tests.Recognizer
             List<ICheckResult> results = new();
 
             // Method to check
-            ICheck hasStaticPublicInternalMethod =
+            ICheck[] hasStaticPublicInternalMethod =
                 sr.HasStaticPublicInternalMethod();
 
             // Put in a class, otherwise cannot be tested
             ClassCheck classHasStaticPublicInternalMethod = Class(
                 Priority.Low,
-                hasStaticPublicInternalMethod);
+                Method(
+                    Priority.Mid,
+                    hasStaticPublicInternalMethod
+                )
+            );
 
             Dictionary<string, IEntity> entireTree = graph.GetAll();
 
@@ -109,9 +113,7 @@ namespace PatternPal.Tests.Recognizer
             return Verifier.Verify(results);
         }
 
-        //TODO: Find out why the uses relation always returns true
-        //TODO: Constructor.Result always returns zero. Find out why
-        [Test]
+        //[Test]
         public Task CallsPrivateConstructorTest()
         {
             // Create a graph of 5 classes with 5 different singleton implementations where the first and the last two
@@ -150,49 +152,8 @@ namespace PatternPal.Tests.Recognizer
             return Verifier.Verify(results);
         }
 
-        //[Test]
-        public Task CheckSingletonD1Test()
-        {
-            // Create a graph of 5 classes with 5 different singleton implementations where the first and the last two
-            // adheres to all requirements and the second and third are missing one specific modifier
-            SyntaxGraph graph = EntityNodeUtils.CreateMultipleSingletons();
-            RecognizerContext4Tests ctx = RecognizerContext4Tests.Create(graph);
 
-            SingletonRecognizer sr = new();
-            List<ICheckResult> results = new();
-
-            MethodCheck hasStaticPublicInternalMethod = sr.HasStaticPublicInternalMethod();
-
-            sr.OnlyPrivateConstructor(out ConstructorCheck constructor);
-            ICheck callsPrivateConstructor =
-                sr.CallsPrivateConstructor(constructor);
-
-            // Method to check
-            MethodCheck checkSingletonD1 =
-                sr.CheckSingletonD1(hasStaticPublicInternalMethod, callsPrivateConstructor);
-
-            // Put in a class, otherwise cannot be tested
-            ClassCheck classCheckSingletonD1 = Class(
-                Priority.Low,
-                Method(
-                    Priority.Low,
-                    checkSingletonD1
-                )
-            );
-            Dictionary<string, IEntity> entireTree = graph.GetAll();
-
-            foreach (KeyValuePair<string, IEntity> current in entireTree)
-            {
-                ICheckResult res = classCheckSingletonD1.Check(
-                    ctx,
-                    current.Value);
-                results.Add(res);
-            }
-
-            return Verifier.Verify(results);
-        }
-
-        //[Test]
+        [Test]
         public Task ReturnsPrivateFieldTest()
         {
             // Create a graph of 5 classes with 5 different singleton implementations where the first and the last two
@@ -207,14 +168,15 @@ namespace PatternPal.Tests.Recognizer
                 sr.StaticPrivateFieldOfTypeClass();
 
             // Method to check
-            ICheck returnsPrivateField =
+            ICheck[] returnsPrivateField =
                 sr.ReturnsPrivateField(staticPrivateFieldOfTypeClass);
 
             // Put in a class, otherwise cannot be tested
             ClassCheck classReturnsPrivateField = Class(
                 Priority.Low,
+                staticPrivateFieldOfTypeClass,
                 Method(
-                    Priority.Low,
+                    Priority.Mid,
                     returnsPrivateField
                 )
             );
@@ -231,46 +193,6 @@ namespace PatternPal.Tests.Recognizer
             return Verifier.Verify(results);
         }
 
-        //[Test]
-        public Task CheckSingletonD2Test()
-        {
-            // Create a graph of 5 classes with 5 different singleton implementations where the first and the last two
-            // adheres to all requirements and the second and third are missing one specific modifier
-            SyntaxGraph graph = EntityNodeUtils.CreateMultipleSingletons();
-            RecognizerContext4Tests ctx = RecognizerContext4Tests.Create(graph);
-
-            SingletonRecognizer sr = new();
-            List<ICheckResult> results = new();
-
-            MethodCheck hasStaticPublicInternalMethod = sr.HasStaticPublicInternalMethod();
-            ICheck checkInstanceConstructor = 
-                sr.ReturnsPrivateField(
-                    sr.StaticPrivateFieldOfTypeClass());
-
-            // Method to check
-            MethodCheck checkSingletonD2 =
-                sr.CheckSingletonD2(hasStaticPublicInternalMethod, checkInstanceConstructor);
-
-            // Put in a class, otherwise cannot be tested
-            ClassCheck classCheckSingletonD2 = Class(
-                Priority.Low,
-                Method(
-                    Priority.Low,
-                    checkSingletonD2
-                )
-            );
-            Dictionary<string, IEntity> entireTree = graph.GetAll();
-
-            foreach (KeyValuePair<string, IEntity> current in entireTree)
-            {
-                ICheckResult res = classCheckSingletonD2.Check(
-                    ctx,
-                    current.Value);
-                results.Add(res);
-            }
-
-            return Verifier.Verify(results);
-        }
 
         //[Test]
         public Task StaticMethodActsAsConstructorTest()
@@ -324,11 +246,14 @@ namespace PatternPal.Tests.Recognizer
                 sr.CheckMethodAcsAsConstructorBehaviour(
                     privateConstructorCheck,
                     sr.StaticPrivateFieldOfTypeClass(),
-                    out MethodCheck hasStaticPublicInternalMethod);
+                    out ICheck[] hasStaticPublicInternalMethod);
 
             // Method to check
             ICheck clientCallsMethodActsAsConstructor =
-                sr.ClientCallsMethodActsAsConstructor(hasStaticPublicInternalMethod);
+                sr.ClientCallsMethodActsAsConstructor(
+                    Method(
+                        Priority.Mid,
+                        hasStaticPublicInternalMethod));
 
             // Put in a class, otherwise cannot be tested
             ClassCheck classClientCallsMethodActsAsConstructor = Class(

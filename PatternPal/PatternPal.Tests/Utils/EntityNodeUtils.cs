@@ -460,18 +460,13 @@ namespace PatternPal.Tests.Utils
                                      }
                                  }
 
-                                 //does not return private field
+                                 //does not use private field
                                  public class MockClass5
                                  {
-                                    static private MockClass5 _instance;
+                                     static private MockClass5 _instance;
                                  
-                                    public static MockClass5 GetInstance()
-                                    {
-                                         if (_instance == null)
-                                         {
-                                             _instance = new MockClass5();
-                                         }
-                                 
+                                     public static MockClass5 GetInstance()
+                                     {
                                          return new MockClass5();
                                      }
                                  }

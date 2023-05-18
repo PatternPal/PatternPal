@@ -5,9 +5,11 @@
     ChildrenCheckResults: [
       {
         FeedbackMessage: ,
+        Priority: Mid,
         ChildrenCheckResults: [
           {
             FeedbackMessage: Found method: GetInstance().,
+            Priority: Mid,
             ChildrenCheckResults: [
               {
                 FeedbackMessage: Modifiers correctly implemented.,
@@ -50,9 +52,11 @@
     ChildrenCheckResults: [
       {
         FeedbackMessage: ,
+        Priority: Mid,
         ChildrenCheckResults: [
           {
             FeedbackMessage: Found method: GetInstance().,
+            Priority: Mid,
             ChildrenCheckResults: [
               {
                 FeedbackMessage: The node GetInstance() does not have the static modifier.,
@@ -95,9 +99,11 @@
     ChildrenCheckResults: [
       {
         FeedbackMessage: ,
+        Priority: Mid,
         ChildrenCheckResults: [
           {
             FeedbackMessage: Found method: GetInstance().,
+            Priority: Mid,
             ChildrenCheckResults: [
               {
                 FeedbackMessage: Modifiers correctly implemented.,
@@ -140,9 +146,11 @@
     ChildrenCheckResults: [
       {
         FeedbackMessage: ,
+        Priority: Mid,
         ChildrenCheckResults: [
           {
             FeedbackMessage: Found method: GetInstance().,
+            Priority: Mid,
             ChildrenCheckResults: [
               {
                 FeedbackMessage: Modifiers correctly implemented.,
@@ -185,9 +193,11 @@
     ChildrenCheckResults: [
       {
         FeedbackMessage: ,
+        Priority: Mid,
         ChildrenCheckResults: [
           {
             FeedbackMessage: Found method: GetInstance().,
+            Priority: Mid,
             ChildrenCheckResults: [
               {
                 FeedbackMessage: Modifiers correctly implemented.,
