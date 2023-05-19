@@ -73,27 +73,41 @@ namespace PatternPal.SyntaxTree.Models.Members.Property
         }
     }
 
+    /// <summary>
+    /// The getter part of an <see cref="IProperty"/> rapped as an <see cref="IMethod"/>.
+    /// </summary>
     public class PropertyGetMethod : PropertyMethod
     {
         public PropertyGetMethod(Property property, AccessorDeclarationSyntax accessor) : base(property, accessor)
         {
         }
 
+        /// <inheritdoc />
         public override string GetName() { return $"{property.GetName()}_get"; }
 
+        /// <inheritdoc />
         public override IEnumerable<TypeSyntax> GetParameters() { return Array.Empty<TypeSyntax>(); }
+
+        /// <inheritdoc />
         public override TypeSyntax GetReturnType() { return property.GetPropertyType(); }
     }
 
+    /// <summary>
+    /// The setter part of an <see cref="IProperty"/> rapped as an <see cref="IMethod"/>.
+    /// </summary>
     public class PropertySetMethod : PropertyMethod
     {
         public PropertySetMethod(Property property, AccessorDeclarationSyntax accessor) : base(property, accessor)
         {
         }
 
+        /// <inheritdoc />
         public override string GetName() { return $"{property.GetName()}_set"; }
 
+        /// <inheritdoc />
         public override IEnumerable<TypeSyntax> GetParameters() { return new[] {property.GetPropertyType()}; }
+
+        /// <inheritdoc />
         public override TypeSyntax GetReturnType() { return null; }
     }
 }

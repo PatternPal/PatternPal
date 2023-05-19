@@ -15,7 +15,7 @@ using PatternPal.SyntaxTree.Utils;
 namespace PatternPal.SyntaxTree.Models.Entities
 {
     /// <summary>
-    /// Base implementation of an Entity
+    /// Base implementation of an Entity.
     /// </summary>
     public abstract class AbstractEntity : AbstractNode, IEntity
     {
