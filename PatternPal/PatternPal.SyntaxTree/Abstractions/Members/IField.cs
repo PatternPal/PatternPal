@@ -7,6 +7,9 @@ namespace PatternPal.SyntaxTree.Abstractions.Members
     /// </summary>
     public interface IField : IMember
     {
+        /// <summary>
+        /// Gets the Roslyn representation of the type of the field.
+        /// </summary>
         TypeSyntax GetFieldType();
     }
 }

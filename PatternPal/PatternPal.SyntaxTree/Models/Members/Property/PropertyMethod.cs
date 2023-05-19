@@ -11,9 +11,13 @@ using PatternPal.SyntaxTree.Abstractions.Root;
 
 namespace PatternPal.SyntaxTree.Models.Members.Property
 {
+    /// <summary>
+    /// An <see cref="IProperty"/> rapped as an <see cref="IMethod"/>.
+    /// </summary>
     public abstract class PropertyMethod : IMethod
     {
         private readonly AccessorDeclarationSyntax _accessor;
+        // The property rapped.
         protected readonly Property property;
 
         protected PropertyMethod(Property property, AccessorDeclarationSyntax accessor)
@@ -22,25 +26,34 @@ namespace PatternPal.SyntaxTree.Models.Members.Property
             _accessor = accessor;
         }
 
+        /// <inheritdoc />
         public abstract string GetName();
+
+        /// <inheritdoc />
         public abstract IEnumerable<TypeSyntax> GetParameters();
+
+        /// <inheritdoc />
         public abstract SyntaxNode GetReturnType();
 
+        /// <inheritdoc />
         public SyntaxNode GetSyntaxNode()
         {
             return _accessor ?? property.GetSyntaxNode();
         }
 
+        /// <inheritdoc />
         public IRoot GetRoot()
         {
             return property.GetRoot();
         }
 
+        /// <inheritdoc />
         public IEnumerable<IModifier> GetModifiers()
         {
             return property.GetModifiers();
         }
 
+        /// <inheritdoc />
         public CSharpSyntaxNode GetBody()
         {
             return (CSharpSyntaxNode)_accessor?.Body
@@ -48,6 +61,7 @@ namespace PatternPal.SyntaxTree.Models.Members.Property
                    ?? property.propertyDeclarationSyntax.ExpressionBody;
         }
 
+        /// <inheritdoc />
         public IEntity GetParent()
         {
             return property.GetParent();

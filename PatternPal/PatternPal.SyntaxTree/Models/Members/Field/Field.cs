@@ -10,6 +10,7 @@ using PatternPal.SyntaxTree.Utils;
 
 namespace PatternPal.SyntaxTree.Models.Members.Field
 {
+    /// <inheritdoc cref="IField"/>
     public class Field : AbstractNode, IField
     {
         private readonly FieldDeclarationSyntax _fieldDeclaration;
@@ -23,26 +24,31 @@ namespace PatternPal.SyntaxTree.Models.Members.Field
             _parent = parent;
         }
 
+        /// <inheritdoc />
         public override string GetName()
         {
             return string.Join(", ", _variable.Variables.Select(v => v.Identifier.ToString()));
         }
 
+        /// <inheritdoc />
         public TypeSyntax GetFieldType()
         {
             return _fieldDeclaration.Declaration.Type;
         }
 
+        /// <inheritdoc />
         public IEnumerable<IModifier> GetModifiers()
         {
             return _fieldDeclaration.Modifiers.ToModifiers();
         }
 
+        /// <inheritdoc />
         public IEntity GetParent()
         {
             return _parent;
         }
 
+        /// <inheritdoc />
         public SyntaxNode GetReturnType()
         {
             return GetFieldType();

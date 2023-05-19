@@ -60,6 +60,9 @@ namespace PatternPal.SyntaxTree.Abstractions.Root
 
     public interface INamedEntitiesContainer : IEntitiesContainer
     {
+        /// <summary>
+        /// Gets the name of the <see cref="IEntity"/> preceded by the namespace that contains it.
+        /// </summary>
         string GetNamespace();
     }
 }

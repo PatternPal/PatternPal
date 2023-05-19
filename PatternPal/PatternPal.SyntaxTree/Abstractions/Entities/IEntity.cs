@@ -55,7 +55,7 @@ namespace PatternPal.SyntaxTree.Abstractions.Entities
         IEnumerable<Relation> GetRelations(RelationTargetKind type);
 
         /// <summary>
-        /// Gets all methods. This includes getter and setter from <see cref="IProperty"/>s and <see cref="IConstructor"/>s.
+        /// Gets all methods. This includes getters and setters from <see cref="IProperty"/>s and <see cref="IConstructor"/>s.
         /// </summary>
         IEnumerable<IMethod> GetAllMethods();
 

@@ -44,13 +44,19 @@ namespace PatternPal.SyntaxTree.Models.Root
                 .ToList();
         }
 
+        /// <inheritdoc />
         public override string GetName() { return "root"; }
 
+        /// <inheritdoc />
         public string GetSource() { return _source; }
 
+        /// <inheritdoc />
         public new IRoot GetRoot() { return this; }
 
+        /// <inheritdoc />
         public IEnumerable<INamespace> GetNamespaces() { return _namespaces.AsReadOnly(); }
+
+        /// <inheritdoc />
         public IEnumerable<UsingDirectiveSyntax> GetUsing() { return _using.AsReadOnly(); }
 
         /// <summary>
@@ -78,7 +84,8 @@ namespace PatternPal.SyntaxTree.Models.Root
         {
             return _graph.GetRelations(node, type);
         }
-        
+
+        /// <inheritdoc />
         public IEnumerable<INode> GetChildren()
         {
             return _entities

@@ -22,6 +22,7 @@ namespace PatternPal.SyntaxTree.Models
             _root = root;
         }
 
+        /// <inheritdoc />
         public abstract string GetName();
 
         /// <summary>
@@ -33,7 +34,7 @@ namespace PatternPal.SyntaxTree.Models
         }
 
         /// <summary>
-        /// Returns the Z<see cref="IRoot"/> this node belongs to.
+        /// Returns the <see cref="IRoot"/> this node belongs to.
         /// </summary>
         public IRoot GetRoot()
         {

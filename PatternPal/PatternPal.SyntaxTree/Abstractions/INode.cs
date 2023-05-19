@@ -16,19 +16,16 @@ namespace PatternPal.SyntaxTree.Abstractions
         /// <summary>
         /// Gets the name of the node.
         /// </summary>
-        /// <returns>The name of the node</returns>
         string GetName();
 
         /// <summary>
         /// Gets the Roslyn syntax of the node.
         /// </summary>
-        /// <returns>The declaration syntax of the node</returns>
         SyntaxNode GetSyntaxNode();
 
         /// <summary>
         /// Gets the <see cref="IRoot"/> of the node.
         /// </summary>
-        /// <returns>The root of the node</returns>
         IRoot GetRoot();
     }
 

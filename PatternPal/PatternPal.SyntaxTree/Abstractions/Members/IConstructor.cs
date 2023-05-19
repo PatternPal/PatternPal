@@ -11,10 +11,20 @@ namespace PatternPal.SyntaxTree.Abstractions.Members
     {
         string GetConstructorType();
 
+        /// <summary>
+        /// Returns the arguments passed to constructor when it was invoked.
+        /// TODO check whether this is correct, or just delete as it isn't used.
+        /// </summary>
         IEnumerable<string> GetArguments();
 
+        /// <summary>
+        /// Return the constructor rapped as a <see cref="IMethod"/>.
+        /// </summary>
         IMethod AsMethod();
 
+        /// <summary>
+        /// Gets the parent of this <see cref="IConstructor"/>.
+        /// </summary>
         new IClass GetParent();
     }
 }

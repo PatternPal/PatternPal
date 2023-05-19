@@ -12,10 +12,11 @@ using PatternPal.SyntaxTree.Models.Members.Field;
 
 namespace PatternPal.SyntaxTree.Models.Entities
 {
+    /// <inheritdoc cref="IClass"/>
     public class Class : AbstractEntity, IClass
     {
-        private readonly List<IConstructor> _constructors = new List<IConstructor>();
-        private readonly List<IField> _fields = new List<IField>();
+        private readonly List<IConstructor> _constructors = new();
+        private readonly List<IField> _fields = new();
         private readonly ClassDeclarationSyntax _typeDeclarationSyntax;
 
         public Class(ClassDeclarationSyntax typeDeclarationSyntax, IEntitiesContainer parent) : base(
@@ -38,21 +39,25 @@ namespace PatternPal.SyntaxTree.Models.Entities
             }
         }
 
+        /// <inheritdoc />
         public override EntityType GetEntityType()
         {
             return EntityType.Class;
         }
 
+        /// <inheritdoc />
         public IEnumerable<IConstructor> GetConstructors()
         {
             return _constructors.AsReadOnly();
         }
 
+        /// <inheritdoc />
         public IEnumerable<IField> GetFields()
         {
             return _fields.AsReadOnly();
         }
 
+        /// <inheritdoc />
         public override IEnumerable<IMethod> GetAllMethods()
         {
             var methods = new List<IMethod>(base.GetAllMethods());
@@ -60,16 +65,19 @@ namespace PatternPal.SyntaxTree.Models.Entities
             return methods.AsReadOnly();
         }
 
+        /// <inheritdoc />
         public override IEnumerable<IField> GetAllFields()
         {
             return base.GetAllFields().Concat(GetFields());
         }
 
+        /// <inheritdoc />
         public override IEnumerable<IMember> GetMembers()
         {
             return base.GetMembers().Concat(_fields).Concat(_constructors);
         }
 
+        /// <inheritdoc />
         public override IEnumerable<INode> GetChildren()
         {
             return base.GetChildren()
