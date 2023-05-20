@@ -113,7 +113,7 @@ namespace PatternPal.Tests.Recognizer
             return Verifier.Verify(results);
         }
 
-        //[Test]
+        [Test]
         public Task CallsPrivateConstructorTest()
         {
             // Create a graph of 5 classes with 5 different singleton implementations where the first and the last two

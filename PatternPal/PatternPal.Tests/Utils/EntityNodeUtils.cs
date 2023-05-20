@@ -478,6 +478,81 @@ namespace PatternPal.Tests.Utils
             graph.CreateGraph();
             return graph;
         }
+
+        internal static SyntaxGraph CreateClientSingletons()
+        {
+            const string INPUT = """
+                                 //Correct
+                                 public class MockClass1
+                                 {
+                                    static private MockClass1 _instance;
+
+                                    private MockClass1()
+                                    {
+                                    }
+
+                                    public static MockClass1 GetInstance()
+                                    {
+                                        if (_instance == null)
+                                        {
+                                            _instance = new MockClass1();
+                                        }
+
+                                        return _instance;
+                                    }
+
+                                    public static void DoNothing()
+                                    {
+                                    }
+                                 }
+
+                                 public class Client1
+                                 {
+                                    public Client1()
+                                    {
+                                        MockClass1 singleton = MockClass1.GetInstance();
+                                    }
+                                 }
+
+                                 //Wrong call
+                                 public class MockClass2
+                                 {
+                                    static private MockClass2 _instance;
+                                 
+                                    private MockClass2()
+                                    {
+                                    }
+                                 
+                                    public static MockClass2 GetInstance()
+                                    {
+                                        if (_instance == null)
+                                        {
+                                            _instance = new MockClass2();
+                                        }
+                                 
+                                        return _instance;
+                                    }
+                                 
+                                    public static void DoNothing()
+                                    {
+                                    }
+                                 }
+                                 
+                                 public class Client2
+                                 {
+                                    public Client2()
+                                    {
+                                        MockClass2.DoNothing();
+                                    }
+                                 }
+                                 """;
+            SyntaxGraph graph = new();
+            graph.AddFile(
+                INPUT,
+                "0");
+            graph.CreateGraph();
+            return graph;
+        }
         #endregion
 
         internal static SyntaxGraph CreateMethodWithParamaters()
@@ -664,5 +739,10 @@ namespace PatternPal.Tests.Utils
         }
 
         public IEnumerable< INode > GetChildren() { return Array.Empty< INode >(); }
+
+
     }
+    
+
+        
 }

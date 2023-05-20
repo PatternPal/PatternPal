@@ -242,11 +242,21 @@ internal class SingletonRecognizer : IRecognizer
     /// <summary>
     /// A collection of <see cref="ICheck"/>s that together determine if the client class calls the method which acts as a constructor in Singleton
     /// </summary>
-    internal RelationCheck ClientCallsMethodActsAsConstructor(MethodCheck getInstanceMethod)
+    internal ClassCheck ClientCallsMethodActsAsConstructor(MethodCheck getInstanceMethod)
     {
-        return Uses(
-            Priority.Mid,
-            getInstanceMethod.Result
+        return Class(
+            Priority.Low,
+            Uses(
+                Priority.Mid,
+                getInstanceMethod.Result
+            ),
+            Not(
+                Priority.Low,
+                Type(
+                    Priority.Knockout,
+                    ICheck.GetCurrentEntity //TODO: hier moet niet staan currententity maar juist het type van de getinstancemethod class
+                )
+            )
         );
     }
 }
