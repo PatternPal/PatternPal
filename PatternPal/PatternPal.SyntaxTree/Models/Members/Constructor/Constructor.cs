@@ -41,16 +41,10 @@ namespace PatternPal.SyntaxTree.Models.Members.Constructor
             return _constructor.ParameterList.ToParameters();
         }
 
+        /// <inheritdoc />
         public string GetConstructorType()
         {
             return _constructor.Identifier.ToString();
-        }
-
-        /// <inheritdoc />
-        public IEnumerable<string> GetArguments()
-        {
-            return _constructor.Initializer?.ArgumentList.Arguments.ToList()
-                .Select(x => x.ToString());
         }
 
         /// <inheritdoc />

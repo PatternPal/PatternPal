@@ -10,11 +10,11 @@ using PatternPal.SyntaxTree.Abstractions.Root;
 namespace PatternPal.SyntaxTree.Models.Members.Property
 {
     /// <summary>
-    /// An <see cref="IProperty"/> rapped as an <see cref="IField"/>.
+    /// An <see cref="IProperty"/> wrapped as an <see cref="IField"/>.
     /// </summary>
     public class PropertyField : IField
     {
-        // The property rapped.
+        // The property wrapped.
         private readonly Property _property;
 
         public PropertyField(Property property) { _property = property; }

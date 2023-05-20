@@ -104,6 +104,7 @@ namespace PatternPal.SyntaxTree.Models.Members.Property
             );
         }
 
+        /// <inheritdoc />
         public bool IsField()
         {
             if (propertyDeclarationSyntax.AccessorList == null)

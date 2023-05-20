@@ -9,16 +9,13 @@ namespace PatternPal.SyntaxTree.Abstractions.Members
     /// </summary>
     public interface IConstructor : IMember, IParameterized, IBodied, IChild<IClass>
     {
+        /// <summary>
+        /// Gets the name of the <see cref="IClass"/> this constructor is a member of.
+        /// </summary>
         string GetConstructorType();
 
         /// <summary>
-        /// Returns the arguments passed to constructor when it was invoked.
-        /// TODO check whether this is correct, or just delete as it isn't used.
-        /// </summary>
-        IEnumerable<string> GetArguments();
-
-        /// <summary>
-        /// Return the constructor rapped as a <see cref="IMethod"/>.
+        /// Return the constructor wrapped as a <see cref="IMethod"/>.
         /// </summary>
         IMethod AsMethod();
 

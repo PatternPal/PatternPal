@@ -4,7 +4,7 @@ using PatternPal.SyntaxTree.Abstractions.Members;
 namespace PatternPal.SyntaxTree.Abstractions;
 
 /// <summary>
-/// Represents a relation of type <see cref="_type"/> from <see cref="Source"/> to <see cref="Target"/>.
+/// Represents a relation of type <see cref="RelationType"/> from <see cref="Source"/> to <see cref="Target"/>.
 /// </summary>
 public class Relation
 {
@@ -19,6 +19,9 @@ public class Relation
     /// <summary>
     /// Returns an instance of <see cref="Relation"/>.
     /// </summary>
+    /// <param name="relationType">The type of relation.</param>
+    /// <param name="source">The source of the relation.</param>
+    /// <param name="target">The target of the relation.</param>
     internal Relation(
         RelationType relationType,
         OneOf< IEntity, IMember > source,

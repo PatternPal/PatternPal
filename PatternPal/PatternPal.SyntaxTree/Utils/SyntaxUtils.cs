@@ -13,7 +13,7 @@ using PatternPal.SyntaxTree.Models.Entities;
 namespace PatternPal.SyntaxTree.Utils
 {
     /// <summary>
-    /// Used as an adapter to adapt the Roslyn library.
+    /// Used as a facade to mask the Roslyn library.
     /// </summary>
     public static class SyntaxUtils
     {

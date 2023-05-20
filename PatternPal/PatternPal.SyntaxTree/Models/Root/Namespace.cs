@@ -54,7 +54,7 @@ namespace PatternPal.SyntaxTree.Models.Root
         {
             if (_parent is INamedEntitiesContainer name)
             {
-                return $"{name}.{_syntax.Name.ToString()}";
+                return $"{name}.{_syntax.Name}";
             }
 
             return _syntax.Name.ToString();

@@ -12,12 +12,12 @@ using PatternPal.SyntaxTree.Abstractions.Root;
 namespace PatternPal.SyntaxTree.Models.Members.Property
 {
     /// <summary>
-    /// An <see cref="IProperty"/> rapped as an <see cref="IMethod"/>.
+    /// An <see cref="IProperty"/> wrapped as an <see cref="IMethod"/>.
     /// </summary>
     public abstract class PropertyMethod : IMethod
     {
         private readonly AccessorDeclarationSyntax _accessor;
-        // The property rapped.
+        // The property wrapped.
         protected readonly Property property;
 
         protected PropertyMethod(Property property, AccessorDeclarationSyntax accessor)
@@ -74,7 +74,7 @@ namespace PatternPal.SyntaxTree.Models.Members.Property
     }
 
     /// <summary>
-    /// The getter part of an <see cref="IProperty"/> rapped as an <see cref="IMethod"/>.
+    /// The getter part of an <see cref="IProperty"/> wrapped as an <see cref="IMethod"/>.
     /// </summary>
     public class PropertyGetMethod : PropertyMethod
     {
@@ -93,7 +93,7 @@ namespace PatternPal.SyntaxTree.Models.Members.Property
     }
 
     /// <summary>
-    /// The setter part of an <see cref="IProperty"/> rapped as an <see cref="IMethod"/>.
+    /// The setter part of an <see cref="IProperty"/> wrapped as an <see cref="IMethod"/>.
     /// </summary>
     public class PropertySetMethod : PropertyMethod
     {

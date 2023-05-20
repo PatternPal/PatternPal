@@ -27,10 +27,15 @@ namespace PatternPal.SyntaxTree.Abstractions.Members
         /// </summary>
         IMethod GetSetter();
 
+        /// <summary>
+        /// Returns whether the property is an auto property.
+        /// This means that it has an empty getter, and that if
+        /// it has a setter, it is empty as well.
+        /// </summary>
         bool IsField();
 
         /// <summary>
-        /// Gets the property rapped in an <see cref="IField"/>.
+        /// Gets the property wrapped in an <see cref="IField"/>.
         /// </summary>
         IField GetField();
 
