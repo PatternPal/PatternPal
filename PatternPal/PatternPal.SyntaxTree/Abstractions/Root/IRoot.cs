@@ -1,10 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-
-using PatternPal.SyntaxTree.Abstractions.Entities;
-
-namespace PatternPal.SyntaxTree.Abstractions.Root
+﻿namespace PatternPal.SyntaxTree.Abstractions.Root
 {
     /// <summary>
     /// A root represents a compiled file in the <see cref="SyntaxGraph" />.

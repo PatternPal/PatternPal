@@ -1,5 +1,6 @@
 # Singleton
 ## Introduction
+A singleton pattern is a creational design pattern that lets you ensure that a class has only one instance, whil providing a global access point to this instance. The explanation on this page is based on the definition of previous development teams, the website refactoring guru[^1] and the book Design Patterns Explained[^2].
 
 ### Context of use
 The singleton pattern is useful when you want to ensure there is only one instance of a class, while also providing global access to this class. In addition to this you want to ensure that all entities are using the same instance of this object, without passing a reference to all of them.
@@ -14,17 +15,17 @@ The **singleton** class declares the static method getInstance() that returns an
 
 ## Requirements
 _Client Class_
-a. calls the method that acts as a constructor of the singleton class
+1. calls the method that acts as a constructor of the singleton class
 
 _Singleton class_ 
-a. has no public/internal constructor
-b. has at least one private/protected constructor
-c. has a static, private field with the same type as the class
-d. has a static, public/internal method that acts as a constructor in the following way:
-  i. if called and there is no instance saved in the private field, then it calls the private constructor
-  ii. if called and there is an instance saved in the private field it returns that instance
+1. has no public/internal constructor
+2. has at least one private/protected constructor
+3. has a static, private field with the same type as the class
+4. has a static, public/internal method that acts as a constructor in the following way:
+  _i. if called and there is no instance saved in the private field, then it calls the private constructor
+  _ii. if called and there is an instance saved in the private field it returns that instance
 
 ## References
 The following sources are used to determine the requirements:
-1. Refactoring Guru, Creational Patterns - Singleton. https://refactoring.guru/design-patterns/singleton
-2. A.Shalloway, J.R.Trott, Design Patterns Explained - A new perspective on Object Oriented Design (p.363). (2004)
+[^1]: Refactoring Guru, Creational Patterns - Singleton. https://refactoring.guru/design-patterns/singleton
+[^2]: A.Shalloway, J.R.Trott, Design Patterns Explained - A new perspective on Object Oriented Design (p.363). (2004)

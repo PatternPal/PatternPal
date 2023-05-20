@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using PatternPal.SyntaxTree.Abstractions.Members;
+﻿using PatternPal.SyntaxTree.Abstractions.Members;
 
 namespace PatternPal.SyntaxTree.Abstractions.Entities
 {

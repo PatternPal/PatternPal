@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-
-using PatternPal.SyntaxTree.Abstractions.Members;
+﻿using PatternPal.SyntaxTree.Abstractions.Members;
 using PatternPal.SyntaxTree.Abstractions.Root;
 
 namespace PatternPal.SyntaxTree.Abstractions.Entities

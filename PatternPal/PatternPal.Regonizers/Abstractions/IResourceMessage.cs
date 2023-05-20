@@ -1,8 +1,7 @@
-﻿namespace PatternPal.Recognizers.Abstractions
+﻿namespace PatternPal.Recognizers.Abstractions;
+
+public interface IResourceMessage
 {
-    public interface IResourceMessage
-    {
-        string GetKey();
-        string[] GetParameters();
-    }
+    string GetKey();
+    string[] GetParameters();
 }

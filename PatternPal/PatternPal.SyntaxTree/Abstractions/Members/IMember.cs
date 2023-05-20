@@ -1,6 +1,4 @@
-﻿using PatternPal.SyntaxTree.Abstractions.Entities;
-
-namespace PatternPal.SyntaxTree.Abstractions.Members
+﻿namespace PatternPal.SyntaxTree.Abstractions.Members
 {
     /// <summary>
     /// A member of an <see cref="IEntity"/>, like constructors, fields etc.

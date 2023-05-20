@@ -1,7 +1,4 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-
-using PatternPal.SyntaxTree.Abstractions.Entities;
-using PatternPal.SyntaxTree.Abstractions.Root;
+﻿using PatternPal.SyntaxTree.Abstractions.Root;
 
 namespace PatternPal.SyntaxTree.Models.Entities
 {
