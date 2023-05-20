@@ -2,6 +2,7 @@
 
 namespace PatternPal.SyntaxTree.Models.Entities
 {
+    /// <inheritdoc cref="IInterface"/>
     public class Interface : AbstractEntity, IInterface
     {
         private readonly InterfaceDeclarationSyntax _typeDeclarationSyntax;
@@ -13,6 +14,7 @@ namespace PatternPal.SyntaxTree.Models.Entities
             _typeDeclarationSyntax = typeDeclarationSyntax;
         }
 
+        /// <inheritdoc />
         public override EntityType GetEntityType()
         {
             return EntityType.Interface;

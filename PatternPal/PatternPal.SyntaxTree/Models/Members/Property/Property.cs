@@ -7,6 +7,7 @@ using PatternPal.SyntaxTree.Utils;
 
 namespace PatternPal.SyntaxTree.Models.Members.Property
 {
+    /// <inheritdoc cref="IProperty"/>
     public class Property : AbstractNode, IProperty
     {
         private readonly IEntity _parent;
@@ -18,36 +19,43 @@ namespace PatternPal.SyntaxTree.Models.Members.Property
             _parent = parent;
         }
 
+        /// <inheritdoc />
         public override string GetName()
         {
             return propertyDeclarationSyntax.Identifier.Text;
         }
 
+        /// <inheritdoc />
         public IEnumerable<IModifier> GetModifiers()
         {
             return propertyDeclarationSyntax.Modifiers.ToModifiers();
         }
 
+        /// <inheritdoc />
         public IField GetField()
         {
             return new PropertyField(this);
         }
 
+        /// <inheritdoc />
         public TypeSyntax GetPropertyType()
         {
             return propertyDeclarationSyntax.Type;
         }
 
+        /// <inheritdoc />
         public IEntity GetParent()
         {
             return _parent;
         }
 
+        /// <inheritdoc />
         public SyntaxNode GetReturnType()
         {
             return GetPropertyType();
         }
 
+        /// <inheritdoc />
         public bool HasGetter()
         {
             if (propertyDeclarationSyntax.ExpressionBody != null)
@@ -63,6 +71,7 @@ namespace PatternPal.SyntaxTree.Models.Members.Property
             return propertyDeclarationSyntax.AccessorList.Accessors.Any(SyntaxKind.GetAccessorDeclaration);
         }
 
+        /// <inheritdoc />
         public bool HasSetter()
         {
             if (propertyDeclarationSyntax.AccessorList == null)
@@ -73,6 +82,7 @@ namespace PatternPal.SyntaxTree.Models.Members.Property
             return propertyDeclarationSyntax.AccessorList.Accessors.Any(SyntaxKind.SetAccessorDeclaration);
         }
 
+        /// <inheritdoc />
         public IMethod GetGetter()
         {
             return new PropertyGetMethod(
@@ -81,6 +91,7 @@ namespace PatternPal.SyntaxTree.Models.Members.Property
             );
         }
 
+        /// <inheritdoc />
         public IMethod GetSetter()
         {
             return new PropertySetMethod(
@@ -89,6 +100,7 @@ namespace PatternPal.SyntaxTree.Models.Members.Property
             );
         }
 
+        /// <inheritdoc />
         public bool IsField()
         {
             if (propertyDeclarationSyntax.AccessorList == null)

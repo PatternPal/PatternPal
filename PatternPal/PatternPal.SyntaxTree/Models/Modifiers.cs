@@ -2,15 +2,28 @@
 
 namespace PatternPal.SyntaxTree.Models
 {
+    /// <summary>
+    /// Represents a modifier of an <see cref="INode"/>.
+    /// </summary>
+    /// <example>Examples are private, static, and abstract</example>
     public class Modifier : IModifier
     {
+        // TODO possibly completely change to an Enum instead.
+
+        // The type of modifier
         private readonly string _name;
 
+        /// <summary>
+        /// Returns an instance of <see cref="Modifier"/>
+        /// </summary>
         public Modifier(string name)
         {
             _name = name;
         }
 
+        /// <summary>
+        /// Returns the name, thus type, of the modifier
+        /// </summary>
         public string GetName() { return _name.ToLower(); }
 
         protected bool Equals(IModifier other) {
@@ -30,11 +43,11 @@ namespace PatternPal.SyntaxTree.Models
             return _name;
         }
 
+        // An object pool of all types of modifiers.
         public static readonly IModifier Public = new Modifier("public");
         public static readonly IModifier Internal = new Modifier("internal");
         public static readonly IModifier Protected = new Modifier("protected");
         public static readonly IModifier Private = new Modifier("private");
-
         public static readonly IModifier Abstract = new Modifier("abstract");
         public static readonly IModifier Const = new Modifier("const");
         public static readonly IModifier Extern = new Modifier("extern");
@@ -49,12 +62,18 @@ namespace PatternPal.SyntaxTree.Models
         public static readonly IModifier New = new Modifier("new");
         public static readonly IModifier Async = new Modifier("async");
 
+        /// <summary>
+        /// Adds the possibility to create a modifier not already present in the object pool of modifiers.
+        /// </summary>
         public static IModifier Custom(string name)
         {
             return new Modifier(name);
         }
     }
 
+    /// <summary>
+    /// A <see cref="Modifier"/> with a <see cref="SyntaxToken"/>.
+    /// </summary>
     internal class SyntaxModifier : Modifier
     {
         internal readonly SyntaxToken syntaxToken;

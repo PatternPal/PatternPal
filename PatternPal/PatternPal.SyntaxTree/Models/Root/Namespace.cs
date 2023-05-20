@@ -5,6 +5,7 @@ using PatternPal.SyntaxTree.Utils;
 
 namespace PatternPal.SyntaxTree.Models.Root
 {
+    /// <inheritdoc cref="INamespace"/>
     public class Namespace : AbstractNode, INamespace
     {
         private readonly List<IEntity> _entities;
@@ -31,30 +32,39 @@ namespace PatternPal.SyntaxTree.Models.Root
                 .ToList();
         }
 
+        /// <inheritdoc />
         public override string GetName()
         {
             return GetNamespace();
         }
 
+        /// <inheritdoc />
         public INamespaceContainer GetParent()
         {
             return _parent;
         }
 
+        /// <inheritdoc />
         public string GetNamespace()
         {
             if (_parent is INamedEntitiesContainer name)
             {
-                return $"{name}.{_syntax.Name.ToString()}";
+                return $"{name}.{_syntax.Name}";
             }
 
             return _syntax.Name.ToString();
         }
 
+        /// <inheritdoc />
         public IEnumerable<INamespace> GetNamespaces() { return _namespaces.AsReadOnly(); }
+
+        /// <inheritdoc />
         public IEnumerable<UsingDirectiveSyntax> GetUsing() { return _using.AsReadOnly(); }
+
+        /// <inheritdoc />
         public IEnumerable<IEntity> GetEntities() { return _entities.AsReadOnly(); }
 
+        /// <inheritdoc />
         public Dictionary<string, IEntity> GetAllEntities()
         {
             return GetNamespaces()
@@ -65,6 +75,7 @@ namespace PatternPal.SyntaxTree.Models.Root
                 .ToDictionary(p => p.Key, p => p.Value);
         }
 
+        /// <inheritdoc />
         public IEnumerable<INode> GetChildren()
         {
             return _entities
