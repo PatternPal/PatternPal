@@ -374,7 +374,11 @@ namespace PatternPal.Extension.Commands
 
                 LogEventRequest request = CreateStandardLog();
                 request.EventType = eventType;
-                request.ProjectId = project.FullName;
+                
+                // TODO Review (O.A.): Now logs full path on local machine, which is not very privacy friendly.
+                // I suggest changing to either UniqueName (includes folder) or Name (just name of project itself).
+                request.ProjectId = project.UniqueName;
+                
 
                 // TODO Review
                 // NOTE: Sends a single event per project -- is this useful for the CodeStates?
