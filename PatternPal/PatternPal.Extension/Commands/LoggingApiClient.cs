@@ -10,8 +10,10 @@ using Action = PatternPal.Extension.Model.Action;
 
 namespace PatternPal.Extension.Commands
 {
+    [Obsolete]
     public static class LoggingApiClient
     {
+        // TODO: Is this even used? Review for deletion.
         private static readonly HttpClient client = new HttpClient() { BaseAddress = new Uri("https://localhost:44387/api/Logging/") };
 
         public static async Task<HttpResponseMessage> PostActionAsync(EnvDTE.vsBuildAction vsAction)
