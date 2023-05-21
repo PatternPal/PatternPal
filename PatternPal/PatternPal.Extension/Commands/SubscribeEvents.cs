@@ -48,6 +48,8 @@ namespace PatternPal.Extension.Commands
 
         private static CancellationToken _cancellationToken;
 
+        private static Dictionary<String, ByteString> _previousCodeStates = new Dictionary<string, ByteString>();
+
         /// <summary>
         /// Initializes the preparation for the subscription of the logged events. 
         /// </summary>
@@ -420,12 +422,18 @@ namespace PatternPal.Extension.Commands
                 // TODO: In the future, it is better not to necessarily do the zipping on the UI thread to prevent blocking :).
                 request.Data = ZipDirectory(Path.GetDirectoryName(project.FullName));
 
+                
+
                 // TODO Review
                 // NOTE: Sends a single event per project -- is this useful for the CodeStates?
                 //LogProviderService.LogProviderServiceClient client =
                 //    new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
                 //LogEventResponse response = client.LogEvent(request);
                 LogEventResponse response = PushLog(request);
+
+                // After we successfully logged (TODO is that checked here?), we store the bytestring in the dict. 
+                // TODO: Once we know what to do with this, might need to be a hash or have further safety measures.
+                _previousCodeStates.Add(request.ProjectId, request.Data);
             }
         }
 
