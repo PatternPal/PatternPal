@@ -180,12 +180,16 @@ namespace PatternPal.Extension.Commands
         internal static void OnSessionStart()
         {
             SessionId = Guid.NewGuid().ToString();
-
+           
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtSessionStart;
-            LogProviderService.LogProviderServiceClient client =
-                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-            LogEventResponse response = client.LogEvent(request);
+
+            // TODO Review
+            // Note that response is never used
+            //LogProviderService.LogProviderServiceClient client =
+            //    new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
+            //LogEventResponse response = client.LogEvent(request);
+            LogEventResponse response = PushLog(request);
         }
 
         /// <summary>
@@ -195,9 +199,12 @@ namespace PatternPal.Extension.Commands
         {
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtSessionEnd;
-            LogProviderService.LogProviderServiceClient client =
-                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-            LogEventResponse response = client.LogEvent(request);
+
+            // TODO Review
+            //LogProviderService.LogProviderServiceClient client =
+            //    new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
+            //LogEventResponse response = client.LogEvent(request);
+            LogEventResponse response = PushLog(request);
         }
 
         /// <summary>
@@ -213,9 +220,12 @@ namespace PatternPal.Extension.Commands
             request.CompileMessageData = compileMessageData;
             request.SourceLocation = sourceLocation;
             request.CodeStateSection = codeStateSection;
-            LogProviderService.LogProviderServiceClient client =
-                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-            LogEventResponse response = client.LogEvent(request);
+
+            // TODO Review
+            //LogProviderService.LogProviderServiceClient client =
+            //    new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
+            //LogEventResponse response = client.LogEvent(request);
+            LogEventResponse response = PushLog(request);
         }
 
         /// <summary>
@@ -224,6 +234,8 @@ namespace PatternPal.Extension.Commands
         internal static void OnProjectOpen()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+            string test = _dte.Solution.FullName;
+
             LogEachProject(EventType.EvtProjectOpen);
         }
 
@@ -255,9 +267,14 @@ namespace PatternPal.Extension.Commands
                 request.ExecutionResult = ExecutionResult.ExtSucces;
             }
 
-            LogProviderService.LogProviderServiceClient client =
-                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-            LogEventResponse response = client.LogEvent(request);
+
+            // TODO Review
+            //LogProviderService.LogProviderServiceClient client =
+            //    new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
+            //LogEventResponse response = client.LogEvent(request);
+            LogEventResponse response = PushLog(request);
+            
+            // TODO What does this do?
             System.Diagnostics.Process process = new System.Diagnostics.Process();
         }
 
@@ -274,6 +291,20 @@ namespace PatternPal.Extension.Commands
                 EventId = Guid.NewGuid().ToString(), SubjectId = GetSubjectId(), SessionId = _sessionId
             };
         }
+
+        /// <summary>
+        /// TODO Is this a good name for this method?
+        /// TODO Comment (also return type)
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        private static LogEventResponse PushLog(LogEventRequest request)
+        {
+            LogProviderService.LogProviderServiceClient client =
+                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
+
+            return client.LogEvent(request);
+        } 
 
         /// <summary>
         /// Saves the SubjectId of the user, if not set already, as a GUID.
@@ -345,9 +376,12 @@ namespace PatternPal.Extension.Commands
                 request.EventType = eventType;
                 request.ProjectId = project.FullName;
 
-                LogProviderService.LogProviderServiceClient client =
-                    new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-                LogEventResponse response = client.LogEvent(request);
+                // TODO Review
+                // NOTE: Sends a single event per project -- is this useful for the CodeStates?
+                //LogProviderService.LogProviderServiceClient client =
+                //    new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
+                //LogEventResponse response = client.LogEvent(request);
+                LogEventResponse response = PushLog(request);
             }
         }
 
