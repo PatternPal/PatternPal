@@ -315,7 +315,7 @@ namespace PatternPal.Extension.Commands
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        private static ByteString ZipDirectory(string path)
+        public static ByteString ZipDirectory(string path)
         {
             // TODO: Protect against too large codebases.
             Byte[] bytes;
@@ -421,8 +421,6 @@ namespace PatternPal.Extension.Commands
                 // Zip project folder
                 // TODO: In the future, it is better not to necessarily do the zipping on the UI thread to prevent blocking :).
                 request.Data = ZipDirectory(Path.GetDirectoryName(project.FullName));
-
-                
 
                 // TODO Review
                 // NOTE: Sends a single event per project -- is this useful for the CodeStates?
