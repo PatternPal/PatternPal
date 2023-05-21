@@ -319,21 +319,22 @@ namespace PatternPal.Extension.Commands
             Byte[] bytes;
 
             using (MemoryStream ms = new MemoryStream())
-            using (ZipArchive archive = new ZipArchive(ms, ZipArchiveMode.Create))
             {
-
-                string[] files = Directory.GetFiles(path, "*.cs", SearchOption.AllDirectories);
-
-                foreach (string file in files)
+                using (ZipArchive archive = new ZipArchive(ms, ZipArchiveMode.Create))
                 {
-                    ZipArchiveEntry entry = archive.CreateEntry(file, CompressionLevel.Optimal);
 
-                    using (Stream entryStream = entry.Open())
-                    using (FileStream contents = File.OpenRead(file))
+                    string[] files = Directory.GetFiles(path, "*.cs", SearchOption.AllDirectories);
+
+                    foreach (string file in files)
                     {
-                        contents.CopyTo(entryStream);
-                    }
+                        ZipArchiveEntry entry = archive.CreateEntry(GetRelativePath(path, file), CompressionLevel.Optimal);
 
+                        using (Stream entryStream = entry.Open())
+                        using (FileStream contents = File.OpenRead(file))
+                        {
+                            contents.CopyTo(entryStream);
+                        }
+                    }
                 }
 
                 bytes = ms.ToArray();
@@ -375,9 +376,9 @@ namespace PatternPal.Extension.Commands
         }
 
         /// <summary>
-        /// Gets the relative path when given an absolute path and a filename.
+        /// Gets the relative path when given an absolute directory path and a filename.
         /// </summary>
-        /// <param name="relativeTo"> The absolute path to the root folder of the solution or project</param>
+        /// <param name="relativeTo"> The absolute path to the root folder</param>
         /// <param name="path">The absolute path to the specific file</param>
         /// <returns></returns>
         public static string GetRelativePath(string relativeTo, string path)
@@ -411,10 +412,10 @@ namespace PatternPal.Extension.Commands
 
                 LogEventRequest request = CreateStandardLog();
                 request.EventType = eventType;
-                
+
                 // TODO Review (O.A.): Now logs full path on local machine, which is not very privacy friendly.
                 request.ProjectId = project.UniqueName;
-                
+
                 // Zip project folder
                 // TODO: In the future, it is better not to necessarily do the zipping on the UI thread to prevent blocking :).
                 request.Data = ZipDirectory(Path.GetDirectoryName(project.FullName));
