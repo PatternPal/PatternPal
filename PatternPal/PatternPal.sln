@@ -8,9 +8,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "10 - Back-end", "10 - Back-end", "{25C2E758-AC65-4A3A-A11A-2D3510C01BB8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "20 - Front-end", "20 - Front-end", "{D8082781-8981-4B17-9E4A-5C25EF7E3892}"
-	ProjectSection(SolutionItems) = preProject
-		PatternPal.Regonizers\Abstractions\IResult.cs = PatternPal.Regonizers\Abstractions\IResult.cs
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatternPal.Core", "PatternPal.Core\PatternPal.Core.csproj", "{39C79D09-34DA-496B-936D-4387F5DB9104}"
 EndProject
