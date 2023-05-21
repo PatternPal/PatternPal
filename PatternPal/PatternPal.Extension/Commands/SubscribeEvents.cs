@@ -8,7 +8,9 @@ using EnvDTE;
 using EnvDTE80;
 using PatternPal.Protos;
 using System.Threading;
+using System.IO.Compression;
 using System.Collections;
+using Google.Protobuf;
 using Microsoft.VisualStudio.Shell.Interop;
 
 
@@ -304,7 +306,41 @@ namespace PatternPal.Extension.Commands
                 new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
 
             return client.LogEvent(request);
-        } 
+        }
+
+        /// <summary>
+        ///  TODO
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private static ByteString ZipDirectory(string path)
+        {
+            // TODO: Protect against too large codebases.
+            Byte[] bytes;
+
+            using (MemoryStream ms = new MemoryStream())
+            using (ZipArchive archive = new ZipArchive(ms, ZipArchiveMode.Create))
+            {
+
+                string[] files = Directory.GetFiles(path, "*.cs", SearchOption.AllDirectories);
+
+                foreach (string file in files)
+                {
+                    ZipArchiveEntry entry = archive.CreateEntry(file, CompressionLevel.Optimal);
+
+                    using (Stream entryStream = entry.Open())
+                    using (FileStream contents = File.OpenRead(file))
+                    {
+                        contents.CopyTo(entryStream);
+                    }
+
+                }
+
+                bytes = ms.ToArray();
+            }
+
+            return ByteString.CopyFrom(bytes);
+        }
 
         /// <summary>
         /// Saves the SubjectId of the user, if not set already, as a GUID.
@@ -359,7 +395,8 @@ namespace PatternPal.Extension.Commands
 
         /// <summary>
         /// Cycles through all active projects and log the given event for each of these projects.
-        /// </summary>e
+        /// <param name="eventType">TODO</param>
+        /// </summary>
         private static void LogEachProject(EventType eventType)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
@@ -376,9 +413,11 @@ namespace PatternPal.Extension.Commands
                 request.EventType = eventType;
                 
                 // TODO Review (O.A.): Now logs full path on local machine, which is not very privacy friendly.
-                // I suggest changing to either UniqueName (includes folder) or Name (just name of project itself).
                 request.ProjectId = project.UniqueName;
                 
+                // Zip project folder
+                // TODO: In the future, it is better not to necessarily do the zipping on the UI thread to prevent blocking :).
+                request.Data = ZipDirectory(Path.GetDirectoryName(project.FullName));
 
                 // TODO Review
                 // NOTE: Sends a single event per project -- is this useful for the CodeStates?
@@ -389,9 +428,12 @@ namespace PatternPal.Extension.Commands
             }
         }
 
+        /// <summary>
         /// Event handler for when an exception is unhandled. This is used to determine in the user's last debug session
         /// whether there were any unhandled exceptions. Although creating a separate method might seem redundant
         /// for the actual logic used here, it is necessary for the adding and removing from any used event listeners.
+        /// <param name="reason">TODO</param>
+        /// <param name="executionAction">TODO</param>
         /// </summary>
         public static void OnExceptionUnhandled(dbgEventReason reason, ref dbgExecutionAction executionAction)
         {
