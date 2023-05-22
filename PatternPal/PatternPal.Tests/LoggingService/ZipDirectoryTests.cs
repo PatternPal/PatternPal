@@ -14,7 +14,8 @@ namespace PatternPal.Tests.LoggingService
         private const string TEMPDIR = "zipTestTemp";
 
         /// <summary>
-        /// TODO
+        /// Creates the temporary working directory for before each test; deletes
+        /// it first if it already existed.
         /// </summary>
         [SetUp]
         public void Init()
@@ -28,9 +29,10 @@ namespace PatternPal.Tests.LoggingService
         }
 
         /// <summary>
-        /// TODO
+        /// Zips the directory supplied at path (containing only *.cs-files) and checks if unzipping the result
+        /// yields the same directory as supplied.
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="path">The path to the resource directory, containing only *.cs-files</param>
         [Test]
         [TestCase("../../../LoggingService/Resources/OnlyCsFiles")]
         [TestCase("../../../TestClasses/StrategyFactoryMethodTest1")]
@@ -45,10 +47,11 @@ namespace PatternPal.Tests.LoggingService
         }
 
         /// <summary>
-        /// TODO
+        /// Zips the directory supplied at path and checks if unzipping the result
+        /// yields the same directory as the one supplied minus all non-*.cs-files.
         /// </summary>
-        /// <param name="path"></param>
-        /// <param name="expected"></param>
+        /// <param name="path">The path to the resource directory</param>
+        /// <param name="expected">The path to a copy of the resource directory minus all non-*.cs-files</param>
         [Test]
         [TestCase("../../../LoggingService/Resources/MixedFiles1", "../../../LoggingService/Resources/MixedFiles1Exp")]
         [TestCase("../../../LoggingService/Resources/MixedFiles2", "../../../LoggingService/Resources/MixedFiles2Exp")]
@@ -62,7 +65,7 @@ namespace PatternPal.Tests.LoggingService
         }
 
         /// <summary>
-        /// TODO
+        /// Deletes the temporary working directory after each test.
         /// </summary>
         [TearDown]
         public void Cleanup()
@@ -72,10 +75,10 @@ namespace PatternPal.Tests.LoggingService
 
         #region Utility
         /// <summary>
-        /// TODO
+        /// Unzips the supplied ByteString-represented zip archive to path.
         /// </summary>
-        /// <param name="data"></param>
-        /// <param name="path"></param>
+        /// <param name="data">The zip archive, represented as a bytestring</param>
+        /// <param name="path">The path to unzip to</param>
         private static void Unzip(ByteString data, string path)
         {
             Byte[] compressed = data.ToArray();
@@ -87,6 +90,9 @@ namespace PatternPal.Tests.LoggingService
                 string fullPath = Path.Combine(path, entry.FullName);
                 string directory = Path.GetDirectoryName(fullPath);
 
+                // If the parent directory of the current entry did not exist, we
+                // create it. A second call to create the same directory will not
+                // result in any action.
                 if (directory != null)
                 {
                     Directory.CreateDirectory(directory);
@@ -97,12 +103,10 @@ namespace PatternPal.Tests.LoggingService
         }
 
         /// <summary>
-        /// TODO
-        /// Include src
+        /// Roughly compares two directories, also see source.
         /// </summary>
-        /// <param name="directoryA"></param>
-        /// <param name="directoryB"></param>
-        /// <returns></returns>
+        /// <see href="https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/how-to-compare-the-contents-of-two-folders-linq">Source</see>
+        /// <returns>Whether the directories are the same</returns>
         private static bool CompareDirectories(string directoryA, string directoryB)
         {
             DirectoryInfo dirA = new DirectoryInfo(directoryA);
