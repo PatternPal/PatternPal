@@ -255,9 +255,6 @@ namespace PatternPal.Extension.Commands
             }
 
             LogEventResponse response = PushLog(request);
-            
-            // TODO What does this do?
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
         }
 
         #endregion
