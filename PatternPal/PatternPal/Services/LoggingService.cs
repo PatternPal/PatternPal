@@ -24,7 +24,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     public override Task<LogEventResponse> LogEvent(LogEventRequest receivedRequest, ServerCallContext context)
     {
         GrpcChannel grpcChannel = GrpcChannel.ForAddress(
-            "http://178.128.140.163:8080");
+            "http://161.35.87.186:8080");
 
         LogRequest sendRequest = DetermineSpecificLog(receivedRequest);
         LogCollectorService.LogCollectorServiceClient client = new(grpcChannel);
@@ -58,6 +58,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
             Protos.EventType.EvtDebugProgram => DebugProgramLog(receivedRequest),
             Protos.EventType.EvtSessionStart => SessionStartLog(receivedRequest),
             Protos.EventType.EvtSessionEnd => SessionEndLog(receivedRequest),
+            Protos.EventType.EvtXRecognizerRun => RecognizeLog(receivedRequest),
             _ => StandardLog(receivedRequest)
         };
     }
@@ -81,8 +82,17 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
                 receivedRequest.SessionId 
         };
     }
-
+    
     #region Log types
+
+    private static LogRequest RecognizeLog(LogEventRequest receivedRequest)
+    {
+        LogRequest sendLog = StandardLog(receivedRequest);
+        sendLog.EventType = LoggingServer.EventType.EvtXRecognizerRun;
+        sendLog.RecognizerResult = receivedRequest.RecognizerResult;
+        sendLog.RecognizerConfig = receivedRequest.RecognizerConfig;
+        return sendLog;
+    }
     private static LogRequest CompileLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
@@ -156,6 +166,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
       
         return sendLog;
     }
+
     #endregion
 
     #region Utils

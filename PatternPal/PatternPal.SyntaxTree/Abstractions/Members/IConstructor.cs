@@ -1,11 +1,13 @@
 ﻿namespace PatternPal.SyntaxTree.Abstractions.Members
 {
+    /// <summary>
+    /// An <see cref="INode"/> which represents a constructor.
+    /// </summary>
     public interface IConstructor : IMember, IParameterized, IBodied, IChild<IClass>
     {
         /// <summary>
-        /// Gets the type of the constructor.
+        /// Gets the name of the <see cref="IClass"/> this constructor is a member of.
         /// </summary>
-        /// <returns>The type of the constructor in string format.</returns>
         string GetConstructorType();
 
         /// <summary>
@@ -15,21 +17,13 @@
         public ConstructorDeclarationSyntax GetConstructorDeclarationSyntax();
 
         /// <summary>
-        /// Gets the arguments the constructor was used.
+        /// Return the constructor wrapped as a <see cref="IMethod"/>.
         /// </summary>
-        /// <returns>Arguments the constructor was used with in string format.</returns>
-        IEnumerable<string> GetArguments();
-
-        /// <summary>
-        /// Casts the Constructor to a Method.
-        /// </summary>
-        /// <returns>An <see cref="IMethod"/>.</returns>
         IMethod AsMethod();
 
         /// <summary>
-        /// Gets the parent of the constructor.
+        /// Gets the parent of this <see cref="IConstructor"/>.
         /// </summary>
-        /// <returns>The <see cref="IClass"/> which is the parent of the constructor.</returns>
         new IClass GetParent();
     }
 }

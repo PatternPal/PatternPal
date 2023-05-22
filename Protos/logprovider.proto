@@ -21,27 +21,30 @@ string subject_id = 3;
 string tool_instances = 4;
 
 // Optional columns
-string client_timestamp = 5;
-string experimental_condition = 6; 
-string logging_error_id = 7;
-string parent_event_id = 8;
-string session_id = 9;
-string project_id = 10;
-string code_state_section = 11;
-patternpal.EventInitiator event_initiatior = 12;
-patternpal.EditType edit_type = 13;
-string compile_result = 14;
-string compile_message_type = 15;
-string compile_message_data = 16;
-string source_location = 17;
-string execution_id = 18;
-string test_id = 19;
 patternpal.ExecutionResult execution_result = 20;
-string intervention_category = 21;
-string intervention_type = 22;
-string intervention_message = 23;
 
-optional string filePath = 24;
+string client_timestamp = 6;
+string experimental_condition = 7; 
+string logging_error_id = 8;
+string parent_event_id = 9;
+string session_id = 10;
+string project_id = 11;
+string code_state_section = 12;
+patternpal.EventInitiator event_initiatior = 13;
+patternpal.EditType edit_type = 14;
+string compile_result = 15;
+string compile_message_type = 16;
+string compile_message_data = 17;
+string source_location = 18;
+string execution_id = 19;
+string test_id = 20;
+patternpal.ExecutionResult execution_result = 21;
+string intervention_category = 22;
+string intervention_type = 23;
+string intervention_message = 24;
+string recognizer_result = 25;
+string recognizer_config = 26;
+bytes data = 27;
 }
 
 // Input arguments for recognizer response
