@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.Shell;
@@ -8,11 +7,6 @@ using EnvDTE;
 using EnvDTE80;
 using PatternPal.Protos;
 using System.Threading;
-using System.IO.Compression;
-using System.Collections;
-using Google.Protobuf;
-using Microsoft.VisualStudio.Shell.Interop;
-
 
 namespace PatternPal.Extension.Commands
 {
@@ -47,8 +41,6 @@ namespace PatternPal.Extension.Commands
         private static string _pathToUserDataFolder;
 
         private static CancellationToken _cancellationToken;
-
-        private static Dictionary<String, ByteString> _previousCodeStates = new Dictionary<string, ByteString>();
 
         /// <summary>
         /// Initializes the preparation for the subscription of the logged events. 
@@ -188,11 +180,6 @@ namespace PatternPal.Extension.Commands
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtSessionStart;
 
-            // TODO Review
-            // Note that response is never used
-            //LogProviderService.LogProviderServiceClient client =
-            //    new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-            //LogEventResponse response = client.LogEvent(request);
             LogEventResponse response = PushLog(request);
         }
 
@@ -204,10 +191,6 @@ namespace PatternPal.Extension.Commands
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtSessionEnd;
 
-            // TODO Review
-            //LogProviderService.LogProviderServiceClient client =
-            //    new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-            //LogEventResponse response = client.LogEvent(request);
             LogEventResponse response = PushLog(request);
         }
 
@@ -225,10 +208,6 @@ namespace PatternPal.Extension.Commands
             request.SourceLocation = sourceLocation;
             request.CodeStateSection = codeStateSection;
 
-            // TODO Review
-            //LogProviderService.LogProviderServiceClient client =
-            //    new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-            //LogEventResponse response = client.LogEvent(request);
             LogEventResponse response = PushLog(request);
         }
 
@@ -271,11 +250,6 @@ namespace PatternPal.Extension.Commands
                 request.ExecutionResult = ExecutionResult.ExtSucces;
             }
 
-
-            // TODO Review
-            //LogProviderService.LogProviderServiceClient client =
-            //    new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-            //LogEventResponse response = client.LogEvent(request);
             LogEventResponse response = PushLog(request);
             
             // TODO What does this do?
@@ -297,52 +271,16 @@ namespace PatternPal.Extension.Commands
         }
 
         /// <summary>
-        /// TODO Is this a good name for this method?
-        /// TODO Comment (also return type)
+        /// TODO
         /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
+        /// <param name="request">TODO</param>
+        /// <returns>TODO</returns>
         private static LogEventResponse PushLog(LogEventRequest request)
         {
             LogProviderService.LogProviderServiceClient client =
                 new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
 
             return client.LogEvent(request);
-        }
-
-        /// <summary>
-        ///  TODO
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static ByteString ZipDirectory(string path)
-        {
-            // TODO: Protect against too large codebases.
-            Byte[] bytes;
-
-            using (MemoryStream ms = new MemoryStream())
-            {
-                using (ZipArchive archive = new ZipArchive(ms, ZipArchiveMode.Create))
-                {
-
-                    string[] files = Directory.GetFiles(path, "*.cs", SearchOption.AllDirectories);
-
-                    foreach (string file in files)
-                    {
-                        ZipArchiveEntry entry = archive.CreateEntry(GetRelativePath(path, file), CompressionLevel.Optimal);
-
-                        using (Stream entryStream = entry.Open())
-                        using (FileStream contents = File.OpenRead(file))
-                        {
-                            contents.CopyTo(entryStream);
-                        }
-                    }
-                }
-
-                bytes = ms.ToArray();
-            }
-
-            return ByteString.CopyFrom(bytes);
         }
 
         /// <summary>
@@ -377,6 +315,7 @@ namespace PatternPal.Extension.Commands
             return File.ReadAllText(filePath);
         }
 
+        // TODO Separate utility because of duplication with extension
         /// <summary>
         /// Gets the relative path when given an absolute directory path and a filename.
         /// </summary>
@@ -415,23 +354,10 @@ namespace PatternPal.Extension.Commands
                 LogEventRequest request = CreateStandardLog();
                 request.EventType = eventType;
 
-                // TODO Review (O.A.): Now logs full path on local machine, which is not very privacy friendly.
                 request.ProjectId = project.UniqueName;
+                request.FilePath = Path.GetDirectoryName(project.FullName);
 
-                // Zip project folder
-                // TODO: In the future, it is better not to necessarily do the zipping on the UI thread to prevent blocking :).
-                request.Data = ZipDirectory(Path.GetDirectoryName(project.FullName));
-
-                // TODO Review
-                // NOTE: Sends a single event per project -- is this useful for the CodeStates?
-                //LogProviderService.LogProviderServiceClient client =
-                //    new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-                //LogEventResponse response = client.LogEvent(request);
                 LogEventResponse response = PushLog(request);
-
-                // After we successfully logged (TODO is that checked here?), we store the bytestring in the dict. 
-                // TODO: Once we know what to do with this, might need to be a hash or have further safety measures.
-                _previousCodeStates.Add(request.ProjectId, request.Data);
             }
         }
 

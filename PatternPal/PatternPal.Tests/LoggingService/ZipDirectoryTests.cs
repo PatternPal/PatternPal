@@ -1,5 +1,5 @@
 ﻿#region
-// using PatternPal.Extension.Commands;
+using PatternPal.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +11,7 @@ using Google.Protobuf;
 
 #endregion
 
-namespace PatternPal.Tests.Extension
+namespace PatternPal.Tests.LoggingService
 {
     [TestFixture]
     internal class ZipDirectoryTests
@@ -19,9 +19,9 @@ namespace PatternPal.Tests.Extension
         [Test]
         public void Unzipped_ByteString_Matches_Unzipped_Directory_Only_Cs()
         {
-            // TODO Fix Extension circular dependency
-            string testResource = @"./Resources/OnlyCsFiles";
-           // ByteString archive = SubscribeEvents.ZipDirectory(testResource);
+            string testResource = @"..//..//..//LoggingService//Resources//OnlyCsFiles";
+            ByteString archive = Services.LoggingService.ZipDirectory(testResource);
+
             string directoryName = Guid.NewGuid().ToString();
             Directory.CreateDirectory(directoryName);
 

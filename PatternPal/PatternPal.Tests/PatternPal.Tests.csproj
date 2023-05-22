@@ -29,6 +29,7 @@
     <ProjectReference Include="..\PatternPal.Core\PatternPal.Core.csproj" />
     <ProjectReference Include="..\PatternPal.Regonizers\PatternPal.Recognizers.csproj" />
     <ProjectReference Include="..\PatternPal.StepByStep\PatternPal.StepByStep.csproj" />
+    <ProjectReference Include="..\PatternPal\PatternPal.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -47,10 +48,6 @@
     <None Update="Checks\RelationCheckTests.Uses_Check_Returns_Correct_True_Result_For_Method.verified.txt">
       <DependentUpon>RelationCheckTests.cs</DependentUpon>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Extension\Resources\" />
   </ItemGroup>
 
 </Project>
