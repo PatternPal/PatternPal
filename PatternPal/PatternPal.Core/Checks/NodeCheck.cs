@@ -35,7 +35,7 @@ internal class NodeCheck< TNode > : CheckBase
 
     /// <summary>
     /// The dependencies to other <see cref="INode"/>s this check has.
-    /// While calculating the dependencies, it calculates the dependencies of its <see cref="_SubChecks"/>.
+    /// While calculating the dependencies, it calculates the dependencies of its <see cref="_subChecks"/>.
     /// </summary>
     public override int DependencyCount
     {
@@ -112,8 +112,8 @@ internal class NodeCheck< TNode > : CheckBase
     /// <summary>
     /// Run the given <paramref name="subCheck"/> on the given <paramref name="castNode"/>.
     /// </summary>
-    /// <param name="ctx">The current <see cref="IRecognizerContext"/>.</param>
-    /// <param name="castNode">The <see cref="INode"/> to run the <paramref name="subCheck"></param> on.</param>
+    /// <param name="oldCtx">The current <see cref="IRecognizerContext"/>.</param>
+    /// <param name="castNode">The <see cref="INode"/> to run the <paramref name="subCheck"/> on.</param>
     /// <param name="subCheck">The <see cref="ICheck"/> to run.</param>
     /// <returns>The <see cref="ICheckResult"/> of the <paramref name="subCheck"/>.</returns>
     private ICheckResult RunCheck(

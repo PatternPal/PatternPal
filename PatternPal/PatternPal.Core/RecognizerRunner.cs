@@ -277,7 +277,7 @@ public class RecognizerRunner
                         }
                         case NodeCheckResult nodeCheckResult:
                         {
-                            // TODO: Fix this using priorities (only works if all sub-checks are knockout.
+                            // TODO: Fix this using priorities (only works if all sub-checks are knockout).
                             // If `FilterResults` returns false, this means the node check shouldn't
                             // be pruned (because it has correct children). Because it's wrapped in
                             // a not check, this not check is incorrect and should be pruned if it

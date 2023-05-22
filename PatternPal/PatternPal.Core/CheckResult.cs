@@ -125,7 +125,7 @@ public class NodeCheckResult : ICheckResult
     public required Priority Priority { get; init; }
 
     /// <summary>
-    /// Collection of the results of the childchecks, like the MethodCheck inside a ClassCheck
+    /// Collection of the results of the childChecks, like the MethodCheck inside a ClassCheck
     /// </summary>
     public required IList< ICheckResult > ChildrenCheckResults { get; init; }
 

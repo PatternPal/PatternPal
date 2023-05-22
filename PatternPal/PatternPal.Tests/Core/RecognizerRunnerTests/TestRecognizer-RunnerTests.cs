@@ -6,7 +6,7 @@ using static PatternPal.Core.RecognizerRunner;
 namespace PatternPal.Tests.Core.RecognizerRunnerTests;
 
 [TestFixture]
-internal class TestRecognizer_RunnerTests
+internal class TestRecognizerRunnerTests
 {
     [Test]
     [TestCase("PruneTestClass1.cs")]
@@ -14,7 +14,7 @@ internal class TestRecognizer_RunnerTests
     [TestCase("PruneTestClass3.cs")]
     public Task Knockout_Pruning(string filename)
     {
-        //Create testrecognizer
+        //Create testRecognizer
         string code = FileUtils.FileToString("PruneTests\\" + filename);
 
         SyntaxGraph graph = new();
