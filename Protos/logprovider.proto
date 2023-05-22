@@ -21,8 +21,6 @@ string subject_id = 3;
 string tool_instances = 4;
 
 // Optional columns
-patternpal.ExecutionResult execution_result = 20;
-
 string client_timestamp = 6;
 string experimental_condition = 7; 
 string logging_error_id = 8;
@@ -44,7 +42,7 @@ string intervention_type = 23;
 string intervention_message = 24;
 string recognizer_result = 25;
 string recognizer_config = 26;
-bytes data = 27;
+optional string file_path = 27;
 }
 
 // Input arguments for recognizer response
