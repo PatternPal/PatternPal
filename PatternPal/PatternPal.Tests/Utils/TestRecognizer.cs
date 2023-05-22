@@ -6,37 +6,23 @@ internal class TestRecognizer : IRecognizer
     {
         MethodCheck instanceMethod =
             Method(
-                Priority.Low,
+                Priority.Knockout,
                 Modifiers(
-                    Priority.Low,
+                    Priority.Knockout,
                     Modifier.Static
                 )
             );
 
         yield return Class(
-            Priority.Low,
-            instanceMethod,
-            Field(
-                Priority.Low,
-                Modifiers(
-                    Priority.Low,
-                    Modifier.Static,
-                    Modifier.Private
-                ),
-                Type(
-                    Priority.Low,
-                    ICheck.GetCurrentEntity
-                )
-            )
+            Priority.Knockout,
+            instanceMethod
         );
 
         yield return Class(
-            Priority.Low,
-            Method(
-                Priority.Low,
-                Uses(
-                    Priority.Low,
-                    instanceMethod)
+            Priority.Knockout,
+            Uses(
+                Priority.Knockout,
+                instanceMethod
             )
         );
     }

@@ -315,8 +315,8 @@ public class RecognizerRunner
 
         // If parentCheck becomes empty => also prune parent. The parent is pruned by the caller if
         // we return `true`.
-        if (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count
-            || (parentCheckResult.CollectionKind == CheckCollectionKind.All && resultsToBePruned.Count > 0))
+        if (resultsToBePruned.Count > 0 && (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count
+            || parentCheckResult.CollectionKind == CheckCollectionKind.All))
         {
             // Parent becomes empty.
             parentCheckResult.ChildrenCheckResults.Clear();

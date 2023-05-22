@@ -9,34 +9,25 @@ namespace PatternPal.Tests.Core.RecognizerRunnerTests;
 internal class TestRecognizer_RunnerTests
 {
     [Test]
-    [TestCase("PruneTestClass1.cs", "lalal", true)]
-    public void Knockout_Pruning(
-        string filename,
-        string node,
-        bool shouldBePruned
-        )
+    [TestCase("PruneTestClass1.cs")]
+    [TestCase("PruneTestClass2.cs")]
+    public Task Knockout_Pruning(string filename)
     {
         //Create testrecognizer
         string code = FileUtils.FileToString("PruneTests\\" + filename);
-        string nameSpaceNode = "PatternPal.Tests.TestClasses.PruneTests";
 
         SyntaxGraph graph = new();
         graph.AddFile(code, code);
         graph.CreateGraph();
 
-        TestRecognizer recognizer = new();
+        IRecognizer recognizer = new TestRecognizer();
         ICheck rootCheck = recognizer.CreateRootCheck();
 
-        IRecognizerContext ctx = new RecognizerContext
-        {
-            Graph = graph,
-            CurrentEntity = null!,
-            ParentCheck = rootCheck,
-        };
+        IRecognizerContext ctx = RecognizerContext4Tests.Create(graph, rootCheck);
 
         NodeCheckResult rootResult = (NodeCheckResult)rootCheck.Check(
             ctx,
-            new RootNode());
+            new RootNode4Tests());
 
         SortCheckResults(rootResult);
 
@@ -46,10 +37,6 @@ internal class TestRecognizer_RunnerTests
             resultsByNode,
             rootResult);
 
-
-        Assert.AreEqual(shouldBePruned, true);
-
-        //Test if name of node is in result
-        //Assert shouldBePruned
+        return Verifier.Verify(rootResult);
     }
 }

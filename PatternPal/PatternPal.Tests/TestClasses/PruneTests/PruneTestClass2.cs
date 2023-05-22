@@ -1,6 +1,6 @@
 ﻿namespace PatternPal.Tests.TestClasses.PruneTests;
 
-internal class PruneTestClass1
+internal class PruneTestClass2
 {
     public static int CalculateClient()
     {
@@ -8,7 +8,6 @@ internal class PruneTestClass1
     }
 }
 
-internal class ClassUsesPruneClass 
+internal class ClassNotUsesPruneClass
 {
-    public int pizza = PruneTestClass1.CalculateClient();
 }
