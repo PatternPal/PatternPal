@@ -10,13 +10,6 @@ internal class TestRecognizer : IRecognizer
                 Modifiers(
                     Priority.Low,
                     Modifier.Static
-                ),
-                Not(
-                    Priority.Low,
-                    Modifiers(
-                        Priority.Low,
-                        Modifier.Private
-                    )
                 )
             );
 
@@ -33,40 +26,6 @@ internal class TestRecognizer : IRecognizer
                 Type(
                     Priority.Low,
                     ICheck.GetCurrentEntity
-                )
-            ),
-            Constructor(
-                Priority.Low,
-                Modifiers(
-                    Priority.Low,
-                    Modifier.Private
-                )
-            ),
-            Not(
-                Priority.Low,
-                Any(
-                    Priority.Low,
-                    Constructor(
-                        Priority.Low,
-                        Modifiers(
-                            Priority.Low,
-                            Modifier.Public
-                        )
-                    ),
-                    Constructor(
-                        Priority.Low,
-                        Modifiers(
-                            Priority.Low,
-                            Modifier.Internal
-                        )
-                    ),
-                    Constructor(
-                        Priority.Low,
-                        Modifiers(
-                            Priority.Low,
-                            Modifier.Protected
-                        )
-                    )
                 )
             )
         );
