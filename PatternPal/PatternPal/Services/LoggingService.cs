@@ -17,7 +17,7 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
     public override Task<LogEventResponse> LogEvent(LogEventRequest receivedRequest, ServerCallContext context)
     {
         GrpcChannel grpcChannel = GrpcChannel.ForAddress(
-            "http://178.128.140.163:8080");
+            "http://161.35.87.186:8080");
 
         LogRequest sendRequest = DetermineSpecificLog(receivedRequest);
         LogCollectorService.LogCollectorServiceClient client = new LogCollectorService.LogCollectorServiceClient(grpcChannel);
@@ -69,7 +69,6 @@ public class LoggingService : Protos.LogProviderService.LogProviderServiceBase
             EventId = receivedRequest.EventId, //TO DO: Generate ID in Logging Server self
             SubjectId = receivedRequest.SubjectId,
             ToolInstances = Environment.Version.ToString(),
-            CodeStateId = Guid.NewGuid().ToString(),
             ClientTimestamp =
                 DateTime.UtcNow.ToString(
                     "yyyy-MM-dd HH:mm:ss.fff zzz"), //TO DO: DateTimeOffset.Now.ToString("yyyy-MM-dd HH:mm:ss.fff  zzz"), : Logging server cannot work with offsets yet
