@@ -275,10 +275,8 @@ namespace PatternPal.Extension.Commands
         }
 
         /// <summary>
-        /// TODO
+        /// Sends the log request to the background service in order to be processed to the server.
         /// </summary>
-        /// <param name="request">TODO</param>
-        /// <returns>TODO</returns>
         private static LogEventResponse PushLog(LogEventRequest request)
         {
             LogProviderService.LogProviderServiceClient client =
@@ -341,7 +339,6 @@ namespace PatternPal.Extension.Commands
 
         /// <summary>
         /// Cycles through all active projects and log the given event for each of these projects.
-        /// <param name="eventType">TODO</param>
         /// </summary>
         private static void LogEachProject(EventType eventType)
         {
@@ -358,6 +355,8 @@ namespace PatternPal.Extension.Commands
                 LogEventRequest request = CreateStandardLog();
                 request.EventType = eventType;
 
+                // Since LogEachProject is only called by either Project.Open or Project.Close,
+                // we include the full CodeState.
                 request.ProjectId = project.UniqueName;
                 request.FilePath = Path.GetDirectoryName(project.FullName);
 
@@ -369,8 +368,6 @@ namespace PatternPal.Extension.Commands
         /// Event handler for when an exception is unhandled. This is used to determine in the user's last debug session
         /// whether there were any unhandled exceptions. Although creating a separate method might seem redundant
         /// for the actual logic used here, it is necessary for the adding and removing from any used event listeners.
-        /// <param name="reason">TODO</param>
-        /// <param name="executionAction">TODO</param>
         /// </summary>
         public static void OnExceptionUnhandled(dbgEventReason reason, ref dbgExecutionAction executionAction)
         {
