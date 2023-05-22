@@ -240,58 +240,6 @@ namespace PatternPal.Tests.Utils
             return graph;
         }
 
-        internal static SyntaxGraph CreatePerfectSingleton()
-        {
-            // SingleTonTestCase05 is a perfect implementation
-            const string INPUT = """
-                                 public class SingleTonTestCase05
-                                 {
-                                     private static SingleTonTestCase05 _instance;
-
-                                     private SingleTonTestCase05()
-                                     {
-                                     }
-
-                                     public static SingleTonTestCase05 GetInstance()
-                                     {
-                                         if (_instance == null)
-                                         {
-                                             _instance = new SingleTonTestCase05();
-                                         }
-
-                                         return _instance;
-                                     }
-
-                                     public void DoSomething()
-                                     {
-
-                                     }
-                                 }
-
-                                 public class SingleTonTestCase5User
-                                 {
-                                     SingleTonTestCase05 instance;
-
-                                     public SingleTonTestCase5User()
-                                     {
-                                         instance = SingleTonTestCase05.GetInstance();
-                                     }
-
-                                     public void DoSomethingWithSingleton()
-                                     {
-                                         instance.DoSomething();
-                                     }
-                                 }
-                                 """;
-
-            SyntaxGraph graph = new();
-            graph.AddFile(
-                INPUT,
-                "0");
-            graph.CreateGraph();
-            return graph;
-        }
-
         #region singletonTesting
         /// <summary>
         /// contains multiple constructors with different modifiers
@@ -383,7 +331,7 @@ namespace PatternPal.Tests.Utils
         /// <summary>
         /// contains multiple simplistic singleton examples with different methods
         /// </summary>
-        internal static SyntaxGraph CreateMultipleSingletons()
+        internal static SyntaxGraph CreateCorrectSingleton()
         {
             const string INPUT = """
                                  //Correct
@@ -405,6 +353,18 @@ namespace PatternPal.Tests.Utils
                                          return _instance;
                                      }
                                  }
+                                 """;
+            SyntaxGraph graph = new();
+            graph.AddFile(
+                INPUT,
+                "0");
+            graph.CreateGraph();
+            return graph;
+        }
+
+        internal static SyntaxGraph CreateSingletonWrongMethodModifiers()
+        {
+            const string INPUT = """
                                  //Wrong method modifiers 1
                                  public class MockClass2
                                  {
@@ -444,7 +404,18 @@ namespace PatternPal.Tests.Utils
                                          return _instance;
                                      }
                                  }
+                                 """;
+            SyntaxGraph graph = new();
+            graph.AddFile(
+                INPUT,
+                "0");
+            graph.CreateGraph();
+            return graph;
+        }
 
+        internal static SyntaxGraph CreateSingletonNoConstructorCall()
+        {
+            const string INPUT = """
                                  //Constructor not being called
                                  public class MockClass4
                                  {
@@ -464,7 +435,18 @@ namespace PatternPal.Tests.Utils
                                          return _instance;
                                      }
                                  }
+                                 """;
+            SyntaxGraph graph = new();
+            graph.AddFile(
+                INPUT,
+                "0");
+            graph.CreateGraph();
+            return graph;
+        }
 
+        internal static SyntaxGraph CreateSingletonNoFieldUsage()
+        {
+            const string INPUT = """
                                  //does not use private field
                                  public class MockClass5
                                  {

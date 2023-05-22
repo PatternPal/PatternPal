@@ -1,21 +1,21 @@
 ﻿[
   {
-    FeedbackMessage: Found class 'MockClass1',
+    FeedbackMessage: Found class 'MockClass4',
     Priority: Low,
     ChildrenCheckResults: [
       {
         FeedbackMessage: ,
         ChildrenCheckResults: [
           {
-            FeedbackMessage: Found constructor: MockClass1().,
+            FeedbackMessage: Found constructor: MockClass4().,
             ChildrenCheckResults: [
               {
                 FeedbackMessage: Modifiers correctly implemented.,
                 Correct: true,
-                MatchedNode: MockClass1
+                MatchedNode: MockClass4
               }
             ],
-            MatchedNode: MockClass1,
+            MatchedNode: MockClass4,
             NodeCheckCollectionWrapper: false
           }
         ],
@@ -35,11 +35,11 @@
                 Priority: Mid,
                 ChildrenCheckResults: [
                   {
-                    FeedbackMessage: Node GetInstance() has a Uses relation with node MockClass1(),
+                    FeedbackMessage: No Uses relation found.,
                     Priority: Mid,
-                    Correct: true,
+                    Correct: false,
                     DependencyCount: 1,
-                    MatchedNode: MockClass1
+                    MatchedNode: MockClass4
                   }
                 ],
                 DependencyCount: 1,
@@ -58,7 +58,7 @@
       }
     ],
     DependencyCount: 1,
-    MatchedNode: MockClass1,
+    MatchedNode: MockClass4,
     NodeCheckCollectionWrapper: false
   }
 ]
