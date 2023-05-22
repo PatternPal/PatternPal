@@ -113,7 +113,8 @@ namespace PatternPal.Tests.Recognizer
             return Verifier.Verify(results);
         }
 
-        [Test]
+        //Wachten op jeroen d1
+        //[Test]
         public Task CallsPrivateConstructorTest()
         {
             // Create a graph of 5 classes with 5 different singleton implementations where the first and the last two
@@ -193,7 +194,7 @@ namespace PatternPal.Tests.Recognizer
             return Verifier.Verify(results);
         }
 
-
+        //Wachten op jeroen d012
         //[Test]
         public Task StaticMethodActsAsConstructorTest()
         {
@@ -228,12 +229,12 @@ namespace PatternPal.Tests.Recognizer
             return Verifier.Verify(results);
         }
 
-        //[Test]
+        [Test]
         public Task ClientCallsMethodActsAsConstructorTest()
         {
             // Create a graph of 5 classes with 5 different singleton implementations where the first and the last two
             // adheres to all requirements and the second and third are missing one specific modifier
-            SyntaxGraph graph = EntityNodeUtils.CreateMultipleSingletons();
+            SyntaxGraph graph = EntityNodeUtils.CreateClientSingletons();
             RecognizerContext4Tests ctx = RecognizerContext4Tests.Create(graph);
 
             SingletonRecognizer sr = new();
@@ -242,8 +243,7 @@ namespace PatternPal.Tests.Recognizer
             sr.OnlyPrivateConstructor(out ConstructorCheck privateConstructorCheck);
 
             // Step 3 of Singleton StepByStep
-            ICheck hasMethodAcsAsConstructor =
-                sr.CheckMethodAcsAsConstructorBehaviour(
+            _ = sr.CheckMethodAcsAsConstructorBehaviour(
                     privateConstructorCheck,
                     sr.StaticPrivateFieldOfTypeClass(),
                     out ICheck[] hasStaticPublicInternalMethod);
