@@ -1,12 +1,7 @@
 ﻿#region
-using PatternPal.Services;
-using System;
-using System.Collections.Generic;
+using ls = PatternPal.Services.LoggingService;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Google.Protobuf;
 
 #endregion
@@ -16,20 +11,71 @@ namespace PatternPal.Tests.LoggingService
     [TestFixture]
     internal class ZipDirectoryTests
     {
-        [Test]
-        public void Unzipped_ByteString_Matches_Unzipped_Directory_Only_Cs()
+        private const string TEMPDIR = "zipTestTemp";
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        [SetUp]
+        public void Init()
         {
-            string testResource = @"..//..//..//LoggingService//Resources//OnlyCsFiles";
-            ByteString archive = Services.LoggingService.ZipDirectory(testResource);
+            if (Directory.Exists(TEMPDIR))
+            {
+                Directory.Delete(TEMPDIR, true);
+            }
 
-            string directoryName = Guid.NewGuid().ToString();
-            Directory.CreateDirectory(directoryName);
-
-            Assert.IsTrue(CompareDirectories(testResource, directoryName));
-
-            Directory.Delete(directoryName);
+            Directory.CreateDirectory(TEMPDIR);
         }
 
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="path"></param>
+        [Test]
+        [TestCase("../../../LoggingService/Resources/OnlyCsFiles")]
+        [TestCase("../../../TestClasses/StrategyFactoryMethodTest1")]
+        [TestCase("../../../TestClasses/AdapterTest1")]
+        public void Unzipped_ByteString_Matches_Unzipped_Directory_Only_Cs_Files(string path)
+        {
+            string fullPath = Path.GetFullPath(path);
+            ByteString archive = ls.ZipDirectory(fullPath);
+            Unzip(archive, TEMPDIR);
+
+            Assert.IsTrue(CompareDirectories(fullPath, TEMPDIR));
+        }
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="expected"></param>
+        [Test]
+        [TestCase("../../../LoggingService/Resources/MixedFiles1", "../../../LoggingService/Resources/MixedFiles1Exp")]
+        [TestCase("../../../LoggingService/Resources/MixedFiles2", "../../../LoggingService/Resources/MixedFiles2Exp")]
+        public void Unzipped_ByteString_Matches_Unzipped_Directory_Mixed_Files(string path, string expected)
+        {
+            string fullPath = Path.GetFullPath(path);
+            ByteString archive = ls.ZipDirectory(fullPath);
+            Unzip(archive, TEMPDIR);
+
+            Assert.IsTrue(CompareDirectories(expected, TEMPDIR));
+        }
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        [TearDown]
+        public void Cleanup()
+        {
+            Directory.Delete(TEMPDIR, true);
+        }
+
+        #region Utility
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="path"></param>
         private static void Unzip(ByteString data, string path)
         {
             Byte[] compressed = data.ToArray();
@@ -50,6 +96,13 @@ namespace PatternPal.Tests.LoggingService
             }
         }
 
+        /// <summary>
+        /// TODO
+        /// Include src
+        /// </summary>
+        /// <param name="directoryA"></param>
+        /// <param name="directoryB"></param>
+        /// <returns></returns>
         private static bool CompareDirectories(string directoryA, string directoryB)
         {
             DirectoryInfo dirA = new DirectoryInfo(directoryA);
@@ -93,4 +146,6 @@ namespace PatternPal.Tests.LoggingService
             return s.GetHashCode();
         }
     }
+
+#endregion
 }

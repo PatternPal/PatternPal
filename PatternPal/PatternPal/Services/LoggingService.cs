@@ -202,6 +202,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     #region Utils
     /// <summary>
     ///  TODO
+    /// Note: expects a full file path
     /// </summary>
     /// <param name="path"></param>
     /// <returns></returns>
