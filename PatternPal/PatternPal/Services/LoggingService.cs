@@ -1,4 +1,4 @@
-﻿#region
+#region
 
 using Grpc.Net.Client;
 using PatternPal.LoggingServer;
@@ -56,13 +56,13 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     {
         return new LogRequest
         {
-            EventId = receivedRequest.EventId, //TO DO: Generate ID in Logging Server self
+            EventId = receivedRequest.EventId, //TODO: Generate ID in Logging Server self
             SubjectId = receivedRequest.SubjectId,
             ToolInstances = Environment.Version.ToString(),
-            CodeStateId = Guid.NewGuid().ToString(),
+            CodeStateId = Guid.NewGuid().ToString(), //TODO: Generate ID in Logging Server
             ClientTimestamp =
                 DateTime.UtcNow.ToString(
-                    "yyyy-MM-dd HH:mm:ss.fff zzz"), //TO DO: DateTimeOffset.Now.ToString("yyyy-MM-dd HH:mm:ss.fff  zzz"), : Logging server cannot work with offsets yet
+                    "yyyy-MM-dd HH:mm:ss.fff zzz"), //TODO: DateTimeOffset.Now.ToString("yyyy-MM-dd HH:mm:ss.fff  zzz"), : Logging server cannot work with offsets yet
             SessionId =
                 receivedRequest.SessionId 
         };
@@ -101,6 +101,8 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         LogRequest sendLog = StandardLog(receivedRequest);
         sendLog.EventType = LoggingServer.EventType.EvtProjectOpen;
         sendLog.ProjectId = receivedRequest.ProjectId;
+        sendLog.Data = receivedRequest.Data;
+
         return sendLog;
     }
 
