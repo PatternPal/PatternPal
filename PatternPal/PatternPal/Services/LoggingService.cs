@@ -21,12 +21,6 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     /// </summary>
     private static Dictionary<String, (ByteString CodeState, bool Full)> _lastCodeState = new Dictionary<string, (ByteString CodeState, bool Full)>();
 
-    /// <summary>
-    /// TODO
-    /// </summary>
-    /// <param name="receivedRequest">TODO</param>
-    /// <param name="context">TODO</param>
-    /// <returns></returns>
     public override Task<LogEventResponse> LogEvent(LogEventRequest receivedRequest, ServerCallContext context)
     {
         GrpcChannel grpcChannel = GrpcChannel.ForAddress(
@@ -89,11 +83,6 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     }
 
     #region Log types
-    /// <summary>
-    /// TODO
-    /// </summary>
-    /// <param name="receivedRequest"></param>
-    /// <returns></returns>
     private static LogRequest CompileLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
@@ -102,11 +91,6 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         return sendLog;
     }
 
-    /// <summary>
-    /// TODO
-    /// </summary>
-    /// <param name="receivedRequest"></param>
-    /// <returns></returns>
     private static LogRequest CompileErrorLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
@@ -119,11 +103,6 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         return sendLog;
     }
 
-    /// <summary>
-    /// TODO
-    /// </summary>
-    /// <param name="receivedRequest"></param>
-    /// <returns></returns>
     private static LogRequest ProjectCloseLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
@@ -138,11 +117,6 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         return sendLog;
     }
 
-    /// <summary>
-    /// TODO
-    /// </summary>
-    /// <param name="receivedRequest"></param>
-    /// <returns></returns>
     private static LogRequest ProjectOpenLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
@@ -157,11 +131,6 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         return sendLog;
     }
 
-    /// <summary>
-    /// TODO
-    /// </summary>
-    /// <param name="receivedRequest"></param>
-    /// <returns></returns>
     private static LogRequest DebugProgramLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
@@ -172,11 +141,6 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         return sendLog;
     }
 
-    /// <summary>
-    /// TODO
-    /// </summary>
-    /// <param name="receivedRequest"></param>
-    /// <returns></returns>
     private static LogRequest SessionStartLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
@@ -185,11 +149,6 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         return sendLog;
     }
 
-    /// <summary>
-    /// TODO
-    /// </summary>
-    /// <param name="receivedRequest"></param>
-    /// <returns></returns>
     private static LogRequest SessionEndLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
@@ -201,11 +160,11 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
 
     #region Utils
     /// <summary>
-    ///  TODO
-    /// Note: expects a full file path
+    /// Zips only the *.cs-files in the supplied path to an in-memory archive,
+    /// while retaining the directory structure.
     /// </summary>
-    /// <param name="path"></param>
-    /// <returns></returns>
+    /// <param name="path">The absolute path to the directory</param>
+    /// <returns>A ByteString of the resulting archive</returns>
     public static ByteString ZipDirectory(string path)
     {
         // TODO: Protect against too large codebases.
@@ -234,6 +193,8 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
             bytes = ms.ToArray();
         }
 
+        // The final memoryStream containing the zip archive is represented as an array of bytes;
+        //  we copy it to a byteString here in order to facilitate easy gRPC usage.
         return ByteString.CopyFrom(bytes);
     }
 
