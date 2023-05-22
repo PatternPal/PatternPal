@@ -320,7 +320,6 @@ namespace PatternPal.Extension.Commands
         /// </summary>
         /// <param name="relativeTo"> The absolute path to the root folder</param>
         /// <param name="path">The absolute path to the specific file</param>
-        /// <returns></returns>
         public static string GetRelativePath(string relativeTo, string path)
         {
             Uri uri = new Uri(relativeTo);
