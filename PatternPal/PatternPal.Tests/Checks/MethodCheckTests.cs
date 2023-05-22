@@ -1,7 +1,6 @@
 ﻿#region
 
-using PatternPal.SyntaxTree.Abstractions.Entities;
-using PatternPal.SyntaxTree.Abstractions.Members;
+using static PatternPal.Core.Checks.CheckBuilder;
 
 #endregion
 

@@ -1,12 +1,10 @@
-// Global using directives
+﻿// Global using directives
 
 global using Grpc.Core;
 
 global using PatternPal.CommonResources;
 global using PatternPal.Core;
-global using PatternPal.Core.Models;
 global using PatternPal.Protos;
-global using PatternPal.Recognizers.Abstractions;
 global using PatternPal.StepByStep;
 global using PatternPal.StepByStep.Abstractions;
 

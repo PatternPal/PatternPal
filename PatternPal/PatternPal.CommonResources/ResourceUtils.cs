@@ -3,87 +3,83 @@ using System.Resources;
 using System.Text.RegularExpressions;
 using PatternPal.Recognizers.Abstractions;
 
-namespace PatternPal.CommonResources
+namespace PatternPal.CommonResources;
+
+public static class ResourceUtils
 {
-    public static class ResourceUtils
+    private static ResourceManager _resourceMan;
+    private static readonly Regex Regex = new(@"\{\d+\}");
+
+    private static ResourceManager ResourceManager
     {
-        private static ResourceManager resourceMan;
-        private static readonly Regex regex = new Regex(@"\{\d+\}");
-
-        public static ResourceManager ResourceManager
+        get
         {
-            get
+            if (_resourceMan is not null)
             {
-                if (resourceMan is null)
-                {
-                    var temp = new ResourceManager(
-                        "PatternPal.CommonResources.ClassFeedbackRes", typeof(ClassFeedbackRes).Assembly
-                    );
-                    resourceMan = temp;
-                }
-
-                return resourceMan;
+                return _resourceMan;
             }
+
+            ResourceManager temp = new(
+                "PatternPal.CommonResources.ClassFeedbackRes", typeof(ClassFeedbackRes).Assembly
+            );
+            _resourceMan = temp;
+
+            return _resourceMan;
+        }
+    }
+
+    public static CultureInfo Culture { get; set; }
+
+    private static string GetResourceFromString(string name)
+    {
+        return ResourceManager.GetString(name, Culture);
+    }
+
+    public static string ResourceMessageToString(IResourceMessage resMessage, ICheckResult result = null)
+    {
+        string message = "";
+
+        if (resMessage == null) return message;
+
+        message = GetResourceFromString(resMessage.GetKey());
+        if (message == null) return "";
+
+        if (resMessage.GetParameters() != null && resMessage.GetParameters().Length > 0)
+        {
+            message = string.Format(message, resMessage.GetParameters());
+        }
+        else if (result != null && ContainsCurlyBracketsWithDigits(resMessage))
+        {
+            message = string.Format(message, result.GetElement());
         }
 
-        public static CultureInfo Culture { get; set; }
+        return message;
+    }
 
-        public static string GetResourceFromString(string name)
+    public static string ResultToString(ICheckResult result)
+    {
+        string res = "";
+        IResourceMessage messageResource = result.GetFeedback();
+
+        if (result.GetElement() != null && !ContainsCurlyBracketsWithDigits(messageResource))
         {
-            return ResourceManager.GetString(name, Culture);
+            res += result.GetElement() + " | ";
         }
 
-        public static string ResourceMessageToString(IResourceMessage resMessage, ICheckResult result = null)
+        if (messageResource != null)
         {
-            var message = "";
-
-            if (resMessage == null) return message;
-
-            message = GetResourceFromString(resMessage.GetKey());
-            if (message == null) return "";
-
-            if (resMessage.GetParameters() != null && resMessage.GetParameters().Length > 0)
-            {
-                message = string.Format(message, resMessage.GetParameters());
-            }
-            else if (result != null && ContainsCurlyBracketsWithDigits(resMessage))
-            {
-                message = string.Format(message, result.GetElement());
-            }
-
-            return message;
+            res += ResourceMessageToString(messageResource, result);
         }
 
-        public static string ResultToString(ICheckResult result)
-        {
-            var res = "";
-            var messageResource = result.GetFeedback();
+        return res;
+    }
 
-            if (result.GetElement() != null && !ContainsCurlyBracketsWithDigits(messageResource))
-            {
-                res += result.GetElement() + " | ";
-            }
+    private static bool ContainsCurlyBracketsWithDigits(IResourceMessage resMessage)
+    {
+        if (resMessage == null) return false;
 
-            if (messageResource != null)
-            {
-                res += ResourceMessageToString(messageResource, result);
-            }
+        string resMessageString = GetResourceFromString(resMessage.GetKey());
 
-            return res;
-        }
-
-        private static bool ContainsCurlyBracketsWithDigits(IResourceMessage resMessage)
-        {
-            if (resMessage == null) return false;
-
-            var resMessageString = GetResourceFromString(resMessage?.GetKey());
-
-            if (resMessageString != null)
-            {
-                return regex.IsMatch(resMessageString);
-            }
-
-            return false;
-        }
+        return resMessageString != null && Regex.IsMatch(resMessageString);
     }
 }

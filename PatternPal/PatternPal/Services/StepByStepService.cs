@@ -16,7 +16,7 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
                 new InstructionSet
                 {
                     Name = name,
-                    NumberOfInstructions = (uint)set.Instructions.Count(),
+                    NumberOfInstructions = (uint)set.Instructions.Count()
                 });
         }
 
@@ -63,7 +63,7 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
                                                                     ShowFileSelector = instruction is IFileSelector,
                                                                     FileId = instruction is IFileSelector fileSelector
                                                                         ? fileSelector.FileId
-                                                                        : string.Empty,
+                                                                        : string.Empty
                                                                 }
                                               };
 
@@ -122,7 +122,7 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
 
         CheckInstructionResponse response = new()
                                             {
-                                                Result = res,
+                                                Result = res
                                             };
         return Task.FromResult(response);
     }
@@ -134,7 +134,7 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
                                      {
                                          FeedbackType = (CheckResult.Types.FeedbackType)((int)checkResult.GetFeedbackType() + 1),
                                          Hidden = checkResult.IsHidden,
-                                         FeedbackMessage = ResourceUtils.ResultToString(checkResult),
+                                         FeedbackMessage = ResourceUtils.ResultToString(checkResult)
                                      };
         foreach (Recognizers.Abstractions.ICheckResult childCheckResult in checkResult.GetChildFeedback())
         {
