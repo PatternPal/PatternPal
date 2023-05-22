@@ -43,6 +43,9 @@ message RecognizeRequest {
 
     // Whether to show all results or just those above a threshold determined by the backend.
     bool show_all_results = 4;
+
+    // SubjectID for the logging
+    string subject_id = 5;
 }
 
 // Recognize response message.
