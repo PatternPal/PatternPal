@@ -10,7 +10,7 @@ namespace PatternPal.Tests.Recognizer
     internal class SingletonRecognizerTests
     {
         [Test]
-        public Task OnlyPrivateConstructorTest()
+        public Task OnlyPrivateProtectedConstructorTest()
         {
             // Create a graph of 5 classes with 4 different constructors with private, protected,
             // public and internal modifiers, and one with both private and internal
@@ -21,19 +21,19 @@ namespace PatternPal.Tests.Recognizer
             List<ICheckResult> results = new();
 
             // Step 1 of Singleton StepByStep
-            ICheck onlyPrivateConstructorCheck =
-                sr.OnlyPrivateConstructor(out _);
+            ICheck onlyPrivateProtectedConstructorCheck =
+                sr.OnlyPrivateProtectedConstructor(out _);
 
             // Needs to be in a class in order to be tested
-            ClassCheck classOnlyPrivateConstructorCheck = Class(
+            ClassCheck classOnlyPrivateProtectedConstructorCheck = Class(
                 Priority.Low,
-                onlyPrivateConstructorCheck);
+                onlyPrivateProtectedConstructorCheck);
 
             Dictionary<string, IEntity> entireTree = graph.GetAll();
 
             foreach (KeyValuePair<string, IEntity> current in entireTree)
             {
-                ICheckResult res = classOnlyPrivateConstructorCheck.Check(
+                ICheckResult res = classOnlyPrivateProtectedConstructorCheck.Check(
                     ctx,
                     current.Value);
                 results.Add(res);
@@ -147,7 +147,7 @@ namespace PatternPal.Tests.Recognizer
         }
 
         [Test]
-        public Task CallsPrivateConstructorTest()
+        public Task CallsPrivateProtectedConstructorTest()
         {
             // Create a graph with a correct private constructor call
             SyntaxGraph graph = EntityNodeUtils.CreateCorrectSingleton();
@@ -156,26 +156,26 @@ namespace PatternPal.Tests.Recognizer
             SingletonRecognizer sr = new();
             List<ICheckResult> results = new();
 
-            sr.OnlyPrivateConstructor(out ConstructorCheck constructor);
+            sr.OnlyPrivateProtectedConstructor(out ConstructorCheck constructor);
 
             // Method to check
-            ICheck callsPrivateConstructor =
-                sr.CallsPrivateConstructor(constructor);
+            ICheck callsPrivateProtectedConstructor =
+                sr.CallsPrivateProtectedConstructor(constructor);
 
             // Put in a class, otherwise cannot be tested
-            ClassCheck classCallsPrivateConstructor = Class(
+            ClassCheck classCallsPrivateProtectedConstructor = Class(
                 Priority.Low,
                 constructor,
                 Method(
                     Priority.Low,
-                    callsPrivateConstructor
+                    callsPrivateProtectedConstructor
                 )
             );
             Dictionary<string, IEntity> entireTree = graph.GetAll();
 
             foreach (KeyValuePair<string, IEntity> current in entireTree)
             {
-                ICheckResult res = classCallsPrivateConstructor.Check(
+                ICheckResult res = classCallsPrivateProtectedConstructor.Check(
                     ctx,
                     current.Value);
                 results.Add(res);
@@ -185,7 +185,7 @@ namespace PatternPal.Tests.Recognizer
         }
 
         [Test]
-        public Task DoesNotCallPrivateConstructorTest()
+        public Task DoesNotCallPrivateProtectedConstructorTest()
         {
             // Create a graph of 5 classes with 5 different singleton implementations where the first and the last two
             // adheres to all requirements and the second and third are missing one specific modifier
@@ -195,26 +195,26 @@ namespace PatternPal.Tests.Recognizer
             SingletonRecognizer sr = new();
             List<ICheckResult> results = new();
 
-            sr.OnlyPrivateConstructor(out ConstructorCheck constructor);
+            sr.OnlyPrivateProtectedConstructor(out ConstructorCheck constructor);
 
             // Method to check
-            ICheck callsPrivateConstructor =
-                sr.CallsPrivateConstructor(constructor);
+            ICheck callsPrivateProtectedConstructor =
+                sr.CallsPrivateProtectedConstructor(constructor);
 
             // Put in a class, otherwise cannot be tested
-            ClassCheck classCallsPrivateConstructor = Class(
+            ClassCheck classCallsPrivateProtectedConstructor = Class(
                 Priority.Low,
                 constructor,
                 Method(
                     Priority.Low,
-                    callsPrivateConstructor
+                    callsPrivateProtectedConstructor
                 )
             );
             Dictionary<string, IEntity> entireTree = graph.GetAll();
 
             foreach (KeyValuePair<string, IEntity> current in entireTree)
             {
-                ICheckResult res = classCallsPrivateConstructor.Check(
+                ICheckResult res = classCallsPrivateProtectedConstructor.Check(
                     ctx,
                     current.Value);
                 results.Add(res);
@@ -314,12 +314,12 @@ namespace PatternPal.Tests.Recognizer
             SingletonRecognizer sr = new();
             List<ICheckResult> results = new();
 
-            sr.OnlyPrivateConstructor(out ConstructorCheck privateConstructorCheck);
+            sr.OnlyPrivateProtectedConstructor(out ConstructorCheck privateProtectedConstructorCheck);
 
             // Step 3 of Singleton StepByStep
             ClassCheck hasMethodActsAsConstructor =
-                sr.CheckMethodAcsAsConstructorBehaviour(
-                    privateConstructorCheck,
+                sr.CheckMethodActsAsConstructorBehaviour(
+                    privateProtectedConstructorCheck,
                     sr.StaticPrivateFieldOfTypeClass(),
                     out _);
 
@@ -347,12 +347,12 @@ namespace PatternPal.Tests.Recognizer
             SingletonRecognizer sr = new();
             List<ICheckResult> results = new();
 
-            sr.OnlyPrivateConstructor(out ConstructorCheck privateConstructorCheck);
+            sr.OnlyPrivateProtectedConstructor(out ConstructorCheck privateProtectedConstructorCheck);
 
             // Step 3 of Singleton StepByStep
             ClassCheck hasMethodActsAsConstructor =
-                sr.CheckMethodAcsAsConstructorBehaviour(
-                    privateConstructorCheck,
+                sr.CheckMethodActsAsConstructorBehaviour(
+                    privateProtectedConstructorCheck,
                     sr.StaticPrivateFieldOfTypeClass(),
                     out _);
 
@@ -380,12 +380,12 @@ namespace PatternPal.Tests.Recognizer
             SingletonRecognizer sr = new();
             List<ICheckResult> results = new();
 
-            sr.OnlyPrivateConstructor(out ConstructorCheck privateConstructorCheck);
+            sr.OnlyPrivateProtectedConstructor(out ConstructorCheck privateProtectedConstructorCheck);
 
             // Step 3 of Singleton StepByStep
             ClassCheck hasMethodActsAsConstructor =
-                sr.CheckMethodAcsAsConstructorBehaviour(
-                    privateConstructorCheck,
+                sr.CheckMethodActsAsConstructorBehaviour(
+                    privateProtectedConstructorCheck,
                     sr.StaticPrivateFieldOfTypeClass(),
                     out _);
 
@@ -413,12 +413,12 @@ namespace PatternPal.Tests.Recognizer
             SingletonRecognizer sr = new();
             List<ICheckResult> results = new();
 
-            sr.OnlyPrivateConstructor(out ConstructorCheck privateConstructorCheck);
+            sr.OnlyPrivateProtectedConstructor(out ConstructorCheck privateProtectedConstructorCheck);
 
             // Step 3 of Singleton StepByStep
             ClassCheck hasMethodActsAsConstructor =
-                sr.CheckMethodAcsAsConstructorBehaviour(
-                    privateConstructorCheck,
+                sr.CheckMethodActsAsConstructorBehaviour(
+                    privateProtectedConstructorCheck,
                     sr.StaticPrivateFieldOfTypeClass(),
                     out _);
 

@@ -10,9 +10,22 @@
             FeedbackMessage: Found constructor: MockClass1().,
             ChildrenCheckResults: [
               {
-                FeedbackMessage: Modifiers correctly implemented.,
-                Correct: true,
-                MatchedNode: MockClass1
+                FeedbackMessage: Found the required checks for: MockClass1().,
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: Modifiers correctly implemented.,
+                    Correct: true,
+                    MatchedNode: MockClass1
+                  },
+                  {
+                    FeedbackMessage: The node MockClass1() does not have the protected modifier.,
+                    Correct: false,
+                    MatchedNode: MockClass1
+                  }
+                ],
+                CollectionKind: Any,
+                MatchedNode: MockClass1,
+                NodeCheckCollectionWrapper: false
               }
             ],
             MatchedNode: MockClass1,

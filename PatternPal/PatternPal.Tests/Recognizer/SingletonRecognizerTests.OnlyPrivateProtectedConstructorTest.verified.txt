@@ -14,9 +14,22 @@
                 FeedbackMessage: Found constructor: MockClass1().,
                 ChildrenCheckResults: [
                   {
-                    FeedbackMessage: Modifiers correctly implemented.,
-                    Correct: true,
-                    MatchedNode: MockClass1
+                    FeedbackMessage: Found the required checks for: MockClass1().,
+                    ChildrenCheckResults: [
+                      {
+                        FeedbackMessage: Modifiers correctly implemented.,
+                        Correct: true,
+                        MatchedNode: MockClass1
+                      },
+                      {
+                        FeedbackMessage: The node MockClass1() does not have the protected modifier.,
+                        Correct: false,
+                        MatchedNode: MockClass1
+                      }
+                    ],
+                    CollectionKind: Any,
+                    MatchedNode: MockClass1,
+                    NodeCheckCollectionWrapper: false
                   }
                 ],
                 MatchedNode: MockClass1,
@@ -44,11 +57,6 @@
                         },
                         {
                           FeedbackMessage: The node MockClass1() does not have the internal modifier.,
-                          Correct: false,
-                          MatchedNode: MockClass1
-                        },
-                        {
-                          FeedbackMessage: The node MockClass1() does not have the protected modifier.,
                           Correct: false,
                           MatchedNode: MockClass1
                         }
@@ -89,9 +97,22 @@
                 FeedbackMessage: Found constructor: MockClass2().,
                 ChildrenCheckResults: [
                   {
-                    FeedbackMessage: The node MockClass2() does not have the private modifier.,
-                    Correct: false,
-                    MatchedNode: MockClass2
+                    FeedbackMessage: Found the required checks for: MockClass2().,
+                    ChildrenCheckResults: [
+                      {
+                        FeedbackMessage: The node MockClass2() does not have the private modifier.,
+                        Correct: false,
+                        MatchedNode: MockClass2
+                      },
+                      {
+                        FeedbackMessage: Modifiers correctly implemented.,
+                        Correct: true,
+                        MatchedNode: MockClass2
+                      }
+                    ],
+                    CollectionKind: Any,
+                    MatchedNode: MockClass2,
+                    NodeCheckCollectionWrapper: false
                   }
                 ],
                 MatchedNode: MockClass2,
@@ -120,11 +141,6 @@
                         {
                           FeedbackMessage: The node MockClass2() does not have the internal modifier.,
                           Correct: false,
-                          MatchedNode: MockClass2
-                        },
-                        {
-                          FeedbackMessage: Modifiers correctly implemented.,
-                          Correct: true,
                           MatchedNode: MockClass2
                         }
                       ],
@@ -164,9 +180,22 @@
                 FeedbackMessage: Found constructor: MockClass3().,
                 ChildrenCheckResults: [
                   {
-                    FeedbackMessage: The node MockClass3() does not have the private modifier.,
-                    Correct: false,
-                    MatchedNode: MockClass3
+                    FeedbackMessage: Found the required checks for: MockClass3().,
+                    ChildrenCheckResults: [
+                      {
+                        FeedbackMessage: The node MockClass3() does not have the private modifier.,
+                        Correct: false,
+                        MatchedNode: MockClass3
+                      },
+                      {
+                        FeedbackMessage: The node MockClass3() does not have the protected modifier.,
+                        Correct: false,
+                        MatchedNode: MockClass3
+                      }
+                    ],
+                    CollectionKind: Any,
+                    MatchedNode: MockClass3,
+                    NodeCheckCollectionWrapper: false
                   }
                 ],
                 MatchedNode: MockClass3,
@@ -194,11 +223,6 @@
                         },
                         {
                           FeedbackMessage: The node MockClass3() does not have the internal modifier.,
-                          Correct: false,
-                          MatchedNode: MockClass3
-                        },
-                        {
-                          FeedbackMessage: The node MockClass3() does not have the protected modifier.,
                           Correct: false,
                           MatchedNode: MockClass3
                         }
@@ -239,9 +263,22 @@
                 FeedbackMessage: Found constructor: MockClass4().,
                 ChildrenCheckResults: [
                   {
-                    FeedbackMessage: The node MockClass4() does not have the private modifier.,
-                    Correct: false,
-                    MatchedNode: MockClass4
+                    FeedbackMessage: Found the required checks for: MockClass4().,
+                    ChildrenCheckResults: [
+                      {
+                        FeedbackMessage: The node MockClass4() does not have the private modifier.,
+                        Correct: false,
+                        MatchedNode: MockClass4
+                      },
+                      {
+                        FeedbackMessage: The node MockClass4() does not have the protected modifier.,
+                        Correct: false,
+                        MatchedNode: MockClass4
+                      }
+                    ],
+                    CollectionKind: Any,
+                    MatchedNode: MockClass4,
+                    NodeCheckCollectionWrapper: false
                   }
                 ],
                 MatchedNode: MockClass4,
@@ -270,11 +307,6 @@
                         {
                           FeedbackMessage: Modifiers correctly implemented.,
                           Correct: true,
-                          MatchedNode: MockClass4
-                        },
-                        {
-                          FeedbackMessage: The node MockClass4() does not have the protected modifier.,
-                          Correct: false,
                           MatchedNode: MockClass4
                         }
                       ],
@@ -314,9 +346,22 @@
                 FeedbackMessage: Found constructor: MockClass5().,
                 ChildrenCheckResults: [
                   {
-                    FeedbackMessage: The node MockClass5() does not have the private modifier.,
-                    Correct: false,
-                    MatchedNode: MockClass5
+                    FeedbackMessage: Found the required checks for: MockClass5().,
+                    ChildrenCheckResults: [
+                      {
+                        FeedbackMessage: The node MockClass5() does not have the private modifier.,
+                        Correct: false,
+                        MatchedNode: MockClass5
+                      },
+                      {
+                        FeedbackMessage: The node MockClass5() does not have the protected modifier.,
+                        Correct: false,
+                        MatchedNode: MockClass5
+                      }
+                    ],
+                    CollectionKind: Any,
+                    MatchedNode: MockClass5,
+                    NodeCheckCollectionWrapper: false
                   }
                 ],
                 MatchedNode: MockClass5,
@@ -326,9 +371,22 @@
                 FeedbackMessage: Found constructor: MockClass5().,
                 ChildrenCheckResults: [
                   {
-                    FeedbackMessage: Modifiers correctly implemented.,
-                    Correct: true,
-                    MatchedNode: MockClass5
+                    FeedbackMessage: Found the required checks for: MockClass5().,
+                    ChildrenCheckResults: [
+                      {
+                        FeedbackMessage: Modifiers correctly implemented.,
+                        Correct: true,
+                        MatchedNode: MockClass5
+                      },
+                      {
+                        FeedbackMessage: The node MockClass5() does not have the protected modifier.,
+                        Correct: false,
+                        MatchedNode: MockClass5
+                      }
+                    ],
+                    CollectionKind: Any,
+                    MatchedNode: MockClass5,
+                    NodeCheckCollectionWrapper: false
                   }
                 ],
                 MatchedNode: MockClass5,
@@ -358,11 +416,6 @@
                           FeedbackMessage: Modifiers correctly implemented.,
                           Correct: true,
                           MatchedNode: MockClass5
-                        },
-                        {
-                          FeedbackMessage: The node MockClass5() does not have the protected modifier.,
-                          Correct: false,
-                          MatchedNode: MockClass5
                         }
                       ],
                       CollectionKind: Any,
@@ -386,11 +439,6 @@
                         },
                         {
                           FeedbackMessage: The node MockClass5() does not have the internal modifier.,
-                          Correct: false,
-                          MatchedNode: MockClass5
-                        },
-                        {
-                          FeedbackMessage: The node MockClass5() does not have the protected modifier.,
                           Correct: false,
                           MatchedNode: MockClass5
                         }

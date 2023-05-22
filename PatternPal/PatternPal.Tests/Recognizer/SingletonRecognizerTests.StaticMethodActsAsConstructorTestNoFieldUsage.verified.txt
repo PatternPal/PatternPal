@@ -10,9 +10,22 @@
             FeedbackMessage: Found constructor: MockClass5().,
             ChildrenCheckResults: [
               {
-                FeedbackMessage: Modifiers correctly implemented.,
-                Correct: true,
-                MatchedNode: MockClass5
+                FeedbackMessage: Found the required checks for: MockClass5().,
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: Modifiers correctly implemented.,
+                    Correct: true,
+                    MatchedNode: MockClass5
+                  },
+                  {
+                    FeedbackMessage: The node MockClass5() does not have the protected modifier.,
+                    Correct: false,
+                    MatchedNode: MockClass5
+                  }
+                ],
+                CollectionKind: Any,
+                MatchedNode: MockClass5,
+                NodeCheckCollectionWrapper: false
               }
             ],
             MatchedNode: MockClass5,

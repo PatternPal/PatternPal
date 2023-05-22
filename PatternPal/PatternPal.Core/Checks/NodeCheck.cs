@@ -251,7 +251,6 @@ internal class NodeCheck< TNode > : CheckBase
                 nodeCheck.Check(
                     ctx,
                     node));
-            //nodeCheck._matchedEntities.Add(node);
         }
 
         // Return the result.

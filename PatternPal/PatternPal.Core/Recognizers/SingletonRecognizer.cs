@@ -9,8 +9,7 @@ using static PatternPal.Core.Checks.CheckBuilder;
 namespace PatternPal.Core.Recognizers;
 
 /// <summary>
-/// A <see cref="IRecognizer"/> that is used to determine if the provided file is an implementation
-/// of the singleton pattern.
+/// A <see cref="IRecognizer"/> that is used to determine if the provided files or project implements the singleton pattern
 /// </summary>
 /// <remarks>
 /// Requirements to fulfill the pattern:<br/>
@@ -33,16 +32,16 @@ internal class SingletonRecognizer : IRecognizer
     public IEnumerable<ICheck> Create()
     {
         // Step 1: Checks for requirements Singleton a & b
-        ICheck onlyPrivateConstructor =
-            OnlyPrivateConstructor(out ConstructorCheck privateConstructorCheck);
+        ICheck onlyPrivateProtectedConstructor =
+            OnlyPrivateProtectedConstructor(out ConstructorCheck privateProtectedConstructorCheck);
 
         // Step 2: Check for requirement Singleton c
         FieldCheck staticPrivateFieldOfTypeClass =
             StaticPrivateFieldOfTypeClass();
 
         // Step 3: Check for requirement Singleton d0-d2
-        ICheck checkMethodActsAsConstructorBehaviour = CheckMethodAcsAsConstructorBehaviour(
-            privateConstructorCheck,
+        ICheck checkMethodActsAsConstructorBehaviour = CheckMethodActsAsConstructorBehaviour(
+            privateProtectedConstructorCheck,
             staticPrivateFieldOfTypeClass,
             out ICheck[] hasStaticPublicInternalMethod);
 
@@ -56,7 +55,7 @@ internal class SingletonRecognizer : IRecognizer
 
         yield return Class(
             Priority.Low,
-            onlyPrivateConstructor,
+            onlyPrivateProtectedConstructor,
             staticPrivateFieldOfTypeClass,
             checkMethodActsAsConstructorBehaviour
         );
@@ -71,17 +70,24 @@ internal class SingletonRecognizer : IRecognizer
     /// A collection of <see cref="ICheck"/>s that together determine a constructor is only.
     /// <see langword="private"/>.
     /// </summary>
-    internal ICheck OnlyPrivateConstructor(out ConstructorCheck privateConstructorCheck)
+    internal ICheck OnlyPrivateProtectedConstructor(out ConstructorCheck privateProtectedConstructorCheck)
     {
-        privateConstructorCheck = Constructor(
+        privateProtectedConstructorCheck = Constructor(
             Priority.Knockout,
-            Modifiers(
+            Any(
                 Priority.Knockout,
-                Modifier.Private
+                Modifiers(
+                    Priority.Knockout,
+                    Modifier.Private
+                ),
+                Modifiers(
+                    Priority.Knockout,
+                    Modifier.Protected
+                )
             )
         );
 
-        NotCheck noPuclicConstructorCheck = Not(
+        NotCheck noPublicInternalConstructorCheck = Not(
             Priority.Knockout,
             Constructor(
                 Priority.Knockout,
@@ -92,23 +98,19 @@ internal class SingletonRecognizer : IRecognizer
                         Modifier.Public),
                     Modifiers(
                         Priority.Knockout,
-                        Modifier.Internal),
-                    Modifiers(
-                        Priority.Knockout,
-                        Modifier.Protected
-                    )
+                        Modifier.Internal)
                 )
             )
         );
 
         return All(Priority.Low,
-            privateConstructorCheck,
-            noPuclicConstructorCheck);
+            privateProtectedConstructorCheck,
+            noPublicInternalConstructorCheck);
     }
 
     /// <summary>
     /// A collection of <see cref="ICheck"/>s that together determine that there is a field which
-    /// is private and static in a given class.
+    /// is private and static.
     /// </summary>
     internal FieldCheck StaticPrivateFieldOfTypeClass()
     {
@@ -154,28 +156,13 @@ internal class SingletonRecognizer : IRecognizer
     /// <summary>
     /// A collection of <see cref="ICheck"/>s that together determine that there exists a method which adheres to the requirement of Singleton d1
     /// </summary>
-    internal RelationCheck CallsPrivateConstructor(ConstructorCheck constructor)
+    internal RelationCheck CallsPrivateProtectedConstructor(ConstructorCheck constructor)
     {
-        //Right now it only checks if the constructor is called somewhere in a method, not at which conditions
+        //TODO: Right now it only checks if the constructor is called somewhere in a method, not at which conditions
         return Uses(
             Priority.Mid,
             constructor.Result
         );
-
-        /*TODO: fix and use 'correct' implementation below
-        //return Method(
-        //    Priority.Mid,
-        //    new IfThenOperatorCheck(
-        //        Priority.Mid,
-        //        new List<ICheck>(),
-        //        new List<ICheck> {
-        //            Uses(
-        //                Priority.Mid,
-        //                constructor.Result
-        //            )
-        //        }
-        //    )
-        //);*/
     }
 
     /// <summary>
@@ -183,7 +170,7 @@ internal class SingletonRecognizer : IRecognizer
     /// </summary>
     internal ICheck[] ReturnsPrivateField(FieldCheck checkSingletonC)
     {
-        //Right now it only checks if the field is called somewhere in a method and if the return type is the same as the class, not at which conditions
+        //TODO: Right now it only checks if the field is called somewhere in a method and if the return type is the same as the class, not at which conditions
         return new ICheck[]
         {
             Uses(
@@ -195,29 +182,13 @@ internal class SingletonRecognizer : IRecognizer
                 ICheck.GetCurrentEntity
             )
         };
-
-
-        /*TODO: fix and use 'correct' implementation below
-        //return Method(
-        //    Priority.Mid,
-        //    new IfThenOperatorCheck(
-        //        Priority.Mid,
-        //        new List<ICheck>(),
-        //        new List<ICheck> {
-        //            Uses(
-        //                Priority.Mid,
-        //                checkSingletonC.Result
-        //            )
-        //        }
-        //    )
-        //);*/
     }
 
     /// <summary>
     /// A collection of <see cref="ICheck"/>s that checks if the behaviour of an method in the singleton class adheres to requirements Singleton d0, d1 and d2
     /// </summary>
-    internal ClassCheck CheckMethodAcsAsConstructorBehaviour(
-        ConstructorCheck privateConstructorCheck,
+    internal ClassCheck CheckMethodActsAsConstructorBehaviour(
+        ConstructorCheck privateProtectedConstructorCheck,
         FieldCheck staticPrivateFieldOfTypeClass,
         out ICheck[] hasStaticPublicInternalMethod)
     {
@@ -225,14 +196,14 @@ internal class SingletonRecognizer : IRecognizer
         hasStaticPublicInternalMethod = HasStaticPublicInternalMethod();
 
         // check d1
-        RelationCheck checkNoInstanceConstructor = CallsPrivateConstructor(privateConstructorCheck);
+        RelationCheck checkNoInstanceConstructor = CallsPrivateProtectedConstructor(privateProtectedConstructorCheck);
 
         // check d2
         ICheck[] checkInstanceConstructor = ReturnsPrivateField(staticPrivateFieldOfTypeClass);
 
         return Class(
             Priority.Low,
-            privateConstructorCheck,
+            privateProtectedConstructorCheck,
             staticPrivateFieldOfTypeClass,
             Method(
                 Priority.High,
