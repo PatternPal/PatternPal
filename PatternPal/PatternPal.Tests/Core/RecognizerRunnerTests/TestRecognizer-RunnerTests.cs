@@ -11,6 +11,7 @@ internal class TestRecognizer_RunnerTests
     [Test]
     [TestCase("PruneTestClass1.cs")]
     [TestCase("PruneTestClass2.cs")]
+    [TestCase("PruneTestClass3.cs")]
     public Task Knockout_Pruning(string filename)
     {
         //Create testrecognizer
