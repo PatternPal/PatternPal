@@ -47,7 +47,7 @@ internal class SingletonRecognizer : IRecognizer
             out ICheck[] hasStaticPublicInternalMethod);
 
         // Step 4: Check for requirement Client a
-        RelationCheck checkClientA = ClientCallsMethodActsAsConstructor(
+        ClassCheck checkClientA = ClientCallsMethodActsAsConstructor(
             Method(
                 Priority.Low,
                 hasStaticPublicInternalMethod
@@ -216,7 +216,7 @@ internal class SingletonRecognizer : IRecognizer
     /// <summary>
     /// A collection of <see cref="ICheck"/>s that checks if the behaviour of an method in the singleton class adheres to requirements Singleton d0, d1 and d2
     /// </summary>
-    internal ICheck CheckMethodAcsAsConstructorBehaviour(
+    internal ClassCheck CheckMethodAcsAsConstructorBehaviour(
         ConstructorCheck privateConstructorCheck,
         FieldCheck staticPrivateFieldOfTypeClass,
         out ICheck[] hasStaticPublicInternalMethod)
@@ -230,13 +230,17 @@ internal class SingletonRecognizer : IRecognizer
         // check d2
         ICheck[] checkInstanceConstructor = ReturnsPrivateField(staticPrivateFieldOfTypeClass);
 
-        return Method(
+        return Class(
             Priority.Low,
-            hasStaticPublicInternalMethod.Append(
-                checkNoInstanceConstructor).Concat(
-                    checkInstanceConstructor).ToArray()
-            
-            );
+            privateConstructorCheck,
+            staticPrivateFieldOfTypeClass,
+            Method(
+                Priority.High,
+                hasStaticPublicInternalMethod.Append(
+                    checkNoInstanceConstructor).Concat(
+                        checkInstanceConstructor).ToArray()
+            )
+        );
     }
 
     /// <summary>
@@ -246,15 +250,21 @@ internal class SingletonRecognizer : IRecognizer
     {
         return Class(
             Priority.Low,
-            Uses(
-                Priority.Mid,
-                getInstanceMethod.Result
-            ),
-            Not(
+            Any(
                 Priority.Low,
-                Type(
-                    Priority.Knockout,
-                    ICheck.GetCurrentEntity //TODO: hier moet niet staan currententity maar juist het type van de getinstancemethod class
+                Constructor(
+                    Priority.High,
+                    Uses(
+                        Priority.Mid,
+                        getInstanceMethod.Result
+                    )
+                ),
+                Method(
+                    Priority.High,
+                    Uses(
+                        Priority.Mid,
+                        getInstanceMethod.Result
+                    )
                 )
             )
         );

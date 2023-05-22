@@ -113,8 +113,7 @@ namespace PatternPal.Tests.Recognizer
             return Verifier.Verify(results);
         }
 
-        //Wachten op jeroen d1
-        //[Test]
+        [Test]
         public Task CallsPrivateConstructorTest()
         {
             // Create a graph of 5 classes with 5 different singleton implementations where the first and the last two
@@ -194,8 +193,7 @@ namespace PatternPal.Tests.Recognizer
             return Verifier.Verify(results);
         }
 
-        //Wachten op jeroen d012
-        //[Test]
+        [Test]
         public Task StaticMethodActsAsConstructorTest()
         {
             // Create a graph of 5 classes with 5 different singleton implementations where the first adheres to all requirements
@@ -210,7 +208,7 @@ namespace PatternPal.Tests.Recognizer
             sr.OnlyPrivateConstructor(out ConstructorCheck privateConstructorCheck);
 
             // Step 3 of Singleton StepByStep
-            ICheck hasMethodAcsAsConstructor =
+            ClassCheck hasMethodActsAsConstructor =
                 sr.CheckMethodAcsAsConstructorBehaviour(
                     privateConstructorCheck,
                     sr.StaticPrivateFieldOfTypeClass(),
@@ -220,7 +218,7 @@ namespace PatternPal.Tests.Recognizer
 
             foreach (KeyValuePair<string, IEntity> current in entireTree)
             {
-                ICheckResult res = hasMethodAcsAsConstructor.Check(
+                ICheckResult res =  hasMethodActsAsConstructor.Check(
                     ctx,
                     current.Value);
                 results.Add(res);
@@ -230,44 +228,81 @@ namespace PatternPal.Tests.Recognizer
         }
 
         [Test]
-        public Task ClientCallsMethodActsAsConstructorTest()
+        public Task ClientDoesCallMethodActsAsConstructorTest()
         {
-            // Create a graph of 5 classes with 5 different singleton implementations where the first and the last two
-            // adheres to all requirements and the second and third are missing one specific modifier
-            SyntaxGraph graph = EntityNodeUtils.CreateClientSingletons();
+            SyntaxGraph graph = EntityNodeUtils.CreateCorrectClientSingleton();
             RecognizerContext4Tests ctx = RecognizerContext4Tests.Create(graph);
 
             SingletonRecognizer sr = new();
             List<ICheckResult> results = new();
 
-            sr.OnlyPrivateConstructor(out ConstructorCheck privateConstructorCheck);
-
-            // Step 3 of Singleton StepByStep
-            _ = sr.CheckMethodAcsAsConstructorBehaviour(
-                    privateConstructorCheck,
-                    sr.StaticPrivateFieldOfTypeClass(),
-                    out ICheck[] hasStaticPublicInternalMethod);
-
-            // Method to check
-            ICheck clientCallsMethodActsAsConstructor =
-                sr.ClientCallsMethodActsAsConstructor(
-                    Method(
-                        Priority.Mid,
-                        hasStaticPublicInternalMethod));
-
-            // Put in a class, otherwise cannot be tested
-            ClassCheck classClientCallsMethodActsAsConstructor = Class(
-                Priority.Low,
-                Method(
-                    Priority.Low,
-                    clientCallsMethodActsAsConstructor
-                )
+            //Method which the client should call
+            MethodCheck publicInternalMethod = Method(
+                Priority.Mid,
+                sr.HasStaticPublicInternalMethod()
             );
+
+            // Client call check
+            ClassCheck clientCallsMethodActsAsConstructor =
+                sr.ClientCallsMethodActsAsConstructor(
+                    publicInternalMethod);
+
+            ICheck checkBothClasses = All(
+                Priority.Low,
+                Class(
+                    Priority.High,
+                    publicInternalMethod
+                ),
+                clientCallsMethodActsAsConstructor
+            );
+
             Dictionary<string, IEntity> entireTree = graph.GetAll();
 
             foreach (KeyValuePair<string, IEntity> current in entireTree)
             {
-                ICheckResult res = classClientCallsMethodActsAsConstructor.Check(
+                ICheckResult res = checkBothClasses.Check(
+                    ctx,
+                    current.Value);
+                results.Add(res);
+            }
+
+            return Verifier.Verify(results);
+        }
+
+        [Test]
+        public Task ClientDoesNotCallMethodActsAsConstructorTest()
+        {
+            SyntaxGraph graph = EntityNodeUtils.CreateWrongClientSingleton();
+            RecognizerContext4Tests ctx = RecognizerContext4Tests.Create(graph);
+
+            SingletonRecognizer sr = new();
+            List<ICheckResult> results = new();
+
+            //Method which the client should call
+            MethodCheck publicInternalMethod = Method(
+                Priority.Mid,
+                sr.HasStaticPublicInternalMethod()
+            );
+
+            // Client call check
+            ClassCheck clientCallsMethodActsAsConstructor =
+                sr.ClientCallsMethodActsAsConstructor(
+                    publicInternalMethod);
+
+            ICheck checkBothClasses = All(
+                Priority.Low,
+                Class(
+                    Priority.High,
+                    publicInternalMethod
+                ),
+                clientCallsMethodActsAsConstructor
+            );
+
+            Dictionary<string, IEntity> entireTree = graph.GetAll();
+
+            foreach (KeyValuePair<string, IEntity> current in entireTree)
+            {
+                ICheckResult res = checkBothClasses.Check(
                     ctx,
                     current.Value);
                 results.Add(res);

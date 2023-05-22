@@ -389,14 +389,14 @@ namespace PatternPal.Tests.Utils
                                  //Correct
                                  public class MockClass1
                                  {
-                                    static private MockClass1 _instance;
+                                     static private MockClass1 _instance;
 
-                                    private MockClass1()
-                                    {
-                                    }
+                                     private MockClass1()
+                                     {
+                                     }
 
-                                    public static MockClass1 GetInstance()
-                                    {
+                                     public static MockClass1 GetInstance()
+                                     {
                                          if (_instance == null)
                                          {
                                              _instance = new MockClass1();
@@ -408,15 +408,19 @@ namespace PatternPal.Tests.Utils
                                  //Wrong method modifiers 1
                                  public class MockClass2
                                  {
-                                    static private MockClass2 _instance;
-                                 
-                                    public MockClass2 GetInstance()
-                                    {
+                                     static private MockClass2 _instance;
+
+                                     private MockClass2()
+                                     {
+                                     }
+
+                                     public MockClass2 GetInstance()
+                                     {
                                          if (_instance == null)
                                          {
                                              _instance = new MockClass2();
                                          }
-                                 
+
                                          return _instance;
                                      }
                                  }
@@ -424,15 +428,19 @@ namespace PatternPal.Tests.Utils
                                  //Wrong method modifiers 2
                                  public class MockClass3
                                  {
-                                    static private MockClass3 _instance;
-                                 
-                                    private static MockClass3 GetInstance()
-                                    {
+                                     static private MockClass3 _instance;
+
+                                     private MockClass3()
+                                     {
+                                     }
+
+                                     private static MockClass3 GetInstance()
+                                     {
                                          if (_instance == null)
                                          {
                                              _instance = new MockClass3();
                                          }
-                                 
+
                                          return _instance;
                                      }
                                  }
@@ -440,19 +448,19 @@ namespace PatternPal.Tests.Utils
                                  //Constructor not being called
                                  public class MockClass4
                                  {
-                                    static private MockClass4 _instance;
-                                 
-                                    private MockClass4()
-                                    {
-                                    }
+                                     static private MockClass4 _instance;
 
-                                    public static MockClass4 GetInstance()
-                                    {
+                                     private MockClass4()
+                                     {
+                                     }
+
+                                     public static MockClass4 GetInstance()
+                                     {
                                          if (_instance == null)
                                          {
                                              return _instance;
                                          }
-                                 
+
                                          return _instance;
                                      }
                                  }
@@ -461,7 +469,11 @@ namespace PatternPal.Tests.Utils
                                  public class MockClass5
                                  {
                                      static private MockClass5 _instance;
-                                 
+
+                                     private MockClass5()
+                                     {
+                                     }
+
                                      public static MockClass5 GetInstance()
                                      {
                                          return new MockClass5();
@@ -476,10 +488,9 @@ namespace PatternPal.Tests.Utils
             return graph;
         }
 
-        internal static SyntaxGraph CreateClientSingletons()
+        internal static SyntaxGraph CreateCorrectClientSingleton()
         {
             const string INPUT = """
-                                 //Correct
                                  public class MockClass1
                                  {
                                     static private MockClass1 _instance;
@@ -497,10 +508,6 @@ namespace PatternPal.Tests.Utils
 
                                         return _instance;
                                     }
-
-                                    public static void DoNothing()
-                                    {
-                                    }
                                  }
 
                                  public class Client1
@@ -508,38 +515,6 @@ namespace PatternPal.Tests.Utils
                                     public Client1()
                                     {
                                         MockClass1 singleton = MockClass1.GetInstance();
-                                    }
-                                 }
-
-                                 //Wrong call
-                                 public class MockClass2
-                                 {
-                                    static private MockClass2 _instance;
-                                 
-                                    private MockClass2()
-                                    {
-                                    }
-                                 
-                                    public static MockClass2 GetInstance()
-                                    {
-                                        if (_instance == null)
-                                        {
-                                            _instance = new MockClass2();
-                                        }
-                                 
-                                        return _instance;
-                                    }
-                                 
-                                    public static void DoNothing()
-                                    {
-                                    }
-                                 }
-                                 
-                                 public class Client2
-                                 {
-                                    public Client2()
-                                    {
-                                        MockClass2.DoNothing();
                                     }
                                  }
                                  """;
@@ -550,6 +525,43 @@ namespace PatternPal.Tests.Utils
             graph.CreateGraph();
             return graph;
         }
+        internal static SyntaxGraph CreateWrongClientSingleton()
+        {
+            const string INPUT = """
+                                 public class MockClass2
+                                 {
+                                     static private MockClass2 _instance;
+
+                                     private MockClass2()
+                                     {
+                                     }
+
+                                     public static MockClass2 GetInstance()
+                                     {
+                                         if (_instance == null)
+                                         {
+                                             _instance = new MockClass2();
+                                         }
+
+                                         return _instance;
+                                     }
+                                 }
+
+                                 public class Client2
+                                 {
+                                     public Client2()
+                                     {
+                                     }
+                                 }
+                                 """;
+            SyntaxGraph graph = new();
+            graph.AddFile(
+                INPUT,
+                "0");
+            graph.CreateGraph();
+            return graph;
+        }
+        
         #endregion
 
         internal static SyntaxGraph CreateMethodWithParamaters()
@@ -739,7 +751,6 @@ namespace PatternPal.Tests.Utils
 
 
     }
-    
 
-        
+    
 }
