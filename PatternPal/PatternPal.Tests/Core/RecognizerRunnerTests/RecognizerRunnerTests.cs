@@ -112,10 +112,10 @@ public class RecognizerRunnerTests
         // The root node should be pruned.
         Assert.IsTrue(parentShouldBePruned);
 
-        // The child isn't pruned, because the parent can be pruned.
+        // The `ChildrenCheckResults` list is cleared before pruning the parent.
         Assert.AreEqual(
             rootCheckResult.ChildrenCheckResults.Count,
-            1);
+            0);
     }
 
     [Test]

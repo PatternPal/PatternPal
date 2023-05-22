@@ -14,6 +14,7 @@
           MatchedNode: Parent
         }
       ],
+      CollectionKind: Any,
       DependencyCount: 1,
       MatchedNode: Child,
       NodeCheckCollectionWrapper: true
