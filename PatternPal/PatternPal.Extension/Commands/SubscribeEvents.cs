@@ -1,4 +1,4 @@
-#region 
+﻿#region 
 
 using System;
 using System.IO;
@@ -9,9 +9,7 @@ using EnvDTE;
 using EnvDTE80;
 using PatternPal.Protos;
 using System.Threading;
-using System.Collections;
-using System.Linq;
-using Microsoft.VisualStudio.Shell.Interop;
+using System.Collections.Generic;
 
 #endregion
 
@@ -264,23 +262,19 @@ namespace PatternPal.Extension.Commands
         /// <summary>
         /// The event handler for when recognizing software patterns in the extension.
         /// </summary>
-        public static void OnPatternRecognized(RecognizeRequest recognizeRequestrequest, IList<RecognizeResult> recognizeResultsresponse)
+        public static void OnPatternRecognized(RecognizeRequest recognizeRequest, IList<RecognizeResult> recognizeResults)
         {
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtXRecognizerRun;
-            string config = recognizeRequestrequest.Recognizers.ToString();
+            string config = recognizeRequest.Recognizers.ToString();
 
             request.RecognizerConfig = config;
-            foreach (RecognizeResult result in recognizeResultsresponse)
+            foreach (RecognizeResult result in recognizeResults)
             {
                 request.RecognizerResult += result.ToString();
             }
 
-
-
-            LogProviderService.LogProviderServiceClient client =
-                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-            LogEventResponse response = client.LogEvent(request);
+            LogEventResponse response = PushLog(request);
         }
 
         #endregion
