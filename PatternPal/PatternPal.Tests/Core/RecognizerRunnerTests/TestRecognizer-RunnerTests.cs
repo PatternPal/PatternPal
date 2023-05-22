@@ -6,7 +6,7 @@ using static PatternPal.Core.RecognizerRunner;
 namespace PatternPal.Tests.Core.RecognizerRunnerTests;
 
 [TestFixture]
-internal class TestRecognizerRunnerTests
+internal class TestRecognizer_RunnerTests
 {
     [Test]
     [TestCase("PruneTestClass1.cs")]
