@@ -1,22 +1,23 @@
 #region
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-
 using PatternPal.SyntaxTree.Abstractions;
-using PatternPal.SyntaxTree.Abstractions.Entities;
 using PatternPal.SyntaxTree.Abstractions.Members;
+using PatternPal.SyntaxTree.Models.Entities;
 using PatternPal.SyntaxTree.Models.Members.Method;
 
 #endregion
 
 namespace PatternPal.SyntaxTree
 {
+    /// <summary>
+    /// Makes and keeps a collection of all <see cref="Relation"/>s of the <see cref="SyntaxGraph"/>,
+    /// and makes it possible to search for specific relations
+    /// </summary>
     public class Relations
     {
+        // Reverses the type of relation.
         private static readonly Dictionary< RelationType, RelationType > ReversedTypes =
             new Dictionary< RelationType, RelationType >
             {
@@ -46,19 +47,22 @@ namespace PatternPal.SyntaxTree
                 }
             };
 
-        //List with all relations in graph
+        // List with all relations in the graph.
         internal List< Relation > relations = new();
 
-        //Dictionary to access relations of entities fast
+        // Dictionary to access relations of entities fast.
         internal Dictionary< IEntity, List< Relation > > EntityRelations = new();
 
-        //Dictionary to access relations of methods fast
+        // Dictionary to access relations of members fast.
         internal Dictionary< IMember, List< Relation > > MemberRelations = new();
 
         private readonly SyntaxGraph _graph;
         private List< IEntity > _entities;
         private List< IMember > _members = new();
 
+        /// <summary>
+        /// Returns an instance of <see cref="Relations"/>.
+        /// </summary>
         public Relations(
             SyntaxGraph graph)
         {
@@ -66,13 +70,14 @@ namespace PatternPal.SyntaxTree
         }
 
         /// <summary>
-        /// Creates <see cref="Relation"/>'s between <see cref="IEntity"/>'s and <see cref="INode"/>'s.
+        /// Creates <see cref="Relation"/>s between <see cref="IEntity"/>s and <see cref="IMember"/>s.
         /// </summary>
         public void CreateEdges()
         {
+            // Get all entities
             _entities = _graph.GetAll().Values.ToList();
 
-            // Get all members
+            // Get all members.
             _members.AddRange(
                 _entities.SelectMany(
                     y =>
@@ -104,6 +109,7 @@ namespace PatternPal.SyntaxTree
             INode ? node2,
             RelationType type)
         {
+            // node1 and node2 can be null when the node searched does not exist.
             if (node1 is null
                 || node2 is null)
             {
@@ -124,6 +130,7 @@ namespace PatternPal.SyntaxTree
                 _ => throw new ArgumentException()
             };
 
+            // Create the relation of type 'type' between the node1 and node2.
             Relation relation = new(
                 type,
                 source,
@@ -133,7 +140,8 @@ namespace PatternPal.SyntaxTree
                 target,
                 source );
 
-            // TODO: This requires the custom Equals method.
+            // TODO: This requires the custom Equals method. Does not yet work
+            // If the relation is already stored, do not add it again.
             if (relations.Any(r => r == relation)
                 || relations.Any(r => r == relationReversed))
             {
@@ -157,7 +165,7 @@ namespace PatternPal.SyntaxTree
         /// </summary>
         /// <param name="node">The source of the <see cref="Relation"/></param>
         /// <param name="relation">The <see cref="Relation"/> to store.</param>
-        /// <exception cref="ArgumentException">Throws exception when trying to add a <see cref="Relation"/> with a not supported <see cref="INode"/>.</exception>
+        /// <exception cref="ArgumentException">Throws an exception when trying to add a <see cref="Relation"/> with a not supported <see cref="INode"/>.</exception>
         private void StoreRelation(
             INode node,
             Relation relation)
@@ -260,7 +268,6 @@ namespace PatternPal.SyntaxTree
             foreach (TypeSyntax type in entity.GetBases())
             {
                 //TODO check generic
-                //string typeName = type.ToString();
 
                 IEntity ? edgeNode = GetEntityByName(type);
                 if (edgeNode is null)
@@ -353,6 +360,16 @@ namespace PatternPal.SyntaxTree
                     node,
                     node2,
                     RelationType.Uses);
+
+                if (identifier.Parent is ObjectCreationExpressionSyntax parent && node2 is Class classNode)
+                {
+                    IMember? matchedConstructor = GetMemberByName(parent);
+
+                    AddRelation(
+                        node,
+                        matchedConstructor,
+                        RelationType.Uses);
+                }
             }
         }
 

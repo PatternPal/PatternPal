@@ -1,85 +1,86 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-
 using PatternPal.SyntaxTree.Abstractions.Root;
 
 namespace PatternPal.SyntaxTree.Abstractions
 {
+    /// <summary>
+    /// Represents a node in the <see cref="SyntaxGraph"/>.
+    /// </summary>
     public interface INode
     {
         /// <summary>
-        ///     Get the name of the node.
+        /// Gets the name of the node.
         /// </summary>
-        /// <returns>The name of the node</returns>
         string GetName();
 
         /// <summary>
-        ///     Get the syntax of the node.
+        /// Gets the Roslyn syntax of the node.
         /// </summary>
-        /// <returns>The declaration syntax of the node</returns>
         SyntaxNode GetSyntaxNode();
 
         /// <summary>
-        ///     Get the root of the node.
+        /// Gets the <see cref="IRoot"/> of the node.
         /// </summary>
-        /// <returns>The root of the node</returns>
         IRoot GetRoot();
     }
 
+    /// <summary>
+    /// Represents a Node which can have parameters.
+    /// </summary>
+    /// <example>Methods and constructors.</example>
     public interface IParameterized : INode
     {
+        /// <summary>
+        /// Returns the parameters of the <see cref="INode"/>.
+        /// </summary>
         IEnumerable<TypeSyntax> GetParameters();
     }
 
+    /// <summary>
+    /// Represents a Node which has a body.
+    /// </summary>
+    /// <example>Methods and constructors</example>
     public interface IBodied : INode
     {
+        /// <summary>
+        /// Returns the body of the <see cref="INode"/>.
+        /// </summary>
         CSharpSyntaxNode GetBody();
     }
 
+    /// <summary>
+    /// Represents a Node which can have <see cref="IModifier"/>s.
+    /// </summary>
     public interface IModified : INode
     {
         /// <summary>
-        ///     Gets the modifiers of this node
+        /// Gets the modifiers of this <see cref="INode"/>.
         /// </summary>
-        /// <returns>A list of Modifiers</returns>
         IEnumerable<IModifier> GetModifiers();
     }
 
+    /// <summary>
+    /// Represents a Node which can have children <see cref="INode"/>s.
+    /// </summary>
     public interface IParent : INode
     {
         /// <summary>
-        ///     Get all children
+        /// Get all children nodes from the parent.
         /// </summary>
-        /// <returns>All children of this node</returns>
         IEnumerable<INode> GetChildren();
     }
 
     /// <summary>
-    /// Is needed because net standard 2.0 doesn't support default interface implementations, stupid
+    /// Represents a node which can be a child of another node.
     /// </summary>
-    public static class ParentExtension
-    {
-        /// <summary>
-        ///     Get all children recursive
-        /// </summary>
-        /// <returns></returns>
-        static IEnumerable<INode> GetAllChildren(this IParent parent)
-        {
-            return parent
-                .GetChildren()
-                .SelectMany(child => (child as IParent)?.GetAllChildren().Append(child) ?? new[] { child });
-        }
-    }
-
+    /// <typeparam name="T">The parent of the node</typeparam>
     public interface IChild<out T> where T : INode, IParent
     {
         /// <summary>
-        ///     Gets the parent of this node
+        /// Gets the parent of this <see cref="INode"/>.
         /// </summary>
-        /// <returns>The parent of this node</returns>
         T GetParent();
     }
 }
