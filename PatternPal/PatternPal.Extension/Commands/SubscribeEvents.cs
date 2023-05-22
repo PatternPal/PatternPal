@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region 
+
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.Shell;
@@ -7,6 +9,8 @@ using EnvDTE;
 using EnvDTE80;
 using PatternPal.Protos;
 using System.Threading;
+
+#endregion
 
 namespace PatternPal.Extension.Commands
 {

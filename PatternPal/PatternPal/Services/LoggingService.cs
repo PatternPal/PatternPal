@@ -19,7 +19,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     /// <summary>
     /// Stores the last codeState that has been successfully logged to the server, per projectId.
     /// </summary>
-    private static Dictionary<String, ByteString> _lastCodeState = new Dictionary<string, ByteString>();
+    private static Dictionary<String, (ByteString CodeState, bool Full)> _lastCodeState = new Dictionary<string, (ByteString CodeState, bool Full)>();
 
     /// <summary>
     /// TODO
@@ -41,7 +41,8 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         // TODO First check if logging was successful
         if (sendRequest.HasData)
         {
-            _lastCodeState.Add(sendRequest.ProjectId, sendRequest.Data);
+            // TODO Whether the codeState is full should eventually be determined here, but for now; always true.
+            _lastCodeState[sendRequest.ProjectId] = (sendRequest.Data, true);
         }
 
         // Send response back to frond-end to verify something has been received here
@@ -256,6 +257,3 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     }
     #endregion
 }
-
-
-
