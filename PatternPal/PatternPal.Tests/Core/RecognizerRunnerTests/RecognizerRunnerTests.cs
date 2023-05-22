@@ -39,7 +39,7 @@ public class RecognizerRunnerTests
                 Check = null
             };
 
-        RecognizerRunner.FilterResults(null, rootCheckResult);
+        RecognizerRunner.PruneResults(null, rootCheckResult);
 
         // One child is pruned.
         Assert.AreEqual(
@@ -73,7 +73,7 @@ public class RecognizerRunnerTests
                 Check = null
             };
 
-        RecognizerRunner.FilterResults(null, rootCheckResult);
+        RecognizerRunner.PruneResults(null, rootCheckResult);
 
         // The child is not pruned.
         Assert.AreEqual(
@@ -107,7 +107,7 @@ public class RecognizerRunnerTests
                 Check = null
             };
 
-        bool parentShouldBePruned = RecognizerRunner.FilterResults(null, rootCheckResult);
+        bool parentShouldBePruned = RecognizerRunner.PruneResults(null, rootCheckResult);
 
         // The root node should be pruned.
         Assert.IsTrue(parentShouldBePruned);
@@ -166,7 +166,7 @@ public class RecognizerRunnerTests
                 Check = null
             };
 
-        bool rootShouldBePruned = RecognizerRunner.FilterResults(null, rootCheckResult);
+        bool rootShouldBePruned = RecognizerRunner.PruneResults(null, rootCheckResult);
 
         // Root should not be pruned.
         Assert.IsFalse(rootShouldBePruned);
@@ -224,7 +224,7 @@ public class RecognizerRunnerTests
             };
 
         // Nested not check throws ArgumentException.
-        Assert.Throws< ArgumentException >(() => RecognizerRunner.FilterResults(null, rootCheckResult));
+        Assert.Throws< ArgumentException >(() => RecognizerRunner.PruneResults(null, rootCheckResult));
     }
 
     [Test]
@@ -270,7 +270,7 @@ public class RecognizerRunnerTests
                 Check = null
             };
 
-        RecognizerRunner.FilterResults(null, rootCheckResult);
+        RecognizerRunner.PruneResults(null, rootCheckResult);
 
         // Not check itself is not pruned.
         Assert.AreEqual(
@@ -325,7 +325,7 @@ public class RecognizerRunnerTests
                 Check = null
             };
 
-        RecognizerRunner.FilterResults(null, rootCheckResult);
+        RecognizerRunner.PruneResults(null, rootCheckResult);
 
         // Not check itself is pruned.
         Assert.AreEqual(
@@ -393,7 +393,7 @@ public class RecognizerRunnerTests
                 Check = null
             };
 
-        RecognizerRunner.FilterResults(null, rootCheckResult);
+        RecognizerRunner.PruneResults(null, rootCheckResult);
 
         // Not check is pruned.
         Assert.AreEqual(
@@ -460,7 +460,7 @@ public class RecognizerRunnerTests
                 Check = null
             };
 
-        RecognizerRunner.FilterResults(null, rootCheckResult);
+        RecognizerRunner.PruneResults(null, rootCheckResult);
 
         // Not check is not pruned.
         Assert.AreEqual(

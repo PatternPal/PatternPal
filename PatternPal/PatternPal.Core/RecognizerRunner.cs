@@ -151,7 +151,7 @@ public class RecognizerRunner
 
         // Filter the results.
         Dictionary< INode, List< ICheckResult > > resultsByNode = new();
-        FilterResults(
+        PruneResults(
             resultsByNode,
             rootResult);
 
@@ -193,7 +193,7 @@ public class RecognizerRunner
     /// becomes empty because all its sub-<see cref="ICheckResult"/>s are pruned, we can also prune
     /// the <see cref="NodeCheckResult"/> itself.
     /// </remarks>
-    internal static bool FilterResults(
+    internal static bool PruneResults(
         Dictionary< INode, List< ICheckResult > > resultsByNode,
         NodeCheckResult parentCheckResult)
     {
@@ -242,9 +242,9 @@ public class RecognizerRunner
                 }
                 case NodeCheckResult nodeCheckResult:
                 {
-                    // Filter the results recursively. If `FilterResults` returns true, the node
+                    // Filter the results recursively. If `PruneResults` returns true, the node
                     // check itself should also be pruned.
-                    if (FilterResults(
+                    if (PruneResults(
                         resultsByNode,
                         nodeCheckResult))
                     {
@@ -278,11 +278,11 @@ public class RecognizerRunner
                         case NodeCheckResult nodeCheckResult:
                         {
                             // TODO: Fix this using priorities (only works if all sub-checks are knockout).
-                            // If `FilterResults` returns false, this means the node check shouldn't
+                            // If `PruneResults` returns false, this means the node check shouldn't
                             // be pruned (because it has correct children). Because it's wrapped in
                             // a not check, this not check is incorrect and should be pruned if it
                             // has priority Knockout.
-                            if (!FilterResults(
+                            if (!PruneResults(
                                     resultsByNode,
                                     nodeCheckResult)
                                 && notCheckResult.Priority == Priority.Knockout)

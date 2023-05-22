@@ -34,7 +34,7 @@ internal class TestRecognizer_RunnerTests
 
         // Filter the results.
         Dictionary<INode, List<ICheckResult>> resultsByNode = new();
-        FilterResults(
+        PruneResults(
             resultsByNode,
             rootResult);
 
