@@ -15,20 +15,20 @@ composing modular checks using the fluent design pattern.
 ### Checks
 
 A recognizer is build from multiple checks which are also build from other checks, each check
-searches through the SyntaxGraph to look for specific nodes or relations between nodes.
+searches through the @PatternPal.SyntaxTree.SyntaxGraph to look for specific nodes or relations between nodes.
 More information about the individual checks can be found [here](checks.md).
 
 ### Priority
 
-Each check has a priority. This indicates the importance of the
+Each check has a @PatternPal.Core.Checks.Priority. This indicates the importance of the
 characteristic the check validates being present in the design pattern.
-There are four levels of priority, Knockout, High, Mid, and Low. A check
-with a Knockout priority must succeed for the design pattern to be
-considered at all. A certain predetermined percentage of the High checks
+There are four levels of priority, `Knockout`, `High`, `Mid`, and `Low`. A check
+with a `Knockout` priority must succeed for the design pattern to be
+considered at all. A certain predetermined percentage of the `High` checks
 must succeed as well for the pattern to be considered. If this
-percentage is met, but not all high checks are met, then these
+percentage is met, but not all `High` checks are met, then these
 unfulfilled checks are either critical points of improvement or an
-indication the pattern is not implemented after all. Mid and Low checks
+indication the pattern is not implemented after all. `Mid` and `Low` checks
 do not serve as determinants for the consideration of a pattern but
 rather function as qualifiers for assessing the level of proficiency in
 the implementation of the design pattern. They are used as final pattern
@@ -36,22 +36,22 @@ qualifiers and serve as points for further improvement.
 
 ### CheckResult
 
-A CheckResult is the result of a check. Similar to how a check can be a
+A @PatternPal.Core.CheckResult is the result of a check. Similar to how a check can be a
 collection of checks, the result of a check can be a collection of
-CheckResults. Each CheckResult has a feedback message, which provides
+`CheckResult`s. Each `CheckResult` has a feedback message, which provides
 information about what happened when the check was run. For example, it
 shows for what reason a check did not succeed.\
-A leaf check corresponds to a LeafCheckResult. Such a CheckResult either
+A leaf check corresponds to a @PatternPal.Core.LeafCheckResult. Such a `CheckResult` either
 did succeed or did not. Therefore, it has a Correctness property. A node
-check corresponds to a NodeCheckResult. It has a list of
-NodeCheckResults and LeafCheckResults.
+check corresponds to a @PatternPal.Core.NodeCheckResult. It has a list of
+`NodeCheckResult`s and `LeafCheckResult`s.
 
 ### CheckBuilder
 
-The CheckBuilder is a static class that makes it possible to make a
+The @PatternPal.Core.Checks.CheckBuilder is a static class that makes it possible to make a
 collection of checks for a recognizer. It contains a number of static
-methods, each one for one specific check, like Class() which returns a
-ClassCheck, and Method() which returns a MethodCheck. These methods can
+methods, each one for one specific check, like `Class()` which returns a
+@PatternPal.Core.Checks.ClassCheck, and `Method()` which returns a @PatternPal.Core.Checks.MethodCheck. These methods can
 be used by a recognizer to create checks in a fluid way.
 
 ### Example recognizer
