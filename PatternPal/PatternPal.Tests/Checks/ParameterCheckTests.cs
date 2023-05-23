@@ -216,14 +216,14 @@ public class ParameterCheckTests
         // Create two typechecks for a parameter check on a method with one parameter
         TypeCheck typeIntNode = new TypeCheck(
             Priority.Low,
-            OneOf< Func< List< INode > >, GetCurrentEntity >.FromT0(
+            OneOf< ICheck , GetCurrentEntity >.FromT0(
                 () => new List< INode >
                       {
                           ctx.Graph.Relations.GetEntityByName(intNode.GetReturnType())
                       }));
         TypeCheck typeStringNode = new TypeCheck(
             Priority.Low,
-            OneOf< Func< List< INode > >, GetCurrentEntity >.FromT0(
+            OneOf< ICheck >, GetCurrentEntity >.FromT0(
                 () => new List< INode >
                       {
                           ctx.Graph.Relations.GetEntityByName(stringNode.GetReturnType())

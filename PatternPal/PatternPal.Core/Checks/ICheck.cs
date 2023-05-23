@@ -246,13 +246,13 @@ internal static class CheckBuilder
     /// Creates a new <see cref="TypeCheck"/>.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="TypeCheck"/>.</param>
-    /// <param name="getMatchedNodes">A <see cref="Func{TResult}"/> which returns a <see cref="List{T}"/> of matched <see cref="INode"/>s from another <see cref="ICheck"/>.</param>
+    /// <param name="getRelatedCheck">A <see cref="CheckBase"/> which belongs to the <see cref="ICheck"/> which is used as type reference.</param>
     /// <returns>The created <see cref="TypeCheck"/>.</returns>
     internal static TypeCheck Type(
         Priority priority,
-        Func< List< INode > > getMatchedNodes) => new(
+        CheckBase getRelatedCheck) => new(
         priority,
-        getMatchedNodes );
+        getRelatedCheck );
 
     /// <summary>
     /// Creates a new <see cref="TypeCheck"/>.

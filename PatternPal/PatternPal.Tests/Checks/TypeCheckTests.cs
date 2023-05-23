@@ -12,7 +12,7 @@ public class TypeCheckTests
 
         TypeCheck typeCheck = new(
             Priority.Low,
-            OneOf< Func< List< INode > >, GetCurrentEntity >.FromT0(
+            OneOf<ICheck, GetCurrentEntity >.FromT0(
                 () => new List< INode >
                       {
                           classEntity
@@ -34,7 +34,7 @@ public class TypeCheckTests
 
         TypeCheck typeCheck = new(
             Priority.Low,
-            OneOf< Func< List< INode > >, GetCurrentEntity >.FromT0(
+            OneOf< ICheck, GetCurrentEntity >.FromT0(
                 () => new List< INode >
                       {
                           classEntity
