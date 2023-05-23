@@ -3,7 +3,7 @@
   Priority: Low,
   ChildrenCheckResults: [
     {
-      FeedbackMessage: ,
+      FeedbackMessage: Executing NOT-check,
       Priority: Low,
       NestedResult: {
         FeedbackMessage: The node Test does not have the private modifier.,

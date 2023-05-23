@@ -54,6 +54,7 @@ internal class TypeCheck : CheckBase
                                 : $"Node '{node}' has incorrect type, expected '{getNode}'",
                             DependencyCount = DependencyCount,
                             MatchedNode = getNode,
+                            Check = this,
                         });
                 }
 
@@ -64,6 +65,7 @@ internal class TypeCheck : CheckBase
                            FeedbackMessage = $"Found node '{node}'",
                            DependencyCount = DependencyCount,
                            MatchedNode = node,
+                           Check = this,
                        };
             },
             getCurrentEntity =>
@@ -80,6 +82,7 @@ internal class TypeCheck : CheckBase
                                : $"Node '{node}' has incorrect type, expected '{nodeToMatch}'",
                            DependencyCount = DependencyCount,
                            MatchedNode = node,
+                           Check = this,
                        };
             });
     }

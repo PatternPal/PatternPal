@@ -61,6 +61,7 @@ internal class ParameterCheck : CheckBase
                        Priority = Priority,
                        DependencyCount = DependencyCount,
                        MatchedNode = node,
+                       Check = this,
                    };
         }
         // No TypeChecks were provided
@@ -73,6 +74,7 @@ internal class ParameterCheck : CheckBase
                        Priority = Priority,
                        DependencyCount = DependencyCount,
                        MatchedNode = node,
+                       Check = this,
                    };
         }
 
@@ -93,6 +95,7 @@ internal class ParameterCheck : CheckBase
                                         FeedbackMessage = "There are less parameters than TypeChecks",
                                         DependencyCount = typecheck.DependencyCount,
                                         MatchedNode = node,
+                                        Check = this,
                                     };
                 subCheckResultsResults.Add(temp);
                 break;
@@ -161,6 +164,7 @@ internal class ParameterCheck : CheckBase
                    Priority = Priority,
                    DependencyCount = DependencyCount,
                    MatchedNode = node,
+                   Check = this,
                };
     }
 }

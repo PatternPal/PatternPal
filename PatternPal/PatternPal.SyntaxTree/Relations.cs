@@ -1,4 +1,4 @@
-﻿#region
+#region
 
 using System;
 using System.Linq;
@@ -257,17 +257,6 @@ namespace PatternPal.SyntaxTree
             return _members.FirstOrDefault(x => x.GetSyntaxNode().IsEquivalentTo(memberDeclaration));
         }
 
-        /// <summary>
-        /// Tries to get an <see cref="IMember"/> from a <see cref="SyntaxGraph"/> by matching the member's name to all members in a specific class.
-        /// </summary>
-        /// <param name="graph">The <see cref="SyntaxGraph"/> in which the <see cref="IMember"/> can be found.</param>
-        /// <param name="entityName">The name of the <see cref="IEntity"/> in which the <see cref="IMember"/> resides</param>
-        /// <param name="memberName">The name of the <see cref="IMember"/></param>
-        /// <returns>The matched <see cref="IMember"/></returns>
-        public static IMember ? GetMemberFromGraph(SyntaxGraph graph, string entityName, string memberName)
-        {
-            return graph.GetAll()[entityName].GetMembers().FirstOrDefault(x => x.GetName() == memberName);
-        }
 
         /// <summary>
         /// Creates the Extend, ExtendedBy, Implements and ImplementedBy relations between two <see cref="IEntity"/>'s.
