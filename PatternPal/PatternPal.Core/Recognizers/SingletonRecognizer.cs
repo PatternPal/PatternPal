@@ -85,7 +85,7 @@ internal class SingletonRecognizer : IRecognizer
                 Priority.Low,
                 Uses(
                     Priority.Low,
-                    instanceMethod.Result)
+                    instanceMethod)
             )
         );
     }
