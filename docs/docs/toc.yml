@@ -14,7 +14,9 @@
 - name: Checks
   href: technical/checks.md
 - name: Syntax Graph
-  href: technical/syntax_graph
+  href: technical/syntax_graph.md
+- name: Extension
+  href: technical/extension.md
 
 - name: How to
 - name: Implement a Recognizer
