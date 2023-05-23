@@ -125,21 +125,13 @@ internal class ParameterCheck : CheckBase
                     }
                     case NodeCheckResult nodeCheckResult:
                     {
-                        bool anyTrue = false;
-                        foreach (LeafCheckResult subCheck in nodeCheckResult.ChildrenCheckResults)
-                        {
-                            // One of the subChecks was correct.
-                            if (subCheck.Correct)
-                            {
-                                anyTrue = true;
-                            }
-                        }
+                        bool anyTrue = nodeCheckResult.ChildrenCheckResults.OfType<LeafCheckResult>().Any(subCheck => subCheck.Correct);
+
                         if (anyTrue)
                         {
                             subCheckResultsResults.Add(tempCheck);
                             nodeParameters.RemoveAt(x);
                             noneCorrect = false;
-                            break;
                         }
                         break;
                         
