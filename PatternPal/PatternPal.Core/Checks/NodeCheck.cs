@@ -259,6 +259,14 @@ internal class NodeCheck< TNode > : CheckBase
                     node));
         }
 
+        // Prevent null-ref when `nodeCheck` is not evaluated because there are no nodes to match
+        // on. This should not trigger the evaluation exception, so assign an empty list to prevent
+        // that.
+        if (results.Count == 0)
+        {
+            nodeCheck._matchedEntities ??= new List< INode >();
+        }
+
         // Return the result.
         return new NodeCheckResult
                {

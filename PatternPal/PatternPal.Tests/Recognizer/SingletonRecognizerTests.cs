@@ -1,10 +1,4 @@
-﻿
-using PatternPal.Core.Recognizers;
-using PatternPal.SyntaxTree;
-using PatternPal.SyntaxTree.Abstractions.Entities;
-using static PatternPal.Core.Checks.CheckBuilder;
-
-namespace PatternPal.Tests.Recognizer
+﻿namespace PatternPal.Tests.Recognizer
 {
     [TestFixture]
     internal class SingletonRecognizerTests
@@ -58,10 +52,10 @@ namespace PatternPal.Tests.Recognizer
 
             // Method to check
             ICheck[] hasStaticPublicInternalMethod =
-                sr.HasStaticPublicInternalMethod();
+                sr.IsStaticPublicOrInternal();
 
             // Put in a class, otherwise cannot be tested
-            ClassCheck classHasStaticPublicInternalMethod = Class(
+            ClassCheck classIsStaticPublicOrInternal = Class(
                 Priority.Low,
                 Method(
                     Priority.Mid,
@@ -69,7 +63,7 @@ namespace PatternPal.Tests.Recognizer
                 )
             );
 
-            return TestICheck(classHasStaticPublicInternalMethod, graph);
+            return TestICheck(classIsStaticPublicOrInternal, graph);
         }
         [Test]
         public Task HasWrongMethodModifiersTest()
@@ -80,10 +74,10 @@ namespace PatternPal.Tests.Recognizer
 
             // Method to check
             ICheck[] hasStaticPublicInternalMethod =
-                sr.HasStaticPublicInternalMethod();
+                sr.IsStaticPublicOrInternal();
 
             // Put in a class, otherwise cannot be tested
-            ClassCheck classHasStaticPublicInternalMethod = Class(
+            ClassCheck classIsStaticPublicOrInternal = Class(
                 Priority.Low,
                 Method(
                     Priority.Mid,
@@ -91,7 +85,7 @@ namespace PatternPal.Tests.Recognizer
                 )
             );
 
-            return TestICheck(classHasStaticPublicInternalMethod, graph);
+            return TestICheck(classIsStaticPublicOrInternal, graph);
         }
 
         [Test]
@@ -211,14 +205,20 @@ namespace PatternPal.Tests.Recognizer
 
             sr.OnlyPrivateProtectedConstructor(out ConstructorCheck privateProtectedConstructorCheck);
 
+            FieldCheck fieldCheck = sr.StaticPrivateFieldOfTypeClass();
+
             // Step 3 of Singleton StepByStep
-            ClassCheck hasMethodActsAsConstructor =
+            MethodCheck hasMethodActsAsConstructor =
                 sr.CheckMethodActsAsConstructorBehaviour(
                     privateProtectedConstructorCheck,
-                    sr.StaticPrivateFieldOfTypeClass(),
-                    out _);
+                    fieldCheck);
 
-            return TestICheck(hasMethodActsAsConstructor, graph);
+            return TestICheck(Class(
+                Priority.Low,
+                privateProtectedConstructorCheck,
+                fieldCheck,
+                hasMethodActsAsConstructor
+            ), graph);
         }
 
         [Test]
@@ -230,14 +230,20 @@ namespace PatternPal.Tests.Recognizer
 
             sr.OnlyPrivateProtectedConstructor(out ConstructorCheck privateProtectedConstructorCheck);
 
+            FieldCheck fieldCheck = sr.StaticPrivateFieldOfTypeClass();
+
             // Step 3 of Singleton StepByStep
-            ClassCheck hasMethodActsAsConstructor =
+            MethodCheck hasMethodActsAsConstructor =
                 sr.CheckMethodActsAsConstructorBehaviour(
                     privateProtectedConstructorCheck,
-                    sr.StaticPrivateFieldOfTypeClass(),
-                    out _);
+                    fieldCheck);
 
-            return TestICheck(hasMethodActsAsConstructor, graph);
+            return TestICheck(Class(
+                Priority.Low, 
+                privateProtectedConstructorCheck,
+                fieldCheck,
+                hasMethodActsAsConstructor
+            ), graph);
         }
 
         [Test]
@@ -249,14 +255,20 @@ namespace PatternPal.Tests.Recognizer
 
             sr.OnlyPrivateProtectedConstructor(out ConstructorCheck privateProtectedConstructorCheck);
 
+            FieldCheck fieldCheck = sr.StaticPrivateFieldOfTypeClass();
+
             // Step 3 of Singleton StepByStep
-            ClassCheck hasMethodActsAsConstructor =
+            MethodCheck hasMethodActsAsConstructor =
                 sr.CheckMethodActsAsConstructorBehaviour(
                     privateProtectedConstructorCheck,
-                    sr.StaticPrivateFieldOfTypeClass(),
-                    out _);
+                    fieldCheck);
 
-            return TestICheck(hasMethodActsAsConstructor, graph);
+            return TestICheck(Class(
+                Priority.Low,
+                privateProtectedConstructorCheck,
+                fieldCheck,
+                hasMethodActsAsConstructor
+            ), graph);
         }
 
         [Test]
@@ -268,14 +280,20 @@ namespace PatternPal.Tests.Recognizer
 
             sr.OnlyPrivateProtectedConstructor(out ConstructorCheck privateProtectedConstructorCheck);
 
+            FieldCheck fieldCheck = sr.StaticPrivateFieldOfTypeClass();
+
             // Step 3 of Singleton StepByStep
-            ClassCheck hasMethodActsAsConstructor =
+            MethodCheck hasMethodActsAsConstructor =
                 sr.CheckMethodActsAsConstructorBehaviour(
                     privateProtectedConstructorCheck,
-                    sr.StaticPrivateFieldOfTypeClass(),
-                    out _);
+                    fieldCheck);
 
-            return TestICheck(hasMethodActsAsConstructor, graph);
+            return TestICheck(Class(
+                Priority.Low,
+                privateProtectedConstructorCheck,
+                fieldCheck,
+                hasMethodActsAsConstructor
+            ), graph);
         }
 
         [Test]
@@ -288,7 +306,7 @@ namespace PatternPal.Tests.Recognizer
             //Method which the client should call
             MethodCheck publicInternalMethod = Method(
                 Priority.Mid,
-                sr.HasStaticPublicInternalMethod()
+                sr.IsStaticPublicOrInternal()
             );
 
             // Client call check
@@ -318,7 +336,7 @@ namespace PatternPal.Tests.Recognizer
             //Method which the client should call
             MethodCheck publicInternalMethod = Method(
                 Priority.Mid,
-                sr.HasStaticPublicInternalMethod()
+                sr.IsStaticPublicOrInternal()
             );
 
             // Client call check
