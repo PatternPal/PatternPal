@@ -1,0 +1,84 @@
+﻿{
+  FeedbackMessage: Found the required checks for: PatternPal.Tests.Utils.RootNode4Tests.,
+  ChildrenCheckResults: [
+    {
+      FeedbackMessage: ,
+      ChildrenCheckResults: [
+        {
+          FeedbackMessage: Found class 'PruneTestClass1',
+          ChildrenCheckResults: [
+            {
+              FeedbackMessage: ,
+              ChildrenCheckResults: [
+                {
+                  FeedbackMessage: Found method: CalculateClient().,
+                  ChildrenCheckResults: [
+                    {
+                      FeedbackMessage: Modifiers correctly implemented.,
+                      Correct: true,
+                      MatchedNode: CalculateClient
+                    }
+                  ],
+                  MatchedNode: CalculateClient,
+                  NodeCheckCollectionWrapper: false
+                }
+              ],
+              CollectionKind: Any,
+              NodeCheckCollectionWrapper: true
+            }
+          ],
+          MatchedNode: PruneTestClass1,
+          NodeCheckCollectionWrapper: false
+        },
+        {
+          FeedbackMessage: Found class 'ClassUsesPruneClass',
+          ChildrenCheckResults: [
+            {
+              FeedbackMessage: ,
+              CollectionKind: Any,
+              NodeCheckCollectionWrapper: true
+            }
+          ],
+          MatchedNode: ClassUsesPruneClass,
+          NodeCheckCollectionWrapper: false
+        }
+      ],
+      CollectionKind: Any,
+      NodeCheckCollectionWrapper: true
+    },
+    {
+      FeedbackMessage: ,
+      ChildrenCheckResults: [
+        {
+          FeedbackMessage: Found class 'ClassUsesPruneClass',
+          ChildrenCheckResults: [
+            {
+              FeedbackMessage: Found Uses relations for ClassUsesPruneClass.,
+              ChildrenCheckResults: [
+                {
+                  FeedbackMessage: Node ClassUsesPruneClass has a Uses relation with node CalculateClient(),
+                  Correct: true,
+                  DependencyCount: 1,
+                  MatchedNode: CalculateClient
+                }
+              ],
+              CollectionKind: Any,
+              DependencyCount: 1,
+              MatchedNode: ClassUsesPruneClass,
+              NodeCheckCollectionWrapper: true
+            }
+          ],
+          DependencyCount: 1,
+          MatchedNode: ClassUsesPruneClass,
+          NodeCheckCollectionWrapper: false
+        }
+      ],
+      CollectionKind: Any,
+      DependencyCount: 1,
+      NodeCheckCollectionWrapper: true
+    }
+  ],
+  DependencyCount: 1,
+  MatchedNode: root node,
+  NodeCheckCollectionWrapper: false
+}

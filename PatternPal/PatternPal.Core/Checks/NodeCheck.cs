@@ -13,17 +13,21 @@ internal class NodeCheck< TNode > : CheckBase
     // The kind of this collection of checks.
     private readonly CheckCollectionKind _kind;
 
-    // The entities matched by this check.
-    private readonly List< INode > _matchedEntities;
-
-    // The current sub-check being checked.
-    private ICheck ? _currentSubCheck;
-
     /// <summary>
     /// Gets a <see cref="Func{TResult}"/> which returns a <see cref="List{T}"/> of <see cref="IEntity"/>s matched by this <see cref="ICheck"/>.
     /// </summary>
     /// <returns>A <see cref="List{T}"/> of matched <see cref="IEntity"/>s.</returns>
-    internal Func< List< INode > > Result => () => _matchedEntities;
+    public override Func< List< INode > > Result => () => _matchedEntities
+                                                          ?? throw new ArgumentNullException(
+                                                              nameof( _matchedEntities ),
+                                                              $"'{this}' is not yet evaluated, make sure to evaluate this check before you try to access it results!");
+
+    // The current sub-check being checked.
+    private ICheck ? _currentSubCheck;
+
+    // The entities matched by this check. This list is set when the check is evaluated, before then
+    // it is null. When the list is set but empty, no entities were matched by this check.
+    private List< INode > ? _matchedEntities;
 
     // The dependency count, declared as nullable so we can check whether we have calculated it
     // already.
@@ -31,7 +35,7 @@ internal class NodeCheck< TNode > : CheckBase
 
     /// <summary>
     /// The dependencies to other <see cref="INode"/>s this check has.
-    /// While calculating the dependencies, it calculates the dependencies of its <see cref="_SubChecks"/>.
+    /// While calculating the dependencies, it calculates the dependencies of its <see cref="_subChecks"/>.
     /// </summary>
     public override int DependencyCount
     {
@@ -67,7 +71,6 @@ internal class NodeCheck< TNode > : CheckBase
     {
         _subChecks = subChecks;
         _kind = kind;
-        _matchedEntities = new List< INode >();
     }
 
     /// <inheritdoc />
@@ -90,6 +93,7 @@ internal class NodeCheck< TNode > : CheckBase
         }
 
         // Store the matched entity.
+        _matchedEntities ??= new List< INode >();
         _matchedEntities.Add(castNode);
 
         // Return the result.
@@ -101,14 +105,15 @@ internal class NodeCheck< TNode > : CheckBase
                    Priority = Priority,
                    DependencyCount = DependencyCount,
                    MatchedNode = castNode,
+                   Check = this,
                };
     }
 
     /// <summary>
     /// Run the given <paramref name="subCheck"/> on the given <paramref name="castNode"/>.
     /// </summary>
-    /// <param name="ctx">The current <see cref="IRecognizerContext"/>.</param>
-    /// <param name="castNode">The <see cref="INode"/> to run the <paramref name="subCheck"></param> on.</param>
+    /// <param name="oldCtx">The current <see cref="IRecognizerContext"/>.</param>
+    /// <param name="castNode">The <see cref="INode"/> to run the <paramref name="subCheck"/> on.</param>
     /// <param name="subCheck">The <see cref="ICheck"/> to run.</param>
     /// <returns>The <see cref="ICheckResult"/> of the <paramref name="subCheck"/>.</returns>
     private ICheckResult RunCheck(
@@ -190,6 +195,7 @@ internal class NodeCheck< TNode > : CheckBase
                            Priority = notCheck.Priority,
                            DependencyCount = notCheck.DependencyCount,
                            MatchedNode = nestedResult.MatchedNode,
+                           Check = notCheck,
                        };
             }
 
@@ -262,7 +268,8 @@ internal class NodeCheck< TNode > : CheckBase
                    FeedbackMessage = string.Empty,
                    Priority = nodeCheck.Priority,
                    DependencyCount = nodeCheck.DependencyCount,
-                   MatchedNode = null
+                   MatchedNode = null,
+                   Check = nodeCheck,
                };
     }
 

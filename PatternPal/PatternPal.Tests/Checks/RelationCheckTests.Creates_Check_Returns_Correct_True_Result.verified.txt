@@ -14,9 +14,10 @@
           MatchedNode: Used
         }
       ],
+      CollectionKind: Any,
       DependencyCount: 1,
       MatchedNode: Uses,
-      NodeCheckCollectionWrapper: false
+      NodeCheckCollectionWrapper: true
     }
   ],
   DependencyCount: 1,

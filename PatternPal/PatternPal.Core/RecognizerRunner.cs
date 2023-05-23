@@ -150,7 +150,10 @@ public class RecognizerRunner
         SortCheckResults(rootResult);
 
         // Filter the results.
-        FilterResults(rootResult);
+        Dictionary< INode, List< ICheckResult > > resultsByNode = new();
+        PruneResults(
+            resultsByNode,
+            rootResult);
 
         return rootResult;
     }
@@ -190,7 +193,8 @@ public class RecognizerRunner
     /// becomes empty because all its sub-<see cref="ICheckResult"/>s are pruned, we can also prune
     /// the <see cref="NodeCheckResult"/> itself.
     /// </remarks>
-    internal static bool FilterResults(
+    internal static bool PruneResults(
+        Dictionary< INode, List< ICheckResult > > resultsByNode,
         NodeCheckResult parentCheckResult)
     {
         // TODO: Properly handle CheckCollectionKind.
@@ -203,6 +207,21 @@ public class RecognizerRunner
 
         foreach (ICheckResult checkResult in parentCheckResult.ChildrenCheckResults)
         {
+            if (checkResult.MatchedNode is not null)
+            {
+                if (!resultsByNode.TryGetValue(
+                    checkResult.MatchedNode,
+                    out List< ICheckResult > ? results))
+                {
+                    results = new List< ICheckResult >();
+                    resultsByNode.Add(
+                        checkResult.MatchedNode,
+                        results);
+                }
+
+                results.Add(checkResult);
+            }
+
             switch (checkResult)
             {
                 case LeafCheckResult leafCheckResult:
@@ -217,16 +236,20 @@ public class RecognizerRunner
                     if (leafCheckResult.Priority == Priority.Knockout)
                     {
                         resultsToBePruned.Add(leafCheckResult);
+                        leafCheckResult.Pruned = true;
                     }
                     break;
                 }
                 case NodeCheckResult nodeCheckResult:
                 {
-                    // Filter the results recursively. If `FilterResults` returns true, the node
+                    // Filter the results recursively. If `PruneResults` returns true, the node
                     // check itself should also be pruned.
-                    if (FilterResults(nodeCheckResult))
+                    if (PruneResults(
+                        resultsByNode,
+                        nodeCheckResult))
                     {
                         resultsToBePruned.Add(nodeCheckResult);
+                        nodeCheckResult.Pruned = true;
                     }
                     break;
                 }
@@ -248,19 +271,24 @@ public class RecognizerRunner
                             if (notCheckResult.Priority == Priority.Knockout)
                             {
                                 resultsToBePruned.Add(notCheckResult);
+                                notCheckResult.Pruned = true;
                             }
                             break;
                         }
                         case NodeCheckResult nodeCheckResult:
                         {
-                            // If `FilterResults` returns false, this means the node check shouldn't
+                            // TODO: Fix this using priorities (only works if all sub-checks are knockout).
+                            // If `PruneResults` returns false, this means the node check shouldn't
                             // be pruned (because it has correct children). Because it's wrapped in
                             // a not check, this not check is incorrect and should be pruned if it
                             // has priority Knockout.
-                            if (!FilterResults(nodeCheckResult)
+                            if (!PruneResults(
+                                    resultsByNode,
+                                    nodeCheckResult)
                                 && notCheckResult.Priority == Priority.Knockout)
                             {
                                 resultsToBePruned.Add(notCheckResult);
+                                notCheckResult.Pruned = true;
                             }
                             break;
                         }
@@ -287,10 +315,74 @@ public class RecognizerRunner
 
         // If parentCheck becomes empty => also prune parent. The parent is pruned by the caller if
         // we return `true`.
-        if (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count)
+        if (resultsToBePruned.Count > 0 && (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count
+            || parentCheckResult.CollectionKind == CheckCollectionKind.All))
         {
             // Parent becomes empty.
+            parentCheckResult.ChildrenCheckResults.Clear();
             return true;
+        }
+
+        if (parentCheckResult is
+            {
+                NodeCheckCollectionWrapper: true,
+                Priority: Priority.Knockout,
+                Check: RelationCheck
+            })
+        {
+            // We're currently processing the NodeCheckResult of a RelationCheck.
+
+            foreach (ICheckResult relationCheckResult in parentCheckResult.ChildrenCheckResults)
+            {
+                if (relationCheckResult is not LeafCheckResult relationResult)
+                {
+                    throw new ArgumentException($"Unexpected check type '{relationCheckResult.GetType()}', expected '{typeof( LeafCheckResult )}'");
+                }
+
+                if (relationResult.RelatedCheck is null)
+                {
+                    throw new ArgumentNullException(
+                        nameof( relationResult.RelatedCheck ),
+                        $"RelatedCheck of CheckResult '{relationResult}' is null, while it should reference the ICheck belonging to the INode it has a relation to.");
+                }
+
+                // If the RelationCheck did not match any nodes, it won't have any child results. As
+                // such, we won't reach this code. If we do reach this code, but
+                // `relationResult.MatchedNode` is null, this is an error.
+                if (relationResult.MatchedNode is null)
+                {
+                    throw new ArgumentNullException(
+                        nameof( relationResult.MatchedNode ),
+                        "Relation check did not match any nodes");
+                }
+
+                // Get the CheckResults belonging to the node to which there should be a relation.
+                List< ICheckResult > resultsOfNode = resultsByNode[ relationResult.MatchedNode ];
+
+                // Find the CheckResult linked to the check which searched for the Node to which there should be a relation.
+                ICheckResult ? relevantResult = resultsOfNode.FirstOrDefault(
+                    (
+                        result) => result.Check == relationResult.RelatedCheck);
+
+                // This should not be possible for the same reason `relationResult.MatchedNode`
+                // should not be null.
+                if (relevantResult is null)
+                {
+                    throw new ArgumentNullException(
+                        nameof( relevantResult ),
+                        "Relation check did not match any nodes");
+                }
+
+                // If this node gets pruned, it does not have the required attributes to be the node belonging to the
+                // check which searched for the node to which there should be a relation. Therefore, even though the
+                // relation might be found, it is not the relation directed to the node to which there should be one.
+                // Therefore this relation is not the required one, and thus the relationResult gets pruned.
+                if (relevantResult.Pruned)
+                {
+                    resultsToBePruned.Add(relationResult);
+                    relationResult.Pruned = true;
+                }
+            }
         }
 
         // Prune the results.
@@ -307,7 +399,7 @@ public class RecognizerRunner
 /// <summary>
 /// Contains state for the <see cref="ICheck"/> which is currently being processed.
 /// </summary>
-internal interface IRecognizerContext
+public interface IRecognizerContext
 {
     /// <summary>
     /// The <see cref="SyntaxGraph"/> on which the <see cref="ICheck"/>s are being processed.

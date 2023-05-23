@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 
 using NDesk.Options;
 
@@ -32,11 +33,11 @@ internal static class Program
         FileManager fileManager = new();
 
         OptionSet options = new()
-        {
-            {
-                "h|help", "shows this message and exit", v => showHelp = v != null
-            }
-        };
+                            {
+                                {
+                                    "h|help", "shows this message and exit", v => showHelp = v != null
+                                }
+                            };
 
         //Add design patterns as specifiable option
         foreach (DesignPattern pattern in designPatternsList)
@@ -46,7 +47,9 @@ internal static class Program
                     " ",
                     "_"),
                 "includes " + pattern.Name,
-                v => selectedPatterns.Add(pattern)
+                // This closure is not stored, so accessing the captured variable is not an issue.
+                // ReSharper disable once AccessToModifiedClosure
+                _ => selectedPatterns.Add(pattern)
             );
         }
 
@@ -79,13 +82,11 @@ internal static class Program
         List< string > selectedFiles = (from a in arguments where a.EndsWith(".cs") && a.Length > 3 select a).ToList();
 
         foreach (string arg in from arg in arguments
-                 where Directory.Exists(arg)
-                 select arg)
+            where Directory.Exists(arg)
+            select arg)
         {
             selectedFiles.AddRange(fileManager.GetAllCSharpFilesFromDirectory(arg));
         }
-
-        List< string > selectedDirectories = (from dir in arguments where Directory.Exists(dir) select dir).ToList();
 
         if (selectedFiles.Count == 0)
         {
@@ -128,8 +129,7 @@ internal static class Program
 
         Console.WriteLine();
         PrintResults(
-            result,
-            selectedDirectories);
+            result);
     }
 
     private static void ShowHelpMessage(
@@ -141,8 +141,7 @@ internal static class Program
     }
 
     private static void PrintResults(
-        ICheckResult result,
-        List< string > selectedDirectories)
+        ICheckResult result)
     {
         Console.WriteLine("\nResults:");
 
@@ -157,66 +156,51 @@ internal static class Program
                     },
                     Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
                     WriteIndented = true,
+                    // NOTE: Workaround to ignore the required `ICheckResult.Check` property.
+                    // See: https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/required-properties
+                    TypeInfoResolver = new DefaultJsonTypeInfoResolver
+                                       {
+                                           Modifiers =
+                                           {
+                                               static ti =>
+                                               {
+                                                   if (ti.Kind != JsonTypeInfoKind.Object)
+                                                   {
+                                                       return;
+                                                   }
+
+                                                   foreach (JsonPropertyInfo propertyInfo in ti.Properties)
+                                                   {
+                                                       propertyInfo.IsRequired = false;
+                                                   }
+                                               }
+                                           }
+                                       }
                 }));
         Console.WriteLine();
     }
 
-    public static void DrawTextProgressBar(
-        string stepDescription,
-        int progress,
-        int total)
-    {
-        int totalChunks = 30;
-
-        //draw empty progress bar
-        Console.Write('\r');
-        Console.Write(@"[");
-
-        double pctComplete = Convert.ToDouble(progress) / total;
-        int numChunksComplete = Convert.ToInt16(totalChunks * pctComplete);
-
-        //draw completed chunks
-        Console.BackgroundColor = ConsoleColor.Green;
-        Console.Write("".PadRight(numChunksComplete));
-
-        //draw incomplete chunks
-        Console.BackgroundColor = ConsoleColor.Gray;
-        Console.Write("".PadRight(totalChunks - numChunksComplete));
-
-        //draw totals
-        Console.BackgroundColor = ConsoleColor.Black;
-        Console.Write(@"]     "); //end
-
-        string output = progress + " of " + total;
-        //pad the output so when changing from 3 to 4 digits we avoid text shifting
-        Console.Write(output.PadRight(15) + stepDescription);
-        Console.Write(
-            new string(
-                ' ',
-                Console.WindowWidth - Console.CursorLeft - 1));
-    }
-
-    public static IEnumerable< string > SplitCommandLine(
+    private static IEnumerable< string > SplitCommandLine(
         string commandLine)
     {
         bool inQuotes = false;
 
         return commandLine.Split(
-                c =>
-                {
-                    if (c == '\"')
-                    {
-                        inQuotes = !inQuotes;
-                    }
+                              c =>
+                              {
+                                  if (c == '\"')
+                                  {
+                                      inQuotes = !inQuotes;
+                                  }
 
-                    return !inQuotes && c == ' ';
-                }
-            )
-            .Select(arg => arg.Trim().TrimMatchingQuotes('\"'))
-            .Where(arg => !string.IsNullOrEmpty(arg));
+                                  return !inQuotes && c == ' ';
+                              }
+                          )
+                          .Select(arg => arg.Trim().TrimMatchingQuotes('\"'))
+                          .Where(arg => !string.IsNullOrEmpty(arg));
     }
 
-    public static IEnumerable< string > Split(
+    private static IEnumerable< string > Split(
         this string str,
         Func< char, bool > controller
     )
@@ -236,22 +220,19 @@ internal static class Program
             }
         }
 
-        yield return str[nextPiece..];
+        yield return str[ nextPiece.. ];
     }
 
-    public static string TrimMatchingQuotes(
+    private static string TrimMatchingQuotes(
         this string input,
         char quote)
     {
-        if (input.Length >= 2
-            && input[ 0 ] == quote
-            && input[ ^1 ] == quote)
-        {
-            return input.Substring(
+        return input.Length >= 2
+               && input[ 0 ] == quote
+               && input[ ^1 ] == quote
+            ? input.Substring(
                 1,
-                input.Length - 2);
-        }
-
-        return input;
+                input.Length - 2)
+            : input;
     }
 }

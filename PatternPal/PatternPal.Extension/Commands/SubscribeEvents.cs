@@ -9,6 +9,7 @@ using EnvDTE80;
 using PatternPal.Protos;
 using System.Threading;
 using System.Collections;
+using System.Linq;
 using Microsoft.VisualStudio.Shell.Interop;
 
 
@@ -261,6 +262,29 @@ namespace PatternPal.Extension.Commands
             System.Diagnostics.Process process = new System.Diagnostics.Process();
         }
 
+
+        /// <summary>
+        /// The event handler for when recognizing software patterns in the extension.
+        /// </summary>
+        public static void OnPatternRecognized(RecognizeRequest recognizeRequestrequest, IList<RecognizeResult> recognizeResultsresponse)
+        {
+            LogEventRequest request = CreateStandardLog();
+            request.EventType = EventType.EvtXRecognizerRun;
+            string config = recognizeRequestrequest.Recognizers.ToString();
+
+            request.RecognizerConfig = config;
+            foreach (RecognizeResult result in recognizeResultsresponse)
+            {
+                request.RecognizerResult += result.ToString();
+            }
+
+
+
+            LogProviderService.LogProviderServiceClient client =
+                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
+            LogEventResponse response = client.LogEvent(request);
+        }
+
         #endregion
 
         /// <summary>
@@ -350,6 +374,8 @@ namespace PatternPal.Extension.Commands
                 LogEventResponse response = client.LogEvent(request);
             }
         }
+
+
 
         /// Event handler for when an exception is unhandled. This is used to determine in the user's last debug session
         /// whether there were any unhandled exceptions. Although creating a separate method might seem redundant
