@@ -120,6 +120,6 @@ example when instead of requiring a specific modifier, you exclude one.
   _ If the check is a nodeCheck implement the `NodeCheck< TNode >`
   _ otherwise, implement the @PatternPal.Core.Checks.Checkbase
 3. Add the check to the switch in the `NodeCheck< TNode >.RunCheck()` for a derivation from the `NodeCheck< INode >` one should probably add some extra logic. Otherwise this is done in the override of `Check()`.
-4. Add a static method to the `CheckBuilder` class in `PatternPal.Core/Checks/ICheck.cs` returning an isntance of the created check.
+4. Add a static method to the `CheckBuilder` class in `PatternPal.Core/Checks/ICheck.cs` returning an instance of the created check.
 
 5. Create a ...CheckTest.cs file in the `PatternPal.Tests/Checks` folder and check the functionality. There are some helpfull methods in `PatternPal.Tests/Utils`.
