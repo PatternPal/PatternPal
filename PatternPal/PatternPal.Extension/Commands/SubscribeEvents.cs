@@ -268,6 +268,7 @@ namespace PatternPal.Extension.Commands
         /// </summary>
         public static void OnPatternRecognized(RecognizeRequest recognizeRequestrequest, IList<RecognizeResult> recognizeResultsresponse)
         {
+            if (_package == null || !_package.DoLogData) return; 
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtXRecognizerRun;
             string config = recognizeRequestrequest.Recognizers.ToString();

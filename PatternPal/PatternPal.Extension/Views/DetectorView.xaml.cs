@@ -244,7 +244,6 @@ namespace PatternPal.Extension.Views
             }
 
             request.ShowAllResults = !(ShowAllCheckBox.IsChecked.HasValue && ShowAllCheckBox.IsChecked.Value);
-
             IAsyncStreamReader< RecognizeResponse > responseStream = GrpcHelper.RecognizerClient.Recognize(request).ResponseStream;
 
             IList< RecognizeResult > results = new List< RecognizeResult >();
@@ -252,7 +251,6 @@ namespace PatternPal.Extension.Views
             {
                 results.Add(responseStream.Current.Result);
             }
-
             SubscribeEvents.OnPatternRecognized(request, results);
             CreateResultViewModels(results);
             SummaryControl.Text = "Recognizer is finished";
