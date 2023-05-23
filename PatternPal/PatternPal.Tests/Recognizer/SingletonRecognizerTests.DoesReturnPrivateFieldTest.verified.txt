@@ -46,13 +46,14 @@
                     FeedbackMessage: Node GetInstance() has a Uses relation with node _instance,
                     Priority: Mid,
                     Correct: true,
-                    DependencyCount: 1,
+                    DependencyCount: 2,
                     MatchedNode: _instance
                   }
                 ],
-                DependencyCount: 1,
+                CollectionKind: Any,
+                DependencyCount: 2,
                 MatchedNode: GetInstance,
-                NodeCheckCollectionWrapper: false
+                NodeCheckCollectionWrapper: true
               },
               {
                 FeedbackMessage: Node 'MockClass1' has correct type,
@@ -61,17 +62,17 @@
                 MatchedNode: MockClass1
               }
             ],
-            DependencyCount: 2,
+            DependencyCount: 3,
             MatchedNode: GetInstance,
             NodeCheckCollectionWrapper: false
           }
         ],
         CollectionKind: Any,
-        DependencyCount: 2,
+        DependencyCount: 3,
         NodeCheckCollectionWrapper: true
       }
     ],
-    DependencyCount: 3,
+    DependencyCount: 4,
     MatchedNode: MockClass1,
     NodeCheckCollectionWrapper: false
   }

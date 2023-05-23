@@ -1,4 +1,4 @@
-#region
+﻿#region
 
 using System.Linq;
 using Google.Protobuf.WellKnownTypes;
@@ -161,7 +161,7 @@ internal class SingletonRecognizer : IRecognizer
         //TODO: Right now it only checks if the constructor is called somewhere in a method, not at which conditions
         return Uses(
             Priority.Mid,
-            constructor.Result
+            constructor
         );
     }
 
@@ -175,7 +175,7 @@ internal class SingletonRecognizer : IRecognizer
         {
             Uses(
                 Priority.Mid,
-                checkSingletonC.Result
+                checkSingletonC
             ),
             Type(
                 Priority.Knockout,
@@ -227,14 +227,14 @@ internal class SingletonRecognizer : IRecognizer
                     Priority.High,
                     Uses(
                         Priority.Mid,
-                        getInstanceMethod.Result
+                        getInstanceMethod
                     )
                 ),
                 Method(
                     Priority.High,
                     Uses(
                         Priority.Mid,
-                        getInstanceMethod.Result
+                        getInstanceMethod
                     )
                 )
             )

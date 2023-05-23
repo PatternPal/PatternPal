@@ -55,9 +55,10 @@
                     MatchedNode: MockClass4
                   }
                 ],
+                CollectionKind: Any,
                 DependencyCount: 1,
                 MatchedNode: GetInstance,
-                NodeCheckCollectionWrapper: false
+                NodeCheckCollectionWrapper: true
               }
             ],
             DependencyCount: 1,

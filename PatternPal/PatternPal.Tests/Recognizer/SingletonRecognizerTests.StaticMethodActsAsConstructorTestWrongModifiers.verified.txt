@@ -105,9 +105,10 @@
                     MatchedNode: MockClass2
                   }
                 ],
+                CollectionKind: Any,
                 DependencyCount: 1,
                 MatchedNode: GetInstance,
-                NodeCheckCollectionWrapper: false
+                NodeCheckCollectionWrapper: true
               },
               {
                 FeedbackMessage: Found Uses relations for GetInstance().,
@@ -117,13 +118,14 @@
                     FeedbackMessage: Node GetInstance() has a Uses relation with node _instance,
                     Priority: Mid,
                     Correct: true,
-                    DependencyCount: 1,
+                    DependencyCount: 2,
                     MatchedNode: _instance
                   }
                 ],
-                DependencyCount: 1,
+                CollectionKind: Any,
+                DependencyCount: 2,
                 MatchedNode: GetInstance,
-                NodeCheckCollectionWrapper: false
+                NodeCheckCollectionWrapper: true
               },
               {
                 FeedbackMessage: Node 'MockClass2' has correct type,
@@ -132,17 +134,17 @@
                 MatchedNode: MockClass2
               }
             ],
-            DependencyCount: 3,
+            DependencyCount: 4,
             MatchedNode: GetInstance,
             NodeCheckCollectionWrapper: false
           }
         ],
         CollectionKind: Any,
-        DependencyCount: 3,
+        DependencyCount: 4,
         NodeCheckCollectionWrapper: true
       }
     ],
-    DependencyCount: 4,
+    DependencyCount: 5,
     MatchedNode: MockClass2,
     NodeCheckCollectionWrapper: false
   },
@@ -259,9 +261,10 @@
                     MatchedNode: MockClass3
                   }
                 ],
+                CollectionKind: Any,
                 DependencyCount: 1,
                 MatchedNode: GetInstance,
-                NodeCheckCollectionWrapper: false
+                NodeCheckCollectionWrapper: true
               },
               {
                 FeedbackMessage: Found Uses relations for GetInstance().,
@@ -271,20 +274,21 @@
                     FeedbackMessage: No Uses relation found.,
                     Priority: Mid,
                     Correct: false,
-                    DependencyCount: 1,
+                    DependencyCount: 2,
                     MatchedNode: _instance
                   },
                   {
                     FeedbackMessage: Node GetInstance() has a Uses relation with node _instance,
                     Priority: Mid,
                     Correct: true,
-                    DependencyCount: 1,
+                    DependencyCount: 2,
                     MatchedNode: _instance
                   }
                 ],
-                DependencyCount: 1,
+                CollectionKind: Any,
+                DependencyCount: 2,
                 MatchedNode: GetInstance,
-                NodeCheckCollectionWrapper: false
+                NodeCheckCollectionWrapper: true
               },
               {
                 FeedbackMessage: Node 'MockClass3' has correct type,
@@ -293,17 +297,17 @@
                 MatchedNode: MockClass3
               }
             ],
-            DependencyCount: 3,
+            DependencyCount: 4,
             MatchedNode: GetInstance,
             NodeCheckCollectionWrapper: false
           }
         ],
         CollectionKind: Any,
-        DependencyCount: 3,
+        DependencyCount: 4,
         NodeCheckCollectionWrapper: true
       }
     ],
-    DependencyCount: 4,
+    DependencyCount: 5,
     MatchedNode: MockClass3,
     NodeCheckCollectionWrapper: false
   }

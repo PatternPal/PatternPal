@@ -46,13 +46,14 @@
                     FeedbackMessage: No Uses relation found.,
                     Priority: Mid,
                     Correct: false,
-                    DependencyCount: 1,
+                    DependencyCount: 2,
                     MatchedNode: _instance
                   }
                 ],
-                DependencyCount: 1,
+                CollectionKind: Any,
+                DependencyCount: 2,
                 MatchedNode: GetInstance,
-                NodeCheckCollectionWrapper: false
+                NodeCheckCollectionWrapper: true
               },
               {
                 FeedbackMessage: Node 'MockClass5' has correct type,
@@ -61,17 +62,17 @@
                 MatchedNode: MockClass5
               }
             ],
-            DependencyCount: 2,
+            DependencyCount: 3,
             MatchedNode: GetInstance,
             NodeCheckCollectionWrapper: false
           }
         ],
         CollectionKind: Any,
-        DependencyCount: 2,
+        DependencyCount: 3,
         NodeCheckCollectionWrapper: true
       }
     ],
-    DependencyCount: 3,
+    DependencyCount: 4,
     MatchedNode: MockClass5,
     NodeCheckCollectionWrapper: false
   }

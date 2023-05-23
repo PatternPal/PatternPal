@@ -104,9 +104,10 @@
                                 MatchedNode: GetInstance
                               }
                             ],
+                            CollectionKind: Any,
                             DependencyCount: 1,
                             MatchedNode: MockClass1,
-                            NodeCheckCollectionWrapper: false
+                            NodeCheckCollectionWrapper: true
                           }
                         ],
                         DependencyCount: 1,
@@ -138,9 +139,10 @@
                                 MatchedNode: GetInstance
                               }
                             ],
+                            CollectionKind: Any,
                             DependencyCount: 1,
                             MatchedNode: GetInstance,
-                            NodeCheckCollectionWrapper: false
+                            NodeCheckCollectionWrapper: true
                           }
                         ],
                         DependencyCount: 1,
@@ -191,9 +193,10 @@
                                 MatchedNode: GetInstance
                               }
                             ],
+                            CollectionKind: Any,
                             DependencyCount: 1,
                             MatchedNode: Client1,
-                            NodeCheckCollectionWrapper: false
+                            NodeCheckCollectionWrapper: true
                           }
                         ],
                         DependencyCount: 1,
@@ -345,9 +348,10 @@
                                 MatchedNode: GetInstance
                               }
                             ],
+                            CollectionKind: Any,
                             DependencyCount: 1,
                             MatchedNode: MockClass1,
-                            NodeCheckCollectionWrapper: false
+                            NodeCheckCollectionWrapper: true
                           }
                         ],
                         DependencyCount: 1,
@@ -386,9 +390,10 @@
                                 MatchedNode: GetInstance
                               }
                             ],
+                            CollectionKind: Any,
                             DependencyCount: 1,
                             MatchedNode: GetInstance,
-                            NodeCheckCollectionWrapper: false
+                            NodeCheckCollectionWrapper: true
                           }
                         ],
                         DependencyCount: 1,
@@ -446,9 +451,10 @@
                                 MatchedNode: GetInstance
                               }
                             ],
+                            CollectionKind: Any,
                             DependencyCount: 1,
                             MatchedNode: Client1,
-                            NodeCheckCollectionWrapper: false
+                            NodeCheckCollectionWrapper: true
                           }
                         ],
                         DependencyCount: 1,
