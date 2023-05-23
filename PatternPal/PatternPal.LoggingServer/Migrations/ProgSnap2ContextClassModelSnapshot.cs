@@ -58,6 +58,12 @@ namespace PatternPal.LoggingServer.Migrations
                     b.Property<string>("ProjectId")
                         .HasColumnType("text");
 
+                    b.Property<string>("RecognizerConfig")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RecognizerResult")
+                        .HasColumnType("text");
+
                     b.Property<DateTimeOffset>("ServerDatetime")
                         .HasColumnType("timestamp with time zone");
 

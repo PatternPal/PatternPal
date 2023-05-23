@@ -34,5 +34,10 @@ public class NodeConverter : JsonConverter
     public static void Init()
     {
         VerifierSettings.AddExtraSettings(_ => _.Converters.Add(new NodeConverter()));
+        VerifierSettings.IgnoreMember("Pruned");
+        VerifierSettings.IgnoreMember("Check");
+        VerifierSettings.IgnoreMember("RelatedCheck");
+        
     }
+
 }

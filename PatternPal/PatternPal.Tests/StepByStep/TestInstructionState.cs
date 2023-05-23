@@ -1,5 +1,4 @@
 ﻿using PatternPal.StepByStep.Abstractions;
-using PatternPal.SyntaxTree;
 using PatternPal.SyntaxTree.Abstractions.Entities;
 
 namespace PatternPal.Tests.StepByStep

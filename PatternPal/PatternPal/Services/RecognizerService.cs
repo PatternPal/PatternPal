@@ -161,12 +161,6 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                 newCheckResult.SubCheckResults.Add(CreateCheckResult(notCheckResult.NestedResult));
                 break;
             }
-            case LeafCheckResult:
-            default:
-            {
-                // A LeafCheckResult doesn't have any sub-checks.
-                break;
-            }
         }
 
         return newCheckResult;

@@ -1,9 +1,7 @@
-﻿using PatternPal.SyntaxTree.Abstractions.Entities;
-
-namespace PatternPal.SyntaxTree.Abstractions.Members
+﻿namespace PatternPal.SyntaxTree.Abstractions.Members
 {
     /// <summary>
-    /// Interface which denotes a member of an <see cref="IEntity"/>, like constructors, fields etc.
+    /// A member of an <see cref="IEntity"/>, like constructors, fields etc.
     /// </summary>
     public interface IMember : IModified, IChild<IEntity>
     {
