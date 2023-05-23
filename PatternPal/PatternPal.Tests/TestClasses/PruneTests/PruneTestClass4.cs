@@ -7,6 +7,7 @@ internal class UsesPrune4
 {
     PruneTestClass4 pizza() 
     {
-        return new PruneTestClass4();
+        PruneTestClass4 pizza = new PruneTestClass4();
+        return pizza;
     }
 }

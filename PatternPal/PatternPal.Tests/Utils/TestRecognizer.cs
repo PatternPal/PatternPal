@@ -44,14 +44,11 @@ internal class TestRecognizerType : IRecognizer
 
         yield return Class(
             Priority.Knockout,
-            Uses(
+            Method(
                 Priority.Knockout,
-                Method(
+                Type(
                     Priority.Knockout,
-                    Type(
-                        Priority.Knockout,
-                        internalClass
-                    )
+                    internalClass
                 )
             )
         );

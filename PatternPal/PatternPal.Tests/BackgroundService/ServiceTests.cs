@@ -81,7 +81,7 @@ public class Tests
                                        File = Directory.GetCurrentDirectory() + "\\TestClasses\\Singleton\\" + filename
                                    };
 
-        request.Recognizers.Add(Recognizer.Singleton);
+        request.Recognizers.Add(Protos.Recognizer.Singleton);
         request.ShowAllResults = true;
 
         IAsyncStreamReader< RecognizeResponse > responseStream = _client.Recognize(request).ResponseStream;
@@ -112,7 +112,7 @@ public class Tests
                                        File = Directory.GetCurrentDirectory() + "\\TestClasses\\Singleton\\" + filename
                                    };
         // Attach a bridge recognizer
-        request.Recognizers.Add(Recognizer.Bridge);
+        request.Recognizers.Add(Protos.Recognizer.Bridge);
         // Show all results
         request.ShowAllResults = true;
 
@@ -144,7 +144,7 @@ public class Tests
                                    };
 
         // Attach a bridge recognizer
-        request.Recognizers.Add(Recognizer.Bridge);
+        request.Recognizers.Add(Protos.Recognizer.Bridge);
         // Do not show all results
         request.ShowAllResults = false;
 

@@ -19,7 +19,6 @@ patternpal.EventType event_type = 1;
 string event_id = 2;
 string subject_id = 3;
 string tool_instances = 4;
-string code_state_id = 5;
 
 // Optional columns
 string client_timestamp = 6;
@@ -43,12 +42,10 @@ string intervention_type = 23;
 string intervention_message = 24;
 string recognizer_result = 25;
 string recognizer_config = 26;
-bytes data = 27;
+optional string file_path = 27;
 }
 
 // Input arguments for recognizer response
 message LogEventResponse {
-
     string response_message = 1;
-
 }

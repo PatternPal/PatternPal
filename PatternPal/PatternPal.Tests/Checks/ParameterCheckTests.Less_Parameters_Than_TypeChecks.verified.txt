@@ -18,9 +18,10 @@
               MatchedNode: StringTest
             }
           ],
+          CollectionKind: Any,
           DependencyCount: 1,
           MatchedNode: StringTest,
-          NodeCheckCollectionWrapper: false
+          NodeCheckCollectionWrapper: true
         },
         {
           FeedbackMessage: There are less parameters than TypeChecks,

@@ -11,7 +11,7 @@ internal delegate IEntity GetCurrentEntity(
 
 /// <summary>
 /// Represents a check, which is a part of a <see cref="Recognizers.IRecognizer"/> responsible for checking
-/// something in the <see cref="SyntaxGraph"/>, e.g. the modifiers of a method, or the type of a
+/// some properties in the <see cref="SyntaxGraph"/>, e.g. the modifiers of a method, or the type of a
 /// property.
 /// </summary>
 public interface ICheck
@@ -19,7 +19,7 @@ public interface ICheck
     /// <summary>
     /// Function which will return the current <see cref="IEntity"/> being checked.
     /// </summary>
-    /// <param name="ctx">The current <see cref="RecognizerContext"/>.</param>
+    /// <param name="ctx">The current <see cref="IRecognizerContext"/>.</param>
     /// <returns>The current <see cref="IEntity"/> being checked.</returns>
     internal static readonly GetCurrentEntity GetCurrentEntity = ctx => ctx.CurrentEntity;
 
@@ -38,7 +38,7 @@ public interface ICheck
     /// <summary>
     /// Runs the current check on the given <see cref="INode"/>.
     /// </summary>
-    /// <param name="ctx">The current <see cref="RecognizerContext"/>.</param>
+    /// <param name="ctx">The current <see cref="IRecognizerContext"/>.</param>
     /// <param name="node">The <see cref="INode"/> to be checked.</param>
     /// <returns>An <see cref="ICheckResult"/> which represents the result of the check.</returns>
     ICheckResult Check(
@@ -123,11 +123,11 @@ public enum CheckCollectionKind
 internal static class CheckBuilder
 {
     /// <summary>
-    /// Creates a new <see cref="CheckCollection"/> of kind <see cref="CheckCollectionKind.Any"/>.
+    /// Creates a new <see cref="NodeCheck{TNode}"/> of kind <see cref="CheckCollectionKind.Any"/>.
     /// </summary>
-    /// <param name="priority">The <see cref="Priority"/> of this <see cref="CheckCollection"/>.</param>
-    /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="CheckCollection"/>.</param>
-    /// <returns>The created <see cref="CheckCollection"/>.</returns>
+    /// <param name="priority">The <see cref="Priority"/> of this <see cref="NodeCheck{TNode}"/>.</param>
+    /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="NodeCheck{TNode}"/>.</param>
+    /// <returns>The created <see cref="NodeCheck{TNode}"/>.</returns>
     internal static NodeCheck< INode > Any(
         Priority priority,
         params ICheck[ ] checks) => new(
@@ -136,11 +136,11 @@ internal static class CheckBuilder
         CheckCollectionKind.Any );
 
     /// <summary>
-    /// Creates a new <see cref="CheckCollection"/> of kind <see cref="CheckCollectionKind.All"/>
+    /// Creates a new <see cref="NodeCheck{TNode}"/> of kind <see cref="CheckCollectionKind.All"/>
     /// </summary>
-    /// <param name="priority">The <see cref="Priority"/> of this <see cref="CheckCollection"/>.</param>
-    /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="CheckCollection"/>.</param>
-    /// <returns>The created <see cref="CheckCollection"/>.</returns>
+    /// <param name="priority">The <see cref="Priority"/> of this <see cref="NodeCheck{TNode}"/>.</param>
+    /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="NodeCheck{TNode}"/>.</param>
+    /// <returns>The created <see cref="NodeCheck{TNode}"/>.</returns>
     internal static NodeCheck< INode > All(
         Priority priority,
         params ICheck[ ] checks) => new(
@@ -163,7 +163,7 @@ internal static class CheckBuilder
     /// Creates a new <see cref="ClassCheck"/>.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="ClassCheck"/>.</param>
-    /// <param name="checks"/>The sub-<see cref="ICheck"/>s of this <see cref="ClassCheck"/>.</param>
+    /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="ClassCheck"/>.</param>
     /// <returns>The created <see cref="ClassCheck"/>.</returns>
     internal static ClassCheck Class(
         Priority priority,
@@ -175,7 +175,7 @@ internal static class CheckBuilder
     /// Creates a new <see cref="ClassCheck"/> with a <see cref="Modifier"/> check for <see langword="abstract"/> as it first sub-<see cref="ICheck"/>.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="ClassCheck"/>.</param>
-    /// <param name="checks"/>The sub-<see cref="ICheck"/>s of this <see cref="ClassCheck"/>.</param>
+    /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="ClassCheck"/>.</param>
     /// <returns>The created <see cref="ClassCheck"/>.</returns>
     internal static ClassCheck AbstractClass(
         Priority priority,
@@ -191,7 +191,7 @@ internal static class CheckBuilder
     /// Creates a new <see cref="InterfaceCheck"/>.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="InterfaceCheck"/>.</param>
-    /// <param name="checks"/>The sub-<see cref="ICheck"/>s of this <see cref="InterfaceCheck"/>.</param>
+    /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="InterfaceCheck"/>.</param>
     /// <returns>The created <see cref="InterfaceCheck"/>.</returns>
     internal static InterfaceCheck Interface(
         Priority priority,
@@ -203,7 +203,7 @@ internal static class CheckBuilder
     /// Creates a new <see cref="MethodCheck"/>.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="MethodCheck"/>.</param>
-    /// <param name="checks"/>The sub-<see cref="ICheck"/>s of this <see cref="MethodCheck"/>.</param>
+    /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="MethodCheck"/>.</param>
     /// <returns>The created <see cref="MethodCheck"/>.</returns>
     internal static MethodCheck Method(
         Priority priority,
@@ -215,7 +215,7 @@ internal static class CheckBuilder
     /// Creates a new <see cref="PropertyCheck"/>.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="PropertyCheck"/>.</param>
-    /// <param name="checks"/>The sub-<see cref="ICheck"/>s of this <see cref="PropertyCheck"/>.</param>
+    /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="PropertyCheck"/>.</param>
     /// <returns>The created <see cref="PropertyCheck"/>.</returns>
     internal static PropertyCheck Property(
         Priority priority,
@@ -331,7 +331,7 @@ internal static class CheckBuilder
     /// Creates a new <see cref="FieldCheck"/>.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="FieldCheck"/>.</param>
-    /// <param name="checks"/>The sub-<see cref="ICheck"/>s of this <see cref="FieldCheck"/>.</param>
+    /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="FieldCheck"/>.</param>
     /// <returns>The created <see cref="FieldCheck"/>.</returns>
     internal static FieldCheck Field(
         Priority priority,
@@ -343,7 +343,7 @@ internal static class CheckBuilder
     /// Creates a new <see cref="ConstructorCheck"/>.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="ConstructorCheck"/>.</param>
-    /// <param name="checks"/>The sub-<see cref="ICheck"/>s of this <see cref="ConstructorCheck"/>.</param>
+    /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="ConstructorCheck"/>.</param>
     /// <returns>The created <see cref="ConstructorCheck"/>.</returns>
     internal static ConstructorCheck Constructor(
         Priority priority,
@@ -404,7 +404,7 @@ internal sealed class IncorrectNodeTypeException : Exception
     /// </summary>
     /// <param name="node">The <see cref="INode"/> which could not be converted.</param>
     internal static IncorrectNodeTypeException From< T >(
-        INode ? node) => new(
+        INode? node) => new(
         typeof( T ),
         node );
 }

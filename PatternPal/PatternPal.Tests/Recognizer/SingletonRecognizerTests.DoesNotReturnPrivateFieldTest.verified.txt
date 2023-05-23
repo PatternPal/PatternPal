@@ -1,0 +1,97 @@
+﻿[
+  {
+    FeedbackMessage: Found class 'MockClass5',
+    Priority: Low,
+    ChildrenCheckResults: [
+      {
+        FeedbackMessage: ,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found field '_instance',
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: Modifiers correctly implemented.,
+                Correct: true,
+                MatchedNode: _instance
+              },
+              {
+                FeedbackMessage: Found node 'MockClass5',
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: Node 'MockClass5' has correct type,
+                    Correct: true,
+                    DependencyCount: 1,
+                    MatchedNode: MockClass5
+                  }
+                ],
+                CollectionKind: Any,
+                DependencyCount: 1,
+                MatchedNode: MockClass5,
+                NodeCheckCollectionWrapper: true
+              }
+            ],
+            DependencyCount: 1,
+            MatchedNode: _instance,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        DependencyCount: 1,
+        NodeCheckCollectionWrapper: true
+      },
+      {
+        FeedbackMessage: ,
+        Priority: Mid,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found method: GetInstance().,
+            Priority: Mid,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: Found Uses relations for GetInstance().,
+                Priority: Mid,
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: No Uses relation found.,
+                    Priority: Mid,
+                    Correct: false,
+                    DependencyCount: 2,
+                    MatchedNode: _instance
+                  }
+                ],
+                CollectionKind: Any,
+                DependencyCount: 2,
+                MatchedNode: GetInstance,
+                NodeCheckCollectionWrapper: true
+              },
+              {
+                FeedbackMessage: Found node 'MockClass5',
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: Node 'MockClass5' has correct type,
+                    Correct: true,
+                    DependencyCount: 1,
+                    MatchedNode: MockClass5
+                  }
+                ],
+                CollectionKind: Any,
+                DependencyCount: 1,
+                MatchedNode: MockClass5,
+                NodeCheckCollectionWrapper: true
+              }
+            ],
+            DependencyCount: 3,
+            MatchedNode: GetInstance,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        DependencyCount: 3,
+        NodeCheckCollectionWrapper: true
+      }
+    ],
+    DependencyCount: 4,
+    MatchedNode: MockClass5,
+    NodeCheckCollectionWrapper: false
+  }
+]

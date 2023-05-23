@@ -387,6 +387,14 @@ public class RecognizerRunner
             }
         }
 
+        if (resultsToBePruned.Count > 0 && (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count
+                                            || parentCheckResult.CollectionKind == CheckCollectionKind.All))
+        {
+            // Parent becomes empty.
+            parentCheckResult.ChildrenCheckResults.Clear();
+            return true;
+        }
+
         // Prune the results.
         foreach (ICheckResult checkResult in resultsToBePruned)
         {

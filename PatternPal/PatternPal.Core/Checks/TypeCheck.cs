@@ -67,6 +67,8 @@ internal class TypeCheck : CheckBase
                            DependencyCount = DependencyCount,
                            MatchedNode = node,
                            Check = this,
+                           NodeCheckCollectionWrapper = true,
+                           CollectionKind = CheckCollectionKind.Any
                        };
             },
             getCurrentEntity =>
@@ -97,6 +99,8 @@ internal class TypeCheck : CheckBase
                     DependencyCount = DependencyCount,
                     MatchedNode = node,
                     Check = this,
+                    NodeCheckCollectionWrapper = true,
+                    CollectionKind = CheckCollectionKind.Any
                 };
             });
     }

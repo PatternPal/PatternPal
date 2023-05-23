@@ -1,4 +1,4 @@
-﻿#region
+#region
 
 using static PatternPal.Core.Checks.CheckBuilder;
 
@@ -52,7 +52,7 @@ public class RelationCheckTests
         //the Uses class node from the syntax graph 
         INode usesNode = graph.GetAll()[ "Uses" ];
         //the UsedFunction node from the syntax graph 
-        INode usedNode = Relations.GetMemberFromGraph(
+        INode usedNode = EntityNodeUtils.GetMemberFromGraph<INode>(
             graph,
             "Used",
             "UsedFunction");
@@ -86,12 +86,12 @@ public class RelationCheckTests
         IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
 
         //the UsesFunction node from the syntax graph 
-        INode usesNode = Relations.GetMemberFromGraph(
+        INode usesNode = EntityNodeUtils.GetMemberFromGraph<INode>(
             graph,
             "Uses",
             "UsesFunction");
         //the UsedFunction node from the syntax graph 
-        INode usedNode = Relations.GetMemberFromGraph(
+        INode usedNode = EntityNodeUtils.GetMemberFromGraph<INode>(
             graph,
             "Used",
             "UsedFunction");

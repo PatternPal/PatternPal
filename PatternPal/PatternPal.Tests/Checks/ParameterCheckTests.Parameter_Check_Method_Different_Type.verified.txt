@@ -18,9 +18,10 @@
               MatchedNode: IntTest
             }
           ],
+          CollectionKind: Any,
           DependencyCount: 1,
           MatchedNode: StringTest,
-          NodeCheckCollectionWrapper: false
+          NodeCheckCollectionWrapper: true
         }
       ],
       DependencyCount: 1,

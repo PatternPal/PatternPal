@@ -1,0 +1,169 @@
+﻿[
+  {
+    FeedbackMessage: Found class 'MockClass4',
+    Priority: Low,
+    ChildrenCheckResults: [
+      {
+        FeedbackMessage: ,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found constructor: MockClass4().,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: Found the required checks for: MockClass4().,
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: Modifiers correctly implemented.,
+                    Correct: true,
+                    MatchedNode: MockClass4
+                  },
+                  {
+                    FeedbackMessage: The node MockClass4() does not have the protected modifier.,
+                    Correct: false,
+                    MatchedNode: MockClass4
+                  }
+                ],
+                CollectionKind: Any,
+                MatchedNode: MockClass4,
+                NodeCheckCollectionWrapper: false
+              }
+            ],
+            MatchedNode: MockClass4,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        NodeCheckCollectionWrapper: true
+      },
+      {
+        FeedbackMessage: ,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found field '_instance',
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: Modifiers correctly implemented.,
+                Correct: true,
+                MatchedNode: _instance
+              },
+              {
+                FeedbackMessage: Found node 'MockClass4',
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: Node 'MockClass4' has correct type,
+                    Correct: true,
+                    DependencyCount: 1,
+                    MatchedNode: MockClass4
+                  }
+                ],
+                CollectionKind: Any,
+                DependencyCount: 1,
+                MatchedNode: MockClass4,
+                NodeCheckCollectionWrapper: true
+              }
+            ],
+            DependencyCount: 1,
+            MatchedNode: _instance,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        DependencyCount: 1,
+        NodeCheckCollectionWrapper: true
+      },
+      {
+        FeedbackMessage: ,
+        Priority: High,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found method: GetInstance().,
+            Priority: High,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: Modifiers correctly implemented.,
+                Correct: true,
+                MatchedNode: GetInstance
+              },
+              {
+                FeedbackMessage: Found the required checks for: GetInstance().,
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: Modifiers correctly implemented.,
+                    Correct: true,
+                    MatchedNode: GetInstance
+                  },
+                  {
+                    FeedbackMessage: The node GetInstance() does not have the internal modifier.,
+                    Correct: false,
+                    MatchedNode: GetInstance
+                  }
+                ],
+                CollectionKind: Any,
+                MatchedNode: GetInstance,
+                NodeCheckCollectionWrapper: false
+              },
+              {
+                FeedbackMessage: Found Uses relations for GetInstance().,
+                Priority: Mid,
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: No Uses relation found.,
+                    Priority: Mid,
+                    Correct: false,
+                    DependencyCount: 1,
+                    MatchedNode: MockClass4
+                  }
+                ],
+                CollectionKind: Any,
+                DependencyCount: 1,
+                MatchedNode: GetInstance,
+                NodeCheckCollectionWrapper: true
+              },
+              {
+                FeedbackMessage: Found Uses relations for GetInstance().,
+                Priority: Mid,
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: Node GetInstance() has a Uses relation with node _instance,
+                    Priority: Mid,
+                    Correct: true,
+                    DependencyCount: 2,
+                    MatchedNode: _instance
+                  }
+                ],
+                CollectionKind: Any,
+                DependencyCount: 2,
+                MatchedNode: GetInstance,
+                NodeCheckCollectionWrapper: true
+              },
+              {
+                FeedbackMessage: Found node 'MockClass4',
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: Node 'MockClass4' has correct type,
+                    Correct: true,
+                    DependencyCount: 1,
+                    MatchedNode: MockClass4
+                  }
+                ],
+                CollectionKind: Any,
+                DependencyCount: 1,
+                MatchedNode: MockClass4,
+                NodeCheckCollectionWrapper: true
+              }
+            ],
+            DependencyCount: 4,
+            MatchedNode: GetInstance,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        DependencyCount: 4,
+        NodeCheckCollectionWrapper: true
+      }
+    ],
+    DependencyCount: 5,
+    MatchedNode: MockClass4,
+    NodeCheckCollectionWrapper: false
+  }
+]

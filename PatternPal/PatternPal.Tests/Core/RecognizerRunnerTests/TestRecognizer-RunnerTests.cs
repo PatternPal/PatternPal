@@ -9,10 +9,10 @@ namespace PatternPal.Tests.Core.RecognizerRunnerTests;
 internal class TestRecognizer_RunnerTests
 {
     [Test]
-    [TestCase("PruneTestClass1.cs")]
     [TestCase("PruneTestClass2.cs")]
     [TestCase("PruneTestClass3.cs")]
-    public Task Knockout_Pruning_Relation(string filename)
+    [TestCase("PruneTestClass1.cs")]
+    public Task Knockout_Pruning(string filename)
     {
         //Create testRecognizer
         string code = FileUtils.FileToString("PruneTests\\" + filename);

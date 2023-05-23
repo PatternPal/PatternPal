@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PatternPal.Regonizers\PatternPal.Recognizers.csproj" />
+    <ProjectReference Include="..\PatternPal.Recognizers\PatternPal.Recognizers.csproj" />
   </ItemGroup>
 
   <ItemGroup>

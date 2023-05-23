@@ -1,5 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#region 
+
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.Shell;
@@ -8,10 +9,9 @@ using EnvDTE;
 using EnvDTE80;
 using PatternPal.Protos;
 using System.Threading;
-using System.Collections;
-using System.Linq;
-using Microsoft.VisualStudio.Shell.Interop;
+using System.Collections.Generic;
 
+#endregion
 
 namespace PatternPal.Extension.Commands
 {
@@ -181,12 +181,11 @@ namespace PatternPal.Extension.Commands
         internal static void OnSessionStart()
         {
             SessionId = Guid.NewGuid().ToString();
-
+           
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtSessionStart;
-            LogProviderService.LogProviderServiceClient client =
-                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-            LogEventResponse response = client.LogEvent(request);
+
+            LogEventResponse response = PushLog(request);
         }
 
         /// <summary>
@@ -196,9 +195,8 @@ namespace PatternPal.Extension.Commands
         {
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtSessionEnd;
-            LogProviderService.LogProviderServiceClient client =
-                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-            LogEventResponse response = client.LogEvent(request);
+
+            LogEventResponse response = PushLog(request);
         }
 
         /// <summary>
@@ -214,9 +212,8 @@ namespace PatternPal.Extension.Commands
             request.CompileMessageData = compileMessageData;
             request.SourceLocation = sourceLocation;
             request.CodeStateSection = codeStateSection;
-            LogProviderService.LogProviderServiceClient client =
-                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-            LogEventResponse response = client.LogEvent(request);
+
+            LogEventResponse response = PushLog(request);
         }
 
         /// <summary>
@@ -256,33 +253,27 @@ namespace PatternPal.Extension.Commands
                 request.ExecutionResult = ExecutionResult.ExtSucces;
             }
 
-            LogProviderService.LogProviderServiceClient client =
-                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-            LogEventResponse response = client.LogEvent(request);
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            LogEventResponse response = PushLog(request);
         }
 
 
         /// <summary>
         /// The event handler for when recognizing software patterns in the extension.
         /// </summary>
-        public static void OnPatternRecognized(RecognizeRequest recognizeRequestrequest, IList<RecognizeResult> recognizeResultsresponse)
+        public static void OnPatternRecognized(RecognizeRequest recognizeRequest, IList<RecognizeResult> recognizeResults)
         {
+            if (_package == null || !_package.DoLogData) return; 
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtXRecognizerRun;
-            string config = recognizeRequestrequest.Recognizers.ToString();
+            string config = recognizeRequest.Recognizers.ToString();
 
             request.RecognizerConfig = config;
-            foreach (RecognizeResult result in recognizeResultsresponse)
+            foreach (RecognizeResult result in recognizeResults)
             {
                 request.RecognizerResult += result.ToString();
             }
 
-
-
-            LogProviderService.LogProviderServiceClient client =
-                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-            LogEventResponse response = client.LogEvent(request);
+            LogEventResponse response = PushLog(request);
         }
 
         #endregion
@@ -297,6 +288,17 @@ namespace PatternPal.Extension.Commands
             {
                 EventId = Guid.NewGuid().ToString(), SubjectId = GetSubjectId(), SessionId = _sessionId
             };
+        }
+
+        /// <summary>
+        /// Sends the log request to the background service in order to be processed to the server.
+        /// </summary>
+        private static LogEventResponse PushLog(LogEventRequest request)
+        {
+            LogProviderService.LogProviderServiceClient client =
+                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
+
+            return client.LogEvent(request);
         }
 
         /// <summary>
@@ -331,12 +333,12 @@ namespace PatternPal.Extension.Commands
             return File.ReadAllText(filePath);
         }
 
+        // TODO Separate utility because of duplication with extension
         /// <summary>
-        /// Gets the relative path when given an absolute path and a filename.
+        /// Gets the relative path when given an absolute directory path and a filename.
         /// </summary>
-        /// <param name="relativeTo"> The absolute path to the root folder of the solution or project</param>
+        /// <param name="relativeTo"> The absolute path to the root folder</param>
         /// <param name="path">The absolute path to the specific file</param>
-        /// <returns></returns>
         public static string GetRelativePath(string relativeTo, string path)
         {
             Uri uri = new Uri(relativeTo);
@@ -352,7 +354,7 @@ namespace PatternPal.Extension.Commands
 
         /// <summary>
         /// Cycles through all active projects and log the given event for each of these projects.
-        /// </summary>e
+        /// </summary>
         private static void LogEachProject(EventType eventType)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
@@ -365,18 +367,28 @@ namespace PatternPal.Extension.Commands
                     continue;
                 }
 
+                // TODO This catches miscellanious projects without a defined project.Fullname, but we should investigate where this
+                //  problem derives from.
+                if (project.FullName == null || !File.Exists((project.FullName)))
+                {
+                    continue;
+                }
+
                 LogEventRequest request = CreateStandardLog();
                 request.EventType = eventType;
-                request.ProjectId = project.FullName;
 
-                LogProviderService.LogProviderServiceClient client =
-                    new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-                LogEventResponse response = client.LogEvent(request);
+                // Since LogEachProject is only called by either Project.Open or Project.Close,
+                // we include the full CodeState.
+                request.ProjectId = project.UniqueName;
+                request.FilePath = Path.GetDirectoryName(project.FullName);
+
+                LogEventResponse response = PushLog(request);
             }
         }
 
 
 
+        /// <summary>
         /// Event handler for when an exception is unhandled. This is used to determine in the user's last debug session
         /// whether there were any unhandled exceptions. Although creating a separate method might seem redundant
         /// for the actual logic used here, it is necessary for the adding and removing from any used event listeners.
