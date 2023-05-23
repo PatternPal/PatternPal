@@ -1,7 +1,7 @@
 ﻿namespace PatternPal.Core.Checks;
 
 /// <summary>
-/// Checks if the parameters of an <see cref="IParameterized"/> are in accorance with the types in <see cref="_parameterTypes"/>.
+/// Checks if the parameters of an <see cref="IParameterized"/> are in accordance with the types in <see cref="_parameterTypes"/>.
 /// </summary>
 internal class ParameterCheck : CheckBase
 {
@@ -38,6 +38,7 @@ internal class ParameterCheck : CheckBase
         _parameterTypes = parameterTypes;
     }
 
+    /// <inheritdoc />
     public override ICheckResult Check(
         IRecognizerContext ctx,
         INode node)
@@ -78,22 +79,21 @@ internal class ParameterCheck : CheckBase
                    };
         }
 
-        // For each typecheck, check whether one of the parameters of node has the correct type
+        // For each typeCheck, check whether one of the parameters of node has the correct type
         // and if so remove from node parameters list.
-        foreach (TypeCheck typecheck in _parameterTypes)
+        foreach (TypeCheck typeCheck in _parameterTypes)
         {
             bool noneCorrect = true;
 
             // There are no parameters to check with.   
             if (nodeParameters.Count == 0)
             {
-                // TODO
                 ICheckResult temp = new LeafCheckResult
                                     {
                                         Priority = Priority,
                                         Correct = false,
                                         FeedbackMessage = "There are less parameters than TypeChecks",
-                                        DependencyCount = typecheck.DependencyCount,
+                                        DependencyCount = typeCheck.DependencyCount,
                                         MatchedNode = node,
                                         Check = this,
                                     };
@@ -105,9 +105,8 @@ internal class ParameterCheck : CheckBase
                  x < nodeParameters.Count();
                  x++)
             {
-                var test = nodeParameters[ x ];
-                ICheckResult tempCheck;
-                tempCheck = typecheck.Check(
+                IEntity test = nodeParameters[ x ];
+                ICheckResult tempCheck = typeCheck.Check(
                     ctx,
                     nodeParameters.ElementAt(x));
 
@@ -126,26 +125,16 @@ internal class ParameterCheck : CheckBase
                     }
                     case NodeCheckResult nodeCheckResult:
                     {
-                        bool anyTrue = false;
-                        foreach (LeafCheckResult subcheck in nodeCheckResult.ChildrenCheckResults)
-                        {
-                            // One of the subchecks was correct.
-                            if (subcheck.Correct)
-                            {
-                                anyTrue = true;
-                            }
-                        }
+                        bool anyTrue = nodeCheckResult.ChildrenCheckResults.OfType<LeafCheckResult>().Any(subCheck => subCheck.Correct);
+
                         if (anyTrue)
                         {
                             subCheckResultsResults.Add(tempCheck);
                             nodeParameters.RemoveAt(x);
                             noneCorrect = false;
-                            break;
                         }
-                        else
-                        {
-                            break;
-                        }
+                        break;
+                        
                     }
                 }
 
