@@ -48,7 +48,7 @@ check corresponds to a @PatternPal.Core.NodeCheckResult. It has a list of
 
 ### CheckBuilder
 
-The @PatternPal.Core.Checks.CheckBuilder is a static class that makes it possible to make a
+The @PatternPal.Core.Checks.ICheckBuilder is a static class that makes it possible to make a
 collection of checks for a recognizer. It contains a number of static
 methods, each one for one specific check, like `Class()` which returns a
 @PatternPal.Core.Checks.ClassCheck, and `Method()` which returns a @PatternPal.Core.Checks.MethodCheck. These methods can
