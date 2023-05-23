@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="LoggingService\Resources\**" />
+    <EmbeddedResource Remove="LoggingService\Resources\**" />
+    <None Remove="LoggingService\Resources\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="coverlet.msbuild" Version="3.2.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -29,6 +35,7 @@
     <ProjectReference Include="..\PatternPal.Core\PatternPal.Core.csproj" />
     <ProjectReference Include="..\PatternPal.Regonizers\PatternPal.Recognizers.csproj" />
     <ProjectReference Include="..\PatternPal.StepByStep\PatternPal.StepByStep.csproj" />
+    <ProjectReference Include="..\PatternPal\PatternPal.csproj" />
   </ItemGroup>
 
   <ItemGroup>
