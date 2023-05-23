@@ -15,10 +15,7 @@ namespace PatternPal.Tests.Recognizer
             // Create a graph of 5 classes with 4 different constructors with private, protected,
             // public and internal modifiers, and one with both private and internal
             SyntaxGraph graph = EntityNodeUtils.CreateMultipleConstructors();
-            RecognizerContext4Tests ctx = RecognizerContext4Tests.Create(graph);
-
             SingletonRecognizer sr = new();
-            List<ICheckResult> results = new();
 
             // Step 1 of Singleton StepByStep
             ICheck onlyPrivateProtectedConstructorCheck =
@@ -29,17 +26,7 @@ namespace PatternPal.Tests.Recognizer
                 Priority.Low,
                 onlyPrivateProtectedConstructorCheck);
 
-            Dictionary<string, IEntity> entireTree = graph.GetAll();
-
-            foreach (KeyValuePair<string, IEntity> current in entireTree)
-            {
-                ICheckResult res = classOnlyPrivateProtectedConstructorCheck.Check(
-                    ctx,
-                    current.Value);
-                results.Add(res);
-            }
-
-            return Verifier.Verify(results);
+            return TestICheck(classOnlyPrivateProtectedConstructorCheck, graph);
         }
 
         [Test]
@@ -48,10 +35,7 @@ namespace PatternPal.Tests.Recognizer
             // Create a graph of 4 classes with 4 different fields where the first adheres to all 3 requirements
             // and the last three are all missing one specific requirement
             SyntaxGraph graph = EntityNodeUtils.CreateMultipleFields();
-            RecognizerContext4Tests ctx = RecognizerContext4Tests.Create(graph);
-
             SingletonRecognizer sr = new();
-            List<ICheckResult> results = new();
 
             // Step 2 of Singleton StepByStep
             ICheck hasCorrectFieldCheck =
@@ -62,17 +46,7 @@ namespace PatternPal.Tests.Recognizer
                 Priority.Low,
                 hasCorrectFieldCheck);
 
-            Dictionary<string, IEntity> entireTree = graph.GetAll();
-
-            foreach (KeyValuePair<string, IEntity> current in entireTree)
-            {
-                ICheckResult res = classHasCorrectFieldCheck.Check(
-                    ctx,
-                    current.Value);
-                results.Add(res);
-            }
-
-            return Verifier.Verify(results);
+            return TestICheck(classHasCorrectFieldCheck, graph);
         }
 
         [Test]
@@ -80,10 +54,7 @@ namespace PatternPal.Tests.Recognizer
         {
             // Create a graph of a singleton and check if its methods have the correct modifiers
             SyntaxGraph graph = EntityNodeUtils.CreateCorrectSingleton();
-            RecognizerContext4Tests ctx = RecognizerContext4Tests.Create(graph);
-
             SingletonRecognizer sr = new();
-            List<ICheckResult> results = new();
 
             // Method to check
             ICheck[] hasStaticPublicInternalMethod =
@@ -98,27 +69,14 @@ namespace PatternPal.Tests.Recognizer
                 )
             );
 
-            Dictionary<string, IEntity> entireTree = graph.GetAll();
-
-            foreach (KeyValuePair<string, IEntity> current in entireTree)
-            {
-                ICheckResult res = classHasStaticPublicInternalMethod.Check(
-                    ctx,
-                    current.Value);
-                results.Add(res);
-            }
-
-            return Verifier.Verify(results);
+            return TestICheck(classHasStaticPublicInternalMethod, graph);
         }
         [Test]
         public Task HasWrongMethodModifiersTest()
         {
             // Create two graphs of two classes where one of the modifiers of methods are missing
             SyntaxGraph graph = EntityNodeUtils.CreateSingletonWrongMethodModifiers();
-            RecognizerContext4Tests ctx = RecognizerContext4Tests.Create(graph);
-
             SingletonRecognizer sr = new();
-            List<ICheckResult> results = new();
 
             // Method to check
             ICheck[] hasStaticPublicInternalMethod =
@@ -133,17 +91,7 @@ namespace PatternPal.Tests.Recognizer
                 )
             );
 
-            Dictionary<string, IEntity> entireTree = graph.GetAll();
-
-            foreach (KeyValuePair<string, IEntity> current in entireTree)
-            {
-                ICheckResult res = classHasStaticPublicInternalMethod.Check(
-                    ctx,
-                    current.Value);
-                results.Add(res);
-            }
-
-            return Verifier.Verify(results);
+            return TestICheck(classHasStaticPublicInternalMethod, graph);
         }
 
         [Test]
@@ -151,10 +99,7 @@ namespace PatternPal.Tests.Recognizer
         {
             // Create a graph with a correct private constructor call
             SyntaxGraph graph = EntityNodeUtils.CreateCorrectSingleton();
-            RecognizerContext4Tests ctx = RecognizerContext4Tests.Create(graph);
-
             SingletonRecognizer sr = new();
-            List<ICheckResult> results = new();
 
             sr.OnlyPrivateProtectedConstructor(out ConstructorCheck constructor);
 
@@ -171,17 +116,8 @@ namespace PatternPal.Tests.Recognizer
                     callsPrivateProtectedConstructor
                 )
             );
-            Dictionary<string, IEntity> entireTree = graph.GetAll();
 
-            foreach (KeyValuePair<string, IEntity> current in entireTree)
-            {
-                ICheckResult res = classCallsPrivateProtectedConstructor.Check(
-                    ctx,
-                    current.Value);
-                results.Add(res);
-            }
-
-            return Verifier.Verify(results);
+            return TestICheck(classCallsPrivateProtectedConstructor, graph);
         }
 
         [Test]
@@ -190,10 +126,7 @@ namespace PatternPal.Tests.Recognizer
             // Create a graph of 5 classes with 5 different singleton implementations where the first and the last two
             // adheres to all requirements and the second and third are missing one specific modifier
             SyntaxGraph graph = EntityNodeUtils.CreateSingletonNoConstructorCall();
-            RecognizerContext4Tests ctx = RecognizerContext4Tests.Create(graph);
-
             SingletonRecognizer sr = new();
-            List<ICheckResult> results = new();
 
             sr.OnlyPrivateProtectedConstructor(out ConstructorCheck constructor);
 
@@ -210,17 +143,8 @@ namespace PatternPal.Tests.Recognizer
                     callsPrivateProtectedConstructor
                 )
             );
-            Dictionary<string, IEntity> entireTree = graph.GetAll();
 
-            foreach (KeyValuePair<string, IEntity> current in entireTree)
-            {
-                ICheckResult res = classCallsPrivateProtectedConstructor.Check(
-                    ctx,
-                    current.Value);
-                results.Add(res);
-            }
-
-            return Verifier.Verify(results);
+            return TestICheck(classCallsPrivateProtectedConstructor, graph);
         }
 
 
@@ -229,10 +153,7 @@ namespace PatternPal.Tests.Recognizer
         {
             // Create a graph of a correct singleton which returns its private field
             SyntaxGraph graph = EntityNodeUtils.CreateCorrectSingleton();
-            RecognizerContext4Tests ctx = RecognizerContext4Tests.Create(graph);
-
             SingletonRecognizer sr = new();
-            List<ICheckResult> results = new();
 
             FieldCheck staticPrivateFieldOfTypeClass =
                 sr.StaticPrivateFieldOfTypeClass();
@@ -250,17 +171,7 @@ namespace PatternPal.Tests.Recognizer
                     returnsPrivateField
                 )
             );
-            Dictionary<string, IEntity> entireTree = graph.GetAll();
-
-            foreach (KeyValuePair<string, IEntity> current in entireTree)
-            {
-                ICheckResult res = classReturnsPrivateField.Check(
-                    ctx,
-                    current.Value);
-                results.Add(res);
-            }
-
-            return Verifier.Verify(results);
+            return TestICheck(classReturnsPrivateField, graph);
         }
 
         [Test]
@@ -268,11 +179,8 @@ namespace PatternPal.Tests.Recognizer
         {
             // Create a graph of an incorrect singleton which does not return its private field
             SyntaxGraph graph = EntityNodeUtils.CreateSingletonNoFieldUsage();
-            RecognizerContext4Tests ctx = RecognizerContext4Tests.Create(graph);
-
             SingletonRecognizer sr = new();
-            List<ICheckResult> results = new();
-
+            
             FieldCheck staticPrivateFieldOfTypeClass =
                 sr.StaticPrivateFieldOfTypeClass();
 
@@ -289,17 +197,8 @@ namespace PatternPal.Tests.Recognizer
                     returnsPrivateField
                 )
             );
-            Dictionary<string, IEntity> entireTree = graph.GetAll();
 
-            foreach (KeyValuePair<string, IEntity> current in entireTree)
-            {
-                ICheckResult res = classReturnsPrivateField.Check(
-                    ctx,
-                    current.Value);
-                results.Add(res);
-            }
-
-            return Verifier.Verify(results);
+            return TestICheck(classReturnsPrivateField, graph);
         }
 
         [Test]
@@ -307,12 +206,8 @@ namespace PatternPal.Tests.Recognizer
         {
             // Create a graph of 5 classes with 5 different singleton implementations where the first adheres to all requirements
             // and the last four are all missing one specific requirement
-
             SyntaxGraph graph = EntityNodeUtils.CreateCorrectSingleton();
-            RecognizerContext4Tests ctx = RecognizerContext4Tests.Create(graph);
-
             SingletonRecognizer sr = new();
-            List<ICheckResult> results = new();
 
             sr.OnlyPrivateProtectedConstructor(out ConstructorCheck privateProtectedConstructorCheck);
 
@@ -323,29 +218,15 @@ namespace PatternPal.Tests.Recognizer
                     sr.StaticPrivateFieldOfTypeClass(),
                     out _);
 
-            Dictionary<string, IEntity> entireTree = graph.GetAll();
-
-            foreach (KeyValuePair<string, IEntity> current in entireTree)
-            {
-                ICheckResult res =  hasMethodActsAsConstructor.Check(
-                    ctx,
-                    current.Value);
-                results.Add(res);
-            }
-
-            return Verifier.Verify(results);
+            return TestICheck(hasMethodActsAsConstructor, graph);
         }
 
         [Test]
         public Task StaticMethodActsAsConstructorTestWrongModifiers()
         {
             // Create a graph of a singleton class with wrong method modifiers
-
             SyntaxGraph graph = EntityNodeUtils.CreateSingletonWrongMethodModifiers();
-            RecognizerContext4Tests ctx = RecognizerContext4Tests.Create(graph);
-
             SingletonRecognizer sr = new();
-            List<ICheckResult> results = new();
 
             sr.OnlyPrivateProtectedConstructor(out ConstructorCheck privateProtectedConstructorCheck);
 
@@ -356,29 +237,15 @@ namespace PatternPal.Tests.Recognizer
                     sr.StaticPrivateFieldOfTypeClass(),
                     out _);
 
-            Dictionary<string, IEntity> entireTree = graph.GetAll();
-
-            foreach (KeyValuePair<string, IEntity> current in entireTree)
-            {
-                ICheckResult res = hasMethodActsAsConstructor.Check(
-                    ctx,
-                    current.Value);
-                results.Add(res);
-            }
-
-            return Verifier.Verify(results);
+            return TestICheck(hasMethodActsAsConstructor, graph);
         }
 
         [Test]
         public Task StaticMethodActsAsConstructorTestNoConstructorCall()
         {
             // Create a graph of a singleton class with no call to the constructor
-
             SyntaxGraph graph = EntityNodeUtils.CreateSingletonNoConstructorCall();
-            RecognizerContext4Tests ctx = RecognizerContext4Tests.Create(graph);
-
             SingletonRecognizer sr = new();
-            List<ICheckResult> results = new();
 
             sr.OnlyPrivateProtectedConstructor(out ConstructorCheck privateProtectedConstructorCheck);
 
@@ -389,29 +256,15 @@ namespace PatternPal.Tests.Recognizer
                     sr.StaticPrivateFieldOfTypeClass(),
                     out _);
 
-            Dictionary<string, IEntity> entireTree = graph.GetAll();
-
-            foreach (KeyValuePair<string, IEntity> current in entireTree)
-            {
-                ICheckResult res = hasMethodActsAsConstructor.Check(
-                    ctx,
-                    current.Value);
-                results.Add(res);
-            }
-
-            return Verifier.Verify(results);
+            return TestICheck(hasMethodActsAsConstructor, graph);
         }
 
         [Test]
         public Task StaticMethodActsAsConstructorTestNoFieldUsage()
         {
             // Create a graph of a singleton class with no usage of the private field
-
             SyntaxGraph graph = EntityNodeUtils.CreateSingletonNoFieldUsage();
-            RecognizerContext4Tests ctx = RecognizerContext4Tests.Create(graph);
-
             SingletonRecognizer sr = new();
-            List<ICheckResult> results = new();
 
             sr.OnlyPrivateProtectedConstructor(out ConstructorCheck privateProtectedConstructorCheck);
 
@@ -422,17 +275,7 @@ namespace PatternPal.Tests.Recognizer
                     sr.StaticPrivateFieldOfTypeClass(),
                     out _);
 
-            Dictionary<string, IEntity> entireTree = graph.GetAll();
-
-            foreach (KeyValuePair<string, IEntity> current in entireTree)
-            {
-                ICheckResult res = hasMethodActsAsConstructor.Check(
-                    ctx,
-                    current.Value);
-                results.Add(res);
-            }
-
-            return Verifier.Verify(results);
+            return TestICheck(hasMethodActsAsConstructor, graph);
         }
 
         [Test]
@@ -440,10 +283,7 @@ namespace PatternPal.Tests.Recognizer
         {
             // Create a graph of a singleton class where the client uses the singleton
             SyntaxGraph graph = EntityNodeUtils.CreateCorrectClientSingleton();
-            RecognizerContext4Tests ctx = RecognizerContext4Tests.Create(graph);
-
             SingletonRecognizer sr = new();
-            List<ICheckResult> results = new();
 
             //Method which the client should call
             MethodCheck publicInternalMethod = Method(
@@ -465,17 +305,7 @@ namespace PatternPal.Tests.Recognizer
                 clientCallsMethodActsAsConstructor
             );
 
-            Dictionary<string, IEntity> entireTree = graph.GetAll();
-
-            foreach (KeyValuePair<string, IEntity> current in entireTree)
-            {
-                ICheckResult res = checkBothClasses.Check(
-                    ctx,
-                    current.Value);
-                results.Add(res);
-            }
-
-            return Verifier.Verify(results);
+            return TestICheck(checkBothClasses, graph);
         }
 
         [Test]
@@ -483,10 +313,7 @@ namespace PatternPal.Tests.Recognizer
         {
             // Create a graph of a singleton class where the client does not use the singleton
             SyntaxGraph graph = EntityNodeUtils.CreateWrongClientSingleton();
-            RecognizerContext4Tests ctx = RecognizerContext4Tests.Create(graph);
-
             SingletonRecognizer sr = new();
-            List<ICheckResult> results = new();
 
             //Method which the client should call
             MethodCheck publicInternalMethod = Method(
@@ -508,11 +335,19 @@ namespace PatternPal.Tests.Recognizer
                 clientCallsMethodActsAsConstructor
             );
 
+            return TestICheck(checkBothClasses, graph);
+        }
+
+
+        Task TestICheck(ICheck check, SyntaxGraph graph)
+        {
+            RecognizerContext4Tests ctx = RecognizerContext4Tests.Create(graph);
             Dictionary<string, IEntity> entireTree = graph.GetAll();
+            List<ICheckResult> results = new();
 
             foreach (KeyValuePair<string, IEntity> current in entireTree)
             {
-                ICheckResult res = checkBothClasses.Check(
+                ICheckResult res = check.Check(
                     ctx,
                     current.Value);
                 results.Add(res);
