@@ -27,7 +27,7 @@
   <ItemGroup>
     <ProjectReference Include="..\PatternPal.CommonResources\PatternPal.CommonResources.csproj" />
     <ProjectReference Include="..\PatternPal.Core\PatternPal.Core.csproj" />
-    <ProjectReference Include="..\PatternPal.Regonizers\PatternPal.Recognizers.csproj" />
+    <ProjectReference Include="..\PatternPal.Recognizers\PatternPal.Recognizers.csproj" />
     <ProjectReference Include="..\PatternPal.StepByStep\PatternPal.StepByStep.csproj" />
   </ItemGroup>
 
