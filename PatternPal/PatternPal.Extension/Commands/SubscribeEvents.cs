@@ -222,8 +222,6 @@ namespace PatternPal.Extension.Commands
         internal static void OnProjectOpen()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            string test = _dte.Solution.FullName;
-
             LogEachProject(EventType.EvtProjectOpen);
         }
 
@@ -364,6 +362,13 @@ namespace PatternPal.Extension.Commands
             foreach (Project project in projects)
             {
                 if (project == null)
+                {
+                    continue;
+                }
+
+                // TODO This catches miscellanious projects without a defined project.Fullname, but we should investigate where this
+                //  problem derives from.
+                if (project.FullName == null || !File.Exists((project.FullName)))
                 {
                     continue;
                 }
