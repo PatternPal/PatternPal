@@ -90,7 +90,7 @@ by port mapping using the -p flag whenever running 'docker run
 container. In our case the ports relevant are 443 and 80 for a good gRPC
 connection. So dependent on what ports you've setup during network
 configuration the command should be as following: 'docker run -d -p
-8080:80 -p 8443:443 siem2l/patternpalloggingserver:latest'.
+8080:80 -p 8443:443 --name patternpal siem2l/patternpalloggingserver:latest'.
 
 ### Configuration
 
