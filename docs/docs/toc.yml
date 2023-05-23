@@ -2,15 +2,17 @@
 - name: Home
   href: ../index.md
 
-- name: Context explanation 
+- name: Context explanation
 - name: Singleton
   href: context/singleton.md
 - name: Strategy
   href: context/strategy.md
 
 - name: Technical explanation
-- name: Recognizer 
+- name: Recognizer
   href: technical/recognizer.md
+- name: Recognizer Runner
+  href: technical/recognizer_runner.md
 - name: Checks
   href: technical/checks.md
 - name: Syntax Graph
@@ -21,5 +23,3 @@
   href: how-to/implement_recognizer.md
 - name: Implement an Extension
   href: how-to/implement_extension.md
-
-
