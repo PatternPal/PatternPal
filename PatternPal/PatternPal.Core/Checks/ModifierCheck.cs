@@ -55,6 +55,7 @@ internal class ModifierCheck : CheckBase
                            Priority = Priority,
                            DependencyCount = DependencyCount,
                            MatchedNode = node,
+                           Check = this,
                        };
             }
         }
@@ -66,6 +67,7 @@ internal class ModifierCheck : CheckBase
                    Priority = Priority,
                    DependencyCount = DependencyCount,
                    MatchedNode = node,
+                   Check = this,
                };
     }
 }

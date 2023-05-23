@@ -27,6 +27,17 @@ public interface ICheckResult
     /// The <see cref="INode"/> on which the <see cref="ICheck"/> was run.
     /// </summary>
     INode ? MatchedNode { get; init; }
+
+    /// <summary>
+    /// The <see cref="ICheck"/> from which this <see cref="ICheckResult"/> originates.
+    /// </summary>
+    [JsonIgnore]
+    ICheck Check { get; init; }
+
+    /// <summary>
+    /// Whether the result is marked as to-be-pruned
+    /// </summary>
+    bool Pruned { get; set; }
 }
 
 /// <summary>
@@ -50,6 +61,26 @@ public class LeafCheckResult : ICheckResult
 
     /// <inheritdoc />
     public required INode ? MatchedNode { get; init; }
+
+    /// <inheritdoc />
+    [JsonIgnore]
+    public required ICheck Check { get; init; }
+
+    /// <inheritdoc />
+    public bool Pruned { get; set; }
+
+    /// <summary>
+    /// If this <see cref="LeafCheckResult"/> belongs to a <see cref="RelationCheck"/>,
+    /// this <see cref="ICheck"/> gets set to the <see cref="ICheck"/> which searches
+    /// for the <see cref="INode"/> to which there should be a relation.
+    /// </summary>
+    /// <example>
+    /// In the Strategy pattern, If this is the LeafCheckResult belonging to the
+    /// RelationCheck which checks whether their is a uses relation from Context
+    /// to Strategy, this field gets set to to Check which searches for the Strategy
+    /// </example>
+    [JsonIgnore]
+    public ICheck ? RelatedCheck { get; init; }
 }
 
 /// <summary>
@@ -73,6 +104,13 @@ public class NotCheckResult : ICheckResult
 
     /// <inheritdoc />
     public required INode ? MatchedNode { get; init; }
+
+    /// <inheritdoc />
+    [JsonIgnore]
+    public required ICheck Check { get; init; }
+
+    /// <inheritdoc />
+    public bool Pruned { get; set; }
 }
 
 /// <summary>
@@ -87,7 +125,7 @@ public class NodeCheckResult : ICheckResult
     public required Priority Priority { get; init; }
 
     /// <summary>
-    /// Collection of the results of the childchecks, like the MethodCheck inside a ClassCheck
+    /// Collection of the results of the childChecks, like the MethodCheck inside a ClassCheck
     /// </summary>
     public required IList< ICheckResult > ChildrenCheckResults { get; init; }
 
@@ -114,4 +152,11 @@ public class NodeCheckResult : ICheckResult
     /// to <see langword="true"/>.
     /// </remarks>
     public bool NodeCheckCollectionWrapper { get; set; }
+
+    /// <inheritdoc />
+    [JsonIgnore]
+    public required ICheck Check { get; init; }
+
+    /// <inheritdoc />
+    public bool Pruned { get; set; }
 }
