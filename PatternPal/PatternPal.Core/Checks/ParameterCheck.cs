@@ -88,7 +88,6 @@ internal class ParameterCheck : CheckBase
             // There are no parameters to check with.   
             if (nodeParameters.Count == 0)
             {
-                // TODO 
                 ICheckResult temp = new LeafCheckResult
                                     {
                                         Priority = Priority,
