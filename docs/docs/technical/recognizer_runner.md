@@ -1,8 +1,9 @@
 # Recognizer Runner
 
 The `RecognizerRunner` class is the main entry point of the design pattern recognition process. It
-is responsible for initializing the selected recognizers, creating the `SyntaxGraph` of the input
-files, as well as for processing the results of the recognizers.
+is responsible for initializing the selected recognizers, creating the
+[`SyntaxGraph`](~/docs/technical/syntax_graph.md) of the input files, as well as for processing the
+results of the recognizers.
 
 ## Initialization
 
@@ -49,7 +50,7 @@ The second step is pruning the results. A result can only be pruned if its prior
 and it is incorrect. All other results are preserved for later processing. Pruning is done
 recursively, to find as many results to prune as possible. If all child results of a result are
 pruned, the result itself can also be pruned. Furthermore, if the `CollectionKind` of a result is
-`All`, and at least one its child results is pruned, that result can also be pruned.
+`All`, and at least one of its child results is pruned, that result can also be pruned.
 
 After we have collected the child results which can be pruned, we check if any of the child results
 are the result of a `RelationCheck`. As this check uses the results of prior checks, which might

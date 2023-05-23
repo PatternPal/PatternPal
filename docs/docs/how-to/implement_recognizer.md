@@ -10,8 +10,8 @@ encounter when working with recognizers in PatternPal.
 ## Prerequisites
 
 Before we get started, make sure you have clear requirements in mind which define the design pattern
-you want to recognize. The way in which you have gather these requirements does not really matter,
-translation of these requirements into checks is what you will learn in this guide.
+you want to recognize. The way in which you gather these requirements does not really matter for
+this section, translation of these requirements into checks is what you will learn in this guide.
 
 ## Creating a new Recognizer
 
@@ -46,22 +46,22 @@ internal class MyRecognizer : IRecognizer
 ## Writing your first Check
 
 Now that we have gotten all the setup out of the way, we can get started writing checks. But what is
-a check? You can think of a check as a pattern which PatternPal uses as the shape which the analyzed
+a check? You can think of a check as a pattern that PatternPal uses as the shape which the analyzed
 program should match. In a way, it resembles pattern matching as you might be familiar with from C#
 or other languages. However, checks in PatternPal have several features which make it more powerful
 than plain pattern matching. More details on these features will follow in later sections.
 
-As we already mentioned, your checks will roughly resemble the structure of the code you analyzing.
-There are a couple things to keep in mind while designing your recognizer. First, the root of your
-tree of checks must always be a check which matches an entity, so for example an `InterfaceCheck` or
-a `ClassCheck`. You should keep in mind that PatternPal starts the recognition from the root of the
-code graph, so the first things it encounters are entities. As a method cannot appear outside an
-interface or class in C#, this will never be the first thing PatternPal finds. As such, you should
-always wrap a `MethodCheck` in either an `InterfaceCheck` or a `ClassCheck`. The only other checks
-which may appear as root checks are the so called operator checks. The checks, like `All`, `Any`,
-`Not`, and so on, allow you to compose multiple checks, or the check for something which should not
-be present in the implementation. These checks are not directly used for pattern matching, so that
-is why they can be used as root checks.
+As we already mentioned, your checks will roughly resemble the structure of the code you are
+analyzing. There are a couple things to keep in mind while designing your recognizer. First, the
+root of your tree of checks must always be a check which matches an entity, so for example an
+`InterfaceCheck` or a `ClassCheck`. You should keep in mind that PatternPal starts the recognition
+from the root of the code graph, so the first things it encounters are entities. As a method cannot
+appear outside an interface or class in C#, this will never be the first thing PatternPal finds. As
+such, you should always wrap a `MethodCheck` in either an `InterfaceCheck` or a `ClassCheck`. The
+only other checks which may appear as root checks are the so called operator checks. The checks,
+like `All`, `Any`, and `Not`, allow you to compose multiple checks, or the check for something which
+should not be present in the implementation. These checks are not directly used for pattern
+matching, so that is why they can be used as root checks.
 
 ### The first Check
 
@@ -85,14 +85,14 @@ of those using the same recognizer. In a later section we will also show how to 
 between these entities. The second important thing is the priority, which is `Knockout` in this
 case. Using priorities you can differentiate between different requirements, and assign an
 importance to them. The `Knockout` priority is special in the sense that this marks the check as
-required, if PatternPal sees that a check has failed, but it is marked as `Knockout`, it will
+required. If PatternPal sees that a check has failed, but it is marked as `Knockout`, it will
 immediately disregard the entity being checked from being a possible match.
 
 ## Adding nested Checks
 
 Now that you have seen how to create a check, it is time to learn how to add a nested check. A
 nested check is a check which is the child of another check. An example of this is a `MethodCheck`
-which is the child of a `ClassCheck`.
+which can be the child of a `ClassCheck`.
 
 ### Private Constructor Check
 
@@ -144,8 +144,9 @@ IEnumerable< ICheck > IRecognizer.Create()
 }
 ```
 
-Because a constructor can have only one modifier, you cannot put the `NotCheck` inside the
-`ConstructorCheck` you created in the previous section.
+Because a constructor can have only one modifier in C#, you cannot put the `NotCheck` inside the
+`ConstructorCheck` you created in the previous section. You can check for multiple modifiers at once
+by wrapping the `ModifierCheck` in an `AnyCheck`.
 
 ## Referencing the current Entity
 
@@ -218,7 +219,7 @@ want to check that the `GetInstance` method uses the field matched by the `Field
 this, we can use a `RelationCheck`. `RelationCheck`s are checks which you can use to check for
 relations between different entities and nodes. Examples of these relations are `Uses`,
 `Implements`, and so on. You can read about all the available relations
-[here](~/docs/technical/syntax_graph.md). Combining the `static` modifier check with this
+[here](~/docs/technical/checks.md). Combining the `static` modifier check with this
 `RelationCheck` check, we get the following `MethodCheck`:
 
 ```csharp
