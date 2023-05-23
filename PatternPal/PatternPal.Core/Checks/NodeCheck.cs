@@ -190,7 +190,7 @@ internal class NodeCheck< TNode > : CheckBase
                     notCheck.NestedCheck);
                 return new NotCheckResult
                        {
-                           FeedbackMessage = string.Empty,
+                           FeedbackMessage = "Executing NOT-check",
                            NestedResult = nestedResult,
                            Priority = notCheck.Priority,
                            DependencyCount = notCheck.DependencyCount,

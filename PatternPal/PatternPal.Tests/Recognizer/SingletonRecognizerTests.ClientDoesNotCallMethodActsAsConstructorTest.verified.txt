@@ -1,0 +1,497 @@
+﻿[
+  {
+    FeedbackMessage: Found the required checks for: MockClass2.,
+    Priority: Low,
+    ChildrenCheckResults: [
+      {
+        FeedbackMessage: ,
+        Priority: High,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found class 'MockClass2',
+            Priority: High,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: ,
+                Priority: Mid,
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: Found method: GetInstance().,
+                    Priority: Mid,
+                    ChildrenCheckResults: [
+                      {
+                        FeedbackMessage: Modifiers correctly implemented.,
+                        Correct: true,
+                        MatchedNode: GetInstance
+                      },
+                      {
+                        FeedbackMessage: Found the required checks for: GetInstance().,
+                        ChildrenCheckResults: [
+                          {
+                            FeedbackMessage: Modifiers correctly implemented.,
+                            Correct: true,
+                            MatchedNode: GetInstance
+                          },
+                          {
+                            FeedbackMessage: The node GetInstance() does not have the internal modifier.,
+                            Correct: false,
+                            MatchedNode: GetInstance
+                          }
+                        ],
+                        CollectionKind: Any,
+                        MatchedNode: GetInstance,
+                        NodeCheckCollectionWrapper: false
+                      }
+                    ],
+                    MatchedNode: GetInstance,
+                    NodeCheckCollectionWrapper: false
+                  }
+                ],
+                CollectionKind: Any,
+                NodeCheckCollectionWrapper: true
+              }
+            ],
+            MatchedNode: MockClass2,
+            NodeCheckCollectionWrapper: false
+          },
+          {
+            FeedbackMessage: Found class 'Client2',
+            Priority: High,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: ,
+                Priority: Mid,
+                CollectionKind: Any,
+                NodeCheckCollectionWrapper: true
+              }
+            ],
+            MatchedNode: Client2,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        NodeCheckCollectionWrapper: true
+      },
+      {
+        FeedbackMessage: ,
+        Priority: Low,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found class 'MockClass2',
+            Priority: Low,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: Found the required checks for: MockClass2.,
+                Priority: Low,
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: ,
+                    Priority: High,
+                    ChildrenCheckResults: [
+                      {
+                        FeedbackMessage: Found constructor: MockClass2().,
+                        Priority: High,
+                        ChildrenCheckResults: [
+                          {
+                            FeedbackMessage: Found Uses relations for MockClass2().,
+                            Priority: Mid,
+                            ChildrenCheckResults: [
+                              {
+                                FeedbackMessage: No Uses relation found.,
+                                Priority: Mid,
+                                Correct: false,
+                                DependencyCount: 1,
+                                MatchedNode: GetInstance
+                              }
+                            ],
+                            CollectionKind: Any,
+                            DependencyCount: 1,
+                            MatchedNode: MockClass2,
+                            NodeCheckCollectionWrapper: true
+                          }
+                        ],
+                        DependencyCount: 1,
+                        MatchedNode: MockClass2,
+                        NodeCheckCollectionWrapper: false
+                      }
+                    ],
+                    CollectionKind: Any,
+                    DependencyCount: 1,
+                    NodeCheckCollectionWrapper: true
+                  },
+                  {
+                    FeedbackMessage: ,
+                    Priority: High,
+                    ChildrenCheckResults: [
+                      {
+                        FeedbackMessage: Found method: GetInstance().,
+                        Priority: High,
+                        ChildrenCheckResults: [
+                          {
+                            FeedbackMessage: Found Uses relations for GetInstance().,
+                            Priority: Mid,
+                            ChildrenCheckResults: [
+                              {
+                                FeedbackMessage: No Uses relation found.,
+                                Priority: Mid,
+                                Correct: false,
+                                DependencyCount: 1,
+                                MatchedNode: GetInstance
+                              }
+                            ],
+                            CollectionKind: Any,
+                            DependencyCount: 1,
+                            MatchedNode: GetInstance,
+                            NodeCheckCollectionWrapper: true
+                          }
+                        ],
+                        DependencyCount: 1,
+                        MatchedNode: GetInstance,
+                        NodeCheckCollectionWrapper: false
+                      }
+                    ],
+                    CollectionKind: Any,
+                    DependencyCount: 1,
+                    NodeCheckCollectionWrapper: true
+                  }
+                ],
+                CollectionKind: Any,
+                DependencyCount: 2,
+                MatchedNode: MockClass2,
+                NodeCheckCollectionWrapper: false
+              }
+            ],
+            DependencyCount: 2,
+            MatchedNode: MockClass2,
+            NodeCheckCollectionWrapper: false
+          },
+          {
+            FeedbackMessage: Found class 'Client2',
+            Priority: Low,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: Found the required checks for: Client2.,
+                Priority: Low,
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: ,
+                    Priority: High,
+                    ChildrenCheckResults: [
+                      {
+                        FeedbackMessage: Found constructor: Client2().,
+                        Priority: High,
+                        ChildrenCheckResults: [
+                          {
+                            FeedbackMessage: Found Uses relations for Client2().,
+                            Priority: Mid,
+                            ChildrenCheckResults: [
+                              {
+                                FeedbackMessage: No Uses relation found.,
+                                Priority: Mid,
+                                Correct: false,
+                                DependencyCount: 1,
+                                MatchedNode: GetInstance
+                              }
+                            ],
+                            CollectionKind: Any,
+                            DependencyCount: 1,
+                            MatchedNode: Client2,
+                            NodeCheckCollectionWrapper: true
+                          }
+                        ],
+                        DependencyCount: 1,
+                        MatchedNode: Client2,
+                        NodeCheckCollectionWrapper: false
+                      }
+                    ],
+                    CollectionKind: Any,
+                    DependencyCount: 1,
+                    NodeCheckCollectionWrapper: true
+                  },
+                  {
+                    FeedbackMessage: ,
+                    Priority: High,
+                    CollectionKind: Any,
+                    DependencyCount: 1,
+                    NodeCheckCollectionWrapper: true
+                  }
+                ],
+                CollectionKind: Any,
+                DependencyCount: 2,
+                MatchedNode: Client2,
+                NodeCheckCollectionWrapper: false
+              }
+            ],
+            DependencyCount: 2,
+            MatchedNode: Client2,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        DependencyCount: 2,
+        NodeCheckCollectionWrapper: true
+      }
+    ],
+    DependencyCount: 2,
+    MatchedNode: MockClass2,
+    NodeCheckCollectionWrapper: false
+  },
+  {
+    FeedbackMessage: Found the required checks for: Client2.,
+    Priority: Low,
+    ChildrenCheckResults: [
+      {
+        FeedbackMessage: ,
+        Priority: High,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found class 'MockClass2',
+            Priority: High,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: ,
+                Priority: Mid,
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: Found method: GetInstance().,
+                    Priority: Mid,
+                    ChildrenCheckResults: [
+                      {
+                        FeedbackMessage: Modifiers correctly implemented.,
+                        Correct: true,
+                        MatchedNode: GetInstance
+                      },
+                      {
+                        FeedbackMessage: Found the required checks for: GetInstance().,
+                        ChildrenCheckResults: [
+                          {
+                            FeedbackMessage: Modifiers correctly implemented.,
+                            Correct: true,
+                            MatchedNode: GetInstance
+                          },
+                          {
+                            FeedbackMessage: The node GetInstance() does not have the internal modifier.,
+                            Correct: false,
+                            MatchedNode: GetInstance
+                          }
+                        ],
+                        CollectionKind: Any,
+                        MatchedNode: GetInstance,
+                        NodeCheckCollectionWrapper: false
+                      }
+                    ],
+                    MatchedNode: GetInstance,
+                    NodeCheckCollectionWrapper: false
+                  }
+                ],
+                CollectionKind: Any,
+                NodeCheckCollectionWrapper: true
+              }
+            ],
+            MatchedNode: MockClass2,
+            NodeCheckCollectionWrapper: false
+          },
+          {
+            FeedbackMessage: Found class 'Client2',
+            Priority: High,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: ,
+                Priority: Mid,
+                CollectionKind: Any,
+                NodeCheckCollectionWrapper: true
+              }
+            ],
+            MatchedNode: Client2,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        NodeCheckCollectionWrapper: true
+      },
+      {
+        FeedbackMessage: ,
+        Priority: Low,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found class 'MockClass2',
+            Priority: Low,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: Found the required checks for: MockClass2.,
+                Priority: Low,
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: ,
+                    Priority: High,
+                    ChildrenCheckResults: [
+                      {
+                        FeedbackMessage: Found constructor: MockClass2().,
+                        Priority: High,
+                        ChildrenCheckResults: [
+                          {
+                            FeedbackMessage: Found Uses relations for MockClass2().,
+                            Priority: Mid,
+                            ChildrenCheckResults: [
+                              {
+                                FeedbackMessage: No Uses relation found.,
+                                Priority: Mid,
+                                Correct: false,
+                                DependencyCount: 1,
+                                MatchedNode: GetInstance
+                              },
+                              {
+                                FeedbackMessage: No Uses relation found.,
+                                Priority: Mid,
+                                Correct: false,
+                                DependencyCount: 1,
+                                MatchedNode: GetInstance
+                              }
+                            ],
+                            CollectionKind: Any,
+                            DependencyCount: 1,
+                            MatchedNode: MockClass2,
+                            NodeCheckCollectionWrapper: true
+                          }
+                        ],
+                        DependencyCount: 1,
+                        MatchedNode: MockClass2,
+                        NodeCheckCollectionWrapper: false
+                      }
+                    ],
+                    CollectionKind: Any,
+                    DependencyCount: 1,
+                    NodeCheckCollectionWrapper: true
+                  },
+                  {
+                    FeedbackMessage: ,
+                    Priority: High,
+                    ChildrenCheckResults: [
+                      {
+                        FeedbackMessage: Found method: GetInstance().,
+                        Priority: High,
+                        ChildrenCheckResults: [
+                          {
+                            FeedbackMessage: Found Uses relations for GetInstance().,
+                            Priority: Mid,
+                            ChildrenCheckResults: [
+                              {
+                                FeedbackMessage: No Uses relation found.,
+                                Priority: Mid,
+                                Correct: false,
+                                DependencyCount: 1,
+                                MatchedNode: GetInstance
+                              },
+                              {
+                                FeedbackMessage: No Uses relation found.,
+                                Priority: Mid,
+                                Correct: false,
+                                DependencyCount: 1,
+                                MatchedNode: GetInstance
+                              }
+                            ],
+                            CollectionKind: Any,
+                            DependencyCount: 1,
+                            MatchedNode: GetInstance,
+                            NodeCheckCollectionWrapper: true
+                          }
+                        ],
+                        DependencyCount: 1,
+                        MatchedNode: GetInstance,
+                        NodeCheckCollectionWrapper: false
+                      }
+                    ],
+                    CollectionKind: Any,
+                    DependencyCount: 1,
+                    NodeCheckCollectionWrapper: true
+                  }
+                ],
+                CollectionKind: Any,
+                DependencyCount: 2,
+                MatchedNode: MockClass2,
+                NodeCheckCollectionWrapper: false
+              }
+            ],
+            DependencyCount: 2,
+            MatchedNode: MockClass2,
+            NodeCheckCollectionWrapper: false
+          },
+          {
+            FeedbackMessage: Found class 'Client2',
+            Priority: Low,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: Found the required checks for: Client2.,
+                Priority: Low,
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: ,
+                    Priority: High,
+                    ChildrenCheckResults: [
+                      {
+                        FeedbackMessage: Found constructor: Client2().,
+                        Priority: High,
+                        ChildrenCheckResults: [
+                          {
+                            FeedbackMessage: Found Uses relations for Client2().,
+                            Priority: Mid,
+                            ChildrenCheckResults: [
+                              {
+                                FeedbackMessage: No Uses relation found.,
+                                Priority: Mid,
+                                Correct: false,
+                                DependencyCount: 1,
+                                MatchedNode: GetInstance
+                              },
+                              {
+                                FeedbackMessage: No Uses relation found.,
+                                Priority: Mid,
+                                Correct: false,
+                                DependencyCount: 1,
+                                MatchedNode: GetInstance
+                              }
+                            ],
+                            CollectionKind: Any,
+                            DependencyCount: 1,
+                            MatchedNode: Client2,
+                            NodeCheckCollectionWrapper: true
+                          }
+                        ],
+                        DependencyCount: 1,
+                        MatchedNode: Client2,
+                        NodeCheckCollectionWrapper: false
+                      }
+                    ],
+                    CollectionKind: Any,
+                    DependencyCount: 1,
+                    NodeCheckCollectionWrapper: true
+                  },
+                  {
+                    FeedbackMessage: ,
+                    Priority: High,
+                    CollectionKind: Any,
+                    DependencyCount: 1,
+                    NodeCheckCollectionWrapper: true
+                  }
+                ],
+                CollectionKind: Any,
+                DependencyCount: 2,
+                MatchedNode: Client2,
+                NodeCheckCollectionWrapper: false
+              }
+            ],
+            DependencyCount: 2,
+            MatchedNode: Client2,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        DependencyCount: 2,
+        NodeCheckCollectionWrapper: true
+      }
+    ],
+    DependencyCount: 2,
+    MatchedNode: Client2,
+    NodeCheckCollectionWrapper: false
+  }
+]
