@@ -264,7 +264,7 @@ internal class NodeCheck< TNode > : CheckBase
         // that.
         if (results.Count == 0)
         {
-            nodeCheck._matchedEntities = new List< INode >();
+            nodeCheck._matchedEntities ??= new List< INode >();
         }
 
         // Return the result.
