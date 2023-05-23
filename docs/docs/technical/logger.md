@@ -8,14 +8,6 @@ specific snapshot appropriately.
 
 ## System requirements
 
-### Hardware requirements (minimum)
-
-- Processor: Dual-core processor
-
-- Memory: 4GB RAM
-
-- Storage: 32GB
-
 ### Software requirements
 
 - Operating system: Linux distribution (Ubuntu, CentOS, or Debian)
@@ -57,7 +49,7 @@ or server.
 
 6. Configuration: Update the application settings or configuration
 files to connect to the database using the correct connection
-string. This can be done using volume-mounted files.
+string.
 
 7. Test Application: Ensure the server is running correctly and
 available for remote clients to communicate.
