@@ -15,6 +15,10 @@
   href: technical/checks.md
 - name: Syntax Graph
   href: technical/syntax_graph
+- name: Logging Server
+  href: technical/logger.md
+- name: Logging arguments
+  href: technical/logger_arguments.md
 
 - name: How to
 - name: Implement a Recognizer

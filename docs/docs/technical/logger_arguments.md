@@ -1,4 +1,4 @@
-# Logging server LogRequest Arguments
+# LogRequest Arguments
 
 Progsnap2 is a powerful software tool designed for capturing and analyzing programming events during the development process. It allows developers and researchers to collect fine-grained data about programming actions, such as code edits, builds, and debugging activities. Progsnap2 supports various event types, and the arguments associated with each event type can vary.
 
