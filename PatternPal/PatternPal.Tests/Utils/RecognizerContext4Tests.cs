@@ -12,21 +12,27 @@ internal class RecognizerContext4Tests : IRecognizerContext
 
     private RecognizerContext4Tests(
         SyntaxGraph graph,
-        ICheck rootCheck)
+        ICheck rootCheck,
+        IEntity entity)
     {
         IsRootContext = true;
         Graph = graph;
-        CurrentEntity = null!;
+        CurrentEntity = entity;
         ParentCheck = rootCheck;
     }
 
     internal static RecognizerContext4Tests Empty() => new(
         null!,
-        null! );
+        null!, 
+        null!);
 
     internal static RecognizerContext4Tests Create(
         SyntaxGraph graph,
         ICheck ? rootCheck = null) => new(
         graph,
-        rootCheck! );
+        rootCheck!,
+        null!);
+
+    internal static RecognizerContext4Tests WithEntity(IEntity entity) => new(
+        null!, null!, entity);
 }
