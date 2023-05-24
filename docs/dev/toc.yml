@@ -27,13 +27,18 @@
 # Pattern recognition --------------------
 - name: Data logging
   items:
-  - name: Logging Server
-    href: technical/logger.md
+  # -- Design
+  - name: Design
   - name: Logging arguments
     href: technical/logger_arguments.md
+
+  # -- Guides
+  - name: Guides
+  - name: Installation
+    href: logging/guides/installation.md
 
 # Extension ------------------------------
 - name: Extension
   items:
   - name: Notes
-    href: technical/extension.md
+    href: extension/notes.md

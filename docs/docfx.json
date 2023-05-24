@@ -44,15 +44,17 @@
     "globalMetadata": {
       "_appTitle": "PatternPal",
       "_appName": "PatternPal",
-      "_appLogoPath": "logo.png",
+      "_appLogoPath": "images/logo.png",
+      "_appFaviconPath": "images/favicon.ico",
       "_enableSearch": true
     },
     "fileMetadata": {
       "_disableTocFilter": {
-        "index.md": true
+        "index.md": true,
+        "home/**": true
       }
     },
-    "template": ["default", "modern"],
+    "template": ["default", "modern", "custom"],
     "keepFileLink": false,
     "disableGitFeatures": false,
     "markdownEngineName": "markdig",
