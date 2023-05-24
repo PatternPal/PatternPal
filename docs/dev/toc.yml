@@ -29,8 +29,10 @@
   items:
   # -- Design
   - name: Design
-  - name: Logging arguments
-    href: technical/logger_arguments.md
+  - name: Overview
+    href: logging/design/overview.md
+  - name: LogRequest
+    href: logging/design/logrequest.md
 
   # -- Guides
   - name: Guides

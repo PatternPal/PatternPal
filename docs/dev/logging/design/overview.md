@@ -1,4 +1,4 @@
-# Logging Server
+# Overview
 
 The PatternPal extension offers valuable research opportunities, thus
 requiring the implementation of an adequate logging solution. The
@@ -15,7 +15,7 @@ Ubuntu, CentOS, or Debian.
 - Containerization: Docker for containerization of the application
 server. Making it easier to deploy, scale and manage containers.
 
-- Programming language: C$\#$ is used for all application components
+- Programming language: C# is used for all application components
 of the logging system.
 
 - Dependency management: NuGet for managing .NET packages.
@@ -25,6 +25,8 @@ system for the entire application.
 
 - Communication protocol: gRPC is used as the communication protocol
 between the server and clients.
+
+---
 
 ## Logging server structure
 
@@ -48,7 +50,7 @@ prevents redundancy and a single place for all communication.
 
 ### Progsnap2
 
-We use the Progsnap2 model to log information from the extension.
+We use the [Progsnap2](https://cssplice.github.io/progsnap2/) model to log information from the extension.
 Progsnap2 is a specification for datasets that record information about
 the programming process, such as modifications to the source code and
 debugging details during the building of projects. This enables us to
