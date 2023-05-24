@@ -107,6 +107,7 @@ public class RecognizerRunner
                                      Graph = _graph,
                                      CurrentEntity = null!,
                                      ParentCheck = rootCheck,
+                                     EntityCheck = rootCheck
                                  };
 
         rootCheck.Check(
@@ -138,6 +139,7 @@ public class RecognizerRunner
                                      Graph = _graph,
                                      CurrentEntity = null!,
                                      ParentCheck = rootCheck,
+                                     EntityCheck = rootCheck
                                  };
 
         NodeCheckResult rootResult = (NodeCheckResult)rootCheck.Check(
@@ -327,62 +329,70 @@ public class RecognizerRunner
             {
                 NodeCheckCollectionWrapper: true,
                 Priority: Priority.Knockout,
-                Check: RelationCheck
+                Check: RelationCheck or TypeCheck
             })
         {
-            // We're currently processing the NodeCheckResult of a RelationCheck.
+            // We're currently processing the NodeCheckResult of a RelationCheck or TypeCheck. 
 
-            foreach (ICheckResult relationCheckResult in parentCheckResult.ChildrenCheckResults)
+            foreach (ICheckResult dependentCheckResult in parentCheckResult.ChildrenCheckResults)
             {
-                if (relationCheckResult is not LeafCheckResult relationResult)
+                if (dependentCheckResult is not LeafCheckResult dependentResult)
                 {
-                    throw new ArgumentException($"Unexpected check type '{relationCheckResult.GetType()}', expected '{typeof( LeafCheckResult )}'");
+                    throw new ArgumentException($"Unexpected check type '{dependentCheckResult.GetType()}', expected '{typeof( LeafCheckResult )}'");
                 }
 
-                if (relationResult.RelatedCheck is null)
+                if (dependentResult.RelatedCheck is null)
                 {
                     throw new ArgumentNullException(
-                        nameof( relationResult.RelatedCheck ),
-                        $"RelatedCheck of CheckResult '{relationResult}' is null, while it should reference the ICheck belonging to the INode it has a relation to.");
+                        nameof( dependentResult.RelatedCheck ),
+                        $"RelatedCheck of CheckResult '{dependentResult}' is null, while it should reference the ICheck belonging to the related INode.");
                 }
 
-                // If the RelationCheck did not match any nodes, it won't have any child results. As
+                // If the RelationCheck or TypeCheck did not match any nodes, it won't have any child results. As
                 // such, we won't reach this code. If we do reach this code, but
-                // `relationResult.MatchedNode` is null, this is an error.
-                if (relationResult.MatchedNode is null)
+                // `dependentResult.MatchedNode` is null, this is an error.
+                if (dependentResult.MatchedNode is null)
                 {
                     throw new ArgumentNullException(
-                        nameof( relationResult.MatchedNode ),
-                        "Relation check did not match any nodes");
+                        nameof( dependentResult.MatchedNode ),
+                        "Relation or Type check did not match any nodes");
                 }
 
-                // Get the CheckResults belonging to the node to which there should be a relation.
-                List< ICheckResult > resultsOfNode = resultsByNode[ relationResult.MatchedNode ];
+                // Get the CheckResults belonging to the related node.
+                List< ICheckResult > resultsOfNode = resultsByNode[ dependentResult.MatchedNode ];
 
-                // Find the CheckResult linked to the check which searched for the Node to which there should be a relation.
+                // Find the CheckResult linked to the check which searched for the related node.
                 ICheckResult ? relevantResult = resultsOfNode.FirstOrDefault(
                     (
-                        result) => result.Check == relationResult.RelatedCheck);
+                        result) => result.Check == dependentResult.RelatedCheck);
 
-                // This should not be possible for the same reason `relationResult.MatchedNode`
+                // This should not be possible for the same reason `dependentResult.MatchedNode`
                 // should not be null.
                 if (relevantResult is null)
                 {
                     throw new ArgumentNullException(
                         nameof( relevantResult ),
-                        "Relation check did not match any nodes");
+                        "Relation or Type check did not match any nodes");
                 }
 
                 // If this node gets pruned, it does not have the required attributes to be the node belonging to the
-                // check which searched for the node to which there should be a relation. Therefore, even though the
+                // check which searched for the related node. Therefore, even though the
                 // relation might be found, it is not the relation directed to the node to which there should be one.
-                // Therefore this relation is not the required one, and thus the relationResult gets pruned.
+                // Therefore this relation is not the required one, and thus the dependentResult gets pruned.
                 if (relevantResult.Pruned)
                 {
-                    resultsToBePruned.Add(relationResult);
-                    relationResult.Pruned = true;
+                    resultsToBePruned.Add(dependentResult);
+                    dependentResult.Pruned = true;
                 }
             }
+        }
+
+        if (resultsToBePruned.Count > 0 && (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count
+                                            || parentCheckResult.CollectionKind == CheckCollectionKind.All))
+        {
+            // Parent becomes empty.
+            parentCheckResult.ChildrenCheckResults.Clear();
+            return true;
         }
 
         // Prune the results.
@@ -421,6 +431,11 @@ public interface IRecognizerContext
     internal ICheck ParentCheck { get; }
 
     /// <summary>
+    /// The <see cref="ICheck"/> belonging to the <see cref="CurrentEntity"/>.
+    /// </summary>
+    internal ICheck EntityCheck { get; }
+
+    /// <summary>
     /// Create a new <see cref="IRecognizerContext"/> instance from an existing one, overwriting the
     /// old properties with the new ones.
     /// </summary>
@@ -438,7 +453,8 @@ public interface IRecognizerContext
                                {
                                    Graph = oldCtx.Graph,
                                    CurrentEntity = currentNode as IEntity ?? oldCtx.CurrentEntity,
-                                   ParentCheck = parentCheck
+                                   ParentCheck = parentCheck,
+                                   EntityCheck = currentNode is IEntity ? parentCheck : oldCtx.EntityCheck
                                };
 }
 
@@ -456,6 +472,9 @@ file class RecognizerContext : IRecognizerContext
 
     /// <inheritdoc />
     public required ICheck ParentCheck { get; init; }
+
+    /// <inheritdoc />
+    public required ICheck EntityCheck { get; init; }
 }
 
 /// <summary>

@@ -8,7 +8,7 @@
 internal class TypeCheck : CheckBase
 {
     // Used to get the node to compare against.
-    private readonly OneOf< Func< List< INode > >, GetCurrentEntity > _getNode;
+    private readonly OneOf< ICheck, GetCurrentEntity > _getNode;
 
     /// <summary>
     /// A <see cref="TypeCheck"/> is dependent on the result of <see cref="_getNode"/>.
@@ -22,7 +22,7 @@ internal class TypeCheck : CheckBase
     /// <param name="getNode">A functor to get the node to compare against.</param>
     internal TypeCheck(
         Priority priority,
-        OneOf< Func< List< INode > >, GetCurrentEntity > getNode)
+        OneOf< ICheck, GetCurrentEntity > getNode)
         : base(priority)
     {
         _getNode = getNode;
@@ -38,10 +38,10 @@ internal class TypeCheck : CheckBase
     {
         // Get the node to match against.
         return _getNode.Match< ICheckResult >(
-            getNodes =>
+            relatedCheck =>
             {
                 List< ICheckResult > subResults = new();
-                foreach (INode getNode in getNodes())
+                foreach (INode getNode in relatedCheck.Result())
                 {
                     bool isMatch = node == getNode;
                     subResults.Add(
@@ -55,6 +55,7 @@ internal class TypeCheck : CheckBase
                             DependencyCount = DependencyCount,
                             MatchedNode = getNode,
                             Check = this,
+                            RelatedCheck = relatedCheck
                         });
                 }
 
@@ -66,6 +67,8 @@ internal class TypeCheck : CheckBase
                            DependencyCount = DependencyCount,
                            MatchedNode = node,
                            Check = this,
+                           NodeCheckCollectionWrapper = true,
+                           CollectionKind = CheckCollectionKind.Any
                        };
             },
             getCurrentEntity =>
@@ -73,17 +76,32 @@ internal class TypeCheck : CheckBase
                 // Construct and return the check result.
                 INode nodeToMatch = getCurrentEntity(ctx);
                 bool isMatch = node == nodeToMatch;
-                return new LeafCheckResult
-                       {
-                           Priority = Priority,
-                           Correct = isMatch,
-                           FeedbackMessage = isMatch
-                               ? $"Node '{node}' has correct type"
-                               : $"Node '{node}' has incorrect type, expected '{nodeToMatch}'",
-                           DependencyCount = DependencyCount,
-                           MatchedNode = node,
-                           Check = this,
-                       };
+                List<ICheckResult> subResults = new()
+                {
+                    new LeafCheckResult
+                    {
+                        Priority = Priority,
+                        Correct = isMatch,
+                        FeedbackMessage = isMatch
+                            ? $"Node '{node}' has correct type"
+                            : $"Node '{node}' has incorrect type, expected '{nodeToMatch}'",
+                        DependencyCount = DependencyCount,
+                        MatchedNode = nodeToMatch, //TODO is this right or should this be node?
+                        Check = this,
+                        RelatedCheck = ctx.EntityCheck
+                    }
+                };
+                return new NodeCheckResult
+                {
+                    Priority = Priority,
+                    ChildrenCheckResults = subResults,
+                    FeedbackMessage = $"Found node '{node}'",
+                    DependencyCount = DependencyCount,
+                    MatchedNode = node,
+                    Check = this,
+                    NodeCheckCollectionWrapper = true,
+                    CollectionKind = CheckCollectionKind.Any
+                };
             });
     }
 }

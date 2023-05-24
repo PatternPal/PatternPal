@@ -18,9 +18,10 @@
               MatchedNode: IntTest
             }
           ],
+          CollectionKind: Any,
           DependencyCount: 1,
           MatchedNode: IntTest,
-          NodeCheckCollectionWrapper: false
+          NodeCheckCollectionWrapper: true
         },
         {
           FeedbackMessage: Found node 'IntTest',
@@ -34,9 +35,10 @@
               MatchedNode: IntTest
             }
           ],
+          CollectionKind: Any,
           DependencyCount: 1,
           MatchedNode: IntTest,
-          NodeCheckCollectionWrapper: false
+          NodeCheckCollectionWrapper: true
         },
         {
           FeedbackMessage: Found node 'StringTest',
@@ -50,9 +52,10 @@
               MatchedNode: StringTest
             }
           ],
+          CollectionKind: Any,
           DependencyCount: 1,
           MatchedNode: StringTest,
-          NodeCheckCollectionWrapper: false
+          NodeCheckCollectionWrapper: true
         }
       ],
       DependencyCount: 3,
