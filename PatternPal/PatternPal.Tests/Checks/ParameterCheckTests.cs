@@ -127,7 +127,7 @@ public class ParameterCheckTests
         TestCheck stringNodeCheck = new(ctx.Graph.Relations.GetEntityByName(stringNode.GetReturnType()));
 
         // TypeCheck of the StringTestFunction method (return type is StringTest)
-        TypeCheck typeStringNode = new TypeCheck(
+        TypeCheck typeStringNode = new(
             Priority.Low,
             stringNodeCheck);
 
