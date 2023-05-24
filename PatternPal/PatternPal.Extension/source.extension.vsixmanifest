@@ -3,7 +3,7 @@
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011"
                  xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="PatternPal.Extension.887d04da-c93c-4a87-b084-d9c6d1d92830" Version="3.1.0" Language="en-US"
+        <Identity Id="PatternPal.Extension.887d04da-c93c-4a87-b084-d9c6d1d92830" Version="3.3.0" Language="en-US"
                   Publisher="Team PatternPal" />
         <DisplayName>PatternPal.Extension</DisplayName>
         <Description xml:space="preserve">A Design Pattern recognition tool.</Description>
