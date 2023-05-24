@@ -42,12 +42,17 @@
     ],
     "output": "_site",
     "globalMetadata": {
-      "_appLogoPath": "PatternPal/PatternPal.Extension/Resources/logo.png"
+      "_appTitle": "PatternPal",
+      "_appName": "PatternPal",
+      "_appLogoPath": "logo.png",
+      "_enableSearch": true
     },
-    "globalMetadataFiles": [],
-    "fileMetadataFiles": [],
+    "fileMetadata": {
+      "_disableTocFilter": {
+        "index.md": true
+      }
+    },
     "template": ["default", "modern"],
-    "postProcessors": [],
     "keepFileLink": false,
     "disableGitFeatures": false,
     "markdownEngineName": "markdig",

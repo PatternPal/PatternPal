@@ -1,5 +1,5 @@
 - name: Home
-  href: index.md
+  href: home/
 - name: Users
   href: users/
 - name: Developers
