@@ -21,6 +21,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     /// </summary>
     private static Dictionary<String, (ByteString CodeState, bool Full)> _lastCodeState = new Dictionary<string, (ByteString CodeState, bool Full)>();
 
+    /// <inheritdoc />
     public override Task<LogEventResponse> LogEvent(LogEventRequest receivedRequest, ServerCallContext context)
     {
         GrpcChannel grpcChannel = GrpcChannel.ForAddress(
@@ -85,6 +86,12 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     
     #region Log types
 
+    /// <summary>
+    /// Creates a LogRequest that is populated with info obtained from the supplied
+    /// received event and further specific details relevant for the RecognizerRun-event.
+    /// </summary>
+    /// <param name="receivedRequest">The originally received request from the PP extension</param>
+    /// <returns>A LogRequest populated for this specific event</returns>
     private static LogRequest RecognizeLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
@@ -93,6 +100,13 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         sendLog.RecognizerConfig = receivedRequest.RecognizerConfig;
         return sendLog;
     }
+
+    /// <summary>
+    /// Creates a LogRequest that is populated with info obtained from the supplied
+    /// received event and further specific details relevant for the Compile-event.
+    /// </summary>
+    /// <param name="receivedRequest">The originally received request from the PP extension</param>
+    /// <returns>A LogRequest populated for this specific event</returns>
     private static LogRequest CompileLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
@@ -101,6 +115,12 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         return sendLog;
     }
 
+    /// <summary>
+    /// Creates a LogRequest that is populated with info obtained from the supplied
+    /// received event and further specific details relevant for the CompileError-event.
+    /// </summary>
+    /// <param name="receivedRequest">The originally received request from the PP extension</param>
+    /// <returns>A LogRequest populated for this specific event</returns>
     private static LogRequest CompileErrorLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
@@ -113,6 +133,12 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         return sendLog;
     }
 
+    /// <summary>
+    /// Creates a LogRequest that is populated with info obtained from the supplied
+    /// received event and further specific details relevant for the ProjectClose-event.
+    /// </summary>
+    /// <param name="receivedRequest">The originally received request from the PP extension</param>
+    /// <returns>A LogRequest populated for this specific event</returns>
     private static LogRequest ProjectCloseLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
@@ -127,6 +153,12 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         return sendLog;
     }
 
+    /// <summary>
+    /// Creates a LogRequest that is populated with info obtained from the supplied
+    /// received event and further specific details relevant for the ProjectOpen-event.
+    /// </summary>
+    /// <param name="receivedRequest">The originally received request from the PP extension</param>
+    /// <returns>A LogRequest populated for this specific event</returns>
     private static LogRequest ProjectOpenLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
@@ -141,6 +173,12 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         return sendLog;
     }
 
+    /// <summary>
+    /// Creates a LogRequest that is populated with info obtained from the supplied
+    /// received event and further specific details relevant for the DebugProgram-event.
+    /// </summary>
+    /// <param name="receivedRequest">The originally received request from the PP extension</param>
+    /// <returns>A LogRequest populated for this specific event</returns>
     private static LogRequest DebugProgramLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
@@ -151,6 +189,12 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         return sendLog;
     }
 
+    /// <summary>
+    /// Creates a LogRequest that is populated with info obtained from the supplied
+    /// received event and further specific details relevant for the SessionStart-event.
+    /// </summary>
+    /// <param name="receivedRequest">The originally received request from the PP extension</param>
+    /// <returns>A LogRequest populated for this specific event</returns>
     private static LogRequest SessionStartLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
@@ -159,6 +203,12 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         return sendLog;
     }
 
+    /// <summary>
+    /// Creates a LogRequest that is populated with info obtained from the supplied
+    /// received event and further specific details relevant for the SessionEnd-event.
+    /// </summary>
+    /// <param name="receivedRequest">The originally received request from the PP extension</param>
+    /// <returns>A LogRequest populated for this specific event</returns>
     private static LogRequest SessionEndLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
@@ -209,7 +259,6 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         return ByteString.CopyFrom(bytes);
     }
 
-    // TODO Separate utility because of duplication with extension
     /// <summary>
     /// Gets the relative path when given an absolute directory path and a filename.
     /// </summary>
@@ -218,6 +267,9 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     /// <returns></returns>
     public static string GetRelativePath(string relativeTo, string path)
     {
+        // TODO Separate utility because of duplication with extension
+        // TODO Testing
+        
         Uri uri = new Uri(relativeTo);
         string rel = Uri.UnescapeDataString(uri.MakeRelativeUri(new Uri(path)).ToString())
             .Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
