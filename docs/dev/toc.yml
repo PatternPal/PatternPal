@@ -28,5 +28,3 @@
 - name: How to
 - name: Implement a Recognizer
   href: how-to/implement_recognizer.md
-- name: Implement an Extension
-  href: how-to/implement_extension.md
