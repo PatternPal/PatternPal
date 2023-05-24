@@ -23,16 +23,16 @@ The IEntities and IMembers of each IRoot are analyzed and created. Once
 all files are loaded and the syntax tree is constructed, relations are
 established between the nodes using the CreateGraph method. This is
 accomplished by examining the descendant nodes of each IEntity or
-IMethod for a particular type of roslyn syntax which denotes there is a
+IMember for a particular type of roslyn syntax which denotes there is a
 particular relationship, a feature provided by Roslyn. When descendant
-Roslyn syntax nodes that relate to a specific IEntity or IMethod are
-identified, the corresponding IEntity or IMethod is found using the
+Roslyn syntax nodes that relate to a specific IEntity or IMember are
+identified, the corresponding IEntity or IMember is found using the
 SemanticModel, which is another Roslyn feature. This is for example
 necessary when a method uses another method, the line where the method
 is called is a descendant node, but not the actual method which is
 called. this declaration node, which the descendant node refers to, can
 be obtained with the SemanticModel, and is the same as the Roslyn
-SyntaxNode saved in one of the saved IEntities or IMethods. Both sides
+SyntaxNode saved in one of the saved IEntities or Imembers. Both sides
 of a relation are now obtained, and the relation can be established.
 
 ## Appendix
