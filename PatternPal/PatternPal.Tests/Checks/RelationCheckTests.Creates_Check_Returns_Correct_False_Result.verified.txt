@@ -9,9 +9,18 @@
         {
           FeedbackMessage: No Creates relation found.,
           Priority: Low,
-          Correct: false
+          Correct: false,
+          DependencyCount: 1,
+          MatchedNode: Uses
         }
-      ]
+      ],
+      CollectionKind: Any,
+      DependencyCount: 1,
+      MatchedNode: Used,
+      NodeCheckCollectionWrapper: true
     }
-  ]
+  ],
+  DependencyCount: 1,
+  MatchedNode: Used,
+  NodeCheckCollectionWrapper: false
 }

@@ -9,9 +9,18 @@
         {
           FeedbackMessage: Node Uses has a Creates relation with node Used,
           Priority: Low,
-          Correct: true
+          Correct: true,
+          DependencyCount: 1,
+          MatchedNode: Used
         }
-      ]
+      ],
+      CollectionKind: Any,
+      DependencyCount: 1,
+      MatchedNode: Uses,
+      NodeCheckCollectionWrapper: true
     }
-  ]
+  ],
+  DependencyCount: 1,
+  MatchedNode: Uses,
+  NodeCheckCollectionWrapper: false
 }

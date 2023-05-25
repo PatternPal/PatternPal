@@ -1,7 +1,4 @@
-﻿#region
-
-using PatternPal.SyntaxTree;
-using PatternPal.SyntaxTree.Abstractions;
+#region
 
 using static PatternPal.Core.Checks.CheckBuilder;
 
@@ -36,7 +33,7 @@ public class RelationCheckTests
             Priority.Low,
             Uses(
                 Priority.Low,
-                usedMethod.Result));
+                usedMethod));
 
         ICheckResult result = usesMethod.Check(
             ctx,
@@ -55,7 +52,7 @@ public class RelationCheckTests
         //the Uses class node from the syntax graph 
         INode usesNode = graph.GetAll()[ "Uses" ];
         //the UsedFunction node from the syntax graph 
-        INode usedNode = Relations.GetMethodFromGraph(
+        INode usedNode = EntityNodeUtils.GetMemberFromGraph<INode>(
             graph,
             "Used",
             "UsedFunction");
@@ -72,7 +69,7 @@ public class RelationCheckTests
             Priority.Low,
             Uses(
                 Priority.Low,
-                usedMethod.Result));
+                usedMethod));
 
         ICheckResult result = usesClass.Check(
             ctx,
@@ -89,12 +86,12 @@ public class RelationCheckTests
         IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
 
         //the UsesFunction node from the syntax graph 
-        INode usesNode = Relations.GetMethodFromGraph(
+        INode usesNode = EntityNodeUtils.GetMemberFromGraph<INode>(
             graph,
             "Uses",
             "UsesFunction");
         //the UsedFunction node from the syntax graph 
-        INode usedNode = Relations.GetMethodFromGraph(
+        INode usedNode = EntityNodeUtils.GetMemberFromGraph<INode>(
             graph,
             "Used",
             "UsedFunction");
@@ -111,7 +108,7 @@ public class RelationCheckTests
             Priority.Low,
             Uses(
                 Priority.Low,
-                usesMethod.Result));
+                usesMethod));
 
         ICheckResult result = usedMethod.Check(
             ctx,
@@ -144,7 +141,7 @@ public class RelationCheckTests
             Priority.Low,
             Inherits(
                 Priority.Low,
-                parentClass.Result));
+                parentClass));
 
         ICheckResult result = childClass.Check(
             ctx,
@@ -177,7 +174,7 @@ public class RelationCheckTests
             Priority.Low,
             Inherits(
                 Priority.Low,
-                usesClass.Result));
+                usesClass));
 
         ICheckResult result = usedClass.Check(
             ctx,
@@ -210,7 +207,7 @@ public class RelationCheckTests
             Priority.Low,
             Implements(
                 Priority.Low,
-                parentInterfaceCheck.Result));
+                parentInterfaceCheck));
 
         ICheckResult result = childInterfaceCheck.Check(
             ctx,
@@ -243,7 +240,7 @@ public class RelationCheckTests
             Priority.Low,
             Implements(
                 Priority.Low,
-                parentInterfaceCheck.Result));
+                parentInterfaceCheck));
 
         ICheckResult result = childInterfaceCheck.Check(
             ctx,
@@ -276,7 +273,7 @@ public class RelationCheckTests
             Priority.Low,
             Creates(
                 Priority.Low,
-                createdClass.Result));
+                createdClass));
 
         ICheckResult result = creatingClass.Check(
             ctx,
@@ -312,7 +309,7 @@ public class RelationCheckTests
             Creates(
                 Priority.Low,
                 //the result of the createdClass, which is the creatingNode
-                createdClass.Result));
+                createdClass));
 
         ICheckResult result = creatingClass.Check(
             ctx,

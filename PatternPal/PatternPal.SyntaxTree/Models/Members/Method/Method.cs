@@ -1,15 +1,11 @@
-﻿using System.Collections.Generic;
-
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-
+﻿using Microsoft.CodeAnalysis.CSharp;
 using PatternPal.SyntaxTree.Abstractions;
-using PatternPal.SyntaxTree.Abstractions.Entities;
 using PatternPal.SyntaxTree.Abstractions.Members;
 using PatternPal.SyntaxTree.Utils;
 
 namespace PatternPal.SyntaxTree.Models.Members.Method
 {
+    /// <inheritdoc cref="IMethod"/>
     public class Method : AbstractNode, IMethod
     {
         private readonly MethodDeclarationSyntax _methodDeclaration;
@@ -20,27 +16,32 @@ namespace PatternPal.SyntaxTree.Models.Members.Method
             _parent = parent;
         }
 
+        /// <inheritdoc />
         public override string GetName()
         {
             return _methodDeclaration.Identifier.ToString();
         }
 
+        /// <inheritdoc />
         public IEnumerable<IModifier> GetModifiers()
         {
             return _methodDeclaration.Modifiers.ToModifiers();
         }
 
+        /// <inheritdoc />
         public IEnumerable<TypeSyntax> GetParameters()
         {
             return _methodDeclaration.ParameterList.ToParameters();
         }
 
+        /// <inheritdoc />
         public CSharpSyntaxNode GetBody()
         {
             return (CSharpSyntaxNode)_methodDeclaration.Body ?? _methodDeclaration.ExpressionBody;
         }
 
-        public TypeSyntax GetReturnType()
+        /// <inheritdoc />
+        public SyntaxNode GetReturnType()
         {
             return _methodDeclaration.ReturnType;
         }
@@ -50,6 +51,7 @@ namespace PatternPal.SyntaxTree.Models.Members.Method
             return _methodDeclaration;
         }
 
+        /// <inheritdoc />
         public IEntity GetParent()
         {
             return _parent;

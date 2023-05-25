@@ -144,13 +144,16 @@ namespace PatternPal.Extension
 
                 // The SessionId has to be reset if the option for logging data is changed to prevent logging without a session id. 
                 // In other words, a new session has to be started.
+                ThreadHelper.ThrowIfNotOnUIThread();
                 if (value)
                 {
                     SubscribeEvents.OnSessionStart();
+                    SubscribeEvents.OnProjectOpen();
                 }
                 else
                 {
                     SubscribeEvents.OnSessionEnd();
+                    SubscribeEvents.OnProjectClose();
                 }
 
                 _doLogData = value;

@@ -3,14 +3,18 @@
   Priority: Low,
   ChildrenCheckResults: [
     {
-      FeedbackMessage: ,
+      FeedbackMessage: Executing NOT-check,
       Priority: Low,
       NestedResult: {
         FeedbackMessage: The node Test does not have the private modifier.,
         Priority: Low,
-        Correct: false
-      }
+        Correct: false,
+        MatchedNode: Test
+      },
+      MatchedNode: Test
     }
   ],
-  CollectionKind: Any
+  CollectionKind: Any,
+  MatchedNode: Test,
+  NodeCheckCollectionWrapper: false
 }

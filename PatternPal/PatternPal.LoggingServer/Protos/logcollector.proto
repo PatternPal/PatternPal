@@ -1,4 +1,4 @@
-﻿syntax = "proto3";
+syntax = "proto3";
 
 option csharp_namespace = "PatternPal.LoggingServer";
 
@@ -19,30 +19,30 @@ EventType event_type = 1;
 string event_id = 2;
 string subject_id = 3;
 string tool_instances = 4;
-string code_state_id = 5;
 
 // Optional columns
-string client_timestamp = 6;
-string experimental_condition = 7; 
-string logging_error_id = 8;
-optional string parent_event_id = 9;
-string session_id = 10;
-string project_id = 11;
-string code_state_section = 12;
-EventInitiator event_initiatior = 13;
-EditType edit_type = 14;
-string compile_result = 15;
-string compile_message_type = 16;
-string compile_message_data = 17;
-string source_location = 18;
-string execution_id = 19;
-string test_id = 20;
-ExecutionResult execution_result = 21;
-string intervention_category = 22;
-string intervention_type = 23;
-string intervention_message = 24;
-optional bytes data = 25;
-
+string client_timestamp = 5;
+string experimental_condition = 6; 
+string logging_error_id = 7;
+optional string parent_event_id = 8;
+string session_id =9;
+string project_id = 10;
+string code_state_section = 11;
+EventInitiator event_initiatior = 12;
+EditType edit_type = 13;
+string compile_result = 14;
+string compile_message_type = 15;
+string compile_message_data = 16;
+string source_location = 17;
+string execution_id = 18;
+string test_id = 19;
+optional ExecutionResult execution_result = 20;
+string intervention_category = 21;
+string intervention_type = 22;
+string intervention_message = 23;
+optional string recognizer_result = 24;
+optional string recognizer_config = 25;
+optional bytes data = 26;
 }
 
 // Input arguments for recognizer response
@@ -77,7 +77,8 @@ enum EventType
     EVT_DEBUG_TEST = 20;
     EVT_RESOURCE_VIEW = 21;
     EVT_INTERVENTION = 22;
-    EVT_CUSTOM = 23;
+    EVT_X_RECOGNIZER_RUN = 23;
+    EVT_X_STEP_BY_STEP_STEP = 24; 
 }
 
 enum EventInitiator

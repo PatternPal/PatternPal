@@ -1,0 +1,78 @@
+﻿[
+  {
+    FeedbackMessage: Found class 'MockClass1',
+    Priority: Low,
+    ChildrenCheckResults: [
+      {
+        FeedbackMessage: ,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found constructor: MockClass1().,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: Found the required checks for: MockClass1().,
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: Modifiers correctly implemented.,
+                    Correct: true,
+                    MatchedNode: MockClass1
+                  },
+                  {
+                    FeedbackMessage: The node MockClass1() does not have the protected modifier.,
+                    Correct: false,
+                    MatchedNode: MockClass1
+                  }
+                ],
+                CollectionKind: Any,
+                MatchedNode: MockClass1,
+                NodeCheckCollectionWrapper: false
+              }
+            ],
+            MatchedNode: MockClass1,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        NodeCheckCollectionWrapper: true
+      },
+      {
+        FeedbackMessage: ,
+        Priority: Low,
+        ChildrenCheckResults: [
+          {
+            FeedbackMessage: Found method: GetInstance().,
+            Priority: Low,
+            ChildrenCheckResults: [
+              {
+                FeedbackMessage: Found Uses relations for GetInstance().,
+                Priority: Mid,
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: Node GetInstance() has a Uses relation with node MockClass1(),
+                    Priority: Mid,
+                    Correct: true,
+                    DependencyCount: 1,
+                    MatchedNode: MockClass1
+                  }
+                ],
+                CollectionKind: Any,
+                DependencyCount: 1,
+                MatchedNode: GetInstance,
+                NodeCheckCollectionWrapper: true
+              }
+            ],
+            DependencyCount: 1,
+            MatchedNode: GetInstance,
+            NodeCheckCollectionWrapper: false
+          }
+        ],
+        CollectionKind: Any,
+        DependencyCount: 1,
+        NodeCheckCollectionWrapper: true
+      }
+    ],
+    DependencyCount: 1,
+    MatchedNode: MockClass1,
+    NodeCheckCollectionWrapper: false
+  }
+]

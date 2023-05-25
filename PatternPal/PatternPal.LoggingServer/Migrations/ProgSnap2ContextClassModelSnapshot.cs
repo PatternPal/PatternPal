@@ -17,7 +17,7 @@ namespace PatternPal.LoggingServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.4")
+                .HasAnnotation("ProductVersion", "7.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -46,6 +46,9 @@ namespace PatternPal.LoggingServer.Migrations
                     b.Property<int>("EventType")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("ExecutionResult")
+                        .HasColumnType("integer");
+
                     b.Property<int>("Order")
                         .HasColumnType("integer");
 
@@ -53,6 +56,12 @@ namespace PatternPal.LoggingServer.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("ProjectId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RecognizerConfig")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RecognizerResult")
                         .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("ServerDatetime")

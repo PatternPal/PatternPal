@@ -1,6 +1,4 @@
-﻿using PatternPal.SyntaxTree.Abstractions;
-using PatternPal.SyntaxTree.Abstractions.Entities;
-using PatternPal.SyntaxTree.Abstractions.Members;
+﻿using PatternPal.SyntaxTree.Abstractions.Entities;
 
 namespace PatternPal.Tests.Checks;
 
@@ -11,16 +9,13 @@ public class TypeCheckTests
     public Task Type_Check_Returns_Correct_Result()
     {
         IClass classEntity = EntityNodeUtils.CreateClass();
-
+        
         TypeCheck typeCheck = new(
             Priority.Low,
-            OneOf< Func< List< INode > >, GetCurrentEntity >.FromT0(
-                () => new List< INode >
-                      {
-                          classEntity
-                      }) );
+            OneOf<ICheck, GetCurrentEntity >.FromT1(
+                ICheck.GetCurrentEntity) );
 
-        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
+        IRecognizerContext ctx = RecognizerContext4Tests.WithEntity(classEntity );
 
         ICheckResult result = typeCheck.Check(
             ctx,
@@ -36,13 +31,10 @@ public class TypeCheckTests
 
         TypeCheck typeCheck = new(
             Priority.Low,
-            OneOf< Func< List< INode > >, GetCurrentEntity >.FromT0(
-                () => new List< INode >
-                      {
-                          classEntity
-                      }) );
+            OneOf< ICheck, GetCurrentEntity >.FromT1(
+                ICheck.GetCurrentEntity) );
 
-        IRecognizerContext ctx = RecognizerContext4Tests.Empty();
+        IRecognizerContext ctx = RecognizerContext4Tests.WithEntity(classEntity);
 
         ICheckResult result = typeCheck.Check(
             ctx,

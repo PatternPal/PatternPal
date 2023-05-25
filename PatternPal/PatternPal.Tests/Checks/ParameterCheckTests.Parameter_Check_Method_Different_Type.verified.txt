@@ -13,11 +13,23 @@
             {
               FeedbackMessage: Node 'StringTest' has incorrect type, expected 'IntTest',
               Priority: Low,
-              Correct: false
+              Correct: false,
+              DependencyCount: 1,
+              MatchedNode: IntTest
             }
-          ]
+          ],
+          CollectionKind: Any,
+          DependencyCount: 1,
+          MatchedNode: StringTest,
+          NodeCheckCollectionWrapper: true
         }
-      ]
+      ],
+      DependencyCount: 1,
+      MatchedNode: IntTestFunction,
+      NodeCheckCollectionWrapper: false
     }
-  ]
+  ],
+  DependencyCount: 1,
+  MatchedNode: IntTestFunction,
+  NodeCheckCollectionWrapper: false
 }

@@ -3,14 +3,18 @@
   Priority: Low,
   ChildrenCheckResults: [
     {
-      FeedbackMessage: ,
+      FeedbackMessage: Executing NOT-check,
       Priority: Low,
       NestedResult: {
         FeedbackMessage: Modifiers correctly implemented.,
         Priority: Low,
-        Correct: true
-      }
+        Correct: true,
+        MatchedNode: Test
+      },
+      MatchedNode: Test
     }
   ],
-  CollectionKind: Any
+  CollectionKind: Any,
+  MatchedNode: Test,
+  NodeCheckCollectionWrapper: false
 }

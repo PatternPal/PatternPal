@@ -29,7 +29,8 @@ enum EventType
     EVT_DEBUG_TEST = 20;
     EVT_RESOURCE_VIEW = 21;
     EVT_INTERVENTION = 22;
-    EVT_CUSTOM = 23;
+    EVT_X_RECOGNIZER_RUN = 23;
+    EVT_X_STEP_BY_STEP_STEP = 24; 
 }
 
 enum EventInitiator

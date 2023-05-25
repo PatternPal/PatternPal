@@ -16,7 +16,7 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
                 new InstructionSet
                 {
                     Name = name,
-                    NumberOfInstructions = (uint)set.Instructions.Count(),
+                    NumberOfInstructions = (uint)set.Instructions.Count()
                 });
         }
 
@@ -63,7 +63,7 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
                                                                     ShowFileSelector = instruction is IFileSelector,
                                                                     FileId = instruction is IFileSelector fileSelector
                                                                         ? fileSelector.FileId
-                                                                        : string.Empty,
+                                                                        : string.Empty
                                                                 }
                                               };
 
@@ -104,7 +104,7 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
                                   //Recognizer = 0,
                                   //ClassName = result.EntityNode.GetFullName(),
                               };
-        foreach (ICheckResult checkResult in instruction.Checks.Select(check => check.Correct(state)))
+        foreach (Recognizers.Abstractions.ICheckResult checkResult in instruction.Checks.Select(check => check.Correct(state)))
         {
             res.Results.Add(CreateCheckResult(checkResult));
         }
@@ -122,22 +122,21 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
 
         CheckInstructionResponse response = new()
                                             {
-                                                Result = res,
+                                                Result = res
                                             };
         return Task.FromResult(response);
     }
 
-    private CheckResult CreateCheckResult(
-        ICheckResult checkResult)
+    private static CheckResult CreateCheckResult(
+        Recognizers.Abstractions.ICheckResult checkResult)
     {
         CheckResult newCheckResult = new()
                                      {
                                          FeedbackType = (CheckResult.Types.FeedbackType)((int)checkResult.GetFeedbackType() + 1),
                                          Hidden = checkResult.IsHidden,
-                                         Score = checkResult.GetScore(),
-                                         FeedbackMessage = ResourceUtils.ResultToString(checkResult),
+                                         FeedbackMessage = ResourceUtils.ResultToString(checkResult)
                                      };
-        foreach (ICheckResult childCheckResult in checkResult.GetChildFeedback())
+        foreach (Recognizers.Abstractions.ICheckResult childCheckResult in checkResult.GetChildFeedback())
         {
             newCheckResult.SubCheckResults.Add(CreateCheckResult(childCheckResult));
         }
@@ -146,6 +145,6 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
 
     private static class State
     {
-        internal static Dictionary< string, string > StateKeyed = new();
+        internal static readonly Dictionary< string, string > StateKeyed = new();
     }
 }

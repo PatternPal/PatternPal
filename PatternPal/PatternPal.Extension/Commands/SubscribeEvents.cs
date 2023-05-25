@@ -1,5 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#region 
+
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.Shell;
@@ -8,9 +9,9 @@ using EnvDTE;
 using EnvDTE80;
 using PatternPal.Protos;
 using System.Threading;
-using System.Collections;
-using Microsoft.VisualStudio.Shell.Interop;
+using System.Collections.Generic;
 
+#endregion
 
 namespace PatternPal.Extension.Commands
 {
@@ -26,9 +27,15 @@ namespace PatternPal.Extension.Commands
 
         private static DTE _dte;
 
-        private static Solution _dteSolution;
+        private static DebuggerEvents _dteDebugEvents;
+
+        private static SolutionEvents _dteSolutionEvents;
+
+        private static BuildEvents _dteBuildEvents;
 
         private static string _sessionId;
+
+        private static bool _unhandledExceptionThrown;
 
         public static string SessionId
         {
@@ -51,14 +58,17 @@ namespace PatternPal.Extension.Commands
         {
             _dte = dte;
             ThreadHelper.ThrowIfNotOnUIThread();
+            _dteDebugEvents = _dte.Events.DebuggerEvents;
+            _dteSolutionEvents = _dte.Events.SolutionEvents;
+            _dteBuildEvents = _dte.Events.BuildEvents;
             _package = package;
             _pathToUserDataFolder = Path.Combine(_package.UserLocalDataPath.ToString(), "Extensions", "Team PatternPal",
                 "PatternPal.Extension", "UserData");
             _cancellationToken = cancellationToken;
             SaveSubjectId();
 
-            // Initialization, as otherwise the handlers will never get started.
-            bool _ = package.DoLogData;
+            // This activates the DoLogData, necessary here in Initialize to kickstart the Session and Project Open events.
+            bool _ = _package.DoLogData;
         }
 
         /// <summary>
@@ -68,12 +78,13 @@ namespace PatternPal.Extension.Commands
         public static async Task SubscribeEventHandlersAsync()
         {
             await _package.JoinableTaskFactory.SwitchToMainThreadAsync(_cancellationToken);
-            _dteSolution = _dte.Solution;
             // Code that interacts with UI elements goes here
-            _dte.Events.BuildEvents.OnBuildDone += OnCompileDone;
-            _dte.Events.SolutionEvents.Opened += OnProjectOpen;
-            _dte.Events.SolutionEvents.BeforeClosing += OnProjectClose;
-            // _dte.Events.DebuggerEvents.OnEnterDesignMode += OnRunProgram; //Not triggering...
+            _dteBuildEvents.OnBuildDone += OnCompileDone;
+            _dteSolutionEvents.Opened += OnProjectOpen;
+            _dteSolutionEvents.BeforeClosing += OnProjectClose;
+            _dteDebugEvents.OnEnterBreakMode +=
+                OnExceptionUnhandled; // OnEnterBreakMode is triggered for both breakpoints as well as exceptions, with the reason parameter specifying this.
+            _dteDebugEvents.OnEnterDesignMode += OnDebugProgram;
         }
 
 
@@ -83,9 +94,11 @@ namespace PatternPal.Extension.Commands
         public static async Task UnsubscribeEventHandlersAsync()
         {
             await _package.JoinableTaskFactory.SwitchToMainThreadAsync(_cancellationToken);
-            _dte.Events.BuildEvents.OnBuildDone -= OnCompileDone;
-            _dte.Events.SolutionEvents.Opened -= OnProjectOpen;
-            _dte.Events.SolutionEvents.BeforeClosing -= OnProjectClose;
+            _dteBuildEvents.OnBuildDone -= OnCompileDone;
+            _dteSolutionEvents.Opened -= OnProjectOpen;
+            _dteSolutionEvents.BeforeClosing -= OnProjectClose;
+            _dteDebugEvents.OnEnterBreakMode -= OnExceptionUnhandled;
+            _dteDebugEvents.OnEnterDesignMode -= OnDebugProgram;
         }
 
 
@@ -168,12 +181,11 @@ namespace PatternPal.Extension.Commands
         internal static void OnSessionStart()
         {
             SessionId = Guid.NewGuid().ToString();
-
+           
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtSessionStart;
-            LogProviderService.LogProviderServiceClient client =
-                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-            LogEventResponse response = client.LogEvent(request);
+
+            LogEventResponse response = PushLog(request);
         }
 
         /// <summary>
@@ -183,9 +195,8 @@ namespace PatternPal.Extension.Commands
         {
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtSessionEnd;
-            LogProviderService.LogProviderServiceClient client =
-                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-            LogEventResponse response = client.LogEvent(request);
+
+            LogEventResponse response = PushLog(request);
         }
 
         /// <summary>
@@ -201,103 +212,68 @@ namespace PatternPal.Extension.Commands
             request.CompileMessageData = compileMessageData;
             request.SourceLocation = sourceLocation;
             request.CodeStateSection = codeStateSection;
-            LogProviderService.LogProviderServiceClient client =
-                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-            LogEventResponse response = client.LogEvent(request);
+
+            LogEventResponse response = PushLog(request);
         }
 
         /// <summary>
         /// The event handler for handling the Project.Open Event.
         /// </summary>
-        private static void OnProjectOpen()
+        internal static void OnProjectOpen()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            Projects projects = _dte.Solution.Projects;
-
-            // Distinguish whether only a csproj file was opened initially, or a solution file.
-            // For a csproj, _dte.Solution.FullName returns an empty string and the projects inside
-            // have to be iterated (which is only 1 project, the csproj file).
-            string nameTest = _dte.Solution.FullName;
-
-            if (nameTest == "")
-            {
-                List<Project> list = new List<Project>();
-                IEnumerator item = projects.GetEnumerator();
-                while (item.MoveNext())
-                {
-                    Project project = item.Current as Project;
-                    if (project == null)
-                    {
-                        continue;
-                    }
-
-                    nameTest = project.FullName;
-                }
-            }
-
-            LogEventRequest request = CreateStandardLog();
-            request.EventType = EventType.EvtProjectOpen;
-            request.ProjectId = nameTest;
-            LogProviderService.LogProviderServiceClient client =
-                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-            LogEventResponse response = client.LogEvent(request);
+            LogEachProject(EventType.EvtProjectOpen);
         }
 
         /// <summary>
         /// The event handler for handling the Project.Close Event.
         /// </summary>
-        private static void OnProjectClose()
+        internal static void OnProjectClose()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            Projects projects = _dte.Solution.Projects;
-
-            // Distinguish whether only a csproj file was opened initially, or a solution file.
-            // For a csproj, _dte.Solution.FullName returns an empty string and the projects inside
-            // have to be iterated (which is only 1 project, the csproj file).
-            string nameTest = _dte.Solution.FullName;
-
-            if (nameTest == "")
-            {
-                List<Project> list = new List<Project>();
-                IEnumerator item = projects.GetEnumerator();
-                while (item.MoveNext())
-                {
-                    Project project = item.Current as Project;
-                    if (project == null)
-                    {
-                        continue;
-                    }
-
-                    nameTest = project.FullName;
-                }
-            }
-
-            LogEventRequest request = CreateStandardLog();
-            request.EventType = EventType.EvtProjectClose;
-            request.ProjectId = nameTest;
-            LogProviderService.LogProviderServiceClient client =
-                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-            LogEventResponse response = client.LogEvent(request);
+            LogEachProject(EventType.EvtProjectClose);
         }
 
         /// <summary>
-        /// The event handler for handling the Run.Program Event.
+        /// The event handler for handling the Debug.Program Event.
         /// </summary>
-        private static void OnRunProgram(dbgEventReason reason)
+        private static void OnDebugProgram(dbgEventReason reason)
         {
             LogEventRequest request = CreateStandardLog();
-            request.EventType = EventType.EvtRunProgram;
+            request.EventType = EventType.EvtDebugProgram;
+            request.ExecutionId = Guid.NewGuid().ToString();
 
-            if (reason == dbgEventReason.dbgEventReasonExceptionThrown ||
-                reason == dbgEventReason.dbgEventReasonExceptionNotHandled)
+            if (_unhandledExceptionThrown)
             {
                 request.ExecutionResult = ExecutionResult.ExtError;
+                _unhandledExceptionThrown = false;
+            }
+            else
+            {
+                request.ExecutionResult = ExecutionResult.ExtSucces;
             }
 
-            LogProviderService.LogProviderServiceClient client =
-                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-            LogEventResponse response = client.LogEvent(request);
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            LogEventResponse response = PushLog(request);
+        }
+
+
+        /// <summary>
+        /// The event handler for when recognizing software patterns in the extension.
+        /// </summary>
+        public static void OnPatternRecognized(RecognizeRequest recognizeRequest, IList<RecognizeResult> recognizeResults)
+        {
+            if (_package == null || !_package.DoLogData) return; 
+            LogEventRequest request = CreateStandardLog();
+            request.EventType = EventType.EvtXRecognizerRun;
+            string config = recognizeRequest.Recognizers.ToString();
+
+            request.RecognizerConfig = config;
+            foreach (RecognizeResult result in recognizeResults)
+            {
+                request.RecognizerResult += result.ToString();
+            }
+
+            LogEventResponse response = PushLog(request);
         }
 
         #endregion
@@ -312,6 +288,17 @@ namespace PatternPal.Extension.Commands
             {
                 EventId = Guid.NewGuid().ToString(), SubjectId = GetSubjectId(), SessionId = _sessionId
             };
+        }
+
+        /// <summary>
+        /// Sends the log request to the background service in order to be processed to the server.
+        /// </summary>
+        private static LogEventResponse PushLog(LogEventRequest request)
+        {
+            LogProviderService.LogProviderServiceClient client =
+                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
+
+            return client.LogEvent(request);
         }
 
         /// <summary>
@@ -346,12 +333,12 @@ namespace PatternPal.Extension.Commands
             return File.ReadAllText(filePath);
         }
 
+        // TODO Separate utility because of duplication with extension
         /// <summary>
-        /// Gets the relative path when given an absolute path and a filename.
+        /// Gets the relative path when given an absolute directory path and a filename.
         /// </summary>
-        /// <param name="relativeTo"> The absolute path to the root folder of the solution or project</param>
+        /// <param name="relativeTo"> The absolute path to the root folder</param>
         /// <param name="path">The absolute path to the specific file</param>
-        /// <returns></returns>
         public static string GetRelativePath(string relativeTo, string path)
         {
             Uri uri = new Uri(relativeTo);
@@ -363,6 +350,55 @@ namespace PatternPal.Extension.Commands
             }
 
             return rel;
+        }
+
+        /// <summary>
+        /// Cycles through all active projects and log the given event for each of these projects.
+        /// </summary>
+        private static void LogEachProject(EventType eventType)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            Projects projects = _dte.Solution.Projects;
+
+            foreach (Project project in projects)
+            {
+                if (project == null)
+                {
+                    continue;
+                }
+
+                // TODO This catches miscellanious projects without a defined project.Fullname, but we should investigate where this
+                //  problem derives from.
+                if (project.FullName == null || !File.Exists((project.FullName)))
+                {
+                    continue;
+                }
+
+                LogEventRequest request = CreateStandardLog();
+                request.EventType = eventType;
+
+                // Since LogEachProject is only called by either Project.Open or Project.Close,
+                // we include the full CodeState.
+                request.ProjectId = project.UniqueName;
+                request.FilePath = Path.GetDirectoryName(project.FullName);
+
+                LogEventResponse response = PushLog(request);
+            }
+        }
+
+
+
+        /// <summary>
+        /// Event handler for when an exception is unhandled. This is used to determine in the user's last debug session
+        /// whether there were any unhandled exceptions. Although creating a separate method might seem redundant
+        /// for the actual logic used here, it is necessary for the adding and removing from any used event listeners.
+        /// </summary>
+        public static void OnExceptionUnhandled(dbgEventReason reason, ref dbgExecutionAction executionAction)
+        {
+            if (reason == dbgEventReason.dbgEventReasonExceptionNotHandled)
+            {
+                _unhandledExceptionThrown = true;
+            }
         }
     }
 }

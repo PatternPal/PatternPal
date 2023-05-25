@@ -9,9 +9,18 @@
         {
           FeedbackMessage: No Uses relation found.,
           Priority: Low,
-          Correct: false
+          Correct: false,
+          DependencyCount: 1,
+          MatchedNode: UsesFunction
         }
-      ]
+      ],
+      CollectionKind: Any,
+      DependencyCount: 1,
+      MatchedNode: UsedFunction,
+      NodeCheckCollectionWrapper: true
     }
-  ]
+  ],
+  DependencyCount: 1,
+  MatchedNode: UsedFunction,
+  NodeCheckCollectionWrapper: false
 }

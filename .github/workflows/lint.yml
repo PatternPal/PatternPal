@@ -1,30 +1,25 @@
 name: Lint
 
 on:
-  push:
-    branches:
-      - master
-      - develop
-    paths:
-      - 'PatternPal/**'
-  pull_request:
-    types: [ opened, synchronize, reopened, ready_for_review ]
-    paths:
-      - 'PatternPal/**'
+  workflow_call:
+    inputs:
+      should_run:
+        required: true
+        type: boolean
   workflow_dispatch:
 
 jobs:
   inspection:
     runs-on: windows-latest
-    if: github.event.pull_request.draft == false
+    if: inputs.should_run
     name: Inspection
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        
+
       - name: Remove extension from solution
         run: dotnet sln PatternPal/PatternPal.sln remove PatternPal/PatternPal.Extension/PatternPal.Extension.csproj
-        
+
       - name: Inspect code
         uses: muno92/resharper_inspectcode@main
         with:

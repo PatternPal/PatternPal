@@ -1,0 +1,48 @@
+# Pattern recognition --------------------
+- name: Pattern recognition
+  items:
+  # -- Design patterns
+  - name: Design patterns
+  - name: Singleton
+    href: recognizers/patterns/singleton.md
+  - name: Strategy
+    href: recognizers/patterns/strategy.md
+
+  # -- Design
+  - name: Design
+  - name: Recognizer
+    href: recognizers/design/recognizer.md
+  - name: Recognizer Runner
+    href: recognizers/design/recognizer_runner.md
+  - name: Checks
+    href: recognizers/design/checks.md
+  - name: Syntax Graph
+    href: recognizers/design/syntax_graph.md
+
+  # -- Guides
+  - name: Guides
+  - name: Implementing a Recognizer
+    href: recognizers/guides/implement_recognizer.md
+  - name: Implementing a Check
+    href: recognizers/guides/implement_check.md
+
+# Pattern recognition --------------------
+- name: Data logging
+  items:
+  # -- Design
+  - name: Design
+  - name: Overview
+    href: logging/design/overview.md
+  - name: LogRequest
+    href: logging/design/logrequest.md
+
+  # -- Guides
+  - name: Guides
+  - name: Installation
+    href: logging/guides/installation.md
+
+# Extension ------------------------------
+- name: Extension
+  items:
+  - name: Notes
+    href: extension/notes.md

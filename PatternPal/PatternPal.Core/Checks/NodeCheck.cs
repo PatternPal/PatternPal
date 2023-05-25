@@ -13,17 +13,49 @@ internal class NodeCheck< TNode > : CheckBase
     // The kind of this collection of checks.
     private readonly CheckCollectionKind _kind;
 
-    // The entities matched by this check.
-    private readonly List< INode > _matchedEntities;
-
-    // The current sub-check being checked.
-    private ICheck ? _currentSubCheck;
-
     /// <summary>
     /// Gets a <see cref="Func{TResult}"/> which returns a <see cref="List{T}"/> of <see cref="IEntity"/>s matched by this <see cref="ICheck"/>.
     /// </summary>
     /// <returns>A <see cref="List{T}"/> of matched <see cref="IEntity"/>s.</returns>
-    internal Func< List< INode > > Result => () => _matchedEntities;
+    public override Func< List< INode > > Result => () => _matchedEntities
+                                                          ?? throw new ArgumentNullException(
+                                                              nameof( _matchedEntities ),
+                                                              $"'{this}' is not yet evaluated, make sure to evaluate this check before you try to access it results!");
+
+    // The current sub-check being checked.
+    private ICheck ? _currentSubCheck;
+
+    // The entities matched by this check. This list is set when the check is evaluated, before then
+    // it is null. When the list is set but empty, no entities were matched by this check.
+    private List< INode > ? _matchedEntities;
+
+    // The dependency count, declared as nullable so we can check whether we have calculated it
+    // already.
+    private int ? _dependencyCount;
+
+    /// <summary>
+    /// The dependencies to other <see cref="INode"/>s this check has.
+    /// While calculating the dependencies, it calculates the dependencies of its <see cref="_subChecks"/>.
+    /// </summary>
+    public override int DependencyCount
+    {
+        get
+        {
+            // Only compute the dependency count if we haven't done so already.
+            if (_dependencyCount is null)
+            {
+                int dependencyCount = 0;
+                foreach (ICheck subCheck in _subChecks)
+                {
+                    dependencyCount += subCheck.DependencyCount;
+                }
+
+                _dependencyCount = dependencyCount;
+            }
+
+            return _dependencyCount.Value;
+        }
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="NodeCheck{TNode}"/> class.
@@ -39,7 +71,6 @@ internal class NodeCheck< TNode > : CheckBase
     {
         _subChecks = subChecks;
         _kind = kind;
-        _matchedEntities = new List< INode >();
     }
 
     /// <inheritdoc />
@@ -62,6 +93,7 @@ internal class NodeCheck< TNode > : CheckBase
         }
 
         // Store the matched entity.
+        _matchedEntities ??= new List< INode >();
         _matchedEntities.Add(castNode);
 
         // Return the result.
@@ -70,15 +102,18 @@ internal class NodeCheck< TNode > : CheckBase
                    ChildrenCheckResults = subCheckResults,
                    FeedbackMessage = GetFeedbackMessage(castNode),
                    CollectionKind = _kind,
-                   Priority = Priority
+                   Priority = Priority,
+                   DependencyCount = DependencyCount,
+                   MatchedNode = castNode,
+                   Check = this,
                };
     }
 
     /// <summary>
     /// Run the given <paramref name="subCheck"/> on the given <paramref name="castNode"/>.
     /// </summary>
-    /// <param name="ctx">The current <see cref="IRecognizerContext"/>.</param>
-    /// <param name="castNode">The <see cref="INode"/> to run the <paramref name="subCheck"></param> on.</param>
+    /// <param name="oldCtx">The current <see cref="IRecognizerContext"/>.</param>
+    /// <param name="castNode">The <see cref="INode"/> to run the <paramref name="subCheck"/> on.</param>
     /// <param name="subCheck">The <see cref="ICheck"/> to run.</param>
     /// <returns>The <see cref="ICheckResult"/> of the <paramref name="subCheck"/>.</returns>
     private ICheckResult RunCheck(
@@ -148,15 +183,21 @@ internal class NodeCheck< TNode > : CheckBase
             // Call this method recursively with the check wrapped by the NotCheck. This is
             // necessary because otherwise the wrapped check won't receive the correct entities.
             case NotCheck notCheck:
+            {
+                ICheckResult nestedResult = RunCheck(
+                    ctx,
+                    castNode,
+                    notCheck.NestedCheck);
                 return new NotCheckResult
                        {
-                           FeedbackMessage = string.Empty,
-                           NestedResult = RunCheck(
-                               ctx,
-                               castNode,
-                               notCheck.NestedCheck),
+                           FeedbackMessage = "Executing NOT-check",
+                           NestedResult = nestedResult,
                            Priority = notCheck.Priority,
+                           DependencyCount = notCheck.DependencyCount,
+                           MatchedNode = nestedResult.MatchedNode,
+                           Check = notCheck,
                        };
+            }
 
             // The type to pass to the TypeCheck depends on the implementation in derived classes of
             // this class.
@@ -218,14 +259,25 @@ internal class NodeCheck< TNode > : CheckBase
                     node));
         }
 
-        // TODO: Do we want to create a dedicated result type here (to indicate that these results originated from one check)?
+        // Prevent null-ref when `nodeCheck` is not evaluated because there are no nodes to match
+        // on. This should not trigger the evaluation exception, so assign an empty list to prevent
+        // that.
+        if (results.Count == 0)
+        {
+            nodeCheck._matchedEntities ??= new List< INode >();
+        }
+
         // Return the result.
         return new NodeCheckResult
                {
                    ChildrenCheckResults = results,
-                   CollectionKind = CheckCollectionKind.All,
+                   CollectionKind = CheckCollectionKind.Any,
+                   NodeCheckCollectionWrapper = true,
                    FeedbackMessage = string.Empty,
                    Priority = nodeCheck.Priority,
+                   DependencyCount = nodeCheck.DependencyCount,
+                   MatchedNode = null,
+                   Check = nodeCheck,
                };
     }
 

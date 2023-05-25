@@ -13,16 +13,30 @@
             {
               FeedbackMessage: Node 'StringTest' has correct type,
               Priority: Low,
-              Correct: true
+              Correct: true,
+              DependencyCount: 1,
+              MatchedNode: StringTest
             }
-          ]
+          ],
+          CollectionKind: Any,
+          DependencyCount: 1,
+          MatchedNode: StringTest,
+          NodeCheckCollectionWrapper: true
         },
         {
           FeedbackMessage: There are less parameters than TypeChecks,
           Priority: Low,
-          Correct: false
+          Correct: false,
+          DependencyCount: 1,
+          MatchedNode: IntTestFunction
         }
-      ]
+      ],
+      DependencyCount: 2,
+      MatchedNode: IntTestFunction,
+      NodeCheckCollectionWrapper: false
     }
-  ]
+  ],
+  DependencyCount: 2,
+  MatchedNode: IntTestFunction,
+  NodeCheckCollectionWrapper: false
 }

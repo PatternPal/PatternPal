@@ -9,9 +9,18 @@
         {
           FeedbackMessage: Node UsesFunction() has a Uses relation with node UsedFunction(),
           Priority: Low,
-          Correct: true
+          Correct: true,
+          DependencyCount: 1,
+          MatchedNode: UsedFunction
         }
-      ]
+      ],
+      CollectionKind: Any,
+      DependencyCount: 1,
+      MatchedNode: UsesFunction,
+      NodeCheckCollectionWrapper: true
     }
-  ]
+  ],
+  DependencyCount: 1,
+  MatchedNode: UsesFunction,
+  NodeCheckCollectionWrapper: false
 }

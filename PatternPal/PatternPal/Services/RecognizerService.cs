@@ -1,12 +1,10 @@
-﻿namespace PatternPal.Services;
+﻿using ICheckResult = PatternPal.Core.ICheckResult;
+
+namespace PatternPal.Services;
 
 /// <inheritdoc cref="Protos.RecognizerService"/>
 public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
 {
-    // The threshold for always showing a result. Results with a score below the threshold are only
-    // shown if the user presses the 'show all' button in the UI.
-    private const int SCORE_THRESHOLD_FOR_SHOW_ALL = 80;
-
     /// <inheritdoc />
     public override Task< GetSupportedRecognizersResponse > GetSupportedRecognizers(
         GetSupportedRecognizersRequest request,
@@ -53,42 +51,28 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
         RecognizerRunner runner = new(
             files,
             request.Recognizers );
-        List< RecognitionResult > results = (List< RecognitionResult >)runner.Run();
-
-        // Sort results by score, in descending order.
-        results.Sort(
-            (
-                x,
-                y) => y.Result.GetScore().CompareTo(x.Result.GetScore()));
-
-        foreach (RecognitionResult result in results)
+        ICheckResult ? result = runner.RunV2();
+        if (result is null)
         {
-            // KNOWN: We sorted the results above, so if we only want to return the top results
-            // (this is controlled by request.ShowAllResults), we can stop as soon as we encounter a
-            // result which has a score below the threshold.
-            if (result.Result.GetScore() < SCORE_THRESHOLD_FOR_SHOW_ALL
-                && !request.ShowAllResults)
-            {
-                break;
-            }
+            return Task.CompletedTask;
+        }
 
-            // Convert the result types returned by the recognizer to the result types which can be
-            // sent over the wire.
+        // KNOWN: The root check result is always a NodeCheckResult.
+        NodeCheckResult rootCheckResult = (NodeCheckResult)result;
+
+        foreach (ICheckResult childCheckResult in rootCheckResult.ChildrenCheckResults)
+        {
             RecognizeResult res = new()
                                   {
-                                      Recognizer = result.Pattern.RecognizerType,
-                                      ClassName = result.EntityNode.GetFullName(),
-                                      Score = (uint)result.Result.GetScore()
+                                      Recognizer = Recognizer.Singleton,
+                                      ClassName = childCheckResult.MatchedNode?.GetName() ?? "no matched node"
                                   };
 
-            foreach (ICheckResult checkResult in result.Result.GetResults())
-            {
-                res.Results.Add(CreateCheckResult(checkResult));
-            }
+            res.Results.Add(CreateCheckResult(childCheckResult));
 
             RecognizeResponse response = new()
                                          {
-                                             Result = res,
+                                             Result = res
                                          };
             responseStream.WriteAsync(response);
         }
@@ -101,7 +85,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
     /// </summary>
     /// <returns><see langword="null"/> if the request contains no valid file or project directory,
     /// or a list of files otherwise.</returns>
-    private IList< string > ? GetFiles(
+    private static IList< string > ? GetFiles(
         RecognizeRequest request)
     {
         switch (request.FileOrProjectCase)
@@ -137,6 +121,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                     "*.cs",
                     SearchOption.AllDirectories).ToList();
             }
+            case RecognizeRequest.FileOrProjectOneofCase.None:
             default:
             {
                 return null;
@@ -150,20 +135,34 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
     /// </summary>
     /// <param name="checkResult">The <see cref="ICheckResult"/> to convert.</param>
     /// <returns>The <see cref="CheckResult"/> instance created from the given <see cref="ICheckResult"/>.</returns>
-    private CheckResult CreateCheckResult(
+    private static CheckResult CreateCheckResult(
         ICheckResult checkResult)
     {
         CheckResult newCheckResult = new()
                                      {
-                                         FeedbackType = (CheckResult.Types.FeedbackType)((int)checkResult.GetFeedbackType() + 1),
-                                         Hidden = checkResult.IsHidden,
-                                         Score = checkResult.GetScore(),
-                                         FeedbackMessage = ResourceUtils.ResultToString(checkResult),
+                                         FeedbackType = (CheckResult.Types.FeedbackType.FeedbackCorrect),
+                                         Hidden = false,
+                                         FeedbackMessage = checkResult.FeedbackMessage
                                      };
-        foreach (ICheckResult childCheckResult in checkResult.GetChildFeedback())
+
+        // Convert sub-check results.
+        switch (checkResult)
         {
-            newCheckResult.SubCheckResults.Add(CreateCheckResult(childCheckResult));
+            case NodeCheckResult nodeCheckResult:
+            {
+                foreach (ICheckResult childCheckResult in nodeCheckResult.ChildrenCheckResults)
+                {
+                    newCheckResult.SubCheckResults.Add(CreateCheckResult(childCheckResult));
+                }
+                break;
+            }
+            case NotCheckResult notCheckResult:
+            {
+                newCheckResult.SubCheckResults.Add(CreateCheckResult(notCheckResult.NestedResult));
+                break;
+            }
         }
+
         return newCheckResult;
     }
 }

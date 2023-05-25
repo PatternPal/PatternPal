@@ -11,15 +11,15 @@ internal delegate IEntity GetCurrentEntity(
 
 /// <summary>
 /// Represents a check, which is a part of a <see cref="Recognizers.IRecognizer"/> responsible for checking
-/// something in the <see cref="SyntaxGraph"/>, e.g. the modifiers of a method, or the type of a
+/// some properties in the <see cref="SyntaxGraph"/>, e.g. the modifiers of a method, or the type of a
 /// property.
 /// </summary>
-internal interface ICheck
+public interface ICheck
 {
     /// <summary>
     /// Function which will return the current <see cref="IEntity"/> being checked.
     /// </summary>
-    /// <param name="ctx">The current <see cref="RecognizerContext"/>.</param>
+    /// <param name="ctx">The current <see cref="IRecognizerContext"/>.</param>
     /// <returns>The current <see cref="IEntity"/> being checked.</returns>
     internal static readonly GetCurrentEntity GetCurrentEntity = ctx => ctx.CurrentEntity;
 
@@ -28,10 +28,17 @@ internal interface ICheck
     /// </summary>
     Priority Priority { get; }
 
+    Func< List< INode > > Result { get;  }
+
+    /// <summary>
+    /// The dependencies to other <see cref="INode"/>s this check has.
+    /// </summary>
+    int DependencyCount { get; }
+
     /// <summary>
     /// Runs the current check on the given <see cref="INode"/>.
     /// </summary>
-    /// <param name="ctx">The current <see cref="RecognizerContext"/>.</param>
+    /// <param name="ctx">The current <see cref="IRecognizerContext"/>.</param>
     /// <param name="node">The <see cref="INode"/> to be checked.</param>
     /// <returns>An <see cref="ICheckResult"/> which represents the result of the check.</returns>
     ICheckResult Check(
@@ -46,6 +53,12 @@ internal abstract class CheckBase : ICheck
 {
     /// <inheritdoc />
     public Priority Priority { get; }
+
+    //public Func<List<INode>> Result => () => throw new ArgumentException("Not a NodeCheck");
+    public virtual Func<List<INode>> Result => throw new NotSupportedException($"this check '{this}' is not a NodeCheck");
+
+    /// <inheritdoc />
+    public abstract int DependencyCount { get; }
 
     /// <summary>
     /// Sets the priority.
@@ -65,7 +78,7 @@ internal abstract class CheckBase : ICheck
 /// <summary>
 /// Represents the priority of a <see cref="ICheck"/>.
 /// </summary>
-internal enum Priority
+public enum Priority
 {
     /// <summary>
     /// This <see cref="ICheck"/> is required for the <see cref="Recognizers.IRecognizer"/> to succeed.
@@ -91,7 +104,7 @@ internal enum Priority
 /// <summary>
 /// Represents the behavior of a collection of <see cref="ICheck"/>s when deciding if it is correct.
 /// </summary>
-enum CheckCollectionKind
+public enum CheckCollectionKind
 {
     /// <summary>
     /// All sub-<see cref="ICheck"/>s must succeed for this <see cref="ICheck"/> to succeed.
@@ -110,11 +123,11 @@ enum CheckCollectionKind
 internal static class CheckBuilder
 {
     /// <summary>
-    /// Creates a new <see cref="CheckCollection"/> of kind <see cref="CheckCollectionKind.Any"/>.
+    /// Creates a new <see cref="NodeCheck{TNode}"/> of kind <see cref="CheckCollectionKind.Any"/>.
     /// </summary>
-    /// <param name="priority">The <see cref="Priority"/> of this <see cref="CheckCollection"/>.</param>
-    /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="CheckCollection"/>.</param>
-    /// <returns>The created <see cref="CheckCollection"/>.</returns>
+    /// <param name="priority">The <see cref="Priority"/> of this <see cref="NodeCheck{TNode}"/>.</param>
+    /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="NodeCheck{TNode}"/>.</param>
+    /// <returns>The created <see cref="NodeCheck{TNode}"/>.</returns>
     internal static NodeCheck< INode > Any(
         Priority priority,
         params ICheck[ ] checks) => new(
@@ -123,11 +136,11 @@ internal static class CheckBuilder
         CheckCollectionKind.Any );
 
     /// <summary>
-    /// Creates a new <see cref="CheckCollection"/> of kind <see cref="CheckCollectionKind.All"/>
+    /// Creates a new <see cref="NodeCheck{TNode}"/> of kind <see cref="CheckCollectionKind.All"/>
     /// </summary>
-    /// <param name="priority">The <see cref="Priority"/> of this <see cref="CheckCollection"/>.</param>
-    /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="CheckCollection"/>.</param>
-    /// <returns>The created <see cref="CheckCollection"/>.</returns>
+    /// <param name="priority">The <see cref="Priority"/> of this <see cref="NodeCheck{TNode}"/>.</param>
+    /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="NodeCheck{TNode}"/>.</param>
+    /// <returns>The created <see cref="NodeCheck{TNode}"/>.</returns>
     internal static NodeCheck< INode > All(
         Priority priority,
         params ICheck[ ] checks) => new(
@@ -150,7 +163,7 @@ internal static class CheckBuilder
     /// Creates a new <see cref="ClassCheck"/>.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="ClassCheck"/>.</param>
-    /// <param name="checks"/>The sub-<see cref="ICheck"/>s of this <see cref="ClassCheck"/>.</param>
+    /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="ClassCheck"/>.</param>
     /// <returns>The created <see cref="ClassCheck"/>.</returns>
     internal static ClassCheck Class(
         Priority priority,
@@ -162,7 +175,7 @@ internal static class CheckBuilder
     /// Creates a new <see cref="ClassCheck"/> with a <see cref="Modifier"/> check for <see langword="abstract"/> as it first sub-<see cref="ICheck"/>.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="ClassCheck"/>.</param>
-    /// <param name="checks"/>The sub-<see cref="ICheck"/>s of this <see cref="ClassCheck"/>.</param>
+    /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="ClassCheck"/>.</param>
     /// <returns>The created <see cref="ClassCheck"/>.</returns>
     internal static ClassCheck AbstractClass(
         Priority priority,
@@ -178,7 +191,7 @@ internal static class CheckBuilder
     /// Creates a new <see cref="InterfaceCheck"/>.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="InterfaceCheck"/>.</param>
-    /// <param name="checks"/>The sub-<see cref="ICheck"/>s of this <see cref="InterfaceCheck"/>.</param>
+    /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="InterfaceCheck"/>.</param>
     /// <returns>The created <see cref="InterfaceCheck"/>.</returns>
     internal static InterfaceCheck Interface(
         Priority priority,
@@ -190,7 +203,7 @@ internal static class CheckBuilder
     /// Creates a new <see cref="MethodCheck"/>.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="MethodCheck"/>.</param>
-    /// <param name="checks"/>The sub-<see cref="ICheck"/>s of this <see cref="MethodCheck"/>.</param>
+    /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="MethodCheck"/>.</param>
     /// <returns>The created <see cref="MethodCheck"/>.</returns>
     internal static MethodCheck Method(
         Priority priority,
@@ -202,7 +215,7 @@ internal static class CheckBuilder
     /// Creates a new <see cref="PropertyCheck"/>.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="PropertyCheck"/>.</param>
-    /// <param name="checks"/>The sub-<see cref="ICheck"/>s of this <see cref="PropertyCheck"/>.</param>
+    /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="PropertyCheck"/>.</param>
     /// <returns>The created <see cref="PropertyCheck"/>.</returns>
     internal static PropertyCheck Property(
         Priority priority,
@@ -238,13 +251,13 @@ internal static class CheckBuilder
     /// Creates a new <see cref="TypeCheck"/>.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="TypeCheck"/>.</param>
-    /// <param name="getMatchedNodes">A <see cref="Func{TResult}"/> which returns a <see cref="List{T}"/> of matched <see cref="INode"/>s from another <see cref="ICheck"/>.</param>
+    /// <param name="getRelatedCheck">A <see cref="CheckBase"/> which belongs to the <see cref="ICheck"/> which is used as type reference.</param>
     /// <returns>The created <see cref="TypeCheck"/>.</returns>
     internal static TypeCheck Type(
         Priority priority,
-        Func< List< INode > > getMatchedNodes) => new(
+        CheckBase getRelatedCheck) => new(
         priority,
-        getMatchedNodes );
+        getRelatedCheck );
 
     /// <summary>
     /// Creates a new <see cref="TypeCheck"/>.
@@ -262,14 +275,15 @@ internal static class CheckBuilder
     /// Creates a new <see cref="RelationCheck"/> for a uses relation.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="RelationCheck"/>.</param>
-    /// <param name="getMatchedNodes">A <see cref="Func{TResult}"/> which returns a <see cref="List{T}"/> of matched <see cref="INode"/>s from another <see cref="ICheck"/>.</param>
+    /// <param name="relatedNodeCheck">The <see cref="ICheck"/> which checks for the node
+    /// to which there should be a uses relation.</param>
     /// <returns>The created <see cref="RelationCheck"/>.</returns>
     internal static RelationCheck Uses(
         Priority priority,
-        Func< List< INode > > getMatchedNodes) => new(
+        ICheck relatedNodeCheck) => new(
         priority,
         RelationType.Uses,
-        getMatchedNodes );
+        relatedNodeCheck);
 
     /// <summary>
     /// Creates a new <see cref="RelationCheck"/> for a used by relation.
@@ -288,14 +302,15 @@ internal static class CheckBuilder
     /// Creates a new <see cref="RelationCheck"/> for a inheritance relation.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="RelationCheck"/>.</param>
-    /// <param name="getMatchedNodes">A <see cref="Func{TResult}"/> which returns a <see cref="List{T}"/> of matched <see cref="INode"/>s from another <see cref="ICheck"/>.</param>
+    /// <param name="relatedNodeCheck">The <see cref="ICheck"/> which checks for the node
+    /// to which there should be an inherits relation.</param>
     /// <returns>The created <see cref="RelationCheck"/>.</returns>
     internal static RelationCheck Inherits(
         Priority priority,
-        Func< List< INode > > getMatchedNodes) => new(
+        ICheck relatedNodeCheck) => new(
         priority,
         RelationType.Extends,
-        getMatchedNodes );
+        relatedNodeCheck );
 
     /// <summary>
     /// Creates a new <see cref="RelationCheck"/> for a inheritance by relation.
@@ -314,14 +329,15 @@ internal static class CheckBuilder
     /// Creates a new <see cref="RelationCheck"/> for an implements relation.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="RelationCheck"/>.</param>
-    /// <param name="getMatchedNodes">A <see cref="Func{TResult}"/> which returns a <see cref="List{T}"/> of matched <see cref="INode"/>s from another <see cref="ICheck"/>.</param>
+    /// <param name="relatedNodeCheck">The <see cref="ICheck"/> which checks for the node
+    /// to which there should be an implements relation.</param>
     /// <returns>The created <see cref="RelationCheck"/>.</returns>
     internal static RelationCheck Implements(
         Priority priority,
-        Func< List< INode > > getMatchedNodes) => new(
+        ICheck relatedNodeCheck) => new(
         priority,
         RelationType.Implements,
-        getMatchedNodes );
+        relatedNodeCheck );
 
     /// <summary>
     /// Creates a new <see cref="RelationCheck"/> for an implemented by relation.
@@ -340,14 +356,15 @@ internal static class CheckBuilder
     /// Creates a new <see cref="RelationCheck"/> for a creation relation.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="RelationCheck"/>.</param>
-    /// <param name="getMatchedNodes">A <see cref="Func{TResult}"/> which returns a <see cref="List{T}"/> of matched <see cref="INode"/>s from another <see cref="ICheck"/>.</param>
-    /// <returns>The created <see cref="RelationCheck"/>.</returns>
+    /// <param name="relatedNodeCheck">The <see cref="ICheck"/> which checks for the node
+    /// to which there should be a creates relation.</param>
+    /// <returns>The created <see cref="RelationCheck"/></returns>
     internal static RelationCheck Creates(
         Priority priority,
-        Func< List< INode > > getMatchedNodes) => new(
+        ICheck relatedNodeCheck) => new(
         priority,
         RelationType.Creates,
-        getMatchedNodes );
+        relatedNodeCheck );
 
     /// <summary>
     /// Creates a new <see cref="RelationCheck"/> for a created by relation.
@@ -366,7 +383,7 @@ internal static class CheckBuilder
     /// Creates a new <see cref="FieldCheck"/>.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="FieldCheck"/>.</param>
-    /// <param name="checks"/>The sub-<see cref="ICheck"/>s of this <see cref="FieldCheck"/>.</param>
+    /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="FieldCheck"/>.</param>
     /// <returns>The created <see cref="FieldCheck"/>.</returns>
     internal static FieldCheck Field(
         Priority priority,
@@ -378,7 +395,7 @@ internal static class CheckBuilder
     /// Creates a new <see cref="ConstructorCheck"/>.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="ConstructorCheck"/>.</param>
-    /// <param name="checks"/>The sub-<see cref="ICheck"/>s of this <see cref="ConstructorCheck"/>.</param>
+    /// <param name="checks">The sub-<see cref="ICheck"/>s of this <see cref="ConstructorCheck"/>.</param>
     /// <returns>The created <see cref="ConstructorCheck"/>.</returns>
     internal static ConstructorCheck Constructor(
         Priority priority,
@@ -415,25 +432,6 @@ internal static class CheckHelper
         ICheck subCheck) => new(
         parentCheck,
         subCheck );
-
-    /// <summary>
-    /// This method checks the value of the leaf nodes and returns true if all the children are correct and false in other cases
-    /// </summary>
-    internal static bool CheckAllChildrenCorrect(
-        ICheckResult checkResult)
-    {
-        if (checkResult is LeafCheckResult leafResult)
-        {
-            return leafResult.Correct;
-        }
-
-        if (checkResult is NodeCheckResult nodeResult)
-        {
-            return nodeResult.ChildrenCheckResults.All(childResult => CheckAllChildrenCorrect(childResult));
-        }
-
-        throw new ArgumentException($"Unknown ICheckResult type: {checkResult.GetType().Name}");
-    }
 }
 
 /// <summary>
@@ -458,7 +456,7 @@ internal sealed class IncorrectNodeTypeException : Exception
     /// </summary>
     /// <param name="node">The <see cref="INode"/> which could not be converted.</param>
     internal static IncorrectNodeTypeException From< T >(
-        INode ? node) => new(
+        INode? node) => new(
         typeof( T ),
         node );
 }
