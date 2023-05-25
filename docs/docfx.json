@@ -41,11 +41,27 @@
       }
     ],
     "output": "_site",
-    "globalMetadataFiles": [],
-    "fileMetadataFiles": [],
-    "template": ["default", "modern"],
-    "postProcessors": [],
+    "globalMetadata": {
+      "_appTitle": "PatternPal",
+      "_appName": "PatternPal",
+      "_appLogoPath": "images/logo.png",
+      "_appFaviconPath": "images/favicon.ico",
+      "_enableSearch": true
+    },
+    "fileMetadata": {
+      "_disableTocFilter": {
+        "index.md": true,
+        "home/**": true
+      }
+    },
+    "template": ["default", "modern", "custom"],
     "keepFileLink": false,
-    "disableGitFeatures": false
-  }
+    "disableGitFeatures": false,
+    "markdownEngineName": "markdig",
+    "markdownEngineProperties": {
+        "markdigExtensions": [
+          "footnotes"
+        ]
+      }
+    }
 }

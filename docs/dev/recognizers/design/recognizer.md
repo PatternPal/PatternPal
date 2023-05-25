@@ -2,7 +2,7 @@
 
 The [appendix](#appendix) can be used as a tool accompanying the reading of this section. For more
 information on how the recognizers are run, see the recognizer runner
-[documentation](~/docs/technical/recognizer_runner.md)
+[documentation](recognizer_runner.md).
 
 ## What is a recognizer
 

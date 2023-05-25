@@ -2,12 +2,11 @@
 There are multiple categories of checks which will be explained below. The categories are: leaf checks, node checks and checkCollections.
 
 ## Leaf Checks
-A leaf check examines a single aspect of an entity (see
-the [syntax graph explanation](syntax_graph.md)) and compares it to a specific value. They do not have child checks therefore their result also does not hold childcheck results. The leaf checks that are now implemented are explained below.
+A leaf check examines a single aspect of an entity (also see [here](syntax_graph.md)) and compares it to a specific value. They do not have child checks therefore their result also does not hold childcheck results. The leaf checks that are now implemented are explained below.
 
 ### ModifierCheck
 
-A @PatternPal.Core.Checks.ModifierCheck examines the modifiers of an entity and compares them to the ones specified in the check. The modifiers that can be checked are public, internal, protected, private, abstract, const, extern, override, partial, readonly, sealed, static, unsafe, virtual, volatile, new and async.
+A @PatternPal.Core.Checks.ModifierCheck examines the modifiers of an entity and compares them to the ones specified in the check. The modifiers that can be checked are `public`, `internal`, `protected`, `private`, `abstract`, `const`, `extern`, `override`, `partial`, `readonly`, `sealed`, `static`, `unsafe`, `virtual`, `volatile`, `new` and `async`.
 
 ### TypeCheck
 
@@ -41,6 +40,10 @@ A Node check examines an entity. It combines Node and Leaf checks into a
 more complex check for the entity being checked.
 
 ### NodeCheck
+
+<!---
+TODO Ref does not work
+-->
 
 A @PatternPal.Core.Checks.NodeCheck is a class encompassing the behavior of a node check, i.e.
 the possibility to run a collection of subchecks. It is the base of all
@@ -114,12 +117,3 @@ is the `NotCheck`.
 @PatternPal.Core.Checks.NotCheck contains a check and negates its result. This can be used for
 example when instead of requiring a specific modifier, you exclude one.
 
-## Creating a new Check
-1. Create a ...Check.cs class in the `PatternPal.Core/Checks` folder 
-2. Decide whether the check is a `NodeCheck`, i.o.w. if the check can have child checks
-  _ If the check is a nodeCheck implement the `NodeCheck< TNode >`
-  _ otherwise, implement the @PatternPal.Core.Checks.CheckBase
-3. Add the check to the switch in the `NodeCheck< TNode >.RunCheck()` for a derivation from the `NodeCheck< INode >` one should probably add some extra logic. Otherwise this is done in the override of `Check()`.
-4. Add a static method to the `CheckBuilder` class in `PatternPal.Core/Checks/ICheck.cs` returning an instance of the created check.
-
-5. Create a ...CheckTest.cs file in the `PatternPal.Tests/Checks` folder and check the functionality. There are some helpfull methods in `PatternPal.Tests/Utils`.

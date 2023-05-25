@@ -2,8 +2,8 @@
 
 In this guide we will go over implementing a recognizer, covering everything you need to know to
 create your own recognizer. You can read more about the available checks
-[here](~/docs/technical/recognizer.md), and more about how a recognizer works internally
-[here](~/docs/technical/recognizer_runner.md). The recognizer we will be implementing in this guide
+[here](~/dev/recognizers/design/recognizer.md), and more about how a recognizer works internally
+[here](~/dev/recognizers/design/recognizer_runner.md). The recognizer we will be implementing in this guide
 is a simplified version of the Singleton recognizer, which contains all the concepts you will
 encounter when working with recognizers in PatternPal.
 
@@ -219,7 +219,7 @@ want to check that the `GetInstance` method uses the field matched by the `Field
 this, we can use a `RelationCheck`. `RelationCheck`s are checks which you can use to check for
 relations between different entities and nodes. Examples of these relations are `Uses`,
 `Implements`, and so on. You can read about all the available relations
-[here](~/docs/technical/checks.md). Combining the `static` modifier check with this
+[here](~/dev/recognizers/design/checks.md). Combining the `static` modifier check with this
 `RelationCheck` check, we get the following `MethodCheck`:
 
 ```csharp

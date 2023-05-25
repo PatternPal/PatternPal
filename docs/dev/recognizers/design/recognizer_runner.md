@@ -2,7 +2,7 @@
 
 The `RecognizerRunner` class is the main entry point of the design pattern recognition process. It
 is responsible for initializing the selected recognizers, creating the
-[`SyntaxGraph`](~/docs/technical/syntax_graph.md) of the input files, as well as for processing the
+[`SyntaxGraph`](syntax_graph.md) of the input files, as well as for processing the
 results of the recognizers.
 
 ## Initialization
@@ -57,7 +57,3 @@ are the result of a `RelationCheck`. As this check uses the results of prior che
 have been pruned, we have to check if we can prune some of the results of the `RelationCheck`
 because they reference results which have been pruned already. If we find any, we also prune these
 results.
-
-### Dealing with Priorities
-
-This is not yet implemented.
