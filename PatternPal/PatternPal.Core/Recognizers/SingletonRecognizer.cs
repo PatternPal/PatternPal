@@ -12,16 +12,16 @@ namespace PatternPal.Core.Recognizers;
 /// A <see cref="IRecognizer"/> that is used to determine if the provided files or project implements the singleton pattern
 /// </summary>
 /// <remarks>
-/// Requirements to fulfill the pattern:<br/>
-/// a) has no public/internal constructor<br/>
-/// b) has at least one private/protected constructor<br/>
-/// c) has a static, private field with the same type as the class<br/>
-/// d0) has a static, public/internal method that acts as a constructor in the following way<br/>
-///     d1) if called and there is no instance saved in the private field, then it calls the private constructor<br/>
-///     d2) if called and there is an instance saved in the private field it returns this instance<br/>
+/// Requirements for the Singleton class:<br/>
+///     a) has no public/internal constructor<br/>
+///     b) has at least one private/protected constructor<br/>
+///     c) has a static, private field with the same type as the class<br/>
+///     d0) has a static, public/internal method that acts as a constructor in the following way<br/>
+///         d1) if called and there is no instance saved in the private field, then it calls the private constructor<br/>
+///         d2) if called and there is an instance saved in the private field it returns this instance<br/>
 /// <br/>
-/// Optional requirement client:<br/>
-/// a) calls the method that acts as a constructor of the singleton class<br/>
+/// Requirement for the Client class:<br/>
+///     a) calls the method that acts as a constructor of the singleton class<br/>
 /// </remarks>
 internal class SingletonRecognizer : IRecognizer
 {
