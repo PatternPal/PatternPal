@@ -241,7 +241,15 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
 
                 foreach (string file in files)
                 {
-                    ZipArchiveEntry entry = archive.CreateEntry(GetRelativePath(path, file), CompressionLevel.Optimal);
+                    /*string p = Path.GetRelativePath(path, file);
+                    string subDir = Path.GetDirectoryName(p);
+                    DirectoryInfo info;
+                    if (subDir.IsE != null)
+                    {
+                        info = new DirectoryInfo(Path.GetDirectoryName(p));
+                    }*/
+
+                    ZipArchiveEntry entry = archive.CreateEntry(p, CompressionLevel.Optimal);
 
                     using (Stream entryStream = entry.Open())
                     using (FileStream contents = File.OpenRead(file))
@@ -257,28 +265,6 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         // The final memoryStream containing the zip archive is represented as an array of bytes;
         //  we copy it to a byteString here in order to facilitate easy gRPC usage.
         return ByteString.CopyFrom(bytes);
-    }
-
-    /// <summary>
-    /// Gets the relative path when given an absolute directory path and a filename.
-    /// </summary>
-    /// <param name="relativeTo"> The absolute path to the root folder</param>
-    /// <param name="path">The absolute path to the specific file</param>
-    /// <returns></returns>
-    public static string GetRelativePath(string relativeTo, string path)
-    {
-        // TODO Separate utility because of duplication with extension
-        // TODO Testing
-        
-        Uri uri = new Uri(relativeTo);
-        string rel = Uri.UnescapeDataString(uri.MakeRelativeUri(new Uri(path)).ToString())
-            .Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
-        if (rel.Contains(Path.DirectorySeparatorChar.ToString()) == false)
-        {
-            rel = $".{Path.DirectorySeparatorChar}{rel}";
-        }
-
-        return rel;
     }
     #endregion
 }
