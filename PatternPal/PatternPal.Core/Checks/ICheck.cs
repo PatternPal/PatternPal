@@ -289,14 +289,15 @@ internal static class CheckBuilder
     /// Creates a new <see cref="RelationCheck"/> for a used by relation.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="RelationCheck"/>.</param>
-    /// <param name="getMatchedNodes">A <see cref="Func{TResult}"/> which returns a <see cref="List{T}"/> of matched <see cref="INode"/>s from another <see cref="ICheck"/>.</param>
+    /// <param name="relatedNodeCheck">A <see cref="ICheck"/> which checks for the node from where there should
+    /// be a used relation.</param>
     /// <returns></returns>
     internal static RelationCheck UsedBy(
         Priority priority,
-        Func<List<INode>> getMatchedNodes) => new(
+        ICheck relatedNodeCheck) => new(
         priority,
         RelationType.UsedBy,
-        getMatchedNodes);
+        relatedNodeCheck);
 
     /// <summary>
     /// Creates a new <see cref="RelationCheck"/> for a inheritance relation.
@@ -313,19 +314,6 @@ internal static class CheckBuilder
         relatedNodeCheck );
 
     /// <summary>
-    /// Creates a new <see cref="RelationCheck"/> for a inheritance by relation.
-    /// </summary>
-    /// <param name="priority">The <see cref="Priority"/> of this <see cref="RelationCheck"/>.</param>
-    /// <param name="getMatchedNodes">A <see cref="Func{TResult}"/> which returns a <see cref="List{T}"/> of matched <see cref="INode"/>s from another <see cref="ICheck"/>.</param>
-    /// <returns>The created <see cref="RelationCheck"/>.</returns>
-    internal static RelationCheck InheritedBy(
-        Priority priority,
-        Func<List<INode>> getMatchedNodes) => new(
-        priority,
-        RelationType.ExtendedBy,
-        getMatchedNodes);
-
-    /// <summary>
     /// Creates a new <see cref="RelationCheck"/> for an implements relation.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="RelationCheck"/>.</param>
@@ -340,19 +328,6 @@ internal static class CheckBuilder
         relatedNodeCheck );
 
     /// <summary>
-    /// Creates a new <see cref="RelationCheck"/> for an implemented by relation.
-    /// </summary>
-    /// <param name="priority">The <see cref="Priority"/> of this <see cref="RelationCheck"/>.</param>
-    /// <param name="getMatchedNodes">A <see cref="Func{TResult}"/> which returns a <see cref="List{T}"/> of matched <see cref="INode"/>s from another <see cref="ICheck"/>.</param>
-    /// <returns>The created <see cref="RelationCheck"/>.</returns>
-    internal static RelationCheck ImplementedBy(
-        Priority priority,
-        Func<List<INode>> getMatchedNodes) => new(
-        priority,
-        RelationType.ImplementedBy,
-        getMatchedNodes);
-
-    /// <summary>
     /// Creates a new <see cref="RelationCheck"/> for a creation relation.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="RelationCheck"/>.</param>
@@ -365,19 +340,6 @@ internal static class CheckBuilder
         priority,
         RelationType.Creates,
         relatedNodeCheck );
-
-    /// <summary>
-    /// Creates a new <see cref="RelationCheck"/> for a created by relation.
-    /// </summary>
-    /// <param name="priority">The <see cref="Priority"/> of this <see cref="RelationCheck"/>.</param>
-    /// <param name="getMatchedNodes">A <see cref="Func{TResult}"/> which returns a <see cref="List{T}"/> of matched <see cref="INode"/>s from another <see cref="ICheck"/>.</param>
-    /// <returns>The created <see cref="RelationCheck"/>.</returns>
-    internal static RelationCheck CreatedBy(
-        Priority priority,
-        Func<List<INode>> getMatchedNodes) => new(
-        priority,
-        RelationType.CreatedBy,
-        getMatchedNodes);
 
     /// <summary>
     /// Creates a new <see cref="FieldCheck"/>.
