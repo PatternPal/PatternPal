@@ -4,6 +4,8 @@ internal class TestRecognizerRelation : IRecognizer
 {
     public string Name => nameof(TestRecognizerRelation);
 
+    public Protos.Recognizer RecognizerType => Protos.Recognizer.Unknown;
+
     public IEnumerable<ICheck> Create()
     {
         MethodCheck instanceMethod =
@@ -33,6 +35,8 @@ internal class TestRecognizerRelation : IRecognizer
 internal class TestRecognizerType : IRecognizer
 {
     public string Name => nameof(TestRecognizerType);
+
+    public Protos.Recognizer RecognizerType => Protos.Recognizer.Unknown;
 
     public IEnumerable<ICheck> Create()
     {

@@ -11,6 +11,11 @@ public interface IRecognizer
     public string Name { get; }
 
     /// <summary>
+    /// The type of the <see cref="IRecognizer"/>, as defined in the Protocol Buffer.
+    /// </summary>
+    public Recognizer RecognizerType { get; }
+
+    /// <summary>
     /// Creates the <see cref="ICheck"/>s which are used to recognize a design pattern.
     /// </summary>
     /// <returns>The created <see cref="ICheck"/>s.</returns>

@@ -1,9 +1,11 @@
 ﻿#region
 
+using System.Reflection;
+using System.Runtime.CompilerServices;
+
 using Microsoft.CodeAnalysis;
 
 using PatternPal.Core.Recognizers;
-using PatternPal.Protos;
 using PatternPal.SyntaxTree;
 using PatternPal.SyntaxTree.Abstractions.Root;
 
@@ -17,12 +19,30 @@ namespace PatternPal.Core;
 public class RecognizerRunner
 {
     // The recognizers which are currently supported.
-    public static readonly IDictionary< Recognizer, IRecognizer > SupportedRecognizers = new Dictionary< Recognizer, IRecognizer >
-                                                                                         {
-                                                                                             {
-                                                                                                 Recognizer.Singleton, new SingletonRecognizer()
-                                                                                             }
-                                                                                         };
+    public static IDictionary< Recognizer, IRecognizer > SupportedRecognizers = null!;
+
+    /// <summary>
+    /// Finds the recognizers which are defined in this assembly and adds them to <see cref="SupportedRecognizers"/>.
+    /// </summary>
+    [ModuleInitializer]
+    public static void Init()
+    {
+        SupportedRecognizers = new Dictionary< Recognizer, IRecognizer >();
+
+        Type recognizerType = typeof( IRecognizer );
+
+        // Find all types which derive from `IRecognizer`.
+        foreach (Type type in recognizerType.Assembly.GetTypes().Where(ty => ty != recognizerType && recognizerType.IsAssignableFrom(ty)))
+        {
+            IRecognizer instance = (IRecognizer)Activator.CreateInstance(type)!;
+
+            // Get the mapping from `Recognizer` to `IRecognizer` by invoking the property on the
+            // recognizer which specifies it.
+            SupportedRecognizers.Add(
+                (Recognizer)type.GetRuntimeProperty(nameof( IRecognizer.RecognizerType ))!.GetValue(instance)!,
+                instance);
+        }
+    }
 
     // The selected recognizers which should be run.
     private readonly IList< IRecognizer > _recognizers;
