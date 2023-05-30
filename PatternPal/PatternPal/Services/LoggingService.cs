@@ -135,6 +135,12 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         return sendLog;
     }
 
+    /// <summary>
+    /// Creates a LogRequest that is populated with info obtained from the supplied
+    /// received event and further specific details relevant for the FileEdit-event.
+    /// </summary>
+    /// <param name="receivedRequest">The originally received request from the PP extension</param>
+    /// <returns>A LogRequest populated for this specific event</returns>
     private static LogRequest FileEditLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);

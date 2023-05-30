@@ -10,8 +10,6 @@ using EnvDTE80;
 using PatternPal.Protos;
 using System.Threading;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.Shell.Interop;
-using StreamJsonRpc;
 
 #endregion
 
@@ -264,6 +262,7 @@ namespace PatternPal.Extension.Commands
         /// has been made to the file or not. This remains File.Edit, and not File.Save as during the handling of diffs,
         /// it is determined whether an edit has been made and if so, it is sent with the codebase - therefore: File.Edit.
         /// </summary>
+        /// <param name="document">The document that is being saved.</param>
         private static void OnDocumentSaved(Document document)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
