@@ -2,6 +2,8 @@
 
 internal class TestRecognizerRelation : IRecognizer
 {
+    public string Name => nameof(TestRecognizerRelation);
+
     public IEnumerable<ICheck> Create()
     {
         MethodCheck instanceMethod =
@@ -30,6 +32,8 @@ internal class TestRecognizerRelation : IRecognizer
 
 internal class TestRecognizerType : IRecognizer
 {
+    public string Name => nameof(TestRecognizerType);
+
     public IEnumerable<ICheck> Create()
     {
         ClassCheck internalClass = Class(
