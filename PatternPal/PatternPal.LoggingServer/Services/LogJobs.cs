@@ -1,4 +1,4 @@
-
+﻿
 using PatternPal.LoggingServer.Data;
 using Quartz;
 
@@ -20,10 +20,10 @@ public class ClearCodestatesJob : IJob
     public async Task Execute(IJobExecutionContext context)
     {
 
-        _logger.LogInformation("Clearing codestates table");
+        _logger.LogInformation("Clearing CodeState folders");
         List<Guid> uniqueCodeStates = await _eventRepository.GetUniqueCodeStates();
 
-        foreach (string folderName in Directory.EnumerateDirectories("codestates"))
+        foreach (string folderName in Directory.EnumerateDirectories("CodeStates"))
         {
             if (!uniqueCodeStates.Contains(Guid.Parse(folderName.Split('\\').Last())))
             {
@@ -32,7 +32,7 @@ public class ClearCodestatesJob : IJob
             }
         }
 
-        _logger.LogInformation("Finished clearing codestates table");
+        _logger.LogInformation("Finished clearing CodeState folders");
         return;
     }
 }      
