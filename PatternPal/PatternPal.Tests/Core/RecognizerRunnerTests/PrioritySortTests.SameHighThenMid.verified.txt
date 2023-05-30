@@ -1,0 +1,61 @@
+﻿{
+  FeedbackMessage: ,
+  Priority: Low,
+  ChildrenCheckResults: [
+    {
+      FeedbackMessage: ,
+      Priority: High,
+      ChildrenCheckResults: [
+        {
+          FeedbackMessage: ,
+          Priority: High,
+          Correct: true,
+          Score: {}
+        },
+        {
+          FeedbackMessage: ,
+          Priority: Mid,
+          Correct: true,
+          Score: {}
+        },
+        {
+          FeedbackMessage: ,
+          Priority: Low,
+          Correct: false
+        }
+      ],
+      CollectionKind: Any,
+      NodeCheckCollectionWrapper: false,
+      Score: {}
+    },
+    {
+      FeedbackMessage: ,
+      Priority: High,
+      ChildrenCheckResults: [
+        {
+          FeedbackMessage: ,
+          Priority: High,
+          Correct: true,
+          Score: {}
+        },
+        {
+          FeedbackMessage: ,
+          Priority: Low,
+          Correct: true,
+          Score: {}
+        },
+        {
+          FeedbackMessage: ,
+          Priority: Mid,
+          Correct: false
+        }
+      ],
+      CollectionKind: Any,
+      NodeCheckCollectionWrapper: false,
+      Score: {}
+    }
+  ],
+  CollectionKind: Any,
+  NodeCheckCollectionWrapper: false,
+  Score: {}
+}
