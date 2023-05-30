@@ -233,8 +233,9 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         // TODO: Protect against too large codebases.
         Byte[] bytes;
 
-        // TODO Meh this will still catch things like "hobin".
-        Regex rgx = new Regex(@"(^(\\|/))((bin)|(obj))((\\|/))");
+        // This will match things like /bin/, bin/, etc. and make sure
+        // those are excluded from the archive.
+        Regex rgx = new Regex(@"(^|(\\|/))((bin)|(obj))((\\|/))");
 
         using (MemoryStream ms = new MemoryStream())
         {
@@ -247,12 +248,15 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
                 {
                     string relativePath = Path.GetRelativePath(path, file);
                     
-                    // TODO works in online testing BUT NOT HERE OMG
+                    // If the 
                     if (rgx.IsMatch(relativePath))
                     {
                         continue;
                     }
 
+                    // Note that we open the file using the full path, but we create the entry using
+                    // the relative path to prevent the entire directory structure from being incorporated
+                    // in the archive.
                     ZipArchiveEntry entry = archive.CreateEntry(relativePath, CompressionLevel.Optimal);
 
                     using (Stream entryStream = entry.Open())
