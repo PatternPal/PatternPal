@@ -2,7 +2,9 @@
 
 using Google.Protobuf;
 using System.IO.Compression;
+using System.Text.RegularExpressions;
 using Grpc.Net.Client;
+using Microsoft.CodeAnalysis.Operations;
 using PatternPal.LoggingServer;
 using ExecutionResult = PatternPal.LoggingServer.ExecutionResult;
 
@@ -229,8 +231,10 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     public static ByteString ZipDirectory(string path)
     {
         // TODO: Protect against too large codebases.
-        // TODO: Now also includes *.cs-build artifacts.
         Byte[] bytes;
+
+        // TODO Meh this will still catch things like "hobin".
+        Regex rgx = new Regex(@"(^(\\|/))((bin)|(obj))((\\|/))");
 
         using (MemoryStream ms = new MemoryStream())
         {
@@ -241,15 +245,15 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
 
                 foreach (string file in files)
                 {
-                    /*string p = Path.GetRelativePath(path, file);
-                    string subDir = Path.GetDirectoryName(p);
-                    DirectoryInfo info;
-                    if (subDir.IsE != null)
+                    string relativePath = Path.GetRelativePath(path, file);
+                    
+                    // TODO works in online testing BUT NOT HERE OMG
+                    if (rgx.IsMatch(relativePath))
                     {
-                        info = new DirectoryInfo(Path.GetDirectoryName(p));
-                    }*/
+                        continue;
+                    }
 
-                    ZipArchiveEntry entry = archive.CreateEntry(p, CompressionLevel.Optimal);
+                    ZipArchiveEntry entry = archive.CreateEntry(relativePath, CompressionLevel.Optimal);
 
                     using (Stream entryStream = entry.Open())
                     using (FileStream contents = File.OpenRead(file))
