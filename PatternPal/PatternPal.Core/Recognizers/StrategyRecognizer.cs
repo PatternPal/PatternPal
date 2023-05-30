@@ -60,7 +60,7 @@ internal class StrategyRecognizer : IRecognizer
         yield return CheckConcreteStrategyExistence();
 
         // Check Context Class 
-        CheckContextClassExistence();
+        yield return CheckContextClassExistence();
         ClassCheck contextStrategyClassCheck = CheckUsageExecuteStrategy(
             out MethodCheck usageExecuteStrategy, out MethodCheck setStrategyMethodCheck, 
             interfaceMethodExecuteStrategy, abstractMethodExecuteStrategy
