@@ -3,8 +3,18 @@
 /// <summary>
 /// Represents a recognizer for a design pattern.
 /// </summary>
-internal interface IRecognizer
+public interface IRecognizer
 {
+    /// <summary>
+    /// The name of the design pattern which this <see cref="IRecognizer"/> recognizes.
+    /// </summary>
+    public string Name { get; }
+
+    /// <summary>
+    /// The type of the <see cref="IRecognizer"/>, as defined in the Protocol Buffer.
+    /// </summary>
+    public Recognizer RecognizerType { get; }
+
     /// <summary>
     /// Creates the <see cref="ICheck"/>s which are used to recognize a design pattern.
     /// </summary>
