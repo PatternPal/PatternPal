@@ -223,6 +223,14 @@ namespace PatternPal.Tests.Utils
             return CreateGraphFromInput(INPUT);
         }
 
+        internal static SyntaxGraph CreateFieldTypeCheck() => CreateGraphFromInput(
+            """
+            public class Test
+            {
+                private Test _test;
+            }
+            """);
+
         /// <summary>
         /// Creates a SyntaxGraph from a string representing a file
         /// </summary>

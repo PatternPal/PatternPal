@@ -82,7 +82,7 @@ internal class NodeCheck< TNode > : CheckBase
         TNode castNode = CheckHelper.ConvertNodeElseThrow< TNode >(node);
 
         // Run the sub-checks.
-        IList<ICheckResult> subCheckResults = new List<ICheckResult>();
+        IList< ICheckResult > subCheckResults = new List< ICheckResult >();
         foreach (ICheck subCheck in _subChecks)
         {
             subCheckResults.Add(
@@ -291,6 +291,43 @@ internal class NodeCheck< TNode > : CheckBase
         IRecognizerContext ctx,
         TNode node)
     {
+        // If the the current check is wrapped in an Any/All check, we need to walk up the checks
+        // tree until we find a parent which can be used to get the type.
+        IRecognizerContext ? currentContext = ctx;
+        while (currentContext is {ParentCheck: NodeCheck< INode >})
+        {
+            currentContext = currentContext.PreviousContext;
+        }
+
+        if (currentContext != null)
+        {
+            // NOTE: Due to the way generics work in C#, we can't create a catch-all pattern for
+            // this.
+            switch (currentContext.ParentCheck)
+            {
+                case FieldCheck fieldCheck:
+                    return fieldCheck.GetType4TypeCheck(
+                        currentContext,
+                        (IField)node);
+                case ClassCheck classCheck:
+                    return classCheck.GetType4TypeCheck(
+                        currentContext,
+                        (IClass)node);
+                case InterfaceCheck interfaceCheck:
+                    return interfaceCheck.GetType4TypeCheck(
+                        currentContext,
+                        (IInterface)node);
+                case MethodCheck methodCheck:
+                    return methodCheck.GetType4TypeCheck(
+                        currentContext,
+                        (IMethod)node);
+                case ConstructorCheck constructorCheck:
+                    return constructorCheck.GetType4TypeCheck(
+                        currentContext,
+                        (IConstructor)node);
+            }
+        }
+
         throw new InvalidSubCheckException(
             this,
             _currentSubCheck!);

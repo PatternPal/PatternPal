@@ -107,7 +107,8 @@ public class RecognizerRunner
                                      Graph = _graph,
                                      CurrentEntity = null!,
                                      ParentCheck = rootCheck,
-                                     EntityCheck = rootCheck
+                                     EntityCheck = rootCheck,
+                                     PreviousContext = null,
                                  };
 
         rootCheck.Check(
@@ -139,7 +140,8 @@ public class RecognizerRunner
                                      Graph = _graph,
                                      CurrentEntity = null!,
                                      ParentCheck = rootCheck,
-                                     EntityCheck = rootCheck
+                                     EntityCheck = rootCheck,
+                                     PreviousContext = null!,
                                  };
 
         NodeCheckResult rootResult = (NodeCheckResult)rootCheck.Check(
@@ -317,8 +319,9 @@ public class RecognizerRunner
 
         // If parentCheck becomes empty => also prune parent. The parent is pruned by the caller if
         // we return `true`.
-        if (resultsToBePruned.Count > 0 && (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count
-            || parentCheckResult.CollectionKind == CheckCollectionKind.All))
+        if (resultsToBePruned.Count > 0
+            && (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count
+                || parentCheckResult.CollectionKind == CheckCollectionKind.All))
         {
             // Parent becomes empty.
             parentCheckResult.ChildrenCheckResults.Clear();
@@ -387,8 +390,9 @@ public class RecognizerRunner
             }
         }
 
-        if (resultsToBePruned.Count > 0 && (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count
-                                            || parentCheckResult.CollectionKind == CheckCollectionKind.All))
+        if (resultsToBePruned.Count > 0
+            && (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count
+                || parentCheckResult.CollectionKind == CheckCollectionKind.All))
         {
             // Parent becomes empty.
             parentCheckResult.ChildrenCheckResults.Clear();
@@ -436,6 +440,12 @@ public interface IRecognizerContext
     internal ICheck EntityCheck { get; }
 
     /// <summary>
+    /// The <see cref="IRecognizerContext"/> from which this <see cref="IRecognizerContext"/> was
+    /// created, or <see langword="null"/> if this is the root <see cref="IRecognizerContext"/>.
+    /// </summary>
+    internal IRecognizerContext ? PreviousContext { get; }
+
+    /// <summary>
     /// Create a new <see cref="IRecognizerContext"/> instance from an existing one, overwriting the
     /// old properties with the new ones.
     /// </summary>
@@ -454,7 +464,10 @@ public interface IRecognizerContext
                                    Graph = oldCtx.Graph,
                                    CurrentEntity = currentNode as IEntity ?? oldCtx.CurrentEntity,
                                    ParentCheck = parentCheck,
-                                   EntityCheck = currentNode is IEntity ? parentCheck : oldCtx.EntityCheck
+                                   EntityCheck = currentNode is IEntity
+                                       ? parentCheck
+                                       : oldCtx.EntityCheck,
+                                   PreviousContext = oldCtx,
                                };
 }
 
@@ -475,6 +488,9 @@ file class RecognizerContext : IRecognizerContext
 
     /// <inheritdoc />
     public required ICheck EntityCheck { get; init; }
+
+    /// <inheritdoc />
+    public IRecognizerContext ? PreviousContext { get; init; }
 }
 
 /// <summary>
