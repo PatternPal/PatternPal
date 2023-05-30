@@ -17,10 +17,10 @@ using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
+using PatternPal.Extension.Commands;
 using PatternPal.Extension.Grpc;
 using PatternPal.Extension.ViewModels;
 using PatternPal.Protos;
-using PatternPal.Extension.Commands;
 
 using Project = Microsoft.CodeAnalysis.Project;
 
@@ -141,21 +141,30 @@ namespace PatternPal.Extension.Views
         /// </summary>
         private void AddViewModels()
         {
-            ViewModels = new List< DesignPatternViewModel >();
-            GetSupportedRecognizersResponse response = GrpcHelper.RecognizerClient.GetSupportedRecognizers(new GetSupportedRecognizersRequest());
-            foreach (Recognizer recognizer in response.Recognizers)
+            try
             {
-                ViewModels.Add(new DesignPatternViewModel(recognizer));
+                GetSupportedRecognizersResponse response = GrpcHelper.RecognizerClient.GetSupportedRecognizers(new GetSupportedRecognizersRequest());
+
+                ViewModels = new List< DesignPatternViewModel >();
+                foreach (Recognizer recognizer in response.Recognizers)
+                {
+                    ViewModels.Add(new DesignPatternViewModel(recognizer));
+                }
+
+                PatternCheckbox.listBox.DataContext = ViewModels;
+
+                const int maxHeight = 3 * 30;
+                int height = Math.Min(
+                    ViewModels.Count * 30,
+                    maxHeight);
+
+                Grid.RowDefinitions[ 3 ].Height = new GridLength(height);
             }
-
-            PatternCheckbox.listBox.DataContext = ViewModels;
-
-            const int maxHeight = 3 * 30;
-            int height = Math.Min(
-                ViewModels.Count * 30,
-                maxHeight);
-
-            Grid.RowDefinitions[ 3 ].Height = new GridLength(height);
+            catch (Exception)
+            {
+                ThreadHelper.ThrowIfNotOnUIThread();
+                GrpcHelper.ShowErrorMessage("Failed to get supported recognizers");
+            }
         }
 
         private void CreateResultViewModels(
@@ -244,17 +253,28 @@ namespace PatternPal.Extension.Views
             }
 
             request.ShowAllResults = !(ShowAllCheckBox.IsChecked.HasValue && ShowAllCheckBox.IsChecked.Value);
-            IAsyncStreamReader< RecognizeResponse > responseStream = GrpcHelper.RecognizerClient.Recognize(request).ResponseStream;
 
-            IList< RecognizeResult > results = new List< RecognizeResult >();
-            while (await responseStream.MoveNext())
+            try
             {
-                results.Add(responseStream.Current.Result);
+                IAsyncStreamReader< RecognizeResponse > responseStream = GrpcHelper.RecognizerClient.Recognize(request).ResponseStream;
+
+                IList< RecognizeResult > results = new List< RecognizeResult >();
+                while (await responseStream.MoveNext())
+                {
+                    results.Add(responseStream.Current.Result);
+                }
+                SubscribeEvents.OnPatternRecognized(
+                    request,
+                    results);
+                CreateResultViewModels(results);
+                SummaryControl.Text = "Recognizer is finished";
+                ProgressStatusBlock.Text = "";
             }
-            SubscribeEvents.OnPatternRecognized(request, results);
-            CreateResultViewModels(results);
-            SummaryControl.Text = "Recognizer is finished";
-            ProgressStatusBlock.Text = "";
+            catch (Exception exception)
+            {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                GrpcHelper.ShowErrorMessage($"Analysis failed with error: {exception.Message}");
+            }
         }
 
         private void SelectAll_Checked(
@@ -345,7 +365,5 @@ namespace PatternPal.Extension.Views
         {
             ThreadHelper.JoinableTaskFactory.Run(AnalyzeAsync);
         }
-
-
     }
 }
