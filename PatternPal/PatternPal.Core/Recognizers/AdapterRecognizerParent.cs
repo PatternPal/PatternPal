@@ -37,7 +37,7 @@ internal abstract class AdapterRecognizerParent : IRecognizer
     ///     a) is an interface/abstract class<br/>
     ///     b) is inherited/implemented by an Adapter<br/>
     ///     c) contains a method<br/>
-    ///         i) if it is an abstract class the method should be abstract<br/>
+    ///         i) if it is an abstract class the method should be abstract or virtual<br/>
     /// <br/>
     /// Requirements for the Adapter class:<br/>
     ///     a) inherits/implements the Client Interface<br/>
@@ -51,7 +51,7 @@ internal abstract class AdapterRecognizerParent : IRecognizer
     public IEnumerable< ICheck > Create()
     {
         //Check Client interface c, ci
-        MethodCheck clientInterfaceMethod = ContainsMaybeAbstractMethod();
+        MethodCheck clientInterfaceMethod = ContainsMaybeAbstractVirtualMethod();
 
         //Check Client interface a
         ICheck clientInterfaceClassType = IsInterfaceAbstractClassWithMethod(clientInterfaceMethod);
@@ -122,7 +122,7 @@ internal abstract class AdapterRecognizerParent : IRecognizer
             adapter
         );
 
-        //Check Client b //TODO: NOT VIA THE ADAPTER
+        //Check Client b
         RelationCheck usedService = Uses(
             Priority.Low,
             adapterMethodsUsingService
@@ -153,7 +153,7 @@ internal abstract class AdapterRecognizerParent : IRecognizer
 
     public abstract ICheck IsInterfaceAbstractClassWithMethod(MethodCheck method);
 
-    public abstract MethodCheck ContainsMaybeAbstractMethod();
+    public abstract MethodCheck ContainsMaybeAbstractVirtualMethod();
 
     public abstract RelationCheck DoesInheritFrom(ICheck parent);
 

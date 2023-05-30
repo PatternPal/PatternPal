@@ -28,13 +28,20 @@ internal abstract class AdapterRecognizerAbstractClass : AdapterRecognizerParent
         );
     }
 
-    public override MethodCheck ContainsMaybeAbstractMethod()
+    public override MethodCheck ContainsMaybeAbstractVirtualMethod()
     {
         return Method(
             Priority.High,
-            Modifiers(
+            Any(
                 Priority.High,
-                Modifier.Abstract
+                Modifiers(
+                    Priority.High,
+                    Modifier.Abstract
+                ),
+                Modifiers(
+                    Priority.High,
+                    Modifier.Virtual
+                )
             )
         );
     }

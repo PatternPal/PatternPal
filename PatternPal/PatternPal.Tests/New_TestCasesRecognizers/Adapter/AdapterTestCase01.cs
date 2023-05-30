@@ -26,22 +26,20 @@
      *            ✓  e) does not return an instance of the Service
      *            ✓  f) every method uses the Service class
      */
-    // ✓  a) has created an object of the type Adapter
-    // ✓  b) has used a method of the Service via the Adapter
-    // ✓  c) has not used a method of the Service without the adapter
+
     //Client
     public class ThirdPartyBillingSystem
     {
-        private readonly ITarget employeeSource;
+        private readonly EmployeeAdapter _employeeSource;
 
-        public ThirdPartyBillingSystem(ITarget employeeSource)
+        public ThirdPartyBillingSystem(EmployeeAdapter employeeSource)
         {
-            this.employeeSource = employeeSource;
+            this._employeeSource = employeeSource;
         }
 
         public void ShowEmployeeList()
         {
-            List<string> employee = employeeSource.GetEmployeeList();
+            List<string> employee = _employeeSource.GetEmployeeList();
             
 
             Console.WriteLine("######### Employee List ##########");
@@ -75,7 +73,7 @@
     }
 
     //Adapter
-    public class EmployeeAdapter : HRSystem
+    public class EmployeeAdapter : ITarget
     {
         private HRSystem service = new();
 

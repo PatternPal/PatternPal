@@ -25,7 +25,7 @@ internal class AdapterRecognizerInterface : AdapterRecognizerParent
         );
     }
 
-    public override MethodCheck ContainsMaybeAbstractMethod()
+    public override MethodCheck ContainsMaybeAbstractVirtualMethod()
     {
         return Method(Priority.High);
     }
