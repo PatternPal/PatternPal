@@ -4,7 +4,6 @@ using Google.Protobuf;
 using System.IO.Compression;
 using System.Text.RegularExpressions;
 using Grpc.Net.Client;
-using Microsoft.CodeAnalysis.Operations;
 using PatternPal.LoggingServer;
 using ExecutionResult = PatternPal.LoggingServer.ExecutionResult;
 
