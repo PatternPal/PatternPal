@@ -18,8 +18,6 @@ using PatternPal.SyntaxTree.Abstractions;
 using PatternPal.SyntaxTree.Abstractions.Entities;
 using PatternPal.SyntaxTree.Models;
 
-using static PatternPal.Core.Resources.DesignPatternNameResources;
-
 namespace PatternPal.StepByStep.InstructionSets
 {
     public class StrategyInstructionSet : IInstructionSet

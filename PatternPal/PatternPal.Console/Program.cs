@@ -12,7 +12,8 @@ using System.Text.Json.Serialization.Metadata;
 using NDesk.Options;
 
 using PatternPal.Core;
-using PatternPal.Core.Models;
+using PatternPal.Core.Recognizers;
+using PatternPal.Protos;
 
 #endregion
 
@@ -27,9 +28,9 @@ internal static class Program
     private static void Main(
         string[ ] args)
     {
-        DesignPattern[ ] designPatternsList = DesignPattern.SupportedPatterns;
+        IDictionary< Recognizer, IRecognizer > supportedRecognizers = RecognizerRunner.SupportedRecognizers;
         bool showHelp = false;
-        List< DesignPattern > selectedPatterns = new();
+        List< IRecognizer > selectedRecognizers = new();
         FileManager fileManager = new();
 
         OptionSet options = new()
@@ -40,16 +41,16 @@ internal static class Program
                             };
 
         //Add design patterns as specifiable option
-        foreach (DesignPattern pattern in designPatternsList)
+        foreach (IRecognizer recognizer in supportedRecognizers.Values)
         {
             options.Add(
-                pattern.Name.Replace(
+                recognizer.Name.Replace(
                     " ",
                     "_"),
-                "includes " + pattern.Name,
+                "includes " + recognizer.Name,
                 // This closure is not stored, so accessing the captured variable is not an issue.
                 // ReSharper disable once AccessToModifiedClosure
-                _ => selectedPatterns.Add(pattern)
+                _ => selectedRecognizers.Add(recognizer)
             );
         }
 
@@ -95,9 +96,9 @@ internal static class Program
         }
 
         //When no specific pattern is chosen, select all
-        if (selectedPatterns.Count == 0)
+        if (selectedRecognizers.Count == 0)
         {
-            selectedPatterns = designPatternsList.ToList();
+            selectedRecognizers = supportedRecognizers.Values.ToList();
         }
 
         Console.WriteLine("Selected files:");
@@ -109,23 +110,18 @@ internal static class Program
 
         Console.WriteLine("\nSelected patterns:");
 
-        foreach (DesignPattern pattern in selectedPatterns)
+        foreach (IRecognizer selectedRecognizer in selectedRecognizers)
         {
-            Console.WriteLine(" - " + pattern.Name);
+            Console.WriteLine(" - " + selectedRecognizer.Name);
         }
 
         Console.WriteLine();
 
         RecognizerRunner recognizerRunner = new(
             selectedFiles,
-            selectedPatterns );
+            selectedRecognizers );
 
-        ICheckResult result = recognizerRunner.RunV2();
-        if (result is null)
-        {
-            Console.WriteLine("No results.");
-            return;
-        }
+        IList< ICheckResult > result = recognizerRunner.Run();
 
         Console.WriteLine();
         PrintResults(
@@ -141,7 +137,7 @@ internal static class Program
     }
 
     private static void PrintResults(
-        ICheckResult result)
+        IList< ICheckResult > result)
     {
         Console.WriteLine("\nResults:");
 
