@@ -1,0 +1,61 @@
+﻿{
+  FeedbackMessage: Found the required checks for: PatternPal.Tests.Utils.RootNode4Tests.,
+  ChildrenCheckResults: [
+    {
+      FeedbackMessage: ,
+      ChildrenCheckResults: [
+        {
+          FeedbackMessage: Found class 'PruneTestClass6',
+          ChildrenCheckResults: [
+            {
+              FeedbackMessage: Modifiers correctly implemented.,
+              Correct: true,
+              MatchedNode: PruneTestClass6
+            }
+          ],
+          MatchedNode: PruneTestClass6,
+          NodeCheckCollectionWrapper: false
+        },
+        {
+          FeedbackMessage: Found class 'UsesNotPrune6',
+          ChildrenCheckResults: [
+            {
+              FeedbackMessage: Modifiers correctly implemented.,
+              Correct: true,
+              MatchedNode: UsesNotPrune6
+            }
+          ],
+          MatchedNode: UsesNotPrune6,
+          NodeCheckCollectionWrapper: false
+        }
+      ],
+      CollectionKind: Any,
+      NodeCheckCollectionWrapper: true
+    },
+    {
+      FeedbackMessage: ,
+      ChildrenCheckResults: [
+        {
+          FeedbackMessage: Found class 'PruneTestClass6',
+          ChildrenCheckResults: [
+            {
+              FeedbackMessage: ,
+              CollectionKind: Any,
+              DependencyCount: 1,
+              NodeCheckCollectionWrapper: true
+            }
+          ],
+          DependencyCount: 1,
+          MatchedNode: PruneTestClass6,
+          NodeCheckCollectionWrapper: false
+        }
+      ],
+      CollectionKind: Any,
+      DependencyCount: 1,
+      NodeCheckCollectionWrapper: true
+    }
+  ],
+  DependencyCount: 1,
+  MatchedNode: root node,
+  NodeCheckCollectionWrapper: false
+}

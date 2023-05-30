@@ -38,18 +38,7 @@ namespace PatternPal.LoggingServer.Services
             Guid eventId = GetGuid(request.EventId, "EventID");
             Guid sessionId = GetGuid(request.SessionId, "SessionID");
             Guid subjectId = GetGuid(request.SubjectId, "SubjectID");
-            Guid parentEventId = Guid.Empty;
-            if (request.HasParentEventId)
-            {
-                parentEventId = GetGuid(request.ParentEventId, "ParentEventID");
-            }
-
-
-            if (request.EventType == EventType.EvtUnknown)
-            {
-                Status status = new Status(StatusCode.InvalidArgument, "Unknown event type");
-                throw new RpcException(status);
-            }
+            Guid parentEventId = request.HasParentEventId ? Guid.Parse(request.ParentEventId) : Guid.Empty;
 
             if (!DateTimeOffset.TryParse(request.ClientTimestamp, out DateTimeOffset cDto))
             {
@@ -64,41 +53,50 @@ namespace PatternPal.LoggingServer.Services
                 recognizeConfig = request.RecognizerConfig;
             }
             
-            Guid codeStateId = await _eventRepository.GetPreviousCodeState(sessionId, subjectId, request.ProjectId);
-            if (request.HasData)
-            {
-                codeStateId = Guid.NewGuid();
-                byte[] compressed = request.Data.ToByteArray();
-                string basePath = Path.Combine(Directory.GetCurrentDirectory(), "CodeStates");
-                string codeStatePath = Path.Combine(basePath, codeStateId.ToString());
-                // Create the directory if it does not exist
-                if (!Directory.Exists(codeStatePath))
+                // Parse code state ID
+                Guid codeStateId = Guid.Empty;
+                if (request.HasData)
                 {
-                    Directory.CreateDirectory(codeStatePath);
-                }
+                    codeStateId = Guid.NewGuid();
+                    byte[] compressed = request.Data.ToByteArray();
 
-                // Convert the byte array to a zip file and extract it
-                using MemoryStream ms = new MemoryStream(compressed);
-                using ZipArchive archive = new ZipArchive(ms);
-                foreach (ZipArchiveEntry entry in archive.Entries)
-                {
-                    string fullPath = Path.Combine(codeStatePath, entry.FullName);
-                    string? directory = Path.GetDirectoryName(fullPath);
-                    // Create the directory if it does not exist (for nested directories). This does not need to check for existence because it will just continue if it does exist already.4
-                    if (directory != null)
+                    if (!IsZipArchive(compressed)){
+                        throw new RpcException(new Status(StatusCode.InvalidArgument, "Data is not a valid zip archive"));
+                    }
+                    string basePath = Path.Combine(Directory.GetCurrentDirectory(), "CodeStates");
+                    string codeStatePath = Path.Combine(basePath, codeStateId.ToString());
+                    // Create the directory if it does not exist
+                    if (!Directory.Exists(codeStatePath))
                     {
-                        Directory.CreateDirectory(directory);
+                        Directory.CreateDirectory(codeStatePath);
                     }
 
-                    // Skip non-cs files
-                    if (!entry.FullName.EndsWith(".cs"))
+                    // Convert the byte array to a zip file and extract it
+                    using MemoryStream ms = new MemoryStream(compressed);
+                    using ZipArchive archive = new ZipArchive(ms);
+                    foreach (ZipArchiveEntry entry in archive.Entries)
                     {
-                        continue;
+                        string fullPath = Path.Combine(codeStatePath, entry.FullName);
+                        string? directory = Path.GetDirectoryName(fullPath);
+                        // Create the directory if it does not exist (for nested directories)
+                        if (directory != null)
+                        {
+                            Directory.CreateDirectory(directory);
+                        }
+
+                        // Skip non-cs files
+                        if (!entry.FullName.EndsWith(".cs"))
+                        {
+                            continue;
+                        }
+
+                        entry.ExtractToFile(fullPath, true);
                     }
-                            
-                    entry.ExtractToFile(fullPath, true);
                 }
-            }
+                else
+                {
+                    codeStateId = await _eventRepository.GetPreviousCodeState(sessionId, subjectId, request.ProjectId);
+                }
 
 
             
@@ -150,6 +148,20 @@ namespace PatternPal.LoggingServer.Services
 
             Status status = new Status(StatusCode.InvalidArgument, $"Invalid {guidName} GUID format");
             throw new RpcException(status);
+        }
+
+        private bool IsZipArchive(byte[] compressed)
+        {
+            try
+            {
+                using MemoryStream ms = new MemoryStream(compressed);
+                using ZipArchive archive = new ZipArchive(ms);
+                return true;
+            }
+            catch (InvalidDataException)
+            {
+                return false;
+            }
         }
     }
 }

@@ -47,10 +47,19 @@
                 MatchedNode: _instance
               },
               {
-                FeedbackMessage: Node 'MockClass4' has correct type,
-                Correct: true,
+                FeedbackMessage: Found node 'MockClass4',
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: Node 'MockClass4' has correct type,
+                    Correct: true,
+                    DependencyCount: 1,
+                    MatchedNode: MockClass4
+                  }
+                ],
+                CollectionKind: Any,
                 DependencyCount: 1,
-                MatchedNode: MockClass4
+                MatchedNode: MockClass4,
+                NodeCheckCollectionWrapper: true
               }
             ],
             DependencyCount: 1,
@@ -128,10 +137,19 @@
                 NodeCheckCollectionWrapper: true
               },
               {
-                FeedbackMessage: Node 'MockClass4' has correct type,
-                Correct: true,
+                FeedbackMessage: Found node 'MockClass4',
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: Node 'MockClass4' has correct type,
+                    Correct: true,
+                    DependencyCount: 1,
+                    MatchedNode: MockClass4
+                  }
+                ],
+                CollectionKind: Any,
                 DependencyCount: 1,
-                MatchedNode: MockClass4
+                MatchedNode: MockClass4,
+                NodeCheckCollectionWrapper: true
               }
             ],
             DependencyCount: 4,

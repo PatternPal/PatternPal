@@ -1,6 +1,6 @@
 ﻿namespace PatternPal.Tests.Utils;
 
-internal class TestRecognizer : IRecognizer
+internal class TestRecognizerRelation : IRecognizer
 {
     public IEnumerable<ICheck> Create()
     {
@@ -23,6 +23,33 @@ internal class TestRecognizer : IRecognizer
             Uses(
                 Priority.Knockout,
                 instanceMethod
+            )
+        );
+    }
+}
+
+internal class TestRecognizerType : IRecognizer
+{
+    public IEnumerable<ICheck> Create()
+    {
+        ClassCheck internalClass = Class(
+            Priority.Knockout,
+            Modifiers(
+                Priority.Knockout,
+                Modifier.Internal
+            )
+        );
+
+        yield return internalClass;
+
+        yield return Class(
+            Priority.Knockout,
+            Method(
+                Priority.Knockout,
+                Type(
+                    Priority.Knockout,
+                    internalClass
+                )
             )
         );
     }

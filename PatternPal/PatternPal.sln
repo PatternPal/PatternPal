@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatternPal.Recognizers", "PatternPal.Regonizers\PatternPal.Recognizers.csproj", "{1F20D376-AA08-45BE-9589-CFD70932C170}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatternPal.Recognizers", "PatternPal.Recognizers\PatternPal.Recognizers.csproj", "{1F20D376-AA08-45BE-9589-CFD70932C170}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "10 - Back-end", "10 - Back-end", "{25C2E758-AC65-4A3A-A11A-2D3510C01BB8}"
 EndProject
@@ -19,6 +19,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatternPal.ConsoleApp", "PatternPal.Console\PatternPal.ConsoleApp.csproj", "{83CEFCB8-F33A-4946-882D-62407F1F7D19}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatternPal.Tests", "PatternPal.Tests\PatternPal.Tests.csproj", "{026711C4-E66B-4553-8EA4-F7FE89A70C85}"
+	ProjectSection(ProjectDependencies) = postProject
+		{409D427A-F297-41D3-BCB3-FAA3ABBFDD8E} = {409D427A-F297-41D3-BCB3-FAA3ABBFDD8E}
+		{86E26B75-AEA1-43FA-AEC5-A81131606D13} = {86E26B75-AEA1-43FA-AEC5-A81131606D13}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatternPal.Extension", "PatternPal.Extension\PatternPal.Extension.csproj", "{6D62168E-3F32-47F9-8BC0-514BF633F903}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -42,6 +46,8 @@ EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{A48AD329-E1C5-4C62-A86C-771DF54E8DB1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logging", "Logging", "{92AD1B40-F1BD-4112-814A-6F94A1501FEE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatternPal.LoggingServerTests", "PatternPal.LoggingServerTests\PatternPal.LoggingServerTests.csproj", "{08E5C551-9568-4D5D-8416-BB4BA8445EC2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -196,8 +202,8 @@ Global
 		{409D427A-F297-41D3-BCB3-FAA3ABBFDD8E}.Release|arm64.Build.0 = Release|Any CPU
 		{409D427A-F297-41D3-BCB3-FAA3ABBFDD8E}.Release|x86.ActiveCfg = Release|Any CPU
 		{409D427A-F297-41D3-BCB3-FAA3ABBFDD8E}.Release|x86.Build.0 = Release|Any CPU
-		{A48AD329-E1C5-4C62-A86C-771DF54E8DB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A48AD329-E1C5-4C62-A86C-771DF54E8DB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A48AD329-E1C5-4C62-A86C-771DF54E8DB1}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{A48AD329-E1C5-4C62-A86C-771DF54E8DB1}.Debug|Any CPU.Build.0 = Release|Any CPU
 		{A48AD329-E1C5-4C62-A86C-771DF54E8DB1}.Debug|arm64.ActiveCfg = Debug|Any CPU
 		{A48AD329-E1C5-4C62-A86C-771DF54E8DB1}.Debug|arm64.Build.0 = Debug|Any CPU
 		{A48AD329-E1C5-4C62-A86C-771DF54E8DB1}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -207,6 +213,17 @@ Global
 		{A48AD329-E1C5-4C62-A86C-771DF54E8DB1}.Release|arm64.Build.0 = Release|Any CPU
 		{A48AD329-E1C5-4C62-A86C-771DF54E8DB1}.Release|x86.ActiveCfg = Release|Any CPU
 		{A48AD329-E1C5-4C62-A86C-771DF54E8DB1}.Release|x86.Build.0 = Release|Any CPU
+		{08E5C551-9568-4D5D-8416-BB4BA8445EC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08E5C551-9568-4D5D-8416-BB4BA8445EC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08E5C551-9568-4D5D-8416-BB4BA8445EC2}.Debug|arm64.ActiveCfg = Debug|Any CPU
+		{08E5C551-9568-4D5D-8416-BB4BA8445EC2}.Debug|arm64.Build.0 = Debug|Any CPU
+		{08E5C551-9568-4D5D-8416-BB4BA8445EC2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{08E5C551-9568-4D5D-8416-BB4BA8445EC2}.Debug|x86.Build.0 = Debug|Any CPU
+		{08E5C551-9568-4D5D-8416-BB4BA8445EC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08E5C551-9568-4D5D-8416-BB4BA8445EC2}.Release|arm64.ActiveCfg = Release|Any CPU
+		{08E5C551-9568-4D5D-8416-BB4BA8445EC2}.Release|arm64.Build.0 = Release|Any CPU
+		{08E5C551-9568-4D5D-8416-BB4BA8445EC2}.Release|x86.ActiveCfg = Release|Any CPU
+		{08E5C551-9568-4D5D-8416-BB4BA8445EC2}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -224,6 +241,7 @@ Global
 		{409D427A-F297-41D3-BCB3-FAA3ABBFDD8E} = {92AD1B40-F1BD-4112-814A-6F94A1501FEE}
 		{A48AD329-E1C5-4C62-A86C-771DF54E8DB1} = {92AD1B40-F1BD-4112-814A-6F94A1501FEE}
 		{92AD1B40-F1BD-4112-814A-6F94A1501FEE} = {25C2E758-AC65-4A3A-A11A-2D3510C01BB8}
+		{08E5C551-9568-4D5D-8416-BB4BA8445EC2} = {42465826-0737-421D-9D08-30F8C43D7912}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {31FB6D39-7D9F-44BC-AF8B-3AA700C8C087}
