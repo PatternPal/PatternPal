@@ -165,6 +165,11 @@ namespace PatternPal.Extension.Views
                 ThreadHelper.ThrowIfNotOnUIThread();
                 GrpcHelper.ShowErrorMessage("Failed to get supported recognizers");
             }
+
+            if (ViewModels == null)
+            {
+                AnalyzeBtn.IsEnabled = false;
+            }
         }
 
         private void CreateResultViewModels(

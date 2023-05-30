@@ -166,7 +166,7 @@
         <Border x:Name="ButtonBorder" Grid.Row="5" Background="Transparent" BorderThickness="0 0" Margin="20,0,20,0"
                 Style="{StaticResource ButtonBorder}">
             <Grid>
-                <Button Content="{x:Static UIResources:ExtensionUIResources.Analyse}" Height="30"
+                <Button Name="AnalyzeBtn" Content="{x:Static UIResources:ExtensionUIResources.Analyse}" Height="30"
                         Click="Analyse_Button" Margin="5 0" />
             </Grid>
         </Border>
