@@ -10,6 +10,7 @@ using EnvDTE80;
 using PatternPal.Protos;
 using System.Threading;
 using System.Collections.Generic;
+using Microsoft.VisualStudio.Shell.Interop;
 
 #endregion
 
@@ -66,6 +67,18 @@ namespace PatternPal.Extension.Commands
                 "PatternPal.Extension", "UserData");
             _cancellationToken = cancellationToken;
             SaveSubjectId();
+
+            // Get the active project
+            Project project = _dte.Solution.Projects.Item(1);
+
+            // Get the ProjectItems collection for the project
+            ProjectItems projectItems = project.ProjectItems;
+
+            // Get the ProjectItemsEvents object
+            ProjectItemsEvents projectItemsEvents = (ProjectItemsEvents)_dte.Events.GetObject("ProjectItemsEvents");
+
+            // Subscribe to the ItemAdded event
+            projectItemsEvents.ItemAdded += OnFileCreate;
 
             // This activates the DoLogData, necessary here in Initialize to kickstart the Session and Project Open events.
             bool _ = _package.DoLogData;
@@ -173,6 +186,12 @@ namespace PatternPal.Extension.Commands
                     OnCompileError(request, errorType, errorMessage, errorSourceLocation, codeStateSection);
                 }
             }
+        }
+
+        internal static void OnFileCreate(ProjectItem projectItem)
+        {
+
+            SessionId = Guid.NewGuid().ToString();
         }
 
         /// <summary>
