@@ -43,9 +43,9 @@ internal abstract class AdapterRecognizerParent : IRecognizer
     ///     a) inherits/implements the Client Interface<br/>
     ///     b) creates an Service object<br/>
     ///     c) contains a private field in which the Service is stored<br/>
-    ///     d) uses the Service class<br/>
-    ///     e) does not return an instance of the Service<br/>
-    ///     f) every method uses the Service class<br/>
+    ///     d) does not return an instance of the Service
+    ///     e) a method uses the Service class
+    ///     f) every method uses the Service class
     /// </remarks>
 
     public IEnumerable< ICheck > Create()

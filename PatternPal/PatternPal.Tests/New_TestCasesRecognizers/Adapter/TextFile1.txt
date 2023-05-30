@@ -19,7 +19,7 @@
      *            ✓  a) inherits/implements the Client Interface
      *            ✓  b) creates an Service object
      *            ✓  c) contains a private field in which the Service is stored
-     *            ✓  d) uses the Service class
-     *            ✓  e) does not return an instance of the Service
+     *            ✓  d) does not return an instance of the Service
+     *            ✓  e) a method uses the Service class
      *            ✓  f) every method uses the Service class
      */

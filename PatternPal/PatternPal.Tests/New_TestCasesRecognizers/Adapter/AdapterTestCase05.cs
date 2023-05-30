@@ -10,19 +10,19 @@
      *            ✓  a) does not inherit from the Client Interface
      *            ✓  b) is used by the Adapter class
      *         Client
-     *            ✓  a) has created an object of the type Adapter
-     *            ✓  b) has used a method of the Service via the Adapter
-     *            ✓  c) has not used a method of the Service without the adapter
+     *               a) has created an object of the type Adapter
+     *               b) has used a method of the Service via the Adapter
+     *               c) has not used a method of the Service without the adapter
      *         Client interface
      *            ✓  a) is an interface/abstract class
      *            ✓  b) is inherited/implemented by an Adapter
-     *            ✓  c) contains a method
-     *            ✓        1) if it is an abstract class the method should be abstract
+     *               c) contains a method
+     *                     1) if it is an abstract class the method should be abstract
      *         Adapter
      *            ✓  a) inherits/implements the Client Interface
      *            ✓  b) creates an Service object
-     *            ✓  c) contains a private field in which the Service is stored
-     *            ✓  d) does not return an instance of the Service
+     *               c) contains a private field in which the Service is stored
+     *               d) does not return an instance of the Service
      *            ✓  e) a method uses the Service class
      *            ✓  f) every method uses the Service class
      */
@@ -32,34 +32,36 @@
     {
         private readonly EmployeeAdapter _employeeSource;
 
-        public ThirdPartyBillingSystem()
+        public ThirdPartyBillingSystem(EmployeeAdapter employeeSource)
         {
-            this._employeeSource = new EmployeeAdapter();
+            this._employeeSource = employeeSource;
         }
 
         public void ShowEmployeeList()
         {
-            List<string> employee = _employeeSource.GetEmployeeList();
-            
+            List<string> employee = new();
+
 
             Console.WriteLine("######### Employee List ##########");
+
             foreach (string item in employee)
             {
-                Console.Write(item);
+                HRSystem.GetEmployees();
             }
         }
     }
 
+
     //Client interface
     file interface ITarget
     {
-        List<string> GetEmployeeList();
+
     }
 
     //Service
     file class HRSystem
     {
-        public string[][] GetEmployees()
+        public static string[][] GetEmployees()
         {
             var employees = new string[4][];
 
@@ -75,12 +77,10 @@
     //Adapter
     file class EmployeeAdapter : ITarget
     {
-        private HRSystem service = new();
-
         public List<string> GetEmployeeList()
         {
             List<string> employeeList = new();
-            string[][] employees = service.GetEmployees();
+            string[][] employees = HRSystem.GetEmployees();
             foreach (string[] employee in employees)
             {
                 employeeList.Add(employee[0]);
@@ -92,6 +92,12 @@
             }
 
             return employeeList;
+        }
+
+        HRSystem WrongReturnType()
+        {
+            HRSystem.GetEmployees();
+            return new HRSystem();
         }
     }
 }

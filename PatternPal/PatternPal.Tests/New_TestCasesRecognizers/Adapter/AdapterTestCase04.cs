@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PatternPal.Tests.New_TestCasesRecognizers.Adapter
+﻿namespace PatternPal.Tests.New_TestCasesRecognizers.Adapter
 {
+
     /* Pattern:              Adapter
      * Original code source: None
      *
@@ -13,7 +8,7 @@ namespace PatternPal.Tests.New_TestCasesRecognizers.Adapter
      * Requirements to fullfill the pattern:
      *         Service
      *            ✓  a) does not inherit from the Client Interface
-     *            ✓  b) is used by the Adapter class
+     *               b) is used by the Adapter class
      *         Client
      *            ✓  a) has created an object of the type Adapter
      *            ✓  b) has used a method of the Service via the Adapter
@@ -28,12 +23,12 @@ namespace PatternPal.Tests.New_TestCasesRecognizers.Adapter
      *            ✓  b) creates an Service object
      *            ✓  c) contains a private field in which the Service is stored
      *            ✓  d) does not return an instance of the Service
-     *            ✓  e) a method uses the Service class
-     *            ✓  f) every method uses the Service class
+     *               e) a method uses the Service class
+     *               f) every method uses the Service class
      */
 
     //Client interface
-    file abstract class RectangleInterface
+    abstract file class RectangleInterface
     {
         private int X, Y;
         private float Width, Height;
@@ -100,10 +95,10 @@ namespace PatternPal.Tests.New_TestCasesRecognizers.Adapter
     {
         private SquareThirdParty _service;
 
-        new int getX() { return _service.x - 10;}
-        new int getY() { return _service.y - 10;}
-        new float getWidth() { return _service.size; }
-        new float getHeight() { return _service.size; }
+        new int getX() { return base.getX();}
+        new int getY() { return base.getY();}
+        new float getWidth() { return base.getWidth(); }
+        new float getHeight() { return base.getHeight(); }
 
         public Adapter(int X, int Y, float Width, float Height) : base(X, Y, Width, Width)
         {
@@ -111,12 +106,12 @@ namespace PatternPal.Tests.New_TestCasesRecognizers.Adapter
         }
         new void Move(int dx, int dy)
         {
-            _service.MoveRectangleTo(getX() + dx, getY() + dy);
+            base.Move(dx,dy);
         }
 
         new void Resize(int dWidth, int dHeight)
         {
-            _service.MultiplySize((getWidth() + dWidth) / getWidth());
+            base.Resize(dWidth, dHeight);
         }
     }
 
