@@ -75,7 +75,7 @@ public class RecognizerRunner
     /// Create a new recognizer runner instance.
     /// </summary>
     /// <param name="files">The files to run the recognizers on.</param>
-    /// <param name="patterns">The design patterns for which to run the recognizers.</param>
+    /// <param name="recognizers">The design patterns for which to run the recognizers.</param>
     public RecognizerRunner(
         IEnumerable< string > files,
         IEnumerable< IRecognizer > recognizers)
