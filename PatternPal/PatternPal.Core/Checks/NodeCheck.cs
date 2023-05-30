@@ -82,7 +82,7 @@ internal class NodeCheck< TNode > : CheckBase
         TNode castNode = CheckHelper.ConvertNodeElseThrow< TNode >(node);
 
         // Run the sub-checks.
-        IList< ICheckResult > subCheckResults = new List< ICheckResult >();
+        IList<ICheckResult> subCheckResults = new List<ICheckResult>();
         foreach (ICheck subCheck in _subChecks)
         {
             subCheckResults.Add(

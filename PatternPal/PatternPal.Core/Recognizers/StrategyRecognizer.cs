@@ -57,10 +57,10 @@ internal class StrategyRecognizer : IRecognizer
             out MethodCheck abstractMethodExecuteStrategy);
 
         // Check Concrete Strategy Class
-        _concreteClassCheck = CheckConcreteStrategyExistence();
-        yield return _concreteClassCheck;
-        
+        yield return CheckConcreteStrategyExistence();
+
         // Check Context Class 
+        CheckContextClassExistence();
         ClassCheck contextStrategyClassCheck = CheckUsageExecuteStrategy(
             out MethodCheck usageExecuteStrategy, out MethodCheck setStrategyMethodCheck, 
             interfaceMethodExecuteStrategy, abstractMethodExecuteStrategy
@@ -130,7 +130,7 @@ internal class StrategyRecognizer : IRecognizer
     /// Strategy interface / abstract class.</returns>
     internal ClassCheck CheckConcreteStrategyExistence()
     {
-        return Class(
+        _concreteClassCheck = Class(
             Priority.Knockout,
             Any(
                 Priority.Knockout,
@@ -142,6 +142,7 @@ internal class StrategyRecognizer : IRecognizer
                     _abstractClassStrategyCheck)
             )
         );
+        return _concreteClassCheck;
     }
 
 

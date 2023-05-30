@@ -96,7 +96,7 @@ public class RecognizerRunner
             return new List< RecognitionResult >();
         }
 
-        SingletonRecognizer recognizer = new();
+        StrategyRecognizer recognizer = new();
 
         ICheck rootCheck = new NodeCheck< INode >(
             Priority.Knockout,
@@ -130,7 +130,7 @@ public class RecognizerRunner
             return null;
         }
 
-        IRecognizer recognizer = new SingletonRecognizer();
+        IRecognizer recognizer = new StrategyRecognizer();
 
         ICheck rootCheck = recognizer.CreateRootCheck();
 
