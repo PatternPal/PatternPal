@@ -1,5 +1,7 @@
 ﻿#region
 
+using System;
+using System.Diagnostics;
 using System.Net.Http;
 
 using Grpc.Net.Client;
@@ -35,6 +37,10 @@ namespace PatternPal.Extension.Grpc
             StepByStepClient = new StepByStepService.StepByStepServiceClient(Channel);
         }
 
+        #region InfoBar
+
+        private static IVsInfoBarUIElement _currentInfoBarElement;
+
         internal static void ShowErrorMessage(
             string errorMessage)
         {
@@ -45,12 +51,7 @@ namespace PatternPal.Extension.Grpc
             IVsInfoBarUIFactory infoBarFactory = (IVsInfoBarUIFactory)Package.GetGlobalService(typeof( SVsInfoBarUIFactory ));
             IVsUIShell shell = (IVsUIShell)Package.GetGlobalService(typeof( SVsUIShell ));
 
-            IVsInfoBar infoBar = new InfoBarModel(
-                new[ ]
-                {
-                    new InfoBarTextSpan(errorMessage)
-                },
-                KnownMonikers.StatusError);
+            _currentInfoBarElement?.Close();
 
             if (ErrorHandler.Failed(
                     shell.FindToolWindow(
@@ -76,7 +77,69 @@ namespace PatternPal.Extension.Grpc
                 return;
             }
 
-            ((IVsInfoBarHost)infoBarHost).AddInfoBar(infoBarFactory.CreateInfoBar(infoBar));
+            void RestartBackgroundService() => GrpcBackgroundServiceHelper.StartBackgroundService();
+            IVsInfoBar infoBar = BackgroundProcessIsRunning()
+                ? new InfoBarModel(
+                    new[ ]
+                    {
+                        new InfoBarTextSpan(errorMessage)
+                    },
+                    KnownMonikers.StatusError)
+                : new InfoBarModel(
+                    new[ ]
+                    {
+                        new InfoBarTextSpan("PatternPal has crashed")
+                    },
+                    new[ ]
+                    {
+                        new InfoBarHyperlink(
+                            "Restart",
+                            (Action)RestartBackgroundService)
+                    },
+                    KnownMonikers.StatusError);
+
+            _currentInfoBarElement = infoBarFactory.CreateInfoBar(infoBar);
+
+            uint eventCookie = 0;
+
+            // ReSharper disable once AccessToModifiedClosure
+            void OnClose() => _currentInfoBarElement?.Unadvise(eventCookie);
+
+            _currentInfoBarElement?.Advise(
+                new InfoBarUIEvents(OnClose),
+                out eventCookie);
+
+            ((IVsInfoBarHost)infoBarHost).AddInfoBar(_currentInfoBarElement);
         }
+
+        private static bool BackgroundProcessIsRunning() => Process.GetProcessesByName("PatternPal").Length > 0;
+
+        private class InfoBarUIEvents : IVsInfoBarUIEvents
+        {
+            private readonly Action _onClose;
+
+            public InfoBarUIEvents(
+                Action onClose)
+            {
+                _onClose = onClose;
+            }
+
+            public void OnClosed(
+                IVsInfoBarUIElement infoBarUIElement)
+            {
+                _onClose();
+            }
+
+            public void OnActionItemClicked(
+                IVsInfoBarUIElement infoBarUIElement,
+                IVsInfoBarActionItem actionItem)
+            {
+                ThreadHelper.ThrowIfNotOnUIThread();
+                (actionItem.ActionContext as Action)?.Invoke();
+                infoBarUIElement.Close();
+            }
+        }
+
+        #endregion
     }
 }

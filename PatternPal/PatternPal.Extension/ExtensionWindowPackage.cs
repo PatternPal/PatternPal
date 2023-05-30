@@ -5,7 +5,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+
 using EnvDTE;
+
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -62,6 +64,8 @@ namespace PatternPal.Extension
         /// </summary>
         public const string PackageGuidString = "ca375a3b-ff54-4156-937d-cbddc605b23c";
 
+        internal static ExtensionWindowPackage PackageInstance { get; private set; }
+
         #region Package Members
 
         /// <summary>
@@ -86,7 +90,8 @@ namespace PatternPal.Extension
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
             await ExtensionWindowCommand.InitializeAsync(this);
 
-            GrpcBackgroundServiceHelper.StartBackgroundService(this);
+            PackageInstance = this;
+            GrpcBackgroundServiceHelper.StartBackgroundService();
         }
 
         internal static void Main()
