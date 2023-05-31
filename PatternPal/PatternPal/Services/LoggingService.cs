@@ -2,6 +2,7 @@
 
 using Google.Protobuf;
 using System.IO.Compression;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using Grpc.Net.Client;
 using PatternPal.LoggingServer;
@@ -20,8 +21,11 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     /// <summary>
     /// Stores the last codeState that has been successfully logged to the server, per projectId.
     /// </summary>
-    private static Dictionary<String, (ByteString CodeState, bool Full)> _lastCodeState =
-        new Dictionary<string, (ByteString CodeState, bool Full)>();
+    
+    private static Dictionary<String, Dictionary<String, MD5>> _lastCodeState =
+        new Dictionary<string, Dictionary<String, MD5>>();
+
+    
 
     /// <inheritdoc />
     public override Task<LogEventResponse> LogEvent(LogEventRequest receivedRequest, ServerCallContext context)
@@ -39,7 +43,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         if (sendRequest.HasData)
         {
             // TODO Whether the codeState is full should eventually be determined here, but for now; always true.
-            _lastCodeState[sendRequest.ProjectId] = (sendRequest.Data, true);
+           // _lastCodeState[sendRequest.ProjectId] = (sendRequest.Data, true);
         }
 
         // Send response back to frond-end to verify something has been received here
@@ -263,8 +267,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
                 foreach (string file in files)
                 {
                     string relativePath = Path.GetRelativePath(path, file);
-                    
-                    // If the 
+
                     if (rgx.IsMatch(relativePath))
                     {
                         continue;
