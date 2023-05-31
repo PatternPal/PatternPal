@@ -51,30 +51,29 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
         RecognizerRunner runner = new(
             files,
             request.Recognizers );
-        ICheckResult ? result = runner.RunV2();
-        if (result is null)
-        {
-            return Task.CompletedTask;
-        }
+        IList< ICheckResult > results = runner.Run();
 
         // KNOWN: The root check result is always a NodeCheckResult.
-        NodeCheckResult rootCheckResult = (NodeCheckResult)result;
-
-        foreach (ICheckResult childCheckResult in rootCheckResult.ChildrenCheckResults)
+        foreach (ICheckResult result in results)
         {
-            RecognizeResult res = new()
-                                  {
-                                      Recognizer = Recognizer.Singleton,
-                                      ClassName = childCheckResult.MatchedNode?.GetName() ?? "no matched node"
-                                  };
+            NodeCheckResult rootCheckResult = (NodeCheckResult)result;
 
-            res.Results.Add(CreateCheckResult(childCheckResult));
+            foreach (ICheckResult childCheckResult in rootCheckResult.ChildrenCheckResults)
+            {
+                RecognizeResult res = new()
+                                      {
+                                          Recognizer = Recognizer.Singleton,
+                                          ClassName = childCheckResult.MatchedNode?.GetName() ?? "no matched node"
+                                      };
 
-            RecognizeResponse response = new()
-                                         {
-                                             Result = res
-                                         };
-            responseStream.WriteAsync(response);
+                res.Results.Add(CreateCheckResult(childCheckResult));
+
+                RecognizeResponse response = new()
+                                             {
+                                                 Result = res
+                                             };
+                responseStream.WriteAsync(response);
+            }
         }
 
         return Task.CompletedTask;

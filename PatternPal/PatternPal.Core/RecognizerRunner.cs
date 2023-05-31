@@ -1,10 +1,11 @@
 ﻿#region
 
+using System.Reflection;
+using System.Runtime.CompilerServices;
+
 using Microsoft.CodeAnalysis;
 
-using PatternPal.Core.Models;
 using PatternPal.Core.Recognizers;
-using PatternPal.Protos;
 using PatternPal.SyntaxTree;
 using PatternPal.SyntaxTree.Abstractions.Root;
 
@@ -17,11 +18,37 @@ namespace PatternPal.Core;
 /// </summary>
 public class RecognizerRunner
 {
-    // TODO: Refactor DesignPattern so its properties are defined directly on the IRecognizer implementation.
-    private readonly IList< DesignPattern > _patterns;
+    // The recognizers which are currently supported.
+    public static IDictionary< Recognizer, IRecognizer > SupportedRecognizers = null!;
+
+    /// <summary>
+    /// Finds the recognizers which are defined in this assembly and adds them to <see cref="SupportedRecognizers"/>.
+    /// </summary>
+    [ModuleInitializer]
+    public static void Init()
+    {
+        SupportedRecognizers = new Dictionary< Recognizer, IRecognizer >();
+
+        Type recognizerType = typeof( IRecognizer );
+
+        // Find all types which derive from `IRecognizer`.
+        foreach (Type type in recognizerType.Assembly.GetTypes().Where(ty => ty != recognizerType && recognizerType.IsAssignableFrom(ty)))
+        {
+            IRecognizer instance = (IRecognizer)Activator.CreateInstance(type)!;
+
+            // Get the mapping from `Recognizer` to `IRecognizer` by invoking the property on the
+            // recognizer which specifies it.
+            SupportedRecognizers.Add(
+                (Recognizer)type.GetRuntimeProperty(nameof( IRecognizer.RecognizerType ))!.GetValue(instance)!,
+                instance);
+        }
+    }
+
+    // The selected recognizers which should be run.
+    private readonly IList< IRecognizer > _recognizers;
 
     // The syntax graph of the code currently being recognized.
-    private SyntaxGraph _graph;
+    private readonly SyntaxGraph _graph;
 
     /// <summary>
     /// Create a new recognizer runner instance.
@@ -31,48 +58,30 @@ public class RecognizerRunner
     public RecognizerRunner(
         IEnumerable< string > files,
         IEnumerable< Recognizer > recognizers)
+        : this(
+            files,
+            recognizers.Select(
+                recognizer =>
+                {
+                    SupportedRecognizers.TryGetValue(
+                        recognizer,
+                        out IRecognizer ? recognizerImpl);
+                    return recognizerImpl;
+                }).Where(recognizer => null != recognizer).Select(recognizer => recognizer!))
     {
-        CreateGraph(files);
-
-        // Because we currently haven't implemented all recognizers, this will crash. To prevent
-        // that, we skip this. When we have the recognizers reimplemented, this can be enabled
-        // again.
-
-        // Get the design patterns which correspond to the given recognizers.
-        //_patterns = new List< DesignPattern >();
-        //foreach (Recognizer recognizer in recognizers)
-        //{
-        //    // `Recognizer.Unknown` is the default value of the `Recognizer` enum, as required
-        //    // by the Protocol Buffer spec. This value should never be used.
-        //    if (recognizer == Recognizer.Unknown)
-        //    {
-        //        continue;
-        //    }
-
-        //    _patterns.Add(DesignPattern.SupportedPatterns[ ((int)recognizer) - 1 ]);
-        //}
     }
 
     /// <summary>
     /// Create a new recognizer runner instance.
     /// </summary>
     /// <param name="files">The files to run the recognizers on.</param>
-    /// <param name="patterns">The design patterns for which to run the recognizers.</param>
+    /// <param name="recognizers">The design patterns for which to run the recognizers.</param>
     public RecognizerRunner(
         IEnumerable< string > files,
-        IList< DesignPattern > patterns)
+        IEnumerable< IRecognizer > recognizers)
     {
-        CreateGraph(files);
-        _patterns = patterns;
-    }
+        _recognizers = recognizers.ToList();
 
-    /// <summary>
-    /// Creates a <see cref="SyntaxGraph"/> from the given files.
-    /// </summary>
-    /// <param name="files">The files from which to create a <see cref="SyntaxGraph"/></param>
-    private void CreateGraph(
-        IEnumerable< string > files)
-    {
         _graph = new SyntaxGraph();
         foreach (string file in files)
         {
@@ -85,79 +94,49 @@ public class RecognizerRunner
     }
 
     /// <summary>
-    /// Run the recognizers.
-    /// </summary>
-    /// <returns>A list of <see cref="RecognitionResult"/>, one per given design pattern.</returns>
-    public IList< RecognitionResult > Run()
-    {
-        // If the graph is empty, we don't have to do any work.
-        if (_graph.IsEmpty)
-        {
-            return new List< RecognitionResult >();
-        }
-
-        SingletonRecognizer recognizer = new();
-
-        ICheck rootCheck = new NodeCheck< INode >(
-            Priority.Knockout,
-            recognizer.Create());
-
-        IRecognizerContext ctx = new RecognizerContext
-                                 {
-                                     Graph = _graph,
-                                     CurrentEntity = null!,
-                                     ParentCheck = rootCheck,
-                                     EntityCheck = rootCheck
-                                 };
-
-        rootCheck.Check(
-            ctx,
-            new RootNode());
-
-        return new List< RecognitionResult >();
-    }
-
-    /// <summary>
     /// Runs the configured <see cref="IRecognizer"/>s.
     /// </summary>
     /// <returns>The result of the <see cref="IRecognizer"/>, or <see langword="null"/> if the <see cref="SyntaxGraph"/> is empty.</returns>
-    public ICheckResult ? RunV2()
+    public IList< ICheckResult > Run()
     {
         // If the graph is empty, we don't have to do any work.
         if (_graph.IsEmpty)
         {
-            // TODO: Return empty result?
-            return null;
+            return new List< ICheckResult >();
         }
 
-        IRecognizer recognizer = new SingletonRecognizer();
+        IList< ICheckResult > results = new List< ICheckResult >();
+        foreach (IRecognizer recognizer in _recognizers)
+        {
+            ICheck rootCheck = recognizer.CreateRootCheck();
 
-        ICheck rootCheck = recognizer.CreateRootCheck();
+            IRecognizerContext ctx = new RecognizerContext
+                                     {
+                                         Graph = _graph,
+                                         CurrentEntity = null!,
+                                         ParentCheck = rootCheck,
+                                         EntityCheck = rootCheck
+                                     };
 
-        IRecognizerContext ctx = new RecognizerContext
-                                 {
-                                     Graph = _graph,
-                                     CurrentEntity = null!,
-                                     ParentCheck = rootCheck,
-                                     EntityCheck = rootCheck
-                                 };
+            NodeCheckResult rootResult = (NodeCheckResult)rootCheck.Check(
+                ctx,
+                new RootNode());
 
-        NodeCheckResult rootResult = (NodeCheckResult)rootCheck.Check(
-            ctx,
-            new RootNode());
+            // TODO: Define least and most dependable and reference that definition here.
 
-        // TODO: Define least and most dependable and reference that definition here.
+            // Sort the check results from least to most dependable.
+            SortCheckResults(rootResult);
 
-        // Sort the check results from least to most dependable.
-        SortCheckResults(rootResult);
+            // Filter the results.
+            Dictionary< INode, List< ICheckResult > > resultsByNode = new();
+            PruneResults(
+                resultsByNode,
+                rootResult);
 
-        // Filter the results.
-        Dictionary< INode, List< ICheckResult > > resultsByNode = new();
-        PruneResults(
-            resultsByNode,
-            rootResult);
+            results.Add(rootResult);
+        }
 
-        return rootResult;
+        return results;
     }
 
     /// <summary>
@@ -317,8 +296,9 @@ public class RecognizerRunner
 
         // If parentCheck becomes empty => also prune parent. The parent is pruned by the caller if
         // we return `true`.
-        if (resultsToBePruned.Count > 0 && (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count
-            || parentCheckResult.CollectionKind == CheckCollectionKind.All))
+        if (resultsToBePruned.Count > 0
+            && (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count
+                || parentCheckResult.CollectionKind == CheckCollectionKind.All))
         {
             // Parent becomes empty.
             parentCheckResult.ChildrenCheckResults.Clear();
@@ -387,8 +367,9 @@ public class RecognizerRunner
             }
         }
 
-        if (resultsToBePruned.Count > 0 && (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count
-                                            || parentCheckResult.CollectionKind == CheckCollectionKind.All))
+        if (resultsToBePruned.Count > 0
+            && (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count
+                || parentCheckResult.CollectionKind == CheckCollectionKind.All))
         {
             // Parent becomes empty.
             parentCheckResult.ChildrenCheckResults.Clear();
@@ -454,7 +435,9 @@ public interface IRecognizerContext
                                    Graph = oldCtx.Graph,
                                    CurrentEntity = currentNode as IEntity ?? oldCtx.CurrentEntity,
                                    ParentCheck = parentCheck,
-                                   EntityCheck = currentNode is IEntity ? parentCheck : oldCtx.EntityCheck
+                                   EntityCheck = currentNode is IEntity
+                                       ? parentCheck
+                                       : oldCtx.EntityCheck
                                };
 }
 
