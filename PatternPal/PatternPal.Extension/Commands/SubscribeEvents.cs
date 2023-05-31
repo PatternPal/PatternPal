@@ -23,7 +23,7 @@ namespace PatternPal.Extension.Commands
         /// <summary>
         ///     VS Package that provides this command, not null.
         /// </summary>
-        private static PatternPalExtensionPackage _package;
+        private static ExtensionWindowPackage _package;
 
         private static DTE _dte;
 
@@ -54,7 +54,7 @@ namespace PatternPal.Extension.Commands
         /// <param name="package"> The PatternPal package itself. </param>
         public static void Initialize(
             DTE dte,
-            PatternPalExtensionPackage package, CancellationToken cancellationToken)
+            ExtensionWindowPackage package, CancellationToken cancellationToken)
         {
             _dte = dte;
             ThreadHelper.ThrowIfNotOnUIThread();
@@ -68,7 +68,7 @@ namespace PatternPal.Extension.Commands
             SaveSubjectId();
 
             // This activates the DoLogData, necessary here in Initialize to kickstart the Session and Project Open events.
-            bool _ = _package.DoLogData;
+            bool _ = Privacy.Instance.DoLogData;
         }
 
         /// <summary>
@@ -262,7 +262,7 @@ namespace PatternPal.Extension.Commands
         /// </summary>
         public static void OnPatternRecognized(RecognizeRequest recognizeRequest, IList<RecognizeResult> recognizeResults)
         {
-            if (_package == null || !_package.DoLogData) return; 
+            if (_package == null || !Privacy.Instance.DoLogData) return; 
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtXRecognizerRun;
             string config = recognizeRequest.Recognizers.ToString();
