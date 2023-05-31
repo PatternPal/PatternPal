@@ -2,6 +2,7 @@
 
 using Google.Protobuf;
 using System.IO.Compression;
+using System.Text.RegularExpressions;
 using Grpc.Net.Client;
 using PatternPal.LoggingServer;
 using ExecutionResult = PatternPal.LoggingServer.ExecutionResult;
@@ -229,8 +230,11 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     public static ByteString ZipDirectory(string path)
     {
         // TODO: Protect against too large codebases.
-        // TODO: Now also includes *.cs-build artifacts.
         Byte[] bytes;
+
+        // This will match things like /bin/, bin/, etc. and make sure
+        // those are excluded from the archive.
+        Regex rgx = new Regex(@"(^|(\\|/))((bin)|(obj))((\\|/))");
 
         using (MemoryStream ms = new MemoryStream())
         {
@@ -241,7 +245,18 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
 
                 foreach (string file in files)
                 {
-                    ZipArchiveEntry entry = archive.CreateEntry(GetRelativePath(path, file), CompressionLevel.Optimal);
+                    string relativePath = Path.GetRelativePath(path, file);
+                    
+                    // If the 
+                    if (rgx.IsMatch(relativePath))
+                    {
+                        continue;
+                    }
+
+                    // Note that we open the file using the full path, but we create the entry using
+                    // the relative path to prevent the entire directory structure from being incorporated
+                    // in the archive.
+                    ZipArchiveEntry entry = archive.CreateEntry(relativePath, CompressionLevel.Optimal);
 
                     using (Stream entryStream = entry.Open())
                     using (FileStream contents = File.OpenRead(file))
@@ -257,28 +272,6 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         // The final memoryStream containing the zip archive is represented as an array of bytes;
         //  we copy it to a byteString here in order to facilitate easy gRPC usage.
         return ByteString.CopyFrom(bytes);
-    }
-
-    /// <summary>
-    /// Gets the relative path when given an absolute directory path and a filename.
-    /// </summary>
-    /// <param name="relativeTo"> The absolute path to the root folder</param>
-    /// <param name="path">The absolute path to the specific file</param>
-    /// <returns></returns>
-    public static string GetRelativePath(string relativeTo, string path)
-    {
-        // TODO Separate utility because of duplication with extension
-        // TODO Testing
-        
-        Uri uri = new Uri(relativeTo);
-        string rel = Uri.UnescapeDataString(uri.MakeRelativeUri(new Uri(path)).ToString())
-            .Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
-        if (rel.Contains(Path.DirectorySeparatorChar.ToString()) == false)
-        {
-            rel = $".{Path.DirectorySeparatorChar}{rel}";
-        }
-
-        return rel;
     }
     #endregion
 }
