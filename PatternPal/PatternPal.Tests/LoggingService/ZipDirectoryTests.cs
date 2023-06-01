@@ -65,6 +65,23 @@ namespace PatternPal.Tests.LoggingService
         }
 
         /// <summary>
+        /// Zips the directory supplied at path and checks if unzipping the result
+        /// yields the same directory as the one supplied minus all contents of subfolders named 'bin' and 'obj'.
+        /// </summary>
+        /// <param name="path">The path to the resource directory</param>
+        /// <param name="expected">The path to a copy of the resource directory minus all build artifacts</param>
+        [Test]
+        [TestCase("../../../LoggingService/Resources/BinObj", "../../../LoggingService/Resources/BinObjExp")]
+        public void Unzipped_ByteString_Excludes_Build_Artifacts(string path, string expected)
+        {
+            string fullPath = Path.GetFullPath(path);
+            ByteString archive = ls.ZipDirectory(fullPath);
+            Unzip(archive, TEMPDIR);
+
+            Assert.IsTrue(CompareDirectories(expected, TEMPDIR));
+        }
+
+        /// <summary>
         /// Deletes the temporary working directory after each test.
         /// </summary>
         [TearDown]

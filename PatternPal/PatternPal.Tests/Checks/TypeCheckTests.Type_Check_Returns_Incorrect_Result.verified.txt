@@ -10,7 +10,8 @@
       MatchedNode: Test
     }
   ],
+  CollectionKind: Any,
   DependencyCount: 1,
   MatchedNode: DoSomething,
-  NodeCheckCollectionWrapper: false
+  NodeCheckCollectionWrapper: true
 }

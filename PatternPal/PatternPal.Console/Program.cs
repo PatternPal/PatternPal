@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
@@ -9,230 +10,123 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 
-using NDesk.Options;
-
 using PatternPal.Core;
-using PatternPal.Core.Models;
+using PatternPal.Protos;
+
+using Spectre.Console;
+using Spectre.Console.Cli;
+using Spectre.Console.Json;
 
 #endregion
 
 namespace PatternPal.ConsoleApp;
 
-internal static class Program
+// ReSharper disable once ClassNeverInstantiated.Global
+internal sealed class PatternPalCommand : Command< Settings >
 {
-    /// <summary>
-    ///     Prints the parses commandline input and starts the runner
-    /// </summary>
-    /// <param name="args">Takes in commandline options and .cs files</param>
-    private static void Main(
-        string[ ] args)
+    public override int Execute(
+        CommandContext context,
+        Settings settings)
     {
-        DesignPattern[ ] designPatternsList = DesignPattern.SupportedPatterns;
-        bool showHelp = false;
-        List< DesignPattern > selectedPatterns = new();
         FileManager fileManager = new();
 
-        OptionSet options = new()
-                            {
-                                {
-                                    "h|help", "shows this message and exit", v => showHelp = v != null
-                                }
-                            };
+        FileAttributes attributes = File.GetAttributes(settings.FileOrDirectory);
+        List< string > selectedFiles = (attributes & FileAttributes.Directory) == FileAttributes.Directory
+            ? fileManager.GetAllCSharpFilesFromDirectory(settings.FileOrDirectory)
+            : new List< string >
+              {
+                  settings.FileOrDirectory
+              };
 
-        //Add design patterns as specifiable option
-        foreach (DesignPattern pattern in designPatternsList)
-        {
-            options.Add(
-                pattern.Name.Replace(
-                    " ",
-                    "_"),
-                "includes " + pattern.Name,
-                // This closure is not stored, so accessing the captured variable is not an issue.
-                // ReSharper disable once AccessToModifiedClosure
-                _ => selectedPatterns.Add(pattern)
-            );
-        }
-
-        if (args.Length <= 0)
-        {
-            Console.WriteLine("No arguments or files specified\n");
-            ShowHelpMessage(options);
-            Console.WriteLine("\nYou can write the argument in the console:");
-            string input = Console.ReadLine();
-            if (input == null)
-            {
-                return;
-            }
-
-            args = SplitCommandLine(input).ToArray();
-            if (args.Length <= 0)
-            {
-                return;
-            }
-        }
-
-        List< string > arguments = options.Parse(args);
-
-        if (showHelp)
-        {
-            ShowHelpMessage(options);
-            return;
-        }
-
-        List< string > selectedFiles = (from a in arguments where a.EndsWith(".cs") && a.Length > 3 select a).ToList();
-
-        foreach (string arg in from arg in arguments
-            where Directory.Exists(arg)
-            select arg)
-        {
-            selectedFiles.AddRange(fileManager.GetAllCSharpFilesFromDirectory(arg));
-        }
-
-        if (selectedFiles.Count == 0)
-        {
-            Console.WriteLine("No files specified!");
-            return;
-        }
-
-        //When no specific pattern is chosen, select all
-        if (selectedPatterns.Count == 0)
-        {
-            selectedPatterns = designPatternsList.ToList();
-        }
-
-        Console.WriteLine("Selected files:");
-
-        foreach (string file in selectedFiles)
-        {
-            Console.WriteLine(" - " + file);
-        }
-
-        Console.WriteLine("\nSelected patterns:");
-
-        foreach (DesignPattern pattern in selectedPatterns)
-        {
-            Console.WriteLine(" - " + pattern.Name);
-        }
-
-        Console.WriteLine();
+        AnsiConsole.WriteLine("Selected files:");
+        AnsiConsole.Write(new Rows(selectedFiles.Select(file => new TextPath(file))));
 
         RecognizerRunner recognizerRunner = new(
             selectedFiles,
-            selectedPatterns );
+            new[ ]
+            {
+                settings.Pattern
+            } );
 
-        ICheckResult result = recognizerRunner.RunV2();
-        if (result is null)
-        {
-            Console.WriteLine("No results.");
-            return;
-        }
+        IList< ICheckResult > result = recognizerRunner.Run();
 
-        Console.WriteLine();
-        PrintResults(
-            result);
-    }
-
-    private static void ShowHelpMessage(
-        OptionSet options)
-    {
-        Console.WriteLine("Usage: patterpal [INPUT] [OPTIONS]");
-        Console.WriteLine("Options:");
-        options.WriteOptionDescriptions(Console.Out);
-    }
-
-    private static void PrintResults(
-        ICheckResult result)
-    {
-        Console.WriteLine("\nResults:");
-
-        Console.WriteLine(
-            JsonSerializer.Serialize(
-                result,
-                new JsonSerializerOptions
+        string jsonOutput = JsonSerializer.Serialize(
+            result,
+            new JsonSerializerOptions
+            {
+                Converters =
                 {
-                    Converters =
-                    {
-                        new JsonStringEnumConverter()
-                    },
-                    Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                    WriteIndented = true,
-                    // NOTE: Workaround to ignore the required `ICheckResult.Check` property.
-                    // See: https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/required-properties
-                    TypeInfoResolver = new DefaultJsonTypeInfoResolver
+                    new JsonStringEnumConverter()
+                },
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                WriteIndented = true,
+                // NOTE: Workaround to ignore the required `ICheckResult.Check` property.
+                // See: https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/required-properties
+                TypeInfoResolver = new DefaultJsonTypeInfoResolver
+                                   {
+                                       Modifiers =
                                        {
-                                           Modifiers =
+                                           static ti =>
                                            {
-                                               static ti =>
+                                               if (ti.Kind != JsonTypeInfoKind.Object)
                                                {
-                                                   if (ti.Kind != JsonTypeInfoKind.Object)
-                                                   {
-                                                       return;
-                                                   }
+                                                   return;
+                                               }
 
-                                                   foreach (JsonPropertyInfo propertyInfo in ti.Properties)
-                                                   {
-                                                       propertyInfo.IsRequired = false;
-                                                   }
+                                               foreach (JsonPropertyInfo propertyInfo in ti.Properties)
+                                               {
+                                                   propertyInfo.IsRequired = false;
                                                }
                                            }
                                        }
-                }));
-        Console.WriteLine();
+                                   }
+            });
+
+        AnsiConsole.WriteLine("Results:");
+        AnsiConsole.Write(new JsonText(jsonOutput));
+
+        return 0;
     }
+}
 
-    private static IEnumerable< string > SplitCommandLine(
-        string commandLine)
+// ReSharper disable once ClassNeverInstantiated.Global
+internal sealed class Settings : CommandSettings
+{
+    [Description("Pattern to recognize")]
+    [CommandArgument(
+        0,
+        "<Pattern>")]
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
+    public required Recognizer Pattern { get; init; }
+
+    [Description("File or directory to run the recognizers on")]
+    [CommandArgument(
+        1,
+        "<FileOrDirectory>")]
+    public required string FileOrDirectory { get; set; }
+
+    public override ValidationResult Validate()
     {
-        bool inQuotes = false;
-
-        return commandLine.Split(
-                              c =>
-                              {
-                                  if (c == '\"')
-                                  {
-                                      inQuotes = !inQuotes;
-                                  }
-
-                                  return !inQuotes && c == ' ';
-                              }
-                          )
-                          .Select(arg => arg.Trim().TrimMatchingQuotes('\"'))
-                          .Where(arg => !string.IsNullOrEmpty(arg));
-    }
-
-    private static IEnumerable< string > Split(
-        this string str,
-        Func< char, bool > controller
-    )
-    {
-        int nextPiece = 0;
-
-        for (int c = 0;
-             c < str.Length;
-             c++)
+        ValidationResult baseValidationResult = base.Validate();
+        if (baseValidationResult.Successful)
         {
-            if (controller(str[ c ]))
+            FileOrDirectory = Path.GetFullPath(FileOrDirectory);
+            if (!Path.Exists(FileOrDirectory))
             {
-                yield return str.Substring(
-                    nextPiece,
-                    c - nextPiece);
-                nextPiece = c + 1;
+                throw new InvalidOperationException("File or directory does not exist");
             }
         }
 
-        yield return str[ nextPiece.. ];
+        return baseValidationResult;
     }
+}
 
-    private static string TrimMatchingQuotes(
-        this string input,
-        char quote)
+internal static class Program
+{
+    private static int Main(
+        string[ ] args)
     {
-        return input.Length >= 2
-               && input[ 0 ] == quote
-               && input[ ^1 ] == quote
-            ? input.Substring(
-                1,
-                input.Length - 2)
-            : input;
+        CommandApp< PatternPalCommand > app = new();
+        return app.Run(args);
     }
 }

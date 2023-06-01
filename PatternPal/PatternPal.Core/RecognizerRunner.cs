@@ -1,10 +1,11 @@
 ﻿#region
 
+using System.Reflection;
+using System.Runtime.CompilerServices;
+
 using Microsoft.CodeAnalysis;
 
-using PatternPal.Core.Models;
 using PatternPal.Core.Recognizers;
-using PatternPal.Protos;
 using PatternPal.SyntaxTree;
 using PatternPal.SyntaxTree.Abstractions.Root;
 
@@ -17,11 +18,37 @@ namespace PatternPal.Core;
 /// </summary>
 public class RecognizerRunner
 {
-    // TODO: Refactor DesignPattern so its properties are defined directly on the IRecognizer implementation.
-    private readonly IList< DesignPattern > _patterns;
+    // The recognizers which are currently supported.
+    public static IDictionary< Recognizer, IRecognizer > SupportedRecognizers = null!;
+
+    /// <summary>
+    /// Finds the recognizers which are defined in this assembly and adds them to <see cref="SupportedRecognizers"/>.
+    /// </summary>
+    [ModuleInitializer]
+    public static void Init()
+    {
+        SupportedRecognizers = new Dictionary< Recognizer, IRecognizer >();
+
+        Type recognizerType = typeof( IRecognizer );
+
+        // Find all types which derive from `IRecognizer`.
+        foreach (Type type in recognizerType.Assembly.GetTypes().Where(ty => ty != recognizerType && recognizerType.IsAssignableFrom(ty)))
+        {
+            IRecognizer instance = (IRecognizer)Activator.CreateInstance(type)!;
+
+            // Get the mapping from `Recognizer` to `IRecognizer` by invoking the property on the
+            // recognizer which specifies it.
+            SupportedRecognizers.Add(
+                (Recognizer)type.GetRuntimeProperty(nameof( IRecognizer.RecognizerType ))!.GetValue(instance)!,
+                instance);
+        }
+    }
+
+    // The selected recognizers which should be run.
+    private readonly IList< IRecognizer > _recognizers;
 
     // The syntax graph of the code currently being recognized.
-    private SyntaxGraph _graph;
+    private readonly SyntaxGraph _graph;
 
     /// <summary>
     /// Create a new recognizer runner instance.
@@ -31,48 +58,30 @@ public class RecognizerRunner
     public RecognizerRunner(
         IEnumerable< string > files,
         IEnumerable< Recognizer > recognizers)
+        : this(
+            files,
+            recognizers.Select(
+                recognizer =>
+                {
+                    SupportedRecognizers.TryGetValue(
+                        recognizer,
+                        out IRecognizer ? recognizerImpl);
+                    return recognizerImpl;
+                }).Where(recognizer => null != recognizer).Select(recognizer => recognizer!))
     {
-        CreateGraph(files);
-
-        // Because we currently haven't implemented all recognizers, this will crash. To prevent
-        // that, we skip this. When we have the recognizers reimplemented, this can be enabled
-        // again.
-
-        // Get the design patterns which correspond to the given recognizers.
-        //_patterns = new List< DesignPattern >();
-        //foreach (Recognizer recognizer in recognizers)
-        //{
-        //    // `Recognizer.Unknown` is the default value of the `Recognizer` enum, as required
-        //    // by the Protocol Buffer spec. This value should never be used.
-        //    if (recognizer == Recognizer.Unknown)
-        //    {
-        //        continue;
-        //    }
-
-        //    _patterns.Add(DesignPattern.SupportedPatterns[ ((int)recognizer) - 1 ]);
-        //}
     }
 
     /// <summary>
     /// Create a new recognizer runner instance.
     /// </summary>
     /// <param name="files">The files to run the recognizers on.</param>
-    /// <param name="patterns">The design patterns for which to run the recognizers.</param>
+    /// <param name="recognizers">The design patterns for which to run the recognizers.</param>
     public RecognizerRunner(
         IEnumerable< string > files,
-        IList< DesignPattern > patterns)
+        IEnumerable< IRecognizer > recognizers)
     {
-        CreateGraph(files);
-        _patterns = patterns;
-    }
+        _recognizers = recognizers.ToList();
 
-    /// <summary>
-    /// Creates a <see cref="SyntaxGraph"/> from the given files.
-    /// </summary>
-    /// <param name="files">The files from which to create a <see cref="SyntaxGraph"/></param>
-    private void CreateGraph(
-        IEnumerable< string > files)
-    {
         _graph = new SyntaxGraph();
         foreach (string file in files)
         {
@@ -85,77 +94,49 @@ public class RecognizerRunner
     }
 
     /// <summary>
-    /// Run the recognizers.
-    /// </summary>
-    /// <returns>A list of <see cref="RecognitionResult"/>, one per given design pattern.</returns>
-    public IList< RecognitionResult > Run()
-    {
-        // If the graph is empty, we don't have to do any work.
-        if (_graph.IsEmpty)
-        {
-            return new List< RecognitionResult >();
-        }
-
-        SingletonRecognizer recognizer = new();
-
-        ICheck rootCheck = new NodeCheck< INode >(
-            Priority.Knockout,
-            recognizer.Create());
-
-        IRecognizerContext ctx = new RecognizerContext
-                                 {
-                                     Graph = _graph,
-                                     CurrentEntity = null!,
-                                     ParentCheck = rootCheck,
-                                 };
-
-        rootCheck.Check(
-            ctx,
-            new RootNode());
-
-        return new List< RecognitionResult >();
-    }
-
-    /// <summary>
     /// Runs the configured <see cref="IRecognizer"/>s.
     /// </summary>
     /// <returns>The result of the <see cref="IRecognizer"/>, or <see langword="null"/> if the <see cref="SyntaxGraph"/> is empty.</returns>
-    public ICheckResult ? RunV2()
+    public IList< ICheckResult > Run()
     {
         // If the graph is empty, we don't have to do any work.
         if (_graph.IsEmpty)
         {
-            // TODO: Return empty result?
-            return null;
+            return new List< ICheckResult >();
         }
 
-        IRecognizer recognizer = new SingletonRecognizer();
+        IList< ICheckResult > results = new List< ICheckResult >();
+        foreach (IRecognizer recognizer in _recognizers)
+        {
+            ICheck rootCheck = recognizer.CreateRootCheck();
 
-        ICheck rootCheck = recognizer.CreateRootCheck();
+            IRecognizerContext ctx = new RecognizerContext
+                                     {
+                                         Graph = _graph,
+                                         CurrentEntity = null!,
+                                         ParentCheck = rootCheck,
+                                         EntityCheck = rootCheck
+                                     };
 
-        IRecognizerContext ctx = new RecognizerContext
-                                 {
-                                     Graph = _graph,
-                                     CurrentEntity = null!,
-                                     ParentCheck = rootCheck,
-                                 };
+            NodeCheckResult rootResult = (NodeCheckResult)rootCheck.Check(
+                ctx,
+                new RootNode());
 
-        NodeCheckResult rootResult = (NodeCheckResult)rootCheck.Check(
-            ctx,
-            new RootNode());
+            // TODO: Define least and most dependable and reference that definition here.
 
-        // TODO: Define least and most dependable and reference that definition here.
+            // Sort the check results from least to most dependable.
+            SortCheckResults(rootResult);
 
-        // Sort the check results from least to most dependable.
-        SortCheckResults(rootResult);
+            // Filter the results.
+            Dictionary< INode, List< ICheckResult > > resultsByNode = new();
+            PruneResults(
+                resultsByNode,
+                rootResult);
 
-        // Filter the results.
-        Dictionary< INode, List< ICheckResult > > resultsByNode = new();
-        PruneResults(
-            resultsByNode,
-            rootResult);
+            results.Add(rootResult);
+        }
 
-        return rootResult;
+        return results;
     }
 
     /// <summary>
@@ -315,8 +296,9 @@ public class RecognizerRunner
 
         // If parentCheck becomes empty => also prune parent. The parent is pruned by the caller if
         // we return `true`.
-        if (resultsToBePruned.Count > 0 && (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count
-            || parentCheckResult.CollectionKind == CheckCollectionKind.All))
+        if (resultsToBePruned.Count > 0
+            && (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count
+                || parentCheckResult.CollectionKind == CheckCollectionKind.All))
         {
             // Parent becomes empty.
             parentCheckResult.ChildrenCheckResults.Clear();
@@ -327,62 +309,71 @@ public class RecognizerRunner
             {
                 NodeCheckCollectionWrapper: true,
                 Priority: Priority.Knockout,
-                Check: RelationCheck
+                Check: RelationCheck or TypeCheck
             })
         {
-            // We're currently processing the NodeCheckResult of a RelationCheck.
+            // We're currently processing the NodeCheckResult of a RelationCheck or TypeCheck. 
 
-            foreach (ICheckResult relationCheckResult in parentCheckResult.ChildrenCheckResults)
+            foreach (ICheckResult dependentCheckResult in parentCheckResult.ChildrenCheckResults)
             {
-                if (relationCheckResult is not LeafCheckResult relationResult)
+                if (dependentCheckResult is not LeafCheckResult dependentResult)
                 {
-                    throw new ArgumentException($"Unexpected check type '{relationCheckResult.GetType()}', expected '{typeof( LeafCheckResult )}'");
+                    throw new ArgumentException($"Unexpected check type '{dependentCheckResult.GetType()}', expected '{typeof( LeafCheckResult )}'");
                 }
 
-                if (relationResult.RelatedCheck is null)
+                if (dependentResult.RelatedCheck is null)
                 {
                     throw new ArgumentNullException(
-                        nameof( relationResult.RelatedCheck ),
-                        $"RelatedCheck of CheckResult '{relationResult}' is null, while it should reference the ICheck belonging to the INode it has a relation to.");
+                        nameof( dependentResult.RelatedCheck ),
+                        $"RelatedCheck of CheckResult '{dependentResult}' is null, while it should reference the ICheck belonging to the related INode.");
                 }
 
-                // If the RelationCheck did not match any nodes, it won't have any child results. As
+                // If the RelationCheck or TypeCheck did not match any nodes, it won't have any child results. As
                 // such, we won't reach this code. If we do reach this code, but
-                // `relationResult.MatchedNode` is null, this is an error.
-                if (relationResult.MatchedNode is null)
+                // `dependentResult.MatchedNode` is null, this is an error.
+                if (dependentResult.MatchedNode is null)
                 {
                     throw new ArgumentNullException(
-                        nameof( relationResult.MatchedNode ),
-                        "Relation check did not match any nodes");
+                        nameof( dependentResult.MatchedNode ),
+                        "Relation or Type check did not match any nodes");
                 }
 
-                // Get the CheckResults belonging to the node to which there should be a relation.
-                List< ICheckResult > resultsOfNode = resultsByNode[ relationResult.MatchedNode ];
+                // Get the CheckResults belonging to the related node.
+                List< ICheckResult > resultsOfNode = resultsByNode[ dependentResult.MatchedNode ];
 
-                // Find the CheckResult linked to the check which searched for the Node to which there should be a relation.
+                // Find the CheckResult linked to the check which searched for the related node.
                 ICheckResult ? relevantResult = resultsOfNode.FirstOrDefault(
                     (
-                        result) => result.Check == relationResult.RelatedCheck);
+                        result) => result.Check == dependentResult.RelatedCheck);
 
-                // This should not be possible for the same reason `relationResult.MatchedNode`
+                // This should not be possible for the same reason `dependentResult.MatchedNode`
                 // should not be null.
                 if (relevantResult is null)
                 {
                     throw new ArgumentNullException(
                         nameof( relevantResult ),
-                        "Relation check did not match any nodes");
+                        "Relation or Type check did not match any nodes");
                 }
 
                 // If this node gets pruned, it does not have the required attributes to be the node belonging to the
-                // check which searched for the node to which there should be a relation. Therefore, even though the
+                // check which searched for the related node. Therefore, even though the
                 // relation might be found, it is not the relation directed to the node to which there should be one.
-                // Therefore this relation is not the required one, and thus the relationResult gets pruned.
+                // Therefore this relation is not the required one, and thus the dependentResult gets pruned.
                 if (relevantResult.Pruned)
                 {
-                    resultsToBePruned.Add(relationResult);
-                    relationResult.Pruned = true;
+                    resultsToBePruned.Add(dependentResult);
+                    dependentResult.Pruned = true;
                 }
             }
+        }
+
+        if (resultsToBePruned.Count > 0
+            && (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count
+                || parentCheckResult.CollectionKind == CheckCollectionKind.All))
+        {
+            // Parent becomes empty.
+            parentCheckResult.ChildrenCheckResults.Clear();
+            return true;
         }
 
         // Prune the results.
@@ -421,6 +412,11 @@ public interface IRecognizerContext
     internal ICheck ParentCheck { get; }
 
     /// <summary>
+    /// The <see cref="ICheck"/> belonging to the <see cref="CurrentEntity"/>.
+    /// </summary>
+    internal ICheck EntityCheck { get; }
+
+    /// <summary>
     /// Create a new <see cref="IRecognizerContext"/> instance from an existing one, overwriting the
     /// old properties with the new ones.
     /// </summary>
@@ -438,7 +434,10 @@ public interface IRecognizerContext
                                {
                                    Graph = oldCtx.Graph,
                                    CurrentEntity = currentNode as IEntity ?? oldCtx.CurrentEntity,
-                                   ParentCheck = parentCheck
+                                   ParentCheck = parentCheck,
+                                   EntityCheck = currentNode is IEntity
+                                       ? parentCheck
+                                       : oldCtx.EntityCheck
                                };
 }
 
@@ -456,6 +455,9 @@ file class RecognizerContext : IRecognizerContext
 
     /// <inheritdoc />
     public required ICheck ParentCheck { get; init; }
+
+    /// <inheritdoc />
+    public required ICheck EntityCheck { get; init; }
 }
 
 /// <summary>

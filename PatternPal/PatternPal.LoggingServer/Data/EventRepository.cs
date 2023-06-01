@@ -16,7 +16,7 @@ namespace PatternPal.LoggingServer.Data
         /// Returns list of all events
         /// </summary>
         /// <returns cref="List{ProgSnap2Event}">Returns all events asynchronously </returns>
-        public async Task<List<ProgSnap2Event>> GetAll()
+        public virtual async Task<List<ProgSnap2Event>> GetAll()
         {
             return await _context.Events.ToListAsync();
         }
@@ -26,7 +26,7 @@ namespace PatternPal.LoggingServer.Data
         /// </summary>
         /// <param name="id">ID of ProgSnap2Event</param>
         /// <returns cref="ProgSnap2Event?"> Returns the requested Event in case it exists</returns>
-        public async Task<ProgSnap2Event?> GetById(string id)
+        public virtual async Task<ProgSnap2Event?> GetById(string id)
         {
             return await _context.Events.FindAsync(id);
         }
@@ -36,7 +36,7 @@ namespace PatternPal.LoggingServer.Data
         /// </summary>
         /// <param name="entity" cref="ProgSnap2Event">Entity that has not been written to the database.</param>
         /// <returns cref="ProgSnap2Event">Returns the saved entity</returns>
-        public async Task<ProgSnap2Event> Insert(ProgSnap2Event entity)
+        public virtual async Task<ProgSnap2Event> Insert(ProgSnap2Event entity)
         {
             await _context.Events.AddAsync(entity);
             await _context.SaveChangesAsync();
@@ -48,7 +48,7 @@ namespace PatternPal.LoggingServer.Data
         /// </summary>
         /// <param name="entity">Entity that does exist in database to update</param>
         /// <returns cref="ProgSnap2Event">Updated entity</returns>
-        public async Task<ProgSnap2Event> Update(ProgSnap2Event entity)
+        public virtual async Task<ProgSnap2Event> Update(ProgSnap2Event entity)
         {
             _context.Events.Update(entity);
             await _context.SaveChangesAsync();
@@ -60,7 +60,7 @@ namespace PatternPal.LoggingServer.Data
         /// </summary>
         /// <param name="id">ID of entity to delete</param>
         /// <exception cref="Exception">Entity does not exist in database</exception>
-        public async Task Delete(string id)
+        public virtual async Task Delete(string id)
         {
             ProgSnap2Event? entity = await _context.Events.FindAsync(id);
 
@@ -78,7 +78,7 @@ namespace PatternPal.LoggingServer.Data
         /// <param name="column">Column name (Case-Sensitive) </param>
         /// <param name="value">Column value</param>
         /// <returns cref="ProgSnap2Event?"></returns>
-        public async Task<ProgSnap2Event?> GetBy(string column, string value)
+        public virtual async Task<ProgSnap2Event?> GetBy(string column, string value)
         {
             return await _context.Events.FirstOrDefaultAsync(e => EF.Property<string>(e, column) == value);
         }
@@ -91,7 +91,7 @@ namespace PatternPal.LoggingServer.Data
         /// <param name="column">Column name (Case-Sensitive) </param>
         /// <param name="value">Column value</param>
         /// <returns></returns>
-        public async Task<List<ProgSnap2Event>> GetAllBy(string column, string value)
+        public virtual async Task<List<ProgSnap2Event>> GetAllBy(string column, string value)
         {
             return await _context.Events.Where(e => EF.Property<string>(e, column) == value).ToListAsync();
         }
@@ -104,7 +104,7 @@ namespace PatternPal.LoggingServer.Data
         /// <param name="sessionId">SessionId of event</param>
         /// <param name="subjectId">SubjectId of event</param>
         /// <returns cref="int">Next order value</returns>
-        public async Task<int> GetNextOrder(Guid sessionId, Guid subjectId)
+        public virtual async Task<int> GetNextOrder(Guid sessionId, Guid subjectId)
         {
             ProgSnap2Event? lastEvent = await _context.Events.Where(e => e.SessionId == sessionId && e.SubjectId == subjectId).OrderByDescending(e => e.Order).FirstOrDefaultAsync();
             if (lastEvent == null)
@@ -113,6 +113,7 @@ namespace PatternPal.LoggingServer.Data
             }
             return lastEvent.Order + 1;
         }
+        
         /// <summary>
         /// To get correct event order, we need to get the last event in the session and subject and increment the order by 1.
         /// </summary>
@@ -120,7 +121,7 @@ namespace PatternPal.LoggingServer.Data
         /// <param name="subjectId">SubjectId of event</param>
         /// <param name="projectId">ProjectId of event</param>
         /// <returns></returns>
-        public async Task<Guid> GetPreviousCodeState(Guid sessionId, Guid subjectId, string projectId)
+        public virtual async Task<Guid> GetPreviousCodeState(Guid sessionId, Guid subjectId, string projectId)
         {
             ProgSnap2Event? lastEvent = await _context.Events.Where(e => e.SessionId == sessionId && e.SubjectId == subjectId && e.ProjectId == projectId).OrderByDescending(e => e.Order).FirstOrDefaultAsync();
             if (lastEvent == null)
