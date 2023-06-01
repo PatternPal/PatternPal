@@ -2,7 +2,6 @@
 
 global using Grpc.Core;
 
-global using PatternPal.CommonResources;
 global using PatternPal.Core;
 global using PatternPal.Protos;
 

@@ -23,7 +23,6 @@
 
   <ItemGroup>
     <ProjectReference Include="../PatternPal.Core/PatternPal.Core.csproj" />
-    <ProjectReference Include="..\PatternPal.CommonResources\PatternPal.CommonResources.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
