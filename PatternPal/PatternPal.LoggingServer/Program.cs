@@ -1,13 +1,13 @@
-﻿
+﻿#region
+
 using Microsoft.EntityFrameworkCore;
 using PatternPal.LoggingServer.Data;
-using PatternPal.LoggingServer.Data.Interfaces;
-using PatternPal.LoggingServer.Models;
 using PatternPal.LoggingServer.Services;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Grpc.AspNetCore.HealthChecks;
 using Quartz;
 using PatternPal.LoggingServer.LogJobs;
+
+#endregion
 
 namespace PatternPal;
 
@@ -39,7 +39,7 @@ internal static class Program
                 .ForJob(jobKey)
                 .WithIdentity("LoggerTrigger", "LoggerGroup") // Monday at midnight
                 .WithCronSchedule("0 0 0 ? * MON *")
-                .WithDescription("Clears the codestates table every Monday at midnight")
+                .WithDescription("Removes all redundant CodeStates every monday at midnight")
             );
 
             q.UseMicrosoftDependencyInjectionJobFactory();

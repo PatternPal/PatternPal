@@ -1,10 +1,16 @@
-﻿
+﻿#region
+
 using PatternPal.LoggingServer.Data;
 using Quartz;
 
+#endregion
+
 namespace PatternPal.LoggingServer.LogJobs;
+
+// TODO Global CodeStates variable
+
 /// <summary>
-/// Job that clears the codestates table every Monday at midnight
+/// Job that removes all redundant CodeStates (those that are not present in the database anymore) at midnight.
 /// </summary>
 public class ClearCodestatesJob : IJob
 {
@@ -32,7 +38,7 @@ public class ClearCodestatesJob : IJob
             }
         }
 
-        _logger.LogInformation("Finished clearing CodeState folders");
+        _logger.LogInformation("Finished clearing CodeStates-directory");
         return;
     }
 }      

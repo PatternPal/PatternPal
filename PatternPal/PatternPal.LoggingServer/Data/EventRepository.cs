@@ -1,6 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿#region
+
+using Microsoft.EntityFrameworkCore;
 using PatternPal.LoggingServer.Data.Interfaces;
 using PatternPal.LoggingServer.Models;
+
+#endregion
 
 namespace PatternPal.LoggingServer.Data
 {

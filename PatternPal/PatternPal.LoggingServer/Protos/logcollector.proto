@@ -43,6 +43,7 @@ string intervention_message = 23;
 optional string recognizer_result = 24;
 optional string recognizer_config = 25;
 optional bytes data = 26;
+bool full_code_state = 27;
 }
 
 // Input arguments for recognizer response

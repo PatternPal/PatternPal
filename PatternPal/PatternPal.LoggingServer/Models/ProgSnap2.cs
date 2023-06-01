@@ -1,12 +1,12 @@
-﻿using CsvHelper.Configuration.Attributes;
-using System.Collections.Generic;
+﻿#region
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using PatternPal.LoggingServer.Models;
-using PatternPal.LoggingServer;
+
+#endregion
+
 namespace PatternPal.LoggingServer.Models
 {
-
     /// <summary>
     /// Represents an event in ProgSnap2, including information about the session, subject, tool instances, code state, and timing.
     /// </summary>
@@ -42,6 +42,11 @@ namespace PatternPal.LoggingServer.Models
         /// The ID of the code state that this event refers to.
         /// </summary>
         public Guid CodeStateId { get; set; }
+
+        /// <summary>
+        /// Whether the stored codeState was complete or partial.
+        /// </summary>
+        public bool FullCodeState { get; set;  }
 
         /// <summary>
         /// The type of event.

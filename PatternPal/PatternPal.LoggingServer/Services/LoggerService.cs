@@ -1,10 +1,15 @@
-﻿using System.IO.Compression;
+﻿#region
+
+using System.IO.Compression;
 using Grpc.Core;
-using Microsoft.Extensions.Logging;
-using PatternPal.LoggingServer;
 using PatternPal.LoggingServer.Data;
-using PatternPal.LoggingServer.Data.Interfaces;
 using PatternPal.LoggingServer.Models;
+
+#endregion
+
+// TODO Global CodeStates variable
+// TODO Refactor
+
 namespace PatternPal.LoggingServer.Services
 {
     public class LoggerService : LogCollectorService.LogCollectorServiceBase
@@ -33,6 +38,7 @@ namespace PatternPal.LoggingServer.Services
         /// <exception cref="RpcException"></exception>
         public override async Task<LogResponse> Log(LogRequest request, ServerCallContext context)
         {
+            // TODO Refactor
 
             // GUID parsing
             Guid eventId = GetGuid(request.EventId, "EventID");
@@ -110,6 +116,7 @@ namespace PatternPal.LoggingServer.Services
                 SubjectId = subjectId,
                 ToolInstances = request.ToolInstances,
                 CodeStateId = codeStateId,
+                FullCodeState = request.FullCodeState,
                 ClientDatetime = cDto,
                 ServerDatetime = DateTimeOffset.Now,
                 SessionId = sessionId,
@@ -122,7 +129,6 @@ namespace PatternPal.LoggingServer.Services
                 RecognizerConfig = recognizeConfig,
                 RecognizerResult = recognizeResult,
                 ExecutionResult = request.ExecutionResult
-
             };
 
             await _eventRepository.Insert(newEvent);
