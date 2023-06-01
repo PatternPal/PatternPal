@@ -181,6 +181,11 @@
     <PackageReference Include="Microsoft.VisualStudio.Shell.15.0">
       <Version>17.5.33428.388</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.VSSDK.BuildTools">
+      <Version>17.6.2164</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Nerdbank.Streams">
       <Version>2.9.112</Version>
     </PackageReference>
