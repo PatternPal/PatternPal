@@ -1,10 +1,10 @@
 ﻿#region
 
-using Microsoft.CodeAnalysis;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
-using PatternPal.Core.Models;
+using Microsoft.CodeAnalysis;
 using PatternPal.Core.Recognizers;
-using PatternPal.Protos;
 using PatternPal.SyntaxTree;
 using PatternPal.SyntaxTree.Abstractions.Root;
 
@@ -17,11 +17,37 @@ namespace PatternPal.Core;
 /// </summary>
 public class RecognizerRunner
 {
-    // TODO: Refactor DesignPattern so its properties are defined directly on the IRecognizer implementation.
-    private readonly IList< DesignPattern > _patterns;
+    // The recognizers which are currently supported.
+    public static IDictionary< Recognizer, IRecognizer > SupportedRecognizers = null!;
+
+    /// <summary>
+    /// Finds the recognizers which are defined in this assembly and adds them to <see cref="SupportedRecognizers"/>.
+    /// </summary>
+    [ModuleInitializer]
+    public static void Init()
+    {
+        SupportedRecognizers = new Dictionary< Recognizer, IRecognizer >();
+
+        Type recognizerType = typeof( IRecognizer );
+
+        // Find all types which derive from `IRecognizer`.
+        foreach (Type type in recognizerType.Assembly.GetTypes().Where(ty => ty != recognizerType && recognizerType.IsAssignableFrom(ty)))
+        {
+            IRecognizer instance = (IRecognizer)Activator.CreateInstance(type)!;
+
+            // Get the mapping from `Recognizer` to `IRecognizer` by invoking the property on the
+            // recognizer which specifies it.
+            SupportedRecognizers.Add(
+                (Recognizer)type.GetRuntimeProperty(nameof( IRecognizer.RecognizerType ))!.GetValue(instance)!,
+                instance);
+        }
+    }
+
+    // The selected recognizers which should be run.
+    private readonly IList< IRecognizer > _recognizers;
 
     // The syntax graph of the code currently being recognized.
-    private SyntaxGraph _graph;
+    private readonly SyntaxGraph _graph;
 
     /// <summary>
     /// Create a new recognizer runner instance.
@@ -31,48 +57,30 @@ public class RecognizerRunner
     public RecognizerRunner(
         IEnumerable< string > files,
         IEnumerable< Recognizer > recognizers)
+        : this(
+            files,
+            recognizers.Select(
+                recognizer =>
+                {
+                    SupportedRecognizers.TryGetValue(
+                        recognizer,
+                        out IRecognizer ? recognizerImpl);
+                    return recognizerImpl;
+                }).Where(recognizer => null != recognizer).Select(recognizer => recognizer!))
     {
-        CreateGraph(files);
-
-        // Because we currently haven't implemented all recognizers, this will crash. To prevent
-        // that, we skip this. When we have the recognizers reimplemented, this can be enabled
-        // again.
-
-        // Get the design patterns which correspond to the given recognizers.
-        //_patterns = new List< DesignPattern >();
-        //foreach (Recognizer recognizer in recognizers)
-        //{
-        //    // `Recognizer.Unknown` is the default value of the `Recognizer` enum, as required
-        //    // by the Protocol Buffer spec. This value should never be used.
-        //    if (recognizer == Recognizer.Unknown)
-        //    {
-        //        continue;
-        //    }
-
-        //    _patterns.Add(DesignPattern.SupportedPatterns[ ((int)recognizer) - 1 ]);
-        //}
     }
 
     /// <summary>
     /// Create a new recognizer runner instance.
     /// </summary>
     /// <param name="files">The files to run the recognizers on.</param>
-    /// <param name="patterns">The design patterns for which to run the recognizers.</param>
+    /// <param name="recognizers">The design patterns for which to run the recognizers.</param>
     public RecognizerRunner(
         IEnumerable< string > files,
-        IList< DesignPattern > patterns)
+        IEnumerable< IRecognizer > recognizers)
     {
-        CreateGraph(files);
-        _patterns = patterns;
-    }
+        _recognizers = recognizers.ToList();
 
-    /// <summary>
-    /// Creates a <see cref="SyntaxGraph"/> from the given files.
-    /// </summary>
-    /// <param name="files">The files from which to create a <see cref="SyntaxGraph"/></param>
-    private void CreateGraph(
-        IEnumerable< string > files)
-    {
         _graph = new SyntaxGraph();
         foreach (string file in files)
         {
@@ -85,79 +93,49 @@ public class RecognizerRunner
     }
 
     /// <summary>
-    /// Run the recognizers.
-    /// </summary>
-    /// <returns>A list of <see cref="RecognitionResult"/>, one per given design pattern.</returns>
-    public IList< RecognitionResult > Run()
-    {
-        // If the graph is empty, we don't have to do any work.
-        if (_graph.IsEmpty)
-        {
-            return new List< RecognitionResult >();
-        }
-
-        SingletonRecognizer recognizer = new();
-
-        ICheck rootCheck = new NodeCheck< INode >(
-            Priority.Knockout,
-            recognizer.Create());
-
-        IRecognizerContext ctx = new RecognizerContext
-                                 {
-                                     Graph = _graph,
-                                     CurrentEntity = null!,
-                                     ParentCheck = rootCheck,
-                                     EntityCheck = rootCheck
-                                 };
-
-        rootCheck.Check(
-            ctx,
-            new RootNode());
-
-        return new List< RecognitionResult >();
-    }
-
-    /// <summary>
     /// Runs the configured <see cref="IRecognizer"/>s.
     /// </summary>
     /// <returns>The result of the <see cref="IRecognizer"/>, or <see langword="null"/> if the <see cref="SyntaxGraph"/> is empty.</returns>
-    public ICheckResult ? RunV2()
+    public IList< ICheckResult > Run()
     {
         // If the graph is empty, we don't have to do any work.
         if (_graph.IsEmpty)
         {
-            // TODO: Return empty result?
-            return null;
+            return new List< ICheckResult >();
         }
 
-        IRecognizer recognizer = new SingletonRecognizer();
+        IList< ICheckResult > results = new List< ICheckResult >();
+        foreach (IRecognizer recognizer in _recognizers)
+        {
+            ICheck rootCheck = recognizer.CreateRootCheck();
 
-        ICheck rootCheck = recognizer.CreateRootCheck();
+            IRecognizerContext ctx = new RecognizerContext
+                                     {
+                                         Graph = _graph,
+                                         CurrentEntity = null!,
+                                         ParentCheck = rootCheck,
+                                         EntityCheck = rootCheck
+                                     };
 
-        IRecognizerContext ctx = new RecognizerContext
-                                 {
-                                     Graph = _graph,
-                                     CurrentEntity = null!,
-                                     ParentCheck = rootCheck,
-                                     EntityCheck = rootCheck
-                                 };
+            NodeCheckResult rootResult = (NodeCheckResult)rootCheck.Check(
+                ctx,
+                new RootNode());
 
-        NodeCheckResult rootResult = (NodeCheckResult)rootCheck.Check(
-            ctx,
-            new RootNode());
+            // TODO: Define least and most dependable and reference that definition here.
 
-        // TODO: Define least and most dependable and reference that definition here.
+            // Sort the check results from least to most dependable.
+            SortCheckResults(rootResult);
 
-        // Sort the check results from least to most dependable.
-        SortCheckResults(rootResult);
+            // Filter the results.
+            Dictionary< INode, List< ICheckResult > > resultsByNode = new();
+            PruneResults(
+                resultsByNode,
+                rootResult);
 
-        // Filter the results.
-        Dictionary< INode, List< ICheckResult > > resultsByNode = new();
-        PruneResults(
-            resultsByNode,
-            rootResult);
-
-        return rootResult;
+            PrioritySort(rootResult);
+            results.Add(rootResult);
+        }
+        return results;
     }
 
     /// <summary>
@@ -317,8 +295,9 @@ public class RecognizerRunner
 
         // If parentCheck becomes empty => also prune parent. The parent is pruned by the caller if
         // we return `true`.
-        if (resultsToBePruned.Count > 0 && (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count
-            || parentCheckResult.CollectionKind == CheckCollectionKind.All))
+        if (resultsToBePruned.Count > 0
+            && (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count
+                || parentCheckResult.CollectionKind == CheckCollectionKind.All))
         {
             // Parent becomes empty.
             parentCheckResult.ChildrenCheckResults.Clear();
@@ -363,8 +342,7 @@ public class RecognizerRunner
 
                 // Find the CheckResult linked to the check which searched for the related node.
                 ICheckResult ? relevantResult = resultsOfNode.FirstOrDefault(
-                    (
-                        result) => result.Check == dependentResult.RelatedCheck);
+                    result => result.Check == dependentResult.RelatedCheck);
 
                 // This should not be possible for the same reason `dependentResult.MatchedNode`
                 // should not be null.
@@ -387,8 +365,9 @@ public class RecognizerRunner
             }
         }
 
-        if (resultsToBePruned.Count > 0 && (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count
-                                            || parentCheckResult.CollectionKind == CheckCollectionKind.All))
+        if (resultsToBePruned.Count > 0
+            && (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count
+                || parentCheckResult.CollectionKind == CheckCollectionKind.All))
         {
             // Parent becomes empty.
             parentCheckResult.ChildrenCheckResults.Clear();
@@ -403,6 +382,58 @@ public class RecognizerRunner
 
         // Parent doesn't become empty, so it shouldn't be pruned by the caller.
         return false;
+    }
+
+    /// <summary>
+    /// Sorts a <see cref="NodeCheckResult"/> based on <see cref="Priority"/>s and whether the
+    /// <see cref="LeafCheckResult"/>s are correct. It goes recursively through the tree of
+    /// <see cref="ICheckResult"/>s, and gives a <see cref="Score"/> to each <see cref="ICheckResult"/>
+    /// based their <see cref="Priority"/>s and the <see cref="Score"/>s and <see cref="Priority"/>s
+    /// of their children.
+    /// </summary>
+    internal static void PrioritySort(NodeCheckResult result)
+    {
+        foreach (ICheckResult childResult in result.ChildrenCheckResults)
+        {
+            PrioritySortHelper(childResult);
+            result.Score += childResult.Score;
+        }
+
+        ((List<ICheckResult>)result.ChildrenCheckResults).Sort((a, b) => a.Score.CompareTo(b.Score));
+    }
+
+    /// <summary>
+    /// Sorts and determines the <see cref="Score"/> of the childResult based on the type of childResult.
+    /// </summary>
+    private static void PrioritySortHelper(ICheckResult childResult)
+    {
+        switch (childResult)
+        {
+            case LeafCheckResult leafResult:
+                leafResult.Score = Score.CreateScore(leafResult.Priority, leafResult.Correct);
+                //TODO add Relation and TypeCheck. Idea underneath. However not as straightforward since a RelationCheck and a TypeCheck are NodeCheckResults
+                /*if (leafResult is { Correct: true, Check: RelationCheck or TypeCheck })
+                {
+                    // Get the CheckResults belonging to the related node.
+                    List<ICheckResult> resultsOfNode = resultsByNode[leafResult.MatchedNode];
+
+                    // Find the CheckResult linked to the check which searched for the related node.
+                    ICheckResult? relevantResult = resultsOfNode.FirstOrDefault(
+                        result => result.Check == leafResult.RelatedCheck);
+
+                    leafResult.Score += relevantResult.Score;
+                }*/
+                break;
+            case NodeCheckResult nodeResult:
+                PrioritySort(nodeResult);
+                break;
+            case NotCheckResult notResult:
+                PrioritySortHelper(notResult.NestedResult);
+                notResult.Score = Score.GetNot(notResult.NestedResult.Priority, notResult.NestedResult.Score);
+                break;
+            default:
+                throw new ArgumentException($"{childResult} is not a supported ICheckResult");
+        }
     }
 }
 
@@ -454,7 +485,9 @@ public interface IRecognizerContext
                                    Graph = oldCtx.Graph,
                                    CurrentEntity = currentNode as IEntity ?? oldCtx.CurrentEntity,
                                    ParentCheck = parentCheck,
-                                   EntityCheck = currentNode is IEntity ? parentCheck : oldCtx.EntityCheck
+                                   EntityCheck = currentNode is IEntity
+                                       ? parentCheck
+                                       : oldCtx.EntityCheck
                                };
 }
 
@@ -491,4 +524,92 @@ file class RootNode : INode
 
     /// <inheritdoc />
     IRoot INode.GetRoot() => throw new UnreachableException();
+}
+
+/// <summary>
+/// The Score of a <see cref="ICheckResult"/>, used to sort the final root <see cref="ICheckResult"/>.
+/// </summary>
+public struct Score : IComparable<Score>
+{
+    internal int High, Mid, Low;
+
+    /// <summary>
+    /// Adds up every component of the right <see cref="Score"/> from the left <see cref="Score"/>.
+    /// </summary>
+    public static Score operator +(Score a, Score b) => 
+        new()
+        {
+            High = a.High + b.High,
+            Mid = a.Mid + b.Mid,
+            Low = a.Low + b.Low
+        };
+
+    /// <summary>
+    /// Subtracts every component of the right <see cref="Score"/> from the left <see cref="Score"/>.
+    /// </summary>
+    public static Score operator -(Score a, Score b) => new Score
+    {
+        High = a.High - b.High,
+        Mid = a.Mid - b.Mid,
+        Low = a.Low - b.Low
+    };
+
+    /// <summary>
+    /// Calculates and returns the <see cref="Score"/> property belonging to a <see cref="LeafCheckResult"/>.
+    /// </summary>
+    /// <param name="priority">The priority of the <see cref="LeafCheckResult"/></param>
+    /// <param name="correct">Whether the <see cref="LeafCheckResult"/> was correct</param>
+    internal static Score CreateScore(Priority priority, bool correct)
+    {
+        int score = correct ? 1 : 0;
+        switch (priority)
+        {
+            case Priority.High:
+                return new Score { High = score };
+            case Priority.Mid:
+                return new Score { Mid = score };
+            case Priority.Low:
+                return new Score { Low = score };
+            default:
+                throw new ArgumentException($"{priority} is an unhandled type of priority.");
+        }
+    }
+
+    /// <summary>
+    /// Calculates what the <see cref="Score"/> of the <see cref="NodeCheckResult"/> of a <see cref="NotCheck"/>,
+    /// based on the <see cref="Score"/> of the <see cref="ICheckResult"/> of its <see cref="NotCheck.NestedCheck"/>.
+    /// </summary>
+    /// <param name="priority">The <see cref="Priority"/> of the parent <see cref="NotCheck"/></param>
+    /// <param name="score">The <see cref="Score"/> of the computed <see cref="NotCheck.NestedCheck"/></param>
+    /// <returns>The <see cref="Score"/> belonging to the parent <see cref="NotCheck"/></returns>
+    internal static Score GetNot(Priority priority, Score score) =>
+        new()
+        {
+            High = (priority == Priority.High && score.High == 0) ? 1 : 0,
+            Mid = (priority == Priority.Mid && score.Mid == 0) ? 1 : 0,
+            Low = (priority == Priority.Low && score.Low == 0) ? 1 : 0
+        };
+
+    /// <inheritdoc />>
+    public int CompareTo(Score other)
+    {
+        if (High > other.High)
+            return -1;
+        if (High < other.High)
+            return 1;
+        if (Mid > other.Mid)
+            return -1;
+        if (Mid < other.Mid)
+            return 1;
+        if (Low > other.Low)
+            return -1;
+        if (Low < other.Low)
+            return 1;
+        return 0;
+    }
+
+    public override string ToString()
+    {
+        return $"High: {High}, Mid: {Mid}, Low: {Low}";
+    }
 }

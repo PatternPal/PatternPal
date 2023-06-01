@@ -45,7 +45,7 @@ namespace PatternPal.Extension.ViewModels
         {
             get
             {
-                if (PatternPalExtensionPackage.CurrentMode == Mode.Default)
+                if (ExtensionWindowPackage.CurrentMode == Mode.Default)
                 {
                     // TODO CommonResources are not used anymore.
                     if (Score == 100)
