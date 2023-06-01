@@ -1,4 +1,5 @@
-﻿using static PatternPal.Core.Checks.CheckBuilder;
+﻿using PatternPal.Core.Recognizers.Helper_Classes;
+using static PatternPal.Core.Checks.CheckBuilder;
 
 namespace PatternPal.Core.Recognizers
 {
@@ -15,8 +16,17 @@ namespace PatternPal.Core.Recognizers
 
         public IEnumerable<ICheck> Create()
         {
-            yield return Any(Priority.Low,
-                _isAbstractClass.Checks().Concat(_isInterface.Checks()).ToArray());
+            yield return Any(
+                Priority.Low,
+                All(
+                    Priority.Low,
+                    _isAbstractClass.Checks()
+                ),
+                All(
+                    Priority.Low,
+                    _isInterface.Checks()
+                )
+            );
         }
     }
 }

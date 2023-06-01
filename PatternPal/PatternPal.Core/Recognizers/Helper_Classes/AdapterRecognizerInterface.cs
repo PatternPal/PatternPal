@@ -7,7 +7,7 @@ using static PatternPal.Core.Checks.CheckBuilder;
 
 #endregion
 
-namespace PatternPal.Core.Recognizers;
+namespace PatternPal.Core.Recognizers.Helper_Classes;
 
 /// <summary>
 /// A <see cref="IRecognizer"/> that is used to determine if the provided files or project implements the adapter pattern
@@ -15,43 +15,28 @@ namespace PatternPal.Core.Recognizers;
 /// <remarks>
 /// Requirements to fulfill the pattern:<br/>
 /// </remarks>
-internal class AdapterRecognizerAbstractClass : AdapterRecognizerParent
+internal class AdapterRecognizerInterface : AdapterRecognizerParent
 {
-    public override ClassCheck IsInterfaceAbstractClassWithMethod(MethodCheck method)
+    public override InterfaceCheck IsInterfaceAbstractClassWithMethod(MethodCheck method)
     {
-        return AbstractClass(
+        return Interface(
             Priority.Knockout,
-            Modifiers(
-                Priority.Knockout,
-                Modifier.Abstract),
             method
         );
     }
 
     public override MethodCheck ContainsMaybeAbstractVirtualMethod()
     {
-        return Method(
-            Priority.High,
-            Any(
-                Priority.High,
-                Modifiers(
-                    Priority.High,
-                    Modifier.Abstract
-                ),
-                Modifiers(
-                    Priority.High,
-                    Modifier.Virtual
-                )
-            )
-        );
+        return Method(Priority.High);
     }
 
-    public override RelationCheck DoesInheritFrom(ICheck possibleParent)
+    public override RelationCheck DoesInheritFrom(ICheck parent)
     {
         return new RelationCheck(
-            Priority.Knockout,
-            RelationType.Extends,
-            possibleParent
+                Priority.Knockout,
+                RelationType.Implements,
+                parent
+
         );
     }
 
@@ -66,7 +51,7 @@ internal class AdapterRecognizerAbstractClass : AdapterRecognizerParent
                 ),
                 Type(
                     Priority.Knockout,
-                    (ClassCheck)service
+                    (InterfaceCheck)service
                 )
             );
         }

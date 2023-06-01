@@ -9,7 +9,7 @@ using static PatternPal.Core.Checks.CheckBuilder;
 
 #endregion
 
-namespace PatternPal.Core.Recognizers;
+namespace PatternPal.Core.Recognizers.Helper_Classes;
 
 /// <summary>
 /// A <see cref="IRecognizer"/> that is used to determine if the provided files or project implements the adapter pattern
@@ -137,13 +137,13 @@ internal abstract class AdapterRecognizerParent
 
         result[1] = adapter;
 
-        result[3] = Class(
+        result[2] = Class(
             Priority.Low,
             clientInterfaceMethod,
             clientInterfaceClassType
         );
 
-        result [4] = Class(
+        result[3] = Class(
             Priority.Low,
             createsAdapter,
             usedService,
