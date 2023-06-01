@@ -1,4 +1,4 @@
-﻿#region 
+﻿#region
 
 using System;
 using System.IO;
@@ -16,7 +16,7 @@ using System.Collections.Generic;
 namespace PatternPal.Extension.Commands
 {
     /// <summary>
-    /// A static class which is responsible for subscribing logged events.
+    /// A static class which is responsible for subscribing logged event in ProgSnap2 format.
     /// </summary>
     public static class SubscribeEvents
     {
@@ -28,6 +28,8 @@ namespace PatternPal.Extension.Commands
         private static DTE _dte;
 
         private static DebuggerEvents _dteDebugEvents;
+
+        private static DocumentEvents _dteDocumentEvents;
 
         private static SolutionEvents _dteSolutionEvents;
 
@@ -61,6 +63,7 @@ namespace PatternPal.Extension.Commands
             _dteDebugEvents = _dte.Events.DebuggerEvents;
             _dteSolutionEvents = _dte.Events.SolutionEvents;
             _dteBuildEvents = _dte.Events.BuildEvents;
+            _dteDocumentEvents = _dte.Events.DocumentEvents;
             _package = package;
             _pathToUserDataFolder = Path.Combine(_package.UserLocalDataPath.ToString(), "Extensions", "Team PatternPal",
                 "PatternPal.Extension", "UserData");
@@ -85,6 +88,7 @@ namespace PatternPal.Extension.Commands
             _dteDebugEvents.OnEnterBreakMode +=
                 OnExceptionUnhandled; // OnEnterBreakMode is triggered for both breakpoints as well as exceptions, with the reason parameter specifying this.
             _dteDebugEvents.OnEnterDesignMode += OnDebugProgram;
+            _dteDocumentEvents.DocumentSaved += OnDocumentSaved;
         }
 
 
@@ -119,9 +123,6 @@ namespace PatternPal.Extension.Commands
             {
                 outputMessage = string.Format("Build {0} with errors. See the output window for details.",
                     Action.ToString());
-
-                // As the compilation led to an error, a separate  log is sent with the compile error diagnostics
-                // and the specific code section in which the compilation error occurred
             }
             else
             {
@@ -181,7 +182,7 @@ namespace PatternPal.Extension.Commands
         internal static void OnSessionStart()
         {
             SessionId = Guid.NewGuid().ToString();
-           
+
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtSessionStart;
 
@@ -256,13 +257,28 @@ namespace PatternPal.Extension.Commands
             LogEventResponse response = PushLog(request);
         }
 
+        /// <summary>
+        /// The event handler for handling the File.Edit Event. This fires at every save of a document regardless whether a change
+        /// has been made to the file or not. This remains File.Edit, and not File.Save as during the handling of diffs,
+        /// it is determined whether an edit has been made and if so, it is sent with the codebase - therefore: File.Edit.
+        /// </summary>
+        /// <param name="document">The document that is being saved.</param>
+        private static void OnDocumentSaved(Document document)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            LogEventRequest request = CreateStandardLog();
+            request.EventType = EventType.EvtFileEdit;
+            request.CodeStateSection = GetRelativePath(Path.GetDirectoryName(document.FullName), document.FullName);
+            LogEventResponse response = PushLog(request);
+        }
 
         /// <summary>
         /// The event handler for when recognizing software patterns in the extension.
         /// </summary>
-        public static void OnPatternRecognized(RecognizeRequest recognizeRequest, IList<RecognizeResult> recognizeResults)
+        public static void OnPatternRecognized(RecognizeRequest recognizeRequest,
+            IList<RecognizeResult> recognizeResults)
         {
-            if (_package == null || !_package.DoLogData) return; 
+            if (_package == null || !_package.DoLogData) return;
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtXRecognizerRun;
             string config = recognizeRequest.Recognizers.ToString();
@@ -385,7 +401,6 @@ namespace PatternPal.Extension.Commands
                 LogEventResponse response = PushLog(request);
             }
         }
-
 
 
         /// <summary>
