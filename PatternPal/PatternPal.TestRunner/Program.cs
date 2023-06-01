@@ -189,7 +189,7 @@ internal class Program
         Console.WriteLine($"{result.Directory}: Expected '{result.ImplementedPattern}', found:");
         foreach (DetectionResult res in result.Results)
         {
-            Console.WriteLine($"  - '{res.DetectedPattern}' with score {res.Score} (implemented in '{res.ClassName}')");
+            Console.WriteLine($"  - '{res.DetectedPattern}' with Score {res.Score} (implemented in '{res.ClassName}')");
         }
     }
 }
