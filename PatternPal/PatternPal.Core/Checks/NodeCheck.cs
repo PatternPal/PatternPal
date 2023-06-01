@@ -264,7 +264,7 @@ internal class NodeCheck< TNode > : CheckBase
         // that.
         if (results.Count == 0)
         {
-            nodeCheck._matchedEntities ??= new List< INode >();
+            MarkCheckAsSeen(nodeCheck);
         }
 
         // Return the result.
@@ -279,6 +279,69 @@ internal class NodeCheck< TNode > : CheckBase
                    MatchedNode = null,
                    Check = nodeCheck,
                };
+    }
+
+    /// <summary>
+    /// Marks the given <paramref name="nodeCheck"/> and any sub-<see cref="ICheck"/>s as seen.
+    /// </summary>
+    private static void MarkCheckAsSeen< T >(
+        NodeCheck< T > nodeCheck)
+        where T : INode
+    {
+        nodeCheck._matchedEntities ??= new List< INode >();
+
+        foreach (ICheck subCheck in nodeCheck._subChecks)
+        {
+            MarkCheckAsSeenImpl(subCheck);
+        }
+
+        void MarkCheckAsSeenImpl(
+            ICheck subCheck)
+        {
+            switch (subCheck)
+            {
+                // These checks don't have any sub-checks, so we don't need to do anything.
+                case ModifierCheck:
+                case RelationCheck:
+                case ParameterCheck:
+                case TypeCheck:
+                    return;
+
+                // These checks can have sub-checks, so we also need to mark the sub-checks as
+                // seen.
+                case NodeCheck< INode > nestedNodeCheck:
+                    MarkCheckAsSeen(nestedNodeCheck);
+                    break;
+                case ClassCheck classCheck:
+                    MarkCheckAsSeen(classCheck);
+                    break;
+                case InterfaceCheck interfaceCheck:
+                    MarkCheckAsSeen(interfaceCheck);
+                    break;
+                case MethodCheck methodCheck:
+                    MarkCheckAsSeen(methodCheck);
+                    break;
+                case FieldCheck fieldCheck:
+                    MarkCheckAsSeen(fieldCheck);
+                    break;
+                case ConstructorCheck constructorCheck:
+                    MarkCheckAsSeen(constructorCheck);
+                    break;
+                case PropertyCheck propertyCheck:
+                    MarkCheckAsSeen(propertyCheck);
+                    break;
+
+                // Mark the nested check of the NotCheck as seen.
+                case NotCheck notCheck:
+                    MarkCheckAsSeenImpl(notCheck.NestedCheck);
+                    break;
+
+                default:
+                    throw CheckHelper.InvalidSubCheck(
+                        nodeCheck,
+                        subCheck);
+            }
+        }
     }
 
     /// <summary>
