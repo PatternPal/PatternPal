@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PatternPal.LoggingServer.Data;
@@ -11,9 +12,11 @@ using PatternPal.LoggingServer.Data;
 namespace PatternPal.LoggingServer.Migrations
 {
     [DbContext(typeof(ProgSnap2ContextClass))]
-    partial class ProgSnap2ContextClassModelSnapshot : ModelSnapshot
+    [Migration("20230601101235_changeSubjectToString")]
+    partial class changeSubjectToString
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

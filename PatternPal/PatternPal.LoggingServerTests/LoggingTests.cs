@@ -101,24 +101,6 @@ namespace PatternPal.LoggingServerTests
         }
 
         [Test]
-        public void Log_InvalidSubjectId_ThrowsInvalidArgument()
-        {
-            // Arrange
-            var request = new LogRequest
-            {
-                EventId = Guid.NewGuid().ToString(),
-                SessionId = Guid.NewGuid().ToString(),
-                SubjectId = "invalid subject ID",
-                EventType = EventType.EvtProjectOpen,
-                ClientTimestamp = DateTimeOffset.Now.ToString("o"),
-                ProjectId = "TestProject",
-            };
-
-            // Act & Assert
-            Assert.ThrowsAsync<RpcException>(() => _service.Log(request, Mock.Of<ServerCallContext>()));
-        }
-
-        [Test]
         public void Log_UnknownEventType_ThrowsInvalidArgument()
         {
             // Arrange
