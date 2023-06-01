@@ -97,7 +97,7 @@ public class RecognizerRunner
     /// Runs the configured <see cref="IRecognizer"/>s.
     /// </summary>
     /// <returns>The result of the <see cref="IRecognizer"/>, or <see langword="null"/> if the <see cref="SyntaxGraph"/> is empty.</returns>
-    public IList< ICheckResult > Run()
+    public IList< ICheckResult > Run(bool pruneAll = false)
     {
         // If the graph is empty, we don't have to do any work.
         if (_graph.IsEmpty)
@@ -131,7 +131,8 @@ public class RecognizerRunner
             Dictionary< INode, List< ICheckResult > > resultsByNode = new();
             PruneResults(
                 resultsByNode,
-                rootResult);
+                rootResult,
+                pruneAll);
 
             results.Add(rootResult);
         }
@@ -176,7 +177,8 @@ public class RecognizerRunner
     /// </remarks>
     internal static bool PruneResults(
         Dictionary< INode, List< ICheckResult > > resultsByNode,
-        NodeCheckResult parentCheckResult)
+        NodeCheckResult parentCheckResult,
+        bool pruneAll = false)
     {
         // TODO: Properly handle CheckCollectionKind.
         // TODO: Properly handle Priorities.
@@ -214,7 +216,7 @@ public class RecognizerRunner
                     }
 
                     // Only prune the incorrect leaf check if its priority is Knockout.
-                    if (leafCheckResult.Priority == Priority.Knockout)
+                    if (Prune(leafCheckResult.Priority, pruneAll))
                     {
                         resultsToBePruned.Add(leafCheckResult);
                         leafCheckResult.Pruned = true;
@@ -249,7 +251,7 @@ public class RecognizerRunner
 
                             // If the leaf check is correct, the not check is incorrect. If the not
                             // check has priority Knockout, it should be pruned.
-                            if (notCheckResult.Priority == Priority.Knockout)
+                            if (Prune(notCheckResult.Priority, pruneAll))
                             {
                                 resultsToBePruned.Add(notCheckResult);
                                 notCheckResult.Pruned = true;
@@ -266,7 +268,7 @@ public class RecognizerRunner
                             if (!PruneResults(
                                     resultsByNode,
                                     nodeCheckResult)
-                                && notCheckResult.Priority == Priority.Knockout)
+                                && (Prune(notCheckResult.Priority, pruneAll)))
                             {
                                 resultsToBePruned.Add(notCheckResult);
                                 notCheckResult.Pruned = true;
@@ -305,10 +307,10 @@ public class RecognizerRunner
             return true;
         }
 
-        if (parentCheckResult is
+        if (Prune(parentCheckResult.Priority, pruneAll) 
+            && parentCheckResult is
             {
                 NodeCheckCollectionWrapper: true,
-                Priority: Priority.Knockout,
                 Check: RelationCheck or TypeCheck
             })
         {
@@ -385,6 +387,15 @@ public class RecognizerRunner
         // Parent doesn't become empty, so it shouldn't be pruned by the caller.
         return false;
     }
+
+    /// <summary>
+    /// Whether the <see cref="ICheckResult"/> should be pruned in case it is incorrect.
+    /// </summary>
+    /// <param name="priority">The <see cref="Priority"/> of the <see cref="ICheckResult"/></param>
+    /// <param name="pruneAll">Whether there should be pruned regardless of <see cref="Priority"/>s</param>
+    /// <returns></returns>
+    private static bool Prune(Priority priority, bool pruneAll)
+        => pruneAll || priority == Priority.Knockout;
 }
 
 /// <summary>
