@@ -1,8 +1,8 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-
 using PatternPal.StepByStep.Abstractions;
 using PatternPal.StepByStep.InstructionSets;
 
@@ -12,18 +12,26 @@ namespace PatternPal.StepByStep
 {
     public static class InstructionSetsCreator
     {
-        public static readonly IReadOnlyDictionary< string, IInstructionSet > InstructionSets;
-
-        static InstructionSetsCreator()
+        public static IInstructionSet InstructionSet;
+        public static List<string> selectablePatterns = new List<string>
         {
-            IDictionary< string, IInstructionSet > sets = new Dictionary< string, IInstructionSet >();
+            "singleton"
+        };
 
-            IInstructionSet set = new StrategyInstructionSet();
-            sets.Add(
-                set.Name,
-                set);
+        static InstructionSetsCreator() { }
 
-            InstructionSets = new ReadOnlyDictionary< string, IInstructionSet >(sets);
+        public static void SetInstructionSet(string patternName)
+        {
+            switch (patternName)
+            {
+                case "singleton":
+                    InstructionSet = new SingletonInstructionSet();
+                    break;
+                default:
+                    // TODO make this the default selection from the combobox
+                    InstructionSet = new SingletonInstructionSet();
+                    break;
+            }
         }
     }
 }

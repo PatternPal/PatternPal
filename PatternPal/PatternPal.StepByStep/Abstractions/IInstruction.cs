@@ -1,22 +1,23 @@
-﻿using System.Collections.Generic;
+﻿//using System.Collections.Generic;
+//using PatternPal.Core.Checks;
 
-namespace PatternPal.StepByStep.Abstractions
-{
-    public interface IInstruction
-    {
-        /// <summary>
-        /// The title of the instruction
-        /// </summary>
-        string Title { get; }
+//namespace PatternPal.StepByStep.Abstractions
+//{
+//    public interface IInstruction
+//    {
+//        /// <summary>
+//        /// Requirement the step needs to fulfill
+//        /// </summary>
+//        string Requirement { get; }
         
-        /// <summary>
-        /// Text that contains the instruction
-        /// </summary>
-        string Description { get; }
+//        /// <summary>
+//        /// Text that explains why the requirement needs to be fulfilled
+//        /// </summary>
+//        string Description { get; }
 
-        /// <summary>
-        /// All checks that need to be passed to continue
-        /// </summary>
-        IEnumerable<IInstructionCheck> Checks { get; }
-    }
-}
+//        /// <summary>
+//        /// Checks that need to be passed to continue
+//        /// </summary>
+//        ICheck Checks { get; }
+//    }
+//}

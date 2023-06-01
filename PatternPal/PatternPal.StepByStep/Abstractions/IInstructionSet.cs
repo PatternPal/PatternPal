@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using PatternPal.Core.Recognizers;
+using PatternPal.Core.StepByStep;
 
 namespace PatternPal.StepByStep.Abstractions
 {
@@ -8,13 +10,38 @@ namespace PatternPal.StepByStep.Abstractions
     public interface IInstructionSet
     {
         /// <summary>
-        /// The name of the instruction set
+        /// Design pattern.
         /// </summary>
-        string Name { get; }
+        string Pattern { get; }
 
         /// <summary>
-        /// List that contains all instructions for this instruction set
+        /// Recognizer corresponding to the pattern.
         /// </summary>
-        IEnumerable<IInstruction> Instructions { get; }
+        IRecognizer Recognizer {get; }
+
+        /// <summary>
+        /// List that contains all instructions for this instruction set.
+        /// </summary>
+        List<IInstruction> Steps { get; }
+
+        /// <summary>
+        /// Retrieves the current instruction based on the step.
+        /// </summary>
+        IInstruction ObtainCurrentInstruction();
+
+        /// <summary>
+        /// The current step.
+        /// </summary>
+        int Index { get; }
+
+        /// <summary>
+        /// Increment the indexer.
+        /// </summary>
+        void NextStep();
+
+        /// <summary>
+        /// Decrease the indexer.
+        /// </summary>
+        void PreviousStep();
     }
 }
