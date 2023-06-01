@@ -95,6 +95,7 @@ public class RecognizerRunner
     /// <summary>
     /// Runs the configured <see cref="IRecognizer"/>s.
     /// </summary>
+    /// <param name="pruneAll">Whether to prune regardless of <see cref="Priority"/>s</param>
     /// <returns>The result of the <see cref="IRecognizer"/>, or <see langword="null"/> if the <see cref="SyntaxGraph"/> is empty.</returns>
     public IList< ICheckResult > Run(bool pruneAll = false)
     {
@@ -163,6 +164,10 @@ public class RecognizerRunner
     /// Filters the sub-<see cref="ICheckResult"/>s of <paramref name="parentCheckResult" /> by
     /// removing any results which can be safely pruned.
     /// </summary>
+    /// <param name="resultsByNode">A <see cref="Dictionary{TKey,TValue}"/> to get the <see cref="ICheckResult"/>s belonging to the <see cref="INode"/>
+    /// found by an <see cref="ICheck"/> related to another <see cref="ICheck"/> by either a <see cref="RelationCheck"/> or <see cref="TypeCheck"/></param>
+    /// <param name="parentCheckResult">The <see cref="ICheckResult"/> currently being evaluated</param>
+    /// <param name="pruneAll">Whether to prune regardless of <see cref="Priority"/>s</param>
     /// <returns><see langword="true"/> if <paramref name="parentCheckResult"/> should also be pruned.</returns>
     /// <remarks>
     /// Results filtering is done in 2 passes.<br/>
@@ -392,8 +397,7 @@ public class RecognizerRunner
     /// Whether the <see cref="ICheckResult"/> should be pruned in case it is incorrect.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of the <see cref="ICheckResult"/></param>
-    /// <param name="pruneAll">Whether there should be pruned regardless of <see cref="Priority"/>s</param>
-    /// <returns></returns>
+    /// <param name="pruneAll">Whether to prune regardless of <see cref="Priority"/>s</param>
     private static bool Prune(Priority priority, bool pruneAll)
         => pruneAll || priority == Priority.Knockout;
 
