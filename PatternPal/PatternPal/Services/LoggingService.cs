@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using Grpc.Net.Client;
+using Microsoft.AspNetCore.Authentication;
 using PatternPal.LoggingServer;
 using ExecutionResult = PatternPal.LoggingServer.ExecutionResult;
 
@@ -22,14 +23,15 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     /// Stores the last codeState that has been successfully logged to the server, per projectId.
     /// </summary>
     
-    private static Dictionary<String, Dictionary<String, MD5>> _lastCodeState =
-        new Dictionary<string, Dictionary<String, MD5>>();
+    private static Dictionary<String, Dictionary<String, String>> _lastCodeState =
+        new Dictionary<string, Dictionary<String, String>>();
 
     
 
     /// <inheritdoc />
     public override Task<LogEventResponse> LogEvent(LogEventRequest receivedRequest, ServerCallContext context)
     {
+        // TODO This should be somewhere in an env-var, right?
         GrpcChannel grpcChannel = GrpcChannel.ForAddress(
             "http://161.35.87.186:8080");
 
@@ -39,11 +41,10 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         // TODO What should be done with the actual response of the logging server?
         LogResponse res = client.Log(sendRequest);
 
-        // TODO First check if logging was successful
-        if (sendRequest.HasData)
+        if (res.Message == "Logged" && sendRequest.HasData)
         {
-            // TODO Whether the codeState is full should eventually be determined here, but for now; always true.
-           // _lastCodeState[sendRequest.ProjectId] = (sendRequest.Data, true);
+            // We save the data from the request if we have confirmed that it has been logged successfully.
+            UpdateHistory(sendRequest.ProjectId, sendRequest.Data);
         }
 
         // Send response back to frond-end to verify something has been received here
@@ -151,6 +152,8 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         LogRequest sendLog = StandardLog(receivedRequest);
         sendLog.EventType = LoggingServer.EventType.EvtFileEdit;
         sendLog.CodeStateSection = receivedRequest.CodeStateSection;
+
+        var hash = HashFile(receivedRequest.FilePath);
 
         return sendLog;
     }
@@ -278,11 +281,9 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
                     // in the archive.
                     ZipArchiveEntry entry = archive.CreateEntry(relativePath, CompressionLevel.Optimal);
 
-                    using (Stream entryStream = entry.Open())
-                    using (FileStream contents = File.OpenRead(file))
-                    {
-                        contents.CopyTo(entryStream);
-                    }
+                    using Stream entryStream = entry.Open();
+                    using FileStream contents = File.OpenRead(file);
+                    contents.CopyTo(entryStream);
                 }
             }
 
@@ -292,6 +293,40 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         // The final memoryStream containing the zip archive is represented as an array of bytes;
         //  we copy it to a byteString here in order to facilitate easy gRPC usage.
         return ByteString.CopyFrom(bytes);
+    }
+
+    /// <summary>
+    /// TODO
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public static string HashFile(string path)
+    {
+        using MD5 md5 = MD5.Create();
+        using FileStream stream = File.OpenRead(path);
+        return Convert.ToBase64String(md5.ComputeHash(stream));
+    }
+
+    /// <summary>
+    /// TODO
+    /// </summary>
+    /// <param name="projectID"></param>
+    /// <param name="data"></param>
+    private static void UpdateHistory(string projectID, ByteString data)
+    {
+        byte[] compressed = data.ToArray();
+
+        using MemoryStream ms = new MemoryStream(compressed);
+        using ZipArchive archive = new ZipArchive(ms);
+        foreach (ZipArchiveEntry entry in archive.Entries)
+        {
+            _lastCodeState.TryAdd(projectID, new Dictionary<String, String>());
+
+            using MD5 md5 = MD5.Create();
+            using Stream stream = entry.Open();
+            _lastCodeState[projectID][entry.FullName] = Convert.ToBase64String(md5.ComputeHash(stream));
+        }
+
     }
     
     #endregion

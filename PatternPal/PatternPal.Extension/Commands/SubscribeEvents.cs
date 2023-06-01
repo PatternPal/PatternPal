@@ -265,6 +265,7 @@ namespace PatternPal.Extension.Commands
         /// <param name="document">The document that is being saved.</param>
         private static void OnDocumentSaved(Document document)
         {
+            // TODO Add ProjectID
             ThreadHelper.ThrowIfNotOnUIThread();
             LogEventRequest request = CreateStandardLog();
 
