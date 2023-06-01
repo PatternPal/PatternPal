@@ -5,13 +5,18 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+
 using EnvDTE;
+
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+
 using PatternPal.Extension.Commands;
 using PatternPal.Extension.Grpc;
+
 using Community.VisualStudio.Toolkit;
+
 #endregion
 
 namespace PatternPal.Extension
@@ -45,11 +50,27 @@ namespace PatternPal.Extension
         Vsix.Description,
         Vsix.Id,
         IconResourceID = 400)] // Info on this package for Help/About
-    [ProvideToolWindow(typeof( ExtensionWindow.Pane ), Style = VsDockStyle.Float)]
-    [ProvideMenuResource("Menus.ctmenu", 1)]
+    [ProvideToolWindow(
+        typeof( ExtensionWindow.Pane ),
+        Style = VsDockStyle.Float)]
+    [ProvideMenuResource(
+        "Menus.ctmenu",
+        1)]
     [Guid(PackageGuids.ExtensionViewString)]
-    [ProvideOptionPage(typeof(OptionsProvider.PrivacyOptions), "PatternPal", "Privacy", 0, 0, true)]
-    [ProvideProfile(typeof(OptionsProvider.PrivacyOptions), "PatternPal", "Privacy", 0, 0, true)]
+    [ProvideOptionPage(
+        typeof( OptionsProvider.PrivacyOptions ),
+        "PatternPal",
+        "Privacy",
+        0,
+        0,
+        true)]
+    [ProvideProfile(
+        typeof( OptionsProvider.PrivacyOptions ),
+        "PatternPal",
+        "Privacy",
+        0,
+        0,
+        true)]
     public sealed class ExtensionWindowPackage : ToolkitPackage
     {
         /// <summary>
@@ -79,12 +100,14 @@ namespace PatternPal.Extension
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
             await this.RegisterCommandsAsync();
-            DTE dte = (DTE)await GetServiceAsync(typeof(DTE));
-            SubscribeEvents.Initialize(
-                dte,
-                this, cancellationToken);
 
             GrpcBackgroundServiceHelper.StartBackgroundService(this);
+
+            DTE dte = (DTE)await GetServiceAsync(typeof( DTE ));
+            SubscribeEvents.Initialize(
+                dte,
+                this,
+                cancellationToken);
         }
 
         internal static void Main()
@@ -96,7 +119,8 @@ namespace PatternPal.Extension
         /// </summary>
         /// <param name="canClose"></param>
         /// <returns></returns>
-        protected override int QueryClose(out bool canClose)
+        protected override int QueryClose(
+            out bool canClose)
         {
             if (Privacy.Instance.DoLogData)
             {
