@@ -18,7 +18,7 @@ namespace PatternPal.Extension
     public class Privacy : BaseOptionModel<Privacy>
     {
         private bool _doLogData;
-        private string _subjectId;
+        private string _subjectId = Guid.Empty.ToString();
         private bool _firstTime = true;
 
 
