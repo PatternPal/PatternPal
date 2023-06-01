@@ -11,10 +11,12 @@ namespace PatternPal.Extension.ViewModels
 
         public ICommand NavigateHomeCommand { get; }
 
-        public ConsentViewModel(NavigationStore navigationStore)
+        public Privacy ConfigPrivacy { get; set; }
+        public ConsentViewModel(NavigationStore navigationStore, Privacy configPrivacy)
         {
             NavigateHomeCommand = new NavigateCommand<HomeViewModel>(navigationStore,
                                 () => new HomeViewModel(navigationStore));
+            ConfigPrivacy = configPrivacy;
         }
 
     }

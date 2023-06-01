@@ -37,7 +37,7 @@ namespace PatternPal.LoggingServer.Services
             // GUID parsing
             Guid eventId = GetGuid(request.EventId, "EventID");
             Guid sessionId = GetGuid(request.SessionId, "SessionID");
-            Guid subjectId = GetGuid(request.SubjectId, "SubjectID");
+            string subjectId = request.SubjectId;
             Guid parentEventId = request.HasParentEventId ? Guid.Parse(request.ParentEventId) : Guid.Empty;
 
             if (!DateTimeOffset.TryParse(request.ClientTimestamp, out DateTimeOffset cDto))

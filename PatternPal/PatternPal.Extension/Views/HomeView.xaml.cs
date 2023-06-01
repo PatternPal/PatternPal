@@ -33,8 +33,8 @@ namespace PatternPal.Extension.Views
                     ref guid,
                     out IVsPackage myPackage)
                 == VSConstants.S_OK)
-            {
-                ((ExtensionWindowPackage)myPackage).ShowOptionPage(typeof(ExtensionWindowPackage));
+            { 
+                ((ExtensionWindowPackage)myPackage).ShowOptionPage(typeof(OptionsProvider.PrivacyOptions));
             }
         }
 

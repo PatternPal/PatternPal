@@ -33,16 +33,18 @@ namespace PatternPal.Extension
 
         public override async Task<FrameworkElement> CreateAsync(int toolWindowId, CancellationToken cancellationToken)
         {
-            await Task.Delay(10);
             NavigationStore navigationStore = new NavigationStore();
-            navigationStore.CurrentViewModel = new HomeViewModel(navigationStore);
+            Privacy config = await Privacy.GetLiveInstanceAsync();
+            if (Privacy.Instance.FirstTime)
+            {
+                navigationStore.CurrentViewModel = new ConsentViewModel(navigationStore, config);
+            }
+            else
+            {
+                navigationStore.CurrentViewModel = new HomeViewModel(navigationStore);
+            }
 
             return new ExtensionWindowControl { DataContext = new MainViewModel(navigationStore)};
-        }
-
-        public override void SetPane(ToolWindowPane pane, int toolWindowId)
-        {
-            base.SetPane(pane, toolWindowId);
         }
 
         [Guid("99574a6e-e671-4dc3-83e6-755a30839b32")]

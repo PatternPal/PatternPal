@@ -18,7 +18,7 @@ namespace PatternPal.Extension
     public class Privacy : BaseOptionModel<Privacy>
     {
         private bool _doLogData;
-        private Guid _sessionId;
+        private string _subjectId;
         private bool _firstTime = true;
 
 
@@ -61,9 +61,9 @@ namespace PatternPal.Extension
         }
 
         [Category("Privacy")]
-        [DisplayName("Session ID")]
-        [Description("The ID of the current session. This is used for research.")]
-        public Guid SessionId { get => _sessionId; set => _sessionId = value; }
+        [DisplayName("Subject ID")]
+        [Description("The ID of the current subject. This is used for research.")]
+        public string SubjectId { get => _subjectId; set => _subjectId = value; }
 
         [Category("Privacy")]
         [DisplayName("First Time")]
