@@ -132,7 +132,7 @@ public class RecognizerRunner
                 resultsByNode,
                 rootResult);
 
-            PrioritySort(rootResult, resultsByNode);
+            PrioritySort(rootResult);
             results.Add(rootResult);
         }
         return results;
@@ -391,51 +391,49 @@ public class RecognizerRunner
     /// based their <see cref="Priority"/>s and the <see cref="Score"/>s and <see cref="Priority"/>s
     /// of their children.
     /// </summary>
-    internal static void PrioritySort(NodeCheckResult result, Dictionary<INode, List<ICheckResult>> resultsByNode)
+    internal static void PrioritySort(NodeCheckResult result)
     {
         foreach (ICheckResult childResult in result.ChildrenCheckResults)
         {
-            switch (childResult)
-            {
-                case LeafCheckResult leafResult:
-                    leafResult.Score = Score.CreateScore(leafResult.Priority, leafResult.Correct);
-                    //TODO add Relation and TypeCheck. Idea underneath. However not as straightforward since a RelationCheck and a TypeCheck are NodeCheckResults
-                    /*if (leafResult is { Correct: true, Check: RelationCheck or TypeCheck })
-                    {
-                        // Get the CheckResults belonging to the related node.
-                        List<ICheckResult> resultsOfNode = resultsByNode[leafResult.MatchedNode];
-
-                        // Find the CheckResult linked to the check which searched for the related node.
-                        ICheckResult? relevantResult = resultsOfNode.FirstOrDefault(
-                            result => result.Check == leafResult.RelatedCheck);
-
-                        leafResult.Score += relevantResult.Score;
-                    }*/
-                    break;
-                case NodeCheckResult nodeResult:
-                    PrioritySort(nodeResult, resultsByNode);
-                    break;
-                case NotCheckResult notResult:
-                    switch (notResult.NestedResult)
-                    {
-                        case LeafCheckResult notLeafResult:
-                            notLeafResult.Score = Score.CreateScore(notLeafResult.Priority, notLeafResult.Correct);
-                            break;
-                        case NodeCheckResult notNodeResult:
-                            PrioritySort(notNodeResult, resultsByNode);
-                            break;
-                        default:
-                            throw new ArgumentException($"{notResult.NestedResult} is not a supported ICheckResult");
-                    }
-                    notResult.Score = Score.GetNot(notResult.NestedResult.Priority, notResult.NestedResult.Score);
-                    break;
-                default:
-                    throw new ArgumentException($"{childResult} is not a supported ICheckResult");
-            }
+            PrioritySortHelper(childResult);
             result.Score += childResult.Score;
         }
 
         ((List<ICheckResult>)result.ChildrenCheckResults).Sort((a, b) => a.Score.CompareTo(b.Score));
+    }
+
+    /// <summary>
+    /// Sorts and determines the <see cref="Score"/> of the childResult based on the type of childResult.
+    /// </summary>
+    private static void PrioritySortHelper(ICheckResult childResult)
+    {
+        switch (childResult)
+        {
+            case LeafCheckResult leafResult:
+                leafResult.Score = Score.CreateScore(leafResult.Priority, leafResult.Correct);
+                //TODO add Relation and TypeCheck. Idea underneath. However not as straightforward since a RelationCheck and a TypeCheck are NodeCheckResults
+                /*if (leafResult is { Correct: true, Check: RelationCheck or TypeCheck })
+                {
+                    // Get the CheckResults belonging to the related node.
+                    List<ICheckResult> resultsOfNode = resultsByNode[leafResult.MatchedNode];
+
+                    // Find the CheckResult linked to the check which searched for the related node.
+                    ICheckResult? relevantResult = resultsOfNode.FirstOrDefault(
+                        result => result.Check == leafResult.RelatedCheck);
+
+                    leafResult.Score += relevantResult.Score;
+                }*/
+                break;
+            case NodeCheckResult nodeResult:
+                PrioritySort(nodeResult);
+                break;
+            case NotCheckResult notResult:
+                PrioritySortHelper(notResult.NestedResult);
+                notResult.Score = Score.GetNot(notResult.NestedResult.Priority, notResult.NestedResult.Score);
+                break;
+            default:
+                throw new ArgumentException($"{childResult} is not a supported ICheckResult");
+        }
     }
 }
 
@@ -536,7 +534,7 @@ public struct Score : IComparable<Score>
     internal int High, Mid, Low;
 
     /// <summary>
-    /// Adds up every component of the right <see cref="Score"/> to the left <see cref="Score"/>.
+    /// Adds up every component of the right <see cref="Score"/> from the left <see cref="Score"/>.
     /// </summary>
     public static Score operator +(Score a, Score b) => 
         new()
@@ -547,7 +545,7 @@ public struct Score : IComparable<Score>
         };
 
     /// <summary>
-    /// Subtracts every component of the right <see cref="Score"/> to the left <see cref="Score"/>.
+    /// Subtracts every component of the right <see cref="Score"/> from the left <see cref="Score"/>.
     /// </summary>
     public static Score operator -(Score a, Score b) => new Score
     {
