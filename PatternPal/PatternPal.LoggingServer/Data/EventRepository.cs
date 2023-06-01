@@ -119,7 +119,7 @@ namespace PatternPal.LoggingServer.Data
         /// <param name="sessionId">SessionId of event</param>
         /// <param name="subjectId">SubjectId of event</param>
         /// <param name="projectId">ProjectId of event</param>
-        /// <returns></returns
+        /// <returns></returns>
         public virtual async Task<Guid> GetPreviousCodeState(Guid sessionId, string subjectId, string projectId)
         {
             ProgSnap2Event? lastEvent = await _context.Events.Where(e => e.SessionId == sessionId && e.SubjectId == subjectId && e.ProjectId == projectId).OrderByDescending(e => e.Order).FirstOrDefaultAsync();
