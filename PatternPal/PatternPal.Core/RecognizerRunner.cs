@@ -409,7 +409,6 @@ public class RecognizerRunner
             PrioritySortHelper(childResult);
             result.Score += childResult.Score;
         }
-    }
 
         ((List<ICheckResult>)result.ChildrenCheckResults).Sort((a, b) => a.Score.CompareTo(b.Score));
     }
