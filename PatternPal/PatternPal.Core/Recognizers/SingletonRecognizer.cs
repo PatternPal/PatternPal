@@ -25,6 +25,12 @@ namespace PatternPal.Core.Recognizers;
 /// </remarks>
 internal class SingletonRecognizer : IRecognizer
 {
+    /// <inheritdoc />
+    public string Name => "Singleton";
+
+    /// <inheritdoc />
+    public Recognizer RecognizerType => Recognizer.Singleton;
+
     /// <summary>
     /// A method which creates a lot of <see cref="ICheck"/>s that each adheres to the requirements a singleton pattern needs to have implemented.
     /// It returns the requirements in a tree structure stated per class.
