@@ -10,13 +10,13 @@
           FeedbackMessage: ,
           Priority: High,
           Correct: true,
-          Score: {}
+          Score: High: 1, Mid: 0, Low: 0
         },
         {
           FeedbackMessage: ,
           Priority: Mid,
           Correct: true,
-          Score: {}
+          Score: High: 0, Mid: 1, Low: 0
         },
         {
           FeedbackMessage: ,
@@ -26,7 +26,7 @@
       ],
       CollectionKind: Any,
       NodeCheckCollectionWrapper: false,
-      Score: {}
+      Score: High: 1, Mid: 1, Low: 0
     },
     {
       FeedbackMessage: ,
@@ -36,13 +36,13 @@
           FeedbackMessage: ,
           Priority: High,
           Correct: true,
-          Score: {}
+          Score: High: 1, Mid: 0, Low: 0
         },
         {
           FeedbackMessage: ,
           Priority: Low,
           Correct: true,
-          Score: {}
+          Score: High: 0, Mid: 0, Low: 1
         },
         {
           FeedbackMessage: ,
@@ -52,10 +52,10 @@
       ],
       CollectionKind: Any,
       NodeCheckCollectionWrapper: false,
-      Score: {}
+      Score: High: 1, Mid: 0, Low: 1
     }
   ],
   CollectionKind: Any,
   NodeCheckCollectionWrapper: false,
-  Score: {}
+  Score: High: 2, Mid: 1, Low: 1
 }

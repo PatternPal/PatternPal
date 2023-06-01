@@ -558,17 +558,18 @@ public struct Score : IComparable<Score>
     internal int High, Mid, Low;
 
     /// <summary>
-    /// Adds up every component of the right <see cref="Score"/> from the left <see cref="Score"/>.
+    /// Adds up every component of the right <see cref="Score"/> to the left <see cref="Score"/>.
     /// </summary>
-    public static Score operator +(Score a, Score b) => new Score
-    {
-        High = a.High + b.High, 
-        Mid = a.Mid + b.Mid, 
-        Low = a.Low + b.Low
-    };
+    public static Score operator +(Score a, Score b) => 
+        new()
+        {
+            High = a.High + b.High,
+            Mid = a.Mid + b.Mid,
+            Low = a.Low + b.Low
+        };
 
     /// <summary>
-    /// Subtracts every component of the right <see cref="Score"/> from the left <see cref="Score"/>.
+    /// Subtracts every component of the right <see cref="Score"/> to the left <see cref="Score"/>.
     /// </summary>
     public static Score operator -(Score a, Score b) => new Score
     {
@@ -608,9 +609,9 @@ public struct Score : IComparable<Score>
     internal static Score GetNot(Priority priority, Score score) =>
         new()
         {
-            High = score.High == 0 ? 1 : 0,
-            Mid = score.Mid == 0 ? 1 : 0,
-            Low = score.Low == 0 ? 1 : 0
+            High = (priority == Priority.High && score.High == 0) ? 1 : 0,
+            Mid = (priority == Priority.Mid && score.Mid == 0) ? 1 : 0,
+            Low = (priority == Priority.Low && score.Low == 0) ? 1 : 0
         };
 
     /// <inheritdoc />>
@@ -629,5 +630,10 @@ public struct Score : IComparable<Score>
         if (Low < other.Low)
             return 1;
         return 0;
+    }
+
+    public override string ToString()
+    {
+        return $"High: {High}, Mid: {Mid}, Low: {Low}";
     }
 }
