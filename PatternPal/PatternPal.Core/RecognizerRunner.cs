@@ -228,7 +228,8 @@ public class RecognizerRunner
                     // check itself should also be pruned.
                     if (PruneResults(
                         resultsByNode,
-                        nodeCheckResult))
+                        nodeCheckResult,
+                        pruneAll))
                     {
                         resultsToBePruned.Add(nodeCheckResult);
                         nodeCheckResult.Pruned = true;
@@ -266,7 +267,8 @@ public class RecognizerRunner
                             // has priority Knockout.
                             if (!PruneResults(
                                     resultsByNode,
-                                    nodeCheckResult)
+                                    nodeCheckResult,
+                                    pruneAll)
                                 && (Prune(notCheckResult.Priority, pruneAll)))
                             {
                                 resultsToBePruned.Add(notCheckResult);
