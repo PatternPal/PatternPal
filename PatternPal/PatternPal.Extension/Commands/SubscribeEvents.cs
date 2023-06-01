@@ -1,4 +1,4 @@
-#region
+﻿#region
 
 using System;
 using System.IO;
@@ -294,7 +294,7 @@ namespace PatternPal.Extension.Commands
         public static void OnPatternRecognized(RecognizeRequest recognizeRequest,
             IList<RecognizeResult> recognizeResults)
         {
-            if (_package == null || !_package.DoLogData)
+            if (_package == null || !Privacy.Instance.DoLogData)
             {
                 return;
             }
