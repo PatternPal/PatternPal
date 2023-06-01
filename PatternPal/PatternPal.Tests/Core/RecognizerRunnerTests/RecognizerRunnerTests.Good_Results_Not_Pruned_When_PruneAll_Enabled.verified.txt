@@ -1,0 +1,20 @@
+﻿{
+  FeedbackMessage: ,
+  Priority: Low,
+  ChildrenCheckResults: [
+    {
+      FeedbackMessage: ,
+      Priority: Mid,
+      ChildrenCheckResults: [
+        {
+          FeedbackMessage: ,
+          Priority: High,
+          Correct: true
+        }
+      ],
+      NodeCheckCollectionWrapper: false
+    }
+  ],
+  CollectionKind: Any,
+  NodeCheckCollectionWrapper: false
+}

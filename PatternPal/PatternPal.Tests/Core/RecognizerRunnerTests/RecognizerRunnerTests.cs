@@ -610,4 +610,109 @@ public class RecognizerRunnerTests
             result1,
             nestedNodeCheckResult.ChildrenCheckResults[ 1 ]);
     }
+
+    [Test]
+    public Task All_Bad_Results_Are_Pruned_When_PruneAll_Enabled()
+    {
+        NodeCheckResult rootCheckResult =
+            new()
+            {
+                FeedbackMessage = string.Empty,
+                ChildrenCheckResults =
+                    new List<ICheckResult>
+                    {
+                        new NodeCheckResult
+                        {
+                            Priority = Priority.Mid,
+                            FeedbackMessage = String.Empty,
+                            DependencyCount = 0,
+                            MatchedNode = null,
+                            Check = null,
+                            ChildrenCheckResults = new List<ICheckResult>
+                            {
+                                new LeafCheckResult
+                                {
+                                    Correct = false,
+                                    Priority = Priority.High,
+                                    FeedbackMessage = String.Empty,
+                                    DependencyCount = 0,
+                                    MatchedNode = null,
+                                    Check = null
+                                }
+                            }
+                        },
+                        new LeafCheckResult
+                        {
+                            Correct = false,
+                            Priority = Priority.Mid,
+                            FeedbackMessage = String.Empty,
+                            DependencyCount = 0,
+                            MatchedNode = null,
+                            Check = null
+                        }
+                    },
+                Priority = Priority.Low,
+                DependencyCount = 0,
+                MatchedNode = null,
+                Check = null
+            };
+
+        RecognizerRunner.SortCheckResults(rootCheckResult);
+        RecognizerRunner.PruneResults(null, rootCheckResult, true);
+
+        return Verifier.Verify(rootCheckResult);
+    }
+
+    [Test]
+    public Task Good_Results_Not_Pruned_When_PruneAll_Enabled()
+    {
+        NodeCheckResult rootCheckResult =
+            new()
+            {
+                FeedbackMessage = string.Empty,
+                ChildrenCheckResults =
+                    new List<ICheckResult>
+                    {
+                        new NodeCheckResult
+                        {
+                            Priority = Priority.Mid,
+                            FeedbackMessage = String.Empty,
+                            DependencyCount = 0,
+                            MatchedNode = null,
+                            Check = null,
+                            ChildrenCheckResults = new List<ICheckResult>
+                            {
+                                new LeafCheckResult
+                                {
+                                    Correct = true,
+                                    Priority = Priority.High,
+                                    FeedbackMessage = String.Empty,
+                                    DependencyCount = 0,
+                                    MatchedNode = null,
+                                    Check = null
+                                }
+                            }
+                        },
+                        new LeafCheckResult
+                        {
+                            Correct = false,
+                            Priority = Priority.Mid,
+                            FeedbackMessage = String.Empty,
+                            DependencyCount = 0,
+                            MatchedNode = null,
+                            Check = null
+                        }
+                    },
+                Priority = Priority.Low,
+                DependencyCount = 0,
+                MatchedNode = null,
+                Check = null,
+                CollectionKind = CheckCollectionKind.Any
+            };
+
+        RecognizerRunner.SortCheckResults(rootCheckResult);
+        RecognizerRunner.PruneResults(null, rootCheckResult, true);
+
+        return Verifier.Verify(rootCheckResult);
+    }
 }
