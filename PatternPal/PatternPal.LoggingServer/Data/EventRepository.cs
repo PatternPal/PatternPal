@@ -113,7 +113,14 @@ namespace PatternPal.LoggingServer.Data
             }
             return lastEvent.Order + 1;
         }
-
+        
+        /// <summary>
+        /// To get correct event order, we need to get the last event in the session and subject and increment the order by 1.
+        /// </summary>
+        /// <param name="sessionId">SessionId of event</param>
+        /// <param name="subjectId">SubjectId of event</param>
+        /// <param name="projectId">ProjectId of event</param>
+        /// <returns></returns>
         public virtual async Task<Guid> GetPreviousCodeState(Guid sessionId, Guid subjectId, string projectId)
         {
             ProgSnap2Event? lastEvent = await _context.Events.Where(e => e.SessionId == sessionId && e.SubjectId == subjectId && e.ProjectId == projectId).OrderByDescending(e => e.Order).FirstOrDefaultAsync();
@@ -122,6 +129,15 @@ namespace PatternPal.LoggingServer.Data
                 return Guid.Empty;
             }
             return lastEvent.CodeStateId;
+        }
+
+        /// <summary>
+        /// Returns list of all unique code states in the database.
+        /// </summary>
+        /// <returns cref="List{Guid}">List of all unique code states</returns>
+        public async Task<List<Guid>> GetUniqueCodeStates(){
+            List<Guid> codeStates = await _context.Events.Select(e => e.CodeStateId).Distinct().ToListAsync();
+            return codeStates;
         }
     }
 }
