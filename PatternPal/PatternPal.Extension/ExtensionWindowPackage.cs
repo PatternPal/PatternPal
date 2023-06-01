@@ -71,11 +71,6 @@ namespace PatternPal.Extension
         true)]
     public sealed class ExtensionWindowPackage : ToolkitPackage
     {
-        /// <summary>
-        ///     ExtensionWindowPackage GUID string.
-        /// </summary>
-        public const string PackageGuidString = "ca375a3b-ff54-4156-937d-cbddc605b23c";
-
         internal static ExtensionWindowPackage PackageInstance { get; private set; }
 
         public static Mode CurrentMode = Mode.Default;
