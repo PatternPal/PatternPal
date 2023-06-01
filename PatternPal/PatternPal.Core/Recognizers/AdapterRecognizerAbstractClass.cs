@@ -15,7 +15,7 @@ namespace PatternPal.Core.Recognizers;
 /// <remarks>
 /// Requirements to fulfill the pattern:<br/>
 /// </remarks>
-internal abstract class AdapterRecognizerAbstractClass : AdapterRecognizerParent
+internal class AdapterRecognizerAbstractClass : AdapterRecognizerParent
 {
     public override ClassCheck IsInterfaceAbstractClassWithMethod(MethodCheck method)
     {

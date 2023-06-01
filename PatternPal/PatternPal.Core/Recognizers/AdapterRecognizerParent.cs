@@ -17,7 +17,7 @@ namespace PatternPal.Core.Recognizers;
 /// <remarks>
 /// Requirements to fulfill the pattern:<br/>
 /// </remarks>
-internal abstract class AdapterRecognizerParent : IRecognizer
+internal abstract class AdapterRecognizerParent
 {
     /// <summary>
     /// A method which creates a lot of <see cref="ICheck"/>s that each adheres to the requirements a adapter pattern needs to have implemented.
@@ -48,8 +48,10 @@ internal abstract class AdapterRecognizerParent : IRecognizer
     ///     f) every method uses the Service class
     /// </remarks>
 
-    public IEnumerable< ICheck > Create()
+    public ICheck[] Checks()
     {
+        ICheck[] result = new ICheck[4];
+
         //Check Client interface c, ci
         MethodCheck clientInterfaceMethod = ContainsMaybeAbstractVirtualMethod();
 
@@ -131,22 +133,24 @@ internal abstract class AdapterRecognizerParent : IRecognizer
         //Check Client c
         ICheck notUsedService = Method(Priority.Low);//TODO: Implemnt check
 
-        yield return service;
+        result[0] = service;
 
-        yield return adapter;
+        result[1] = adapter;
 
-        yield return Class(
+        result[3] = Class(
             Priority.Low,
             clientInterfaceMethod,
             clientInterfaceClassType
         );
 
-        yield return Class(
+        result [4] = Class(
             Priority.Low,
             createsAdapter,
             usedService,
             notUsedService
         );
+
+        return result;
     }
 
 
@@ -180,10 +184,5 @@ internal abstract class AdapterRecognizerParent : IRecognizer
                 )
             )
         );
-    }
-
-    ICheck UsesServiceMethodViaAdapter(MethodCheck allServiceMethods)
-    {
-        
     }
 }
