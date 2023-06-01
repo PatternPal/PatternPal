@@ -23,8 +23,11 @@ public class RecognizerRunner
     /// <summary>
     /// Finds the recognizers which are defined in this assembly and adds them to <see cref="SupportedRecognizers"/>.
     /// </summary>
+    // See: https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca2255#when-to-suppress-warnings
+#pragma warning disable CA2255 // The 'ModuleInitializer' attribute should not be used in libraries
     [ModuleInitializer]
-    public static void Init()
+#pragma warning restore CA2255 // The 'ModuleInitializer' attribute should not be used in libraries
+    public static void ModuleInitializer()
     {
         SupportedRecognizers = new Dictionary< Recognizer, IRecognizer >();
 
