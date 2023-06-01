@@ -88,7 +88,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     {
         return new LogRequest
         {
-            EventId = receivedRequest.EventId, //TODO: Generate ID in Logging Server self
+            EventId = receivedRequest.EventId,
             SubjectId = receivedRequest.SubjectId,
             ToolInstances = Environment.Version.ToString(),
             ClientTimestamp =
