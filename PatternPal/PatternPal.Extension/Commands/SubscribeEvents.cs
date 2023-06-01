@@ -10,6 +10,7 @@ using EnvDTE80;
 using PatternPal.Protos;
 using System.Threading;
 using System.Collections.Generic;
+using Microsoft.VisualStudio.PlatformUI.OleComponentSupport;
 
 #endregion
 
@@ -265,12 +266,14 @@ namespace PatternPal.Extension.Commands
         /// <param name="document">The document that is being saved.</param>
         private static void OnDocumentSaved(Document document)
         {
-            // TODO Add ProjectID
             ThreadHelper.ThrowIfNotOnUIThread();
-            LogEventRequest request = CreateStandardLog();
 
+            LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtFileEdit;
+            
             request.CodeStateSection = GetRelativePath(Path.GetDirectoryName(document.FullName), document.FullName);
+            request.ProjectId = document.ProjectItem.ContainingProject.UniqueName;
+            request.ProjectDirectory = Path.GetDirectoryName(document.ProjectItem.ContainingProject.FullName);
             request.FilePath = document.FullName;
 
             LogEventResponse response = PushLog(request);
@@ -390,7 +393,7 @@ namespace PatternPal.Extension.Commands
                     continue;
                 }
 
-                // TODO This catches miscellanious projects without a defined project.Fullname, but we should investigate where this
+                // TODO This catches miscellaneous projects without a defined project.Fullname, but we should investigate where this
                 //  problem derives from.
                 if (project.FullName == null || !File.Exists((project.FullName)))
                 {

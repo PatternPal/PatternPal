@@ -20,55 +20,62 @@ namespace PatternPal.Services;
 public class LoggingService : LogProviderService.LogProviderServiceBase
 {
     /// <summary>
-    /// Stores the last codeState that has been successfully logged to the server, per projectId.
+    /// Stores the last codeState that has been successfully logged to the server. They
+    /// are stored as follows: They are stored under [projectID][fileNameRelativeToProjectDir].
     /// </summary>
-    
     private static Dictionary<String, Dictionary<String, String>> _lastCodeState =
         new Dictionary<string, Dictionary<String, String>>();
-
-    
 
     /// <inheritdoc />
     public override Task<LogEventResponse> LogEvent(LogEventRequest receivedRequest, ServerCallContext context)
     {
+        (LogRequest request, bool discard) specificLog = DetermineSpecificLog((receivedRequest));
+        LogEventResponse taskResult = new();
+
+        if (specificLog.discard)
+        {
+            taskResult.ResponseMessage = "Discarded";
+            return Task.FromResult(taskResult);
+        }
+
         // TODO This should be somewhere in an env-var, right?
         GrpcChannel grpcChannel = GrpcChannel.ForAddress(
             "http://161.35.87.186:8080");
-
-        LogRequest sendRequest = DetermineSpecificLog(receivedRequest);
         LogCollectorService.LogCollectorServiceClient client = new(grpcChannel);
 
-        // TODO What should be done with the actual response of the logging server?
-        LogResponse res = client.Log(sendRequest);
+        // TODO Response error handling
+        LogResponse response = client.Log(specificLog.request);
 
-        if (res.Message == "Logged" && sendRequest.HasData)
+        if (response.Message == "Logged" && specificLog.request.HasData)
         {
-            // We save the data from the request if we have confirmed that it has been logged successfully.
-            UpdateHistory(sendRequest.ProjectId, sendRequest.Data);
+            // We only store the logged data as the previous codeState if we are certain it was successfully logged.
+            UpdateHistory(specificLog.request.ProjectId, specificLog.request.Data);
         }
 
-        // Send response back to frond-end to verify something has been received here
-        LogEventResponse response = new() { ResponseMessage = "a response message." };
-        return Task.FromResult(response);
+        taskResult.ResponseMessage = response.Message;
+        return Task.FromResult(taskResult);
     }
 
     /// <summary>
     /// Returns a log in the right format for the logging server based on the event type.
     /// </summary>
-    private static LogRequest DetermineSpecificLog(LogEventRequest receivedRequest)
+    private static (LogRequest request, bool discard) DetermineSpecificLog(LogEventRequest receivedRequest)
     {
         return receivedRequest.EventType switch
         {
-            Protos.EventType.EvtCompile => CompileLog(receivedRequest),
-            Protos.EventType.EvtCompileError => CompileErrorLog(receivedRequest),
-            Protos.EventType.EvtFileEdit => FileEditLog(receivedRequest),
-            Protos.EventType.EvtProjectOpen => ProjectOpenLog(receivedRequest),
-            Protos.EventType.EvtProjectClose => ProjectCloseLog(receivedRequest),
-            Protos.EventType.EvtDebugProgram => DebugProgramLog(receivedRequest),
-            Protos.EventType.EvtSessionStart => SessionStartLog(receivedRequest),
-            Protos.EventType.EvtSessionEnd => SessionEndLog(receivedRequest),
-            Protos.EventType.EvtXRecognizerRun => RecognizeLog(receivedRequest),
-            _ => StandardLog(receivedRequest)
+            Protos.EventType.EvtCompile => (CompileLog(receivedRequest), false),
+            Protos.EventType.EvtCompileError => (CompileErrorLog(receivedRequest), false),
+
+            // Currently, the only LogEvent that might need to be discarded is the FileEditEvent, since the file might not have been changed after all.
+            Protos.EventType.EvtFileEdit => FileEditLog(receivedRequest),       
+
+            Protos.EventType.EvtProjectOpen => (ProjectOpenLog(receivedRequest), false),
+            Protos.EventType.EvtProjectClose => (ProjectCloseLog(receivedRequest), false),
+            Protos.EventType.EvtDebugProgram => (DebugProgramLog(receivedRequest), false),
+            Protos.EventType.EvtSessionStart => (SessionStartLog(receivedRequest), false),
+            Protos.EventType.EvtSessionEnd => (SessionEndLog(receivedRequest), false),
+            Protos.EventType.EvtXRecognizerRun => (RecognizeLog(receivedRequest), false),
+            _ => (StandardLog(receivedRequest), false)
         };
     }
 
@@ -102,6 +109,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     /// <returns>A LogRequest populated for this specific event</returns>
     private static LogRequest RecognizeLog(LogEventRequest receivedRequest)
     {
+        // TODO PatternPal only supports running the recognizer on a project, so the projectID should be set as well.
         LogRequest sendLog = StandardLog(receivedRequest);
         sendLog.EventType = LoggingServer.EventType.EvtXRecognizerRun;
         sendLog.RecognizerResult = receivedRequest.RecognizerResult;
@@ -144,18 +152,31 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     /// <summary>
     /// Creates a LogRequest that is populated with info obtained from the supplied
     /// received event and further specific details relevant for the FileEdit-event.
+    /// Note that this LogRequest is discarded when no difference between the last logged
+    /// state of the file and the current state of the file was detected.
     /// </summary>
     /// <param name="receivedRequest">The originally received request from the PP extension</param>
-    /// <returns>A LogRequest populated for this specific event</returns>
-    private static LogRequest FileEditLog(LogEventRequest receivedRequest)
+    /// <returns>A tuple of a LogRequest populated for this specific event, and a bool flagging whether the request should be discarded or not</returns>
+    private static (LogRequest request, bool discard) FileEditLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
+
+        string currentHash = HashFile(receivedRequest.FilePath);
+        string relativePath = Path.GetRelativePath(receivedRequest.ProjectDirectory, receivedRequest.FilePath);
+        string oldHash = _lastCodeState[receivedRequest.ProjectId][relativePath];
+
+        // If these hashes match, the file hasn't changed and the request may be discarded.
+        if (currentHash == oldHash)
+        {
+            return (sendLog, true);
+        }
+
         sendLog.EventType = LoggingServer.EventType.EvtFileEdit;
         sendLog.CodeStateSection = receivedRequest.CodeStateSection;
+        sendLog.ProjectId = receivedRequest.ProjectId;
+        sendLog.Data = ZipPath(receivedRequest.FilePath, relativePath);
 
-        var hash = HashFile(receivedRequest.FilePath);
-
-        return sendLog;
+        return (sendLog, false);
     }
 
     /// <summary>
@@ -172,7 +193,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
 
         if (receivedRequest.HasFilePath)
         {
-            sendLog.Data = ZipDirectory(receivedRequest.FilePath);
+            sendLog.Data = ZipPath(receivedRequest.FilePath);
         }
 
         return sendLog;
@@ -192,7 +213,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
 
         if (receivedRequest.HasFilePath)
         {
-            sendLog.Data = ZipDirectory(receivedRequest.FilePath);
+            sendLog.Data = ZipPath(receivedRequest.FilePath);
         }
 
         return sendLog;
@@ -247,14 +268,20 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     #region Utils
 
     /// <summary>
-    /// Zips only the *.cs-files in the supplied path to an in-memory archive,
-    /// while retaining the directory structure.
+    /// When path is a directory: zips only the *.cs-files in the supplied path to an in-memory archive,
+    /// while retaining the directory structure relative to the directory as root.
+    /// When path is a file: zips that file to an in-memory archive, placing it in the directory structure
+    /// as supplied by the optional parameter relativePath.
     /// </summary>
-    /// <param name="path">The absolute path to the directory</param>
+    /// <param name="path">The absolute path to the file or directory</param>
+    /// <param name="relativePath">Optional: the path to the relative parent directory of the file</param>
     /// <returns>A ByteString of the resulting archive</returns>
-    public static ByteString ZipDirectory(string path)
+    public static ByteString ZipPath(string path, string relativePath = "")
     {
         // TODO: Protect against too large codebases.
+        // Note: Calculating dirSize in C# is not trivial; omitting this for now.
+
+        bool isDirectory = Directory.Exists(path);
         Byte[] bytes;
 
         // This will match things like /bin/, bin/, etc. and make sure
@@ -265,24 +292,43 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         {
             using (ZipArchive archive = new ZipArchive(ms, ZipArchiveMode.Create))
             {
-                string[] files = Directory.GetFiles(path, "*.cs", SearchOption.AllDirectories);
-
-                foreach (string file in files)
+                if (isDirectory)
                 {
-                    string relativePath = Path.GetRelativePath(path, file);
-
-                    if (rgx.IsMatch(relativePath))
+                    // If the supplied path is a directory, we enumerate all *.cs-files in the directory and add it to the archive.
+                    string[] files = Directory.GetFiles(path, "*.cs", SearchOption.AllDirectories);
+                    foreach (string file in files)
                     {
-                        continue;
-                    }
+                        // We need the filePath relative to the directory that is being zipped to prevent inclusion
+                        // of the entire directory structure on the user's disk.
+                        string relativeFile = Path.GetRelativePath(path, file);
 
-                    // Note that we open the file using the full path, but we create the entry using
-                    // the relative path to prevent the entire directory structure from being incorporated
-                    // in the archive.
+                        if (rgx.IsMatch(relativeFile))
+                        {
+                            continue;
+                        }
+
+                        // Note that we open the file using the full path, but we create the entry using
+                        // the relative path to prevent the entire directory structure from being incorporated
+                        // in the archive.
+                        ZipArchiveEntry entry = archive.CreateEntry(relativeFile, CompressionLevel.Optimal);
+
+                        using Stream entryStream = entry.Open();
+                        using FileStream contents = File.OpenRead(file);
+                        contents.CopyTo(entryStream);
+                    }
+                }
+
+                else
+                {
+                    // If the supplied path wasn't a directory it is assumed to be a path; since only direct edits
+                    // of specific *.cs-files will trigger this branch, we also do not check whether this
+                    // file is a *.cs-file or whether it is part of a bin/obj-folder.
+
+                    // Note that the relativePath to the file needs to be supplied via the optional argument here.
                     ZipArchiveEntry entry = archive.CreateEntry(relativePath, CompressionLevel.Optimal);
 
                     using Stream entryStream = entry.Open();
-                    using FileStream contents = File.OpenRead(file);
+                    using FileStream contents = File.OpenRead(path);
                     contents.CopyTo(entryStream);
                 }
             }
@@ -296,11 +342,11 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     }
 
     /// <summary>
-    /// TODO
+    /// Generates a MD5 hash of the file specified at path.
     /// </summary>
-    /// <param name="path"></param>
-    /// <returns></returns>
-    public static string HashFile(string path)
+    /// <param name="path">Path to the file to hash</param>
+    /// <returns>A base64-string representation of the hash</returns>
+    private static string HashFile(string path)
     {
         using MD5 md5 = MD5.Create();
         using FileStream stream = File.OpenRead(path);
@@ -308,7 +354,8 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     }
 
     /// <summary>
-    /// TODO
+    /// Populates _lastCodeState by traversing the supplied archive in data and
+    /// hashing all entries.
     /// </summary>
     /// <param name="projectID"></param>
     /// <param name="data"></param>
@@ -320,6 +367,8 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         using ZipArchive archive = new ZipArchive(ms);
         foreach (ZipArchiveEntry entry in archive.Entries)
         {
+            // We try and add an entry per projectID to create new ones
+            // when a project was not yet included.
             _lastCodeState.TryAdd(projectID, new Dictionary<String, String>());
 
             using MD5 md5 = MD5.Create();
