@@ -13,8 +13,82 @@ internal class PrioritySortTests
     }
 
     [Test]
+    public Task KnockoutThenHighThenMidThenLow()
+    {
+        //Testing multiple nodecheckresults with knockouts is not that interesting, since an incorrect knockout gets pruned.
+        //Thus all knockouts that are sorted by priority sorting must be correct.
+        NodeCheckResult rootCheckResult =
+            new()
+            {
+                FeedbackMessage = string.Empty,
+                CollectionKind = CheckCollectionKind.Any,
+                ChildrenCheckResults =
+                    new List<ICheckResult>
+                    {
+                        new NodeCheckResult
+                        {
+                            FeedbackMessage = string.Empty,
+                            CollectionKind = CheckCollectionKind.Any,
+                            Priority = Priority.Knockout,
+                            DependencyCount = 0,
+                            MatchedNode = null,
+                            Check = null,
+                            ChildrenCheckResults = new List<ICheckResult>
+                            {
+                                new LeafCheckResult
+                                {
+                                    FeedbackMessage = string.Empty,
+                                    Priority = Priority.Low,
+                                    Correct = true,
+                                    DependencyCount = 0,
+                                    MatchedNode = null,
+                                    Check = null,
+                                },
+                                new LeafCheckResult
+                                {
+                                    FeedbackMessage = string.Empty,
+                                    Priority = Priority.Mid,
+                                    Correct = true,
+                                    DependencyCount = 0,
+                                    MatchedNode = null,
+                                    Check = null,
+                                },
+                                new LeafCheckResult
+                                {
+                                    FeedbackMessage = string.Empty,
+                                    Priority = Priority.High,
+                                    Correct = true,
+                                    DependencyCount = 0,
+                                    MatchedNode = null,
+                                    Check = null,
+                                },
+                                new LeafCheckResult()
+                                {
+                                    FeedbackMessage = string.Empty,
+                                    Priority = Priority.Knockout,
+                                    Correct = true,
+                                    DependencyCount = 0,
+                                    MatchedNode = null,
+                                    Check = null,
+                                }
+                            }
+                        },
+                    },
+                Priority = Priority.Low,
+                DependencyCount = 0,
+                MatchedNode = null,
+                Check = null
+            };
+
+        RecognizerRunner.PrioritySort(rootCheckResult);
+
+        return Verifier.Verify(rootCheckResult, _settings);
+    }
+
+    [Test]
     public Task HighMostImportant()
     {
+        //When it comes to priorities that can actually be incorrect in the final result, high is the most important one
         NodeCheckResult rootCheckResult =
             new()
             {
@@ -116,6 +190,7 @@ internal class PrioritySortTests
     [Test]
     public Task SameHighThenMid()
     {
+        //When it comes to priorities that can actually be incorrect in the final result, mid is the second most important one
         NodeCheckResult rootCheckResult =
             new()
             {
@@ -217,6 +292,7 @@ internal class PrioritySortTests
     [Test]
     public Task SameHighAndMidThenLow()
     {
+        //When it comes to priorities that can actually be incorrect in the final result, low is the least important one
         NodeCheckResult rootCheckResult =
             new()
             {

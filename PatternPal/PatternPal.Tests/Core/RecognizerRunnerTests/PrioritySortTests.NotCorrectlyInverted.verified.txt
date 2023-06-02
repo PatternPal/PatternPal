@@ -10,10 +10,10 @@
         Priority: Mid,
         Correct: false
       },
-      Score: High: 0, Mid: 1, Low: 0
+      Score: Knockout: 0, High: 0, Mid: 1, Low: 0
     }
   ],
   CollectionKind: Any,
   NodeCheckCollectionWrapper: false,
-  Score: High: 0, Mid: 1, Low: 0
+  Score: Knockout: 0, High: 0, Mid: 1, Low: 0
 }
