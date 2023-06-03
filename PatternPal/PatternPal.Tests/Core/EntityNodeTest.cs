@@ -1,8 +1,4 @@
-﻿using PatternPal.Recognizers;
-
-using NUnit.Framework;
-
-namespace PatternPal.Tests.Core
+﻿namespace PatternPal.Tests.Core
 {
     public class EntityNodeTest
     {
@@ -37,8 +33,13 @@ namespace PatternPal.Tests.Core
         {
             var code = FileUtils.FileToString(filename);
             var testGraph = EntityNodeUtils.CreateEntityNodeGraphFromOneFile(code);
-            var testNode = testGraph.Values.First();
-            Assert.AreEqual(expected, testNode.GetConstructors().Count());
+            var entity = testGraph.Values.First();
+            int actual = 0;
+            if (entity is IClass cls)
+            {
+                actual = cls.GetConstructors().Count();
+            }
+            Assert.AreEqual(expected, actual);
         }
     }
 }

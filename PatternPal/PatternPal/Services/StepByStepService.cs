@@ -34,12 +34,6 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
         throw new NotImplementedException();
     }
 
-    private static CheckResult CreateCheckResult(
-        Recognizers.Abstractions.ICheckResult checkResult)
-    {
-        throw new NotImplementedException();
-    }
-
     private static class State
     {
         internal static readonly Dictionary< string, string > StateKeyed = new();
