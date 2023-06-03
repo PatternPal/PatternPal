@@ -227,7 +227,7 @@ namespace PatternPal.Tests.Utils
         /// Creates a SyntaxGraph from a string representing a file
         /// </summary>
         /// <returns>A <see cref="SyntaxGraph"/> to be used inside tests.</returns>
-        private static SyntaxGraph CreateGraphFromInput(
+        internal static SyntaxGraph CreateGraphFromInput(
             string input)
         {
             SyntaxGraph graph = new();
