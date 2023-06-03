@@ -71,6 +71,15 @@ internal class DecoratorRecognizer : IRecognizer
                 )
             );
 
+        FieldCheck baseDecoratorField =
+            Field(
+                Priority.Knockout,
+                Type(
+                    Priority.Knockout,
+                    component
+                )
+            );
+
         ClassCheck baseDecorator =
             AbstractClass(
                 Priority.Knockout,
@@ -78,15 +87,13 @@ internal class DecoratorRecognizer : IRecognizer
                     Priority.Knockout,
                     component
                 ),
-                Field(
-                    Priority.Knockout,
-                    Type(
-                        Priority.Knockout,
-                        component
-                    )
-                ),
+                baseDecoratorField,
                 Constructor(
                     Priority.Knockout,
+                    Uses(
+                        Priority.Knockout,
+                        baseDecoratorField
+                    ),
                     Parameters(
                         Priority.Knockout,
                         Type(
@@ -94,9 +101,6 @@ internal class DecoratorRecognizer : IRecognizer
                             component
                         )
                     )
-                    /*
-                     *Uses Field???? want hij moet field gelijk zetten aan de component parameter
-                     */
                 ),
                 baseDecoratorMethod
             );
