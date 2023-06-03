@@ -548,7 +548,7 @@ file class RootNode : INode
 /// </summary>
 public struct Score : IComparable<Score>
 {
-    internal int High, Mid, Low;
+    internal int Knockout, High, Mid, Low;
 
     /// <summary>
     /// Adds up every component of the right <see cref="Score"/> from the left <see cref="Score"/>.
@@ -556,6 +556,7 @@ public struct Score : IComparable<Score>
     public static Score operator +(Score a, Score b) => 
         new()
         {
+            Knockout = a.Knockout + b.Knockout,
             High = a.High + b.High,
             Mid = a.Mid + b.Mid,
             Low = a.Low + b.Low
@@ -564,12 +565,14 @@ public struct Score : IComparable<Score>
     /// <summary>
     /// Subtracts every component of the right <see cref="Score"/> from the left <see cref="Score"/>.
     /// </summary>
-    public static Score operator -(Score a, Score b) => new Score
-    {
-        High = a.High - b.High,
-        Mid = a.Mid - b.Mid,
-        Low = a.Low - b.Low
-    };
+    public static Score operator -(Score a, Score b) => 
+        new()
+        {
+            Knockout = a.Knockout - b.Knockout,
+            High = a.High - b.High,
+            Mid = a.Mid - b.Mid,
+            Low = a.Low - b.Low
+        };
 
     /// <summary>
     /// Calculates and returns the <see cref="Score"/> property belonging to a <see cref="LeafCheckResult"/>.
@@ -581,6 +584,8 @@ public struct Score : IComparable<Score>
         int score = correct ? 1 : 0;
         switch (priority)
         {
+            case Priority.Knockout:
+                return new Score { Knockout = score};
             case Priority.High:
                 return new Score { High = score };
             case Priority.Mid:
@@ -602,6 +607,7 @@ public struct Score : IComparable<Score>
     internal static Score GetNot(Priority priority, Score score) =>
         new()
         {
+            Knockout = (priority == Priority.Knockout && score.Knockout == 0) ? 1 : 0,
             High = (priority == Priority.High && score.High == 0) ? 1 : 0,
             Mid = (priority == Priority.Mid && score.Mid == 0) ? 1 : 0,
             Low = (priority == Priority.Low && score.Low == 0) ? 1 : 0
@@ -610,6 +616,10 @@ public struct Score : IComparable<Score>
     /// <inheritdoc />>
     public int CompareTo(Score other)
     {
+        if (Knockout > other.Knockout)
+            return -1;
+        if (Knockout < other.Knockout)
+            return 1;
         if (High > other.High)
             return -1;
         if (High < other.High)
@@ -627,6 +637,6 @@ public struct Score : IComparable<Score>
 
     public override string ToString()
     {
-        return $"High: {High}, Mid: {Mid}, Low: {Low}";
+        return $"Knockout: {Knockout}, High: {High}, Mid: {Mid}, Low: {Low}";
     }
 }
