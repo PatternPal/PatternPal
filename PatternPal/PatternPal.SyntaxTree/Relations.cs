@@ -397,6 +397,11 @@ namespace PatternPal.SyntaxTree
         private void CreateOverridingEdges(
             IMember member)
         {
+            if (member is not IMethod)
+            {
+                return;
+            }
+
             SemanticModel semanticModel = SemanticModels.GetSemanticModel(
                 member.GetSyntaxNode().SyntaxTree,
                 false);
