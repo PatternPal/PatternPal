@@ -1,11 +1,11 @@
-#region
+﻿#region
 
 using System;
 using System.Linq;
+
 using PatternPal.SyntaxTree.Abstractions;
 using PatternPal.SyntaxTree.Abstractions.Members;
 using PatternPal.SyntaxTree.Models.Entities;
-using PatternPal.SyntaxTree.Models.Members.Method;
 
 #endregion
 
@@ -19,7 +19,7 @@ namespace PatternPal.SyntaxTree
     {
         // Reverses the type of relation.
         private static readonly Dictionary< RelationType, RelationType > ReversedTypes =
-            new Dictionary< RelationType, RelationType >
+            new()
             {
                 {
                     RelationType.Implements, RelationType.ImplementedBy
@@ -32,6 +32,12 @@ namespace PatternPal.SyntaxTree
                 },
                 {
                     RelationType.CreatedBy, RelationType.Creates
+                },
+                {
+                    RelationType.Overrides, RelationType.OverriddenBy
+                },
+                {
+                    RelationType.OverriddenBy, RelationType.Overrides
                 },
                 {
                     RelationType.Uses, RelationType.UsedBy
@@ -48,7 +54,7 @@ namespace PatternPal.SyntaxTree
             };
 
         // List with all relations in the graph.
-        internal List< Relation > relations = new();
+        private List< Relation > _relations = new();
 
         // Dictionary to access relations of entities fast.
         internal Dictionary< IEntity, List< Relation > > EntityRelations = new();
@@ -57,8 +63,8 @@ namespace PatternPal.SyntaxTree
         internal Dictionary< IMember, List< Relation > > MemberRelations = new();
 
         private readonly SyntaxGraph _graph;
-        private List< IEntity > _entities;
-        private List< IMember > _members = new();
+        private List< IEntity > _entities = new();
+        private readonly List< IMember > _members = new();
 
         /// <summary>
         /// Returns an instance of <see cref="Relations"/>.
@@ -94,6 +100,7 @@ namespace PatternPal.SyntaxTree
             {
                 CreateCreationalEdges(member);
                 CreateUsingEdges(member);
+                CreateOverridingEdges(member);
             }
         }
 
@@ -142,8 +149,8 @@ namespace PatternPal.SyntaxTree
 
             // TODO: This requires the custom Equals method. Does not yet work
             // If the relation is already stored, do not add it again.
-            if (relations.Any(r => r == relation)
-                || relations.Any(r => r == relationReversed))
+            if (_relations.Any(r => r == relation)
+                || _relations.Any(r => r == relationReversed))
             {
                 return;
             }
@@ -156,8 +163,8 @@ namespace PatternPal.SyntaxTree
                 node2,
                 relationReversed);
 
-            relations.Add(relation);
-            relations.Add(relationReversed);
+            _relations.Add(relation);
+            _relations.Add(relationReversed);
         }
 
         /// <summary>
@@ -219,10 +226,8 @@ namespace PatternPal.SyntaxTree
 
             SymbolInfo symbol = semanticModel.GetSymbolInfo(syntaxNode);
 
-            TypeDeclarationSyntax? entityDeclaration;
+            TypeDeclarationSyntax ? entityDeclaration = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as TypeDeclarationSyntax;
 
-            entityDeclaration = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as TypeDeclarationSyntax;
-            
             return _entities.FirstOrDefault(x => x.GetSyntaxNode().IsEquivalentTo(entityDeclaration));
         }
 
@@ -240,9 +245,9 @@ namespace PatternPal.SyntaxTree
 
             SymbolInfo symbol = semanticModel.GetSymbolInfo(memberNode);
 
-            MemberDeclarationSyntax? memberDeclaration;
+            MemberDeclarationSyntax ? memberDeclaration;
 
-            SyntaxNode? declarationNode = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax();
+            SyntaxNode ? declarationNode = symbol.Symbol?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax();
 
             //When a field is already declared, the DeclaringSyntaxReferences is a VariableDeclaratorSyntax
             if (declarationNode is VariableDeclaratorSyntax)
@@ -257,6 +262,17 @@ namespace PatternPal.SyntaxTree
             return _members.FirstOrDefault(x => x.GetSyntaxNode().IsEquivalentTo(memberDeclaration));
         }
 
+        /// <summary>
+        /// Gets the <see cref="IMember"/> instance saved in the <see cref="SyntaxGraph"/>.
+        /// </summary>
+        /// <param name="symbol">The <see cref="ISymbol"/> for which to get the corresponding <see cref="IMember"/> instance.</param>
+        /// <returns>The corresponding <see cref="IMember"/> instance, or <see langword="null"/> if it does not exist.</returns>
+        private IMember ? GetMemberBySymbol(
+            ISymbol symbol)
+        {
+            SyntaxNode ? declaringSyntax = symbol.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax();
+            return _members.FirstOrDefault(x => x.GetSyntaxNode().IsEquivalentTo(declaringSyntax));
+        }
 
         /// <summary>
         /// Creates the Extend, ExtendedBy, Implements and ImplementedBy relations between two <see cref="IEntity"/>'s.
@@ -354,21 +370,50 @@ namespace PatternPal.SyntaxTree
 
             foreach (IdentifierNameSyntax identifier in childNodes.OfType< IdentifierNameSyntax >())
             {
-                INode node2 = (INode?)GetEntityByName(identifier) ?? GetMemberByName(identifier);
+                INode ? node2 = (INode ?)GetEntityByName(identifier) ?? GetMemberByName(identifier);
 
                 AddRelation(
                     node,
                     node2,
                     RelationType.Uses);
 
-                if (identifier.Parent is ObjectCreationExpressionSyntax parent && node2 is Class classNode)
+                if (identifier.Parent is ObjectCreationExpressionSyntax parent
+                    && node2 is Class classNode)
                 {
-                    IMember? matchedConstructor = GetMemberByName(parent);
+                    IMember ? matchedConstructor = GetMemberByName(parent);
 
                     AddRelation(
                         node,
                         matchedConstructor,
                         RelationType.Uses);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Creates the <see cref="RelationType.Overrides"/> relations between <see cref="IMember"/>s.
+        /// </summary>
+        /// <param name="member">The <see cref="IMember"/> which will be checked if it overrides another <see cref="IMember"/>.</param>
+        private void CreateOverridingEdges(
+            IMember member)
+        {
+            SemanticModel semanticModel = SemanticModels.GetSemanticModel(
+                member.GetSyntaxNode().SyntaxTree,
+                false);
+            ISymbol declaredSymbol = semanticModel.GetDeclaredSymbol(member.GetSyntaxNode())!;
+
+            if (declaredSymbol.IsOverride)
+            {
+                switch (declaredSymbol)
+                {
+                    case IMethodSymbol methodSymbol:
+                    {
+                        AddRelation(
+                            member,
+                            GetMemberBySymbol(methodSymbol.OverriddenMethod!),
+                            RelationType.Overrides);
+                        break;
+                    }
                 }
             }
         }
@@ -385,7 +430,7 @@ namespace PatternPal.SyntaxTree
             switch (node)
             {
                 case IEntity entityNode:
-                    foreach (var member in entityNode.GetMembers())
+                    foreach (IMember member in entityNode.GetMembers())
                     {
                         childNodes.AddRange(member.GetSyntaxNode().DescendantNodes());
                     }
@@ -402,7 +447,7 @@ namespace PatternPal.SyntaxTree
         /// </summary>
         public void Reset()
         {
-            relations = new List< Relation >();
+            _relations = new List< Relation >();
             EntityRelations = new Dictionary< IEntity, List< Relation > >();
             MemberRelations = new Dictionary< IMember, List< Relation > >();
         }
