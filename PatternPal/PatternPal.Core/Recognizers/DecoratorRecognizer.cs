@@ -10,19 +10,11 @@ using static PatternPal.Core.Checks.CheckBuilder;
 namespace PatternPal.Core.Recognizers;
 
 /// <summary>
-/// A <see cref="IRecognizer"/> that is used to determine if the provided files or project implements the singleton pattern
+/// A <see cref="IRecognizer"/> that is used to determine if the provided files or project implements the decorator pattern
 /// </summary>
 /// <remarks>
 /// Requirements to fulfill the pattern:<br/>
-/// a) has no public/internal constructor<br/>
-/// b) has at least one private/protected constructor<br/>
-/// c) has a static, private field with the same type as the class<br/>
-/// d0) has a static, public/internal method that acts as a constructor in the following way<br/>
-///     d1) if called and there is no instance saved in the private field, then it calls the private constructor<br/>
-///     d2) if called and there is an instance saved in the private field it returns this instance<br/>
-/// <br/>
-/// Optional requirement client:<br/>
-/// a) calls the method that acts as a constructor of the singleton class<br/>
+/// TODO
 /// </remarks>
 internal class DecoratorRecognizer : IRecognizer
 {
@@ -40,6 +32,7 @@ internal class DecoratorRecognizer : IRecognizer
     {
         MethodCheck componentMethod = Method(Priority.Knockout);
 
+        //Could also be an abstract class TODO how
         InterfaceCheck component =
             Interface(
                 Priority.Knockout,
