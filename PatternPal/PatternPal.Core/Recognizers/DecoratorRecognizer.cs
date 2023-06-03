@@ -68,6 +68,10 @@ internal class DecoratorRecognizer : IRecognizer
                 Overrides(
                     Priority.Knockout,
                     componentMethod
+                ),
+                Uses(
+                    Priority.Knockout,
+                    componentMethod
                 )
             );
 
@@ -120,7 +124,7 @@ internal class DecoratorRecognizer : IRecognizer
                     ),
                     Uses(
                         Priority.Knockout,
-                        componentMethod
+                        baseDecoratorMethod
                     )
                 ),
                 Method(Priority.Mid)
@@ -134,6 +138,12 @@ internal class DecoratorRecognizer : IRecognizer
                     component
                 )
             );
+
+        yield return component;
+        yield return concreteComponent;
+        yield return baseDecorator;
+        yield return concreteDecorator;
+        yield return client;
     }
 
     public List<IInstruction> GenerateStepsList()
