@@ -25,7 +25,7 @@ namespace PatternPal.Core.Recognizers;
 /// Optional requirement client:<br/>
 /// a) calls the method that acts as a constructor of the singleton class<br/>
 /// </remarks>
-public class SingletonRecognizer : IRecognizer
+internal class SingletonRecognizer : IRecognizer
 {
     /// <inheritdoc />
     public string Name => "Singleton";
