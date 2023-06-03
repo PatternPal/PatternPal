@@ -14,7 +14,26 @@ namespace PatternPal.Core.Recognizers;
 /// </summary>
 /// <remarks>
 /// Requirements to fulfill the pattern:<br/>
-/// TODO
+/// 1) Requirements for Component
+/// a) is an interface / abstract class
+/// b) has declared a method
+///     i) if the class is an abstract instead of an interface the method has to be an abstract method
+/// c) is implemented / inherited by at least two other classes<br/>
+/// 2) Requirements for Concrete Component
+/// a) is an implementation of the Component interface<br/>
+/// 3) Requirements for Base Decorator
+/// a) is an abstract class
+/// b) has a field of type Component
+/// c) has a constructor with a parameter of type Component, which it passes to its field
+/// d) calls the method of its field in the implementation of the method of Component
+/// e) is an implementation of the Component interface TODO toevoegen aan docs<br/>
+/// 4) Requirements for Concrete Decorator
+/// a) inherits from Base Decorator TODO toevoegen aan docs
+/// b) calls the method of its parent in the implementation of the method of Component<br/>
+/// 5) Requirements for Client
+/// a) has created an object of the type ConcreteComponent
+/// b) has created an object of the type ConcreteDecorator, to which it passes the ConcreteComponent
+/// c) has called the method of ConcreteDecorator
 /// </remarks>
 internal class DecoratorRecognizer : IRecognizer
 {
@@ -129,6 +148,14 @@ internal class DecoratorRecognizer : IRecognizer
                 Uses(
                     Priority.Mid,
                     component
+                ),
+                Creates(
+                    Priority.Mid,
+                    concreteDecorator
+                ),
+                Creates(
+                    Priority.Mid,
+                    concreteComponent
                 )
             );
 
