@@ -13,14 +13,15 @@
      *         Concrete Component
      *            ✓  a) is an implementation of the Component interface
      *         Base Decorator
-     *            ✓  a) is an abstract class
-     *            ✓  b) has a field of type Component
-     *            ✓  c) has a constructor with a parameter of type Component, which it passes to its field
-     *            ✓  d) calls the method of its field in the implementation of the method of Component
-     *            ✓  e) is an implementation of the Component interface TODO toevoegen aan docs
+     *            ✓  a) is an implementation of the Component interface
+     *            ✓  b) is an abstract class
+     *            ✓  c) has a field of type Component
+     *            ✓  d) has a constructor with a parameter of type Component, which it passes to its field
+     *            ✓  e) calls the method of its field in the implementation of the method of Component
      *         Concrete Decorator
-     *            ✓  a) inherits from Base Decorator TODO toevoegen aan docs
-     *            ✓  b) calls the method of its parent in the implementation of the method of Component    
+     *            ✓  a) inherits from Base Decorator
+     *            ✓  b) calls the method of its parent in the implementation of the method of Component
+     *            ✓  c) has a function providing extra behaviour which it calls in the implementation of the method of Component
      *         Client
      *            ✓  a) has created an object of the type ConcreteComponent
      *            ✓  b) has created an object of the type ConcreteDecorator, to which it passes the ConcreteComponent

@@ -26,10 +26,12 @@ namespace PatternPal.Core.Recognizers;
 /// b) has a field of type Component
 /// c) has a constructor with a parameter of type Component, which it passes to its field
 /// d) calls the method of its field in the implementation of the method of Component
-/// e) is an implementation of the Component interface TODO toevoegen aan docs<br/>
+/// e) is an implementation of the Component interface<br/>
 /// 4) Requirements for Concrete Decorator
-/// a) inherits from Base Decorator TODO toevoegen aan docs
-/// b) calls the method of its parent in the implementation of the method of Component<br/>
+/// a) inherits from Base Decorator
+/// b) calls the method of its parent in the implementation of the method of Component
+/// c) has a function providing extra behaviour which it calls in the implementation of the method of Component<br/>
+/// TODO could also be a requirement to have an abstract method in Base Decorator, but this might be enough as both are oke and putting this in an Any is no doing
 /// 5) Requirements for Client
 /// a) has created an object of the type ConcreteComponent
 /// b) has created an object of the type ConcreteDecorator, to which it passes the ConcreteComponent
@@ -139,7 +141,7 @@ internal class DecoratorRecognizer : IRecognizer
                         baseDecoratorMethod
                     )
                 ),
-                Method(Priority.Mid)
+                Method(Priority.Mid) //TODO add to docs
             );
 
         ClassCheck client =
