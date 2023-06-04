@@ -13,7 +13,7 @@ The decorator pattern comes in handy when there are a variety of optional behavi
 follow another behaviour that is always executed.
 
 ### Example of use
-An example case that shows the need of the pattern is a coffe machine. Different types of condiments can be added to
+An example case that shows the need of the pattern is a coffee machine. Different types of condiments can be added to
 coffee. When every combination of condiments and coffee is its own class, adding a new condiment would greatly increase
 the amount of classes. The decorator pattern is usefull in this case since the base coffee can be made the concrete component, and
 all the condiments can be made decorators. Now the addition of a new condiment would only require a new decorator class.
@@ -51,13 +51,16 @@ The **Client** can wrap components in multiple layers of decorators, and execute
 1. is an implementation of the `Component` interface
 
 **BaseDecorator class**
-1. is an abstract class
-2. has a field of type `Component`
-3. has a constructor with a parameter of type `Component`, which it passed to its field
-4. calls the method of its field in the implementation of the method of `Component`
+1. is an implementation of the `Component` interface
+2. is an abstract class
+3. has a field of type `Component`
+4. has a constructor with a parameter of type `Component`, which it passed to its field
+5. calls the method of its field in the implementation of the method of `Component`
 
 **ConcreteDecorator class**
-1. calls the method of its parent in the implementation of the method of `Component`
+1. inherits from `BaseDecorator`
+2. calls the method of its parent in the implementation of the method of `Component`
+3. has a function providing extra behaviour which it calls in the implementation of the method of `Component`
 
 ## References
 [^1]: Refactoring Guru, Structural Patterns - Decorator. https://refactoring.guru/design-patterns/decorator
