@@ -210,7 +210,8 @@ namespace PatternPal.Extension.Commands
         }
 
         /// <summary>
-        /// The event handler for handling the Session.Start Event. When a new session starts, a (new) sessionID is generated .
+        /// The event handler for handling the Session.Start Event. When a new session starts, a (new) sessionID is generated.
+        /// A new file watcher is also created, as a new session can cahnge the directoory the user is working in.
         /// </summary>
         internal static void OnSessionStart()
         {
@@ -235,7 +236,7 @@ namespace PatternPal.Extension.Commands
 
             LogEventResponse response = PushLog(request);
 
-            // Remove the file watcher to prevent wasted resources
+            // When a session has ended, no logs are sent anymore so the watcher can be disposed.
             watcher.Dispose();
         }
 
@@ -276,7 +277,7 @@ namespace PatternPal.Extension.Commands
             ThreadHelper.ThrowIfNotOnUIThread();
             LogEachProject(EventType.EvtProjectClose);
 
-            // When a user closes a solution, the watcher has to be disposed. 
+            // When a user closes a solution, the watcher has to be disposed as the directory saved is then not up-to-date anymore.
             watcher.Dispose();
         }
 
