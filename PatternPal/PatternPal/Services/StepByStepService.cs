@@ -110,7 +110,6 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
         return Task.FromResult(response);
     }
 
-    // TODO 
     /// <inheritdoc />
     public override Task< CheckInstructionResponse > CheckInstruction(
         CheckInstructionRequest request,
@@ -126,24 +125,29 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
         }
         graph.CreateGraph();
 
-        Dictionary< string, IEntity > allEntities = graph.GetAll();
-        string selectedNodePath = allEntities[ request.SelectedItem ].GetRoot().GetSource();
-
+        Dictionary<string, IEntity> allEntities = graph.GetAll();
+        // Selected item in the combobox file path obtained from the graph.
+        string selectedNodePath = string.Empty;
+        if(request.SelectedItem != "")
+        {
+            selectedNodePath = allEntities[request.SelectedItem].GetRoot().GetSource();
+        }
+        // Otherwise the one in viewModel.
+        else
+        {
+            selectedNodePath = request.Documents[0];
+        }
+        
         RecognizerRunner runner = new(
             selectedNodePath,
-            InstructionSetHolder.instructionSet.Steps[ request.InstructionId ] );
-        IList< ICheckResult > res = runner.Run(pruneAll: true);
+            InstructionSetHolder.instructionSet.Steps[request.InstructionId]);
+        IList<ICheckResult> res = runner.Run(pruneAll: true);
+        NodeCheckResult checkRes = (NodeCheckResult)res[0];
 
-        throw new NotImplementedException();
-        // Run runner with IChecks wrapped in something and use the "prune all" option that behaves 
-        // the same as a list of IChecks with all priorities = knockout. The result should be "empty"
-        // /no roots because of a wrong implementation if not it's not empty and the next step can be
-        // selected.
-
-        //NodeCheckResult rootCheckResult = (NodeCheckResult)rootcheck.Check(); 
-        //MakeAllKnockoutPriority(rootCheckResult);
+        return Task.FromResult(new CheckInstructionResponse{ Result = checkRes.ChildrenCheckResults.Count != 0});
     }
 
+    // TODO Method may still be useful depending on the presentation in the detector view
     /// <inheritdoc />
     private static CheckResult CreateCheckResult(
         ICheckResult checkResult)
@@ -162,11 +166,6 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
         //return newCheckResult;
     }
 
-    private static class State
-    {
-        internal static readonly Dictionary< string, string > StateKeyed = new();
-    }
-
     /// <inheritdoc />
     public override Task< SetFilePathResponse > SetNewFilePath(
         SetFilePathRequest request,
@@ -183,9 +182,8 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
 
         return Task.FromResult(new SetFilePathResponse());
     }
-
-    public IRecognizer GetRecognizer(
-        Recognizer recognizer)
+    
+    public IRecognizer GetRecognizer(Recognizer recognizer)
     {
         IDictionary< Recognizer, IRecognizer > supportedRecognizers =
             new Dictionary< Recognizer, IRecognizer >();

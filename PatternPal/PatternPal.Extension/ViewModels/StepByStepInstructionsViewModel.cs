@@ -26,8 +26,6 @@ namespace PatternPal.Extension.ViewModels
         public ObservableCollection< string > cbItems { get; set; } =
             new ObservableCollection< string >();
 
-        public Dictionary<string, string> documentNamesAndPaths { get; set; }
-
         public string SelectedcbItem { get; set; }
 
         private IList< Instruction > _instructions;

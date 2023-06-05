@@ -121,7 +121,6 @@ namespace PatternPal.Extension.Views
         /// </summary>
         private void CheckIfCheckIsAvailable()
         {
-            // TODO remove classselection visibility from view
             if (_viewModel.SBScontinue)
             {
                 CheckImplementationButton.IsEnabled = ClassSelection.SelectedItem != null;
@@ -165,22 +164,11 @@ namespace PatternPal.Extension.Views
 
                 try
                 {
-                    RecognizeResult result = GrpcHelper.StepByStepClient.CheckInstruction(request).Result;
-
-                    List<PatternResultViewModel> viewModels = new List<PatternResultViewModel>
+                    bool result = GrpcHelper.StepByStepClient.CheckInstruction(request).Result;
+                    if (!result)
                     {
-                        new PatternResultViewModel(result)
-                        {
-                            Expanded = true
-                        }
-                    };
-
-                    bool correct = result.Results.All(c => c.FeedbackType == CheckResult.Types.FeedbackType.FeedbackCorrect);
-
-                    ExpanderResults.ResultsView.ItemsSource = viewModels;
-
-                    if (!correct)
                         return;
+                    }
                 }
                 catch (Exception exception)
                 {
@@ -197,7 +185,14 @@ namespace PatternPal.Extension.Views
                         FilePath = _viewModel.FilePath
                     });
 
-                // TODO check logic
+                CheckInstructionRequest request = 
+                    new CheckInstructionRequest{InstructionId = _viewModel.CurrentInstructionNumber-1};
+                request.Documents.Add(_viewModel.FilePath);
+                bool result = GrpcHelper.StepByStepClient.CheckInstruction(request).Result;
+                if (!result)
+                {
+                    return;
+                }
             }
 
             NextInstructionButton.IsEnabled = true;

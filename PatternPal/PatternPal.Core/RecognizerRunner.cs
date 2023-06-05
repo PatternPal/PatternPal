@@ -144,13 +144,15 @@ public class RecognizerRunner
         {
             if (_instruction != null)
             {
-                ICheck rootCheck = new NodeCheck< INode >(
-                    Priority.Knockout,
-                    _instruction.Checks);
-                results.Add(RunImpl(rootCheck));
+                    ICheck rootCheck = new NodeCheck< INode >(
+                        Priority.Knockout,
+                        _instruction.Checks);
+                    results.Add(RunImpl(rootCheck));
             }
-
-            throw new ArgumentException("Provide either an instruction or recognizers to run");
+            else
+            {
+                throw new ArgumentException("Provide either an instruction or recognizers to run");
+            }
         }
 
         return results;
