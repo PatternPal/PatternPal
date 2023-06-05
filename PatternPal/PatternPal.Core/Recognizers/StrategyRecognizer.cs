@@ -1,14 +1,13 @@
 ﻿#region
 
-using PatternPal.Core.Checks;
-using PatternPal.Recognizers.Models.Checks.Entities;
+using PatternPal.Core.StepByStep;
 using PatternPal.SyntaxTree.Models;
+
 using static PatternPal.Core.Checks.CheckBuilder;
 
 #endregion
 
 namespace PatternPal.Core.Recognizers;
-
 
 /// <summary>
 /// A <see cref="IRecognizer"/> that is used to determine if the provided file is an implementation
@@ -37,14 +36,13 @@ namespace PatternPal.Core.Recognizers;
 ///     b) has used the setStrategy() in the Context class to store the ConcreteStrategy object
 ///     c) has executed the ConcreteStrategy via the Context class
 /// </remarks>
-
 internal class StrategyRecognizer : IRecognizer
 {
-    private ClassCheck? _concreteClassCheck;
-    private InterfaceCheck? _interfaceStrategyCheck;
-    private ClassCheck? _abstractClassStrategyCheck;
+    private ClassCheck ? _concreteClassCheck;
+    private InterfaceCheck ? _interfaceStrategyCheck;
+    private ClassCheck ? _abstractClassStrategyCheck;
 
-    private ICheck? _fieldOrPropertyStrategy;
+    private ICheck ? _fieldOrPropertyStrategy;
     public string Name => "Strategy";
     public Recognizer RecognizerType => Recognizer.Strategy;
 
@@ -52,7 +50,7 @@ internal class StrategyRecognizer : IRecognizer
     /// A method which creates a lot of <see cref="ICheck"/>s that each adheres to the requirements a strategy pattern needs to have implemented.
     /// It returns the requirements in a tree structure stated per class.
     /// </summary>
-    public IEnumerable<ICheck> Create()
+    public IEnumerable< ICheck > Create()
     {
         // Check Strategy Interface / Abstract class
         yield return CheckStrategy(
@@ -65,13 +63,22 @@ internal class StrategyRecognizer : IRecognizer
         // Check Context Class 
         yield return CheckContextClassExistence();
         yield return CheckUsageExecuteStrategy(
-            out MethodCheck usageExecuteStrategy, out MethodCheck setStrategyMethodCheck, 
-            interfaceMethodExecuteStrategy, abstractMethodExecuteStrategy
-            );
+            out MethodCheck usageExecuteStrategy,
+            out MethodCheck setStrategyMethodCheck,
+            interfaceMethodExecuteStrategy,
+            abstractMethodExecuteStrategy
+        );
 
         // Client Class
-        ClassCheck clientClassCheck = CheckUsageDoSomething(setStrategyMethodCheck, usageExecuteStrategy);
+        ClassCheck clientClassCheck = CheckUsageDoSomething(
+            setStrategyMethodCheck,
+            usageExecuteStrategy);
         yield return clientClassCheck;
+    }
+
+    public List< IInstruction > GenerateStepsList()
+    {
+        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -85,8 +92,8 @@ internal class StrategyRecognizer : IRecognizer
     /// of the Strategy entity</param>
     /// <returns>A <see cref="NodeCheck{TNode}"/> which checks for the existence of the Strategy entity and
     /// all its requirements.</returns>
-    internal NodeCheck<INode> CheckStrategy(
-        out MethodCheck interfaceMethodExecuteStrategy, 
+    internal NodeCheck< INode > CheckStrategy(
+        out MethodCheck interfaceMethodExecuteStrategy,
         out MethodCheck abstractMethodExecuteStrategy)
     {
         // req. b
@@ -102,7 +109,8 @@ internal class StrategyRecognizer : IRecognizer
         // req. b0
         abstractMethodExecuteStrategy = Method(
             Priority.High,
-            Modifiers(Priority.High,
+            Modifiers(
+                Priority.High,
                 Modifier.Abstract
             )
         );
@@ -120,7 +128,6 @@ internal class StrategyRecognizer : IRecognizer
             _abstractClassStrategyCheck
         );
     }
-
 
     /// <summary>
     /// Creates a <see cref="ClassCheck"/> that checks for the existence of an entity
@@ -148,7 +155,6 @@ internal class StrategyRecognizer : IRecognizer
         return _concreteClassCheck;
     }
 
-
     /// <summary>
     /// Creates a <see cref="ClassCheck"/> that checks in a class entity the existence of either a private
     /// field with the "Strategy" type or a private property with the "Strategy" type.
@@ -159,7 +165,7 @@ internal class StrategyRecognizer : IRecognizer
     /// <returns>A <see cref="ClassCheck"/> that checks for the existence of a private field/property and
     /// other checks that are passed to it.</returns>
     internal ClassCheck CheckContextClassExistence(
-        params ICheck[] checks)
+        params ICheck[ ] checks)
     {
         // req. a
         _fieldOrPropertyStrategy = Any(
@@ -196,13 +202,15 @@ internal class StrategyRecognizer : IRecognizer
                     Modifier.Private
                 )
             )
-            );
+        );
 
         return Class(
             Priority.Knockout,
-            new ICheck[]{ _fieldOrPropertyStrategy }.Concat(checks).ToArray());
+            new ICheck[ ]
+            {
+                _fieldOrPropertyStrategy
+            }.Concat(checks).ToArray());
     }
-
 
     /// <summary>
     /// Creates a <see cref="MethodCheck"/> that checks whether a method uses the <see cref="_fieldOrPropertyStrategy"/>
@@ -216,7 +224,7 @@ internal class StrategyRecognizer : IRecognizer
     /// <see cref="CheckContextClassExistence"/> <see cref="ClassCheck"/>.</returns>
     internal ClassCheck CheckSetStrategy(
         out MethodCheck setStrategyMethodCheck,
-        params ICheck[] checks)
+        params ICheck[ ] checks)
     {
         // req. b
         setStrategyMethodCheck = Method(
@@ -225,8 +233,11 @@ internal class StrategyRecognizer : IRecognizer
                 Priority.High,
                 _fieldOrPropertyStrategy));
 
-        return CheckContextClassExistence(new ICheck[] { setStrategyMethodCheck }.Concat(checks).ToArray());
-
+        return CheckContextClassExistence(
+            new ICheck[ ]
+            {
+                setStrategyMethodCheck
+            }.Concat(checks).ToArray());
     }
 
     /// <summary>
@@ -241,8 +252,10 @@ internal class StrategyRecognizer : IRecognizer
     /// <param name="abstractMethodExecuteStrategy">A <see cref="MethodCheck"/> that is created in <see cref="CheckStrategy"/>.</param>
     /// <returns></returns>
     internal ClassCheck CheckUsageExecuteStrategy(
-        out MethodCheck usageExecuteStrategy, out MethodCheck setStrategyMethodCheck,
-        MethodCheck interfaceMethodExecuteStrategy, MethodCheck abstractMethodExecuteStrategy
+        out MethodCheck usageExecuteStrategy,
+        out MethodCheck setStrategyMethodCheck,
+        MethodCheck interfaceMethodExecuteStrategy,
+        MethodCheck abstractMethodExecuteStrategy
     )
     {
         // req. c
@@ -261,7 +274,9 @@ internal class StrategyRecognizer : IRecognizer
             )
         );
 
-        return CheckSetStrategy( out setStrategyMethodCheck, usageExecuteStrategy);
+        return CheckSetStrategy(
+            out setStrategyMethodCheck,
+            usageExecuteStrategy);
     }
 
     /// <summary>
@@ -272,7 +287,7 @@ internal class StrategyRecognizer : IRecognizer
     /// <param name="checks">A list of <see cref="ICheck"/> instances included in the resulting <see cref="ClassCheck"/>.</param>
     /// <returns>A <see cref="ClassCheck"/> containing the relation check and the specified <paramref name="checks"/>.</returns>
     internal ClassCheck CheckCreationConcreteStrategy(
-        params ICheck[] checks )
+        params ICheck[ ] checks)
     {
         // req. a
         RelationCheck creationConcreteStrategy = Creates(
@@ -281,8 +296,11 @@ internal class StrategyRecognizer : IRecognizer
 
         return Class(
             Priority.Mid,
-            new ICheck[] { creationConcreteStrategy }.Concat(checks).ToArray()
-            ) ;
+            new ICheck[ ]
+            {
+                creationConcreteStrategy
+            }.Concat(checks).ToArray()
+        );
     }
 
     /// <summary>
@@ -294,16 +312,20 @@ internal class StrategyRecognizer : IRecognizer
     /// <param name="checks">A list of <see cref="ICheck"/> instances to be checked in combination with the <see cref="RelationCheck"/>.</param>
     /// <returns>A <see cref="ClassCheck"/> containing the relation check and the specified <paramref name="checks"/>.</returns>
     internal ClassCheck CheckUsageSetStrategy(
-        MethodCheck setStrategyMethodCheck, 
-        params ICheck[] checks)
+        MethodCheck setStrategyMethodCheck,
+        params ICheck[ ] checks)
     {
         // req. b
         RelationCheck usageSetStrategy = Uses(
             Priority.Low,
             setStrategyMethodCheck);
 
-        return CheckCreationConcreteStrategy( new ICheck[] { usageSetStrategy }.Concat(checks).ToArray()
-    );
+        return CheckCreationConcreteStrategy(
+            new ICheck[ ]
+            {
+                usageSetStrategy
+            }.Concat(checks).ToArray()
+        );
     }
 
     /// <summary>
@@ -326,6 +348,7 @@ internal class StrategyRecognizer : IRecognizer
             usageExecuteStrategy
         );
         return CheckUsageSetStrategy(
-            setStrategyMethodCheck, usageDoSomething );
+            setStrategyMethodCheck,
+            usageDoSomething);
     }
 }
