@@ -1,19 +1,22 @@
-﻿using PatternPal.Core.Checks;
-using PatternPal.Core;
+﻿#region
+
+using System.Reflection;
+
+using PatternPal.Core.Recognizers;
 using PatternPal.Core.StepByStep;
 using PatternPal.SyntaxTree;
 using PatternPal.SyntaxTree.Abstractions.Entities;
-using PatternPal.Protos;
-using ICheckResult = PatternPal.Core.ICheckResult;
-using PatternPal.Core.Recognizers;
-using System.Reflection;
+
+using InstructionSet = PatternPal.Core.StepByStep.InstructionSet;
+
+#endregion
 
 namespace PatternPal.Services;
 
 public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
 {
     /// <inheritdoc />
-    public override Task<GetInstructionSetsResponse> GetInstructionSets(
+    public override Task< GetInstructionSetsResponse > GetInstructionSets(
         GetInstructionSetsRequest request,
         ServerCallContext context)
     {
@@ -21,7 +24,7 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
 
         // Obtain all the enum values in the proto.
         bool initialValue = true;
-        foreach (Recognizer test in Enum.GetValues<Recognizer>())
+        foreach (Recognizer test in Enum.GetValues< Recognizer >())
         {
             if (initialValue)
             {
@@ -35,33 +38,35 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
     }
 
     /// <inheritdoc />
-    public override Task<GetInstructionSetResponse> GetInstructionSet(
+    public override Task< GetInstructionSetResponse > GetInstructionSet(
         GetInstructionSetRequest request,
         ServerCallContext context)
     {
         IRecognizer recognizer = GetRecognizer(request.SelectedCombobox);
-        List<IInstruction> instructions = recognizer.GenerateStepsList();
+        List< IInstruction > instructions = recognizer.GenerateStepsList();
 
-        InstructionSetHolder.instructionSet = 
-            new Core.StepByStep.InstructionSet(
-                recognizer, 
+        InstructionSetHolder.instructionSet =
+            new InstructionSet(
+                recognizer,
                 instructions);
 
         Protos.InstructionSet res =
-            new Protos.InstructionSet
+            new()
             {
                 Name = recognizer.Name,
                 NumberOfInstructions = (uint)instructions.Count
             };
-        
-        GetInstructionSetResponse response = new();
-        response.SelectedInstructionset = res;
-        
+
+        GetInstructionSetResponse response = new()
+                                             {
+                                                 SelectedInstructionset = res
+                                             };
+
         return Task.FromResult(response);
     }
 
     /// <inheritdoc />
-    public override Task<GetSelectableClassesResponse> GetSelectableClasses(
+    public override Task< GetSelectableClassesResponse > GetSelectableClasses(
         GetSelectableClassesRequest request,
         ServerCallContext context)
     {
@@ -87,33 +92,33 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
     }
 
     /// <inheritdoc />
-    public override Task<GetInstructionByIdResponse> GetInstructionById(
+    public override Task< GetInstructionByIdResponse > GetInstructionById(
         GetInstructionByIdRequest request,
         ServerCallContext context)
     {
-        var instructionSet = InstructionSetHolder.instructionSet.Steps[(int)request.InstructionNumber];
+        IInstruction instructionSet = InstructionSetHolder.instructionSet.Steps[ (int)request.InstructionNumber ];
         GetInstructionByIdResponse response = new()
-        {
-            Instruction = new Instruction
-            {
-                Title = instructionSet.Requirement,
-                Description = instructionSet.Description,
-                FileId = ""
-            }
-        };
+                                              {
+                                                  Instruction = new Instruction
+                                                                {
+                                                                    Title = instructionSet.Requirement,
+                                                                    Description = instructionSet.Description,
+                                                                    FileId = ""
+                                                                }
+                                              };
 
         return Task.FromResult(response);
     }
 
     // TODO 
     /// <inheritdoc />
-    public override Task<CheckInstructionResponse> CheckInstruction(
+    public override Task< CheckInstructionResponse > CheckInstruction(
         CheckInstructionRequest request,
         ServerCallContext context)
     {
         // Make the graph based on the users opened solution or files.
         SyntaxGraph graph = new();
-        foreach( string document in request.Documents)
+        foreach (string document in request.Documents)
         {
             graph.AddFile(
                 FileManager.MakeStringFromFile(document),
@@ -121,15 +126,13 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
         }
         graph.CreateGraph();
 
-        Dictionary<string, IEntity> allEntities = graph.GetAll();
-        string selectedNodePath = allEntities[request.SelectedItem].GetRoot().GetSource();
+        Dictionary< string, IEntity > allEntities = graph.GetAll();
+        string selectedNodePath = allEntities[ request.SelectedItem ].GetRoot().GetSource();
 
-        RecognizerRunner runner = 
-            new RecognizerRunner(
-                new List<string> { selectedNodePath }, 
-                new List<IRecognizer> { InstructionSetHolder.instructionSet.Recognizer });
-
-        IList<ICheckResult> res = runner.Run(pruneAll: true);
+        RecognizerRunner runner = new(
+            selectedNodePath,
+            InstructionSetHolder.instructionSet.Steps[ request.InstructionId ] );
+        IList< ICheckResult > res = runner.Run(pruneAll: true);
 
         throw new NotImplementedException();
         // Run runner with IChecks wrapped in something and use the "prune all" option that behaves 
@@ -161,11 +164,11 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
 
     private static class State
     {
-        internal static readonly Dictionary<string, string> StateKeyed = new();
+        internal static readonly Dictionary< string, string > StateKeyed = new();
     }
 
     /// <inheritdoc />
-    public override Task<SetFilePathResponse> SetNewFilePath(
+    public override Task< SetFilePathResponse > SetNewFilePath(
         SetFilePathRequest request,
         ServerCallContext context)
     {
@@ -180,13 +183,14 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
 
         return Task.FromResult(new SetFilePathResponse());
     }
-    
-    public IRecognizer GetRecognizer(Recognizer recognizer)
-    {
-        IDictionary<Recognizer, IRecognizer> supportedRecognizers =
-            new Dictionary<Recognizer, IRecognizer>();
 
-        Type recognizerType = typeof(IRecognizer);
+    public IRecognizer GetRecognizer(
+        Recognizer recognizer)
+    {
+        IDictionary< Recognizer, IRecognizer > supportedRecognizers =
+            new Dictionary< Recognizer, IRecognizer >();
+
+        Type recognizerType = typeof( IRecognizer );
 
         // Find all types which derive from `IRecognizer`.
         foreach (Type type in recognizerType.Assembly.GetTypes().Where(ty => ty != recognizerType && recognizerType.IsAssignableFrom(ty)))
@@ -196,14 +200,14 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
             // Get the mapping from `Recognizer` to `IRecognizer` by invoking the property on the
             // recognizer which specifies it.
             supportedRecognizers.Add(
-                (Recognizer)type.GetRuntimeProperty(nameof(IRecognizer.RecognizerType))!.GetValue(instance)!,
+                (Recognizer)type.GetRuntimeProperty(nameof( IRecognizer.RecognizerType ))!.GetValue(instance)!,
                 instance);
         }
-        return supportedRecognizers[recognizer];
+        return supportedRecognizers[ recognizer ];
     }
 }
 
 public static class InstructionSetHolder
 {
-    public static Core.StepByStep.InstructionSet instructionSet { get; set; }
+    public static InstructionSet instructionSet { get; set; }
 }
