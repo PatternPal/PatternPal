@@ -47,7 +47,7 @@ namespace PatternPal.Extension.Stores
             if (ViewModelHistory.Count > 0)
             {
                 if (CurrentViewModel.GetType() == typeof(StepByStepListViewModel))
-                    PatternPalExtensionPackage.CurrentMode = Mode.Default;
+                    ExtensionWindowPackage.CurrentMode = Mode.Default;
                 _currentViewModel = ViewModelHistory.Pop();
                 CurrentViewModelChanged?.Invoke();
                 return _currentViewModel;

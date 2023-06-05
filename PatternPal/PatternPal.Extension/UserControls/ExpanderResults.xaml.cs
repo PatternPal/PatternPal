@@ -1,13 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
 using PatternPal.Extension.ViewModels;
 using Microsoft.CodeAnalysis;
-using Microsoft.VisualStudio.ComponentModelHost;
-using Microsoft.VisualStudio.LanguageServices;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.TextManager.Interop;
 
 namespace PatternPal.Extension.UserControls
 {
@@ -44,29 +39,6 @@ namespace PatternPal.Extension.UserControls
             //}
 
             //SelectNodeInEditor(node, element.GetRoot().GetSource());
-        }
-
-        /// <summary>
-        ///     Clicking on the node brings you to the right document.
-        /// </summary>
-        private void SelectNodeInEditor(SyntaxNode node, string file)
-        {
-            try
-            {
-                var tm = (IVsTextManager)Package.GetGlobalService(typeof(SVsTextManager));
-                var cm = (IComponentModel)Package.GetGlobalService(typeof(SComponentModel));
-                var ws = (Workspace)cm.GetService<VisualStudioWorkspace>();
-                var did = ws.CurrentSolution.GetDocumentIdsWithFilePath(file);
-                ws.OpenDocument(did.FirstOrDefault());
-                tm.GetActiveView(1, null, out var av);
-                var sp = node.GetLocation().GetMappedLineSpan().StartLinePosition;
-                var ep = node.GetLocation().GetMappedLineSpan().EndLinePosition;
-                av.SetSelection(sp.Line, sp.Character, ep.Line, ep.Character);
-            }
-            catch (Exception e)
-            {
-                _ = e.Message;
-            }
         }
     }
 }

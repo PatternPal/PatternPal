@@ -18,7 +18,7 @@ class ProjectResult
     /// <summary>
     /// The analysis results for this project.
     /// </summary>
-    /// <remarks>Results are sorted by score in descending order.</remarks>
+    /// <remarks>Results are sorted by Score in descending order.</remarks>
     internal required IList< DetectionResult > Results { get; init; }
 
     private bool ? _correct;
@@ -26,7 +26,7 @@ class ProjectResult
     /// <summary>
     /// Checks whether the implemented pattern is recognized.
     /// </summary>
-    /// <param name="checkAllResultsForCorrectness">Whether to check if the implemented pattern is recognized with any score, not just the top score.</param>
+    /// <param name="checkAllResultsForCorrectness">Whether to check if the implemented pattern is recognized with any Score, not just the top Score.</param>
     /// <returns>Returns <see langword="true"/> if the implemented pattern is recognized.</returns>
     internal bool Correct(
         bool checkAllResultsForCorrectness)
@@ -86,7 +86,7 @@ class DetectionResult
     internal required string DetectedPattern { get; init; }
 
     /// <summary>
-    /// The score for the detected pattern.
+    /// The Score for the detected pattern.
     /// </summary>
     internal required int Score { get; init; }
 }

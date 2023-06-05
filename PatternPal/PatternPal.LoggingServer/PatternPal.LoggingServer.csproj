@@ -29,6 +29,8 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
+    <PackageReference Include="quartz" Version="3.6.2" />
+    <PackageReference Include="quartz.aspnetcore" Version="3.6.2" />
   </ItemGroup>
 
   <ItemGroup>

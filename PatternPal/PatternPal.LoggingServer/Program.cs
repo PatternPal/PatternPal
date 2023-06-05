@@ -6,6 +6,9 @@ using PatternPal.LoggingServer.Models;
 using PatternPal.LoggingServer.Services;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Grpc.AspNetCore.HealthChecks;
+using Quartz;
+using PatternPal.LoggingServer.LogJobs;
+
 namespace PatternPal;
 
 internal static class Program
@@ -19,7 +22,7 @@ internal static class Program
         builder.Services.AddDbContext<ProgSnap2ContextClass>(options => 
             options.UseNpgsql( builder.Configuration.GetConnectionString("PostgresConnection") )
         );
-
+        
         builder.Services.AddGrpcHealthChecks()
             .AddCheck("Sample", () => HealthCheckResult.Healthy());
 
@@ -27,14 +30,28 @@ internal static class Program
         builder.Services.AddScoped<EventRepository, EventRepository>();
 
 
-        // add migration
+        // Setup Quartz (Scheduler)
+        builder.Services.AddQuartz(q =>
+        {
+            JobKey jobKey = new JobKey("LoggerJob", "LoggerGroup");
+            q.AddJob<ClearCodestatesJob>(opts => opts.WithIdentity(jobKey));
+            q.AddTrigger(opts => opts
+                .ForJob(jobKey)
+                .WithIdentity("LoggerTrigger", "LoggerGroup") // Monday at midnight
+                .WithCronSchedule("0 0 0 ? * MON *")
+                .WithDescription("Clears the codestates table every Monday at midnight")
+            );
 
+            q.UseMicrosoftDependencyInjectionJobFactory();
+        });
 
+        builder.Services.AddQuartzServer(options =>{
+                options.WaitForJobsToComplete = true;
+        });
 
         WebApplication app = builder.Build();
 
         DatabaseManagementService.MigrationInitialization(app); 
-
         app.MapGrpcService<LoggerService>();
 
         // Run the webapp
