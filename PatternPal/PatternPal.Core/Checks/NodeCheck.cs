@@ -388,6 +388,10 @@ internal class NodeCheck< TNode > : CheckBase
                     return constructorCheck.GetType4TypeCheck(
                         currentContext,
                         (IConstructor)node);
+                case PropertyCheck propertyCheck:
+                    return propertyCheck.GetType4TypeCheck(
+                        currentContext,
+                        (IProperty)node);
             }
         }
 

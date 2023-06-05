@@ -23,15 +23,15 @@ namespace PatternPal.Core.Recognizers;
 ///     c) is used by the Context class                                     -- checked in Context Class - c
 ///     d) is implemented / inherited by at least one other class           -- checked in Concrete Class - a
 ///     e) is implemented / inherited by at least two other classes         -- Todo if enough time
+///  Concrete Strategy
+///     a) is an implementation of the Strategy interface
+///     b) if the class is used, it must be used via the context class      -- Todo Create stricter check
+///     c) if the class is not used it should be used via the context class -- Check by Context Class
+///     d) is stored in the context class
 ///  Context
 ///     a) has a private field or property that has a Strategy class as type
 ///     b) has a function setStrategy() to set the non-public field / property with parameter of type Strategy
 ///     c) as a function useStrategy() to execute the strategy.
-///  Concrete Strategy
-///     a) is an implementation of the Strategy interface
-///     b) if the class is used, it must be used via the context class
-///     c) if the class is not used it should be used via the context class
-///     d) is stored in the context class
 ///  Client
 ///     a) has created an object of the type ConcreteStrategy
 ///     b) has used the setStrategy() in the Context class to store the ConcreteStrategy object
@@ -45,6 +45,9 @@ internal class StrategyRecognizer : IRecognizer
     private ClassCheck? _abstractClassStrategyCheck;
 
     private ICheck? _fieldOrPropertyStrategy;
+    public string Name => "Strategy";
+    public Recognizer RecognizerType => Recognizer.Strategy;
+
     /// <summary>
     /// A method which creates a lot of <see cref="ICheck"/>s that each adheres to the requirements a strategy pattern needs to have implemented.
     /// It returns the requirements in a tree structure stated per class.
@@ -61,11 +64,10 @@ internal class StrategyRecognizer : IRecognizer
 
         // Check Context Class 
         yield return CheckContextClassExistence();
-        ClassCheck contextStrategyClassCheck = CheckUsageExecuteStrategy(
+        yield return CheckUsageExecuteStrategy(
             out MethodCheck usageExecuteStrategy, out MethodCheck setStrategyMethodCheck, 
             interfaceMethodExecuteStrategy, abstractMethodExecuteStrategy
             );
-        yield return contextStrategyClassCheck;
 
         // Client Class
         ClassCheck clientClassCheck = CheckUsageDoSomething(setStrategyMethodCheck, usageExecuteStrategy);
@@ -130,6 +132,7 @@ internal class StrategyRecognizer : IRecognizer
     /// Strategy interface / abstract class.</returns>
     internal ClassCheck CheckConcreteStrategyExistence()
     {
+        // req. a
         _concreteClassCheck = Class(
             Priority.Knockout,
             Any(
@@ -158,6 +161,7 @@ internal class StrategyRecognizer : IRecognizer
     internal ClassCheck CheckContextClassExistence(
         params ICheck[] checks)
     {
+        // req. a
         _fieldOrPropertyStrategy = Any(
             Priority.Knockout,
             Field(
@@ -214,6 +218,7 @@ internal class StrategyRecognizer : IRecognizer
         out MethodCheck setStrategyMethodCheck,
         params ICheck[] checks)
     {
+        // req. b
         setStrategyMethodCheck = Method(
             Priority.High,
             Uses(
@@ -240,6 +245,7 @@ internal class StrategyRecognizer : IRecognizer
         MethodCheck interfaceMethodExecuteStrategy, MethodCheck abstractMethodExecuteStrategy
     )
     {
+        // req. c
         usageExecuteStrategy = Method(
             Priority.Mid,
             Any(
@@ -268,6 +274,7 @@ internal class StrategyRecognizer : IRecognizer
     internal ClassCheck CheckCreationConcreteStrategy(
         params ICheck[] checks )
     {
+        // req. a
         RelationCheck creationConcreteStrategy = Creates(
             Priority.Mid,
             _concreteClassCheck);
@@ -290,6 +297,7 @@ internal class StrategyRecognizer : IRecognizer
         MethodCheck setStrategyMethodCheck, 
         params ICheck[] checks)
     {
+        // req. b
         RelationCheck usageSetStrategy = Uses(
             Priority.Low,
             setStrategyMethodCheck);
@@ -312,6 +320,7 @@ internal class StrategyRecognizer : IRecognizer
         MethodCheck usageExecuteStrategy
     )
     {
+        // req. c
         RelationCheck usageDoSomething = Uses(
             Priority.Low,
             usageExecuteStrategy
