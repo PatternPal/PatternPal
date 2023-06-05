@@ -11,6 +11,9 @@ service StepByStepService {
     // Gets the instruction sets which are available for step-by-step mode.
     rpc GetInstructionSets (GetInstructionSetsRequest) returns (GetInstructionSetsResponse);
 
+    // Gets the selected instructionset
+    rpc GetInstructionSet (GetInstructionSetRequest) returns (GetInstructionSetResponse);
+
     // Gets the classes which are selectable when checking a step.
     rpc GetSelectableClasses (GetSelectableClassesRequest) returns (GetSelectableClassesResponse);
 
@@ -19,16 +22,30 @@ service StepByStepService {
 
     // Checks whether a instruction is implemented correctly.
     rpc CheckInstruction (CheckInstructionRequest) returns (CheckInstructionResponse);
+
+    // Sets the filepath of every instruction to the newly created .cs file.
+    rpc SetNewFilePath (SetFilePathRequest) returns (SetFilePathResponse);
 }
 
 // GetInstructionSets request message.
-message GetInstructionSetsRequest {
-}
+message GetInstructionSetsRequest { }
 
 // GetInstructionSets response message.
 message GetInstructionSetsResponse {
-    // List of instruction sets which are available for step-by-step mode.
-    repeated InstructionSet instruction_sets = 1;
+    // InstructionSets that the InstructionsCreator can make.
+    repeated patternpal.Recognizer recognizers = 1;
+}
+
+// GetInstructionSet request message.
+message GetInstructionSetRequest {
+    // Name of the PatternPal
+    patternpal.Recognizer selected_combobox = 1;
+}
+
+// GetInstructionSet response message.
+message GetInstructionSetResponse {
+    // The selected InstructionSet from the combobox.
+    InstructionSet selected_instructionset = 1;
 }
 
 // An instruction set.
@@ -54,11 +71,8 @@ message GetSelectableClassesResponse {
 
 // GetInstructionById request message.
 message GetInstructionByIdRequest {
-    // Name of the instruction set from which to get the instruction.
-    string instruction_set_name = 1;
-
-    // Id of the instruction to get, 0-based.
-    int32 instruction_id = 2;
+    // Indexer to determine the current instruction
+    uint32 instructionNumber = 1;
 }
 
 // GetInstructionById response message.
@@ -74,9 +88,6 @@ message Instruction {
 
     // Description of the instruction.
     string description = 2;
-
-    // Whether to show a file selector.
-    bool show_file_selector = 3;
     
     // Key used to store the selected file.
     string file_id = 4;
@@ -85,7 +96,7 @@ message Instruction {
 // CheckInstruction request message.
 message CheckInstructionRequest {
     // Name of the instruction set from which to get the instruction.
-    string instruction_set_name = 1;
+    //string instruction_set_name = 1;
 
     // Id of the instruction to check, 0-based.
     int32 instruction_id = 2;
@@ -96,9 +107,18 @@ message CheckInstructionRequest {
     // Optional. The selected item in the file selector.
     string selected_item = 4;
 }
-
+      
 // CheckInstruction response message.
 message CheckInstructionResponse {
     // Result of the check of the instruction.
     patternpal.RecognizeResult result = 1;
 }
+
+// SetFilePath request message
+message SetFilePathRequest {
+    // Path to the file determined by user input
+    string file_path = 1;
+}
+
+// SetFilePath response message
+message SetFilePathResponse { }
