@@ -17,16 +17,23 @@ namespace PatternPal.Extension.ViewModels
     {
         public ICommand NavigateHomeCommand { get; }
 
+        public string FilePath { get; set; }
+
+        public bool SBScontinue { get; }
+
         public InstructionSet InstructionSet { get; }
 
         public ObservableCollection< string > cbItems { get; set; } =
             new ObservableCollection< string >();
+
+        public Dictionary<string, string> documentNamesAndPaths { get; set; }
 
         public string SelectedcbItem { get; set; }
 
         private IList< Instruction > _instructions;
 
         public Instruction CurrentInstruction => _instructions[ _currentInstructionNumber - 1 ];
+
 
         private int _currentInstructionNumber;
 
@@ -80,7 +87,8 @@ namespace PatternPal.Extension.ViewModels
 
         public StepByStepInstructionsViewModel(
             NavigationStore navigationStore,
-            InstructionSet instructionSet)
+            InstructionSet instructionSet,
+            bool SBSContinue)
         {
             NavigateHomeCommand = new NavigateCommand< HomeViewModel >(
                 navigationStore,
@@ -92,18 +100,19 @@ namespace PatternPal.Extension.ViewModels
                                 GetInstructionById(CurrentInstructionNumber),
                             };
             CurrentInstructionNumber = 1;
+
+            SBScontinue = SBSContinue;
         }
 
         private Instruction GetInstructionById(
             int instructionId)
         {
-            GetInstructionByIdResponse response = GrpcHelper.StepByStepClient.GetInstructionById(
-                new GetInstructionByIdRequest
+            GetInstructionByIdResponse response =
+                GrpcHelper.StepByStepClient.GetInstructionById(new GetInstructionByIdRequest
                 {
-                    InstructionSetName = InstructionSet.Name,
-                    InstructionId = instructionId,
-                });
-
+                    InstructionNumber = (uint)instructionId
+                }
+                );
             return response.Instruction;
         }
     }

@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -30,7 +31,7 @@ namespace PatternPal.Extension.Views
         private StepByStepInstructionsViewModel _viewModel;
 
         public StepByStepInstructionsView()
-        {
+        {   
             InitializeComponent();
             InitializeViewModelAndButtons();
 
@@ -59,6 +60,7 @@ namespace PatternPal.Extension.Views
         {
             if (_viewModel.TrySelectPreviousInstruction())
             {
+                // TODO decrement the instruction id in service.
                 CheckIfNextPreviousButtonsAvailable();
             }
         }
@@ -74,6 +76,7 @@ namespace PatternPal.Extension.Views
         {
             if (_viewModel.TrySelectNextInstruction())
             {
+                // TODO increase the instruction id in service.
                 CheckIfNextPreviousButtonsAvailable();
             }
         }
@@ -104,67 +107,97 @@ namespace PatternPal.Extension.Views
 
                                       _viewModel = (StepByStepInstructionsViewModel)(this.DataContext);
 
+                                      if (!_viewModel.SBScontinue)
+                                      {
+                                          ClassSelection.Visibility = Visibility.Hidden;
+                                      }
+
                                       CheckIfNextPreviousButtonsAvailable();
                                   };
         }
 
+        /// <summary>
+        /// Checks if the check implementation button is able to be clicked
+        /// </summary>
         private void CheckIfCheckIsAvailable()
         {
-            ClassSelection.Visibility = _viewModel.CurrentInstruction.ShowFileSelector
-                ? Visibility.Visible
-                : Visibility.Hidden;
-            CheckImplementationButton.IsEnabled = !_viewModel.CurrentInstruction.ShowFileSelector || ClassSelection.SelectedItem != null;
-
+            // TODO remove classselection visibility from view
+            if (_viewModel.SBScontinue)
+            {
+                CheckImplementationButton.IsEnabled = ClassSelection.SelectedItem != null;
+            }
+            else
+            {
+                CheckImplementationButton.IsEnabled = 
+                    _viewModel.CurrentInstruction.FileId != "" || !_viewModel.SBScontinue;
+            }
+            
             NextInstructionButton.IsEnabled = false;
             ExpanderResults.ResultsView.ItemsSource = new List< PatternResultViewModel >();
         }
 
+        /// <summary>
+        /// Given the current step checks whether the implementation 
+        /// </summary>
         private void CheckImplementationButton_OnClick(
             object sender,
             RoutedEventArgs e)
         {
             NextInstructionButton.IsEnabled = false;
 
-            CheckInstructionRequest request = new CheckInstructionRequest
-                                              {
-                                                  InstructionSetName = _viewModel.InstructionSet.Name,
-                                                  InstructionId = _viewModel.CurrentInstructionNumber - 1,
-                                                  SelectedItem = _viewModel.SelectedcbItem,
-                                              };
-
-            LoadProject();
-
-            foreach (Project project in Projects)
+            if (_viewModel.SBScontinue)
             {
-                foreach (Document document in project.Documents)
+                CheckInstructionRequest request = new CheckInstructionRequest
                 {
-                    request.Documents.Add(document.FilePath);
+                    InstructionId = _viewModel.CurrentInstructionNumber - 1,
+                    SelectedItem = _viewModel.SelectedcbItem,
+                };
+
+                LoadProject();
+
+                foreach (Project project in Projects)
+                {
+                    foreach (Document document in project.Documents)
+                    {
+                        request.Documents.Add(document.FilePath);
+                    }
+                }
+
+                try
+                {
+                    RecognizeResult result = GrpcHelper.StepByStepClient.CheckInstruction(request).Result;
+
+                    List<PatternResultViewModel> viewModels = new List<PatternResultViewModel>
+                    {
+                        new PatternResultViewModel(result)
+                        {
+                            Expanded = true
+                        }
+                    };
+
+                    bool correct = result.Results.All(c => c.FeedbackType == CheckResult.Types.FeedbackType.FeedbackCorrect);
+
+                    ExpanderResults.ResultsView.ItemsSource = viewModels;
+
+                    if (!correct)
+                        return;
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception);
+                    return;
                 }
             }
-
-            try
+            else
             {
-                RecognizeResult result = GrpcHelper.StepByStepClient.CheckInstruction(request).Result;
+                // When not continuing set the filepath for the steps to the file just created
+                SetFilePathResponse response =
+                    GrpcHelper.StepByStepClient.SetNewFilePath(new SetFilePathRequest
+                    {
+                        FilePath = _viewModel.FilePath
+                    });
 
-                List< PatternResultViewModel > viewModels = new List< PatternResultViewModel >
-                                                            {
-                                                                new PatternResultViewModel(result)
-                                                                {
-                                                                    Expanded = true
-                                                                }
-                                                            };
-
-                bool correct = result.Results.All(c => c.FeedbackType == CheckResult.Types.FeedbackType.FeedbackCorrect);
-
-                ExpanderResults.ResultsView.ItemsSource = viewModels;
-
-                if (!correct)
-                    return;
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception);
-                return;
+                // TODO check logic
             }
 
             NextInstructionButton.IsEnabled = true;
@@ -247,6 +280,9 @@ namespace PatternPal.Extension.Views
 
         #endregion
 
+        /// <summary>
+        /// Obtains the current solution projects
+        /// </summary>
         private void LoadProject()
         {
             IComponentModel cm = (IComponentModel)Package.GetGlobalService(typeof( SComponentModel ));
@@ -306,6 +342,9 @@ namespace PatternPal.Extension.Views
 
         #endregion
 
+        /// <summary>
+        /// Obtains all the selectable classes for the instruction step for SBS
+        /// </summary>
         private void OnDropDownOpened(
             object sender,
             EventArgs e)
@@ -323,12 +362,24 @@ namespace PatternPal.Extension.Views
             }
 
             GetSelectableClassesResponse response = GrpcHelper.StepByStepClient.GetSelectableClasses(request);
+
             foreach (string selectableClass in response.SelectableClasses)
             {
                 _viewModel.cbItems.Add(selectableClass);
             }
+            //foreach (Project current in Projects)
+            //{
+            //    IEnumerable<Document> test = current.Documents;
+            //    foreach(Document document in test)
+            //    {
+            //        _viewModel.cbItems.Add(document.Name);
+            //    }
+            //}
         }
 
+        /// <summary>
+        /// Enables the implementation check button and disables the next instruction button
+        /// </summary>
         private void OnSelectionChanged(
             object sender,
             SelectionChangedEventArgs e)

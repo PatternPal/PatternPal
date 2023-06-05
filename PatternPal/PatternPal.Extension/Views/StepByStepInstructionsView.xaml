@@ -5,10 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
              xmlns:usercontrol="clr-namespace:PatternPal.Extension.UserControls"
+             xmlns:viewModels="clr-namespace:PatternPal.Extension.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="360"
              d:DesignWidth="300"
-             d:DataContext="{d:DesignData StepByStepInstructionsViewModel |(in PatternPal.Extension.ViewModels)}">
+             d:DataContext="{d:DesignInstance Type=viewModels:StepByStepInstructionsViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
             <Style TargetType="TextBlock">
@@ -86,6 +87,7 @@
         <TextBlock Grid.Row="0"
                    TextWrapping="Wrap"
                    TextAlignment="Left"
+
                    Text="{Binding CurrentInstruction.Title}"
                    FontSize="15"
                    HorizontalAlignment="Center"

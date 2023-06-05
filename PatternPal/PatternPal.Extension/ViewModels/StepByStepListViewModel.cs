@@ -20,7 +20,8 @@ namespace PatternPal.Extension.ViewModels
 
         public ICommand NavigateHomeCommand { get; }
         public ICommand NavigateStepByStepInstructionsCommand { get; }
-        public IList< InstructionSet > InstructionSetList { get; set; }
+        public ICommand NavigateContinueStepByStepInstructionsCommand { get; }
+        public IList< Recognizer > InstructionSetList { get; set; }
         public InstructionSet SelectedInstructionSet { get; set;  }
 
         public StepByStepListViewModel(
@@ -29,17 +30,41 @@ namespace PatternPal.Extension.ViewModels
             NavigateHomeCommand = new NavigateCommand< HomeViewModel >(
                 navigationStore,
                 () => new HomeViewModel(navigationStore));
+            
+            // Next button 
             NavigateStepByStepInstructionsCommand =
                 new NavigateCommand< StepByStepInstructionsViewModel >(
                     navigationStore,
                     () => new StepByStepInstructionsViewModel(
                         navigationStore,
-                        SelectedInstructionSet));
+                        SelectedInstructionSet,
+                        false));
+            
+            // Continue button
+            NavigateContinueStepByStepInstructionsCommand =
+                new NavigateCommand<StepByStepInstructionsViewModel>(
+                    navigationStore,
+                    () => new StepByStepInstructionsViewModel(
+                        navigationStore,
+                        SelectedInstructionSet,
+                        true));
 
-            GetInstructionSetsResponse response = GrpcHelper.StepByStepClient.GetInstructionSets(new GetInstructionSetsRequest());
+            GetInstructionSetsResponse response = 
+                GrpcHelper.StepByStepClient.GetInstructionSets(new GetInstructionSetsRequest());
 
-            InstructionSetList = response.InstructionSets;
-            SelectedInstructionSet = InstructionSetList?.FirstOrDefault();
+            List<Recognizer> temFilteredRecognizers = response.Recognizers.Where(r => r is Recognizer.Singleton).ToList();
+            // Dropdown menu in the SBS viewmodel
+            InstructionSetList = temFilteredRecognizers;
+
+            Recognizer test = InstructionSetList.FirstOrDefault();
+
+            GetInstructionSetResponse response2 =
+                GrpcHelper.StepByStepClient.GetInstructionSet(new GetInstructionSetRequest
+                {
+                    SelectedCombobox = test 
+                });
+
+            SelectedInstructionSet = response2.SelectedInstructionset;
         }
     }
 }
