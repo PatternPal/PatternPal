@@ -1,3 +1,12 @@
+# Error handling
+
+Calls to the background process can fail. Because the way these failures should be handled depends
+on the call being made, the caller is responsible for handling the failure. To present an error
+message to the user, use the `GrpcHelper.ShowErrorMessage` method.
+
+If the background process has crashed, a notification is shown to the user which includes an option
+to restart the background service.
+
 # Extension Project Structure
 
 The Visual Studio 2022 extension project has only one dependency: `PatternPal.Extension.Protos`. The

@@ -1,5 +1,7 @@
 ﻿#region
 
+using PatternPal.Core.StepByStep;
+using PatternPal.Core.StepByStep.Resources.Instructions;
 using PatternPal.SyntaxTree.Models;
 
 using static PatternPal.Core.Checks.CheckBuilder;
@@ -25,6 +27,12 @@ namespace PatternPal.Core.Recognizers;
 /// </remarks>
 internal class SingletonRecognizer : IRecognizer
 {
+    /// <inheritdoc />
+    public string Name => "Singleton";
+
+    /// <inheritdoc />
+    public Recognizer RecognizerType => Recognizer.Singleton;
+
     /// <summary>
     /// A method which creates a lot of <see cref="ICheck"/>s that each adheres to the requirements a singleton pattern needs to have implemented.
     /// It returns the requirements in a tree structure stated per class.
@@ -55,6 +63,43 @@ internal class SingletonRecognizer : IRecognizer
         yield return ClientCallsMethodActsAsConstructor(
             checkMethodActsAsConstructorBehaviour
         );
+    }
+
+    public List<IInstruction> GenerateStepsList()
+    {
+        List<IInstruction> res = new List<IInstruction>();
+
+
+        // !!! THESE STEPS ARE OUTDATED, JUST AN EXAMPLE !!!
+        // Step 1: The constructor is ONLY private
+        res.Add(new SimpleInstruction(
+            SingletonInstructions.Step1,
+            SingletonInstructions.Explanation1,
+            new List<ICheck>
+            {
+                OnlyPrivateProtectedConstructor(
+                    out ConstructorCheck privateConstructorCheck)
+            }
+        ));
+
+        // Step 2: There is a static private field with the same type as the class
+        FieldCheck fieldPrivateStaticCheck = StaticPrivateFieldOfTypeClass();
+        res.Add(new SimpleInstruction(
+            SingletonInstructions.Step2,
+            SingletonInstructions.Explanation2,
+            new List<ICheck>
+            {
+                fieldPrivateStaticCheck
+            }));
+
+        // Step 3: There is a method that acts as the constructor
+        // TODO
+
+
+        // Step 4: There is a client that calls the instance method
+        // TODO
+
+        return res;
     }
 
     /// <summary>

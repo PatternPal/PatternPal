@@ -1,10 +1,22 @@
-﻿namespace PatternPal.Core.Recognizers;
+﻿using PatternPal.Core.StepByStep;
+
+namespace PatternPal.Core.Recognizers;
 
 /// <summary>
 /// Represents a recognizer for a design pattern.
 /// </summary>
-internal interface IRecognizer
+public interface IRecognizer
 {
+    /// <summary>
+    /// The name of the design pattern which this <see cref="IRecognizer"/> recognizes.
+    /// </summary>
+    public string Name { get; }
+
+    /// <summary>
+    /// The type of the <see cref="IRecognizer"/>, as defined in the Protocol Buffer.
+    /// </summary>
+    public Recognizer RecognizerType { get; }
+
     /// <summary>
     /// Creates the <see cref="ICheck"/>s which are used to recognize a design pattern.
     /// </summary>
@@ -18,4 +30,11 @@ internal interface IRecognizer
     internal ICheck CreateRootCheck() => new NodeCheck< INode >(
         Priority.Knockout,
         Create());
+
+    /// <summary>
+    /// Returns a list of <see cref="IInstruction"/>s that contain everything for a single step
+    /// in the <see cref="StepByStep"/> module.
+    /// </summary>
+    /// <returns></returns>
+    List<IInstruction> GenerateStepsList();
 }

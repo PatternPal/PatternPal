@@ -1,7 +1,13 @@
-﻿namespace PatternPal.Tests.Utils;
+﻿using PatternPal.Core.StepByStep;
+
+namespace PatternPal.Tests.Utils;
 
 internal class TestRecognizerRelation : IRecognizer
 {
+    public string Name => nameof(TestRecognizerRelation);
+
+    public Protos.Recognizer RecognizerType => Protos.Recognizer.Unknown;
+
     public IEnumerable<ICheck> Create()
     {
         MethodCheck instanceMethod =
@@ -26,10 +32,19 @@ internal class TestRecognizerRelation : IRecognizer
             )
         );
     }
+
+    public List<IInstruction> GenerateStepsList()
+    {
+        throw new NotImplementedException();
+    }
 }
 
 internal class TestRecognizerType : IRecognizer
 {
+    public string Name => nameof(TestRecognizerType);
+
+    public Protos.Recognizer RecognizerType => Protos.Recognizer.Unknown;
+
     public IEnumerable<ICheck> Create()
     {
         ClassCheck internalClass = Class(
@@ -52,5 +67,10 @@ internal class TestRecognizerType : IRecognizer
                 )
             )
         );
+    }
+
+    public List<IInstruction> GenerateStepsList()
+    {
+        throw new NotImplementedException();
     }
 }

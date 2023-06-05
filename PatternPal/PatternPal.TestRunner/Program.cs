@@ -157,16 +157,16 @@ internal class Program
 
         RecognizerRunner runner = new(
             _fileManager.GetAllCSharpFilesFromDirectory(project.Directory),
-            DesignPattern.SupportedPatterns );
+            RecognizerRunner.SupportedRecognizers.Values.ToList() );
 
-        foreach (RecognitionResult recognitionResult in runner.Run().Where(x => x.Result.GetScore() >= 50).OrderByDescending(x => x.Result.GetScore()).ToList())
+        foreach (ICheckResult checkResult in runner.Run())
         {
             result.Results.Add(
                 new DetectionResult
                 {
-                    ClassName = recognitionResult.EntityNode.GetName(),
-                    DetectedPattern = recognitionResult.Pattern.Name,
-                    Score = recognitionResult.Result.GetScore(),
+                    ClassName = checkResult.MatchedNode?.GetName() ?? string.Empty,
+                    DetectedPattern = string.Empty,
+                    Score = 0
                 });
         }
 
@@ -174,7 +174,7 @@ internal class Program
     }
 
     /// <summary>
-    ///  Prints details on an incorrectly detected pattern, including the detected pattern with the highest score.
+    /// Prints details on an incorrectly detected pattern, including the detected pattern with the highest score.
     /// </summary>
     /// <param name="result">The result to be printed.</param>
     private static void PrintIncorrectResult(
@@ -189,7 +189,7 @@ internal class Program
         Console.WriteLine($"{result.Directory}: Expected '{result.ImplementedPattern}', found:");
         foreach (DetectionResult res in result.Results)
         {
-            Console.WriteLine($"  - '{res.DetectedPattern}' with score {res.Score} (implemented in '{res.ClassName}')");
+            Console.WriteLine($"  - '{res.DetectedPattern}' with Score {res.Score} (implemented in '{res.ClassName}')");
         }
     }
 }

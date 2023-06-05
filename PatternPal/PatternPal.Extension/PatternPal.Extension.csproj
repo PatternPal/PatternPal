@@ -5,6 +5,7 @@
     <MinimumVisualStudioVersion>16.0</MinimumVisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -20,7 +21,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PatternPal.Extension</RootNamespace>
     <AssemblyName>PatternPal.Extension</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <GeneratePkgDefFile>true</GeneratePkgDefFile>
     <UseCodebase>true</UseCodebase>
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
@@ -50,13 +51,20 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DeployExtension>True</DeployExtension>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Commands\BackCommand.cs" />
     <Compile Include="Commands\NavigateCommand.cs" />
+    <Compile Include="Commands\PatternPalWindowCommand.cs" />
+    <Compile Include="ExtensionWindowPackage1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExtensionWindowPackage.vsct</DependentUpon>
+    </Compile>
     <Compile Include="Grpc\GrpcBackgroundServiceHelper.cs" />
     <Compile Include="Grpc\GrpcHelper.cs" />
-    <Compile Include="Model\Action.cs" />
+    <Compile Include="Options\Privacy.cs" />
     <Compile Include="Resources\ExtensionUIResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -67,6 +75,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>SummaryRescources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="source.extension.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>source.extension.vsixmanifest</DependentUpon>
     </Compile>
     <Compile Include="Stores\NavigationStore.cs" />
     <Compile Include="Commands\SubscribeEvents.cs" />
@@ -82,14 +95,13 @@
     <Compile Include="ViewModels\CheckResultViewModel.cs" />
     <Compile Include="ViewModels\DesignPatternViewModel.cs" />
     <Compile Include="ExtensionWindow.cs" />
-    <Compile Include="Commands\ExtensionWindowCommand.cs" />
     <Compile Include="ExtensionWindowControl.xaml.cs">
       <DependentUpon>ExtensionWindowControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ExtensionWindowPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PatternPal.ExtensionPackage.cs" />
     <Compile Include="ViewModels\DetectorViewModel.cs" />
+    <Compile Include="ViewModels\ConsentViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\PatternResultViewModel.cs" />
@@ -99,6 +111,9 @@
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="Views\DetectorView.xaml.cs">
       <DependentUpon>DetectorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ConsentView.xaml.cs">
+      <DependentUpon>ConsentView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
@@ -111,68 +126,49 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Key.snk" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
+      <Generator>VsixManifestGenerator</Generator>
+      <LastGenOutput>source.extension.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Community.VisualStudio.Toolkit.17" ExcludeAssets="Runtime">
+      <Version>17.0.492</Version>
+      <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Community.VisualStudio.Toolkit.Analyzers">
+      <Version>1.0.492</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Community.VisualStudio.Toolkit.DependencyInjection.Core.17">
+      <Version>17.0.13</Version>
+    </PackageReference>
+    <PackageReference Include="Community.VisualStudio.VSCT">
+      <Version>16.0.29.6</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Grpc.Net.Client">
       <Version>2.53.0</Version>
     </PackageReference>
     <PackageReference Include="Grpc.Net.Client.Web">
       <Version>2.53.0</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis">
-      <Version>4.5.0</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp">
-      <Version>4.5.0</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces">
-      <Version>4.5.0</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.Features">
-      <Version>4.5.0</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic">
-      <Version>4.5.0</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces">
-      <Version>4.5.0</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common">
-      <Version>4.5.0</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Shell.15.0">
-      <Version>17.5.33428.388</Version>
+      <Version>17.0.31902.203</Version>
     </PackageReference>
-    <PackageReference Include="Nerdbank.Streams">
-      <Version>2.9.112</Version>
-    </PackageReference>
-    <PackageReference Include="NuGet.Build.Tasks.Pack">
-      <Version>6.5.0</Version>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="PresentationFramework" Version="4.6.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Imaging">
-      <Version>17.5.33428.366</Version>
+      <Version>17.0.31902.203</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.LanguageServices">
       <Version>4.5.0</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.5.33428.388" ExcludeAssets="runtime">
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.0.31902.203" ExcludeAssets="runtime">
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.5.4074">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.5.0">
-    </PackageReference>
-    <PackageReference Include="System.Resources.Extensions">
-      <Version>7.0.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -196,6 +192,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ConsentView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\HomeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -215,6 +215,8 @@
     </Resource>
     <VSCTCompile Include="ExtensionWindowPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
+      <Generator>VsctGenerator</Generator>
+      <LastGenOutput>ExtensionWindowPackage1.cs</LastGenOutput>
     </VSCTCompile>
     <Content Include="Resources\ExtensionWindowCommand.png" />
     <Content Include="Resources\ExtensionWindowPackage.ico" />
@@ -244,8 +246,8 @@
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -259,6 +261,7 @@
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

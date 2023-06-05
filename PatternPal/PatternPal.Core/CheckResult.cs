@@ -38,6 +38,13 @@ public interface ICheckResult
     /// Whether the result is marked as to-be-pruned
     /// </summary>
     bool Pruned { get; set; }
+
+    /// <summary>
+    /// The <see cref="Score"/> of the result, based on <see cref="Priority"/> and the
+    /// <see cref="Score"/> of its children, and whether the <see cref="LeafCheckResult"/>
+    /// are correct.
+    /// </summary>
+    Score Score { get; set; }
 }
 
 /// <summary>
@@ -69,6 +76,9 @@ public class LeafCheckResult : ICheckResult
     /// <inheritdoc />
     public bool Pruned { get; set; }
 
+    /// <inheritdoc />
+    public Score Score { get; set; }
+
     /// <summary>
     /// If this <see cref="LeafCheckResult"/> belongs to a <see cref="RelationCheck"/>,
     /// this <see cref="ICheck"/> gets set to the <see cref="ICheck"/> which searches
@@ -81,6 +91,7 @@ public class LeafCheckResult : ICheckResult
     /// </example>
     [JsonIgnore]
     public ICheck ? RelatedCheck { get; init; }
+
 }
 
 /// <summary>
@@ -111,6 +122,9 @@ public class NotCheckResult : ICheckResult
 
     /// <inheritdoc />
     public bool Pruned { get; set; }
+
+    /// <inheritdoc />
+    public Score Score { get; set; }
 }
 
 /// <summary>
@@ -159,4 +173,7 @@ public class NodeCheckResult : ICheckResult
 
     /// <inheritdoc />
     public bool Pruned { get; set; }
+
+    /// <inheritdoc />
+    public Score Score { get; set; }
 }
