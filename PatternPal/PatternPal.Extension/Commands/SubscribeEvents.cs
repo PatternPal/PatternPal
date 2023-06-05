@@ -34,6 +34,8 @@ namespace PatternPal.Extension.Commands
 
         private static BuildEvents _dteBuildEvents;
 
+        private static Solution currentSolution;
+
         private static string _sessionId;
 
         private static bool _unhandledExceptionThrown;
@@ -62,23 +64,24 @@ namespace PatternPal.Extension.Commands
             _dteDebugEvents = _dte.Events.DebuggerEvents;
             _dteSolutionEvents = _dte.Events.SolutionEvents;
             _dteBuildEvents = _dte.Events.BuildEvents;
+            currentSolution = _dte.Solution;
             _package = package;
             _pathToUserDataFolder = Path.Combine(_package.UserLocalDataPath.ToString(), "Extensions", "Team PatternPal",
                 "PatternPal.Extension", "UserData");
             _cancellationToken = cancellationToken;
             SaveSubjectId();
 
-            // Get the active project
-            Project project = _dte.Solution.Projects.Item(1);
+            // Create a new FileSystemWatcher instance
+            FileSystemWatcher watcher = new FileSystemWatcher(currentSolution.FullName);
 
-            // Get the ProjectItems collection for the project
-            ProjectItems projectItems = project.ProjectItems;
+            // Set the event handlers
+            watcher.Created += OnFileCreate;
 
-            // Get the ProjectItemsEvents object
-            ProjectItemsEvents projectItemsEvents = (ProjectItemsEvents)_dte.Events.GetObject("ProjectItemsEvents");
+            // Enable the FileSystemWatcher to begin watching for changes
+            watcher.EnableRaisingEvents = true;
 
-            // Subscribe to the ItemAdded event
-            projectItemsEvents.ItemAdded += OnFileCreate;
+            // Clean up the resources
+            watcher.Dispose();
 
             // This activates the DoLogData, necessary here in Initialize to kickstart the Session and Project Open events.
             bool _ = _package.DoLogData;
@@ -188,7 +191,7 @@ namespace PatternPal.Extension.Commands
             }
         }
 
-        internal static void OnFileCreate(ProjectItem projectItem)
+        internal static void OnFileCreate(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
 
             SessionId = Guid.NewGuid().ToString();
