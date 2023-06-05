@@ -64,25 +64,25 @@ internal class DecoratorRecognizer : IRecognizer
             Class(
                 Priority.Knockout,
                 Implements(
-                    Priority.Knockout,
+                    Priority.Knockout, //TODO als ik dit knockout maak pruned hij alles
                     component
                 ),
                 Method(
-                    Priority.Knockout,
-                    Overrides(
-                        Priority.Knockout,
+                    Priority.Knockout
+                    /*Overrides(
+                        Priority.High,
                         componentMethod
-                    )
+                    )*/ //TODO mogelijk ook uit requirements halen als dit niet kan
                 )
             );
 
         MethodCheck baseDecoratorMethod =
             Method(
                 Priority.Knockout,
-                Overrides(
-                    Priority.Knockout,
+                /*Overrides(
+                    Priority.High,
                     componentMethod
-                ),
+                ),*/ //TODO mogelijk ook uit requirements halen als dit niet kan
                 Uses(
                     Priority.Knockout,
                     componentMethod
@@ -123,6 +123,9 @@ internal class DecoratorRecognizer : IRecognizer
                 baseDecoratorMethod
             );
 
+        MethodCheck concreteDecoratorExtraMethod =
+            Method(Priority.Knockout);
+
         ClassCheck concreteDecorator =
             Class(
                 Priority.Knockout,
@@ -130,6 +133,7 @@ internal class DecoratorRecognizer : IRecognizer
                     Priority.Knockout,
                     baseDecorator
                 ),
+                concreteDecoratorExtraMethod,
                 Method(
                     Priority.Knockout,
                     Overrides(
@@ -139,24 +143,27 @@ internal class DecoratorRecognizer : IRecognizer
                     Uses(
                         Priority.Knockout,
                         baseDecoratorMethod
+                    ),
+                    Uses(
+                        Priority.Knockout,
+                        concreteDecoratorExtraMethod
                     )
-                ),
-                Method(Priority.Mid) //TODO add to docs
+                )
             );
 
         ClassCheck client =
             Class(
-                Priority.Mid,
+                Priority.Knockout,
                 Uses(
-                    Priority.Mid,
+                    Priority.Knockout,
                     component
                 ),
                 Creates(
-                    Priority.Mid,
+                    Priority.Knockout,
                     concreteDecorator
                 ),
                 Creates(
-                    Priority.Mid,
+                    Priority.Knockout,
                     concreteComponent
                 )
             );
