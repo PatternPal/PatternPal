@@ -364,30 +364,17 @@ internal class NodeCheck< TNode > : CheckBase
 
         if (currentContext != null)
         {
-            // NOTE: Due to the way generics work in C#, we can't create a catch-all pattern for
-            // this.
+            // NOTE: Only the checks which implement `GetType4TypeCheck` should be matched here.
             switch (currentContext.ParentCheck)
             {
                 case FieldCheck fieldCheck:
                     return fieldCheck.GetType4TypeCheck(
                         currentContext,
                         (IField)node);
-                case ClassCheck classCheck:
-                    return classCheck.GetType4TypeCheck(
-                        currentContext,
-                        (IClass)node);
-                case InterfaceCheck interfaceCheck:
-                    return interfaceCheck.GetType4TypeCheck(
-                        currentContext,
-                        (IInterface)node);
                 case MethodCheck methodCheck:
                     return methodCheck.GetType4TypeCheck(
                         currentContext,
                         (IMethod)node);
-                case ConstructorCheck constructorCheck:
-                    return constructorCheck.GetType4TypeCheck(
-                        currentContext,
-                        (IConstructor)node);
                 case PropertyCheck propertyCheck:
                     return propertyCheck.GetType4TypeCheck(
                         currentContext,
