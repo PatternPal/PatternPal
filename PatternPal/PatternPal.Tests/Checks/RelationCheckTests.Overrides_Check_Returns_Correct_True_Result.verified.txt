@@ -1,0 +1,200 @@
+﻿{
+  FeedbackMessage: Found the required checks for: C1.,
+  Priority: High,
+  ChildrenCheckResults: [
+    {
+      FeedbackMessage: ,
+      Priority: High,
+      ChildrenCheckResults: [
+        {
+          FeedbackMessage: Found class 'C1',
+          Priority: High,
+          ChildrenCheckResults: [
+            {
+              FeedbackMessage: Modifiers correctly implemented.,
+              Priority: High,
+              Correct: true,
+              MatchedNode: C1
+            },
+            {
+              FeedbackMessage: ,
+              Priority: High,
+              ChildrenCheckResults: [
+                {
+                  FeedbackMessage: Found method: M().,
+                  Priority: High,
+                  ChildrenCheckResults: [
+                    {
+                      FeedbackMessage: Modifiers correctly implemented.,
+                      Priority: High,
+                      Correct: true,
+                      MatchedNode: M
+                    }
+                  ],
+                  MatchedNode: M,
+                  NodeCheckCollectionWrapper: false
+                }
+              ],
+              CollectionKind: Any,
+              NodeCheckCollectionWrapper: true
+            }
+          ],
+          MatchedNode: C1,
+          NodeCheckCollectionWrapper: false
+        },
+        {
+          FeedbackMessage: Found class 'C2',
+          Priority: High,
+          ChildrenCheckResults: [
+            {
+              FeedbackMessage: The node C2 does not have the abstract modifier.,
+              Priority: High,
+              Correct: false,
+              MatchedNode: C2
+            },
+            {
+              FeedbackMessage: ,
+              Priority: High,
+              ChildrenCheckResults: [
+                {
+                  FeedbackMessage: Found method: M().,
+                  Priority: High,
+                  ChildrenCheckResults: [
+                    {
+                      FeedbackMessage: The node M() does not have the abstract modifier.,
+                      Priority: High,
+                      Correct: false,
+                      MatchedNode: M
+                    }
+                  ],
+                  MatchedNode: M,
+                  NodeCheckCollectionWrapper: false
+                }
+              ],
+              CollectionKind: Any,
+              NodeCheckCollectionWrapper: true
+            }
+          ],
+          MatchedNode: C2,
+          NodeCheckCollectionWrapper: false
+        }
+      ],
+      CollectionKind: Any,
+      NodeCheckCollectionWrapper: true
+    },
+    {
+      FeedbackMessage: ,
+      Priority: High,
+      ChildrenCheckResults: [
+        {
+          FeedbackMessage: Found class 'C1',
+          Priority: High,
+          ChildrenCheckResults: [
+            {
+              FeedbackMessage: ,
+              Priority: High,
+              ChildrenCheckResults: [
+                {
+                  FeedbackMessage: Found method: M().,
+                  Priority: High,
+                  ChildrenCheckResults: [
+                    {
+                      FeedbackMessage: Found Overrides relations for M().,
+                      Priority: High,
+                      ChildrenCheckResults: [
+                        {
+                          FeedbackMessage: No Overrides relation found.,
+                          Priority: High,
+                          Correct: false,
+                          DependencyCount: 1,
+                          MatchedNode: M
+                        },
+                        {
+                          FeedbackMessage: No Overrides relation found.,
+                          Priority: High,
+                          Correct: false,
+                          DependencyCount: 1,
+                          MatchedNode: M
+                        }
+                      ],
+                      CollectionKind: Any,
+                      DependencyCount: 1,
+                      MatchedNode: M,
+                      NodeCheckCollectionWrapper: true
+                    }
+                  ],
+                  DependencyCount: 1,
+                  MatchedNode: M,
+                  NodeCheckCollectionWrapper: false
+                }
+              ],
+              CollectionKind: Any,
+              DependencyCount: 1,
+              NodeCheckCollectionWrapper: true
+            }
+          ],
+          DependencyCount: 1,
+          MatchedNode: C1,
+          NodeCheckCollectionWrapper: false
+        },
+        {
+          FeedbackMessage: Found class 'C2',
+          Priority: High,
+          ChildrenCheckResults: [
+            {
+              FeedbackMessage: ,
+              Priority: High,
+              ChildrenCheckResults: [
+                {
+                  FeedbackMessage: Found method: M().,
+                  Priority: High,
+                  ChildrenCheckResults: [
+                    {
+                      FeedbackMessage: Found Overrides relations for M().,
+                      Priority: High,
+                      ChildrenCheckResults: [
+                        {
+                          FeedbackMessage: Node M() has a Overrides relation with node M(),
+                          Priority: High,
+                          Correct: true,
+                          DependencyCount: 1,
+                          MatchedNode: M
+                        },
+                        {
+                          FeedbackMessage: No Overrides relation found.,
+                          Priority: High,
+                          Correct: false,
+                          DependencyCount: 1,
+                          MatchedNode: M
+                        }
+                      ],
+                      CollectionKind: Any,
+                      DependencyCount: 1,
+                      MatchedNode: M,
+                      NodeCheckCollectionWrapper: true
+                    }
+                  ],
+                  DependencyCount: 1,
+                  MatchedNode: M,
+                  NodeCheckCollectionWrapper: false
+                }
+              ],
+              CollectionKind: Any,
+              DependencyCount: 1,
+              NodeCheckCollectionWrapper: true
+            }
+          ],
+          DependencyCount: 1,
+          MatchedNode: C2,
+          NodeCheckCollectionWrapper: false
+        }
+      ],
+      CollectionKind: Any,
+      DependencyCount: 1,
+      NodeCheckCollectionWrapper: true
+    }
+  ],
+  DependencyCount: 1,
+  MatchedNode: C1,
+  NodeCheckCollectionWrapper: false
+}

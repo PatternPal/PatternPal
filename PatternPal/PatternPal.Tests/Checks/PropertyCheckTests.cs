@@ -1,7 +1,5 @@
 ﻿#region
 
-using static PatternPal.Core.Checks.CheckBuilder;
-
 #endregion
 
 namespace PatternPal.Tests.Checks;
@@ -75,6 +73,31 @@ internal class PropertyCheckTests
             ctx,
             propertyEntity);
 
+        return Verifier.Verify(result);
+    }
+
+    [Test]
+    public Task Nested_Property_Check_Works()
+    {
+        SyntaxGraph graph = EntityNodeUtils.CreateGraphFromInput(
+            """
+            public class C
+            {
+                public int P { get; }
+            }
+            """);
+        IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
+
+        IEntity entity = graph.GetAll()[ "C" ];
+
+        ClassCheck check = Class(
+            Priority.High,
+            Property(Priority.High)
+        );
+
+        ICheckResult result = check.Check(
+            ctx,
+            entity);
         return Verifier.Verify(result);
     }
 }

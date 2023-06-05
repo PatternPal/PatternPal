@@ -1,6 +1,4 @@
-﻿using PatternPal.SyntaxTree.Abstractions.Entities;
-
-namespace PatternPal.Tests.Checks;
+﻿namespace PatternPal.Tests.Checks;
 
 [TestFixture]
 public class TypeCheckTests
@@ -9,13 +7,13 @@ public class TypeCheckTests
     public Task Type_Check_Returns_Correct_Result()
     {
         IClass classEntity = EntityNodeUtils.CreateClass();
-        
+
         TypeCheck typeCheck = new(
             Priority.Low,
-            OneOf<ICheck, GetCurrentEntity >.FromT1(
+            OneOf< ICheck, GetCurrentEntity >.FromT1(
                 ICheck.GetCurrentEntity) );
 
-        IRecognizerContext ctx = RecognizerContext4Tests.WithEntity(classEntity );
+        IRecognizerContext ctx = RecognizerContext4Tests.WithEntity(classEntity);
 
         ICheckResult result = typeCheck.Check(
             ctx,
@@ -40,5 +38,26 @@ public class TypeCheckTests
             ctx,
             method);
         return Verifier.Verify(result);
+    }
+
+    [Test]
+    public void Type_Check_Throws_For_Invalid_SubCheck()
+    {
+        IClass classEntity = EntityNodeUtils.CreateClass();
+
+        ClassCheck check = Class(
+            Priority.High,
+            Type(
+                Priority.High,
+                Modifiers(
+                    Priority.High,
+                    Modifier.Abstract)));
+
+        IRecognizerContext ctx = RecognizerContext4Tests.WithEntity(classEntity);
+
+        Assert.Throws< InvalidSubCheckException >(
+            () => check.Check(
+                ctx,
+                classEntity));
     }
 }
