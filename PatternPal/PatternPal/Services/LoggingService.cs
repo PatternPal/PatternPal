@@ -56,6 +56,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         {
             Protos.EventType.EvtCompile => CompileLog(receivedRequest),
             Protos.EventType.EvtCompileError => CompileErrorLog(receivedRequest),
+            Protos.EventType.EvtFileCreate => FileCreateLog(receivedRequest),
             Protos.EventType.EvtFileEdit => FileEditLog(receivedRequest),
             Protos.EventType.EvtProjectOpen => ProjectOpenLog(receivedRequest),
             Protos.EventType.EvtProjectClose => ProjectCloseLog(receivedRequest),
@@ -133,6 +134,21 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         sendLog.CodeStateSection = receivedRequest.CodeStateSection;
         sendLog.ParentEventId = receivedRequest.ParentEventId;
         sendLog.SourceLocation = receivedRequest.SourceLocation;
+        return sendLog;
+    }
+
+    /// <summary>
+    /// Creates a LogRequest that is populated with info obtained from the supplied
+    /// received event and further specific details relevant for the FileEdit-event.
+    /// </summary>
+    /// <param name="receivedRequest">The originally received request from the PP extension</param>
+    /// <returns>A LogRequest populated for this specific event</returns>
+    private static LogRequest FileCreateLog(LogEventRequest receivedRequest)
+    {
+        LogRequest sendLog = StandardLog(receivedRequest);
+        sendLog.EventType = LoggingServer.EventType.EvtFileCreate;
+        sendLog.CodeStateSection = receivedRequest.CodeStateSection;
+
         return sendLog;
     }
 
@@ -263,7 +279,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
                 foreach (string file in files)
                 {
                     string relativePath = Path.GetRelativePath(path, file);
-                    
+
                     // If the 
                     if (rgx.IsMatch(relativePath))
                     {
@@ -290,6 +306,6 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         //  we copy it to a byteString here in order to facilitate easy gRPC usage.
         return ByteString.CopyFrom(bytes);
     }
-    
+
     #endregion
 }

@@ -10,7 +10,6 @@ using EnvDTE80;
 using PatternPal.Protos;
 using System.Threading;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.Shell.Interop;
 
 #endregion
 
@@ -191,10 +190,23 @@ namespace PatternPal.Extension.Commands
             }
         }
 
+        /// <summary>
+        /// The event handler for handling the File.Create Event. The file watcher detects every file created,
+        /// so any event triggers with files other than .cs files are unhandled.    
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="fileSystemEventArgs"></param>
         internal static void OnFileCreate(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
+            // Only log for the creation of .cs files
+            if (Path.GetExtension(fileSystemEventArgs.Name) != ".cs")
+                return;
 
-            SessionId = Guid.NewGuid().ToString();
+            LogEventRequest request = CreateStandardLog();
+            request.EventType = EventType.EvtFileCreate;
+            request.CodeStateSection = fileSystemEventArgs.Name;
+
+            LogEventResponse response = PushLog(request);
         }
 
         /// <summary>
@@ -203,14 +215,14 @@ namespace PatternPal.Extension.Commands
         internal static void OnSessionStart()
         {
             SessionId = Guid.NewGuid().ToString();
-     
+
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtSessionStart;
 
             LogEventResponse response = PushLog(request);
 
             // As a new session has started, the file watcher has to be reset so that the "current solution" is up to date
-            SetUpWatcher();
+            SetUpFileWatcher();
         }
 
         /// <summary>
@@ -252,8 +264,8 @@ namespace PatternPal.Extension.Commands
             ThreadHelper.ThrowIfNotOnUIThread();
             LogEachProject(EventType.EvtProjectOpen);
 
-            // When a user opens a new solution, the watcher has to be setup again. 
-            SetUpWatcher();
+            // When a user opens a new solution, the watcher has to be setup again to entail the new solution. 
+            SetUpFileWatcher();
         }
 
         /// <summary>
@@ -311,7 +323,7 @@ namespace PatternPal.Extension.Commands
         public static void OnPatternRecognized(RecognizeRequest recognizeRequest,
             IList<RecognizeResult> recognizeResults)
         {
-            if (_package == null || !Privacy.Instance.DoLogData) return; 
+            if (_package == null || !Privacy.Instance.DoLogData) return;
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtXRecognizerRun;
             string config = recognizeRequest.Recognizers.ToString();
@@ -432,7 +444,7 @@ namespace PatternPal.Extension.Commands
         /// <summary>
         /// Sets up a file watcher for File.Create and File.Delete events for the current opened user solution.
         /// </summary>
-        private static void SetUpWatcher()
+        private static void SetUpFileWatcher()
         {
             if (watcher != null)
             {
@@ -447,6 +459,9 @@ namespace PatternPal.Extension.Commands
 
             // Enable the FileSystemWatcher to begin watching for changes
             watcher.EnableRaisingEvents = true;
+
+            // Enable watching for in the subdirectories as well
+            watcher.IncludeSubdirectories = true;
         }
 
 
