@@ -325,10 +325,7 @@ public class RecognizerRunner
             return true;
         }
 
-        if (Prune(
-                parentCheckResult.Priority,
-                pruneAll)
-            && parentCheckResult is
+        if (parentCheckResult is
             {
                 NodeCheckCollectionWrapper: true,
                 Check: RelationCheck or TypeCheck
@@ -348,6 +345,14 @@ public class RecognizerRunner
                 if (dependentCheckResult is not LeafCheckResult dependentResult)
                 {
                     throw new ArgumentException($"Unexpected check type '{dependentCheckResult.GetType()}', expected '{typeof( LeafCheckResult )}'");
+                }
+
+                // Always prune results of incorrect relations.
+                if (!dependentResult.Correct)
+                {
+                    resultsToBePruned.Add(dependentResult);
+                    dependentResult.Pruned = true;
+                    continue;
                 }
 
                 if (dependentResult.RelatedCheck is null)
