@@ -38,6 +38,8 @@ namespace PatternPal.Extension.Commands
 
         private static Solution currentSolution;
 
+        private static FileSystemWatcher watcher;
+
         private static string _sessionId;
 
         private static bool _unhandledExceptionThrown;
@@ -82,20 +84,8 @@ namespace PatternPal.Extension.Commands
                 "PatternPal.Extension", "UserData");
             _cancellationToken = cancellationToken;
 
-            // Create a new FileSystemWatcher instance
-            FileSystemWatcher watcher = new FileSystemWatcher(currentSolution.FullName);
-
-            // Set the event handlers
-            watcher.Created += OnFileCreate;
-
-            // Enable the FileSystemWatcher to begin watching for changes
-            watcher.EnableRaisingEvents = true;
-
-            // Clean up the resources
-            watcher.Dispose();
-
-            // This activates the DoLogData, necessary here in Initialize to kickstart the Session and Project Open events.
-            bool _ = Privacy.Instance.DoLogData;
+            // Any GET of Privacy.Instance activates the DoLogData which is not the expected behaviour.
+            // However, it is necessary here in Initialize to kickstart the Session and Project Open events.
             SubscribeEvents._subjectId = Privacy.Instance.SubjectId.ToString();
         }
 
@@ -108,8 +98,8 @@ namespace PatternPal.Extension.Commands
             await _package.JoinableTaskFactory.SwitchToMainThreadAsync(_cancellationToken);
             // Code that interacts with UI elements goes here
             _dteBuildEvents.OnBuildDone += OnCompileDone;
-            _dteSolutionEvents.Opened += OnProjectOpen;
-            _dteSolutionEvents.BeforeClosing += OnProjectClose;
+            _dteSolutionEvents.Opened += OnSolutionOpen;
+            _dteSolutionEvents.BeforeClosing += OnSolutionClose;
             _dteDebugEvents.OnEnterBreakMode +=
                 OnExceptionUnhandled; // OnEnterBreakMode is triggered for both breakpoints as well as exceptions, with the reason parameter specifying this.
             _dteDebugEvents.OnEnterDesignMode += OnDebugProgram;
@@ -124,8 +114,8 @@ namespace PatternPal.Extension.Commands
         {
             await _package.JoinableTaskFactory.SwitchToMainThreadAsync(_cancellationToken);
             _dteBuildEvents.OnBuildDone -= OnCompileDone;
-            _dteSolutionEvents.Opened -= OnProjectOpen;
-            _dteSolutionEvents.BeforeClosing -= OnProjectClose;
+            _dteSolutionEvents.Opened -= OnSolutionOpen;
+            _dteSolutionEvents.BeforeClosing -= OnSolutionClose;
             _dteDebugEvents.OnEnterBreakMode -= OnExceptionUnhandled;
             _dteDebugEvents.OnEnterDesignMode -= OnDebugProgram;
         }
@@ -166,7 +156,7 @@ namespace PatternPal.Extension.Commands
             }
             else
             {
-                string pathSolutionDirectory = Path.GetDirectoryName(_dte.Solution.FullName);
+                string pathSolutionDirectory = Path.GetDirectoryName(currentSolution.FullName);
 
                 request.CodeStateSection = GetRelativePath(pathSolutionDirectory, pathSolutionFile);
             }
@@ -213,11 +203,14 @@ namespace PatternPal.Extension.Commands
         internal static void OnSessionStart()
         {
             SessionId = Guid.NewGuid().ToString();
-
+     
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtSessionStart;
 
             LogEventResponse response = PushLog(request);
+
+            // As a new session has started, the file watcher has to be reset so that the "current solution" is up to date
+            SetUpWatcher();
         }
 
         /// <summary>
@@ -229,6 +222,9 @@ namespace PatternPal.Extension.Commands
             request.EventType = EventType.EvtSessionEnd;
 
             LogEventResponse response = PushLog(request);
+
+            // Remove the file watcher to prevent wasted resources
+            watcher.Dispose();
         }
 
         /// <summary>
@@ -251,19 +247,25 @@ namespace PatternPal.Extension.Commands
         /// <summary>
         /// The event handler for handling the Project.Open Event.
         /// </summary>
-        internal static void OnProjectOpen()
+        internal static void OnSolutionOpen()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             LogEachProject(EventType.EvtProjectOpen);
+
+            // When a user opens a new solution, the watcher has to be setup again. 
+            SetUpWatcher();
         }
 
         /// <summary>
         /// The event handler for handling the Project.Close Event.
         /// </summary>
-        internal static void OnProjectClose()
+        internal static void OnSolutionClose()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             LogEachProject(EventType.EvtProjectClose);
+
+            // When a user closes a solution, the watcher has to be disposed. 
+            watcher.Dispose();
         }
 
         /// <summary>
@@ -425,6 +427,26 @@ namespace PatternPal.Extension.Commands
 
                 LogEventResponse response = PushLog(request);
             }
+        }
+
+        /// <summary>
+        /// Sets up a file watcher for File.Create and File.Delete events for the current opened user solution.
+        /// </summary>
+        private static void SetUpWatcher()
+        {
+            if (watcher != null)
+            {
+                watcher.Dispose();
+            }
+
+            // Create a new FileSystemWatcher instance
+            watcher = new FileSystemWatcher(Path.GetDirectoryName(currentSolution.FullName));
+
+            // Set the event handlers
+            watcher.Created += OnFileCreate;
+
+            // Enable the FileSystemWatcher to begin watching for changes
+            watcher.EnableRaisingEvents = true;
         }
 
 
