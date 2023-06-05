@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 
 using Microsoft.CodeAnalysis;
-
 using PatternPal.Core.Recognizers;
 using PatternPal.SyntaxTree;
 using PatternPal.SyntaxTree.Abstractions.Root;
@@ -24,8 +23,11 @@ public class RecognizerRunner
     /// <summary>
     /// Finds the recognizers which are defined in this assembly and adds them to <see cref="SupportedRecognizers"/>.
     /// </summary>
+    // See: https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca2255#when-to-suppress-warnings
+#pragma warning disable CA2255 // The 'ModuleInitializer' attribute should not be used in libraries
     [ModuleInitializer]
-    public static void Init()
+#pragma warning restore CA2255 // The 'ModuleInitializer' attribute should not be used in libraries
+    public static void ModuleInitializer()
     {
         SupportedRecognizers = new Dictionary< Recognizer, IRecognizer >();
 
@@ -96,8 +98,9 @@ public class RecognizerRunner
     /// <summary>
     /// Runs the configured <see cref="IRecognizer"/>s.
     /// </summary>
+    /// <param name="pruneAll">Whether to prune regardless of <see cref="Priority"/>s</param>
     /// <returns>The result of the <see cref="IRecognizer"/>, or <see langword="null"/> if the <see cref="SyntaxGraph"/> is empty.</returns>
-    public IList< ICheckResult > Run()
+    public IList< ICheckResult > Run(bool pruneAll = false)
     {
         // If the graph is empty, we don't have to do any work.
         if (_graph.IsEmpty)
@@ -131,11 +134,12 @@ public class RecognizerRunner
             Dictionary< INode, List< ICheckResult > > resultsByNode = new();
             PruneResults(
                 resultsByNode,
-                rootResult);
+                rootResult,
+                pruneAll);
 
+            PrioritySort(rootResult);
             results.Add(rootResult);
         }
-
         return results;
     }
 
@@ -163,6 +167,10 @@ public class RecognizerRunner
     /// Filters the sub-<see cref="ICheckResult"/>s of <paramref name="parentCheckResult" /> by
     /// removing any results which can be safely pruned.
     /// </summary>
+    /// <param name="resultsByNode">A <see cref="Dictionary{TKey,TValue}"/> to get the <see cref="ICheckResult"/>s belonging to the <see cref="INode"/>
+    /// found by an <see cref="ICheck"/> related to another <see cref="ICheck"/> by either a <see cref="RelationCheck"/> or <see cref="TypeCheck"/></param>
+    /// <param name="parentCheckResult">The <see cref="ICheckResult"/> currently being evaluated</param>
+    /// <param name="pruneAll">Whether to prune regardless of <see cref="Priority"/>s</param>
     /// <returns><see langword="true"/> if <paramref name="parentCheckResult"/> should also be pruned.</returns>
     /// <remarks>
     /// Results filtering is done in 2 passes.<br/>
@@ -176,7 +184,8 @@ public class RecognizerRunner
     /// </remarks>
     internal static bool PruneResults(
         Dictionary< INode, List< ICheckResult > > resultsByNode,
-        NodeCheckResult parentCheckResult)
+        NodeCheckResult parentCheckResult,
+        bool pruneAll = false)
     {
         // TODO: Properly handle CheckCollectionKind.
         // TODO: Properly handle Priorities.
@@ -214,7 +223,7 @@ public class RecognizerRunner
                     }
 
                     // Only prune the incorrect leaf check if its priority is Knockout.
-                    if (leafCheckResult.Priority == Priority.Knockout)
+                    if (Prune(leafCheckResult.Priority, pruneAll))
                     {
                         resultsToBePruned.Add(leafCheckResult);
                         leafCheckResult.Pruned = true;
@@ -227,7 +236,8 @@ public class RecognizerRunner
                     // check itself should also be pruned.
                     if (PruneResults(
                         resultsByNode,
-                        nodeCheckResult))
+                        nodeCheckResult,
+                        pruneAll))
                     {
                         resultsToBePruned.Add(nodeCheckResult);
                         nodeCheckResult.Pruned = true;
@@ -249,7 +259,7 @@ public class RecognizerRunner
 
                             // If the leaf check is correct, the not check is incorrect. If the not
                             // check has priority Knockout, it should be pruned.
-                            if (notCheckResult.Priority == Priority.Knockout)
+                            if (Prune(notCheckResult.Priority, pruneAll))
                             {
                                 resultsToBePruned.Add(notCheckResult);
                                 notCheckResult.Pruned = true;
@@ -265,8 +275,9 @@ public class RecognizerRunner
                             // has priority Knockout.
                             if (!PruneResults(
                                     resultsByNode,
-                                    nodeCheckResult)
-                                && notCheckResult.Priority == Priority.Knockout)
+                                    nodeCheckResult,
+                                    pruneAll)
+                                && (Prune(notCheckResult.Priority, pruneAll)))
                             {
                                 resultsToBePruned.Add(notCheckResult);
                                 notCheckResult.Pruned = true;
@@ -305,10 +316,10 @@ public class RecognizerRunner
             return true;
         }
 
-        if (parentCheckResult is
+        if (Prune(parentCheckResult.Priority, pruneAll) 
+            && parentCheckResult is
             {
                 NodeCheckCollectionWrapper: true,
-                Priority: Priority.Knockout,
                 Check: RelationCheck or TypeCheck
             })
         {
@@ -343,8 +354,7 @@ public class RecognizerRunner
 
                 // Find the CheckResult linked to the check which searched for the related node.
                 ICheckResult ? relevantResult = resultsOfNode.FirstOrDefault(
-                    (
-                        result) => result.Check == dependentResult.RelatedCheck);
+                    result => result.Check == dependentResult.RelatedCheck);
 
                 // This should not be possible for the same reason `dependentResult.MatchedNode`
                 // should not be null.
@@ -384,6 +394,66 @@ public class RecognizerRunner
 
         // Parent doesn't become empty, so it shouldn't be pruned by the caller.
         return false;
+    }
+
+    /// <summary>
+    /// Whether the <see cref="ICheckResult"/> should be pruned in case it is incorrect.
+    /// </summary>
+    /// <param name="priority">The <see cref="Priority"/> of the <see cref="ICheckResult"/></param>
+    /// <param name="pruneAll">Whether to prune regardless of <see cref="Priority"/>s</param>
+    private static bool Prune(Priority priority, bool pruneAll)
+        => pruneAll || priority == Priority.Knockout;
+
+    /// <summary>
+    /// Sorts a <see cref="NodeCheckResult"/> based on <see cref="Priority"/>s and whether the
+    /// <see cref="LeafCheckResult"/>s are correct. It goes recursively through the tree of
+    /// <see cref="ICheckResult"/>s, and gives a <see cref="Score"/> to each <see cref="ICheckResult"/>
+    /// based their <see cref="Priority"/>s and the <see cref="Score"/>s and <see cref="Priority"/>s
+    /// of their children.
+    /// </summary>
+    internal static void PrioritySort(NodeCheckResult result)
+    {
+        foreach (ICheckResult childResult in result.ChildrenCheckResults)
+        {
+            PrioritySortHelper(childResult);
+            result.Score += childResult.Score;
+        }
+
+        ((List<ICheckResult>)result.ChildrenCheckResults).Sort((a, b) => a.Score.CompareTo(b.Score));
+    }
+
+    /// <summary>
+    /// Sorts and determines the <see cref="Score"/> of the childResult based on the type of childResult.
+    /// </summary>
+    private static void PrioritySortHelper(ICheckResult childResult)
+    {
+        switch (childResult)
+        {
+            case LeafCheckResult leafResult:
+                leafResult.Score = Score.CreateScore(leafResult.Priority, leafResult.Correct);
+                //TODO add Relation and TypeCheck. Idea underneath. However not as straightforward since a RelationCheck and a TypeCheck are NodeCheckResults
+                /*if (leafResult is { Correct: true, Check: RelationCheck or TypeCheck })
+                {
+                    // Get the CheckResults belonging to the related node.
+                    List<ICheckResult> resultsOfNode = resultsByNode[leafResult.MatchedNode];
+
+                    // Find the CheckResult linked to the check which searched for the related node.
+                    ICheckResult? relevantResult = resultsOfNode.FirstOrDefault(
+                        result => result.Check == leafResult.RelatedCheck);
+
+                    leafResult.Score += relevantResult.Score;
+                }*/
+                break;
+            case NodeCheckResult nodeResult:
+                PrioritySort(nodeResult);
+                break;
+            case NotCheckResult notResult:
+                PrioritySortHelper(notResult.NestedResult);
+                notResult.Score = Score.GetNot(notResult.NestedResult.Priority, notResult.NestedResult.Score);
+                break;
+            default:
+                throw new ArgumentException($"{childResult} is not a supported ICheckResult");
+        }
     }
 }
 
@@ -474,4 +544,102 @@ file class RootNode : INode
 
     /// <inheritdoc />
     IRoot INode.GetRoot() => throw new UnreachableException();
+}
+
+/// <summary>
+/// The Score of a <see cref="ICheckResult"/>, used to sort the final root <see cref="ICheckResult"/>.
+/// </summary>
+public struct Score : IComparable<Score>
+{
+    internal int Knockout, High, Mid, Low;
+
+    /// <summary>
+    /// Adds up every component of the right <see cref="Score"/> from the left <see cref="Score"/>.
+    /// </summary>
+    public static Score operator +(Score a, Score b) => 
+        new()
+        {
+            Knockout = a.Knockout + b.Knockout,
+            High = a.High + b.High,
+            Mid = a.Mid + b.Mid,
+            Low = a.Low + b.Low
+        };
+
+    /// <summary>
+    /// Subtracts every component of the right <see cref="Score"/> from the left <see cref="Score"/>.
+    /// </summary>
+    public static Score operator -(Score a, Score b) => 
+        new()
+        {
+            Knockout = a.Knockout - b.Knockout,
+            High = a.High - b.High,
+            Mid = a.Mid - b.Mid,
+            Low = a.Low - b.Low
+        };
+
+    /// <summary>
+    /// Calculates and returns the <see cref="Score"/> property belonging to a <see cref="LeafCheckResult"/>.
+    /// </summary>
+    /// <param name="priority">The priority of the <see cref="LeafCheckResult"/></param>
+    /// <param name="correct">Whether the <see cref="LeafCheckResult"/> was correct</param>
+    internal static Score CreateScore(Priority priority, bool correct)
+    {
+        int score = correct ? 1 : 0;
+        switch (priority)
+        {
+            case Priority.Knockout:
+                return new Score { Knockout = score};
+            case Priority.High:
+                return new Score { High = score };
+            case Priority.Mid:
+                return new Score { Mid = score };
+            case Priority.Low:
+                return new Score { Low = score };
+            default:
+                throw new ArgumentException($"{priority} is an unhandled type of priority.");
+        }
+    }
+
+    /// <summary>
+    /// Calculates what the <see cref="Score"/> of the <see cref="NodeCheckResult"/> of a <see cref="NotCheck"/>,
+    /// based on the <see cref="Score"/> of the <see cref="ICheckResult"/> of its <see cref="NotCheck.NestedCheck"/>.
+    /// </summary>
+    /// <param name="priority">The <see cref="Priority"/> of the parent <see cref="NotCheck"/></param>
+    /// <param name="score">The <see cref="Score"/> of the computed <see cref="NotCheck.NestedCheck"/></param>
+    /// <returns>The <see cref="Score"/> belonging to the parent <see cref="NotCheck"/></returns>
+    internal static Score GetNot(Priority priority, Score score) =>
+        new()
+        {
+            Knockout = (priority == Priority.Knockout && score.Knockout == 0) ? 1 : 0,
+            High = (priority == Priority.High && score.High == 0) ? 1 : 0,
+            Mid = (priority == Priority.Mid && score.Mid == 0) ? 1 : 0,
+            Low = (priority == Priority.Low && score.Low == 0) ? 1 : 0
+        };
+
+    /// <inheritdoc />>
+    public int CompareTo(Score other)
+    {
+        if (Knockout > other.Knockout)
+            return -1;
+        if (Knockout < other.Knockout)
+            return 1;
+        if (High > other.High)
+            return -1;
+        if (High < other.High)
+            return 1;
+        if (Mid > other.Mid)
+            return -1;
+        if (Mid < other.Mid)
+            return 1;
+        if (Low > other.Low)
+            return -1;
+        if (Low < other.Low)
+            return 1;
+        return 0;
+    }
+
+    public override string ToString()
+    {
+        return $"Knockout: {Knockout}, High: {High}, Mid: {Mid}, Low: {Low}";
+    }
 }

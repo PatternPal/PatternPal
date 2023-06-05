@@ -1,4 +1,6 @@
-﻿namespace PatternPal.Tests.Utils;
+﻿using PatternPal.Core.StepByStep;
+
+namespace PatternPal.Tests.Utils;
 
 internal class TestRecognizerRelation : IRecognizer
 {
@@ -30,6 +32,11 @@ internal class TestRecognizerRelation : IRecognizer
             )
         );
     }
+
+    public List<IInstruction> GenerateStepsList()
+    {
+        throw new NotImplementedException();
+    }
 }
 
 internal class TestRecognizerType : IRecognizer
@@ -60,5 +67,10 @@ internal class TestRecognizerType : IRecognizer
                 )
             )
         );
+    }
+
+    public List<IInstruction> GenerateStepsList()
+    {
+        throw new NotImplementedException();
     }
 }

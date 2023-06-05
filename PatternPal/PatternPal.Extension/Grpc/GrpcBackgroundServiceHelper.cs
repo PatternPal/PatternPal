@@ -3,6 +3,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
@@ -14,8 +15,7 @@ namespace PatternPal.Extension.Grpc
     {
         private static Process _backgroundService;
 
-        internal static void StartBackgroundService(
-            IServiceProvider serviceProvider)
+        internal static void StartBackgroundService()
         {
             try
             {
@@ -45,7 +45,7 @@ namespace PatternPal.Extension.Grpc
             {
                 // TODO: Improve error handling
                 VsShellUtilities.ShowMessageBox(
-                    serviceProvider,
+                    ExtensionWindowPackage.PackageInstance,
                     $"The background service failed to start: {exception.Message}",
                     "Background service error",
                     OLEMSGICON.OLEMSGICON_CRITICAL,

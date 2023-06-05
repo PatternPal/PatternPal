@@ -19,7 +19,10 @@ internal static class Program
         // Build the webapp and add the services needed, including the database context and the repository as a scoped service.
         WebApplicationBuilder builder = WebApplication.CreateBuilder();
         builder.Services.AddGrpc();
-        builder.Services.AddDbContext<ProgSnap2ContextClass>();
+        builder.Services.AddDbContext<ProgSnap2ContextClass>(options => 
+            options.UseNpgsql( builder.Configuration.GetConnectionString("PostgresConnection") )
+        );
+        
         builder.Services.AddGrpcHealthChecks()
             .AddCheck("Sample", () => HealthCheckResult.Healthy());
 

@@ -61,6 +61,15 @@ namespace PatternPal.Extension.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Accept.
+        /// </summary>
+        public static string Accept {
+            get {
+                return ResourceManager.GetString("Accept", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Active Document.
         /// </summary>
         public static string ActiveDocument {
@@ -75,6 +84,15 @@ namespace PatternPal.Extension.Resources {
         public static string Analyse {
             get {
                 return ResourceManager.GetString("Analyse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deny.
+        /// </summary>
+        public static string Deny {
+            get {
+                return ResourceManager.GetString("Deny", resourceCulture);
             }
         }
         
