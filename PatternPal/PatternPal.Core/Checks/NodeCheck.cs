@@ -4,7 +4,7 @@
 /// Base class for <see cref="ICheck"/>s which can have sub-<see cref="ICheck"/>s.
 /// </summary>
 /// <typeparam name="TNode">The <see cref="INode"/> type which this <see cref="ICheck"/> supports.</typeparam>
-public class NodeCheck< TNode > : CheckBase
+internal class NodeCheck< TNode > : CheckBase
     where TNode : INode
 {
     // The sub-checks of the current check.
@@ -67,8 +67,7 @@ public class NodeCheck< TNode > : CheckBase
         Priority priority,
         IEnumerable< ICheck > subChecks,
         CheckCollectionKind kind = CheckCollectionKind.All)
-        : 
-        base(priority)
+        : base(priority)
     {
         _subChecks = subChecks;
         _kind = kind;

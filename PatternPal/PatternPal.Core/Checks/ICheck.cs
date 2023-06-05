@@ -49,7 +49,7 @@ public interface ICheck
 /// <summary>
 /// Base implementation of a check.
 /// </summary>
-public abstract class CheckBase : ICheck
+internal abstract class CheckBase : ICheck
 {
     /// <inheritdoc />
     public Priority Priority { get; }
