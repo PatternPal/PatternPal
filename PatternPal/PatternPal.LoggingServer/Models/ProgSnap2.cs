@@ -31,7 +31,7 @@ namespace PatternPal.LoggingServer.Models
         /// <summary>
         /// The ID of the subject that this event belongs to. Every new extension installation is a new subject.
         /// </summary>
-        public Guid SubjectId { get; set; }
+        public string SubjectId { get; set; }
 
         /// <summary>
         /// Information about the IDE, compiler, OS, programming language, and other tool instances.

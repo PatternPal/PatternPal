@@ -7,7 +7,7 @@ public class NodeConverter : JsonConverter
         object value,
         JsonSerializer serializer)
     {
-        INode ? node = value as INode;
+        INode? node = value as INode;
         serializer.Serialize(
             writer,
             node?.GetName());

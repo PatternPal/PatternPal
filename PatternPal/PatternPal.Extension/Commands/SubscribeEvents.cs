@@ -23,7 +23,7 @@ namespace PatternPal.Extension.Commands
         /// <summary>
         ///     VS Package that provides this command, not null.
         /// </summary>
-        private static PatternPalExtensionPackage _package;
+        private static ExtensionWindowPackage _package;
 
         private static DTE _dte;
 
@@ -45,6 +45,15 @@ namespace PatternPal.Extension.Commands
             set { _sessionId = value; }
         }
 
+
+        private static string _subjectId;
+
+        private static string SubjectId
+        {
+            get { return _subjectId; }
+            set { _subjectId = value; }
+        }
+
         private static string _pathToUserDataFolder;
 
         private static CancellationToken _cancellationToken;
@@ -56,7 +65,7 @@ namespace PatternPal.Extension.Commands
         /// <param name="package"> The PatternPal package itself. </param>
         public static void Initialize(
             DTE dte,
-            PatternPalExtensionPackage package, CancellationToken cancellationToken)
+            ExtensionWindowPackage package, CancellationToken cancellationToken)
         {
             _dte = dte;
             ThreadHelper.ThrowIfNotOnUIThread();
@@ -68,10 +77,10 @@ namespace PatternPal.Extension.Commands
             _pathToUserDataFolder = Path.Combine(_package.UserLocalDataPath.ToString(), "Extensions", "Team PatternPal",
                 "PatternPal.Extension", "UserData");
             _cancellationToken = cancellationToken;
-            SaveSubjectId();
 
             // This activates the DoLogData, necessary here in Initialize to kickstart the Session and Project Open events.
-            bool _ = _package.DoLogData;
+            bool _ = Privacy.Instance.DoLogData;
+            SubscribeEvents._subjectId = Privacy.Instance.SubjectId.ToString();
         }
 
         /// <summary>
@@ -278,7 +287,7 @@ namespace PatternPal.Extension.Commands
         public static void OnPatternRecognized(RecognizeRequest recognizeRequest,
             IList<RecognizeResult> recognizeResults)
         {
-            if (_package == null || !_package.DoLogData) return;
+            if (_package == null || !Privacy.Instance.DoLogData) return; 
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtXRecognizerRun;
             string config = recognizeRequest.Recognizers.ToString();
@@ -302,7 +311,7 @@ namespace PatternPal.Extension.Commands
         {
             return new LogEventRequest
             {
-                EventId = Guid.NewGuid().ToString(), SubjectId = GetSubjectId(), SessionId = _sessionId
+                EventId = Guid.NewGuid().ToString(), SubjectId = SubscribeEvents.SessionId, SessionId = _sessionId
             };
         }
 
@@ -324,29 +333,23 @@ namespace PatternPal.Extension.Commands
         private static void SaveSubjectId()
         {
             // A SubjectID is only ever generated once per user. If the directory already exists, the SubjectID was already set.
-            if (Directory.Exists(_pathToUserDataFolder))
-            {
-                return;
-            }
+            string subjectId = Privacy.Instance.SubjectId;
 
-            Directory.CreateDirectory(_pathToUserDataFolder);
-            string fileName = "subjectid.txt";
-            string filePath = Path.Combine(_pathToUserDataFolder, fileName);
-            string fileContents = Guid.NewGuid().ToString();
-            File.WriteAllText(filePath, fileContents);
+            if (subjectId == "")
+            {
+                subjectId = Guid.NewGuid().ToString();
+                Privacy.Instance.SubjectId = subjectId;
+            }
         }
 
         /// <summary>
-        /// Reads the SubjectID from a local file.
+        /// Reads the SubjectID from the option model.
         /// </summary>
-        /// <returns>The SubjectID - It returns the contents of the local file.</returns>
+        /// <returns>The SubjectID - It returns the contents of the subjectID property.</returns>
         private static string GetSubjectId()
         {
-            // A SubjectID is only ever generated once per user. If the directory already exists, the SubjectID was already set.
-
-            string fileName = "subjectid.txt";
-            string filePath = Path.Combine(_pathToUserDataFolder, fileName);
-            return File.ReadAllText(filePath);
+            // A SubjectID is only ever generated once per user
+            return Privacy.Instance.SubjectId;
         }
 
         // TODO Separate utility because of duplication with extension

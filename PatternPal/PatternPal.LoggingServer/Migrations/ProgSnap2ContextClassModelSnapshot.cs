@@ -73,8 +73,9 @@ namespace PatternPal.LoggingServer.Migrations
                     b.Property<string>("SourceLocation")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("SubjectId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("SubjectId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("ToolInstances")
                         .IsRequired()

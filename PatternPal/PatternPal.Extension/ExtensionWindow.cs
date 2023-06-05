@@ -1,9 +1,16 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Forms.VisualStyles;
 using PatternPal.Extension.Resources;
 using PatternPal.Extension.Stores;
 using PatternPal.Extension.ViewModels;
 using Microsoft.VisualStudio.Shell;
 using PatternPal.Extension.Grpc;
+using Community.VisualStudio.Toolkit;
+using Microsoft.VisualStudio.Imaging;
 
 namespace PatternPal.Extension
 {
@@ -18,28 +25,44 @@ namespace PatternPal.Extension
     ///         implementation of the IVsUIElementPane interface.
     ///     </para>
     /// </remarks>
-    [Guid("fcbb47e2-1474-417e-84ea-9cc1c6ee0617")]
-    public class ExtensionWindow : ToolWindowPane
+    public class ExtensionWindow : BaseToolWindow<ExtensionWindow>
     {
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="ExtensionWindow" /> class.
-        /// </summary>
-        public ExtensionWindow() : base(null)
+        public override string GetTitle(int toolWindowId) => ExtensionUIResources.ExtensionName;
+
+        public override Type PaneType => typeof(Pane);
+
+        public override async Task<FrameworkElement> CreateAsync(int toolWindowId, CancellationToken cancellationToken)
         {
-            Caption = ExtensionUIResources.ExtensionName;
             NavigationStore navigationStore = new NavigationStore();
-            navigationStore.CurrentViewModel = new HomeViewModel(navigationStore);
+            Privacy config = await Privacy.GetLiveInstanceAsync();
+            if (Privacy.Instance.FirstTime)
+            {
+                navigationStore.CurrentViewModel = new ConsentViewModel(navigationStore, config);
+            }
+            else
+            {
+                navigationStore.CurrentViewModel = new HomeViewModel(navigationStore);
+            }
 
-            // This is the user control hosted by the tool window; Note that, even if this class implements IDisposable,
-            // we are not calling Dispose on this object. This is because ToolWindowPane calls Dispose on
-            // the object returned by the Content property.
-            Content = new ExtensionWindowControl { DataContext = new MainViewModel(navigationStore) };
+            return new ExtensionWindowControl { DataContext = new MainViewModel(navigationStore)};
         }
 
-        protected override void OnClose()
+        [Guid("99574a6e-e671-4dc3-83e6-755a30839b32")]
+        internal class Pane : ToolWindowPane
         {
-            GrpcBackgroundServiceHelper.KillBackgroundService();
-            base.OnClose();
+            /// <summary>
+            ///     Initializes a new instance of the <see cref="ExtensionWindow" /> class.
+            /// </summary>
+            public Pane()
+            {
+                BitmapImageMoniker = KnownMonikers.AnalyzeTrace;
+            }
+
+            protected override void OnClose()
+            {
+                GrpcBackgroundServiceHelper.KillBackgroundService();
+                base.OnClose();
+            }
         }
-    }
+}
 }

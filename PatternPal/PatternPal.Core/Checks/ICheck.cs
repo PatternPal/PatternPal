@@ -28,7 +28,7 @@ public interface ICheck
     /// </summary>
     Priority Priority { get; }
 
-    Func< List< INode > > Result { get;  }
+    Func< List< INode > > Result { get; }
 
     /// <summary>
     /// The dependencies to other <see cref="INode"/>s this check has.
@@ -54,8 +54,7 @@ internal abstract class CheckBase : ICheck
     /// <inheritdoc />
     public Priority Priority { get; }
 
-    //public Func<List<INode>> Result => () => throw new ArgumentException("Not a NodeCheck");
-    public virtual Func<List<INode>> Result => throw new NotSupportedException($"this check '{this}' is not a NodeCheck");
+    public virtual Func< List< INode > > Result => throw new NotSupportedException($"this check '{this}' is not a NodeCheck");
 
     /// <inheritdoc />
     public abstract int DependencyCount { get; }
@@ -272,21 +271,21 @@ internal static class CheckBuilder
         getCurrentEntity );
 
     /// <summary>
-    /// Creates a new <see cref="RelationCheck"/> for a uses relation.
+    /// Creates a new <see cref="RelationCheck"/> for a <see cref="RelationType.Uses"/> relation.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="RelationCheck"/>.</param>
     /// <param name="relatedNodeCheck">The <see cref="ICheck"/> which checks for the node
-    /// to which there should be a uses relation.</param>
+    /// to which there should be a <see cref="RelationType.Uses"/> relation.</param>
     /// <returns>The created <see cref="RelationCheck"/>.</returns>
     internal static RelationCheck Uses(
         Priority priority,
         ICheck relatedNodeCheck) => new(
         priority,
         RelationType.Uses,
-        relatedNodeCheck);
+        relatedNodeCheck );
 
     /// <summary>
-    /// Creates a new <see cref="RelationCheck"/> for a used by relation.
+    /// Creates a new <see cref="RelationCheck"/> for a <see cref="RelationType.UsedBy"/> relation.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="RelationCheck"/>.</param>
     /// <param name="relatedNodeCheck">A <see cref="ICheck"/> which checks for the node from where there should
@@ -300,11 +299,11 @@ internal static class CheckBuilder
         relatedNodeCheck);
 
     /// <summary>
-    /// Creates a new <see cref="RelationCheck"/> for a inheritance relation.
+    /// Creates a new <see cref="RelationCheck"/> for a <see cref="RelationType.Extends"/> relation.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="RelationCheck"/>.</param>
     /// <param name="relatedNodeCheck">The <see cref="ICheck"/> which checks for the node
-    /// to which there should be an inherits relation.</param>
+    /// to which there should be a <see cref="RelationType.Extends"/> relation.</param>
     /// <returns>The created <see cref="RelationCheck"/>.</returns>
     internal static RelationCheck Inherits(
         Priority priority,
@@ -314,11 +313,11 @@ internal static class CheckBuilder
         relatedNodeCheck );
 
     /// <summary>
-    /// Creates a new <see cref="RelationCheck"/> for an implements relation.
+    /// Creates a new <see cref="RelationCheck"/> for a <see cref="RelationType.Implements"/> relation.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="RelationCheck"/>.</param>
     /// <param name="relatedNodeCheck">The <see cref="ICheck"/> which checks for the node
-    /// to which there should be an implements relation.</param>
+    /// to which there should be a <see cref="RelationType.Implements"/> relation.</param>
     /// <returns>The created <see cref="RelationCheck"/>.</returns>
     internal static RelationCheck Implements(
         Priority priority,
@@ -328,11 +327,25 @@ internal static class CheckBuilder
         relatedNodeCheck );
 
     /// <summary>
-    /// Creates a new <see cref="RelationCheck"/> for a creation relation.
+    /// Creates a new <see cref="RelationCheck"/> for a <see cref="RelationType.Overrides"/> relation.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="RelationCheck"/>.</param>
     /// <param name="relatedNodeCheck">The <see cref="ICheck"/> which checks for the node
-    /// to which there should be a creates relation.</param>
+    /// to which there should be a <see cref="RelationType.Overrides"/> relation.</param>
+    /// <returns>The created <see cref="RelationCheck"/>.</returns>
+    internal static RelationCheck Overrides(
+        Priority priority,
+        ICheck relatedNodeCheck) => new(
+        priority,
+        RelationType.Overrides,
+        relatedNodeCheck );
+
+    /// <summary>
+    /// Creates a new <see cref="RelationCheck"/> for a <see cref="RelationType.Creates"/> relation.
+    /// </summary>
+    /// <param name="priority">The <see cref="Priority"/> of this <see cref="RelationCheck"/>.</param>
+    /// <param name="relatedNodeCheck">The <see cref="ICheck"/> which checks for the node
+    /// to which there should be a <see cref="RelationType.Creates"/> relation.</param>
     /// <returns>The created <see cref="RelationCheck"/></returns>
     internal static RelationCheck Creates(
         Priority priority,
@@ -418,7 +431,7 @@ internal sealed class IncorrectNodeTypeException : Exception
     /// </summary>
     /// <param name="node">The <see cref="INode"/> which could not be converted.</param>
     internal static IncorrectNodeTypeException From< T >(
-        INode? node) => new(
+        INode ? node) => new(
         typeof( T ),
         node );
 }

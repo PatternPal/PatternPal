@@ -15,12 +15,6 @@ internal class ConstructorCheck : NodeCheck< IConstructor >
     {
     }
 
-    /// <inheritdoc path="//summary|//param" />
-    /// <returns>The <see cref="IEntity"/> which represents the type constructed by the <see cref="IConstructor"/>.</returns>
-    protected override IEntity GetType4TypeCheck(
-        IRecognizerContext ctx,
-        IConstructor node) => node.GetParent();
-
     /// <inheritdoc />
     protected override string GetFeedbackMessage(
         IConstructor node) => $"Found constructor: {node}.";
