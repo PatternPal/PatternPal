@@ -94,7 +94,10 @@ internal class NodeCheck< TNode > : CheckBase
 
         // Store the matched entity.
         _matchedEntities ??= new List< INode >();
-        _matchedEntities.Add(castNode);
+        if (!castNode.IsPlaceholder)
+        {
+            _matchedEntities.Add(castNode);
+        }
 
         // Return the result.
         return new NodeCheckResult
@@ -104,7 +107,9 @@ internal class NodeCheck< TNode > : CheckBase
                    CollectionKind = _kind,
                    Priority = Priority,
                    DependencyCount = DependencyCount,
-                   MatchedNode = castNode,
+                   MatchedNode = !castNode.IsPlaceholder
+                       ? castNode
+                       : null,
                    Check = this,
                };
     }
