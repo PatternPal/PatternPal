@@ -327,6 +327,13 @@ public class RecognizerRunner
 
             foreach (ICheckResult dependentCheckResult in parentCheckResult.ChildrenCheckResults)
             {
+                // If `dependentCheckResult` has already been pruned earlier on, we don't need to
+                // check it here again.
+                if (dependentCheckResult.Pruned)
+                {
+                    continue;
+                }
+
                 if (dependentCheckResult is not LeafCheckResult dependentResult)
                 {
                     throw new ArgumentException($"Unexpected check type '{dependentCheckResult.GetType()}', expected '{typeof( LeafCheckResult )}'");
