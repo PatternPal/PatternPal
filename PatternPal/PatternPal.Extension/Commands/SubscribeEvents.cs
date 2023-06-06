@@ -35,9 +35,9 @@ namespace PatternPal.Extension.Commands
 
         private static BuildEvents _dteBuildEvents;
 
-        private static Solution currentSolution;
+        private static Solution _currentSolution;
 
-        private static FileSystemWatcher watcher;
+        private static FileSystemWatcher _watcher;
 
         private static string _sessionId;
 
@@ -76,7 +76,7 @@ namespace PatternPal.Extension.Commands
             _dteDebugEvents = _dte.Events.DebuggerEvents;
             _dteSolutionEvents = _dte.Events.SolutionEvents;
             _dteBuildEvents = _dte.Events.BuildEvents;
-            currentSolution = _dte.Solution;
+            _currentSolution = _dte.Solution;
             _dteDocumentEvents = _dte.Events.DocumentEvents;
             _package = package;
             _pathToUserDataFolder = Path.Combine(_package.UserLocalDataPath.ToString(), "Extensions", "Team PatternPal",
@@ -155,7 +155,7 @@ namespace PatternPal.Extension.Commands
             }
             else
             {
-                string pathSolutionDirectory = Path.GetDirectoryName(currentSolution.FullName);
+                string pathSolutionDirectory = Path.GetDirectoryName(_currentSolution.FullName);
 
                 request.CodeStateSection = GetRelativePath(pathSolutionDirectory, pathSolutionFile);
             }
@@ -237,7 +237,7 @@ namespace PatternPal.Extension.Commands
             LogEventResponse response = PushLog(request);
 
             // When a session has ended, no logs are sent anymore so the watcher can be disposed.
-            watcher.Dispose();
+            _watcher.Dispose();
         }
 
         /// <summary>
@@ -278,7 +278,7 @@ namespace PatternPal.Extension.Commands
             LogEachProject(EventType.EvtProjectClose);
 
             // When a user closes a solution, the watcher has to be disposed as the directory saved is then not up-to-date anymore.
-            watcher.Dispose();
+            _watcher.Dispose();
         }
 
         /// <summary>
@@ -447,22 +447,22 @@ namespace PatternPal.Extension.Commands
         /// </summary>
         private static void SetUpFileWatcher()
         {
-            if (watcher != null)
+            if (_watcher != null)
             {
-                watcher.Dispose();
+                _watcher.Dispose();
             }
 
             // Create a new FileSystemWatcher instance
-            watcher = new FileSystemWatcher(Path.GetDirectoryName(currentSolution.FullName));
+            _watcher = new FileSystemWatcher(Path.GetDirectoryName(_currentSolution.FullName));
 
             // Set the event handlers
-            watcher.Created += OnFileCreate;
+            _watcher.Created += OnFileCreate;
 
             // Enable the FileSystemWatcher to begin watching for changes
-            watcher.EnableRaisingEvents = true;
+            _watcher.EnableRaisingEvents = true;
 
             // Enable watching for in the subdirectories as well
-            watcher.IncludeSubdirectories = true;
+            _watcher.IncludeSubdirectories = true;
         }
 
 
