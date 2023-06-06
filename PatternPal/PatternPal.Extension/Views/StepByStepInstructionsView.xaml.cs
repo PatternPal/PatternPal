@@ -49,8 +49,6 @@ namespace PatternPal.Extension.Views
                 out _);
         }
 
-        
-
         private List< Project > Projects { get; set; }
 
         /// <summary>
@@ -64,7 +62,7 @@ namespace PatternPal.Extension.Views
         {
             if (_viewModel.TrySelectPreviousInstruction())
             {
-                // TODO decrement the instruction id in service.
+                resultTextBlock.Visibility = Visibility.Hidden;
                 CheckIfNextPreviousButtonsAvailable();
             }
         }
@@ -80,7 +78,7 @@ namespace PatternPal.Extension.Views
         {
             if (_viewModel.TrySelectNextInstruction())
             {
-                // TODO increase the instruction id in service.
+                resultTextBlock.Visibility = Visibility.Hidden;
                 CheckIfNextPreviousButtonsAvailable();
             }
         }
@@ -149,8 +147,10 @@ namespace PatternPal.Extension.Views
             try
             {
                 bool result = GrpcHelper.StepByStepClient.CheckInstruction(request).Result;
+
                 if (!result)
                 {
+                    resultTextBlock.Visibility = Visibility.Hidden;
                     return;
                 }
             }
@@ -160,6 +160,7 @@ namespace PatternPal.Extension.Views
                 return;
             }
 
+            resultTextBlock.Visibility = Visibility.Visible;
             NextInstructionButton.IsEnabled = true;
         }
 

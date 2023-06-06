@@ -21,7 +21,9 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
 
         // Go over all the recognizers supported by the runner and remove those that do not implement
         // the GenerateStepsList function.
-        foreach (KeyValuePair<Recognizer, IRecognizer> entry in sbsDictionary)
+        foreach (
+            KeyValuePair<Recognizer, IRecognizer> entry 
+            in sbsDictionary)
         {
             try
             {
@@ -29,11 +31,11 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
             }
             catch
             {
-                sbsDictionary.Remove(entry.Key);
+                continue;
             }
+            response.Recognizers.Add(entry.Key);
         }
 
-        response.Recognizers.Add(sbsDictionary.Keys);
 
         return Task.FromResult(response);
     }

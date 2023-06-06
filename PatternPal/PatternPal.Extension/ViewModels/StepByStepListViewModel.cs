@@ -80,11 +80,19 @@ namespace PatternPal.Extension.ViewModels
                 else
                 {
                     MessageBox.Show("No files were provided");
-                    ofd.ShowDialog();
                 }
             }
 
+            ThreadHelper.ThrowIfNotOnUIThread();
+            // Obtain the currently running visual studio instance.
+            DTE dte = (DTE)Package.GetGlobalService(typeof(SDTE));
+            foreach (string file in result)
+            {
+                dte.ItemOperations.OpenFile(file);
+            }
+
             return result;
+            
         }
 
         /// <summary>
@@ -164,13 +172,9 @@ namespace PatternPal.Extension.ViewModels
         /// </summary>
         public List<string> CreateNewWorkFile(out string filePath)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-
-            // Obtain the currently running visual studio instance.
-            DTE dte = (DTE)Package.GetGlobalService(typeof(SDTE));
-
             // Save location for project provided by user
             string folderPath = string.Empty;
+
             using (FolderBrowserDialog fdb = new FolderBrowserDialog())
             {
                 if (fdb.ShowDialog() == DialogResult.OK)

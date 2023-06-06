@@ -77,9 +77,12 @@ internal class SingletonRecognizer : IRecognizer
             new List<ICheck>
             {
                 Class(Priority.Knockout, OnlyPrivateProtectedConstructor(
-                    out ConstructorCheck privateConstructorCheck)) 
+                    out ConstructorCheck privateConstructorCheck))
             }
         ));
+
+        FieldCheck staticPrivateFieldOfTypeClass =
+            StaticPrivateFieldOfTypeClass();
 
         // Step 2: There is a static private field with the same type as the class
         res.Add(new SimpleInstruction(
@@ -87,12 +90,24 @@ internal class SingletonRecognizer : IRecognizer
             SingletonInstructions.Explanation2,
             new List<ICheck>
             {
-                Class(Priority.Knockout, StaticPrivateFieldOfTypeClass())
+                Class(Priority.Knockout, staticPrivateFieldOfTypeClass)
             }
         ));
 
+
+        MethodCheck checkMethodActsAsConstructorBehaviour = CheckMethodActsAsConstructorBehaviour(
+            privateConstructorCheck,
+            staticPrivateFieldOfTypeClass);
         // Step 3: There is a method that acts as the constructor
-        // TODO
+        res.Add(new SimpleInstruction(
+            SingletonInstructions.Step3,
+            SingletonInstructions.Explanation3,
+            new List<ICheck>
+            {
+                Class(
+                    Priority.Knockout,
+                    checkMethodActsAsConstructorBehaviour)
+            }));
 
         // Step 4: There is a client that calls the instance method
         // TODO
