@@ -81,6 +81,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>source.extension.vsixmanifest</DependentUpon>
     </Compile>
+    <Compile Include="StepByStepModes.cs" />
     <Compile Include="Stores\NavigationStore.cs" />
     <Compile Include="Commands\SubscribeEvents.cs" />
     <Compile Include="UserControls\PatternCheckbox.xaml.cs">

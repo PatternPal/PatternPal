@@ -104,16 +104,18 @@ public class RecognizerRunner
     /// <param name="filePath">The path of the file to run the <paramref name="instruction"/> on.</param>
     /// <param name="instruction">The <see cref="IInstruction"/> to run.</param>
     public RecognizerRunner(
-        string filePath,
+        IEnumerable< string > filePaths,
         IInstruction instruction)
     {
         _instruction = instruction;
-
-        string fileContent = FileManager.MakeStringFromFile(filePath);
         _graph = new SyntaxGraph();
-        _graph.AddFile(
-            fileContent,
-            filePath);
+        foreach (string file in filePaths)
+        {
+            string content = FileManager.MakeStringFromFile(file);
+            _graph.AddFile(
+                content,
+                file);
+        }
         _graph.CreateGraph();
     }
 

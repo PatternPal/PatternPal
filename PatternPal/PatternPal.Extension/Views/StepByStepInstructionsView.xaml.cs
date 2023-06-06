@@ -8,12 +8,13 @@ using System.Windows;
 using System.Windows.Controls;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.Internal.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-
+using Microsoft.Win32;
 using PatternPal.Extension.Grpc;
 using PatternPal.Extension.ViewModels;
 using PatternPal.Protos;
@@ -34,6 +35,7 @@ namespace PatternPal.Extension.Views
         {   
             InitializeComponent();
             InitializeViewModelAndButtons();
+            //ContinueButtonBehavior();
 
             Dispatcher.VerifyAccess();
             LoadProject();
@@ -46,6 +48,8 @@ namespace PatternPal.Extension.Views
                 this,
                 out _);
         }
+
+        
 
         private List< Project > Projects { get; set; }
 
@@ -100,18 +104,12 @@ namespace PatternPal.Extension.Views
             DataContextChanged += delegate
                                   {
                                       // only bind events when dataContext is set, not unset
-                                      if (this.DataContext == null)
+                                      if (DataContext == null)
                                       {
                                           return;
                                       }
 
-                                      _viewModel = (StepByStepInstructionsViewModel)(this.DataContext);
-
-                                      if (!_viewModel.SBScontinue)
-                                      {
-                                          ClassSelection.Visibility = Visibility.Hidden;
-                                      }
-
+                                      _viewModel = (StepByStepInstructionsViewModel)(DataContext);
                                       CheckIfNextPreviousButtonsAvailable();
                                   };
         }
@@ -121,22 +119,15 @@ namespace PatternPal.Extension.Views
         /// </summary>
         private void CheckIfCheckIsAvailable()
         {
-            if (_viewModel.SBScontinue)
-            {
-                CheckImplementationButton.IsEnabled = ClassSelection.SelectedItem != null;
-            }
-            else
-            {
-                CheckImplementationButton.IsEnabled = 
-                    _viewModel.CurrentInstruction.FileId != "" || !_viewModel.SBScontinue;
-            }
+            CheckImplementationButton.IsEnabled = _viewModel.FilePaths.Any();
             
             NextInstructionButton.IsEnabled = false;
             ExpanderResults.ResultsView.ItemsSource = new List< PatternResultViewModel >();
         }
 
         /// <summary>
-        /// Given the current step checks whether the implementation 
+        /// Given the current step checks whether any of the files provided have implemented
+        /// the check.
         /// </summary>
         private void CheckImplementationButton_OnClick(
             object sender,
@@ -144,55 +135,29 @@ namespace PatternPal.Extension.Views
         {
             NextInstructionButton.IsEnabled = false;
 
-            if (_viewModel.SBScontinue)
+            CheckInstructionRequest request = new CheckInstructionRequest
             {
-                CheckInstructionRequest request = new CheckInstructionRequest
-                {
-                    InstructionId = _viewModel.CurrentInstructionNumber - 1,
-                    SelectedItem = _viewModel.SelectedcbItem,
-                };
+                InstructionNumber = _viewModel.CurrentInstructionNumber - 1,
+                Recognizer = _viewModel.Recognizer
+            };
 
-                LoadProject();
-
-                foreach (Project project in Projects)
-                {
-                    foreach (Document document in project.Documents)
-                    {
-                        request.Documents.Add(document.FilePath);
-                    }
-                }
-
-                try
-                {
-                    bool result = GrpcHelper.StepByStepClient.CheckInstruction(request).Result;
-                    if (!result)
-                    {
-                        return;
-                    }
-                }
-                catch (Exception exception)
-                {
-                    Console.WriteLine(exception);
-                    return;
-                }
+            foreach (string file in _viewModel.FilePaths)
+            {
+                request.Documents.Add(file);
             }
-            else
-            {
-                // When not continuing set the filepath for the steps to the file just created
-                SetFilePathResponse response =
-                    GrpcHelper.StepByStepClient.SetNewFilePath(new SetFilePathRequest
-                    {
-                        FilePath = _viewModel.FilePath
-                    });
 
-                CheckInstructionRequest request = 
-                    new CheckInstructionRequest{InstructionId = _viewModel.CurrentInstructionNumber-1};
-                request.Documents.Add(_viewModel.FilePath);
+            try
+            {
                 bool result = GrpcHelper.StepByStepClient.CheckInstruction(request).Result;
                 if (!result)
                 {
                     return;
                 }
+            }
+            catch(Exception exception)
+            {
+                Console.WriteLine(exception);
+                return;
             }
 
             NextInstructionButton.IsEnabled = true;
@@ -336,51 +301,5 @@ namespace PatternPal.Extension.Views
         }
 
         #endregion
-
-        /// <summary>
-        /// Obtains all the selectable classes for the instruction step for SBS
-        /// </summary>
-        private void OnDropDownOpened(
-            object sender,
-            EventArgs e)
-        {
-            _viewModel.cbItems.Clear();
-            LoadProject();
-
-            GetSelectableClassesRequest request = new GetSelectableClassesRequest();
-            foreach (Project project in Projects)
-            {
-                foreach (Document document in project.Documents)
-                {
-                    request.Documents.Add(document.FilePath);
-                }
-            }
-
-            GetSelectableClassesResponse response = GrpcHelper.StepByStepClient.GetSelectableClasses(request);
-
-            foreach (string selectableClass in response.SelectableClasses)
-            {
-                _viewModel.cbItems.Add(selectableClass);
-            }
-            //foreach (Project current in Projects)
-            //{
-            //    IEnumerable<Document> test = current.Documents;
-            //    foreach(Document document in test)
-            //    {
-            //        _viewModel.cbItems.Add(document.Name);
-            //    }
-            //}
-        }
-
-        /// <summary>
-        /// Enables the implementation check button and disables the next instruction button
-        /// </summary>
-        private void OnSelectionChanged(
-            object sender,
-            SelectionChangedEventArgs e)
-        {
-            CheckImplementationButton.IsEnabled = true;
-            NextInstructionButton.IsEnabled = false;
-        }
     }
 }

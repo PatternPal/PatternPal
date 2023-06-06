@@ -91,7 +91,7 @@
                     Margin="20,0,20,0"
                     HorizontalAlignment="Center"
                     Visibility="Visible"
-                    Command="{Binding NavigateStepByStepInstructionsCommand}">Next</Button>
+                    Command="{Binding NavigateStepByStepInstructionsCommand}">New</Button>
         <Button Name="Continue"
                 Grid.Row="2"
                 Height="40"
