@@ -34,7 +34,7 @@ The **Client** creates a ConcreteStrategy object and passes it to the Context.
 The Context exposes a setter `setStrategy()` which lets clients replace the strategy associated with the context at runtime.
 
 ## Requirements
-The priority of a requirement is noted with the (low)-(mid)-(high)-(knockout)
+The priority of a requirement is noted with the (low)-(mid)-(high)-(knockout) criteria.
 
 **Client class**
 1. (mid) has created an object of the type `ConcreteStrategy`
