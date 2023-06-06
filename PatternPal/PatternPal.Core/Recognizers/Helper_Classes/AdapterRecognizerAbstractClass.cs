@@ -1,4 +1,4 @@
-﻿#region
+#region
 
 using System.ComponentModel;
 using PatternPal.SyntaxTree.Models;
@@ -14,7 +14,8 @@ namespace PatternPal.Core.Recognizers.Helper_Classes;
 /// </summary>
 internal class AdapterRecognizerAbstractClass : AdapterRecognizerParent
 {
-    public override ClassCheck IsInterfaceOrAbstractClassWithMethod(MethodCheck method)
+    /// <inheritdoc />
+    public override ClassCheck IsInterfaceAbstractClassWithMethod(MethodCheck method)
     {
         return AbstractClass(
             Priority.Knockout,
@@ -25,7 +26,8 @@ internal class AdapterRecognizerAbstractClass : AdapterRecognizerParent
         );
     }
 
-    public override MethodCheck ContainsOverridableMethod()
+    /// <inheritdoc />
+    public override MethodCheck ContainsMaybeAbstractVirtualMethod()
     {
         return Method(
             Priority.High,
@@ -43,6 +45,7 @@ internal class AdapterRecognizerAbstractClass : AdapterRecognizerParent
         );
     }
 
+    /// <inheritdoc />
     public override RelationCheck DoesInheritFrom(ICheck possibleParent)
     {
         return Inherits(
