@@ -1,4 +1,4 @@
-﻿#region
+#region
 
 using System;
 using System.IO;
@@ -433,8 +433,8 @@ namespace PatternPal.Extension.Commands
                     continue;
                 }
 
-                // TODO This catches miscellaneous projects without a defined project.Fullname, but we should investigate where this
-                //  problem derives from.
+                // This catches miscellaneous projects without a defined project.Fullname; the cause of this is unknown since
+                // we are using internal-use-only libraries for event catching.
                 if (project.FullName == null || !File.Exists((project.FullName)))
                 {
                     continue;

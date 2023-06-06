@@ -9,6 +9,7 @@ internal class RecognizerContext4Tests : IRecognizerContext
     public IEntity CurrentEntity { get; }
     public ICheck ParentCheck { get; }
     public ICheck EntityCheck { get;  }
+    public IRecognizerContext ? PreviousContext { get; }
 
     private RecognizerContext4Tests(
         SyntaxGraph graph,

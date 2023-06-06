@@ -1,16 +1,20 @@
-﻿using System.IO.Compression;
+﻿#region
+
+using System.IO.Compression;
 using Grpc.Core;
-using Microsoft.Extensions.Logging;
-using PatternPal.LoggingServer;
 using PatternPal.LoggingServer.Data;
-using PatternPal.LoggingServer.Data.Interfaces;
 using PatternPal.LoggingServer.Models;
+
+#endregion
+
 namespace PatternPal.LoggingServer.Services
 {
     public class LoggerService : LogCollectorService.LogCollectorServiceBase
     {
         private readonly ILogger<LoggerService> _logger;
         private readonly EventRepository _eventRepository;
+
+        private readonly string _codeStateDirectory;
         
         /// <summary>
         /// Constructor for the LoggerService. This service is responsible for logging events to the database. If any other helper classes are needed, they should be added here as well using dependency injection.
@@ -21,6 +25,7 @@ namespace PatternPal.LoggingServer.Services
         {
             _logger = logger;
             _eventRepository = repository;
+            _codeStateDirectory = Path.Combine(Directory.GetCurrentDirectory(), "CodeStates");
         }
 
         /// <summary>
@@ -33,12 +38,11 @@ namespace PatternPal.LoggingServer.Services
         /// <exception cref="RpcException"></exception>
         public override async Task<LogResponse> Log(LogRequest request, ServerCallContext context)
         {
-
             // GUID parsing
             Guid eventId = GetGuid(request.EventId, "EventID");
             Guid sessionId = GetGuid(request.SessionId, "SessionID");
             string subjectId = request.SubjectId;
-            Guid parentEventId = request.HasParentEventId ? Guid.Parse(request.ParentEventId) : Guid.Empty;
+            Guid? parentEventId = request.HasParentEventId ? Guid.Parse(request.ParentEventId) : null;
 
             if (!DateTimeOffset.TryParse(request.ClientTimestamp, out DateTimeOffset cDto))
             {
@@ -46,60 +50,12 @@ namespace PatternPal.LoggingServer.Services
                 throw new RpcException(status);
             }
 
-            string? recognizeResult = null, recognizeConfig = null;
-            if (request.EventType == EventType.EvtXRecognizerRun)
+            Guid? codeStateId = null;
+            if (request.HasData)
             {
-                recognizeResult = request.RecognizerResult;
-                recognizeConfig = request.RecognizerConfig;
+                codeStateId = ParseCodeState(request.Data.ToByteArray());
             }
-            
-                // Parse code state ID
-                Guid codeStateId = Guid.Empty;
-                if (request.HasData)
-                {
-                    codeStateId = Guid.NewGuid();
-                    byte[] compressed = request.Data.ToByteArray();
 
-                    if (!IsZipArchive(compressed)){
-                        throw new RpcException(new Status(StatusCode.InvalidArgument, "Data is not a valid zip archive"));
-                    }
-                    string basePath = Path.Combine(Directory.GetCurrentDirectory(), "CodeStates");
-                    string codeStatePath = Path.Combine(basePath, codeStateId.ToString());
-                    // Create the directory if it does not exist
-                    if (!Directory.Exists(codeStatePath))
-                    {
-                        Directory.CreateDirectory(codeStatePath);
-                    }
-
-                    // Convert the byte array to a zip file and extract it
-                    using MemoryStream ms = new MemoryStream(compressed);
-                    using ZipArchive archive = new ZipArchive(ms);
-                    foreach (ZipArchiveEntry entry in archive.Entries)
-                    {
-                        string fullPath = Path.Combine(codeStatePath, entry.FullName);
-                        string? directory = Path.GetDirectoryName(fullPath);
-                        // Create the directory if it does not exist (for nested directories)
-                        if (directory != null)
-                        {
-                            Directory.CreateDirectory(directory);
-                        }
-
-                        // Skip non-cs files
-                        if (!entry.FullName.EndsWith(".cs"))
-                        {
-                            continue;
-                        }
-
-                        entry.ExtractToFile(fullPath, true);
-                    }
-                }
-                else
-                {
-                    codeStateId = await _eventRepository.GetPreviousCodeState(sessionId, subjectId, request.ProjectId);
-                }
-
-
-            
             int order = await _eventRepository.GetNextOrder(sessionId, subjectId);
 
             ProgSnap2Event newEvent = new ProgSnap2Event
@@ -110,21 +66,23 @@ namespace PatternPal.LoggingServer.Services
                 SubjectId = subjectId,
                 ToolInstances = request.ToolInstances,
                 CodeStateId = codeStateId,
+                FullCodeState = request.HasFullCodeState ? request.FullCodeState : null,
                 ClientDatetime = cDto,
                 ServerDatetime = DateTimeOffset.Now,
                 SessionId = sessionId,
-                ProjectId = request.ProjectId,
+                ProjectId = request.HasProjectId ? request.ProjectId : null,
                 ParentId = parentEventId,
-                CompileMessage = request.CompileMessageData,
-                CompileMessageType = request.CompileMessageType,
-                SourceLocation = request.SourceLocation,
-                CodeStateSection = request.CodeStateSection,
-                RecognizerConfig = recognizeConfig,
-                RecognizerResult = recognizeResult,
-                ExecutionResult = request.ExecutionResult
-
+                CompileMessage = request.HasCompileMessageData ? request.CompileMessageData : null,
+                CompileMessageType = request.HasCompileMessageType ? request.CompileMessageType: null,
+                SourceLocation = request.HasSourceLocation ? request.SourceLocation: null,
+                CodeStateSection = request.HasCodeStateSection ? request.CodeStateSection : null,
+                RecognizerConfig = request.EventType == EventType.EvtXRecognizerRun ? request.RecognizerConfig : null,
+                RecognizerResult = request.EventType == EventType.EvtXRecognizerRun ? request.RecognizerResult : null,
+                ExecutionResult = request.HasExecutionResult ? request.ExecutionResult : null
             };
 
+            // For atomic transactions, it would be a good future improvement to delete the respective codeState-directory
+            // if inserting in the database fails. For now, this is also caught by running the housekeeping-job.
             await _eventRepository.Insert(newEvent);
 
             return await Task.FromResult(new LogResponse
@@ -132,6 +90,50 @@ namespace PatternPal.LoggingServer.Services
                 Message = "Logged"
             });
         }
+
+        /// <summary>
+        /// Unpacks the supplied compressed data to their respective codeState-subdirectory.
+        /// </summary>
+        /// <param name="compressed">A bytestring representing the compressed data</param>
+        /// <returns>The CodeState-GUID</returns>
+        /// <exception cref="RpcException">Is thrown when the supplied bytestring was not a valid zip archive.</exception>
+        private Guid ParseCodeState(byte[] compressed)
+        {
+            Guid codeStateId = Guid.NewGuid();
+
+            if (!IsZipArchive(compressed))
+            {
+                throw new RpcException(new Status(StatusCode.InvalidArgument, "Data is not a valid zip archive"));
+            }
+
+            string codeStatePath = Path.Combine(_codeStateDirectory, codeStateId.ToString());
+            Directory.CreateDirectory(codeStatePath);
+
+            // Convert the byte array to a zip file and extract it
+            using MemoryStream ms = new(compressed);
+            using ZipArchive archive = new(ms);
+            foreach (ZipArchiveEntry entry in archive.Entries)
+            {
+                string fullPath = Path.Combine(codeStatePath, entry.FullName);
+                string? directory = Path.GetDirectoryName(fullPath);
+                // Create the directory if it does not exist (for nested directories)
+                if (directory != null)
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                // Skip non-cs files
+                if (!entry.FullName.EndsWith(".cs"))
+                {
+                    continue;
+                }
+
+                entry.ExtractToFile(fullPath, true);
+            }
+
+            return codeStateId;
+        }
+
         /// <summary>
         /// Helper function to shorten the log function by parsing a GUID from a string and throwing an exception if it is not valid
         /// </summary>
@@ -150,6 +152,11 @@ namespace PatternPal.LoggingServer.Services
             throw new RpcException(status);
         }
 
+        /// <summary>
+        /// Checks if the supplied byte array is a valid zip archive
+        /// </summary>
+        /// <param name="compressed">The byte array possibly representing a zip archive</param>
+        /// <returns>Whether the archive is a valid zip archive, or not</returns>
         private bool IsZipArchive(byte[] compressed)
         {
             try
