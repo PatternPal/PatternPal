@@ -228,6 +228,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     /// <returns>A LogRequest populated for this specific event</returns>
     private static LogRequest DebugProgramLog(LogEventRequest receivedRequest)
     {
+        // TODO Should include ProjectID
         LogRequest sendLog = StandardLog(receivedRequest);
         sendLog.EventType = LoggingServer.EventType.EvtDebugProgram;
         sendLog.ExecutionId = receivedRequest.ExecutionId;
