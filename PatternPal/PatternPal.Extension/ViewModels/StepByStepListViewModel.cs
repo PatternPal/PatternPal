@@ -41,32 +41,26 @@ namespace PatternPal.Extension.ViewModels
             NavigateStepByStepInstructionsCommand =
                 new NavigateCommand< StepByStepInstructionsViewModel >(
                     navigationStore,
-                    () =>
-                    {
-                        return new StepByStepInstructionsViewModel(
-                            navigationStore,
-                            SelectedInstructionSet,
-                            StepByStepModes.New,
-                            CreateNewWorkFileInSolution());
-                    });
+                    () => new StepByStepInstructionsViewModel(
+                        navigationStore,
+                        SelectedInstructionSet,
+                        StepByStepModes.New,
+                        CreateNewWorkFileInSolution()));
             
             // Continue button
             NavigateContinueStepByStepInstructionsCommand =
                 new NavigateCommand<StepByStepInstructionsViewModel>(
                     navigationStore,
-                    () =>
-                    {
-                        return new StepByStepInstructionsViewModel(
-                            navigationStore,
-                            SelectedInstructionSet,
-                            StepByStepModes.Continue,
-                            ContinueButtonBehavior());
-                    });
+                    () => new StepByStepInstructionsViewModel(
+                        navigationStore,
+                        SelectedInstructionSet,
+                        StepByStepModes.Continue,
+                        ContinueButtonBehavior()));
 
-            GetInstructionSetsResponse inStructionSetsResponse = 
+            GetInstructionSetsResponse instructionSetsResponse = 
                 GrpcHelper.StepByStepClient.GetInstructionSets(new GetInstructionSetsRequest());
 
-            InstructionSetList = inStructionSetsResponse.Recognizers;
+            InstructionSetList = instructionSetsResponse.Recognizers;
             SelectedInstructionSet = InstructionSetList.FirstOrDefault();
         }
 
@@ -85,7 +79,7 @@ namespace PatternPal.Extension.ViewModels
                 }
                 else
                 {
-                    MessageBox.Show("No files were provided!");
+                    MessageBox.Show("No files were provided");
                     ofd.ShowDialog();
                 }
             }
@@ -97,8 +91,6 @@ namespace PatternPal.Extension.ViewModels
         /// Prompts the user to add a file to the opened solution and adds it to a project or 
         /// creates a project.
         /// </summary>
-        /// <param name="stepByStepModel"></param>
-        /// <returns></returns>
         public List<string> CreateNewWorkFileInSolution()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
@@ -112,41 +104,64 @@ namespace PatternPal.Extension.ViewModels
                             OLEMSGICON.OLEMSGICON_QUERY,
                             (IVsUIShell)Package.GetGlobalService(typeof(IVsUIShell))))
             {
-                // If there are no projects in the solution create one.
-                List<string> result = CreateNewWorkFile(out string filePath);
-                if (dte.Solution.Projects.Count == 0)
+                if (dte.Solution.IsOpen)
                 {
-                    string projectName = "NewProject";
-                    string projectPath = System.IO.Path.Combine(dte.Solution.FullName, projectName);
-                    Project csTemplateProject =
-                        dte.Solution.AddFromTemplate(
-                            "ConsoleApplication",
-                            projectPath,
-                            projectName,
-                            false);
+                    List<string> result = CreateNewWorkFile(out string filePath);
+                    if (filePath == string.Empty)
+                    {
+                        MessageBox.Show("No save location was provided");
+                        return result;
+                    }
 
-                    csTemplateProject.ProjectItems.AddFromFile(filePath);
+                    if (filePath != string.Empty)
+                    {
+                        if (dte.Solution.Projects.Count == 0)
+                        {
+                            string projectName = "NewProject";
+                            string projectPath = System.IO.Path.Combine(dte.Solution.FullName, projectName);
+                            Project csTemplateProject =
+                                dte.Solution.AddFromTemplate(
+                                    "ConsoleApplication",
+                                    projectPath,
+                                    projectName,
+                                    false);
+
+                            csTemplateProject.ProjectItems.AddFromFile(filePath);
+                        }
+                        else
+                        {
+                            Project project = dte.Solution.Projects.Item(1);
+                            project.ProjectItems.AddFromFile(filePath);
+                        }
+                        dte.ItemOperations.OpenFile(filePath);
+                        return result;
+                    }
+
+                    // User wanted to add to the solution but did not provide a path.
+                    return new List<string>();
                 }
-                else
-                {
-                    Project project = dte.Solution.Projects.Item(1);
-                    project.ProjectItems.AddFromFile(filePath);
-                }
-                dte.ItemOperations.OpenFile(filePath);
-                return result;
+
+                MessageBox.Show("There is no solution open");
+                return new List<string>();
             }
             else
             {
-                // Call what you would do otherwise when there is no solution like in
-                return CreateNewWorkFile(out string filePath);
+                // Call what you would do otherwise when there is no solution loaded.
+                List<string> result = CreateNewWorkFile(out string filePath);
+                if (filePath == string.Empty)
+                {
+                    MessageBox.Show("No save location was provided");
+                    return result;
+                }
+
+                dte.ItemOperations.OpenFile(filePath);
+                return result;
             }
         }
 
         /// <summary>
         /// Prompts the user to provide a filepath and creates a new .cs file and opens it.
         /// </summary>
-        /// <param name="stepByStepModel"></param>
-        /// <returns></returns>
         public List<string> CreateNewWorkFile(out string filePath)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
@@ -162,15 +177,22 @@ namespace PatternPal.Extension.ViewModels
                 {
                     folderPath = fdb.SelectedPath;
                 }
+                else
+                {
+                    filePath = string.Empty;
+                    return new List<string>();
+                }
             }
 
-            string fileName = "NewFile.cs";
             filePath = 
                 Path.Combine(
                     folderPath,
-                    fileName);
+                    "NewFile.cs");
+            if (folderPath == string.Empty)
+            {
+                return new List<string>();
+            }
             using (FileStream fs = File.Create(filePath)) { }
-            dte.ItemOperations.OpenFile(filePath);
             return new List<string>() { filePath };
         }
     }
