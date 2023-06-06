@@ -91,7 +91,7 @@
                     Margin="20,0,20,0"
                     HorizontalAlignment="Center"
                     Visibility="Visible"
-                    Command="{Binding NavigateStepByStepInstructionsCommand}">New</Button>
+                    Command="{Binding NavigateStepByStepInstructionsCommand}">Implement new pattern</Button>
         <Button Name="Continue"
                 Grid.Row="2"
                 Height="40"
@@ -100,7 +100,7 @@
                 Margin="0,45,0,-45"
                 HorizontalAlignment="Center"
                 Command="{Binding NavigateContinueStepByStepInstructionsCommand}">
-            Continue
+            Continue work on pattern
         </Button>
     </Grid>
 </UserControl>
