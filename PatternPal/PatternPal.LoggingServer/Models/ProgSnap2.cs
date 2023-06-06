@@ -98,7 +98,6 @@ namespace PatternPal.LoggingServer.Models
         /// </summary>
         public ExecutionResult? ExecutionResult { get; set; }
 
-
         /// <summary>
         /// The results of the recognizer run, if any. This is a JSON string.
         /// </summary>
