@@ -6,41 +6,11 @@ using static PatternPal.Core.Checks.CheckBuilder;
 namespace PatternPal.Core.Recognizers.Helper_Classes;
 
 /// <summary>
-/// A <see cref="IRecognizer"/> that is used to determine if the provided files or project implements the adapter pattern
+/// An abstract class which contains all checks for the adapter<see cref="IRecognizer"/>.
+/// Because the adapter-pattern can be applied using an interface or an abstract class, some methods are abstract and specified in the subclass.
 /// </summary>
-/// <remarks>
-/// Requirements to fulfill the pattern:<br/>
-/// </remarks>
 internal abstract class AdapterRecognizerParent
 {
-    /// <summary>
-    /// A method which creates a lot of <see cref="ICheck"/>s that each adheres to the requirements a adapter pattern needs to have implemented.
-    /// It returns the requirements in a tree structure stated per class.
-    /// </summary>
-    /// <remarks>
-    /// Requirements for the Service class:<br/>
-    ///     a) does not inherit from the Client Interface.<br/>
-    ///     b) is used by the Adapter class<br/>
-    /// <br/>
-    /// Requirements for the Client class:<br/>
-    ///     a) has created an object of the type Adapter<br/>
-    ///     b) has used a method of the Service via the Adapter<br/>
-    /// <br/>
-    /// Requirements for the Client interface:<br/>
-    ///     a) is an interface/abstract class<br/>
-    ///     b) is inherited/implemented by an Adapter<br/>
-    ///     c) contains a method<br/>
-    ///         i) if it is an abstract class the method should be abstract or virtual<br/>
-    /// <br/>
-    /// Requirements for the Adapter class:<br/>
-    ///     a) inherits/implements the Client Interface<br/>
-    ///     b) creates an Service object<br/>
-    ///     c) contains a private field in which the Service is stored<br/>
-    ///     d) does not return an instance of the Service<br/>
-    ///     e) a method uses the Service class<br/>
-    ///     f) every method uses the Service class<br/>
-    /// </remarks>
-
     public ICheck[] Checks()
     {
         ICheck[] result = new ICheck[4];
@@ -136,13 +106,25 @@ internal abstract class AdapterRecognizerParent
     }
 
 
-
+    /// <summary>
+    /// An <see cref="ICheck"/> which will determine if a <see langword="class"/> is either an <see langword="interface"/> or an <see langword="abstract class"/>.
+    /// </summary>
     public abstract ICheck IsInterfaceAbstractClassWithMethod(MethodCheck method);
 
+    /// <summary>
+    /// An <see cref="ICheck"/> which will determine if there exists a method in the Client Interface."/>.
+    /// If the Client Interface is an <see langword="abstract class"/> then it also checks if the method is <see langword="abstract"/>.
+    /// </summary>
     public abstract MethodCheck ContainsMaybeAbstractVirtualMethod();
 
+    /// <summary>
+    /// An <see cref="ICheck"/> which will determine if the parentcheck inherits from the <see cref="parent"/> node.
+    /// </summary>
     public abstract RelationCheck DoesInheritFrom(ICheck parent);
 
+    /// <summary>
+    /// An <see cref="ICheck"/> which will determine if the parentcheck creates the <see cref="obj"/> node.
+    /// </summary>
     private RelationCheck CreatesObject(ICheck obj)
     {
         return Creates(
@@ -151,6 +133,9 @@ internal abstract class AdapterRecognizerParent
         );
     }
 
+    /// <summary>
+    /// An <see cref="ICheck"/> which will determine if the parentcheck contains the <see cref="service"/> node in a field.
+    /// </summary>
     public FieldCheck ContainsServiceField(ClassCheck service)
     {
         {
@@ -168,6 +153,9 @@ internal abstract class AdapterRecognizerParent
         }
     }
 
+    /// <summary>
+    /// An <see cref="ICheck"/> which will determine if the parentclass does not return an object of the <see cref="service"/> type.
+    /// </summary>
     ICheck NoServiceReturn(ClassCheck service)
     {
         return Not(
@@ -182,6 +170,9 @@ internal abstract class AdapterRecognizerParent
         );
     }
 
+    /// <summary>
+    /// An <see cref="ICheck"/> which will determine if the parentcheck ueses the <see cref="service"/> class directly or via the <see cref="serviceField"/> field.
+    /// </summary>
     ICheck UsesServiceClass(ClassCheck service, FieldCheck serviceField)
     {
         return Any(
@@ -197,6 +188,9 @@ internal abstract class AdapterRecognizerParent
         );
     }
 
+    /// <summary>
+    /// An <see cref="ICheck"/> which determines if all methods of the parentcheck class succeed the <see cref="UsesServiceClass"/> check.
+    /// </summary>
     ICheck AllMethodsUseServiceClass(ClassCheck service, FieldCheck serviceField)
     {
         return Not(

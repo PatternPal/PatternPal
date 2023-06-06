@@ -10,11 +10,8 @@ using static PatternPal.Core.Checks.CheckBuilder;
 namespace PatternPal.Core.Recognizers.Helper_Classes;
 
 /// <summary>
-/// A <see cref="IRecognizer"/> that is used to determine if the provided files or project implements the adapter pattern
+/// A subclass of <see cref="AdapterRecognizerParent"/> that is used to specify checks for the adapter implementation with a Client Interface with type <see langword="interface"/>.
 /// </summary>
-/// <remarks>
-/// Requirements to fulfill the pattern:<br/>
-/// </remarks>
 internal class AdapterRecognizerInterface : AdapterRecognizerParent
 {
     public override InterfaceCheck IsInterfaceAbstractClassWithMethod(MethodCheck method)
