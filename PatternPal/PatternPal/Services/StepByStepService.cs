@@ -1,14 +1,7 @@
 ﻿#region
 
-using System.Collections.Generic;
-using System.Reflection;
-using PatternPal.Core.Checks;
 using PatternPal.Core.Recognizers;
 using PatternPal.Core.StepByStep;
-using PatternPal.SyntaxTree;
-using PatternPal.SyntaxTree.Abstractions.Entities;
-
-using InstructionSet = PatternPal.Core.StepByStep.InstructionSet;
 
 #endregion
 
@@ -23,12 +16,12 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
     {
         GetInstructionSetsResponse response = new();
         
-        IDictionary<Recognizer, IRecognizer> SBSDictionary = 
+        IDictionary<Recognizer, IRecognizer> sbsDictionary = 
             RecognizerRunner.SupportedRecognizers;
 
         // Go over all the recognizers supported by the runner and remove those that do not implement
         // the GenerateStepsList function.
-        foreach (KeyValuePair<Recognizer, IRecognizer> entry in SBSDictionary)
+        foreach (KeyValuePair<Recognizer, IRecognizer> entry in sbsDictionary)
         {
             try
             {
@@ -36,11 +29,11 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
             }
             catch
             {
-                SBSDictionary.Remove(entry.Key);
+                sbsDictionary.Remove(entry.Key);
             }
         }
 
-        response.Recognizers.Add(SBSDictionary.Keys);
+        response.Recognizers.Add(sbsDictionary.Keys);
 
         return Task.FromResult(response);
     }
@@ -101,9 +94,9 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
         ServerCallContext context)
     {
         // Retrieve the checks based on the instruction number and recognizer.
-        Recognizer protorecognizer = request.Recognizer;
-        IRecognizer recognizer = RecognizerRunner.SupportedRecognizers[protorecognizer];
-        IInstruction instruction = recognizer.GenerateStepsList()[(int)request.InstructionNumber];
+        Recognizer protoRecognizer = request.Recognizer;
+        IRecognizer recognizer = RecognizerRunner.SupportedRecognizers[protoRecognizer];
+        IInstruction instruction = recognizer.GenerateStepsList()[request.InstructionNumber];
         
         // Run the checks on the provided files.
         RecognizerRunner runner = new(
@@ -116,14 +109,12 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
             // Assume the implementation is wrong only when there is evidence in one of the
             // results that prove otherwise.
             bool assumption = false;
-            ICheckResult correctCheckResult = null;
             foreach (ICheckResult currentRes in res)
             {
                 NodeCheckResult checkRes = (NodeCheckResult)currentRes;
                 if (checkRes.ChildrenCheckResults.Count != 0)
                 {
                     assumption = true;
-                    correctCheckResult = checkRes;
                 }
             }
 
