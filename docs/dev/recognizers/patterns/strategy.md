@@ -34,30 +34,32 @@ The **Client** creates a ConcreteStrategy object and passes it to the Context.
 The Context exposes a setter `setStrategy()` which lets clients replace the strategy associated with the context at runtime.
 
 ## Requirements
+The priority of a requirement is noted with the (low)-(mid)-(high)-(knockout) criteria.
+
 **Client class**
-1. has created an object of the type `ConcreteStrategy`
-2. has used the `setStrategy()` in the Context class to store the `ConcreteStrategy` object	
-3. has executed the `ConcreteStrategy` via the `Context`-class	
+1. (mid) has created an object of the type `ConcreteStrategy`
+2. (low) has used the `setStrategy()` in the Context class to store the `ConcreteStrategy` object	
+3. (low) has executed the `ConcreteStrategy` via the `Context`-class	
 
 **Context class**
-1. has a private field or property of type `Strategy`
-2. has a function `setStrategy()` to set the private field/property
+1. (knockout) has a private field or property of type `Strategy`
+2. (high) has a function `setStrategy()` to set the private field/property
     1. if the reference is stored in a field the function must have a parameter of type `Strategy`
-3. has a function `useStrategy()` that calls the `execute()` function in `Strategy`
+3. (mid) has a function `useStrategy()` that calls the `execute()` function in `Strategy`
 
 **Strategy interface**
-1. is an interface/abstract class	(duplicate if 4 holds and the implementation/inheritance is correct)
-2. has declared a method
+1. (knockout) is an interface/abstract class	(duplicate if 4 holds and the implementation/inheritance is correct)
+2. (high) has declared a method
     1. if the class is an abstract class instead of an interface, this method has to be an abstract method
-3. is used by the context class
-4. is implemented/inherited by at least one other class
-5. is implemented/inherited by at least two other classes
+3. (mid) is used by the context class
+4. (knockout) is implemented/inherited by at least one other class
+5. (mid) is implemented/inherited by at least two other classes
 
 **ConcreteStrategy class**
-1. is an implementation of the `Strategy` interface
-2. if the class is used, it must be used via the `Context` class
-3. if the class is not used it should be used via the `Context` class
-4. is stored in the `Context` class
+1. (knockout) is an implementation of the `Strategy` interface
+2. (high) if the class is used, it must be used via the `Context` class
+3. (mid) if the class is not used it should be used via the `Context` class
+4. (mid) is stored in the `Context` class
 
 ## References
 [^1]: Refactoring Guru, Behavioral Patterns - Strategy. https://refactoring.guru/design-patterns/strategy

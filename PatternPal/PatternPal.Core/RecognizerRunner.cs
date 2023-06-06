@@ -167,7 +167,8 @@ public class RecognizerRunner
                                          Graph = _graph,
                                          CurrentEntity = null!,
                                          ParentCheck = rootCheck,
-                                         EntityCheck = rootCheck
+                                         EntityCheck = rootCheck,
+                                         PreviousContext = null!,
                                      };
 
             NodeCheckResult rootResult = (NodeCheckResult)rootCheck.Check(
@@ -370,16 +371,19 @@ public class RecognizerRunner
             return true;
         }
 
-        if (Prune(
-                parentCheckResult.Priority,
-                pruneAll)
-            && parentCheckResult is
+        if (parentCheckResult is
             {
                 NodeCheckCollectionWrapper: true,
                 Check: RelationCheck or TypeCheck
             })
         {
             // We're currently processing the NodeCheckResult of a RelationCheck or TypeCheck. 
+
+            // Empty relation/type check results can also be pruned.
+            if (parentCheckResult.ChildrenCheckResults.Count == 0)
+            {
+                return true;
+            }
 
             foreach (ICheckResult dependentCheckResult in parentCheckResult.ChildrenCheckResults)
             {
@@ -393,6 +397,14 @@ public class RecognizerRunner
                 if (dependentCheckResult is not LeafCheckResult dependentResult)
                 {
                     throw new ArgumentException($"Unexpected check type '{dependentCheckResult.GetType()}', expected '{typeof( LeafCheckResult )}'");
+                }
+
+                // Always prune results of incorrect relations.
+                if (!dependentResult.Correct)
+                {
+                    resultsToBePruned.Add(dependentResult);
+                    dependentResult.Pruned = true;
+                    continue;
                 }
 
                 if (dependentResult.RelatedCheck is null)
@@ -561,6 +573,12 @@ public interface IRecognizerContext
     internal ICheck EntityCheck { get; }
 
     /// <summary>
+    /// The <see cref="IRecognizerContext"/> from which this <see cref="IRecognizerContext"/> was
+    /// created, or <see langword="null"/> if this is the root <see cref="IRecognizerContext"/>.
+    /// </summary>
+    internal IRecognizerContext ? PreviousContext { get; }
+
+    /// <summary>
     /// Create a new <see cref="IRecognizerContext"/> instance from an existing one, overwriting the
     /// old properties with the new ones.
     /// </summary>
@@ -581,7 +599,8 @@ public interface IRecognizerContext
                                    ParentCheck = parentCheck,
                                    EntityCheck = currentNode is IEntity
                                        ? parentCheck
-                                       : oldCtx.EntityCheck
+                                       : oldCtx.EntityCheck,
+                                   PreviousContext = oldCtx,
                                };
 }
 
@@ -602,6 +621,9 @@ file class RecognizerContext : IRecognizerContext
 
     /// <inheritdoc />
     public required ICheck EntityCheck { get; init; }
+
+    /// <inheritdoc />
+    public IRecognizerContext ? PreviousContext { get; init; }
 }
 
 /// <summary>
@@ -618,6 +640,9 @@ file class RootNode : INode
 
     /// <inheritdoc />
     IRoot INode.GetRoot() => throw new UnreachableException();
+
+    /// <inheritdoc />
+    bool INode.IsPlaceholder => true;
 }
 
 /// <summary>
