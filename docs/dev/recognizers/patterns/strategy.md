@@ -35,6 +35,7 @@ The Context exposes a setter `setStrategy()` which lets clients replace the stra
 
 ## Requirements
 The priority of a requirement is noted with the (low)-(mid)-(high)-(knockout)
+
 **Client class**
 1. (mid) has created an object of the type `ConcreteStrategy`
 2. (low) has used the `setStrategy()` in the Context class to store the `ConcreteStrategy` object	
