@@ -7,17 +7,15 @@ using Quartz;
 
 namespace PatternPal.LoggingServer.LogJobs;
 
-// TODO Global CodeStates variable
-
 /// <summary>
 /// Job that removes all redundant CodeStates (those that are not present in the database anymore) at midnight.
 /// </summary>
-public class ClearCodestatesJob : IJob
+public class ClearCodeStatesJob : IJob
 {
-    private readonly ILogger<ClearCodestatesJob> _logger;
+    private readonly ILogger<ClearCodeStatesJob> _logger;
     private readonly EventRepository _eventRepository;
 
-    public ClearCodestatesJob(ILogger<ClearCodestatesJob> logger, EventRepository repository)
+    public ClearCodeStatesJob(ILogger<ClearCodeStatesJob> logger, EventRepository repository)
     {
         _logger = logger;
         _eventRepository = repository;

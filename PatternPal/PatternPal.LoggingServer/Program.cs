@@ -35,7 +35,7 @@ internal static class Program
         builder.Services.AddQuartz(q =>
         {
             JobKey jobKey = new JobKey("LoggerJob", "LoggerGroup");
-            q.AddJob<ClearCodestatesJob>(opts => opts.WithIdentity(jobKey));
+            q.AddJob<ClearCodeStatesJob>(opts => opts.WithIdentity(jobKey));
             q.AddTrigger(opts => opts
                 .ForJob(jobKey)
                 .WithIdentity("LoggerTrigger", "LoggerGroup") // Monday at midnight

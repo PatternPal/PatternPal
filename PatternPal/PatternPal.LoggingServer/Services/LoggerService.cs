@@ -1,15 +1,11 @@
 ﻿#region
 
 using System.IO.Compression;
-using System.Reflection.PortableExecutable;
 using Grpc.Core;
 using PatternPal.LoggingServer.Data;
 using PatternPal.LoggingServer.Models;
 
 #endregion
-
-// TODO Global CodeStates variable
-// TODO Refactor
 
 namespace PatternPal.LoggingServer.Services
 {
@@ -42,8 +38,6 @@ namespace PatternPal.LoggingServer.Services
         /// <exception cref="RpcException"></exception>
         public override async Task<LogResponse> Log(LogRequest request, ServerCallContext context)
         {
-            // TODO Refactor
-
             // GUID parsing
             Guid eventId = GetGuid(request.EventId, "EventID");
             Guid sessionId = GetGuid(request.SessionId, "SessionID");
@@ -65,7 +59,7 @@ namespace PatternPal.LoggingServer.Services
             
             // Parse code state ID
             Guid? codeStateId = null;
-            bool? fullCodeState = null;     // TODO Ask Siem
+            bool? fullCodeState = null;
             if (request.HasData)
             {
                 codeStateId = Guid.NewGuid();
@@ -113,7 +107,7 @@ namespace PatternPal.LoggingServer.Services
                 SubjectId = subjectId,
                 ToolInstances = request.ToolInstances,
                 CodeStateId = codeStateId,
-                FullCodeState = request.FullCodeState,
+                FullCodeState = fullCodeState,
                 ClientDatetime = cDto,
                 ServerDatetime = DateTimeOffset.Now,
                 SessionId = sessionId,
