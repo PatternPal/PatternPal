@@ -119,6 +119,7 @@ namespace PatternPal.Extension.Commands
             _dteSolutionEvents.BeforeClosing -= OnSolutionClose;
             _dteDebugEvents.OnEnterBreakMode -= OnExceptionUnhandled;
             _dteDebugEvents.OnEnterDesignMode -= OnDebugProgram;
+            _dteDocumentEvents.DocumentSaved -= OnDocumentSaved;
         }
 
 
