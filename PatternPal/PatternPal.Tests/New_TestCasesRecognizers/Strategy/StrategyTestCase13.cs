@@ -32,10 +32,10 @@ namespace PatternPal.Tests.TestClasses.Strategy
      */
 
     //Strategy interface
-    abstract file class TeamInformation
+    file interface TeamInformation
     {
-        public abstract void ShowMembers();
-        public abstract void TellMeARisk();
+        public void ShowMembers();
+        public void TellMeARisk();
 
         void SayVo()
         {
@@ -46,12 +46,12 @@ namespace PatternPal.Tests.TestClasses.Strategy
     //Concrete strategy
     file class TeamRefactor : TeamInformation
     {
-        public override void ShowMembers()
+        public void ShowMembers()
         {
             Console.WriteLine("Matteo, Linde and Jeroen");
         }
 
-        public override void TellMeARisk()
+        public void TellMeARisk()
         {
             Console.WriteLine("Rewriting the code takes too much time");
         }
@@ -60,12 +60,12 @@ namespace PatternPal.Tests.TestClasses.Strategy
     //Concrete strategy
     file class TeamLogging : TeamInformation
     {
-        public override void ShowMembers()
+        public void ShowMembers()
         {
             Console.WriteLine("Olaf, Wing and Siem");
         }
 
-        public override void TellMeARisk()
+        public void TellMeARisk()
         {
             Console.WriteLine("The logging data could be too big for the server");
         }
@@ -74,12 +74,12 @@ namespace PatternPal.Tests.TestClasses.Strategy
     //Concrete strategy
     file class TeamService : TeamInformation
     {
-        public override void ShowMembers()
+        public void ShowMembers()
         {
             Console.WriteLine("Rutger, Casper and Daan");
         }
 
-        public override void TellMeARisk()
+        public void TellMeARisk()
         {
             Console.WriteLine("Someone could forget his laptop on the train...");
         }
