@@ -1,4 +1,4 @@
-#region
+﻿#region
 
 using System;
 using System.IO;
@@ -11,6 +11,7 @@ using PatternPal.Protos;
 using System.Threading;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.PlatformUI.OleComponentSupport;
+using System.Linq;
 
 #endregion
 
@@ -206,13 +207,16 @@ namespace PatternPal.Extension.Commands
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtFileCreate;
             request.CodeStateSection = fileSystemEventArgs.Name;
+            string projectFullPath = FindContainingCsprojFile(fileSystemEventArgs.FullPath);
+            string projectFolderName = Path.GetDirectoryName(projectFullPath);
+            request.ProjectId = GetRelativePath(projectFolderName, projectFullPath);
 
             LogEventResponse response = PushLog(request);
         }
 
         /// <summary>
         /// The event handler for handling the Session.Start Event. When a new session starts, a (new) sessionID is generated.
-        /// A new file watcher is also created, as a new session can cahnge the directoory the user is working in.
+        /// A new file watcher is also created, as a new session can change the directory the user is working in.
         /// </summary>
         internal static void OnSessionStart()
         {
@@ -475,6 +479,27 @@ namespace PatternPal.Extension.Commands
             _watcher.IncludeSubdirectories = true;
         }
 
+        /// <summary>
+        /// Traverse the directory structure to find the .csproj file that contains the given file path.
+        /// </summary>
+        /// <param name="filePath">The full filepath of the target file. </param>
+        /// <returns>The full path of the found .csproj file.</returns>
+        private static string FindContainingCsprojFile(string filePath)
+        {
+            string directory = Path.GetDirectoryName(filePath);
+
+            while (!string.IsNullOrEmpty(directory))
+            {
+                string csprojFile = Directory.GetFiles(directory, "*.csproj").FirstOrDefault();
+
+                if (!string.IsNullOrEmpty(csprojFile))
+                    return csprojFile;
+
+                directory = Path.GetDirectoryName(directory);
+            }
+
+            return "";
+        }
 
         /// <summary>
         /// Event handler for when an exception is unhandled. This is used to determine in the user's last debug session

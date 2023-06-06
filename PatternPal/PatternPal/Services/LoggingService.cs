@@ -152,7 +152,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     /// Creates a LogRequest that is populated with info obtained from the supplied
     /// received event and further specific details relevant for the FileEdit-event.
     /// Note that this LogRequest is discarded when no difference between the last logged
-    /// state of the file and the current state of the file was detected.
+    /// state of the file and the current state of the file was detected.Ff
     /// </summary>
     /// <param name="receivedRequest">The originally received request from the PP extension</param>
     /// <returns>A LogRequest populated for this specific event</returns>
@@ -161,6 +161,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         LogRequest sendLog = StandardLog(receivedRequest);
         sendLog.EventType = LoggingServer.EventType.EvtFileCreate;
         sendLog.CodeStateSection = receivedRequest.CodeStateSection;
+        sendLog.ProjectId = receivedRequest.ProjectId;
 
         return sendLog;
     }
