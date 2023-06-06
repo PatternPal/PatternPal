@@ -54,7 +54,6 @@ internal abstract class CheckBase : ICheck
     /// <inheritdoc />
     public Priority Priority { get; }
 
-    //public Func<List<INode>> Result => () => throw new ArgumentException("Not a NodeCheck");
     public virtual Func< List< INode > > Result => throw new NotSupportedException($"this check '{this}' is not a NodeCheck");
 
     /// <inheritdoc />
@@ -284,6 +283,20 @@ internal static class CheckBuilder
         priority,
         RelationType.Uses,
         relatedNodeCheck );
+
+    /// <summary>
+    /// Creates a new <see cref="RelationCheck"/> for a <see cref="RelationType.UsedBy"/> relation.
+    /// </summary>
+    /// <param name="priority">The <see cref="Priority"/> of this <see cref="RelationCheck"/>.</param>
+    /// <param name="relatedNodeCheck">A <see cref="ICheck"/> which checks for the node from where there should
+    /// be a used relation.</param>
+    /// <returns></returns>
+    internal static RelationCheck UsedBy(
+        Priority priority,
+        ICheck relatedNodeCheck) => new(
+        priority,
+        RelationType.UsedBy,
+        relatedNodeCheck);
 
     /// <summary>
     /// Creates a new <see cref="RelationCheck"/> for a <see cref="RelationType.Extends"/> relation.
