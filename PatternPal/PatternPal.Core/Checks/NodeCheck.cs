@@ -94,7 +94,10 @@ internal class NodeCheck< TNode > : CheckBase
 
         // Store the matched entity.
         _matchedEntities ??= new List< INode >();
-        _matchedEntities.Add(castNode);
+        if (!castNode.IsPlaceholder)
+        {
+            _matchedEntities.Add(castNode);
+        }
 
         // Return the result.
         return new NodeCheckResult
@@ -104,7 +107,9 @@ internal class NodeCheck< TNode > : CheckBase
                    CollectionKind = _kind,
                    Priority = Priority,
                    DependencyCount = DependencyCount,
-                   MatchedNode = castNode,
+                   MatchedNode = !castNode.IsPlaceholder
+                       ? castNode
+                       : null,
                    Check = this,
                };
     }
@@ -264,7 +269,7 @@ internal class NodeCheck< TNode > : CheckBase
         // that.
         if (results.Count == 0)
         {
-            nodeCheck._matchedEntities ??= new List< INode >();
+            MarkCheckAsSeen(nodeCheck);
         }
 
         // Return the result.
@@ -282,6 +287,69 @@ internal class NodeCheck< TNode > : CheckBase
     }
 
     /// <summary>
+    /// Marks the given <paramref name="nodeCheck"/> and any sub-<see cref="ICheck"/>s as seen.
+    /// </summary>
+    private static void MarkCheckAsSeen< T >(
+        NodeCheck< T > nodeCheck)
+        where T : INode
+    {
+        nodeCheck._matchedEntities ??= new List< INode >();
+
+        foreach (ICheck subCheck in nodeCheck._subChecks)
+        {
+            MarkCheckAsSeenImpl(subCheck);
+        }
+
+        void MarkCheckAsSeenImpl(
+            ICheck subCheck)
+        {
+            switch (subCheck)
+            {
+                // These checks don't have any sub-checks, so we don't need to do anything.
+                case ModifierCheck:
+                case RelationCheck:
+                case ParameterCheck:
+                case TypeCheck:
+                    return;
+
+                // These checks can have sub-checks, so we also need to mark the sub-checks as
+                // seen.
+                case NodeCheck< INode > nestedNodeCheck:
+                    MarkCheckAsSeen(nestedNodeCheck);
+                    break;
+                case ClassCheck classCheck:
+                    MarkCheckAsSeen(classCheck);
+                    break;
+                case InterfaceCheck interfaceCheck:
+                    MarkCheckAsSeen(interfaceCheck);
+                    break;
+                case MethodCheck methodCheck:
+                    MarkCheckAsSeen(methodCheck);
+                    break;
+                case FieldCheck fieldCheck:
+                    MarkCheckAsSeen(fieldCheck);
+                    break;
+                case ConstructorCheck constructorCheck:
+                    MarkCheckAsSeen(constructorCheck);
+                    break;
+                case PropertyCheck propertyCheck:
+                    MarkCheckAsSeen(propertyCheck);
+                    break;
+
+                // Mark the nested check of the NotCheck as seen.
+                case NotCheck notCheck:
+                    MarkCheckAsSeenImpl(notCheck.NestedCheck);
+                    break;
+
+                default:
+                    throw CheckHelper.InvalidSubCheck(
+                        nodeCheck,
+                        subCheck);
+            }
+        }
+    }
+
+    /// <summary>
     /// Gets the <see cref="IEntity"/> to pass to a <see cref="TypeCheck"/>.
     /// </summary>
     /// <param name="ctx">The current <see cref="IRecognizerContext"/>.</param>
@@ -291,6 +359,34 @@ internal class NodeCheck< TNode > : CheckBase
         IRecognizerContext ctx,
         TNode node)
     {
+        // If the the current check is wrapped in an Any/All check, we need to walk up the checks
+        // tree until we find a parent which can be used to get the type.
+        IRecognizerContext ? currentContext = ctx;
+        while (currentContext is {ParentCheck: NodeCheck< INode >})
+        {
+            currentContext = currentContext.PreviousContext;
+        }
+
+        if (currentContext != null)
+        {
+            // NOTE: Only the checks which implement `GetType4TypeCheck` should be matched here.
+            switch (currentContext.ParentCheck)
+            {
+                case FieldCheck fieldCheck:
+                    return fieldCheck.GetType4TypeCheck(
+                        currentContext,
+                        (IField)node);
+                case MethodCheck methodCheck:
+                    return methodCheck.GetType4TypeCheck(
+                        currentContext,
+                        (IMethod)node);
+                case PropertyCheck propertyCheck:
+                    return propertyCheck.GetType4TypeCheck(
+                        currentContext,
+                        (IProperty)node);
+            }
+        }
+
         throw new InvalidSubCheckException(
             this,
             _currentSubCheck!);

@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿#region
 
 using Microsoft.CodeAnalysis.CSharp;
+
 using PatternPal.SyntaxTree.Abstractions.Root;
+
+#endregion
 
 namespace PatternPal.SyntaxTree.Abstractions
 {
@@ -24,6 +27,12 @@ namespace PatternPal.SyntaxTree.Abstractions
         /// Gets the <see cref="IRoot"/> of the node.
         /// </summary>
         IRoot GetRoot();
+
+        /// <summary>
+        /// Indicates that this <see cref="INode"/> serves as a placeholder node. This is only
+        /// <see langword="true"/> for the node initially provided by the runner.
+        /// </summary>
+        bool IsPlaceholder => false;
     }
 
     /// <summary>
@@ -35,7 +44,7 @@ namespace PatternPal.SyntaxTree.Abstractions
         /// <summary>
         /// Returns the parameters of the <see cref="INode"/>.
         /// </summary>
-        IEnumerable<TypeSyntax> GetParameters();
+        IEnumerable< TypeSyntax > GetParameters();
     }
 
     /// <summary>
@@ -58,7 +67,7 @@ namespace PatternPal.SyntaxTree.Abstractions
         /// <summary>
         /// Gets the modifiers of this <see cref="INode"/>.
         /// </summary>
-        IEnumerable<IModifier> GetModifiers();
+        IEnumerable< IModifier > GetModifiers();
     }
 
     /// <summary>
@@ -69,14 +78,15 @@ namespace PatternPal.SyntaxTree.Abstractions
         /// <summary>
         /// Get all children nodes from the parent.
         /// </summary>
-        IEnumerable<INode> GetChildren();
+        IEnumerable< INode > GetChildren();
     }
 
     /// <summary>
     /// Represents a node which can be a child of another node.
     /// </summary>
     /// <typeparam name="T">The parent of the node</typeparam>
-    public interface IChild<out T> where T : INode, IParent
+    public interface IChild< out T >
+        where T : INode, IParent
     {
         /// <summary>
         /// Gets the parent of this <see cref="INode"/>.
