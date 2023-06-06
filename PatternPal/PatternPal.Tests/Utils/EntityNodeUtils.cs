@@ -1,6 +1,7 @@
 ﻿#region
 
 using Microsoft.CodeAnalysis;
+
 using PatternPal.SyntaxTree.Abstractions.Entities;
 using PatternPal.SyntaxTree.Abstractions.Root;
 using PatternPal.SyntaxTree.Models.Entities;
@@ -91,6 +92,19 @@ namespace PatternPal.Tests.Utils
                 GetInterfaceDeclaration(),
                 new TestRoot());
 
+        internal static IInterface CreateInterface(
+            out SyntaxGraph graph)
+        {
+            graph = CreateGraphFromInput(
+                """
+                public interface I
+                {
+                }
+                """);
+
+            return (IInterface)graph.GetAll().Values.First();
+        }
+
         /// <summary>
         /// Creates a <see cref="INamespace"/> instance which can be used in tests.
         /// </summary>
@@ -106,9 +120,12 @@ namespace PatternPal.Tests.Utils
         /// <param name="className">The name of the class in which the method resides</param>
         /// <param name="methodName">The name of the method</param>
         /// <returns></returns>
-        public static T GetMemberFromGraph<T>(SyntaxGraph graph, string className, string methodName)
+        public static T GetMemberFromGraph< T >(
+            SyntaxGraph graph,
+            string className,
+            string methodName)
         {
-            return (T)graph.GetAll()[className].GetMembers().FirstOrDefault(x => x is T && x.GetName() == methodName);
+            return (T)graph.GetAll()[ className ].GetMembers().FirstOrDefault(x => x is T && x.GetName() == methodName);
         }
 
         /// <summary>
@@ -241,6 +258,7 @@ namespace PatternPal.Tests.Utils
         }
 
         #region singletonTesting
+
         /// <summary>
         /// contains multiple constructors with different modifiers
         /// </summary>
@@ -507,6 +525,7 @@ namespace PatternPal.Tests.Utils
             graph.CreateGraph();
             return graph;
         }
+
         internal static SyntaxGraph CreateWrongClientSingleton()
         {
             const string INPUT = """
@@ -543,7 +562,7 @@ namespace PatternPal.Tests.Utils
             graph.CreateGraph();
             return graph;
         }
-        
+
         #endregion
 
         internal static SyntaxGraph CreateMethodWithParamaters()
@@ -593,8 +612,9 @@ namespace PatternPal.Tests.Utils
                                      {
                                      }
 
-                                     internal void DoSomething()
+                                     internal Test DoSomething()
                                      {
+                                        return this;
                                      }
 
                                      protected int TestProperty { get; set; }
@@ -730,9 +750,5 @@ namespace PatternPal.Tests.Utils
         }
 
         public IEnumerable< INode > GetChildren() { return Array.Empty< INode >(); }
-
-
     }
-
-    
 }

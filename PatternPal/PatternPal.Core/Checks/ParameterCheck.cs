@@ -47,8 +47,7 @@ internal class ParameterCheck : CheckBase
 
         // Retrieve the parameters the node has to compare to list of TypeChecks and convert to
         // IEntities.
-        List< IEntity > nodeParameters =
-            hasParameters.GetParameters().Select(x => ctx.Graph.Relations.GetEntityByName(x)).ToList();
+        List< IEntity > nodeParameters = hasParameters.GetParameters().Select(x => ctx.Graph.Relations.GetEntityByName(x)).Where(x => x != null).Select(x => x!).ToList();
 
         List< ICheckResult > subCheckResultsResults = new List< ICheckResult >();
 
@@ -105,43 +104,23 @@ internal class ParameterCheck : CheckBase
                  x < nodeParameters.Count();
                  x++)
             {
-                IEntity test = nodeParameters[ x ];
-                ICheckResult tempCheck = typeCheck.Check(
+                NodeCheckResult typeCheckResult = (NodeCheckResult)typeCheck.Check(
                     ctx,
                     nodeParameters.ElementAt(x));
 
-                switch (tempCheck)
-                {
-                    case LeafCheckResult leafCheckResult:
-                    {
-                        if (leafCheckResult.Correct)
-                        {
-                            subCheckResultsResults.Add(tempCheck);
-                            nodeParameters.RemoveAt(x);
-                            noneCorrect = false;
-                            break;
-                        }
-                        continue;
-                    }
-                    case NodeCheckResult nodeCheckResult:
-                    {
-                        bool anyTrue = nodeCheckResult.ChildrenCheckResults.OfType<LeafCheckResult>().Any(subCheck => subCheck.Correct);
+                bool anyTrue = typeCheckResult.ChildrenCheckResults.OfType< LeafCheckResult >().Any(subCheck => subCheck.Correct);
 
-                        if (anyTrue)
-                        {
-                            subCheckResultsResults.Add(tempCheck);
-                            nodeParameters.RemoveAt(x);
-                            noneCorrect = false;
-                        }
-                        break;
-                        
-                    }
+                if (anyTrue)
+                {
+                    subCheckResultsResults.Add(typeCheckResult);
+                    nodeParameters.RemoveAt(x);
+                    noneCorrect = false;
                 }
 
                 // reached the last iteration none were correct
-                if (x == nodeParameters.Count() - 1 && noneCorrect)
+                if (x == nodeParameters.Count - 1 && noneCorrect)
                 {
-                    subCheckResultsResults.Add(tempCheck);
+                    subCheckResultsResults.Add(typeCheckResult);
                 }
             }
         }

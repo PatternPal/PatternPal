@@ -10,6 +10,7 @@ using EnvDTE80;
 using PatternPal.Protos;
 using System.Threading;
 using System.Collections.Generic;
+using Microsoft.VisualStudio.PlatformUI.OleComponentSupport;
 
 #endregion
 
@@ -312,9 +313,15 @@ namespace PatternPal.Extension.Commands
         private static void OnDocumentSaved(Document document)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtFileEdit;
+            
             request.CodeStateSection = GetRelativePath(Path.GetDirectoryName(document.FullName), document.FullName);
+            request.ProjectId = document.ProjectItem.ContainingProject.UniqueName;
+            request.ProjectDirectory = Path.GetDirectoryName(document.ProjectItem.ContainingProject.FullName);
+            request.FilePath = document.FullName;
+
             LogEventResponse response = PushLog(request);
         }
 
@@ -324,7 +331,11 @@ namespace PatternPal.Extension.Commands
         public static void OnPatternRecognized(RecognizeRequest recognizeRequest,
             IList<RecognizeResult> recognizeResults)
         {
-            if (_package == null || !Privacy.Instance.DoLogData) return;
+            if (_package == null || !Privacy.Instance.DoLogData)
+            { 
+              return; 
+            }
+            
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtXRecognizerRun;
             string config = recognizeRequest.Recognizers.ToString();
@@ -389,7 +400,6 @@ namespace PatternPal.Extension.Commands
             return Privacy.Instance.SubjectId;
         }
 
-        // TODO Separate utility because of duplication with extension
         /// <summary>
         /// Gets the relative path when given an absolute directory path and a filename.
         /// </summary>
@@ -404,7 +414,7 @@ namespace PatternPal.Extension.Commands
             {
                 rel = $".{Path.DirectorySeparatorChar}{rel}";
             }
-
+            
             return rel;
         }
 
@@ -423,7 +433,7 @@ namespace PatternPal.Extension.Commands
                     continue;
                 }
 
-                // TODO This catches miscellanious projects without a defined project.Fullname, but we should investigate where this
+                // TODO This catches miscellaneous projects without a defined project.Fullname, but we should investigate where this
                 //  problem derives from.
                 if (project.FullName == null || !File.Exists((project.FullName)))
                 {
