@@ -63,9 +63,10 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         {
             Protos.EventType.EvtCompile => (CompileLog(receivedRequest), false),
             Protos.EventType.EvtCompileError => (CompileErrorLog(receivedRequest), false),
+            Protos.EventType.EvtFileCreate => (FileCreateLog(receivedRequest), false),
 
             // Currently, the only LogEvent that might need to be discarded is the FileEditEvent, since the file might not have been changed after all.
-            Protos.EventType.EvtFileEdit => FileEditLog(receivedRequest),       
+            Protos.EventType.EvtFileEdit => FileEditLog(receivedRequest),
 
             Protos.EventType.EvtProjectOpen => (ProjectOpenLog(receivedRequest), false),
             Protos.EventType.EvtProjectClose => (ProjectCloseLog(receivedRequest), false),
@@ -151,7 +152,23 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     /// Creates a LogRequest that is populated with info obtained from the supplied
     /// received event and further specific details relevant for the FileEdit-event.
     /// Note that this LogRequest is discarded when no difference between the last logged
-    /// state of the file and the current state of the file was detected.
+    /// state of the file and the current state of the file was detected.Ff
+    /// </summary>
+    /// <param name="receivedRequest">The originally received request from the PP extension</param>
+    /// <returns>A LogRequest populated for this specific event</returns>
+    private static LogRequest FileCreateLog(LogEventRequest receivedRequest)
+    {
+        LogRequest sendLog = StandardLog(receivedRequest);
+        sendLog.EventType = LoggingServer.EventType.EvtFileCreate;
+        sendLog.CodeStateSection = receivedRequest.CodeStateSection;
+        sendLog.ProjectId = receivedRequest.ProjectId;
+
+        return sendLog;
+    }
+
+    /// <summary>
+    /// Creates a LogRequest that is populated with info obtained from the supplied
+    /// received event and further specific details relevant for the FileEdit-event.
     /// </summary>
     /// <param name="receivedRequest">The originally received request from the PP extension</param>
     /// <returns>A tuple of a LogRequest populated for this specific event, and a bool flagging whether the request should be discarded or not</returns>

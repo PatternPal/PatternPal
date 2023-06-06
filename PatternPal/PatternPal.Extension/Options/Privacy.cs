@@ -48,12 +48,12 @@ namespace PatternPal.Extension
                 if (value)
                 {
                     SubscribeEvents.OnSessionStart();
-                    SubscribeEvents.OnProjectOpen();
+                    SubscribeEvents.OnSolutionOpen();
                 }
                 else
                 {
                     SubscribeEvents.OnSessionEnd();
-                    SubscribeEvents.OnProjectClose();
+                    SubscribeEvents.OnSolutionClose();
                 }
 
                 _doLogData = value;
