@@ -129,12 +129,7 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
 
             return Task.FromResult(new CheckInstructionResponse
             {
-                Result = assumption,
-                RecognizeResult = new RecognizeResult
-                {
-                    ClassName = correctCheckResult.MatchedNode.ToString(),
-                    Recognizer = request.Recognizer
-                }
+                Result = assumption
             });
         }
         // There was no content in the file that was able to run in the runner.
@@ -142,12 +137,7 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
         {
             return Task.FromResult(new CheckInstructionResponse
             {
-                Result = false,
-                RecognizeResult = new RecognizeResult
-                {
-                    ClassName = "There is no valid class",
-                    Recognizer = request.Recognizer
-                }
+                Result = false
             });
         }
     }
