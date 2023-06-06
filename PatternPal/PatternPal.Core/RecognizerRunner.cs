@@ -333,6 +333,12 @@ public class RecognizerRunner
         {
             // We're currently processing the NodeCheckResult of a RelationCheck or TypeCheck. 
 
+            // Empty relation/type check results can also be pruned.
+            if (parentCheckResult.ChildrenCheckResults.Count == 0)
+            {
+                return true;
+            }
+
             foreach (ICheckResult dependentCheckResult in parentCheckResult.ChildrenCheckResults)
             {
                 // If `dependentCheckResult` has already been pruned earlier on, we don't need to
