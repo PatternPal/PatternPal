@@ -1,17 +1,21 @@
-﻿
+﻿#region
+
 using PatternPal.LoggingServer.Data;
 using Quartz;
 
+#endregion
+
 namespace PatternPal.LoggingServer.LogJobs;
+
 /// <summary>
-/// Job that clears the codestates table every Monday at midnight
+/// Job that removes all redundant CodeStates (those that are not present in the database anymore) at midnight.
 /// </summary>
-public class ClearCodestatesJob : IJob
+public class ClearCodeStatesJob : IJob
 {
-    private readonly ILogger<ClearCodestatesJob> _logger;
+    private readonly ILogger<ClearCodeStatesJob> _logger;
     private readonly EventRepository _eventRepository;
 
-    public ClearCodestatesJob(ILogger<ClearCodestatesJob> logger, EventRepository repository)
+    public ClearCodeStatesJob(ILogger<ClearCodeStatesJob> logger, EventRepository repository)
     {
         _logger = logger;
         _eventRepository = repository;
@@ -21,7 +25,7 @@ public class ClearCodestatesJob : IJob
     {
 
         _logger.LogInformation("Clearing CodeState folders");
-        List<Guid> uniqueCodeStates = await _eventRepository.GetUniqueCodeStates();
+        List<Guid?> uniqueCodeStates = await _eventRepository.GetUniqueCodeStates();
 
         foreach (string folderName in Directory.EnumerateDirectories("CodeStates"))
         {
@@ -32,7 +36,7 @@ public class ClearCodestatesJob : IJob
             }
         }
 
-        _logger.LogInformation("Finished clearing CodeState folders");
+        _logger.LogInformation("Finished clearing CodeStates-directory");
         return;
     }
 }      

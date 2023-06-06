@@ -5,7 +5,6 @@ using System.IO.Compression;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using Grpc.Net.Client;
-using Microsoft.AspNetCore.Authentication;
 using PatternPal.LoggingServer;
 using ExecutionResult = PatternPal.LoggingServer.ExecutionResult;
 
@@ -23,8 +22,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     /// Stores the last codeState that has been successfully logged to the server. They
     /// are stored as follows: They are stored under [projectID][fileNameRelativeToProjectDir].
     /// </summary>
-    private static Dictionary<String, Dictionary<String, String>> _lastCodeState =
-        new Dictionary<string, Dictionary<String, String>>();
+    private static Dictionary<String, Dictionary<String, String>> _lastCodeState = new();
 
     /// <inheritdoc />
     public override Task<LogEventResponse> LogEvent(LogEventRequest receivedRequest, ServerCallContext context)
@@ -88,7 +86,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     {
         return new LogRequest
         {
-            EventId = receivedRequest.EventId, //TODO: Generate ID in Logging Server self
+            EventId = receivedRequest.EventId,
             SubjectId = receivedRequest.SubjectId,
             ToolInstances = Environment.Version.ToString(),
             ClientTimestamp =
@@ -109,7 +107,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     /// <returns>A LogRequest populated for this specific event</returns>
     private static LogRequest RecognizeLog(LogEventRequest receivedRequest)
     {
-        // TODO PatternPal only supports running the recognizer on a project, so the projectID should be set as well.
+        // TODO PatternPal only supports running the recognizer on a single project, so the projectID should be set as well.
         LogRequest sendLog = StandardLog(receivedRequest);
         sendLog.EventType = LoggingServer.EventType.EvtXRecognizerRun;
         sendLog.RecognizerResult = receivedRequest.RecognizerResult;
@@ -175,6 +173,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         sendLog.CodeStateSection = receivedRequest.CodeStateSection;
         sendLog.ProjectId = receivedRequest.ProjectId;
         sendLog.Data = ZipPath(receivedRequest.FilePath, relativePath);
+        sendLog.FullCodeState = false;
 
         return (sendLog, false);
     }
@@ -194,6 +193,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         if (receivedRequest.HasFilePath)
         {
             sendLog.Data = ZipPath(receivedRequest.FilePath);
+            sendLog.FullCodeState = true;
         }
 
         return sendLog;
@@ -214,6 +214,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         if (receivedRequest.HasFilePath)
         {
             sendLog.Data = ZipPath(receivedRequest.FilePath);
+            sendLog.FullCodeState = true;
         }
 
         return sendLog;
@@ -227,6 +228,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     /// <returns>A LogRequest populated for this specific event</returns>
     private static LogRequest DebugProgramLog(LogEventRequest receivedRequest)
     {
+        // TODO Should include ProjectID
         LogRequest sendLog = StandardLog(receivedRequest);
         sendLog.EventType = LoggingServer.EventType.EvtDebugProgram;
         sendLog.ExecutionId = receivedRequest.ExecutionId;

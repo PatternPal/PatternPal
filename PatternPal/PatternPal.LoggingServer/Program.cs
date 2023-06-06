@@ -1,13 +1,13 @@
-﻿
+﻿#region
+
 using Microsoft.EntityFrameworkCore;
 using PatternPal.LoggingServer.Data;
-using PatternPal.LoggingServer.Data.Interfaces;
-using PatternPal.LoggingServer.Models;
 using PatternPal.LoggingServer.Services;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Grpc.AspNetCore.HealthChecks;
 using Quartz;
 using PatternPal.LoggingServer.LogJobs;
+
+#endregion
 
 namespace PatternPal;
 
@@ -24,8 +24,7 @@ internal static class Program
         );
         
         builder.Services.AddGrpcHealthChecks()
-            .AddCheck("Sample", () => HealthCheckResult.Healthy());
-
+            .AddCheck("HealthCheck", () => HealthCheckResult.Healthy());
 
         builder.Services.AddScoped<EventRepository, EventRepository>();
 
@@ -34,12 +33,12 @@ internal static class Program
         builder.Services.AddQuartz(q =>
         {
             JobKey jobKey = new JobKey("LoggerJob", "LoggerGroup");
-            q.AddJob<ClearCodestatesJob>(opts => opts.WithIdentity(jobKey));
+            q.AddJob<ClearCodeStatesJob>(opts => opts.WithIdentity(jobKey));
             q.AddTrigger(opts => opts
                 .ForJob(jobKey)
-                .WithIdentity("LoggerTrigger", "LoggerGroup") // Monday at midnight
-                .WithCronSchedule("0 0 0 ? * MON *")
-                .WithDescription("Clears the codestates table every Monday at midnight")
+                .WithIdentity("LoggerTrigger", "LoggerGroup")
+                .WithCronSchedule("0 0 0 ? * * *")
+                .WithDescription("Removes all redundant CodeStates every day at midnight")
             );
 
             q.UseMicrosoftDependencyInjectionJobFactory();
