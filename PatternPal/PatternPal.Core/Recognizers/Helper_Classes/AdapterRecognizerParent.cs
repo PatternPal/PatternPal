@@ -65,7 +65,7 @@ internal abstract class AdapterRecognizerParent
         );
 
         //Check Adapter a, Client interface b
-        RelationCheck inheritsClientInterface = DoesInheritFrom(clientInterfaceClassType);
+        RelationCheck inheritsClientInterface = DoesInheritFrom(clientInterfaceClassType); //TODO: vraag linde checkbuilder
 
         //Check Adapter b
         RelationCheck createsServiceObject = CreatesObject(service);
@@ -112,9 +112,12 @@ internal abstract class AdapterRecognizerParent
         );
 
         //Check Client b
-        RelationCheck usedService = Uses(
+        MethodCheck clientUsesServiceViaAdapter = Method(
             Priority.Low,
-            adapterMethodsUsingService
+            Uses(
+                Priority.Low,
+                adapterMethodsUsingService
+            )
         );
 
         result[0] = clientInterfaceClassType;
@@ -125,8 +128,8 @@ internal abstract class AdapterRecognizerParent
 
         result[3] = Class(
             Priority.Low,
-            createsAdapter//,
-            //usedService
+            createsAdapter,
+            clientUsesServiceViaAdapter
         );
 
         return result;
@@ -191,7 +194,6 @@ internal abstract class AdapterRecognizerParent
                 Priority.High,
                 serviceField
             )
-
         );
     }
 

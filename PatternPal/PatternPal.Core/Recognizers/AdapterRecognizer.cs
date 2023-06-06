@@ -1,4 +1,5 @@
 ﻿using PatternPal.Core.Recognizers.Helper_Classes;
+using PatternPal.Core.StepByStep;
 using static PatternPal.Core.Checks.CheckBuilder;
 
 namespace PatternPal.Core.Recognizers
@@ -16,17 +17,22 @@ namespace PatternPal.Core.Recognizers
 
         public IEnumerable<ICheck> Create()
         {
-            yield return Any(
-                Priority.Low,
-                All(
+            yield return All( //Any(
+                    //Priority.Low,
+                    //All(
                     Priority.Low,
                     _isAbstractClass.Checks()
-                ),
-                All(
-                    Priority.Low,
-                    _isInterface.Checks()
-                )
+                //),
+                //All(
+                //Priority.Low,
+                //    _isInterface.Checks()
+                //)
             );
+        }
+
+        public List<IInstruction> GenerateStepsList()
+        {
+            throw new NotImplementedException();
         }
     }
 }

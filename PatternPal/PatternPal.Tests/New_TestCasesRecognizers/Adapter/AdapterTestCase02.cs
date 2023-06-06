@@ -99,21 +99,21 @@ namespace PatternPal.Tests.New_TestCasesRecognizers.Adapter
     {
         private SquareThirdParty _service;
 
-        new int getX() { return _service.x - 10;}
-        new int getY() { return _service.y - 10;}
-        new float getWidth() { return _service.size; }
-        new float getHeight() { return _service.size; }
+        public override int getX() { return _service.x - 10;}
+        public override int getY() { return _service.y - 10;}
+        public override float getWidth() { return _service.size; }
+        public override float getHeight() { return _service.size; }
 
         public Adapter(int X, int Y, float Width, float Height) : base(X, Y, Width, Width)
         {
             _service = new SquareThirdParty(X, Y, (int)Width);
         }
-        new void Move(int dx, int dy)
+        public override void Move(int dx, int dy)
         {
             _service.MoveRectangleTo(getX() + dx, getY() + dy);
         }
 
-        new void Resize(int dWidth, int dHeight)
+        public override void Resize(int dWidth, int dHeight)
         {
             _service.MultiplySize((getWidth() + dWidth) / getWidth());
         }

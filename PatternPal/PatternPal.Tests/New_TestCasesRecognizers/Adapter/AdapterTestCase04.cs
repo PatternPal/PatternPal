@@ -94,21 +94,21 @@
     {
         private SquareThirdParty _service;
 
-        new int getX() { return base.getX();}
-        new int getY() { return base.getY();}
-        new float getWidth() { return base.getWidth(); }
-        new float getHeight() { return base.getHeight(); }
+        public override int getX() { return base.getX();}
+        public override int getY() { return base.getY();}
+        public override float getWidth() { return base.getWidth(); }
+        public override float getHeight() { return base.getHeight(); }
 
         public Adapter(int X, int Y, float Width, float Height) : base(X, Y, Width, Width)
         {
             _service = new SquareThirdParty(X, Y, (int)Width);
         }
-        new void Move(int dx, int dy)
+        public override void Move(int dx, int dy)
         {
             base.Move(dx,dy);
         }
 
-        new void Resize(int dWidth, int dHeight)
+        public override void Resize(int dWidth, int dHeight)
         {
             base.Resize(dWidth, dHeight);
         }
