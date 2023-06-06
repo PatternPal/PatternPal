@@ -41,12 +41,12 @@ namespace PatternPal.LoggingServer.Models
         /// <summary>
         /// The ID of the code state that this event refers to.
         /// </summary>
-        public Guid CodeStateId { get; set; }
+        public Guid? CodeStateId { get; set; }
 
         /// <summary>
         /// Whether the stored codeState was complete or partial.
         /// </summary>
-        public bool FullCodeState { get; set;  }
+        public bool? FullCodeState { get; set;  }
 
         /// <summary>
         /// The type of event.
@@ -62,6 +62,7 @@ namespace PatternPal.LoggingServer.Models
         /// The date and time of the event, in the client's time zone.
         /// </summary>
         public DateTimeOffset ClientDatetime { get; set; }
+
         /// <summary>
         /// The ID of the parent event, if any. Used in cases such as compile.error, where the parent event is compile.
         /// </summary>

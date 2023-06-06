@@ -124,7 +124,7 @@ namespace PatternPal.LoggingServer.Data
         /// <param name="subjectId">SubjectId of event</param>
         /// <param name="projectId">ProjectId of event</param>
         /// <returns></returns>
-        public virtual async Task<Guid> GetPreviousCodeState(Guid sessionId, string subjectId, string projectId)
+        public virtual async Task<Guid?> GetPreviousCodeState(Guid sessionId, string subjectId, string projectId)
         {
             ProgSnap2Event? lastEvent = await _context.Events.Where(e => e.SessionId == sessionId && e.SubjectId == subjectId && e.ProjectId == projectId).OrderByDescending(e => e.Order).FirstOrDefaultAsync();
             if (lastEvent == null)
@@ -138,8 +138,8 @@ namespace PatternPal.LoggingServer.Data
         /// Returns list of all unique code states in the database.
         /// </summary>
         /// <returns cref="List{Guid}">List of all unique code states</returns>
-        public async Task<List<Guid>> GetUniqueCodeStates(){
-            List<Guid> codeStates = await _context.Events.Select(e => e.CodeStateId).Distinct().ToListAsync();
+        public async Task<List<Guid?>> GetUniqueCodeStates(){
+            List<Guid?> codeStates = await _context.Events.Select(e => e.CodeStateId).Distinct().ToListAsync();
             return codeStates;
         }
     }

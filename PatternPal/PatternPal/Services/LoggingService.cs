@@ -5,7 +5,6 @@ using System.IO.Compression;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using Grpc.Net.Client;
-using Microsoft.AspNetCore.Authentication;
 using PatternPal.LoggingServer;
 using ExecutionResult = PatternPal.LoggingServer.ExecutionResult;
 

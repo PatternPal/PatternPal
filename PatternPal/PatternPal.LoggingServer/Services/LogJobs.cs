@@ -27,7 +27,7 @@ public class ClearCodestatesJob : IJob
     {
 
         _logger.LogInformation("Clearing CodeState folders");
-        List<Guid> uniqueCodeStates = await _eventRepository.GetUniqueCodeStates();
+        List<Guid?> uniqueCodeStates = await _eventRepository.GetUniqueCodeStates();
 
         foreach (string folderName in Directory.EnumerateDirectories("CodeStates"))
         {

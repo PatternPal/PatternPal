@@ -23,6 +23,7 @@ internal static class Program
             options.UseNpgsql( builder.Configuration.GetConnectionString("PostgresConnection") )
         );
         
+        // TODO: I think this should be renamed to something else than sample, right?
         builder.Services.AddGrpcHealthChecks()
             .AddCheck("Sample", () => HealthCheckResult.Healthy());
 
