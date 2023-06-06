@@ -14,7 +14,7 @@ An example of use could be some sort of database. There should be global access 
 The **singleton** class declares the static method `getInstance()` that returns an instance of its own class. The constructor of the class should be hidden from the client code and should only be called the first time the `getInstance()` method is called. All other times it returns the previously created instance.
 
 ## Requirements
-The priority of a requirement is noted with the (low)-(mid)-(high)-(knockout)
+The priority of a requirement is noted with the (low)-(mid)-(high)-(knockout) criteria.
 
 **Client class**
 1. (mid) calls the method that acts as a constructor of the singleton class
