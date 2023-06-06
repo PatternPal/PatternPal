@@ -53,15 +53,15 @@ internal class DecoratorRecognizer : IRecognizer
         DecoratorRecognizerParent hasInterface = new DecoratorRecognizerWithInterface();
         DecoratorRecognizerParent hasAbstractClass = new DecoratorRecognizerWithAbstractClass();
 
-        return
+        yield return
             Any(
-                Priority.Knockout,
+                Priority.Knockout, //TODO welke prio moet dit zijn
                 All(
-                    Priority.Knockout,
+                    Priority.Knockout, //TODO welke prio moet dit zijn
                     hasInterface.Checks()
                 ),
                 All(
-                    Priority.Knockout,
+                    Priority.Knockout, //TODO welke prio moet dit zijn
                     hasAbstractClass.Checks()
                 )
             );
