@@ -60,4 +60,31 @@ public class TypeCheckTests
                 ctx,
                 classEntity));
     }
+
+    [Test]
+    public Task Nested_Type_Check_Works()
+    {
+        SyntaxGraph graph = EntityNodeUtils.CreateFieldTypeCheck();
+        IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
+
+        INode @class = graph.GetAll()[ "Test" ];
+
+        ICheck check = Class(
+            Priority.Knockout,
+            Field(
+                Priority.Knockout,
+                Any(
+                    Priority.Knockout,
+                    Type(
+                        Priority.Knockout,
+                        ICheck.GetCurrentEntity)
+                )
+            )
+        );
+
+        ICheckResult result = check.Check(
+            ctx,
+            @class);
+        return Verifier.Verify(result);
+    }
 }

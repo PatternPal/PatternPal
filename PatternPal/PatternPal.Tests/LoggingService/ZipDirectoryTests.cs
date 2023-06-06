@@ -40,7 +40,7 @@ namespace PatternPal.Tests.LoggingService
         public void Unzipped_ByteString_Matches_Unzipped_Directory_Only_Cs_Files(string path)
         {
             string fullPath = Path.GetFullPath(path);
-            ByteString archive = ls.ZipDirectory(fullPath);
+            ByteString archive = ls.ZipPath(fullPath);
             Unzip(archive, TEMPDIR);
 
             Assert.IsTrue(CompareDirectories(fullPath, TEMPDIR));
@@ -58,7 +58,7 @@ namespace PatternPal.Tests.LoggingService
         public void Unzipped_ByteString_Matches_Unzipped_Directory_Mixed_Files(string path, string expected)
         {
             string fullPath = Path.GetFullPath(path);
-            ByteString archive = ls.ZipDirectory(fullPath);
+            ByteString archive = ls.ZipPath(fullPath);
             Unzip(archive, TEMPDIR);
 
             Assert.IsTrue(CompareDirectories(expected, TEMPDIR));
@@ -75,10 +75,22 @@ namespace PatternPal.Tests.LoggingService
         public void Unzipped_ByteString_Excludes_Build_Artifacts(string path, string expected)
         {
             string fullPath = Path.GetFullPath(path);
-            ByteString archive = ls.ZipDirectory(fullPath);
+            ByteString archive = ls.ZipPath(fullPath);
             Unzip(archive, TEMPDIR);
 
             Assert.IsTrue(CompareDirectories(expected, TEMPDIR));
+        }
+
+        [Test]
+        [TestCase("../../../LoggingService/Resources/SingleFile/Hammer.cs", "Hammer.cs", "../../../LoggingService/Resources/SingleFile")]
+        [TestCase("../../../LoggingService/Resources/SingleNestedFile/Nest/Hammer.cs", "Nest/Hammer.cs", "../../../LoggingService/Resources/SingleNestedFile")]
+        public void Unzipped_ByteString_Matches_Single_Zipped_File(string path, string pathInArchive, string expectedDirectory)
+        {
+            string fullPath = Path.GetFullPath(path);
+            ByteString archive = ls.ZipPath(fullPath, pathInArchive);
+            Unzip(archive, TEMPDIR);
+
+            Assert.IsTrue(CompareDirectories(expectedDirectory, TEMPDIR));
         }
 
         /// <summary>

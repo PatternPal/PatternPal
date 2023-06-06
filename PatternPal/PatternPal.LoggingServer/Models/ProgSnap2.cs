@@ -1,12 +1,12 @@
-﻿using CsvHelper.Configuration.Attributes;
-using System.Collections.Generic;
+﻿#region
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using PatternPal.LoggingServer.Models;
-using PatternPal.LoggingServer;
+
+#endregion
+
 namespace PatternPal.LoggingServer.Models
 {
-
     /// <summary>
     /// Represents an event in ProgSnap2, including information about the session, subject, tool instances, code state, and timing.
     /// </summary>
@@ -41,7 +41,12 @@ namespace PatternPal.LoggingServer.Models
         /// <summary>
         /// The ID of the code state that this event refers to.
         /// </summary>
-        public Guid CodeStateId { get; set; }
+        public Guid? CodeStateId { get; set; }
+
+        /// <summary>
+        /// Whether the stored codeState was complete or partial.
+        /// </summary>
+        public bool? FullCodeState { get; set;  }
 
         /// <summary>
         /// The type of event.
@@ -57,6 +62,7 @@ namespace PatternPal.LoggingServer.Models
         /// The date and time of the event, in the client's time zone.
         /// </summary>
         public DateTimeOffset ClientDatetime { get; set; }
+
         /// <summary>
         /// The ID of the parent event, if any. Used in cases such as compile.error, where the parent event is compile.
         /// </summary>
@@ -91,7 +97,6 @@ namespace PatternPal.LoggingServer.Models
         /// Result in case of debug.run event. Value can be "success", "failure", "timeout", "error", "unknown".
         /// </summary>
         public ExecutionResult? ExecutionResult { get; set; }
-
 
         /// <summary>
         /// The results of the recognizer run, if any. This is a JSON string.
