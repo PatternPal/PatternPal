@@ -29,11 +29,9 @@ internal class AdapterRecognizerInterface : AdapterRecognizerParent
 
     public override RelationCheck DoesInheritFrom(ICheck parent)
     {
-        return new RelationCheck(
+        return Implements(
                 Priority.Knockout,
-                RelationType.Implements,
                 parent
-
         );
     }
 }
