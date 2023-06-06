@@ -1,14 +1,16 @@
 ﻿#region
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+
+using Community.VisualStudio.Toolkit;
+
 using EnvDTE;
+
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 
 using PatternPal.Extension.Commands;
 using PatternPal.Extension.Grpc;
@@ -42,27 +44,36 @@ namespace PatternPal.Extension
         UseManagedResourcesOnly = true,
         AllowsBackgroundLoading = true)]
     [InstalledProductRegistration(
-        "#110",
-        "#112",
-        "1.0",
+        Vsix.Name,
+        Vsix.Description,
+        Vsix.Id,
         IconResourceID = 400)] // Info on this package for Help/About
+    [ProvideToolWindow(
+        typeof( ExtensionWindow.Pane ),
+        Style = VsDockStyle.Float)]
     [ProvideMenuResource(
         "Menus.ctmenu",
         1)]
-    [ProvideToolWindow(typeof( ExtensionWindow ))]
-    [Guid(PackageGuidString)]
-    [SuppressMessage(
-        "StyleCop.CSharp.DocumentationRules",
-        "SA1650:ElementDocumentationMustBeSpelledCorrectly",
-        Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
-    public sealed class ExtensionWindowPackage : AsyncPackage
+    [Guid(PackageGuids.ExtensionViewString)]
+    [ProvideOptionPage(
+        typeof( OptionsProvider.PrivacyOptions ),
+        "PatternPal",
+        "Privacy",
+        0,
+        0,
+        true)]
+    [ProvideProfile(
+        typeof( OptionsProvider.PrivacyOptions ),
+        "PatternPal",
+        "Privacy",
+        0,
+        0,
+        true)]
+    public sealed class ExtensionWindowPackage : ToolkitPackage
     {
-        /// <summary>
-        ///     ExtensionWindowPackage GUID string.
-        /// </summary>
-        public const string PackageGuidString = "ca375a3b-ff54-4156-937d-cbddc605b23c";
+        internal static ExtensionWindowPackage PackageInstance { get; private set; }
 
-        #region Package Members
+        public static Mode CurrentMode = Mode.Default;
 
         /// <summary>
         ///     Initialization of the package; this method is called right after the package is sited, so this is the place
@@ -81,44 +92,47 @@ namespace PatternPal.Extension
             CancellationToken cancellationToken,
             IProgress< ServiceProgressData > progress)
         {
+            this.RegisterToolWindows();
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-            await ExtensionWindowCommand.InitializeAsync(this);
+            await this.RegisterCommandsAsync();
 
-            GrpcBackgroundServiceHelper.StartBackgroundService(this);
+            PackageInstance = this;
+            GrpcBackgroundServiceHelper.StartBackgroundService();
+
+            DTE dte = (DTE)await GetServiceAsync(typeof( DTE ));
+            SubscribeEvents.Initialize(
+                dte,
+                this,
+                cancellationToken);
         }
 
         internal static void Main()
         {
         }
 
-        public override IVsAsyncToolWindowFactory GetAsyncToolWindowFactory(
-            Guid toolWindowType)
+        /// <summary>
+        /// Overrides a package method executed when the extension is closed.
+        /// </summary>
+        /// <param name="canClose"></param>
+        /// <returns></returns>
+        protected override int QueryClose(
+            out bool canClose)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            if (toolWindowType == typeof( ExtensionWindow ).GUID)
+            if (Privacy.Instance.DoLogData)
             {
-                return this;
+                SubscribeEvents.OnSessionEnd();
             }
 
-            return base.GetAsyncToolWindowFactory(toolWindowType);
+            canClose = true;
+            return VSConstants.S_OK;
         }
+    }
 
-        protected override string GetToolWindowTitle(
-            Type toolWindowType,
-            int id)
-        {
-            if (toolWindowType == typeof( ExtensionWindow ))
-            {
-                return "ExtensionWindow loading";
-            }
-
-            return base.GetToolWindowTitle(
-                toolWindowType,
-                id);
-        }
-
-        #endregion
+    public enum Mode
+    {
+        Default,
+        StepByStep
     }
 }

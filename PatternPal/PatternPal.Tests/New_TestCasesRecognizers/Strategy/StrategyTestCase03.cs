@@ -67,9 +67,19 @@ namespace PatternPal.Tests.TestClasses.Strategy
     //Context
     file class TheContext
     {
-        private readonly Strategy _strategy;
+        private Strategy _strategy;
 
         public TheContext(Strategy strategy)
+        {
+            _strategy = strategy;
+        }
+
+        public TheContext()
+        {
+
+        }
+
+        public void SetStrategy(Strategy strategy)
         {
             _strategy = strategy;
         }
@@ -87,12 +97,13 @@ namespace PatternPal.Tests.TestClasses.Strategy
         private TheContext _theContext;
         public TheClient()
         {
-            _theContext = input switch
+            _theContext = new TheContext();
+            _theContext.SetStrategy(input switch
             {
-                "A" => new TheContext(new ConcreteA()),
-                "B" => new TheContext(new ConcreteB()),
-                _ => new TheContext(new ConcreteC())
-            };
+                "A" => new ConcreteA(),
+                "B" => new ConcreteB(),
+                _ => new ConcreteC()
+            });
 
             _theContext.ContextInterface();
         }

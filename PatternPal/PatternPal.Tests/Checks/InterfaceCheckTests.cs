@@ -1,7 +1,5 @@
 ﻿#region
 
-using static PatternPal.Core.Checks.CheckBuilder;
-
 #endregion
 
 namespace PatternPal.Tests.Checks;
@@ -100,6 +98,24 @@ public class InterfaceCheckTests
         IRecognizerContext ctx = RecognizerContext4Tests.Empty();
 
         ICheckResult result = interfaceCheck.Check(
+            ctx,
+            interfaceEntity);
+
+        return Verifier.Verify(result);
+    }
+
+    [Test]
+    public Task Nested_Interface_Check_Works()
+    {
+        IInterface interfaceEntity = EntityNodeUtils.CreateInterface(out SyntaxGraph graph);
+        IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
+
+        ICheck check = Any(
+            Priority.High,
+            Interface(
+                Priority.Low));
+
+        ICheckResult result = check.Check(
             ctx,
             interfaceEntity);
 

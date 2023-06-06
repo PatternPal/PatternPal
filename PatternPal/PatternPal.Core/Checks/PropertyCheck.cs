@@ -15,6 +15,12 @@ internal class PropertyCheck : NodeCheck< IProperty >
     {
     }
 
+    /// <inheritdoc path="//summary|//param" />
+    /// <returns>The <see cref="IEntity"/> which represents the type of the <see cref="IProperty"/>.</returns>
+    protected override IEntity GetType4TypeCheck(
+        IRecognizerContext ctx,
+        IProperty node) => ctx.Graph.Relations.GetEntityByName(node.GetPropertyType())!;
+
     /// <inheritdoc />
     protected override string GetFeedbackMessage(
         IProperty node) => $"Found property: {node}.";

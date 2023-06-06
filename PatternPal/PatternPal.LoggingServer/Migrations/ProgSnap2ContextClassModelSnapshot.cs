@@ -31,7 +31,7 @@ namespace PatternPal.LoggingServer.Migrations
                     b.Property<DateTimeOffset>("ClientDatetime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("CodeStateId")
+                    b.Property<Guid?>("CodeStateId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("CodeStateSection")
@@ -48,6 +48,9 @@ namespace PatternPal.LoggingServer.Migrations
 
                     b.Property<int?>("ExecutionResult")
                         .HasColumnType("integer");
+
+                    b.Property<bool?>("FullCodeState")
+                        .HasColumnType("boolean");
 
                     b.Property<int>("Order")
                         .HasColumnType("integer");
@@ -73,8 +76,9 @@ namespace PatternPal.LoggingServer.Migrations
                     b.Property<string>("SourceLocation")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("SubjectId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("SubjectId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("ToolInstances")
                         .IsRequired()

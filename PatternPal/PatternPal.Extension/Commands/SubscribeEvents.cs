@@ -10,6 +10,8 @@ using EnvDTE80;
 using PatternPal.Protos;
 using System.Threading;
 using System.Collections.Generic;
+using Microsoft.VisualStudio.PlatformUI.OleComponentSupport;
+using System.Linq;
 
 #endregion
 
@@ -23,7 +25,7 @@ namespace PatternPal.Extension.Commands
         /// <summary>
         ///     VS Package that provides this command, not null.
         /// </summary>
-        private static PatternPalExtensionPackage _package;
+        private static ExtensionWindowPackage _package;
 
         private static DTE _dte;
 
@@ -35,6 +37,10 @@ namespace PatternPal.Extension.Commands
 
         private static BuildEvents _dteBuildEvents;
 
+        private static Solution _currentSolution;
+
+        private static FileSystemWatcher _watcher;
+
         private static string _sessionId;
 
         private static bool _unhandledExceptionThrown;
@@ -43,6 +49,15 @@ namespace PatternPal.Extension.Commands
         {
             get { return _sessionId; }
             set { _sessionId = value; }
+        }
+
+
+        private static string _subjectId;
+
+        private static string SubjectId
+        {
+            get { return _subjectId; }
+            set { _subjectId = value; }
         }
 
         private static string _pathToUserDataFolder;
@@ -56,22 +71,23 @@ namespace PatternPal.Extension.Commands
         /// <param name="package"> The PatternPal package itself. </param>
         public static void Initialize(
             DTE dte,
-            PatternPalExtensionPackage package, CancellationToken cancellationToken)
+            ExtensionWindowPackage package, CancellationToken cancellationToken)
         {
             _dte = dte;
             ThreadHelper.ThrowIfNotOnUIThread();
             _dteDebugEvents = _dte.Events.DebuggerEvents;
             _dteSolutionEvents = _dte.Events.SolutionEvents;
             _dteBuildEvents = _dte.Events.BuildEvents;
+            _currentSolution = _dte.Solution;
             _dteDocumentEvents = _dte.Events.DocumentEvents;
             _package = package;
             _pathToUserDataFolder = Path.Combine(_package.UserLocalDataPath.ToString(), "Extensions", "Team PatternPal",
                 "PatternPal.Extension", "UserData");
             _cancellationToken = cancellationToken;
-            SaveSubjectId();
 
-            // This activates the DoLogData, necessary here in Initialize to kickstart the Session and Project Open events.
-            bool _ = _package.DoLogData;
+            // Any GET of Privacy.Instance activates the DoLogData which is not the expected behaviour.
+            // However, it is necessary here in Initialize to kickstart the Session and Project Open events.
+            SubscribeEvents._subjectId = Privacy.Instance.SubjectId.ToString();
         }
 
         /// <summary>
@@ -83,8 +99,8 @@ namespace PatternPal.Extension.Commands
             await _package.JoinableTaskFactory.SwitchToMainThreadAsync(_cancellationToken);
             // Code that interacts with UI elements goes here
             _dteBuildEvents.OnBuildDone += OnCompileDone;
-            _dteSolutionEvents.Opened += OnProjectOpen;
-            _dteSolutionEvents.BeforeClosing += OnProjectClose;
+            _dteSolutionEvents.Opened += OnSolutionOpen;
+            _dteSolutionEvents.BeforeClosing += OnSolutionClose;
             _dteDebugEvents.OnEnterBreakMode +=
                 OnExceptionUnhandled; // OnEnterBreakMode is triggered for both breakpoints as well as exceptions, with the reason parameter specifying this.
             _dteDebugEvents.OnEnterDesignMode += OnDebugProgram;
@@ -99,10 +115,11 @@ namespace PatternPal.Extension.Commands
         {
             await _package.JoinableTaskFactory.SwitchToMainThreadAsync(_cancellationToken);
             _dteBuildEvents.OnBuildDone -= OnCompileDone;
-            _dteSolutionEvents.Opened -= OnProjectOpen;
-            _dteSolutionEvents.BeforeClosing -= OnProjectClose;
+            _dteSolutionEvents.Opened -= OnSolutionOpen;
+            _dteSolutionEvents.BeforeClosing -= OnSolutionClose;
             _dteDebugEvents.OnEnterBreakMode -= OnExceptionUnhandled;
             _dteDebugEvents.OnEnterDesignMode -= OnDebugProgram;
+            _dteDocumentEvents.DocumentSaved -= OnDocumentSaved;
         }
 
 
@@ -141,7 +158,7 @@ namespace PatternPal.Extension.Commands
             }
             else
             {
-                string pathSolutionDirectory = Path.GetDirectoryName(_dte.Solution.FullName);
+                string pathSolutionDirectory = Path.GetDirectoryName(_currentSolution.FullName);
 
                 request.CodeStateSection = GetRelativePath(pathSolutionDirectory, pathSolutionFile);
             }
@@ -177,7 +194,30 @@ namespace PatternPal.Extension.Commands
         }
 
         /// <summary>
-        /// The event handler for handling the Session.Start Event. When a new session starts, a (new) sessionID is generated .
+        /// The event handler for handling the File.Create Event. The file watcher detects every file created,
+        /// so any event triggers with files other than .cs files are unhandled.    
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="fileSystemEventArgs"></param>
+        internal static void OnFileCreate(object sender, FileSystemEventArgs fileSystemEventArgs)
+        {
+            // Only log for the creation of .cs files
+            if (Path.GetExtension(fileSystemEventArgs.Name) != ".cs")
+                return;
+
+            LogEventRequest request = CreateStandardLog();
+            request.EventType = EventType.EvtFileCreate;
+            request.CodeStateSection = fileSystemEventArgs.Name;
+            string projectFullPath = FindContainingCsprojFile(fileSystemEventArgs.FullPath);
+            string projectFolderName = Path.GetDirectoryName(projectFullPath);
+            request.ProjectId = GetRelativePath(projectFolderName, projectFullPath);
+
+            LogEventResponse response = PushLog(request);
+        }
+
+        /// <summary>
+        /// The event handler for handling the Session.Start Event. When a new session starts, a (new) sessionID is generated.
+        /// A new file watcher is also created, as a new session can change the directory the user is working in.
         /// </summary>
         internal static void OnSessionStart()
         {
@@ -187,6 +227,9 @@ namespace PatternPal.Extension.Commands
             request.EventType = EventType.EvtSessionStart;
 
             LogEventResponse response = PushLog(request);
+
+            // As a new session has started, the file watcher has to be reset so that the "current solution" is up to date
+            SetUpFileWatcher();
         }
 
         /// <summary>
@@ -198,6 +241,9 @@ namespace PatternPal.Extension.Commands
             request.EventType = EventType.EvtSessionEnd;
 
             LogEventResponse response = PushLog(request);
+
+            // When a session has ended, no logs are sent anymore so the watcher can be disposed.
+            _watcher.Dispose();
         }
 
         /// <summary>
@@ -220,19 +266,25 @@ namespace PatternPal.Extension.Commands
         /// <summary>
         /// The event handler for handling the Project.Open Event.
         /// </summary>
-        internal static void OnProjectOpen()
+        internal static void OnSolutionOpen()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             LogEachProject(EventType.EvtProjectOpen);
+
+            // When a user opens a new solution, the watcher has to be setup again to entail the new solution. 
+            SetUpFileWatcher();
         }
 
         /// <summary>
         /// The event handler for handling the Project.Close Event.
         /// </summary>
-        internal static void OnProjectClose()
+        internal static void OnSolutionClose()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             LogEachProject(EventType.EvtProjectClose);
+
+            // When a user closes a solution, the watcher has to be disposed as the directory saved is then not up-to-date anymore.
+            _watcher.Dispose();
         }
 
         /// <summary>
@@ -266,9 +318,15 @@ namespace PatternPal.Extension.Commands
         private static void OnDocumentSaved(Document document)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtFileEdit;
+            
             request.CodeStateSection = GetRelativePath(Path.GetDirectoryName(document.FullName), document.FullName);
+            request.ProjectId = document.ProjectItem.ContainingProject.UniqueName;
+            request.ProjectDirectory = Path.GetDirectoryName(document.ProjectItem.ContainingProject.FullName);
+            request.FilePath = document.FullName;
+
             LogEventResponse response = PushLog(request);
         }
 
@@ -278,7 +336,11 @@ namespace PatternPal.Extension.Commands
         public static void OnPatternRecognized(RecognizeRequest recognizeRequest,
             IList<RecognizeResult> recognizeResults)
         {
-            if (_package == null || !_package.DoLogData) return;
+            if (_package == null || !Privacy.Instance.DoLogData)
+            { 
+              return; 
+            }
+            
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtXRecognizerRun;
             string config = recognizeRequest.Recognizers.ToString();
@@ -302,7 +364,7 @@ namespace PatternPal.Extension.Commands
         {
             return new LogEventRequest
             {
-                EventId = Guid.NewGuid().ToString(), SubjectId = GetSubjectId(), SessionId = _sessionId
+                EventId = Guid.NewGuid().ToString(), SubjectId = SubscribeEvents.SessionId, SessionId = _sessionId
             };
         }
 
@@ -324,32 +386,25 @@ namespace PatternPal.Extension.Commands
         private static void SaveSubjectId()
         {
             // A SubjectID is only ever generated once per user. If the directory already exists, the SubjectID was already set.
-            if (Directory.Exists(_pathToUserDataFolder))
-            {
-                return;
-            }
+            string subjectId = Privacy.Instance.SubjectId;
 
-            Directory.CreateDirectory(_pathToUserDataFolder);
-            string fileName = "subjectid.txt";
-            string filePath = Path.Combine(_pathToUserDataFolder, fileName);
-            string fileContents = Guid.NewGuid().ToString();
-            File.WriteAllText(filePath, fileContents);
+            if (subjectId == "")
+            {
+                subjectId = Guid.NewGuid().ToString();
+                Privacy.Instance.SubjectId = subjectId;
+            }
         }
 
         /// <summary>
-        /// Reads the SubjectID from a local file.
+        /// Reads the SubjectID from the option model.
         /// </summary>
-        /// <returns>The SubjectID - It returns the contents of the local file.</returns>
+        /// <returns>The SubjectID - It returns the contents of the subjectID property.</returns>
         private static string GetSubjectId()
         {
-            // A SubjectID is only ever generated once per user. If the directory already exists, the SubjectID was already set.
-
-            string fileName = "subjectid.txt";
-            string filePath = Path.Combine(_pathToUserDataFolder, fileName);
-            return File.ReadAllText(filePath);
+            // A SubjectID is only ever generated once per user
+            return Privacy.Instance.SubjectId;
         }
 
-        // TODO Separate utility because of duplication with extension
         /// <summary>
         /// Gets the relative path when given an absolute directory path and a filename.
         /// </summary>
@@ -364,7 +419,7 @@ namespace PatternPal.Extension.Commands
             {
                 rel = $".{Path.DirectorySeparatorChar}{rel}";
             }
-
+            
             return rel;
         }
 
@@ -383,8 +438,8 @@ namespace PatternPal.Extension.Commands
                     continue;
                 }
 
-                // TODO This catches miscellanious projects without a defined project.Fullname, but we should investigate where this
-                //  problem derives from.
+                // This catches miscellaneous projects without a defined project.Fullname; the cause of this is unknown since
+                // we are using internal-use-only libraries for event catching.
                 if (project.FullName == null || !File.Exists((project.FullName)))
                 {
                     continue;
@@ -402,6 +457,50 @@ namespace PatternPal.Extension.Commands
             }
         }
 
+        /// <summary>
+        /// Sets up a file watcher for File.Create and File.Delete events for the current opened user solution.
+        /// </summary>
+        private static void SetUpFileWatcher()
+        {
+            if (_watcher != null)
+            {
+                _watcher.Dispose();
+            }
+
+            // Create a new FileSystemWatcher instance
+            _watcher = new FileSystemWatcher(Path.GetDirectoryName(_currentSolution.FullName));
+
+            // Set the event handlers
+            _watcher.Created += OnFileCreate;
+
+            // Enable the FileSystemWatcher to begin watching for changes
+            _watcher.EnableRaisingEvents = true;
+
+            // Enable watching for in the subdirectories as well
+            _watcher.IncludeSubdirectories = true;
+        }
+
+        /// <summary>
+        /// Traverse the directory structure to find the .csproj file that contains the given file path.
+        /// </summary>
+        /// <param name="filePath">The full filepath of the target file. </param>
+        /// <returns>The full path of the found .csproj file.</returns>
+        private static string FindContainingCsprojFile(string filePath)
+        {
+            string directory = Path.GetDirectoryName(filePath);
+
+            while (!string.IsNullOrEmpty(directory))
+            {
+                string csprojFile = Directory.GetFiles(directory, "*.csproj").FirstOrDefault();
+
+                if (!string.IsNullOrEmpty(csprojFile))
+                    return csprojFile;
+
+                directory = Path.GetDirectoryName(directory);
+            }
+
+            return "";
+        }
 
         /// <summary>
         /// Event handler for when an exception is unhandled. This is used to determine in the user's last debug session

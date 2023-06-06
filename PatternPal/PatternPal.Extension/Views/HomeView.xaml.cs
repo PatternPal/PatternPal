@@ -26,15 +26,15 @@ namespace PatternPal.Extension.Views
             RoutedEventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            Guid guid = typeof( PatternPalExtensionPackage ).GUID;
+            Guid guid = typeof( ExtensionWindowPackage ).GUID;
             IVsShell vsShell = (IVsShell)ServiceProvider.GlobalProvider.GetService(typeof( IVsShell ));
             if (null != vsShell
                 && vsShell.IsPackageLoaded(
                     ref guid,
                     out IVsPackage myPackage)
                 == VSConstants.S_OK)
-            {
-                ((PatternPalExtensionPackage)myPackage).ShowOptionPage(typeof( PatternPalOptionPageGrid ));
+            { 
+                ((ExtensionWindowPackage)myPackage).ShowOptionPage(typeof(OptionsProvider.PrivacyOptions));
             }
         }
 
@@ -42,7 +42,7 @@ namespace PatternPal.Extension.Views
             object sender,
             RoutedEventArgs e)
         {
-            PatternPalExtensionPackage.CurrentMode = Mode.StepByStep;
+            ExtensionWindowPackage.CurrentMode = Mode.StepByStep;
         }
     }
 }
