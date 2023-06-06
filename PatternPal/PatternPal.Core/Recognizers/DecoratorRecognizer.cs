@@ -176,3 +176,51 @@ internal class DecoratorRecognizer : IRecognizer
         throw new NotImplementedException();
     }
 }
+
+abstract file class DecoratorRecognizerParent
+{
+    protected abstract MethodCheck ComponentMethod();
+
+    protected abstract ICheck Component(MethodCheck componentMethod);
+}
+
+file class DecoratorRecognizerWithAbstractClass : DecoratorRecognizerParent
+{
+    protected override MethodCheck ComponentMethod()
+    {
+        return 
+            Method(
+                Priority.Knockout,
+                Modifiers(
+                    Priority.Knockout,
+                    Modifier.Abstract,
+                    Modifier.Virtual
+                )
+            );
+    }
+
+    protected override ClassCheck Component(MethodCheck componentMethod)
+    {
+        return
+            AbstractClass(
+                Priority.Knockout,
+                componentMethod
+            );
+    }
+}
+
+file class DecoratorRecognizerWithInterface : DecoratorRecognizerParent
+{
+    protected override MethodCheck ComponentMethod()
+    {
+        return Method(Priority.Knockout);
+    }
+
+    protected override InterfaceCheck Component(MethodCheck componentMethod)
+    {
+        return Interface(
+            Priority.Knockout,
+            componentMethod
+        );
+    }
+}
