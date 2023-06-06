@@ -17,7 +17,6 @@ namespace PatternPal.Tests.New_TestCasesRecognizers.Adapter
      *         Client
      *            ✓  a) has created an object of the type Adapter
      *            ✓  b) has used a method of the Service via the Adapter
-     *            ✓  c) has not used a method of the Service without the adapter
      *         Client interface
      *            ✓  a) is an interface/abstract class
      *            ✓  b) is inherited/implemented by an Adapter
@@ -33,7 +32,7 @@ namespace PatternPal.Tests.New_TestCasesRecognizers.Adapter
      */
 
     //Client interface
-    file abstract class RectangleInterface
+    abstract file class RectangleInterface
     {
         private int X, Y;
         private float Width, Height;

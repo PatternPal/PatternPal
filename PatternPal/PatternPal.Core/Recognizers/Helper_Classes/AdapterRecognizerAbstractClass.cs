@@ -54,21 +54,4 @@ internal class AdapterRecognizerAbstractClass : AdapterRecognizerParent
             possibleParent
         );
     }
-
-    public override FieldCheck ContainsServiceField(ICheck service)
-    {
-        {
-            return Field(
-                Priority.Knockout,
-                Modifiers(
-                    Priority.Knockout,
-                    Modifier.Private
-                ),
-                Type(
-                    Priority.Knockout,
-                    (ClassCheck)service
-                )
-            );
-        }
-    }
 }

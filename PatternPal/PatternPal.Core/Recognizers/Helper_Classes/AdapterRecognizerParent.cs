@@ -1,12 +1,6 @@
 ﻿#region
-
-using System.ComponentModel;
-using System.Runtime.InteropServices;
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using PatternPal.SyntaxTree.Models;
-
 using static PatternPal.Core.Checks.CheckBuilder;
-
 #endregion
 
 namespace PatternPal.Core.Recognizers.Helper_Classes;
@@ -31,7 +25,6 @@ internal abstract class AdapterRecognizerParent
     /// Requirements for the Client class:<br/>
     ///     a) has created an object of the type Adapter<br/>
     ///     b) has used a method of the Service via the Adapter<br/>
-    ///     c) has not used a method of the Service without the adapter<br/>
     /// <br/>
     /// Requirements for the Client interface:<br/>
     ///     a) is an interface/abstract class<br/>
@@ -43,9 +36,9 @@ internal abstract class AdapterRecognizerParent
     ///     a) inherits/implements the Client Interface<br/>
     ///     b) creates an Service object<br/>
     ///     c) contains a private field in which the Service is stored<br/>
-    ///     d) does not return an instance of the Service
-    ///     e) a method uses the Service class
-    ///     f) every method uses the Service class
+    ///     d) does not return an instance of the Service<br/>
+    ///     e) a method uses the Service class<br/>
+    ///     f) every method uses the Service class<br/>
     /// </remarks>
 
     public ICheck[] Checks()
@@ -75,28 +68,22 @@ internal abstract class AdapterRecognizerParent
         RelationCheck inheritsClientInterface = DoesInheritFrom(clientInterfaceClassType);
 
         //Check Adapter b
-        RelationCheck createsServiceObject = CreatesObject(clientInterfaceClassType);
+        RelationCheck createsServiceObject = CreatesObject(service);
 
         //Check Adapter c
-        FieldCheck containsServiceField = ContainsServiceField(clientInterfaceClassType);
+        FieldCheck containsServiceField = ContainsServiceField(service);
 
         //Check Adapter d
         ICheck noServiceReturn = NoServiceReturn(service);
 
         //Check Adapter e, Service b
-        MethodCheck usesServiceClass = Method(
+        ICheck usesServiceClass = Method(
             Priority.High,
-            Uses(
-                Priority.High,
-                service
-            )
+            UsesServiceClass(service, containsServiceField)
         );
 
         //Check Adapter f
-        ICheck allUsesServiceClass = All(
-            Priority.Mid,
-            usesServiceClass
-        );
+        ICheck allUsesServiceClass = AllMethodsUseServiceClass(service, containsServiceField);
 
         //Helps Client b
         MethodCheck adapterMethodsUsingService = Method(
@@ -130,24 +117,16 @@ internal abstract class AdapterRecognizerParent
             adapterMethodsUsingService
         );
 
-        //Check Client c
-        ICheck notUsedService = Method(Priority.Low);//TODO: Implemnt check
+        result[0] = clientInterfaceClassType;
 
-        result[0] = service;
+        result[1] = service;
 
-        result[1] = adapter;
-
-        result[2] = Class(
-            Priority.Low,
-            clientInterfaceMethod,
-            clientInterfaceClassType
-        );
+        result[2] = adapter;
 
         result[3] = Class(
             Priority.Low,
-            createsAdapter,
-            usedService,
-            notUsedService
+            createsAdapter//,
+            //usedService
         );
 
         return result;
@@ -169,7 +148,22 @@ internal abstract class AdapterRecognizerParent
         );
     }
 
-    public abstract FieldCheck ContainsServiceField(ICheck service);
+    public FieldCheck ContainsServiceField(ClassCheck service)
+    {
+        {
+            return Field(
+                Priority.Knockout,
+                Modifiers(
+                    Priority.Knockout,
+                    Modifier.Private
+                ),
+                Type(
+                    Priority.Knockout,
+                    service
+                )
+            );
+        }
+    }
 
     ICheck NoServiceReturn(ClassCheck service)
     {
@@ -180,7 +174,36 @@ internal abstract class AdapterRecognizerParent
                 Type(
                     Priority.High,
                     service
+                )
+            )
+        );
+    }
 
+    ICheck UsesServiceClass(ClassCheck service, FieldCheck serviceField)
+    {
+        return Any(
+            Priority.High,
+            Uses(
+                Priority.High,
+                service
+            ),
+            Uses(
+                Priority.High,
+                serviceField
+            )
+
+        );
+    }
+
+    ICheck AllMethodsUseServiceClass(ClassCheck service, FieldCheck serviceField)
+    {
+        return Not(
+            Priority.Mid,
+            Method(
+                Priority.Mid,
+                Not(
+                    Priority.Mid,
+                    UsesServiceClass(service, serviceField)
                 )
             )
         );

@@ -12,7 +12,6 @@
      *         Client
      *               a) has created an object of the type Adapter
      *               b) has used a method of the Service via the Adapter
-     *               c) has not used a method of the Service without the adapter
      *         Client interface
      *            ✓  a) is an interface/abstract class
      *            ✓  b) is inherited/implemented by an Adapter

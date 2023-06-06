@@ -39,21 +39,4 @@ internal class AdapterRecognizerInterface : AdapterRecognizerParent
 
         );
     }
-
-    public override FieldCheck ContainsServiceField(ICheck service)
-    {
-        {
-            return Field(
-                Priority.Knockout,
-                Modifiers(
-                    Priority.Knockout,
-                    Modifier.Private
-                ),
-                Type(
-                    Priority.Knockout,
-                    (InterfaceCheck)service
-                )
-            );
-        }
-    }
 }
