@@ -1,5 +1,6 @@
 ﻿#region
 
+using System.ComponentModel;
 using PatternPal.Core.StepByStep;
 using PatternPal.SyntaxTree.Models;
 
@@ -182,6 +183,128 @@ abstract file class DecoratorRecognizerParent
     protected abstract MethodCheck ComponentMethod();
 
     protected abstract ICheck Component(MethodCheck componentMethod);
+
+    protected abstract RelationCheck ExtendsFrom(ICheck parent);
+
+    protected ClassCheck ConcreteComponent(ICheck component)
+    {
+        return
+            Class(
+                Priority.Knockout,
+                ExtendsFrom(component),
+                Method(Priority.Knockout)
+            );
+    }
+
+    protected FieldCheck BaseDecoratorField(ICheck parent)
+    {
+        return 
+            Field(
+                Priority.Knockout,
+                Type(
+                    Priority.Knockout,
+                    (CheckBase)parent
+                )
+            );
+    }
+
+    protected MethodCheck BaseDecoratorMethod(MethodCheck componentMethod, FieldCheck baseDecoratorField)
+    {
+        return
+            Method(
+                Priority.Knockout,
+                    Uses(
+                        Priority.Knockout,
+                        componentMethod
+                    ),
+                    Uses(
+                        Priority.Knockout,
+                        baseDecoratorField //TODO check of dit werkt
+                    )
+            );
+    }
+
+    protected ClassCheck BaseDecorator(ICheck component, FieldCheck baseDecoratorField, MethodCheck baseDecoratorMethod)
+    {
+        return
+            Class(
+                Priority.Knockout,
+                Modifiers(
+                    Priority.High,
+                    Modifier.Abstract
+                ),
+                ExtendsFrom(component),
+                baseDecoratorField,
+                Constructor(
+                    Priority.High,
+                    Uses(
+                        Priority.High,
+                        baseDecoratorField
+                    ),
+                    Parameters(
+                        Priority.High,
+                        Type(
+                            Priority.High,
+                            (CheckBase)component
+                        )
+                    )
+                ),
+                baseDecoratorMethod
+            );
+    }
+
+    protected MethodCheck ConcreteDecoratorExtraMethod()
+    {
+        return Method(Priority.Mid);
+    }
+
+    protected ClassCheck ConcreteDecorator(ClassCheck baseDecorator, MethodCheck concreteDecoratorExtraMethod, MethodCheck baseDecoratorMethod)
+    {
+        return
+            Class(
+                Priority.Knockout,
+                Inherits(
+                    Priority.Knockout,
+                    baseDecorator
+                ),
+                concreteDecoratorExtraMethod,
+                Method(
+                    Priority.Knockout,
+                    Overrides(
+                        Priority.Knockout,
+                        baseDecoratorMethod
+                    ),
+                    Uses(
+                        Priority.Knockout,
+                        baseDecoratorMethod
+                    ),
+                    Uses(
+                        Priority.Mid,
+                        concreteDecoratorExtraMethod
+                    )
+                )
+            );
+    }
+
+    protected ClassCheck Client(ICheck component, ClassCheck concreteDecorator, ClassCheck concreteComponent)
+    {
+        return
+            Class(
+                Priority.Low,
+                Uses(
+                    Priority.Low,
+                    component
+                ),
+                Creates(
+                    Priority.Low,
+                    concreteDecorator
+                ),
+                Creates(
+                    Priority.Low,
+                    concreteComponent
+                )
+            );
+    }
 }
 
 file class DecoratorRecognizerWithAbstractClass : DecoratorRecognizerParent
@@ -193,8 +316,7 @@ file class DecoratorRecognizerWithAbstractClass : DecoratorRecognizerParent
                 Priority.Knockout,
                 Modifiers(
                     Priority.Knockout,
-                    Modifier.Abstract,
-                    Modifier.Virtual
+                    Modifier.Abstract
                 )
             );
     }
@@ -205,6 +327,15 @@ file class DecoratorRecognizerWithAbstractClass : DecoratorRecognizerParent
             AbstractClass(
                 Priority.Knockout,
                 componentMethod
+            );
+    }
+
+    protected override RelationCheck ExtendsFrom(ICheck parent)
+    {
+        return
+            Inherits(
+                Priority.Knockout,
+                parent
             );
     }
 }
@@ -222,5 +353,14 @@ file class DecoratorRecognizerWithInterface : DecoratorRecognizerParent
             Priority.Knockout,
             componentMethod
         );
+    }
+
+    protected override RelationCheck ExtendsFrom(ICheck parent)
+    {
+        return
+            Implements(
+                Priority.Knockout,
+                parent
+            );
     }
 }
