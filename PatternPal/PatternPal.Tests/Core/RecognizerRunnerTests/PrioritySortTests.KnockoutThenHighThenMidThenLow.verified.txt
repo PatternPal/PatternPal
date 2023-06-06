@@ -4,33 +4,18 @@
   ChildrenCheckResults: [
     {
       FeedbackMessage: ,
-      Priority: High,
       ChildrenCheckResults: [
+        {
+          FeedbackMessage: ,
+          Correct: true,
+          Score: Knockout: 1, High: 0, Mid: 0, Low: 0
+        },
         {
           FeedbackMessage: ,
           Priority: High,
           Correct: true,
           Score: Knockout: 0, High: 1, Mid: 0, Low: 0
         },
-        {
-          FeedbackMessage: ,
-          Priority: Mid,
-          Correct: false
-        },
-        {
-          FeedbackMessage: ,
-          Priority: Low,
-          Correct: false
-        }
-      ],
-      CollectionKind: Any,
-      NodeCheckCollectionWrapper: false,
-      Score: Knockout: 0, High: 1, Mid: 0, Low: 0
-    },
-    {
-      FeedbackMessage: ,
-      Priority: High,
-      ChildrenCheckResults: [
         {
           FeedbackMessage: ,
           Priority: Mid,
@@ -42,19 +27,14 @@
           Priority: Low,
           Correct: true,
           Score: Knockout: 0, High: 0, Mid: 0, Low: 1
-        },
-        {
-          FeedbackMessage: ,
-          Priority: High,
-          Correct: false
         }
       ],
       CollectionKind: Any,
       NodeCheckCollectionWrapper: false,
-      Score: Knockout: 0, High: 0, Mid: 1, Low: 1
+      Score: Knockout: 1, High: 1, Mid: 1, Low: 1
     }
   ],
   CollectionKind: Any,
   NodeCheckCollectionWrapper: false,
-  Score: Knockout: 0, High: 1, Mid: 1, Low: 1
+  Score: Knockout: 1, High: 1, Mid: 1, Low: 1
 }

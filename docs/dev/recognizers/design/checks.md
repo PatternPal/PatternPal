@@ -1,7 +1,9 @@
 # Checks
+
 There are multiple categories of checks which will be explained below. The categories are: leaf checks, node checks and checkCollections.
 
 ## Leaf Checks
+
 A leaf check examines a single aspect of an entity (also see [here](syntax_graph.md)) and compares it to a specific value. They do not have child checks therefore their result also does not hold childcheck results. The leaf checks that are now implemented are explained below.
 
 ### ModifierCheck
@@ -41,21 +43,17 @@ more complex check for the entity being checked.
 
 ### NodeCheck
 
-<!---
-TODO Ref does not work
--->
-
-A @PatternPal.Core.Checks.NodeCheck is a class encompassing the behavior of a node check, i.e.
+A @PatternPal.Core.Checks.NodeCheck`1 is a class encompassing the behavior of a node check, i.e.
 the possibility to run a collection of subchecks. It is the base of all
 node checks. It achieves this with the use of a template method
-implementation of the `Check()` function. For each check where different
+implementation of the `Check()`function. For each check where different
 implementations are possible, this function calls a virtual method that
 can be implemented by the specific node checks. For example, what the
 type of a node represents differs per node. The type of a method is its
 return type, while the type of a constructor is its parent type. Thus
 there is a virtual function that gets the type of field and is
 implemented in the specific node checks, and said function is used in
-the `Check()` function in the case of a subcheck of type `TypeCheck`.
+the`Check()`function in the case of a subcheck of type`TypeCheck`.
 @PatternPal.Core.Checks.CheckCollectionKind can be used here to check the amount of childchecks that must return correctly. 
 For now this can be an `Any` `CheckCollectionKind`, which is correct when one of the childs are correct. 
 And an `All` `CheckCollectionKind`, which is correct when all the childs are correct.
@@ -106,14 +104,14 @@ complies with the checks of the `InterfaceCheck`. An `InterfaceCheck` can
 compose `MethodCheck`s, `PropertyCheck`s, `ModifierCheck`s, `RelationCheck`s,
 and operator checks.
 
-### Operator Checks
+## Operator Checks
 
 Some checks are similar to logical operators. They combine the result of
 their collection of checks in a way similar to how logical operators
 combine boolean values. Currently, the only implemented operator check
 is the `NotCheck`.
 
-**NotCheck**
+### NotCheck
+
 @PatternPal.Core.Checks.NotCheck contains a check and negates its result. This can be used for
 example when instead of requiring a specific modifier, you exclude one.
-

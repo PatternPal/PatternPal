@@ -1,4 +1,4 @@
-﻿#region
+#region
 
 using System;
 using System.IO;
@@ -295,10 +295,10 @@ namespace PatternPal.Extension.Commands
             IList<RecognizeResult> recognizeResults)
         {
             if (_package == null || !Privacy.Instance.DoLogData)
-            {
-                return;
+            { 
+              return; 
             }
-
+            
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtXRecognizerRun;
             string config = recognizeRequest.Recognizers.ToString();

@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PatternPal.Recognizers\PatternPal.Recognizers.csproj" />
     <ProjectReference Include="..\PatternPal.SyntaxTree\PatternPal.SyntaxTree.csproj" />
   </ItemGroup>
 

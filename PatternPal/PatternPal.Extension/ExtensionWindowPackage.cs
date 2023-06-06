@@ -1,21 +1,19 @@
 ﻿#region
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+
+using Community.VisualStudio.Toolkit;
 
 using EnvDTE;
 
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 
 using PatternPal.Extension.Commands;
 using PatternPal.Extension.Grpc;
-
-using Community.VisualStudio.Toolkit;
 
 #endregion
 
@@ -73,9 +71,8 @@ namespace PatternPal.Extension
         true)]
     public sealed class ExtensionWindowPackage : ToolkitPackage
     {
-        /// <summary>
-        ///     ExtensionWindowPackage GUID string.
-        /// </summary>
+        internal static ExtensionWindowPackage PackageInstance { get; private set; }
+
         public static Mode CurrentMode = Mode.Default;
 
         /// <summary>
@@ -101,7 +98,8 @@ namespace PatternPal.Extension
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
             await this.RegisterCommandsAsync();
 
-            GrpcBackgroundServiceHelper.StartBackgroundService(this);
+            PackageInstance = this;
+            GrpcBackgroundServiceHelper.StartBackgroundService();
 
             DTE dte = (DTE)await GetServiceAsync(typeof( DTE ));
             SubscribeEvents.Initialize(
