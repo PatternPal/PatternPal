@@ -17,16 +17,16 @@ namespace PatternPal.Core.Recognizers
 
         public IEnumerable<ICheck> Create()
         {
-            yield return All( //Any(
-                    //Priority.Low,
-                    //All(
+            yield return Any(
+                Priority.Low,
+                All(
                     Priority.Low,
                     _isAbstractClass.Checks()
-                //),
-                //All(
-                //Priority.Low,
-                //    _isInterface.Checks()
-                //)
+                ),
+                All(
+                Priority.Low,
+                    _isInterface.Checks()
+                )
             );
         }
 

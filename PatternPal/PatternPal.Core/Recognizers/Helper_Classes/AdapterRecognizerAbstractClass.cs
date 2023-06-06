@@ -48,9 +48,8 @@ internal class AdapterRecognizerAbstractClass : AdapterRecognizerParent
 
     public override RelationCheck DoesInheritFrom(ICheck possibleParent)
     {
-        return new RelationCheck(
+        return Inherits(
             Priority.Knockout,
-            RelationType.Extends,
             possibleParent
         );
     }

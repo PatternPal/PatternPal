@@ -65,7 +65,7 @@ internal abstract class AdapterRecognizerParent
         );
 
         //Check Adapter a, Client interface b
-        RelationCheck inheritsClientInterface = DoesInheritFrom(clientInterfaceClassType); //TODO: vraag linde checkbuilder
+        RelationCheck inheritsClientInterface = DoesInheritFrom(clientInterfaceClassType);
 
         //Check Adapter b
         RelationCheck createsServiceObject = CreatesObject(service);
