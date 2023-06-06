@@ -15,15 +15,15 @@ The **singleton** class declares the static method `getInstance()` that returns 
 
 ## Requirements
 **Client class**
-1. calls the method that acts as a constructor of the singleton class
+1. (mid) calls the method that acts as a constructor of the singleton class
 
 **Singleton class**
-1. has no public/internal constructor
-2. has at least one private/protected constructor
-3. has a static, private field with the same type as the class
-4. has a static, public/internal method that acts as a constructor in the following way:
-    1. if called and there is no instance saved in the private field, then it calls the private constructor
-    2. if called and there is an instance saved in the private field it returns that instance
+1. (knockout) has no public/internal constructor
+2. (knockout) has at least one private/protected constructor
+3. (knockout) has a static, private field with the same type as the class
+4. (knockout) has a static, public/internal method that acts as a constructor in the following way:
+    1. (mid) if called and there is no instance saved in the private field, then it calls the private constructor
+    2. (mid) if called and there is an instance saved in the private field it returns that instance
 
 ## References
 [^1]: Refactoring Guru, Creational Patterns - Singleton. https://refactoring.guru/design-patterns/singleton
