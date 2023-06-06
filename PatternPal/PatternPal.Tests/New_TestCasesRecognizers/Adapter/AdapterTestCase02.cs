@@ -31,6 +31,44 @@ namespace PatternPal.Tests.New_TestCasesRecognizers.Adapter
      *            ✓  f) every method uses the Service class
      */
 
+    //Service
+    file class SquareThirdParty
+    {
+        public int x, y, size;
+
+        public SquareThirdParty(int X, int Y, int Size)
+        {
+            x = X + 10;
+            y = Y + 10;
+            size = Size;
+        }
+
+        public void MoveRectangleTo(int newX, int newY)
+        {
+            x = newX;
+            y = newY;
+        }
+
+        public void MultiplySize(float sizeFactor)
+        {
+            size = (int)(size * sizeFactor);
+        }
+    }
+
+    //Client
+    file class Client
+    {
+        void CreateRectangleAndSquare()
+        {
+            RectangleInterface rectangle = new Rectangle(50, 50, 100, 20);
+            Adapter thirdPartySquare = new(100, 100, 25, 100);
+
+            rectangle.Move(10, 0);
+
+            thirdPartySquare.Resize(10, 0);
+        }
+    }
+
     //Client interface
     abstract file class RectangleInterface
     {
@@ -70,30 +108,6 @@ namespace PatternPal.Tests.New_TestCasesRecognizers.Adapter
         public Rectangle(int x, int y, int width, int height) : base(x, y, width, height){}
     }
 
-    //Service
-    file class SquareThirdParty
-    {
-        public int x, y, size;
-
-        public SquareThirdParty(int X, int Y, int Size)
-        {
-            x = X + 10;
-            y = Y + 10;
-            size = Size;
-        }
-
-        public void MoveRectangleTo(int newX, int newY)
-        {
-            x = newX;
-            y = newY;
-        }
-
-        public void MultiplySize(float sizeFactor)
-        {
-            size = (int)(size * sizeFactor);
-        }
-    }
-
     //Adapter
     file class Adapter : RectangleInterface
     {
@@ -116,20 +130,6 @@ namespace PatternPal.Tests.New_TestCasesRecognizers.Adapter
         public override void Resize(int dWidth, int dHeight)
         {
             _service.MultiplySize((getWidth() + dWidth) / getWidth());
-        }
-    }
-
-    //Client
-    file class Client
-    {
-        void CreateRectangleAndSquare()
-        {
-            RectangleInterface rectangle = new Rectangle(50, 50, 100, 20);
-            Adapter thirdPartySquare = new(100, 100, 25, 100);
-
-            rectangle.Move(10, 0);
-
-            thirdPartySquare.Resize(10, 0);
         }
     }
 }

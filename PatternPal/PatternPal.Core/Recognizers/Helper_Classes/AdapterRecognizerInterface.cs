@@ -14,7 +14,7 @@ namespace PatternPal.Core.Recognizers.Helper_Classes;
 /// </summary>
 internal class AdapterRecognizerInterface : AdapterRecognizerParent
 {
-    public override InterfaceCheck IsInterfaceAbstractClassWithMethod(MethodCheck method)
+    public override InterfaceCheck IsInterfaceOrAbstractClassWithMethod(MethodCheck method)
     {
         return Interface(
             Priority.Knockout,
@@ -22,7 +22,7 @@ internal class AdapterRecognizerInterface : AdapterRecognizerParent
         );
     }
 
-    public override MethodCheck ContainsMaybeAbstractVirtualMethod()
+    public override MethodCheck ContainsOverridableMethod()
     {
         return Method(Priority.High);
     }

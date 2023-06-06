@@ -7,7 +7,7 @@ namespace PatternPal.Core.Recognizers.Helper_Classes;
 
 /// <summary>
 /// An abstract class which contains all checks for the adapter<see cref="IRecognizer"/>.
-/// Because the adapter-pattern can be applied using an interface or an abstract class, some methods are abstract and specified in the subclass.
+/// Because the adapter-pattern can be applied using an interface or an abstract class, some requirements are interface or abstract class specific and defined in the subclasses.
 /// </summary>
 internal abstract class AdapterRecognizerParent
 {
@@ -16,10 +16,10 @@ internal abstract class AdapterRecognizerParent
         ICheck[] result = new ICheck[4];
 
         //Check Client interface c, ci
-        MethodCheck clientInterfaceMethod = ContainsMaybeAbstractVirtualMethod();
+        MethodCheck clientInterfaceMethod = ContainsOverridableMethod();
 
         //Check Client interface a
-        ICheck clientInterfaceClassType = IsInterfaceAbstractClassWithMethod(clientInterfaceMethod);
+        ICheck clientInterfaceClassType = IsInterfaceOrAbstractClassWithMethod(clientInterfaceMethod);
 
         //Helps check Client b
         MethodCheck allServiceMethods = Method(Priority.Low);
@@ -107,23 +107,23 @@ internal abstract class AdapterRecognizerParent
 
 
     /// <summary>
-    /// An <see cref="ICheck"/> which will determine if a <see langword="class"/> is either an <see langword="interface"/> or an <see langword="abstract class"/>.
+    /// An <see cref="ICheck"/> which will determine if a <see langword="node"/> is either an <see langword="interface"/> or an <see langword="abstract class"/>.
     /// </summary>
-    public abstract ICheck IsInterfaceAbstractClassWithMethod(MethodCheck method);
+    public abstract ICheck IsInterfaceOrAbstractClassWithMethod(MethodCheck method);
 
     /// <summary>
     /// An <see cref="ICheck"/> which will determine if there exists a method in the Client Interface."/>.
     /// If the Client Interface is an <see langword="abstract class"/> then it also checks if the method is <see langword="abstract"/>.
     /// </summary>
-    public abstract MethodCheck ContainsMaybeAbstractVirtualMethod();
+    public abstract MethodCheck ContainsOverridableMethod();
 
     /// <summary>
-    /// An <see cref="ICheck"/> which will determine if the parentcheck inherits from the <see cref="parent"/> node.
+    /// An <see cref="ICheck"/> which will determine if the parentcheck inherits from the <paramref name="parent"/> node.
     /// </summary>
     public abstract RelationCheck DoesInheritFrom(ICheck parent);
 
     /// <summary>
-    /// An <see cref="ICheck"/> which will determine if the parentcheck creates the <see cref="obj"/> node.
+    /// An <see cref="ICheck"/> which will determine if the parentcheck creates the <paramref name="obj"/> node.
     /// </summary>
     private RelationCheck CreatesObject(ICheck obj)
     {
@@ -134,7 +134,7 @@ internal abstract class AdapterRecognizerParent
     }
 
     /// <summary>
-    /// An <see cref="ICheck"/> which will determine if the parentcheck contains the <see cref="service"/> node in a field.
+    /// An <see cref="ICheck"/> which will determine if the parentcheck contains a private field with the same type as <paramref name="service"/>.
     /// </summary>
     public FieldCheck ContainsServiceField(ClassCheck service)
     {
@@ -154,7 +154,7 @@ internal abstract class AdapterRecognizerParent
     }
 
     /// <summary>
-    /// An <see cref="ICheck"/> which will determine if the parentclass does not return an object of the <see cref="service"/> type.
+    /// An <see cref="ICheck"/> which will determine if the parentclass does not have a method which returns an object of the <paramref name="service"/> type.
     /// </summary>
     ICheck NoServiceReturn(ClassCheck service)
     {
@@ -171,7 +171,7 @@ internal abstract class AdapterRecognizerParent
     }
 
     /// <summary>
-    /// An <see cref="ICheck"/> which will determine if the parentcheck ueses the <see cref="service"/> class directly or via the <see cref="serviceField"/> field.
+    /// An <see cref="ICheck"/> which will determine if the parentcheck ueses the <paramref name="service"/> class directly or via the <paramref name="serviceField"/> field.
     /// </summary>
     ICheck UsesServiceClass(ClassCheck service, FieldCheck serviceField)
     {

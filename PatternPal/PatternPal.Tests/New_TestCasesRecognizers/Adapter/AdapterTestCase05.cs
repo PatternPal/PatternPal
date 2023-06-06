@@ -26,6 +26,22 @@
      *            ✓  f) every method uses the Service class
      */
 
+    //Service
+    file class HRSystem
+    {
+        public static string[][] GetEmployees()
+        {
+            var employees = new string[4][];
+
+            employees[0] = new[] { "100", "Deepak", "Team Leader" };
+            employees[1] = new[] { "101", "Rohit", "Developer" };
+            employees[2] = new[] { "102", "Gautam", "Developer" };
+            employees[3] = new[] { "103", "Dev", "Tester" };
+
+            return employees;
+        }
+    }
+
     //Client
     file class ThirdPartyBillingSystem
     {
@@ -50,27 +66,10 @@
         }
     }
 
-
     //Client interface
     file interface ITarget
     {
 
-    }
-
-    //Service
-    file class HRSystem
-    {
-        public static string[][] GetEmployees()
-        {
-            var employees = new string[4][];
-
-            employees[0] = new[] { "100", "Deepak", "Team Leader" };
-            employees[1] = new[] { "101", "Rohit", "Developer" };
-            employees[2] = new[] { "102", "Gautam", "Developer" };
-            employees[3] = new[] { "103", "Dev", "Tester" };
-
-            return employees;
-        }
     }
 
     //Adapter

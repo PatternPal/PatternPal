@@ -26,12 +26,6 @@
      *               f) every method uses the Service class
      */
 
-    //Client interface
-    file interface ITarget
-    {
-
-    }
-
     //Service
     file class HRSystem
     {
@@ -46,6 +40,12 @@
 
             return employees;
         }
+    }
+
+    //Client interface
+    file interface ITarget
+    {
+
     }
 
     //Adapter
