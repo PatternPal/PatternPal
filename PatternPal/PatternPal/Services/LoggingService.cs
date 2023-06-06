@@ -63,20 +63,20 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     {
         return receivedRequest.EventType switch
         {
-            Protos.EventType.EvtCompile => CompileLog(receivedRequest),
-            Protos.EventType.EvtCompileError => CompileErrorLog(receivedRequest),
-            Protos.EventType.EvtFileCreate => FileCreateLog(receivedRequest),
+            Protos.EventType.EvtCompile => (CompileLog(receivedRequest), false),
+            Protos.EventType.EvtCompileError => (CompileErrorLog(receivedRequest), false),
+            Protos.EventType.EvtFileCreate => (FileCreateLog(receivedRequest), false),
 
             // Currently, the only LogEvent that might need to be discarded is the FileEditEvent, since the file might not have been changed after all.
             Protos.EventType.EvtFileEdit => FileEditLog(receivedRequest),
 
-            Protos.EventType.EvtProjectOpen => ProjectOpenLog(receivedRequest),
-            Protos.EventType.EvtProjectClose => ProjectCloseLog(receivedRequest),
-            Protos.EventType.EvtDebugProgram => DebugProgramLog(receivedRequest),
-            Protos.EventType.EvtSessionStart => SessionStartLog(receivedRequest),
-            Protos.EventType.EvtSessionEnd => SessionEndLog(receivedRequest),
-            Protos.EventType.EvtXRecognizerRun => RecognizeLog(receivedRequest),
-            _ => StandardLog(receivedRequest)
+            Protos.EventType.EvtProjectOpen => (ProjectOpenLog(receivedRequest), false),
+            Protos.EventType.EvtProjectClose => (ProjectCloseLog(receivedRequest), false),
+            Protos.EventType.EvtDebugProgram => (DebugProgramLog(receivedRequest), false),
+            Protos.EventType.EvtSessionStart => (SessionStartLog(receivedRequest), false),
+            Protos.EventType.EvtSessionEnd => (SessionEndLog(receivedRequest), false),
+            Protos.EventType.EvtXRecognizerRun => (RecognizeLog(receivedRequest), false),
+            _ => (StandardLog(receivedRequest), false)
         };
     }
 
