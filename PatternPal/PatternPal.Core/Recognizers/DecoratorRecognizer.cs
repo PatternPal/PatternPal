@@ -53,7 +53,7 @@ internal class DecoratorRecognizer : IRecognizer
     {
         MethodCheck componentMethod = Method(Priority.Knockout);
 
-        //Could also be an abstract class TODO how
+        //TODO add extra implementation for abstract class and put in Any
         InterfaceCheck component =
             Interface(
                 Priority.Knockout,
@@ -64,29 +64,10 @@ internal class DecoratorRecognizer : IRecognizer
             Class(
                 Priority.Knockout,
                 Implements(
-                    Priority.Knockout, //TODO als ik dit knockout maak pruned hij alles
+                    Priority.Knockout,
                     component
                 ),
-                Method(
-                    Priority.Knockout
-                    /*Overrides(
-                        Priority.High,
-                        componentMethod
-                    )*/ //TODO mogelijk ook uit requirements halen als dit niet kan
-                )
-            );
-
-        MethodCheck baseDecoratorMethod =
-            Method(
-                Priority.Knockout,
-                /*Overrides(
-                    Priority.High,
-                    componentMethod
-                ),*/ //TODO mogelijk ook uit requirements halen als dit niet kan
-                Uses(
-                    Priority.Knockout,
-                    componentMethod
-                )
+                Method(Priority.Knockout)
             );
 
         FieldCheck baseDecoratorField =
@@ -98,24 +79,41 @@ internal class DecoratorRecognizer : IRecognizer
                 )
             );
 
-        ClassCheck baseDecorator =
-            AbstractClass(
+        MethodCheck baseDecoratorMethod =
+            Method(
                 Priority.Knockout,
+                Uses(
+                    Priority.Knockout,
+                    componentMethod
+                ),
+                Uses(
+                    Priority.Knockout,
+                    baseDecoratorField
+                )
+            );
+
+        ClassCheck baseDecorator =
+            Class(
+                Priority.Knockout,
+                Modifiers(
+                    Priority.High,
+                    Modifier.Abstract
+                ),
                 Implements(
                     Priority.Knockout,
                     component
                 ),
                 baseDecoratorField,
                 Constructor(
-                    Priority.Knockout,
+                    Priority.High,
                     Uses(
-                        Priority.Knockout,
+                        Priority.High,
                         baseDecoratorField
                     ),
                     Parameters(
-                        Priority.Knockout,
+                        Priority.High,
                         Type(
-                            Priority.Knockout,
+                            Priority.High,
                             component
                         )
                     )
@@ -124,7 +122,7 @@ internal class DecoratorRecognizer : IRecognizer
             );
 
         MethodCheck concreteDecoratorExtraMethod =
-            Method(Priority.Knockout);
+            Method(Priority.Mid);
 
         ClassCheck concreteDecorator =
             Class(
@@ -145,7 +143,7 @@ internal class DecoratorRecognizer : IRecognizer
                         baseDecoratorMethod
                     ),
                     Uses(
-                        Priority.Knockout,
+                        Priority.Mid,
                         concreteDecoratorExtraMethod
                     )
                 )
@@ -153,17 +151,17 @@ internal class DecoratorRecognizer : IRecognizer
 
         ClassCheck client =
             Class(
-                Priority.Knockout,
+                Priority.Low,
                 Uses(
-                    Priority.Knockout,
+                    Priority.Low,
                     component
                 ),
                 Creates(
-                    Priority.Knockout,
+                    Priority.Low,
                     concreteDecorator
                 ),
                 Creates(
-                    Priority.Knockout,
+                    Priority.Low,
                     concreteComponent
                 )
             );
