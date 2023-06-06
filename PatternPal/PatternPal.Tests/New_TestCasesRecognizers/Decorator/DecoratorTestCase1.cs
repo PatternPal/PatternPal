@@ -8,12 +8,11 @@
      *         Component interface
      *            ✓  a) is an interface	/ abstract class
      *            ✓  b) has declared a method
-     *            ✓        1) if the class is an abstract instead of an interface the method has to be an abstract method
-     *            ✓  c) is implemented / inherited by at least two other classes
+     *            ✓        i) if the class is an abstract instead of an interface the method has to be an abstract method
      *         Concrete Component
-     *            ✓  a) is an implementation of the Component interface
+     *            ✓  a) is an implementation of Component
      *         Base Decorator
-     *            ✓  a) is an implementation of the Component interface
+     *            ✓  a) is an implementation of Component
      *            ✓  b) is an abstract class
      *            ✓  c) has a field of type Component
      *            ✓  d) has a constructor with a parameter of type Component, which it passes to its field
