@@ -50,7 +50,23 @@ internal class DecoratorRecognizer : IRecognizer
     /// </summary>
     public IEnumerable<ICheck> Create()
     {
-        MethodCheck componentMethod = Method(Priority.Knockout);
+        DecoratorRecognizerParent hasInterface = new DecoratorRecognizerWithInterface();
+        DecoratorRecognizerParent hasAbstractClass = new DecoratorRecognizerWithAbstractClass();
+
+        return
+            Any(
+                Priority.Knockout,
+                All(
+                    Priority.Knockout,
+                    hasInterface.Checks()
+                ),
+                All(
+                    Priority.Knockout,
+                    hasAbstractClass.Checks()
+                )
+            );
+
+        /*MethodCheck componentMethod = Method(Priority.Knockout);
 
         //TODO add extra implementation for abstract class and put in Any
         InterfaceCheck component =
@@ -169,7 +185,7 @@ internal class DecoratorRecognizer : IRecognizer
         yield return concreteComponent;
         yield return baseDecorator;
         yield return concreteDecorator;
-        yield return client;
+        yield return client;*/
     }
 
     public List<IInstruction> GenerateStepsList()
@@ -180,6 +196,50 @@ internal class DecoratorRecognizer : IRecognizer
 
 abstract file class DecoratorRecognizerParent
 {
+    public ICheck[] Checks()
+    {
+        ICheck[] result = new ICheck[5];
+
+        //Check Client interface c, ci
+        MethodCheck componentMethod = ComponentMethod();
+
+        //Check Client interface a
+        ICheck component = Component(componentMethod);
+
+        //Helps check Client b
+        ClassCheck concreteComponent = ConcreteComponent(component);
+
+        //Check Concrete Service a
+        FieldCheck baseDecoratorField = BaseDecoratorField(component);
+
+        //Check Adapter a, Client interface b
+        MethodCheck baseDecoratorMethod = BaseDecoratorMethod(componentMethod, baseDecoratorField);
+
+        //Check Adapter b
+        ClassCheck baseDecorator = BaseDecorator(component, baseDecoratorField, baseDecoratorMethod);
+
+        //Check Adapter c
+        MethodCheck concreteDecoratorExtraMethod = ConcreteDecoratorExtraMethod();
+
+        //Check Adapter e, Service b
+        ClassCheck concreteDecorator =
+            ConcreteDecorator(baseDecorator, concreteDecoratorExtraMethod, baseDecoratorMethod);
+
+        //Helps Client b
+        ClassCheck client = Client(component, concreteDecorator, concreteComponent);
+
+        result[0] = component;
+
+        result[1] = concreteComponent;
+
+        result[2] = baseDecorator;
+
+        result[3] = concreteDecorator;
+
+        result[4] = client;
+
+        return result;
+    }
     protected abstract MethodCheck ComponentMethod();
 
     protected abstract ICheck Component(MethodCheck componentMethod);
@@ -196,14 +256,14 @@ abstract file class DecoratorRecognizerParent
             );
     }
 
-    protected FieldCheck BaseDecoratorField(ICheck parent)
+    protected FieldCheck BaseDecoratorField(ICheck component)
     {
         return 
             Field(
                 Priority.Knockout,
                 Type(
                     Priority.Knockout,
-                    (CheckBase)parent
+                    (CheckBase)component
                 )
             );
     }
