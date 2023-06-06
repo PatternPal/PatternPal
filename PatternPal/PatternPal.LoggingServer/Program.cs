@@ -23,10 +23,8 @@ internal static class Program
             options.UseNpgsql( builder.Configuration.GetConnectionString("PostgresConnection") )
         );
         
-        // TODO: I think this should be renamed to something else than sample, right?
         builder.Services.AddGrpcHealthChecks()
-            .AddCheck("Sample", () => HealthCheckResult.Healthy());
-
+            .AddCheck("HealthCheck", () => HealthCheckResult.Healthy());
 
         builder.Services.AddScoped<EventRepository, EventRepository>();
 
@@ -38,9 +36,9 @@ internal static class Program
             q.AddJob<ClearCodeStatesJob>(opts => opts.WithIdentity(jobKey));
             q.AddTrigger(opts => opts
                 .ForJob(jobKey)
-                .WithIdentity("LoggerTrigger", "LoggerGroup") // Monday at midnight
-                .WithCronSchedule("0 0 0 ? * MON *")
-                .WithDescription("Removes all redundant CodeStates every monday at midnight")
+                .WithIdentity("LoggerTrigger", "LoggerGroup")
+                .WithCronSchedule("0 0 0 ? * * *")
+                .WithDescription("Removes all redundant CodeStates every day at midnight")
             );
 
             q.UseMicrosoftDependencyInjectionJobFactory();
