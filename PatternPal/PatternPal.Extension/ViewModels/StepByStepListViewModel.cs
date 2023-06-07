@@ -15,6 +15,7 @@ using PatternPal.Extension.Resources;
 using PatternPal.Extension.Stores;
 using PatternPal.Protos;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 #endregion
 
@@ -175,11 +176,14 @@ namespace PatternPal.Extension.ViewModels
             // Save location for project provided by user
             string folderPath = string.Empty;
 
-            using (FolderBrowserDialog fdb = new FolderBrowserDialog())
+            using (CommonOpenFileDialog fdb = new CommonOpenFileDialog
             {
-                if (fdb.ShowDialog() == DialogResult.OK)
+                IsFolderPicker = true,
+            })
+            {
+                if (fdb.ShowDialog() == CommonFileDialogResult.Ok)
                 {
-                    folderPath = fdb.SelectedPath;
+                    folderPath = fdb.FileName;
                 }
                 else
                 {
