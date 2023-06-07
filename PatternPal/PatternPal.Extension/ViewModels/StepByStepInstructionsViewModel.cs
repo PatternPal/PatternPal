@@ -17,16 +17,23 @@ namespace PatternPal.Extension.ViewModels
     {
         public ICommand NavigateHomeCommand { get; }
 
-        public InstructionSet InstructionSet { get; }
+        public List<string> FilePaths { get; set; }
+
+        public StepByStepModes Mode { get; }
+
+        public Recognizer Recognizer { get; }
 
         public ObservableCollection< string > cbItems { get; set; } =
             new ObservableCollection< string >();
 
         public string SelectedcbItem { get; set; }
 
+        public InstructionSet InstructionSet { get; set; }
+
         private IList< Instruction > _instructions;
 
         public Instruction CurrentInstruction => _instructions[ _currentInstructionNumber - 1 ];
+
 
         private int _currentInstructionNumber;
 
@@ -63,7 +70,7 @@ namespace PatternPal.Extension.ViewModels
             if (_currentInstructionNumber >= _instructions.Count
                 || null == _instructions[ _currentInstructionNumber ])
             {
-                _instructions.Add(GetInstructionById(CurrentInstructionNumber - 1));
+                _instructions.Add(GetInstructionById(CurrentInstructionNumber - 1, Recognizer));
             }
 
             OnPropertyChanged(nameof( CurrentInstruction ));
@@ -80,30 +87,41 @@ namespace PatternPal.Extension.ViewModels
 
         public StepByStepInstructionsViewModel(
             NavigationStore navigationStore,
-            InstructionSet instructionSet)
+            Recognizer recognizer,
+            StepByStepModes mode,
+            List<string> filePaths)
         {
-            NavigateHomeCommand = new NavigateCommand< HomeViewModel >(
+            NavigateHomeCommand = new NavigateCommand<HomeViewModel>(
                 navigationStore,
                 () => new HomeViewModel(navigationStore));
-            InstructionSet = instructionSet;
+            Recognizer = recognizer;
 
-            _instructions = new List< Instruction >((int)InstructionSet.NumberOfInstructions)
-                            {
-                                GetInstructionById(CurrentInstructionNumber),
-                            };
+            GetInstructionSetResponse instructionSetResponse =
+                GrpcHelper.StepByStepClient.GetInstructionSet(new GetInstructionSetRequest { Recognizer = recognizer});
+            InstructionSet = instructionSetResponse.SelectedInstructionset;
+            
+
+            _instructions = new List<Instruction>((int)InstructionSet.NumberOfInstructions)
+            {
+                GetInstructionById(CurrentInstructionNumber, recognizer),
+            };
             CurrentInstructionNumber = 1;
+
+            Mode = mode;
+            FilePaths = filePaths;
         }
 
         private Instruction GetInstructionById(
-            int instructionId)
+            int instructionId,
+            Recognizer recognizer)
         {
-            GetInstructionByIdResponse response = GrpcHelper.StepByStepClient.GetInstructionById(
-                new GetInstructionByIdRequest
+            GetInstructionByIdResponse response =
+                GrpcHelper.StepByStepClient.GetInstructionById(new GetInstructionByIdRequest
                 {
-                    InstructionSetName = InstructionSet.Name,
-                    InstructionId = instructionId,
-                });
-
+                    InstructionNumber = (uint)instructionId,
+                    Recognizers = recognizer
+                }
+                );
             return response.Instruction;
         }
     }

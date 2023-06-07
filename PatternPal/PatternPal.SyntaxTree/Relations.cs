@@ -411,11 +411,11 @@ namespace PatternPal.SyntaxTree
             {
                 switch (declaredSymbol)
                 {
-                    case IMethodSymbol methodSymbol:
+                    case IMethodSymbol {OverriddenMethod: not null} methodSymbol:
                     {
                         AddRelation(
                             member,
-                            GetMemberBySymbol(methodSymbol.OverriddenMethod!),
+                            GetMemberBySymbol(methodSymbol.OverriddenMethod),
                             RelationType.Overrides);
                         break;
                     }

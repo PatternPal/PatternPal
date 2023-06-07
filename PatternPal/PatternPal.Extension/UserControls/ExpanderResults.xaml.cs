@@ -19,7 +19,7 @@ namespace PatternPal.Extension.UserControls
         //TODO: Handle clicking on a node to bring the user to the right document
         private void EventSetter_OnHandler(object sender, MouseButtonEventArgs e)
         {
-            var viewItem = sender as TreeViewItem;
+            TreeViewItem viewItem = sender as TreeViewItem;
 
             if (!(viewItem?.DataContext is CheckResultViewModel viewModel))
             {

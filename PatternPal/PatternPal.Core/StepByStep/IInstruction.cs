@@ -15,7 +15,7 @@ public interface IInstruction
     /// <summary>
     /// Checks that need to be passed to continue.
     /// </summary>
-    List< ICheck > Checks { get; }
+    List<ICheck> Checks { get; }
 
     /// <summary>
     /// The file for which the <see cref="Checks"/> need to run on.

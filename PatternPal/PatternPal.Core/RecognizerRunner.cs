@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using Microsoft.CodeAnalysis;
 
 using PatternPal.Core.Recognizers;
+using PatternPal.Core.StepByStep;
 using PatternPal.SyntaxTree;
 using PatternPal.SyntaxTree.Abstractions.Root;
 
@@ -48,7 +49,8 @@ public class RecognizerRunner
     }
 
     // The selected recognizers which should be run.
-    private readonly IList< IRecognizer > _recognizers;
+    private readonly IList< IRecognizer > ? _recognizers;
+    private readonly IInstruction ? _instruction;
 
     // The syntax graph of the code currently being recognized.
     private readonly SyntaxGraph _graph;
@@ -97,6 +99,27 @@ public class RecognizerRunner
     }
 
     /// <summary>
+    /// Create a new recognizer runner instance.
+    /// </summary>
+    /// <param name="filePath">The path of the file to run the <paramref name="instruction"/> on.</param>
+    /// <param name="instruction">The <see cref="IInstruction"/> to run.</param>
+    public RecognizerRunner(
+        IEnumerable< string > filePaths,
+        IInstruction instruction)
+    {
+        _instruction = instruction;
+        _graph = new SyntaxGraph();
+        foreach (string file in filePaths)
+        {
+            string content = FileManager.MakeStringFromFile(file);
+            _graph.AddFile(
+                content,
+                file);
+        }
+        _graph.CreateGraph();
+    }
+
+    /// <summary>
     /// Runs the configured <see cref="IRecognizer"/>s.
     /// </summary>
     /// <param name="pruneAll">Whether to prune regardless of <see cref="Priority"/>s</param>
@@ -111,10 +134,34 @@ public class RecognizerRunner
         }
 
         IList< ICheckResult > results = new List< ICheckResult >();
-        foreach (IRecognizer recognizer in _recognizers)
+        if (_recognizers != null)
         {
-            ICheck rootCheck = recognizer.CreateRootCheck();
+            foreach (IRecognizer recognizer in _recognizers)
+            {
+                ICheck rootCheck = recognizer.CreateRootCheck();
+                results.Add(RunImpl(rootCheck));
+            }
+        }
+        else
+        {
+            if (_instruction != null)
+            {
+                    ICheck rootCheck = new NodeCheck< INode >(
+                        Priority.Knockout,
+                        _instruction.Checks);
+                    results.Add(RunImpl(rootCheck));
+            }
+            else
+            {
+                throw new ArgumentException("Provide either an instruction or recognizers to run");
+            }
+        }
 
+        return results;
+
+        ICheckResult RunImpl(
+            ICheck rootCheck)
+        {
             IRecognizerContext ctx = new RecognizerContext
                                      {
                                          Graph = _graph,
@@ -141,9 +188,8 @@ public class RecognizerRunner
                 pruneAll);
 
             PrioritySort(rootResult);
-            results.Add(rootResult);
+            return rootResult;
         }
-        return results;
     }
 
     /// <summary>
