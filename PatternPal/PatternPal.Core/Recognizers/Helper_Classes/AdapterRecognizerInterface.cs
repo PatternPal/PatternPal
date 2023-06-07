@@ -1,10 +1,5 @@
-#region
-
-using System.ComponentModel;
-using PatternPal.SyntaxTree.Models;
-
+﻿#region
 using static PatternPal.Core.Checks.CheckBuilder;
-
 #endregion
 
 namespace PatternPal.Core.Recognizers.Helper_Classes;
@@ -15,7 +10,7 @@ namespace PatternPal.Core.Recognizers.Helper_Classes;
 internal class AdapterRecognizerInterface : AdapterRecognizerParent
 {
     /// <inheritdoc />
-    public override InterfaceCheck IsInterfaceAbstractClassWithMethod(MethodCheck method)
+    public override InterfaceCheck IsInterfaceOrAbstractClassWithMethod(MethodCheck method)
     {
         return Interface(
             Priority.Knockout,
@@ -24,7 +19,7 @@ internal class AdapterRecognizerInterface : AdapterRecognizerParent
     }
 
     /// <inheritdoc />
-    public override MethodCheck ContainsMaybeAbstractVirtualMethod()
+    public override MethodCheck ContainsOverridableMethod()
     {
         return Method(Priority.High);
     }

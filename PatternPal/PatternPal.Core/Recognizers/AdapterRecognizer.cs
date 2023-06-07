@@ -45,6 +45,7 @@ namespace PatternPal.Core.Recognizers
         /// A method which creates a lot of <see cref="ICheck"/>s that each adheres to the requirements a adapter pattern needs to have implemented.
         /// It returns the requirements in a tree structure stated per class.
         /// </summary>
+        /// <inheritdoc />
         public IEnumerable<ICheck> Create()
         {
             yield return Any(
@@ -60,6 +61,7 @@ namespace PatternPal.Core.Recognizers
             );
         }
 
+        /// <inheritdoc />
         public List<IInstruction> GenerateStepsList()
         {
             throw new NotImplementedException();
