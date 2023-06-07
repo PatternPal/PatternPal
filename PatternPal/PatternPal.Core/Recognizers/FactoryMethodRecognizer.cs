@@ -1,5 +1,6 @@
 ﻿#region
 
+using PatternPal.Core.StepByStep;
 using PatternPal.SyntaxTree.Models;
 
 using static PatternPal.Core.Checks.CheckBuilder;
@@ -46,8 +47,73 @@ internal class FactoryMethodRecognizer : IRecognizer
     /// </summary>
     public IEnumerable< ICheck > Create()
     {
+        //Product c
+        //Creator c
+        //Concrete product b
+
+        //Product a
+        InterfaceCheck productIsInterface = Interface(
+            Priority.Knockout,
+            Any(Priority.Knockout)
+        );
+        yield return productIsInterface;
+
+        //Concrete product a & Product b
+        RelationCheck concreteInheritsProduct = Inherits(
+            Priority.Knockout,
+            productIsInterface);
+
+        //Creator a
+        ModifierCheck isAbstract = Modifiers(
+            Priority.Knockout,
+            Modifier.Abstract
+        );
+
+        //Creator d
+        MethodCheck factoryMethod = Method(
+            Priority.High,
+            Modifiers(
+                Priority.Knockout,
+                Modifier.Abstract
+            ),
+            Modifiers(
+                Priority.High,
+                Modifier.Public
+            ),
+            Type(
+                Priority.Knockout,
+                productIsInterface
+            )
+        );
         
+        ClassCheck creator = Class(
+            Priority.Low,
+            isAbstract,
+            //b
+            //c
+            factoryMethod
+        );
+        yield return creator;
+
+        //Concrete Creator a & Creator b
+        RelationCheck concreteInheritsCreator = Inherits(
+            Priority.Knockout,
+            creator
+        );
+
+        //Concrete Creator b --Todo does not check if it is exactly one
+        MethodCheck methodReturnsConcreteProduct = Method(
+            Priority.Low,
+            Type(
+                Priority.Low,
+                concreteInheritsProduct
+            )
+        );
+
     }
 
-    
+    public List<IInstruction> GenerateStepsList()
+    {
+        throw new NotImplementedException();
+    }
 }
