@@ -15,26 +15,26 @@ namespace PatternPal.Core.Recognizers;
 /// </summary>
 /// <remarks>
 /// Requirements to fulfill the pattern:<br/>
-///   Strategy:
-///     a) is an interface / abstract class
-///     b) has declared a method
-///         b0) if the class is an abstract instead of an interface the method has to be an abstract method
-///     c) is used by the Context class                                     -- checked in Context Class - c
-///     d) is implemented / inherited by at least one other class           -- checked in Concrete Class - a
-///     e) is implemented / inherited by at least two other classes         -- Todo if enough time
-///  Concrete Strategy
-///     a) is an implementation of the Strategy interface
-///     b) if the class is used, it must be used via the context class      -- Todo Create stricter check
-///     c) if the class is not used it should be used via the context class -- Check by Context Class
-///     d) is stored in the context class
-///  Context
-///     a) has a private field or property that has a Strategy class as type
-///     b) has a function setStrategy() to set the non-public field / property with parameter of type Strategy
-///     c) as a function useStrategy() to execute the strategy.
-///  Client
-///     a) has created an object of the type ConcreteStrategy
-///     b) has used the setStrategy() in the Context class to store the ConcreteStrategy object
-///     c) has executed the ConcreteStrategy via the Context class
+///   Strategy:<br/>
+///     a) is an interface / abstract class<br/>
+///     b) has declared a method<br/>
+///         b0) if the class is an abstract instead of an interface the method has to be an abstract method<br/>
+///     c) is used by the Context class                                     -- checked in Context Class - c<br/>
+///     d) is implemented / inherited by at least one other class           -- checked in Concrete Class - a<br/>
+///     e) is implemented / inherited by at least two other classes         -- Todo if enough time<br/>
+///  Concrete Strategy<br/>
+///     a) is an implementation of the Strategy interface<br/>
+///     b) if the class is used, it must be used via the context class      -- Todo Create stricter check<br/>
+///     c) if the class is not used it should be used via the context class -- Check by Context Class<br/>
+///     d) is stored in the context class<br/>
+///  Context<br/>
+///     a) has a private field or property that has a Strategy class as type<br/>
+///     b) has a function setStrategy() to set the non-public field / property with parameter of type Strategy<br/>
+///     c) as a function useStrategy() to execute the strategy.<br/>
+///  Client<br/>
+///     a) has created an object of the type ConcreteStrategy<br/>
+///     b) has used the setStrategy() in the Context class to store the ConcreteStrategy object<br/>
+///     c) has executed the ConcreteStrategy via the Context class<br/>
 /// </remarks>
 internal class StrategyRecognizer : IRecognizer
 {
