@@ -76,8 +76,10 @@ internal class SingletonRecognizer : IRecognizer
             SingletonInstructions.Explanation1,
             new List<ICheck>
             {
-                Class(Priority.Knockout, OnlyPrivateProtectedConstructor(
-                    out ConstructorCheck privateConstructorCheck))
+                Class(
+                    Priority.Knockout, 
+                    OnlyPrivateProtectedConstructor(
+                        out ConstructorCheck privateConstructorCheck))
             }
         ));
 
@@ -90,7 +92,11 @@ internal class SingletonRecognizer : IRecognizer
             SingletonInstructions.Explanation2,
             new List<ICheck>
             {
-                Class(Priority.Knockout, staticPrivateFieldOfTypeClass)
+                Class(
+                    Priority.Knockout, 
+                    All(
+                        Priority.Low, 
+                        staticPrivateFieldOfTypeClass))
             }
         ));
 
@@ -99,15 +105,7 @@ internal class SingletonRecognizer : IRecognizer
             privateConstructorCheck,
             staticPrivateFieldOfTypeClass);
         // Step 3: There is a method that acts as the constructor
-        res.Add(new SimpleInstruction(
-            SingletonInstructions.Step3,
-            SingletonInstructions.Explanation3,
-            new List<ICheck>
-            {
-                Class(
-                    Priority.Knockout,
-                    checkMethodActsAsConstructorBehaviour)
-            }));
+        // TODO
 
         // Step 4: There is a client that calls the instance method
         // TODO
