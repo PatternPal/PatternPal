@@ -29,18 +29,6 @@
           ],
           MatchedNode: PruneTestClass1,
           NodeCheckCollectionWrapper: false
-        },
-        {
-          FeedbackMessage: Found class 'ClassUsesPruneClass',
-          ChildrenCheckResults: [
-            {
-              FeedbackMessage: ,
-              CollectionKind: Any,
-              NodeCheckCollectionWrapper: true
-            }
-          ],
-          MatchedNode: ClassUsesPruneClass,
-          NodeCheckCollectionWrapper: false
         }
       ],
       CollectionKind: Any,

@@ -19,6 +19,13 @@
             {
               FeedbackMessage: ,
               Priority: High,
+              ChildrenCheckResults: [
+                {
+                  FeedbackMessage: No matches found,
+                  Priority: High,
+                  Correct: false
+                }
+              ],
               CollectionKind: Any,
               NodeCheckCollectionWrapper: true
             }
@@ -77,6 +84,13 @@
             {
               FeedbackMessage: ,
               Priority: High,
+              ChildrenCheckResults: [
+                {
+                  FeedbackMessage: No matches found,
+                  Priority: High,
+                  Correct: false
+                }
+              ],
               CollectionKind: Any,
               DependencyCount: 1,
               NodeCheckCollectionWrapper: true

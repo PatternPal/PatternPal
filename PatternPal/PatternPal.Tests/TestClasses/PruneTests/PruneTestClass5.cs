@@ -9,4 +9,5 @@ internal class UsesPrune5
     {
         return new PruneTestClass5();
     }
+
 }
