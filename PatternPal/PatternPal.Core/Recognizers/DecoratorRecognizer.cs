@@ -69,12 +69,14 @@ abstract file class DecoratorRecognizerParent
     /// 2) Requirements for Concrete Component:
     ///     a) is an implementation of Component<br/>
     ///     b) does not have a field of type Component
+    ///     c) if Component is an abstract class, it overrides the method of Component
     /// 3) Requirements for Base Decorator:
     ///     a) is an implementation of Component
     ///     b) is an abstract class
     ///     c) has a field of type Component
     ///     d) has a constructor with a parameter of type Component, which it passes to its field
     ///     e) calls the method of its field in the implementation of the method of Component<br/>
+    ///         i) if Component is an abstract class, it overrides the method of Component
     /// 4) Requirements for Concrete Decorator:
     ///     a) inherits from Base Decorator
     ///     b) calls the method of its parent in the implementation of the method of Component
@@ -93,7 +95,7 @@ abstract file class DecoratorRecognizerParent
         ICheck component = Component(componentMethod);
 
         //Checks for requirement 2
-        ClassCheck concreteComponent = ConcreteComponent(component);
+        ClassCheck concreteComponent = ConcreteComponent(component, componentMethod);
 
         //Checks for requirement 3
         FieldCheck baseDecoratorField = BaseDecoratorField(component);
@@ -145,19 +147,28 @@ abstract file class DecoratorRecognizerParent
     protected abstract RelationCheck ExtendsFrom(ICheck parent);
 
     /// <summary>
+    /// Check for the method of ConcreteComponent of the Decorator pattern.
+    /// Checks that there is an <see cref="IMethod"/> adhering to the requirements of the ConcreteComponent.
+    /// </summary>
+    /// <remarks>
+    /// Checks part 2c of the requirements defined for a Decorator.
+    /// </remarks>
+    protected abstract MethodCheck ConcreteComponentMethod(ICheck component);
+
+    /// <summary>
     /// Check for the ConcreteComponent of the Decorator pattern.
     /// Checks that there is an <see cref="IClass"/> adhering to the requirements of the ConcreteComponent.
     /// </summary>
     /// <remarks>
     /// Checks part 2 of the requirements defined for a Decorator.
     /// </remarks>
-    protected ClassCheck ConcreteComponent(ICheck component)
+    protected ClassCheck ConcreteComponent(ICheck component, MethodCheck componentMethod)
     {
         return
             Class(
                 Priority.Knockout,
                 ExtendsFrom(component),
-                Method(Priority.Knockout),
+                ConcreteComponentMethod(componentMethod),
                 Not(
                     Priority.Knockout,
                     BaseDecoratorField(component)
@@ -191,21 +202,7 @@ abstract file class DecoratorRecognizerParent
     /// <remarks>
     /// Checks part 3e of the requirements defined for a Decorator.
     /// </remarks>
-    protected MethodCheck BaseDecoratorMethod(MethodCheck componentMethod, FieldCheck baseDecoratorField)
-    {
-        return
-            Method(
-                Priority.Knockout,
-                    Uses(
-                        Priority.Knockout,
-                        componentMethod
-                    ),
-                    Uses(
-                        Priority.Knockout,
-                        baseDecoratorField //TODO check of dit werkt
-                    )
-            );
-    }
+    protected abstract MethodCheck BaseDecoratorMethod(MethodCheck componentMethod, FieldCheck baseDecoratorField);
 
     /// <summary>
     /// Check for the BaseDecorator of the Decorator pattern.
@@ -355,6 +352,40 @@ file class DecoratorRecognizerWithAbstractClass : DecoratorRecognizerParent
                 parent
             );
     }
+
+    /// <inheritdoc />
+    protected override MethodCheck ConcreteComponentMethod(ICheck componentMethod)
+    {
+        return
+            Method(
+                Priority.Knockout,
+                Overrides(
+                    Priority.Knockout,
+                    componentMethod
+                )
+            );
+    }
+
+    /// <inheritdoc />
+    protected override MethodCheck BaseDecoratorMethod(MethodCheck componentMethod, FieldCheck baseDecoratorField)
+    {
+        return
+            Method(
+                Priority.Knockout,
+                Uses(
+                    Priority.Knockout,
+                    componentMethod
+                ),
+                Uses(
+                    Priority.Knockout,
+                    baseDecoratorField
+                ),
+                Overrides(
+                    Priority.Knockout,
+                    componentMethod
+                )
+            );
+    }
 }
 
 /// <summary>
@@ -384,6 +415,29 @@ file class DecoratorRecognizerWithInterface : DecoratorRecognizerParent
             Implements(
                 Priority.Knockout,
                 parent
+            );
+    }
+
+    /// <inheritdoc />
+    protected override MethodCheck ConcreteComponentMethod(ICheck component)
+    {
+        return Method(Priority.Knockout);
+    }
+
+    /// <inheritdoc />
+    protected override MethodCheck BaseDecoratorMethod(MethodCheck componentMethod, FieldCheck baseDecoratorField)
+    {
+        return
+            Method(
+                Priority.Knockout,
+                Uses(
+                    Priority.Knockout,
+                    componentMethod
+                ),
+                Uses(
+                    Priority.Knockout,
+                    baseDecoratorField
+                )
             );
     }
 }

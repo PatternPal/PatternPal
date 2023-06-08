@@ -12,12 +12,14 @@
      *         Concrete Component
      *            ✓  a) is an implementation of Component
      *            ✓  b) does not have a field of type Component
+     *            ✓  c) if Component is an abstract class, it overrides the method of Component
      *         Base Decorator
      *            ✓  a) is an implementation of Component
      *            ✓  b) is an abstract class
      *            ✓  c) has a field of type Component
      *            ✓  d) has a constructor with a parameter of type Component, which it passes to its field
      *            ✓  e) calls the method of its field in the implementation of the method of Component
+     *            ✓        i) if Component is an abstract class, it overrides the method of Component
      *         Concrete Decorator
      *            ✓  a) inherits from Base Decorator
      *            ✓  b) calls the method of its parent in the implementation of the method of Component
