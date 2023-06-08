@@ -13,6 +13,7 @@ namespace PatternPal.Core.Recognizers;
 /// <summary>
 /// A <see cref="IRecognizer"/> that is used to determine if the provided files or project implements the decorator pattern
 /// </summary>
+/// TODO: Check TODO's. maak tests. check dat hij nog goed werkt
 internal class DecoratorRecognizer : IRecognizer
 {
     /// <inheritdoc />
