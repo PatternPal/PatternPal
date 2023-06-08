@@ -1,9 +1,13 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using Community.VisualStudio.Toolkit;
 using Microsoft.VisualStudio.Shell;
 using PatternPal.Extension.Commands;
+
+#endregion
 
 namespace PatternPal.Extension
 {
@@ -17,45 +21,11 @@ namespace PatternPal.Extension
 
     public class Privacy : BaseOptionModel<Privacy>
     {
-        private bool _doLogData;
-
         [Category("Privacy")]
         [DisplayName("Log data")]
         [Description(
             "Whether PatternPal can log your data. The data which gets logged are your actions and your source code. This is used for research. This option is turned off by default.")]
-        public bool DoLogData
-        {
-            get { return _doLogData; }
-            set
-            {
-                // Set is triggered both when changing the field value, as well as when clicking on the OK button.
-                // This prevents the code from being triggered twice.
-                if (value == _doLogData) return;
-
-                ThreadHelper.JoinableTaskFactory.Run(async () =>
-                {
-                    await (value
-                        ? SubscribeEvents.SubscribeEventHandlersAsync()
-                        : SubscribeEvents.UnsubscribeEventHandlersAsync());
-                });
-
-                // The SessionId has to be reset if the option for logging data is changed to prevent logging without a session id. 
-                // In other words, a new session has to be started.
-                //ThreadHelper.ThrowIfNotOnUIThread();
-                //if (value)
-                //{
-                //    SubscribeEvents.OnSessionStart();
-                //    SubscribeEvents.OnSolutionOpen();
-                //}
-                //else
-                //{
-                //    SubscribeEvents.OnSessionEnd();
-                //    SubscribeEvents.OnSolutionClose();
-                //}
-
-                _doLogData = value;
-            }
-        }
+        public bool DoLogData { get; set; } = false;
 
         [Category("Privacy")]
         [DisplayName("First Time")]
@@ -64,7 +34,7 @@ namespace PatternPal.Extension
 
         [Category("Privacy")]
         [DisplayName("Subject ID")]
-        [Description("The ID of the current subject. This is used for research.")]
+        [Description("The ID of the current subject. This can be customized for research purposes.")]
         public string SubjectId { get; set; } = Guid.Empty.ToString();
     }
 }

@@ -10,7 +10,6 @@ using EnvDTE80;
 using PatternPal.Protos;
 using System.Threading;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.PlatformUI.OleComponentSupport;
 using System.Linq;
 
 #endregion
@@ -45,7 +44,7 @@ namespace PatternPal.Extension.Commands
 
         public static string SessionId { get; set; }
 
-        private static string SubjectId { get; set; }
+        private static bool _doLog = false;
 
         private static string _pathToUserDataFolder;
 
@@ -74,8 +73,7 @@ namespace PatternPal.Extension.Commands
 
             // Any GET of Privacy.Instance activates the DoLogData which is not the expected behaviour.
             // However, it is necessary here in Initialize to kickstart the Session and Project Open events.
-            string test = Privacy.Instance.SubjectId;
-            SubscribeEvents.SubjectId = Privacy.Instance.SubjectId;
+            //SubscribeEvents.SubjectId = Privacy.Instance.SubjectId;
         }
 
         /// <summary>
@@ -110,6 +108,36 @@ namespace PatternPal.Extension.Commands
             _dteDocumentEvents.DocumentSaved -= OnDocumentSaved;
         }
 
+        public static void OnChangedLoggingPreference(Privacy obj)
+        {
+            if (_doLog == obj.DoLogData)
+            {
+                return;
+            }
+
+            _doLog = obj.DoLogData;
+
+            ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
+                await (obj.DoLogData
+                    ? SubscribeEventHandlersAsync()
+                    : UnsubscribeEventHandlersAsync());
+            });
+
+            // The SessionId has to be reset if the option for logging data is changed to prevent logging without a session id. 
+            // In other words, a new session has to be started.
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (obj.DoLogData)
+            {
+                OnSessionStart();
+                OnSolutionOpen();
+            }
+            else
+            {
+                OnSolutionClose(); 
+                OnSessionEnd();
+            }
+        }
 
         #region Events
 
@@ -200,6 +228,7 @@ namespace PatternPal.Extension.Commands
         /// </summary>
         internal static void OnSessionStart()
         {
+            //SubjectId = Privacy.Instance.SubjectId;
             SessionId = Guid.NewGuid().ToString();
 
             LogEventRequest request = CreateStandardLog();
@@ -343,7 +372,7 @@ namespace PatternPal.Extension.Commands
         {
             return new LogEventRequest
             {
-                EventId = Guid.NewGuid().ToString(), SubjectId = SubjectId, SessionId = SessionId
+                EventId = Guid.NewGuid().ToString(), SubjectId = Privacy.Instance.SubjectId, SessionId = SessionId
             };
         }
 
