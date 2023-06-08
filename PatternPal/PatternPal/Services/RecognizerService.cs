@@ -1,6 +1,4 @@
-﻿using ICheckResult = PatternPal.Core.ICheckResult;
-
-namespace PatternPal.Services;
+﻿namespace PatternPal.Services;
 
 /// <inheritdoc cref="Protos.RecognizerService"/>
 public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
@@ -12,20 +10,9 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
     {
         GetSupportedRecognizersResponse response = new();
 
-        bool initialValue = true;
-        foreach (Recognizer recognizer in Enum.GetValues< Recognizer >())
+        foreach (Recognizer supportedRecognizer in RecognizerRunner.SupportedRecognizers.Keys)
         {
-            // Skip the first value of the enum. This value is required by the Protocol Buffer
-            // spec, but it shouldn't be used directly, because it's impossible to know whether
-            // the value was set to the default value, or no value was set (because when no
-            // value is set, the default value is used).
-            if (initialValue)
-            {
-                initialValue = false;
-                continue;
-            }
-
-            response.Recognizers.Add(recognizer);
+            response.Recognizers.Add(supportedRecognizer);
         }
 
         return Task.FromResult(response);
