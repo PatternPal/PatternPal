@@ -29,4 +29,19 @@
     <Protobuf Include="$(RepositoryRoot)Protos/logprovider.proto" GrpcServices="Server" Link="Protos/logprovider.proto" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="StepByStep\Resources\Instructions\SingletonInstructions.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SingletonInstructions.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="StepByStep\Resources\Instructions\SingletonInstructions.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SingletonInstructions.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>
