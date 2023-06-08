@@ -261,11 +261,6 @@ public class RecognizerRunner
                 results.Add(checkResult);
             }
 
-            if (checkResult.MatchedNode != null && checkResult.MatchedNode.GetName() == "ConcreteComponent")
-            {
-                int i = 5;
-            }
-
             switch (checkResult)
             {
                 case LeafCheckResult leafCheckResult:

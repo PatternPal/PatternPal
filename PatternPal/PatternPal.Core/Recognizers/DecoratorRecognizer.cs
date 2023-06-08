@@ -35,13 +35,13 @@ internal class DecoratorRecognizer : IRecognizer
 
         yield return
             Any(
-                Priority.Knockout, //TODO welke prio moet dit zijn
+                Priority.Knockout,
                 All(
-                    Priority.Knockout, //TODO welke prio moet dit zijn
+                    Priority.Knockout,
                     hasInterface.Checks()
                 ),
                 All(
-                    Priority.Knockout, //TODO welke prio moet dit zijn
+                    Priority.Knockout,
                     hasAbstractClass.Checks()
                 )
             );
@@ -189,6 +189,7 @@ abstract file class DecoratorRecognizerParent
     ///         i) if the class is an abstract instead of an interface the method has to be an abstract method
     /// 2) Requirements for Concrete Component:
     ///     a) is an implementation of Component<br/>
+    ///     b) does not have a field of type Component
     /// 3) Requirements for Base Decorator:
     ///     a) is an implementation of Component
     ///     b) is an abstract class
@@ -277,7 +278,11 @@ abstract file class DecoratorRecognizerParent
             Class(
                 Priority.Knockout,
                 ExtendsFrom(component),
-                Method(Priority.Knockout)
+                Method(Priority.Knockout),
+                Not(
+                    Priority.Knockout,
+                    BaseDecoratorField(component)
+                )
             );
     }
 

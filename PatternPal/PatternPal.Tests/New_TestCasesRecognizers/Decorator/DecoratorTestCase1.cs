@@ -11,6 +11,7 @@
      *            ✓        i) if the class is an abstract instead of an interface the method has to be an abstract method
      *         Concrete Component
      *            ✓  a) is an implementation of Component
+     *            ✓  b) does not have a field of type Component
      *         Base Decorator
      *            ✓  a) is an implementation of Component
      *            ✓  b) is an abstract class
