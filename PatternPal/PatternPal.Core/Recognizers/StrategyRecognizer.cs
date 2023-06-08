@@ -1,6 +1,5 @@
 ﻿#region
 
-using PatternPal.Core.StepByStep;
 using PatternPal.SyntaxTree.Models;
 
 using static PatternPal.Core.Checks.CheckBuilder;
@@ -43,14 +42,15 @@ internal class StrategyRecognizer : IRecognizer
     private ClassCheck ? _abstractClassStrategyCheck;
 
     private ICheck ? _fieldOrPropertyStrategy;
+
+    /// <inheritdoc />
     public string Name => "Strategy";
+
+    /// <inheritdoc />
     public Recognizer RecognizerType => Recognizer.Strategy;
 
-    /// <summary>
-    /// A method which creates a lot of <see cref="ICheck"/>s that each adheres to the requirements a strategy pattern needs to have implemented.
-    /// It returns the requirements in a tree structure stated per class.
-    /// </summary>
-    public IEnumerable< ICheck > Create()
+    /// <inheritdoc />
+    IEnumerable< ICheck > IRecognizer.Create()
     {
         // Check Strategy Interface / Abstract class
         yield return CheckStrategy(
@@ -74,11 +74,6 @@ internal class StrategyRecognizer : IRecognizer
             setStrategyMethodCheck,
             usageExecuteStrategy);
         yield return clientClassCheck;
-    }
-
-    public List< IInstruction > GenerateStepsList()
-    {
-        throw new NotImplementedException();
     }
 
     /// <summary>

@@ -19,8 +19,15 @@ namespace PatternPal.Core;
 /// </summary>
 public class RecognizerRunner
 {
-    // The recognizers which are currently supported.
+    /// <summary>
+    /// The <see cref="IRecognizer"/>s which are currently supported.
+    /// </summary>
     public static IDictionary< Recognizer, IRecognizer > SupportedRecognizers = null!;
+
+    /// <summary>
+    /// The <see cref="IStepByStepRecognizer"/>s which are currently supported.
+    /// </summary>
+    public static IDictionary< Recognizer, IStepByStepRecognizer > SupportedStepByStepRecognizers = null!;
 
     /// <summary>
     /// Finds the recognizers which are defined in this assembly and adds them to <see cref="SupportedRecognizers"/>.
@@ -32,19 +39,32 @@ public class RecognizerRunner
     public static void ModuleInitializer()
     {
         SupportedRecognizers = new Dictionary< Recognizer, IRecognizer >();
+        GetImplementingTypes(
+            SupportedRecognizers,
+            nameof( IRecognizer.RecognizerType ));
 
-        Type recognizerType = typeof( IRecognizer );
+        SupportedStepByStepRecognizers = new Dictionary< Recognizer, IStepByStepRecognizer >();
+        GetImplementingTypes(
+            SupportedStepByStepRecognizers,
+            nameof( IStepByStepRecognizer.RecognizerType ));
 
-        // Find all types which derive from `IRecognizer`.
-        foreach (Type type in recognizerType.Assembly.GetTypes().Where(ty => ty != recognizerType && recognizerType.IsAssignableFrom(ty)))
+        void GetImplementingTypes< T >(
+            IDictionary< Recognizer, T > supportedRecognizers,
+            string nameOfRecognizerProperty)
         {
-            IRecognizer instance = (IRecognizer)Activator.CreateInstance(type)!;
+            Type recognizerType = typeof( T );
 
-            // Get the mapping from `Recognizer` to `IRecognizer` by invoking the property on the
-            // recognizer which specifies it.
-            SupportedRecognizers.Add(
-                (Recognizer)type.GetRuntimeProperty(nameof( IRecognizer.RecognizerType ))!.GetValue(instance)!,
-                instance);
+            // Find all types which derive from `T`.
+            foreach (Type type in recognizerType.Assembly.GetTypes().Where(ty => ty != recognizerType && recognizerType.IsAssignableFrom(ty)))
+            {
+                T instance = (T)Activator.CreateInstance(type)!;
+
+                // Get the mapping from `Recognizer` to `T` by invoking the property on the
+                // recognizer which specifies it.
+                supportedRecognizers.Add(
+                    (Recognizer)type.GetRuntimeProperty(nameOfRecognizerProperty)!.GetValue(instance)!,
+                    instance);
+            }
         }
     }
 
@@ -146,10 +166,10 @@ public class RecognizerRunner
         {
             if (_instruction != null)
             {
-                    ICheck rootCheck = new NodeCheck< INode >(
-                        Priority.Knockout,
-                        _instruction.Checks);
-                    results.Add(RunImpl(rootCheck));
+                ICheck rootCheck = new NodeCheck< INode >(
+                    Priority.Knockout,
+                    _instruction.Checks);
+                results.Add(RunImpl(rootCheck));
             }
             else
             {

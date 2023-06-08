@@ -1,6 +1,4 @@
-﻿using PatternPal.Core.StepByStep;
-
-namespace PatternPal.Core.Recognizers;
+﻿namespace PatternPal.Core.Recognizers;
 
 /// <summary>
 /// Represents a recognizer for a design pattern.
@@ -30,11 +28,4 @@ public interface IRecognizer
     internal ICheck CreateRootCheck() => new NodeCheck< INode >(
         Priority.Knockout,
         Create());
-
-    /// <summary>
-    /// Returns a list of <see cref="IInstruction"/>s that contain everything for a single step
-    /// in the <see cref="StepByStep"/> module.
-    /// </summary>
-    /// <returns></returns>
-    List<IInstruction> GenerateStepsList();
 }
