@@ -1,5 +1,6 @@
 ﻿using PatternPal.Core.Recognizers.Helper_Classes;
 using PatternPal.Core.StepByStep;
+
 using static PatternPal.Core.Checks.CheckBuilder;
 
 namespace PatternPal.Core.Recognizers
@@ -40,12 +41,8 @@ namespace PatternPal.Core.Recognizers
         readonly AdapterRecognizerParent _isInterface = new AdapterRecognizerInterface();
         readonly AdapterRecognizerParent _isAbstractClass = new AdapterRecognizerAbstractClass();
 
-        /// <summary>
-        /// A method which creates a lot of <see cref="ICheck"/>s that each adheres to the requirements a adapter pattern needs to have implemented.
-        /// It returns the requirements in a tree structure stated per class.
-        /// </summary>
         /// <inheritdoc />
-        public IEnumerable<ICheck> Create()
+        IEnumerable< ICheck > IRecognizer.Create()
         {
             yield return Any(
                 Priority.Low,
@@ -54,16 +51,10 @@ namespace PatternPal.Core.Recognizers
                     _isAbstractClass.Checks()
                 ),
                 All(
-                Priority.Low,
+                    Priority.Low,
                     _isInterface.Checks()
                 )
             );
-        }
-
-        /// <inheritdoc />
-        public List<IInstruction> GenerateStepsList()
-        {
-            throw new NotImplementedException();
         }
     }
 }

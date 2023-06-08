@@ -1,7 +1,8 @@
 ﻿#region
 
-using PatternPal.Core.Recognizers;
 using PatternPal.Core.StepByStep;
+
+using InstructionSet = PatternPal.Protos.InstructionSet;
 
 #endregion
 
@@ -15,27 +16,11 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
         ServerCallContext context)
     {
         GetInstructionSetsResponse response = new();
-        
-        IDictionary<Recognizer, IRecognizer> sbsDictionary = 
-            RecognizerRunner.SupportedRecognizers;
 
-        // Go over all the recognizers supported by the runner and remove those that do not implement
-        // the GenerateStepsList function.
-        foreach (
-            KeyValuePair<Recognizer, IRecognizer> entry 
-            in sbsDictionary)
+        foreach (Recognizer recognizer in RecognizerRunner.SupportedStepByStepRecognizers.Keys)
         {
-            try
-            {
-                entry.Value.GenerateStepsList();
-            }
-            catch
-            {
-                continue;
-            }
-            response.Recognizers.Add(entry.Key);
+            response.Recognizers.Add(recognizer);
         }
-
 
         return Task.FromResult(response);
     }
@@ -45,14 +30,13 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
         GetInstructionSetRequest request,
         ServerCallContext context)
     {
-
         // Provided with the recognizer return information on the instruction set required by the
         // InstructionsViewModel to navigate between steps.
         Recognizer providedRecognizer = request.Recognizer;
-        IRecognizer recognizer = RecognizerRunner.SupportedRecognizers[providedRecognizer];
+        IStepByStepRecognizer recognizer = RecognizerRunner.SupportedStepByStepRecognizers[ providedRecognizer ];
         List< IInstruction > instructions = recognizer.GenerateStepsList();
 
-        Protos.InstructionSet res =
+        InstructionSet res =
             new()
             {
                 Name = recognizer.Name,
@@ -75,8 +59,8 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
         // Provided with the recognizer and instruction number return the instruction detailed
         // information for display to the user.
         Recognizer protorecognizer = request.Recognizers;
-        IRecognizer recognizer = RecognizerRunner.SupportedRecognizers[protorecognizer];
-        IInstruction instruction = recognizer.GenerateStepsList()[(int)request.InstructionNumber];
+        IStepByStepRecognizer recognizer = RecognizerRunner.SupportedStepByStepRecognizers[ protorecognizer ];
+        IInstruction instruction = recognizer.GenerateStepsList()[ (int)request.InstructionNumber ];
         GetInstructionByIdResponse response = new()
                                               {
                                                   Instruction = new Instruction
@@ -97,14 +81,14 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
     {
         // Retrieve the checks based on the instruction number and recognizer.
         Recognizer protoRecognizer = request.Recognizer;
-        IRecognizer recognizer = RecognizerRunner.SupportedRecognizers[protoRecognizer];
-        IInstruction instruction = recognizer.GenerateStepsList()[request.InstructionNumber];
-        
+        IStepByStepRecognizer recognizer = RecognizerRunner.SupportedStepByStepRecognizers[ protoRecognizer ];
+        IInstruction instruction = recognizer.GenerateStepsList()[ request.InstructionNumber ];
+
         // Run the checks on the provided files.
         RecognizerRunner runner = new(
             request.Documents,
-            instruction);
-        IList<ICheckResult> res = runner.Run(pruneAll: true);
+            instruction );
+        IList< ICheckResult > res = runner.Run(pruneAll: true);
         // Check whether there is a single file with results.
         if (res.Any())
         {
@@ -120,18 +104,20 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
                 }
             }
 
-            return Task.FromResult(new CheckInstructionResponse
-            {
-                Result = assumption
-            });
+            return Task.FromResult(
+                new CheckInstructionResponse
+                {
+                    Result = assumption
+                });
         }
         // There was no content in the file that was able to run in the runner.
         else
         {
-            return Task.FromResult(new CheckInstructionResponse
-            {
-                Result = false
-            });
+            return Task.FromResult(
+                new CheckInstructionResponse
+                {
+                    Result = false
+                });
         }
     }
 
