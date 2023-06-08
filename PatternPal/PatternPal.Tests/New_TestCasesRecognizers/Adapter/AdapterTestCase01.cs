@@ -45,10 +45,12 @@
     file class ThirdPartyBillingSystem
     {
         private readonly EmployeeAdapter _employeeSource;
+        private HRSystem _service;
 
         public ThirdPartyBillingSystem()
         {
-            this._employeeSource = new EmployeeAdapter();
+            this._service = new HRSystem();
+            this._employeeSource = new EmployeeAdapter(_service);
         }
 
         public void ShowEmployeeList()
@@ -73,12 +75,16 @@
     //Adapter
     file class EmployeeAdapter : ITarget
     {
-        private HRSystem service = new();
+        private HRSystem _service;
 
+        public EmployeeAdapter(HRSystem service)
+        {
+            _service = service;
+        }
         public List<string> GetEmployeeList()
         {
             List<string> employeeList = new();
-            string[][] employees = service.GetEmployees();
+            string[][] employees = _service.GetEmployees();
             foreach (string[] employee in employees)
             {
                 employeeList.Add(employee[0]);

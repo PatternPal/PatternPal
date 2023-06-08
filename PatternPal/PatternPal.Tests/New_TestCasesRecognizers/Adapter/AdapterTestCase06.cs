@@ -76,6 +76,16 @@
     {
         private HRSystem service;
 
+        public EmployeeAdapter(HRSystem service)
+        {
+            this.service = service;
+        }
+
+        public EmployeeAdapter()
+        {
+
+        }
+
         public List<string> GetEmployeeList()
         {
             List<string> employeeList = new();
