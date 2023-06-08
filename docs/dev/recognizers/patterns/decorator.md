@@ -52,7 +52,8 @@ The priority of a requirement is noted with the (low)-(mid)-(high)-(knockout) cr
 
 **ConcreteComponent class**
 1. (knockout) is an implementation of `Component`
-2. (low) is created by the Client class (duplicate if 1a holds)
+2. (knockout) does not have a field of type `Component`
+3. (low) is created by the Client class
 
 **BaseDecorator class**
 1. (knockout) is an implementation of `Component`
