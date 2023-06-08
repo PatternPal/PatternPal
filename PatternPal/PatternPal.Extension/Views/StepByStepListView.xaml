@@ -6,9 +6,11 @@
              xmlns:local="clr-namespace:PatternPal.Extension"
              xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
              xmlns:UIResources="clr-namespace:PatternPal.Extension.Resources"
+             xmlns:viewModels="clr-namespace:PatternPal.Extension.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="360"
-             d:DesignWidth="300">
+             d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance Type=viewModels:StepByStepListViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
             <Style TargetType="TextBlock">
@@ -61,34 +63,44 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0"
+        <TextBlock Grid.Row="0"
                        TextWrapping="Wrap"
                        Text="Choose a design pattern to implement:"
                        FontSize="15"
                        HorizontalAlignment="Center"
                        Margin="20,0,20,10" />
 
-            <ComboBox Grid.Row="1"
+        <ComboBox Grid.Row="1"
                       Margin="20,0,20,10"
                       Width="200"
                       HorizontalAlignment="Center"
                       ItemsSource="{Binding InstructionSetList}"
-                      SelectedItem="{Binding SelectedInstructionSet}"
-                      DisplayMemberPath="Name"></ComboBox>
-            <Button Grid.Row="2"
+                      SelectedIndex="0"
+                      SelectedItem="{Binding SelectedInstructionSet}"></ComboBox>
+        <Button Grid.Row="2"
                     Height="40"
                     Width="200"
                     FontSize="15"
                     Margin="20,0,20,0"
                     HorizontalAlignment="Center"
                     Visibility="Visible"
-                    Command="{Binding NavigateStepByStepInstructionsCommand}">Next</Button>
-        </Grid>
+                    Command="{Binding NavigateStepByStepInstructionsCommand}">Implement new pattern</Button>
+        <Button Name="Continue"
+                Grid.Row="2"
+                Height="40"
+                Width="200"
+                FontSize="15" 
+                Margin="0,45,0,-45"
+                HorizontalAlignment="Center"
+                Command="{Binding NavigateContinueStepByStepInstructionsCommand}">
+            Continue work on pattern
+        </Button>
+    </Grid>
 </UserControl>
