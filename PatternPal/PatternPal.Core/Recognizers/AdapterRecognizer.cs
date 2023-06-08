@@ -24,11 +24,10 @@ namespace PatternPal.Core.Recognizers
     /// <br/>
     /// Requirements for the Adapter class:<br/>
     ///     a) inherits/implements the Client Interface<br/>
-    ///     b) creates an Service object<br/>
+    ///     b) creates an Service object or gets one via the constructor<br/>
     ///     c) contains a private field in which the Service is stored<br/>
     ///     d) does not return an instance of the Service<br/>
     ///     e) a method uses the Service class<br/>
-    ///     f) every method uses the Service class<br/>
     /// </remarks>
     internal class AdapterRecognizer : IRecognizer
     {
