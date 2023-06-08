@@ -8,9 +8,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Core\TestClasses\**" />
     <Compile Remove="LoggingService\Resources\**" />
+    <Compile Remove="New_TestCasesRecognizers\**" />
+    <Compile Remove="TestClasses\**" />
+    <EmbeddedResource Remove="Core\TestClasses\**" />
     <EmbeddedResource Remove="LoggingService\Resources\**" />
+    <EmbeddedResource Remove="New_TestCasesRecognizers\**" />
+    <EmbeddedResource Remove="TestClasses\**" />
+    <None Remove="Core\TestClasses\**" />
     <None Remove="LoggingService\Resources\**" />
+    <None Remove="New_TestCasesRecognizers\**" />
+    <None Remove="TestClasses\**" />
   </ItemGroup>
 
   <ItemGroup>
