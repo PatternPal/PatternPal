@@ -53,7 +53,8 @@ The priority of a requirement is noted with the (low)-(mid)-(high)-(knockout) cr
 **ConcreteComponent class**
 1. (knockout) is an implementation of `Component`
 2. (knockout) does not have a field of type `Component`
-3. (low) is created by the `Client` class
+3. (knockout) if Component is an abstract class, it overrides the method of Component
+4. (low) is created by the `Client` class
 
 **BaseDecorator class**
 1. (knockout) is an implementation of `Component`
@@ -61,7 +62,8 @@ The priority of a requirement is noted with the (low)-(mid)-(high)-(knockout) cr
 3. (knockout) has a field of type `Component`
 4. (high) has a constructor with a parameter of type `Component`, which it passed to its field
 5. (knockout) calls the method of its field in the implementation of the method of `Component`
-6. (knockout) is inherited by at least 1 other class
+    i. if Component is an abstract class, it overrides the method of Component
+7. (knockout) is inherited by at least 1 other class
 
 **ConcreteDecorator class**
 1. (knockout) inherits from `BaseDecorator`
