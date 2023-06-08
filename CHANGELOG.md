@@ -7,6 +7,38 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [3.4.0] - 2023-06-08
+
+## Added
+
+- Log: Add a test suite for logging server by @JustNireon in https://github.com/PatternPal/PatternPal/pull/264
+- Log: Implementation File.Edit by @WingToh in https://github.com/PatternPal/PatternPal/pull/267
+- Log: Delete codestates folders if not existent in database by @JustNireon in https://github.com/PatternPal/PatternPal/pull/261
+- Rec: Add priority sorting to RecognizerRunner by @ViciousDoormat in https://github.com/PatternPal/PatternPal/pull/271
+- Rec: Add prune all option to runner by @ViciousDoormat in https://github.com/PatternPal/PatternPal/pull/273
+- Ext: Error handling by @KnapSac in https://github.com/PatternPal/PatternPal/pull/265
+- Rec: Added knockouts to priority sorting and added a test by @ViciousDoormat in https://github.com/PatternPal/PatternPal/pull/276
+- Docs: Add Priority sorting to recognizerrunner docs by @ViciousDoormat in https://github.com/PatternPal/PatternPal/pull/277
+- Feat: all object/method definitions for new step by step mode by @DanielvanDamme in https://github.com/PatternPal/PatternPal/pull/272
+- ST: Add `Overrides` relation by @KnapSac in https://github.com/PatternPal/PatternPal/pull/278
+- Log: Implemented diff-logging by @ovda96 in https://github.com/PatternPal/PatternPal/pull/274
+- Rec: Implement strategy recognizer by @LvanWerven in https://github.com/PatternPal/PatternPal/pull/282
+- Log: Refactoring + added FullCodeState-field by @ovda96 in https://github.com/PatternPal/PatternPal/pull/285
+- Rec: Added priority notation by @LvanWerven in https://github.com/PatternPal/PatternPal/pull/286
+- Log: Implemented File.Create by @WingToh in https://github.com/PatternPal/PatternPal/pull/283
+- Rec: Added adapter by @rutgervincken in https://github.com/PatternPal/PatternPal/pull/288
+- SBS: Implementation of new StepByStep module. by @DanielvanDamme in https://github.com/PatternPal/PatternPal/pull/284
+
+## Changed
+
+- Docs: Restructured documentation layout by @ovda96 in https://github.com/PatternPal/PatternPal/pull/258
+- Rec: No longer hard-code Singleton Recognizer by @KnapSac in https://github.com/PatternPal/PatternPal/pull/266
+- CLI: Remove .NET Framework dependency and use Spectre.Console by @KnapSac in https://github.com/PatternPal/PatternPal/pull/270
+- Ext: Update to extensibility and add consent page by @JustNireon in https://github.com/PatternPal/PatternPal/pull/269
+- Meta: Cleanup old code by @KnapSac in https://github.com/PatternPal/PatternPal/pull/275
+- Rec: Fix adding result twice to to be pruned list by @KnapSac in https://github.com/PatternPal/PatternPal/pull/281
+- Log: File.Edit only logging when enabled by @WingToh in https://github.com/PatternPal/PatternPal/pull/287
+
 ## [3.3.0] - 2023-05-24
 
 ## Added
