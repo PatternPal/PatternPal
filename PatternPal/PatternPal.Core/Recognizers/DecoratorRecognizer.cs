@@ -45,127 +45,6 @@ internal class DecoratorRecognizer : IRecognizer
                     hasAbstractClass.Checks()
                 )
             );
-
-        /*MethodCheck componentMethod = Method(Priority.Knockout);
-
-        //TODO add extra implementation for abstract class and put in Any
-        InterfaceCheck component =
-            Interface(
-                Priority.Knockout,
-                componentMethod
-            );
-
-        ClassCheck concreteComponent =
-            Class(
-                Priority.Knockout,
-                Implements(
-                    Priority.Knockout,
-                    component
-                ),
-                Method(Priority.Knockout)
-            );
-
-        FieldCheck baseDecoratorField =
-            Field(
-                Priority.Knockout,
-                Type(
-                    Priority.Knockout,
-                    component
-                )
-            );
-
-        MethodCheck baseDecoratorMethod =
-            Method(
-                Priority.Knockout,
-                Uses(
-                    Priority.Knockout,
-                    componentMethod
-                ),
-                Uses(
-                    Priority.Knockout,
-                    baseDecoratorField
-                )
-            );
-
-        ClassCheck baseDecorator =
-            Class(
-                Priority.Knockout,
-                Modifiers(
-                    Priority.High,
-                    Modifier.Abstract
-                ),
-                Implements(
-                    Priority.Knockout,
-                    component
-                ),
-                baseDecoratorField,
-                Constructor(
-                    Priority.High,
-                    Uses(
-                        Priority.High,
-                        baseDecoratorField
-                    ),
-                    Parameters(
-                        Priority.High,
-                        Type(
-                            Priority.High,
-                            component
-                        )
-                    )
-                ),
-                baseDecoratorMethod
-            );
-
-        MethodCheck concreteDecoratorExtraMethod =
-            Method(Priority.Mid);
-
-        ClassCheck concreteDecorator =
-            Class(
-                Priority.Knockout,
-                Inherits(
-                    Priority.Knockout,
-                    baseDecorator
-                ),
-                concreteDecoratorExtraMethod,
-                Method(
-                    Priority.Knockout,
-                    Overrides(
-                        Priority.Knockout,
-                        baseDecoratorMethod
-                    ),
-                    Uses(
-                        Priority.Knockout,
-                        baseDecoratorMethod
-                    ),
-                    Uses(
-                        Priority.Mid,
-                        concreteDecoratorExtraMethod
-                    )
-                )
-            );
-
-        ClassCheck client =
-            Class(
-                Priority.Low,
-                Uses(
-                    Priority.Low,
-                    component
-                ),
-                Creates(
-                    Priority.Low,
-                    concreteDecorator
-                ),
-                Creates(
-                    Priority.Low,
-                    concreteComponent
-                )
-            );
-
-        yield return component;
-        yield return concreteComponent;
-        yield return baseDecorator;
-        yield return concreteDecorator;
-        yield return client;*/
     }
 
     public List<IInstruction> GenerateStepsList()
@@ -209,23 +88,23 @@ abstract file class DecoratorRecognizerParent
     {
         ICheck[] result = new ICheck[5];
 
-        //Checks for 1
+        //Checks for requirement 1
         MethodCheck componentMethod = ComponentMethod();
         ICheck component = Component(componentMethod);
 
-        //Check for 2
+        //Checks for requirement 2
         ClassCheck concreteComponent = ConcreteComponent(component);
 
-        //Check for 3
+        //Checks for requirement 3
         FieldCheck baseDecoratorField = BaseDecoratorField(component);
         MethodCheck baseDecoratorMethod = BaseDecoratorMethod(componentMethod, baseDecoratorField);
         ClassCheck baseDecorator = BaseDecorator(component, baseDecoratorField, baseDecoratorMethod);
 
-        //Check for 4
+        //Checks for requirement 4
         MethodCheck concreteDecoratorExtraMethod = ConcreteDecoratorExtraMethod();
         ClassCheck concreteDecorator = ConcreteDecorator(baseDecorator, concreteDecoratorExtraMethod, baseDecoratorMethod);
 
-        //Check for 5
+        //Checks for requirement 5
         ClassCheck client = Client(component, concreteDecorator, concreteComponent);
 
         result[0] = component;
