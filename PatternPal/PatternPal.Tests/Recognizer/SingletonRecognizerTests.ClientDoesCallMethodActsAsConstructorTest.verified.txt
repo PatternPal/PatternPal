@@ -61,6 +61,13 @@
               {
                 FeedbackMessage: ,
                 Priority: Mid,
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: no matches found,
+                    Priority: Mid,
+                    Correct: false
+                  }
+                ],
                 CollectionKind: Any,
                 NodeCheckCollectionWrapper: true
               }
@@ -211,6 +218,13 @@
                   {
                     FeedbackMessage: ,
                     Priority: High,
+                    ChildrenCheckResults: [
+                      {
+                        FeedbackMessage: no matches found,
+                        Priority: High,
+                        Correct: false
+                      }
+                    ],
                     CollectionKind: Any,
                     DependencyCount: 1,
                     NodeCheckCollectionWrapper: true
@@ -298,6 +312,13 @@
               {
                 FeedbackMessage: ,
                 Priority: Mid,
+                ChildrenCheckResults: [
+                  {
+                    FeedbackMessage: no matches found,
+                    Priority: Mid,
+                    Correct: false
+                  }
+                ],
                 CollectionKind: Any,
                 NodeCheckCollectionWrapper: true
               }
@@ -469,6 +490,13 @@
                   {
                     FeedbackMessage: ,
                     Priority: High,
+                    ChildrenCheckResults: [
+                      {
+                        FeedbackMessage: no matches found,
+                        Priority: High,
+                        Correct: false
+                      }
+                    ],
                     CollectionKind: Any,
                     DependencyCount: 1,
                     NodeCheckCollectionWrapper: true

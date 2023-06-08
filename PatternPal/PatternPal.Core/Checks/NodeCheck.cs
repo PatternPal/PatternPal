@@ -271,16 +271,15 @@ internal class NodeCheck< TNode > : CheckBase
         {
             MarkCheckAsSeen(nodeCheck);
 
-            // TODO this fixes so that when no field is in the class and a fieldcheck is run
-            // it does not return a "correct" result.
-            //results.Add(new LeafCheckResult {
-            //    FeedbackMessage = "",
-            //    Correct = false,
-            //    Priority = Priority.Knockout,
-            //    DependencyCount = 0,
-            //    MatchedNode = null,
-            //    Check = null,
-            //});
+            results.Add(new LeafCheckResult
+            {
+                FeedbackMessage = "no matches found",
+                Correct = false,
+                Priority = nodeCheck.Priority,
+                DependencyCount = 0,
+                MatchedNode = null,
+                Check = nodeCheck,
+            });
         }
 
         // Return the result.
