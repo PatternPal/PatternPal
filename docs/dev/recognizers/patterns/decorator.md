@@ -47,13 +47,13 @@ The priority of a requirement is noted with the (low)-(mid)-(high)-(knockout) cr
 1. (knockout) is an interface/abstract class
 2. (knockout) has declared a method
     1. if the class is an abstract class instead of an interface, this method has to be an abstract method
-3. (knockout) its declared method gets called by the BaseDecorator class 
+3. (knockout) its declared method gets called by `BaseDecorator` 
 4. (knockout) is implemented/inherited by at least two other classes
 
 **ConcreteComponent class**
 1. (knockout) is an implementation of `Component`
 2. (knockout) does not have a field of type `Component`
-3. (low) is created by the Client class
+3. (low) is created by the `Client` class
 
 **BaseDecorator class**
 1. (knockout) is an implementation of `Component`
