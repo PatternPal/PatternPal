@@ -21,7 +21,7 @@
               Priority: High,
               ChildrenCheckResults: [
                 {
-                  FeedbackMessage: no matches found,
+                  FeedbackMessage: No matches found,
                   Priority: High,
                   Correct: false
                 }
@@ -86,7 +86,7 @@
               Priority: High,
               ChildrenCheckResults: [
                 {
-                  FeedbackMessage: no matches found,
+                  FeedbackMessage: No matches found,
                   Priority: High,
                   Correct: false
                 }
