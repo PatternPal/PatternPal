@@ -18,9 +18,6 @@ namespace PatternPal.Extension
     public class Privacy : BaseOptionModel<Privacy>
     {
         private bool _doLogData;
-        private string _subjectId = Guid.Empty.ToString();
-        private bool _firstTime = true;
-
 
         [Category("Privacy")]
         [DisplayName("Log data")]
@@ -44,30 +41,30 @@ namespace PatternPal.Extension
 
                 // The SessionId has to be reset if the option for logging data is changed to prevent logging without a session id. 
                 // In other words, a new session has to be started.
-                ThreadHelper.ThrowIfNotOnUIThread();
-                if (value)
-                {
-                    SubscribeEvents.OnSessionStart();
-                    SubscribeEvents.OnSolutionOpen();
-                }
-                else
-                {
-                    SubscribeEvents.OnSessionEnd();
-                    SubscribeEvents.OnSolutionClose();
-                }
+                //ThreadHelper.ThrowIfNotOnUIThread();
+                //if (value)
+                //{
+                //    SubscribeEvents.OnSessionStart();
+                //    SubscribeEvents.OnSolutionOpen();
+                //}
+                //else
+                //{
+                //    SubscribeEvents.OnSessionEnd();
+                //    SubscribeEvents.OnSolutionClose();
+                //}
 
                 _doLogData = value;
             }
         }
 
         [Category("Privacy")]
-        [DisplayName("Subject ID")]
-        [Description("The ID of the current subject. This is used for research.")]
-        public string SubjectId { get => _subjectId; set => _subjectId = value; }
-
-        [Category("Privacy")]
         [DisplayName("First Time")]
         [Description("Whether this is the first time PatternPal is used. This is used for research.")]
-        public bool FirstTime { get => _firstTime; set => _firstTime = value; }
+        public bool FirstTime { get; set; } = true;
+
+        [Category("Privacy")]
+        [DisplayName("Subject ID")]
+        [Description("The ID of the current subject. This is used for research.")]
+        public string SubjectId { get; set; } = Guid.Empty.ToString();
     }
 }
