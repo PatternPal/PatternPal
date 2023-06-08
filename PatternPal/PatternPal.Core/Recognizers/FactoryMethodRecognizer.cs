@@ -31,7 +31,7 @@ namespace PatternPal.Core.Recognizers;
 ///         3) returns an object of type Product<br/>
 /// Requirements for the Concrete Creator class:<br/>
 ///     a) inherits Creator<br/>
-///     b) has exactly one method that returns an Concrete Product<br/>
+///     b) has exactly one method that creates and returns a Concrete Product<br/>
 /// </remarks>
 internal class FactoryMethodRecognizer : IRecognizer
 {
@@ -49,7 +49,6 @@ internal class FactoryMethodRecognizer : IRecognizer
     {
         //Product c
         //Creator c
-        //Concrete product b
 
         //Product a
         InterfaceCheck productIsInterface = Interface(
@@ -107,7 +106,23 @@ internal class FactoryMethodRecognizer : IRecognizer
             Type(
                 Priority.Low,
                 concreteInheritsProduct
+            ),
+            Creates(
+                Priority.Low,
+                concreteInheritsProduct
             )
+        );
+
+        ClassCheck concreteCreator = Class(
+            Priority.Low,
+            concreteInheritsCreator,
+            methodReturnsConcreteProduct
+        );
+
+        //Concrete product b
+        RelationCheck getsCreatedInConcreteProduct = CreatedBy(
+            Priority.High,
+            concreteCreator
         );
 
     }

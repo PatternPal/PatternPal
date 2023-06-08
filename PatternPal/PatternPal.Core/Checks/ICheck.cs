@@ -355,6 +355,20 @@ internal static class CheckBuilder
         relatedNodeCheck );
 
     /// <summary>
+    /// Creates a new <see cref="RelationCheck"/> for a <see cref="RelationType.CreatedBy"/> relation.
+    /// </summary>
+    /// <param name="priority">The <see cref="Priority"/> of this <see cref="RelationCheck"/>.</param>
+    /// <param name="relatedNodeCheck">The <see cref="ICheck"/> which checks for the node
+    /// to which there should be a <see cref="RelationType.Creates"/> relation.</param>
+    /// <returns>The entity which creates in the <see cref="RelationCheck"/></returns>
+    internal static RelationCheck CreatedBy(
+        Priority priority,
+        ICheck relatedNodeCheck) => new(
+        priority,
+        RelationType.CreatedBy,
+        relatedNodeCheck);
+
+    /// <summary>
     /// Creates a new <see cref="FieldCheck"/>.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="FieldCheck"/>.</param>
