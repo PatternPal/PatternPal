@@ -38,7 +38,7 @@ internal abstract class AdapterRecognizerParent
         RelationCheck inheritsClientInterface = DoesInheritFrom(clientInterfaceClassType);
 
         //Check Adapter b
-        RelationCheck createsServiceObject = CreatesObject(service);
+        ICheck createsServiceObject = CreatesObjectOrGetViaConstructor(service);
 
         //Check Adapter c
         FieldCheck containsServiceField = ContainsServiceField(service);
@@ -51,9 +51,6 @@ internal abstract class AdapterRecognizerParent
             Priority.High,
             UsesServiceClass(service, containsServiceField)
         );
-
-        //Check Adapter f
-        ICheck allUsesServiceClass = AllMethodsUseServiceClass(service, containsServiceField);
 
         //Helps Client b
         MethodCheck adapterMethodsUsingService = Method(
@@ -71,7 +68,6 @@ internal abstract class AdapterRecognizerParent
             containsServiceField,
             noServiceReturn,
             usesServiceClass,
-            allUsesServiceClass,
             adapterMethodsUsingService
         );
 
@@ -123,13 +119,46 @@ internal abstract class AdapterRecognizerParent
     public abstract RelationCheck DoesInheritFrom(ICheck parent);
 
     /// <summary>
-    /// An <see cref="ICheck"/> which will determine if the parentcheck creates the <paramref name="obj"/> node.
+    /// An <see cref="ICheck"/> which will determine if the parentcheck creates the <paramref name="obj"/> node or if it is given als parameter with a constructor.
+    /// In the second case it also checks if there is no constructor without the  <paramref name="obj"/> type.
     /// </summary>
-    private RelationCheck CreatesObject(ICheck obj)
+    private ICheck CreatesObjectOrGetViaConstructor(ClassCheck obj)
     {
-        return Creates(
+        return Any(
             Priority.Knockout,
-            obj
+            Creates(
+                Priority.Knockout,
+                obj
+            ),
+            All(
+                Priority.Knockout,
+                Constructor(
+                    Priority.Knockout,
+                    Parameters(
+                        Priority.Knockout,
+                        Type(
+                            Priority.Knockout,
+                            obj
+                        )
+                    )
+                ),
+                Not(
+                    Priority.Knockout,
+                    Constructor(
+                        Priority.Knockout,
+                        Not(
+                            Priority.Knockout,
+                            Parameters(
+                                Priority.Knockout,
+                                Type(
+                                    Priority.Knockout,
+                                    obj
+                                )
+                            )
+                        )
+                    )
+                )
+            )   
         );
     }
 
@@ -184,23 +213,6 @@ internal abstract class AdapterRecognizerParent
             Uses(
                 Priority.High,
                 serviceField
-            )
-        );
-    }
-
-    /// <summary>
-    /// An <see cref="ICheck"/> which determines if all methods of the parentcheck class succeed the <see cref="UsesServiceClass"/> check.
-    /// </summary>
-    ICheck AllMethodsUseServiceClass(ClassCheck service, FieldCheck serviceField)
-    {
-        return Not(
-            Priority.Mid,
-            Method(
-                Priority.Mid,
-                Not(
-                    Priority.Mid,
-                    UsesServiceClass(service, serviceField)
-                )
             )
         );
     }

@@ -19,11 +19,10 @@
      *            ✓        1) if it is an abstract class the method should be abstract
      *         Adapter
      *            ✓  a) inherits/implements the Client Interface
-     *            ✓  b) creates an Service object
+     *            ✓  b) creates an Service object or gets one via the constructor
      *            ✓  c) contains a private field in which the Service is stored
      *            ✓  d) does not return an instance of the Service
      *            ✓  e) a method uses the Service class
-     *            ✓  f) every method uses the Service class
      */
 
     //Service
@@ -46,10 +45,12 @@
     file class ThirdPartyBillingSystem
     {
         private readonly EmployeeAdapter _employeeSource;
+        private HRSystem _service;
 
         public ThirdPartyBillingSystem()
         {
-            this._employeeSource = new EmployeeAdapter();
+            this._service = new HRSystem();
+            this._employeeSource = new EmployeeAdapter(_service);
         }
 
         public void ShowEmployeeList()
@@ -74,12 +75,16 @@
     //Adapter
     file class EmployeeAdapter : ITarget
     {
-        private HRSystem service = new();
+        private HRSystem _service;
 
+        public EmployeeAdapter(HRSystem service)
+        {
+            _service = service;
+        }
         public List<string> GetEmployeeList()
         {
             List<string> employeeList = new();
-            string[][] employees = service.GetEmployees();
+            string[][] employees = _service.GetEmployees();
             foreach (string[] employee in employees)
             {
                 employeeList.Add(employee[0]);
