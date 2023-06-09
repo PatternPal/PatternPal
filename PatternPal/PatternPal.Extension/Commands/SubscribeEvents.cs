@@ -70,10 +70,6 @@ namespace PatternPal.Extension.Commands
             _pathToUserDataFolder = Path.Combine(_package.UserLocalDataPath, "Extensions", "Team PatternPal",
                 "PatternPal.Extension", "UserData");
             _cancellationToken = cancellationToken;
-
-            // Any GET of Privacy.Instance activates the DoLogData which is not the expected behaviour.
-            // However, it is necessary here in Initialize to kickstart the Session and Project Open events.
-            //SubscribeEvents.SubjectId = Privacy.Instance.SubjectId;
         }
 
         /// <summary>
@@ -108,8 +104,13 @@ namespace PatternPal.Extension.Commands
             _dteDocumentEvents.DocumentSaved -= OnDocumentSaved;
         }
 
+        /// <summary>
+        /// Event handler for a changed logging preference in the privacy screen.
+        /// </summary>
+        /// <param name="obj"></param>
         public static void OnChangedLoggingPreference(Privacy obj)
         {
+            // We explicitly check if the value has changed. 
             if (_doLog == obj.DoLogData)
             {
                 return;
@@ -117,6 +118,7 @@ namespace PatternPal.Extension.Commands
 
             _doLog = obj.DoLogData;
 
+            // If the value changes, a new session is either started or ended.
             ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
                 await (obj.DoLogData
@@ -124,8 +126,6 @@ namespace PatternPal.Extension.Commands
                     : UnsubscribeEventHandlersAsync());
             });
 
-            // The SessionId has to be reset if the option for logging data is changed to prevent logging without a session id. 
-            // In other words, a new session has to be started.
             ThreadHelper.ThrowIfNotOnUIThread();
             if (obj.DoLogData)
             {
@@ -134,7 +134,7 @@ namespace PatternPal.Extension.Commands
             }
             else
             {
-                OnSolutionClose(); 
+                OnSolutionClose();
                 OnSessionEnd();
             }
         }
@@ -450,7 +450,7 @@ namespace PatternPal.Extension.Commands
             }
 
             // Create a new FileSystemWatcher instance
-            // TODO This can go wrong.
+            // TODO We need to explicitely check if that path is not null and handle other cases.
             _watcher = new FileSystemWatcher(Path.GetDirectoryName(_currentSolution.FullName));
 
             // Set the event handlers

@@ -111,11 +111,6 @@ namespace PatternPal.Extension
                 cancellationToken);
         }
 
-        private void PrivacyOnSaved(Privacy obj)
-        {
-            
-        }
-
         internal static void Main()
         {
         }
