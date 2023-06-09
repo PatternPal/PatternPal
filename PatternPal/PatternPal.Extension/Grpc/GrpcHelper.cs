@@ -1,16 +1,15 @@
 ﻿#region
 
-using System;
 using System.Diagnostics;
 using System.Net.Http;
+
+using Community.VisualStudio.Toolkit;
 
 using Grpc.Net.Client;
 using Grpc.Net.Client.Web;
 
-using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 
 using PatternPal.Protos;
 
@@ -37,48 +36,20 @@ namespace PatternPal.Extension.Grpc
             StepByStepClient = new StepByStepService.StepByStepServiceClient(Channel);
         }
 
-        #region InfoBar
-
-        private static IVsInfoBarUIElement _currentInfoBarElement;
-
+        /// <summary>
+        /// Creates a notification in the PatternPal window notifying the user that an error has
+        /// occurred. If the background process has crashed, the user gets the option to restart it.
+        /// </summary>
         internal static void ShowErrorMessage(
             string errorMessage)
         {
             const string LOG_SOURCE = "PatternPal";
+            const string RESTART = "Restart";
 
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            IVsInfoBarUIFactory infoBarFactory = (IVsInfoBarUIFactory)Package.GetGlobalService(typeof( SVsInfoBarUIFactory ));
-            IVsUIShell shell = (IVsUIShell)Package.GetGlobalService(typeof( SVsUIShell ));
-
-            _currentInfoBarElement?.Close();
-
-            if (ErrorHandler.Failed(
-                    shell.FindToolWindow(
-                        (uint)__VSFINDTOOLWIN.FTW_fFrameOnly,
-                        typeof( ExtensionWindow ).GUID,
-                        out IVsWindowFrame frame))
-                || frame is null)
-            {
-                VsShellUtilities.LogError(
-                    LOG_SOURCE,
-                    $"Failed to find tool window to attach error: {errorMessage}");
-                return;
-            }
-
-            if (ErrorHandler.Failed(
-                frame.GetProperty(
-                    (int)__VSFPROPID7.VSFPROPID_InfoBarHost,
-                    out object infoBarHost)))
-            {
-                VsShellUtilities.LogError(
-                    LOG_SOURCE,
-                    $"Failed to find info bar host to attach error: {errorMessage}");
-                return;
-            }
-
-            void RestartBackgroundService() => GrpcBackgroundServiceHelper.StartBackgroundService();
-            IVsInfoBar infoBar = BackgroundProcessIsRunning()
+            // Create the infobar model.
+            InfoBarModel infoBarModel = Process.GetProcessesByName("PatternPal").Length > 0
                 ? new InfoBarModel(
                     new[ ]
                     {
@@ -92,54 +63,43 @@ namespace PatternPal.Extension.Grpc
                     },
                     new[ ]
                     {
-                        new InfoBarHyperlink(
-                            "Restart",
-                            (Action)RestartBackgroundService)
+                        new InfoBarHyperlink(RESTART)
                     },
                     KnownMonikers.StatusError);
 
-            _currentInfoBarElement = infoBarFactory.CreateInfoBar(infoBar);
+            ThreadHelper.JoinableTaskFactory.Run(
+                async () =>
+                {
+                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            uint eventCookie = 0;
+                    InfoBar infoBar = await VS.InfoBar.CreateAsync(
+                        typeof( ExtensionWindow.Pane ).GUID.ToString(),
+                        infoBarModel);
 
-            // ReSharper disable once AccessToModifiedClosure
-            void OnClose() => _currentInfoBarElement?.Unadvise(eventCookie);
+                    // Log the error if we can't create the infobar to show it in.
+                    if (infoBar == null)
+                    {
+                        VsShellUtilities.LogError(
+                            LOG_SOURCE,
+                            $"Failed to find tool window to attach error: {errorMessage}");
+                        return;
+                    }
 
-            _currentInfoBarElement?.Advise(
-                new InfoBarUIEvents(OnClose),
-                out eventCookie);
+                    // Restart the background service if necessary.
+                    infoBar.ActionItemClicked += (
+                                                     sender,
+                                                     e) =>
+                                                 {
+                                                     ThreadHelper.ThrowIfNotOnUIThread();
+                                                     if (e.ActionItem.Text == RESTART)
+                                                     {
+                                                         GrpcBackgroundServiceHelper.StartBackgroundService();
+                                                     }
+                                                     infoBar.Close();
+                                                 };
 
-            ((IVsInfoBarHost)infoBarHost).AddInfoBar(_currentInfoBarElement);
+                    await infoBar.TryShowInfoBarUIAsync();
+                });
         }
-
-        private static bool BackgroundProcessIsRunning() => Process.GetProcessesByName("PatternPal").Length > 0;
-
-        private class InfoBarUIEvents : IVsInfoBarUIEvents
-        {
-            private readonly Action _onClose;
-
-            public InfoBarUIEvents(
-                Action onClose)
-            {
-                _onClose = onClose;
-            }
-
-            public void OnClosed(
-                IVsInfoBarUIElement infoBarUIElement)
-            {
-                _onClose();
-            }
-
-            public void OnActionItemClicked(
-                IVsInfoBarUIElement infoBarUIElement,
-                IVsInfoBarActionItem actionItem)
-            {
-                ThreadHelper.ThrowIfNotOnUIThread();
-                (actionItem.ActionContext as Action)?.Invoke();
-                infoBarUIElement.Close();
-            }
-        }
-
-        #endregion
     }
 }

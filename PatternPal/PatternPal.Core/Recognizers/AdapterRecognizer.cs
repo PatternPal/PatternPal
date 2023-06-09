@@ -1,5 +1,6 @@
 ﻿using PatternPal.Core.Recognizers.Helper_Classes;
 using PatternPal.Core.StepByStep;
+
 using static PatternPal.Core.Checks.CheckBuilder;
 
 namespace PatternPal.Core.Recognizers
@@ -24,11 +25,10 @@ namespace PatternPal.Core.Recognizers
     /// <br/>
     /// Requirements for the Adapter class:<br/>
     ///     a) inherits/implements the Client Interface<br/>
-    ///     b) creates an Service object<br/>
+    ///     b) creates an Service object or gets one via the constructor<br/>
     ///     c) contains a private field in which the Service is stored<br/>
     ///     d) does not return an instance of the Service<br/>
     ///     e) a method uses the Service class<br/>
-    ///     f) every method uses the Service class<br/>
     /// </remarks>
     internal class AdapterRecognizer : IRecognizer
     {
@@ -41,12 +41,8 @@ namespace PatternPal.Core.Recognizers
         readonly AdapterRecognizerParent _isInterface = new AdapterRecognizerInterface();
         readonly AdapterRecognizerParent _isAbstractClass = new AdapterRecognizerAbstractClass();
 
-        /// <summary>
-        /// A method which creates a lot of <see cref="ICheck"/>s that each adheres to the requirements a adapter pattern needs to have implemented.
-        /// It returns the requirements in a tree structure stated per class.
-        /// </summary>
         /// <inheritdoc />
-        public IEnumerable<ICheck> Create()
+        IEnumerable< ICheck > IRecognizer.Create()
         {
             yield return Any(
                 Priority.Low,
@@ -55,16 +51,10 @@ namespace PatternPal.Core.Recognizers
                     _isAbstractClass.Checks()
                 ),
                 All(
-                Priority.Low,
+                    Priority.Low,
                     _isInterface.Checks()
                 )
             );
-        }
-
-        /// <inheritdoc />
-        public List<IInstruction> GenerateStepsList()
-        {
-            throw new NotImplementedException();
         }
     }
 }

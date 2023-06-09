@@ -19,11 +19,10 @@
      *            ✓        1) if it is an abstract class the method should be abstract or virtual
      *         Adapter
      *            ✓  a) inherits/implements the Client Interface
-     *            ✓  b) creates an Service object
+     *            ✓  b) creates an Service object or gets one via the constructor
      *            ✓  c) contains a private field in which the Service is stored
      *            ✓  d) does not return an instance of the Service
      *               e) a method uses the Service class
-     *               f) every method uses the Service class
      */
 
     //Service
