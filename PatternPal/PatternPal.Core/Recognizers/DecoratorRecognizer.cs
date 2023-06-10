@@ -65,7 +65,7 @@ abstract file class DecoratorRecognizerParent
     /// 1) Requirements for Component:
     ///     a) is an interface / abstract class
     ///     b) has declared a method
-    ///         i) if the class is an abstract instead of an interface the method has to be an abstract method
+    ///         i) if the class is an abstract class instead of an interface the method has to be an abstract method
     /// 2) Requirements for Concrete Component:
     ///     a) is an implementation of Component<br/>
     ///     b) does not have a field of type Component

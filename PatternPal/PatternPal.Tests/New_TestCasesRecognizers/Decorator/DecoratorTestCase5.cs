@@ -11,7 +11,7 @@
      *            ✓        i) if the class is an abstract class instead of an interface the method has to be an abstract method
      *         Concrete Component
      *            ✓  a) is an implementation of Component
-     *            ✓  b) does not have a field of type Component
+     *               b) does not have a field of type Component
      *            ✓  c) if Component is an abstract class, it overrides the method of Component
      *         Base Decorator
      *            ✓  a) is an implementation of Component
@@ -30,26 +30,28 @@
      *            ✓  c) has called the method of ConcreteDecorator
      */
 
-abstract file class Component
+file interface IComponent
 {
-    public abstract void Behaviour();
+    void Behaviour();
 }
 
-file class ConcreteComponent : Component
+file class ConcreteComponent : IComponent
 {
-    public override void Behaviour() { }
+    private IComponent _component;
+
+    public void Behaviour() { }
 }
 
-abstract file class BaseDecorator : Component
+abstract file class BaseDecorator : IComponent
 {
-    private Component _component;
+    private IComponent _component;
 
-    public BaseDecorator(Component component)
+    public BaseDecorator(IComponent component)
     {
         _component = component;
     }
 
-    public override void Behaviour()
+    public virtual void Behaviour()
     {
         _component.Behaviour();
     }
@@ -57,7 +59,7 @@ abstract file class BaseDecorator : Component
 
 file class ConcreteDecorator : BaseDecorator
 {
-    public ConcreteDecorator(Component component) : base(component) { }
+    public ConcreteDecorator(IComponent component) : base(component) { }
 
     public override void Behaviour()
     {
@@ -70,7 +72,7 @@ file class ConcreteDecorator : BaseDecorator
 
 file class Client
 {
-    private Component _component = new ConcreteDecorator(new ConcreteComponent());
+    private IComponent _component = new ConcreteDecorator(new ConcreteComponent());
 
     public void Execute()
     {

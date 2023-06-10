@@ -8,18 +8,18 @@
      *         Component interface
      *            ✓  a) is an interface	/ abstract class
      *            ✓  b) has declared a method
-     *            ✓        i) if the class is an abstract class instead of an interface the method has to be an abstract method
+     *                     i) if the class is an abstract class instead of an interface the method has to be an abstract method
      *         Concrete Component
      *            ✓  a) is an implementation of Component
      *            ✓  b) does not have a field of type Component
-     *            ✓  c) if Component is an abstract class, it overrides the method of Component
+     *               c) if Component is an abstract class, it overrides the method of Component
      *         Base Decorator
      *            ✓  a) is an implementation of Component
      *            ✓  b) is an abstract class
      *            ✓  c) has a field of type Component
      *            ✓  d) has a constructor with a parameter of type Component, which it passes to its field
      *            ✓  e) calls the method of its field in the implementation of the method of Component
-     *            ✓        i) if Component is an abstract class, it overrides the method of Component
+     *                     i) if Component is an abstract class, it overrides the method of Component
      *         Concrete Decorator
      *            ✓  a) inherits from Base Decorator
      *            ✓  b) calls the method of its parent in the implementation of the method of Component
@@ -32,12 +32,14 @@
 
 abstract file class Component
 {
-    public abstract void Behaviour();
+    public void Behaviour() { }
 }
 
 file class ConcreteComponent : Component
 {
-    public override void Behaviour() { }
+    public new void Behaviour() { }
+
+   // private Component _component;
 }
 
 abstract file class BaseDecorator : Component
@@ -49,7 +51,7 @@ abstract file class BaseDecorator : Component
         _component = component;
     }
 
-    public override void Behaviour()
+    new void Behaviour()
     {
         _component.Behaviour();
     }
@@ -59,7 +61,7 @@ file class ConcreteDecorator : BaseDecorator
 {
     public ConcreteDecorator(Component component) : base(component) { }
 
-    public override void Behaviour()
+    new void Behaviour()
     {
         ExtraBehaviour();
         base.Behaviour();

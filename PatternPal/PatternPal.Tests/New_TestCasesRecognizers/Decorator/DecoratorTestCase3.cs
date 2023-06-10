@@ -8,7 +8,7 @@
      *         Component interface
      *            ✓  a) is an interface	/ abstract class
      *            ✓  b) has declared a method
-     *            ✓        i) if the class is an abstract instead of an interface the method has to be an abstract method
+     *            ✓        i) if the class is an abstract class instead of an interface the method has to be an abstract method
      *         Concrete Component
      *            ✓  a) is an implementation of Component
      *            ✓  b) does not have a field of type Component
