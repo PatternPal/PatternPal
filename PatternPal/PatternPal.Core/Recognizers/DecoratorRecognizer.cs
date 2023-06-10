@@ -107,7 +107,7 @@ abstract file class DecoratorRecognizerParent
         ClassCheck concreteDecorator = ConcreteDecorator(baseDecorator, concreteDecoratorExtraMethod, baseDecoratorMethod);
 
         //Checks for requirement 5
-        ClassCheck client = Client(component, concreteDecorator, concreteComponent);
+        ClassCheck client = Client(componentMethod, concreteDecorator, concreteComponent);
 
         result[0] = component;
         result[1] = concreteComponent;
@@ -294,14 +294,14 @@ abstract file class DecoratorRecognizerParent
     /// <remarks>
     /// Checks part 5 of the requirements defined for a Decorator.
     /// </remarks>
-    protected ClassCheck Client(ICheck component, ClassCheck concreteDecorator, ClassCheck concreteComponent)
+    protected ClassCheck Client(MethodCheck componentMethod, ClassCheck concreteDecorator, ClassCheck concreteComponent)
     {
         return
             Class(
                 Priority.Low,
                 Uses(
                     Priority.Low,
-                    component
+                    componentMethod
                 ),
                 Creates(
                     Priority.Low,
