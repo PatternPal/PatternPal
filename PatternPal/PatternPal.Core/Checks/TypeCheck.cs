@@ -22,8 +22,11 @@ internal class TypeCheck : CheckBase
     /// <param name="getNode">A functor to get the node to compare against.</param>
     internal TypeCheck(
         Priority priority,
+        string ? requirement,
         OneOf< ICheck, GetCurrentEntity > getNode)
-        : base(priority)
+        : base(
+            priority,
+            requirement)
     {
         _getNode = getNode;
     }

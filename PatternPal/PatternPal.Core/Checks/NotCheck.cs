@@ -23,8 +23,11 @@ internal class NotCheck : CheckBase
     /// <param name="check"><see cref="ICheck"/> which should not pass.</param>
     internal NotCheck(
         Priority priority,
+        string ? requirement,
         ICheck check)
-        : base(priority)
+        : base(
+            priority,
+            requirement)
     {
         NestedCheck = check;
     }

@@ -144,22 +144,22 @@ public class RecognizerRunner
     /// </summary>
     /// <param name="pruneAll">Whether to prune regardless of <see cref="Priority"/>s</param>
     /// <returns>The result of the <see cref="IRecognizer"/>, or <see langword="null"/> if the <see cref="SyntaxGraph"/> is empty.</returns>
-    public IList< ICheckResult > Run(
+    public IList< (Recognizer, ICheckResult) > Run(
         bool pruneAll = false)
     {
         // If the graph is empty, we don't have to do any work.
         if (_graph.IsEmpty)
         {
-            return new List< ICheckResult >();
+            return new List< (Recognizer, ICheckResult) >();
         }
 
-        IList< ICheckResult > results = new List< ICheckResult >();
+        IList< (Recognizer, ICheckResult) > results = new List< (Recognizer, ICheckResult) >();
         if (_recognizers != null)
         {
             foreach (IRecognizer recognizer in _recognizers)
             {
                 ICheck rootCheck = recognizer.CreateRootCheck();
-                results.Add(RunImpl(rootCheck));
+                results.Add((recognizer.RecognizerType, RunImpl(rootCheck)));
             }
         }
         else
@@ -168,8 +168,10 @@ public class RecognizerRunner
             {
                 ICheck rootCheck = new NodeCheck< INode >(
                     Priority.Knockout,
+                    null,
                     _instruction.Checks);
-                results.Add(RunImpl(rootCheck));
+                // TODO: Get recognizer
+                results.Add((Recognizer.Unknown, RunImpl(rootCheck)));
             }
             else
             {

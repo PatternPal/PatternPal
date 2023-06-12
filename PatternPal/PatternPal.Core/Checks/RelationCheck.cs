@@ -26,9 +26,12 @@ internal class RelationCheck : CheckBase
     /// to which there should be a <see cref="_relationType"/> relation.</param>
     internal RelationCheck(
         Priority priority,
+        string ? requirement,
         RelationType relationType,
         ICheck relatedNodeCheck)
-        : base(priority)
+        : base(
+            priority,
+            requirement)
     {
         _relatedNodeCheck = relatedNodeCheck;
         _relationType = relationType;
@@ -46,14 +49,12 @@ internal class RelationCheck : CheckBase
         foreach (INode getNode in _relatedNodeCheck.Result())
         {
             bool hasCorrectRelation = ctx.Graph.GetRelations(
-                                              node,
-                                              RelationTargetKind.All).
-                                          Any(
-                                              relation => relation.GetRelationType() == _relationType
-                                                          &&
-                                                          relation.Target.Match(
-                                                              entity => entity == getNode,
-                                                              method => method == getNode));
+                node,
+                RelationTargetKind.All).Any(
+                relation => relation.GetRelationType() == _relationType
+                            && relation.Target.Match(
+                                entity => entity == getNode,
+                                method => method == getNode));
 
             results.Add(
                 new LeafCheckResult

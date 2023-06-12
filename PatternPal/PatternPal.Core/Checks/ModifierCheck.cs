@@ -21,8 +21,11 @@ internal class ModifierCheck : CheckBase
     /// <param name="modifiers">A list of modifiers the node should have</param>
     public ModifierCheck(
         Priority priority,
+        string ? requirement,
         IEnumerable< IModifier > modifiers)
-        : base(priority)
+        : base(
+            priority,
+            requirement)
     {
         _modifiers = modifiers;
     }
