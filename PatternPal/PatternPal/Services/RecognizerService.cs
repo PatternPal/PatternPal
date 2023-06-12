@@ -41,13 +41,30 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
         IList< (Recognizer, ICheckResult) > results = runner.Run();
 
         // KNOWN: The root check result is always a NodeCheckResult.
-        foreach ((Recognizer recognizer, ICheckResult result) in results)
+        foreach ((Recognizer recognizer, ICheckResult rootCheckResult) in results)
         {
             RecognizeResult rootResult = new()
                                          {
                                              Recognizer = recognizer,
-                                             Result = CreateCheckResult(result)
+                                             Feedback = "Goed gedoet"
                                          };
+
+            Dictionary< string, Result > resultsByRequirement = new();
+            foreach (Result result in GetResults(rootCheckResult))
+            {
+                if (!resultsByRequirement.TryGetValue(
+                        result.Requirement,
+                        out Result ? existingResult)
+                    || (existingResult.MatchedNode == null && result.MatchedNode != null))
+                {
+                    resultsByRequirement[ result.Requirement ] = result;
+                }
+            }
+
+            foreach (Result result in resultsByRequirement.Values)
+            {
+                rootResult.Results.Add(result);
+            }
 
             RecognizeResponse response = new()
                                          {
@@ -57,6 +74,53 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
         }
 
         return Task.CompletedTask;
+    }
+
+    private static IEnumerable< Result > GetResults(
+        ICheckResult checkResult)
+    {
+        if (!string.IsNullOrWhiteSpace(checkResult.Check.Requirement))
+        {
+            Result result = new()
+                            {
+                                Requirement = checkResult.Check.Requirement
+                            };
+
+            if (checkResult.MatchedNode != null)
+            {
+                result.MatchedNode = new MatchedNode
+                                     {
+                                         Name = checkResult.MatchedNode.GetName()
+                                     };
+            }
+
+            yield return result;
+        }
+
+        switch (checkResult)
+        {
+            case LeafCheckResult:
+                yield break;
+            case NotCheckResult notCheckResult:
+            {
+                foreach (Result result in GetResults(notCheckResult.NestedResult))
+                {
+                    yield return result;
+                }
+                yield break;
+            }
+            case NodeCheckResult nodeCheckResult:
+            {
+                foreach (ICheckResult childCheckResult in nodeCheckResult.ChildrenCheckResults)
+                {
+                    foreach (Result result in GetResults(childCheckResult))
+                    {
+                        yield return result;
+                    }
+                }
+                yield break;
+            }
+        }
     }
 
     /// <summary>
@@ -119,8 +183,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
     {
         CheckResult newCheckResult = new()
                                      {
-                                         FeedbackType = (CheckResult.Types.FeedbackType.FeedbackCorrect),
-                                         Hidden = false,
+                                         Requirement = checkResult.Check.Requirement ?? string.Empty,
                                          FeedbackMessage = checkResult.FeedbackMessage
                                      };
 
