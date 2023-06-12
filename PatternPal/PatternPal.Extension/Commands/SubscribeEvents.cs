@@ -46,8 +46,6 @@ namespace PatternPal.Extension.Commands
 
         private static bool _doLog = false;
 
-        private static string _pathToUserDataFolder;
-
         private static CancellationToken _cancellationToken;
 
         /// <summary>
@@ -67,8 +65,6 @@ namespace PatternPal.Extension.Commands
             _currentSolution = _dte.Solution;
             _dteDocumentEvents = _dte.Events.DocumentEvents;
             _package = package;
-            _pathToUserDataFolder = Path.Combine(_package.UserLocalDataPath, "Extensions", "Team PatternPal",
-                "PatternPal.Extension", "UserData");
             _cancellationToken = cancellationToken;
 
             // We should call OnChangedLoggingPreference to "load" a possibly stored setting. The
@@ -221,6 +217,30 @@ namespace PatternPal.Extension.Commands
 
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtFileCreate;
+            request.CodeStateSection = fileSystemEventArgs.Name;
+            string projectFullPath = FindContainingCsprojFile(fileSystemEventArgs.FullPath);
+            string projectFolderName = Path.GetDirectoryName(projectFullPath);
+            request.ProjectId = GetRelativePath(projectFolderName, projectFullPath);
+
+            LogEventResponse response = PushLog(request);
+        }
+
+        /// <summary>
+        /// The event handler for handling the File.Delete Event. The file watcher detects every file deleted,
+        /// so any event triggers with files other than .cs files are unhandled.    
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="fileSystemEventArgs"></param>
+        internal static void OnFileDelete(object sender, FileSystemEventArgs fileSystemEventArgs)
+        {
+            // Only log for the creation of .cs files
+            if (Path.GetExtension(fileSystemEventArgs.Name) != ".cs")
+            {
+                return;
+            }
+
+            LogEventRequest request = CreateStandardLog();
+            request.EventType = EventType.EvtFileDelete;
             request.CodeStateSection = fileSystemEventArgs.Name;
             string projectFullPath = FindContainingCsprojFile(fileSystemEventArgs.FullPath);
             string projectFolderName = Path.GetDirectoryName(projectFullPath);
@@ -451,10 +471,7 @@ namespace PatternPal.Extension.Commands
         /// </summary>
         private static void SetUpFileWatcher()
         {
-            if (_watcher != null)
-            {
-                _watcher.Dispose();
-            }
+            _watcher?.Dispose();
 
             // Create a new FileSystemWatcher instance
             // TODO We need to explicitely check if that path is not null and handle other cases.
@@ -462,6 +479,7 @@ namespace PatternPal.Extension.Commands
 
             // Set the event handlers
             _watcher.Created += OnFileCreate;
+            _watcher.Deleted += OnFileDelete;
 
             // Enable the FileSystemWatcher to begin watching for changes
             _watcher.EnableRaisingEvents = true;
