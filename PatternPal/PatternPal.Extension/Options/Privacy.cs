@@ -4,8 +4,6 @@ using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using Community.VisualStudio.Toolkit;
-using Microsoft.VisualStudio.Shell;
-using PatternPal.Extension.Commands;
 
 #endregion
 
