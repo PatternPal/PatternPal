@@ -31,11 +31,13 @@ public class ParameterCheckTests
         // Create same typecheck for two different parameters and one other type parameter
         TypeCheck typeIntNode1 = new(
             Priority.Low,
+            null,
             intNodeCheck );
 
         TypeCheck typeIntNode2 = typeIntNode1;
         TypeCheck typeStringNode = new(
             Priority.Low,
+            null,
             stringNodeCheck );
 
         List< TypeCheck > collectiontest = new()
@@ -47,10 +49,12 @@ public class ParameterCheckTests
 
         ParameterCheck usedParamCheck = new(
             Priority.Low,
+            null,
             collectiontest );
 
         MethodCheck method3 = new(
             Priority.Low,
+            null,
             new List< ICheck >
             {
                 usedParamCheck
@@ -79,6 +83,7 @@ public class ParameterCheckTests
         // TypeCheck of the StringTestFunction method (return type is StringTest)
         TypeCheck typeIntNode = new(
             Priority.Low,
+            null,
             intNodeCheck );
 
         List< TypeCheck > collectiontest = new()
@@ -88,10 +93,12 @@ public class ParameterCheckTests
 
         ParameterCheck usedParamCheck = new(
             Priority.Low,
+            null,
             collectiontest );
 
         MethodCheck method3 = new(
             Priority.Low,
+            null,
             new List< ICheck >
             {
                 usedParamCheck
@@ -128,6 +135,7 @@ public class ParameterCheckTests
         // TypeCheck of the StringTestFunction method (return type is StringTest)
         TypeCheck typeStringNode = new(
             Priority.Low,
+            null,
             stringNodeCheck );
 
         List< TypeCheck > collectiontest = new()
@@ -137,10 +145,12 @@ public class ParameterCheckTests
 
         ParameterCheck usedParamCheck = new(
             Priority.Low,
+            null,
             collectiontest );
 
         MethodCheck method3 = new(
             Priority.Low,
+            null,
             new List< ICheck >
             {
                 usedParamCheck
@@ -169,6 +179,7 @@ public class ParameterCheckTests
         ParameterCheck usedParamCheck =
             new ParameterCheck(
                 Priority.Low,
+                null,
                 new List< TypeCheck >
                 {
                 });
@@ -222,9 +233,11 @@ public class ParameterCheckTests
         // Create two typechecks for a parameter check on a method with one parameter
         TypeCheck typeIntNode = new(
             Priority.Low,
+            null,
             intNodeCheck );
         TypeCheck typeStringNode = new(
             Priority.Low,
+            null,
             stringNodeCheck );
 
         List< TypeCheck > collectiontest = new()
@@ -235,9 +248,11 @@ public class ParameterCheckTests
 
         ParameterCheck usedParamCheck = new(
             Priority.Low,
+            null,
             collectiontest );
         MethodCheck method3 = new(
             Priority.Low,
+            null,
             new List< ICheck >
             {
                 usedParamCheck
@@ -253,6 +268,7 @@ public class ParameterCheckTests
 file class TestCheck : ICheck
 {
     public Priority Priority { get; }
+    public string ? Requirement { get; }
     public Func< List< INode > > Result { get; }
     public int DependencyCount { get; }
 

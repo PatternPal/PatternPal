@@ -159,7 +159,7 @@ internal class Program
             _fileManager.GetAllCSharpFilesFromDirectory(project.Directory),
             RecognizerRunner.SupportedRecognizers.Values.ToList() );
 
-        foreach (ICheckResult checkResult in runner.Run())
+        foreach ((_, ICheckResult checkResult) in runner.Run())
         {
             result.Results.Add(
                 new DetectionResult

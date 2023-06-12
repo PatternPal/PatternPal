@@ -38,29 +38,22 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
         RecognizerRunner runner = new(
             files,
             request.Recognizers );
-        IList< ICheckResult > results = runner.Run();
+        IList< (Recognizer, ICheckResult) > results = runner.Run();
 
         // KNOWN: The root check result is always a NodeCheckResult.
-        foreach (ICheckResult result in results)
+        foreach ((Recognizer recognizer, ICheckResult result) in results)
         {
-            NodeCheckResult rootCheckResult = (NodeCheckResult)result;
+            RecognizeResult rootResult = new()
+                                         {
+                                             Recognizer = recognizer,
+                                             Result = CreateCheckResult(result)
+                                         };
 
-            foreach (ICheckResult childCheckResult in rootCheckResult.ChildrenCheckResults)
-            {
-                RecognizeResult res = new()
-                                      {
-                                          Recognizer = Recognizer.Singleton,
-                                          ClassName = childCheckResult.MatchedNode?.GetName() ?? "no matched node"
-                                      };
-
-                res.Results.Add(CreateCheckResult(childCheckResult));
-
-                RecognizeResponse response = new()
-                                             {
-                                                 Result = res
-                                             };
-                responseStream.WriteAsync(response);
-            }
+            RecognizeResponse response = new()
+                                         {
+                                             Result = rootResult
+                                         };
+            responseStream.WriteAsync(response);
         }
 
         return Task.CompletedTask;

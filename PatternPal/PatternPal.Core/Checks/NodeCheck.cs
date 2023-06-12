@@ -65,9 +65,12 @@ internal class NodeCheck< TNode > : CheckBase
     /// <param name="kind">The <see cref="CheckCollectionKind"/> to use for the sub-<see cref="ICheck"/>s.</param>
     internal NodeCheck(
         Priority priority,
+        string ? requirement,
         IEnumerable< ICheck > subChecks,
         CheckCollectionKind kind = CheckCollectionKind.All)
-        : base(priority)
+        : base(
+            priority,
+            requirement)
     {
         _subChecks = subChecks;
         _kind = kind;
@@ -271,16 +274,17 @@ internal class NodeCheck< TNode > : CheckBase
         {
             MarkCheckAsSeen(nodeCheck);
 
-			// No node matches were found for the check so return the check was incorrect.
-            results.Add(new LeafCheckResult
-            {
-                FeedbackMessage = "No matches found",
-                Correct = false,
-                Priority = nodeCheck.Priority,
-                DependencyCount = 0,
-                MatchedNode = null,
-                Check = nodeCheck,
-            });
+            // No node matches were found for the check so return the check was incorrect.
+            results.Add(
+                new LeafCheckResult
+                {
+                    FeedbackMessage = "No matches found",
+                    Correct = false,
+                    Priority = nodeCheck.Priority,
+                    DependencyCount = 0,
+                    MatchedNode = null,
+                    Check = nodeCheck,
+                });
         }
 
         // Return the result.

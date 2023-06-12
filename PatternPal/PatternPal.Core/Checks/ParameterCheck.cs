@@ -32,8 +32,11 @@ internal class ParameterCheck : CheckBase
     /// <param name="parameterTypes">A list of types the node parameters should have.</param>
     internal ParameterCheck(
         Priority priority,
+        string ? requirement,
         IEnumerable< TypeCheck > parameterTypes)
-        : base(priority)
+        : base(
+            priority,
+            requirement)
     {
         _parameterTypes = parameterTypes;
     }

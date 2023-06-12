@@ -8,9 +8,11 @@ internal class FieldCheck : NodeCheck< IField >
     /// <inheritdoc cref="NodeCheck{TNode}"/>
     internal FieldCheck(
         Priority priority,
+        string ? requirement,
         IEnumerable< ICheck > checks)
         : base(
             priority,
+            requirement,
             checks)
     {
     }
@@ -20,7 +22,6 @@ internal class FieldCheck : NodeCheck< IField >
     protected override IEntity GetType4TypeCheck(
         IRecognizerContext ctx,
         IField node) => ctx.Graph.Relations.GetEntityByName(node.GetFieldType())!;
-
 
     /// <inheritdoc />
     protected override string GetFeedbackMessage(
