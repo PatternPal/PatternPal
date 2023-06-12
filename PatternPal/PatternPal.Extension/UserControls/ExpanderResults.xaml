@@ -54,7 +54,8 @@
                                             <StackPanel Orientation="Vertical">
                                                 <StackPanel Margin="0,0,0,10">
                                                     <TextBlock Text="{Binding Requirement}" />
-                                                    <TextBlock Text="{Binding MatchedNodeName}" />
+                                                    <Label Content="{Binding MatchedNodeName}"
+                                                           MouseDoubleClick="Control_OnMouseDoubleClick" />
                                                 </StackPanel>
                                             </StackPanel>
                                         </DataTemplate>

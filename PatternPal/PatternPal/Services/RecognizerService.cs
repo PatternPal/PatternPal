@@ -88,9 +88,14 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
 
             if (checkResult.MatchedNode != null)
             {
+                INode matchedNode = checkResult.MatchedNode;
+                TextSpan sourceLocation = matchedNode.GetSourceLocation;
                 result.MatchedNode = new MatchedNode
                                      {
-                                         Name = checkResult.MatchedNode.GetName()
+                                         Name = matchedNode.GetName(),
+                                         Path = matchedNode.GetRoot().GetSource(),
+                                         Start = sourceLocation.Start,
+                                         Length = sourceLocation.Length
                                      };
             }
 

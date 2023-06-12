@@ -11,11 +11,15 @@ namespace PatternPal.Extension.ViewModels
         public string Requirement { get; }
         public string MatchedNodeName { get; }
 
+        public Result Result { get; }
+
         public CheckResultViewModel(
             Result result)
         {
             Requirement = result.Requirement;
             MatchedNodeName = result.MatchedNode?.Name;
+
+            Result = result;
         }
     }
 }

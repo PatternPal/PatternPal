@@ -22,6 +22,10 @@ message Result {
 
 message MatchedNode {
     string name = 1;
+
+    string path = 2;
+    int32 start = 3;
+    int32 length = 4;
 }
 
 // Result of one specific check inside a recognizer.
