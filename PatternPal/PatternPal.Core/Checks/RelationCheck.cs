@@ -47,13 +47,13 @@ internal class RelationCheck : CheckBase
         {
             bool hasCorrectRelation = ctx.Graph.GetRelations(
                                               node,
-                                              RelationTargetKind.All). //get all relations the checked node has
+                                              RelationTargetKind.All).
                                           Any(
                                               relation => relation.GetRelationType() == _relationType
-                                                          && //which are of type uses
+                                                          &&
                                                           relation.Target.Match(
                                                               entity => entity == getNode,
-                                                              method => method == getNode)); //and go to the node which should be used
+                                                              method => method == getNode));
 
             results.Add(
                 new LeafCheckResult

@@ -7,6 +7,8 @@
     href: recognizers/patterns/singleton.md
   - name: Strategy
     href: recognizers/patterns/strategy.md
+  - name: Decorator
+    href: recognizers/patterns/decorator.md
 
   # -- Design
   - name: Design

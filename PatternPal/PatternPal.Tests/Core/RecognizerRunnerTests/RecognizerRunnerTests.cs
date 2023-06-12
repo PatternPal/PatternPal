@@ -127,7 +127,71 @@ public class RecognizerRunnerTests
     }
 
     [Test]
-    public void Node_Check_Is_Pruned_If_Empty()
+    public void Node_Check_Is_Pruned_If_Empty_And_Knockout()
+    {
+        NodeCheckResult rootCheckResult =
+            new()
+            {
+                FeedbackMessage = string.Empty,
+                CollectionKind = CheckCollectionKind.Any,
+                ChildrenCheckResults =
+                    new List<ICheckResult>
+                    {
+                        new LeafCheckResult
+                        {
+                            FeedbackMessage = string.Empty,
+                            Priority = Priority.Knockout,
+                            Correct = true,
+                            DependencyCount = 0,
+                            MatchedNode = null,
+                            Check = null
+                        },
+                        new NodeCheckResult
+                        {
+                            FeedbackMessage = string.Empty,
+                            ChildrenCheckResults =
+                                new List< ICheckResult >
+                                {
+                                    new LeafCheckResult
+                                    {
+                                        FeedbackMessage = string.Empty,
+                                        Priority = Priority.Knockout,
+                                        Correct = false,
+                                        DependencyCount = 0,
+                                        MatchedNode = null,
+                                        Check = null
+                                    }
+                                },
+                            Priority = Priority.Knockout,
+                            DependencyCount = 0,
+                            MatchedNode = null,
+                            Check = null
+                        }
+                    },
+                Priority = Priority.Low,
+                DependencyCount = 0,
+                MatchedNode = null,
+                Check = null
+            };
+
+        bool rootShouldBePruned = RecognizerRunner.PruneResults(
+            null,
+            rootCheckResult);
+
+        // Root should not be pruned.
+        Assert.IsFalse(rootShouldBePruned);
+
+        // Nested NodeCheckResult is pruned.
+        Assert.AreEqual(
+            rootCheckResult.ChildrenCheckResults.Count,
+            1);
+
+        // The leftover child result is the leaf result.
+        Assert.IsInstanceOf<LeafCheckResult>(rootCheckResult.ChildrenCheckResults[0]);
+    }
+
+    [Test]
+    public void Node_Check_Is_Not_Pruned_If_Empty_But_Not_Knockout()
     {
         NodeCheckResult rootCheckResult =
             new()
@@ -184,7 +248,7 @@ public class RecognizerRunnerTests
         // Nested NodeCheckResult is pruned.
         Assert.AreEqual(
             rootCheckResult.ChildrenCheckResults.Count,
-            1);
+            2);
 
         // The leftover child result is the leaf result.
         Assert.IsInstanceOf< LeafCheckResult >(rootCheckResult.ChildrenCheckResults[ 0 ]);
