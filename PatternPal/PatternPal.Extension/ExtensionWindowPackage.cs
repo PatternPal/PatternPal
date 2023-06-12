@@ -101,6 +101,9 @@ namespace PatternPal.Extension
             PackageInstance = this;
             GrpcBackgroundServiceHelper.StartBackgroundService();
 
+            // Sets an event handler for saved settings
+            Privacy.Saved += SubscribeEvents.OnChangedLoggingPreference;
+
             DTE dte = (DTE)await GetServiceAsync(typeof( DTE ));
             SubscribeEvents.Initialize(
                 dte,
