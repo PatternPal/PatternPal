@@ -64,7 +64,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
             Protos.EventType.EvtCompile => (CompileLog(receivedRequest), false),
             Protos.EventType.EvtCompileError => (CompileErrorLog(receivedRequest), false),
             Protos.EventType.EvtFileCreate => (FileCreateLog(receivedRequest), false),
-
+            Protos.EventType.EvtFileDelete => (FileDeleteLog(receivedRequest), false),
             // Currently, the only LogEvent that might need to be discarded is the FileEditEvent, since the file might not have been changed after all.
             Protos.EventType.EvtFileEdit => FileEditLog(receivedRequest),
 
@@ -160,6 +160,24 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     {
         LogRequest sendLog = StandardLog(receivedRequest);
         sendLog.EventType = LoggingServer.EventType.EvtFileCreate;
+        sendLog.CodeStateSection = receivedRequest.CodeStateSection;
+        sendLog.ProjectId = receivedRequest.ProjectId;
+
+        return sendLog;
+    }
+
+    /// <summary>
+    /// Creates a LogRequest that is populated with info obtained from the supplied
+    /// received event and further specific details relevant for the FileDelete-event.
+    /// Note that this LogRequest is discarded when no difference between the last logged
+    /// state of the file and the current state of the file was detected.
+    /// </summary>
+    /// <param name="receivedRequest">The originally received request from the PP extension</param>
+    /// <returns>A LogRequest populated for this specific event</returns>
+    private static LogRequest FileDeleteLog(LogEventRequest receivedRequest)
+    {
+        LogRequest sendLog = StandardLog(receivedRequest);
+        sendLog.EventType = LoggingServer.EventType.EvtFileDelete;
         sendLog.CodeStateSection = receivedRequest.CodeStateSection;
         sendLog.ProjectId = receivedRequest.ProjectId;
 
