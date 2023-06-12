@@ -70,6 +70,11 @@ namespace PatternPal.Extension.Commands
             _pathToUserDataFolder = Path.Combine(_package.UserLocalDataPath, "Extensions", "Team PatternPal",
                 "PatternPal.Extension", "UserData");
             _cancellationToken = cancellationToken;
+
+            // We should call OnChangedLoggingPreference to "load" a possibly stored setting. The
+            // application always stored with the internal flag set to false, so this will only actually
+            // do something when it was stored as true (and subsequently kickstart the logging session).
+            OnChangedLoggingPreference(Privacy.Instance);
         }
 
         /// <summary>
@@ -210,7 +215,9 @@ namespace PatternPal.Extension.Commands
         {
             // Only log for the creation of .cs files
             if (Path.GetExtension(fileSystemEventArgs.Name) != ".cs")
+            {
                 return;
+            }
 
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtFileCreate;
