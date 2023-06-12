@@ -135,7 +135,7 @@ public class RecognizerRunnerTests
                 FeedbackMessage = string.Empty,
                 CollectionKind = CheckCollectionKind.Any,
                 ChildrenCheckResults =
-                    new List<ICheckResult>
+                    new List< ICheckResult >
                     {
                         new LeafCheckResult
                         {
@@ -187,7 +187,7 @@ public class RecognizerRunnerTests
             1);
 
         // The leftover child result is the leaf result.
-        Assert.IsInstanceOf<LeafCheckResult>(rootCheckResult.ChildrenCheckResults[0]);
+        Assert.IsInstanceOf< LeafCheckResult >(rootCheckResult.ChildrenCheckResults[ 0 ]);
     }
 
     [Test]
@@ -848,6 +848,72 @@ public class RecognizerRunnerTests
                 Creates(
                     Priority.Knockout,
                     classCheck
+                )
+            )
+        );
+
+        NodeCheckResult result = (NodeCheckResult)check.Check(
+            ctx,
+            classEntity);
+
+        RecognizerRunner.SortCheckResults(result);
+
+        Dictionary< INode, List< ICheckResult > > resultsByNode = new();
+        RecognizerRunner.PruneResults(
+            resultsByNode,
+            result);
+
+        return Verifier.Verify(result);
+    }
+
+    [Test]
+    public Task Incorrect_Relation_Result_Is_Pruned()
+    {
+        SyntaxGraph graph = EntityNodeUtils.CreateGraphFromInput(
+            """
+            public class C1
+            {
+            }
+
+            internal class C2
+            {
+            }
+
+            public class C3
+            {
+                public C3()
+                {
+                    new C1();
+                }
+
+                public void M()
+                {
+                    new C2();
+                }
+            }
+            """);
+        IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
+
+        IEntity classEntity = graph.GetAll()[ "C1" ];
+
+        ClassCheck classCheck = Class(
+            Priority.Knockout,
+            Modifiers(
+                Priority.Knockout,
+                Modifier.Internal
+            )
+        );
+        ICheck check = All(
+            Priority.High,
+            classCheck,
+            Class(
+                Priority.High,
+                Constructor(
+                    Priority.Knockout,
+                    Creates(
+                        Priority.High,
+                        classCheck
+                    )
                 )
             )
         );
