@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using Microsoft.CodeAnalysis;
 
 using PatternPal.Core.Recognizers;
+using PatternPal.Core.StepByStep;
 using PatternPal.SyntaxTree;
 using PatternPal.SyntaxTree.Abstractions.Root;
 
@@ -18,8 +19,15 @@ namespace PatternPal.Core;
 /// </summary>
 public class RecognizerRunner
 {
-    // The recognizers which are currently supported.
+    /// <summary>
+    /// The <see cref="IRecognizer"/>s which are currently supported.
+    /// </summary>
     public static IDictionary< Recognizer, IRecognizer > SupportedRecognizers = null!;
+
+    /// <summary>
+    /// The <see cref="IStepByStepRecognizer"/>s which are currently supported.
+    /// </summary>
+    public static IDictionary< Recognizer, IStepByStepRecognizer > SupportedStepByStepRecognizers = null!;
 
     /// <summary>
     /// Finds the recognizers which are defined in this assembly and adds them to <see cref="SupportedRecognizers"/>.
@@ -31,24 +39,38 @@ public class RecognizerRunner
     public static void ModuleInitializer()
     {
         SupportedRecognizers = new Dictionary< Recognizer, IRecognizer >();
+        GetImplementingTypes(
+            SupportedRecognizers,
+            nameof( IRecognizer.RecognizerType ));
 
-        Type recognizerType = typeof( IRecognizer );
+        SupportedStepByStepRecognizers = new Dictionary< Recognizer, IStepByStepRecognizer >();
+        GetImplementingTypes(
+            SupportedStepByStepRecognizers,
+            nameof( IStepByStepRecognizer.RecognizerType ));
 
-        // Find all types which derive from `IRecognizer`.
-        foreach (Type type in recognizerType.Assembly.GetTypes().Where(ty => ty != recognizerType && recognizerType.IsAssignableFrom(ty)))
+        void GetImplementingTypes< T >(
+            IDictionary< Recognizer, T > supportedRecognizers,
+            string nameOfRecognizerProperty)
         {
-            IRecognizer instance = (IRecognizer)Activator.CreateInstance(type)!;
+            Type recognizerType = typeof( T );
 
-            // Get the mapping from `Recognizer` to `IRecognizer` by invoking the property on the
-            // recognizer which specifies it.
-            SupportedRecognizers.Add(
-                (Recognizer)type.GetRuntimeProperty(nameof( IRecognizer.RecognizerType ))!.GetValue(instance)!,
-                instance);
+            // Find all types which derive from `T`.
+            foreach (Type type in recognizerType.Assembly.GetTypes().Where(ty => ty != recognizerType && recognizerType.IsAssignableFrom(ty)))
+            {
+                T instance = (T)Activator.CreateInstance(type)!;
+
+                // Get the mapping from `Recognizer` to `T` by invoking the property on the
+                // recognizer which specifies it.
+                supportedRecognizers.Add(
+                    (Recognizer)type.GetRuntimeProperty(nameOfRecognizerProperty)!.GetValue(instance)!,
+                    instance);
+            }
         }
     }
 
     // The selected recognizers which should be run.
-    private readonly IList< IRecognizer > _recognizers;
+    private readonly IList< IRecognizer > ? _recognizers;
+    private readonly IInstruction ? _instruction;
 
     // The syntax graph of the code currently being recognized.
     private readonly SyntaxGraph _graph;
@@ -97,6 +119,27 @@ public class RecognizerRunner
     }
 
     /// <summary>
+    /// Create a new recognizer runner instance.
+    /// </summary>
+    /// <param name="filePath">The path of the file to run the <paramref name="instruction"/> on.</param>
+    /// <param name="instruction">The <see cref="IInstruction"/> to run.</param>
+    public RecognizerRunner(
+        IEnumerable< string > filePaths,
+        IInstruction instruction)
+    {
+        _instruction = instruction;
+        _graph = new SyntaxGraph();
+        foreach (string file in filePaths)
+        {
+            string content = FileManager.MakeStringFromFile(file);
+            _graph.AddFile(
+                content,
+                file);
+        }
+        _graph.CreateGraph();
+    }
+
+    /// <summary>
     /// Runs the configured <see cref="IRecognizer"/>s.
     /// </summary>
     /// <param name="pruneAll">Whether to prune regardless of <see cref="Priority"/>s</param>
@@ -111,10 +154,34 @@ public class RecognizerRunner
         }
 
         IList< ICheckResult > results = new List< ICheckResult >();
-        foreach (IRecognizer recognizer in _recognizers)
+        if (_recognizers != null)
         {
-            ICheck rootCheck = recognizer.CreateRootCheck();
+            foreach (IRecognizer recognizer in _recognizers)
+            {
+                ICheck rootCheck = recognizer.CreateRootCheck();
+                results.Add(RunImpl(rootCheck));
+            }
+        }
+        else
+        {
+            if (_instruction != null)
+            {
+                ICheck rootCheck = new NodeCheck< INode >(
+                    Priority.Knockout,
+                    _instruction.Checks);
+                results.Add(RunImpl(rootCheck));
+            }
+            else
+            {
+                throw new ArgumentException("Provide either an instruction or recognizers to run");
+            }
+        }
 
+        return results;
+
+        ICheckResult RunImpl(
+            ICheck rootCheck)
+        {
             IRecognizerContext ctx = new RecognizerContext
                                      {
                                          Graph = _graph,
@@ -141,9 +208,8 @@ public class RecognizerRunner
                 pruneAll);
 
             PrioritySort(rootResult);
-            results.Add(rootResult);
+            return rootResult;
         }
-        return results;
     }
 
     /// <summary>
@@ -239,7 +305,7 @@ public class RecognizerRunner
                 {
                     // Filter the results recursively. If `PruneResults` returns true, the node
                     // check itself should also be pruned.
-                    if (PruneResults(
+                    if (Prune(nodeCheckResult.Priority, pruneAll) && PruneResults(
                         resultsByNode,
                         nodeCheckResult,
                         pruneAll))

@@ -11,8 +11,8 @@ service StepByStepService {
     // Gets the instruction sets which are available for step-by-step mode.
     rpc GetInstructionSets (GetInstructionSetsRequest) returns (GetInstructionSetsResponse);
 
-    // Gets the classes which are selectable when checking a step.
-    rpc GetSelectableClasses (GetSelectableClassesRequest) returns (GetSelectableClassesResponse);
+    // Gets the selected instructionset
+    rpc GetInstructionSet (GetInstructionSetRequest) returns (GetInstructionSetResponse);
 
     // Gets a instruction with a given id.
     rpc GetInstructionById (GetInstructionByIdRequest) returns (GetInstructionByIdResponse);
@@ -22,13 +22,24 @@ service StepByStepService {
 }
 
 // GetInstructionSets request message.
-message GetInstructionSetsRequest {
-}
+message GetInstructionSetsRequest { }
 
 // GetInstructionSets response message.
 message GetInstructionSetsResponse {
-    // List of instruction sets which are available for step-by-step mode.
-    repeated InstructionSet instruction_sets = 1;
+    // InstructionSets that the InstructionsCreator can make.
+    repeated patternpal.Recognizer recognizers = 1;
+}
+
+// GetInstructionSet request message.
+message GetInstructionSetRequest {
+    // Name of the PatternPal
+    patternpal.Recognizer recognizer = 1;
+}
+
+// GetInstructionSet response message.
+message GetInstructionSetResponse {
+    // The selected InstructionSet from the combobox.
+    InstructionSet selected_instructionset = 1;
 }
 
 // An instruction set.
@@ -40,25 +51,13 @@ message InstructionSet {
     uint32 number_of_instructions = 2;
 }
 
-// GetSelectableClasses request message.
-message GetSelectableClassesRequest {
-    // List of documents which may contain selectable classes.
-    repeated string documents = 1;
-}
-
-// GetSelectableClasses response message.
-message GetSelectableClassesResponse {
-    // List of class names which are selectable.
-    repeated string selectable_classes = 1;
-}
-
 // GetInstructionById request message.
 message GetInstructionByIdRequest {
-    // Name of the instruction set from which to get the instruction.
-    string instruction_set_name = 1;
+    // Indexer to determine the current instruction
+    uint32 instruction_number = 1;
 
-    // Id of the instruction to get, 0-based.
-    int32 instruction_id = 2;
+    // Recognizer to obtain instruction with
+    patternpal.Recognizer recognizers = 2;
 }
 
 // GetInstructionById response message.
@@ -74,9 +73,6 @@ message Instruction {
 
     // Description of the instruction.
     string description = 2;
-
-    // Whether to show a file selector.
-    bool show_file_selector = 3;
     
     // Key used to store the selected file.
     string file_id = 4;
@@ -84,21 +80,24 @@ message Instruction {
 
 // CheckInstruction request message.
 message CheckInstructionRequest {
-    // Name of the instruction set from which to get the instruction.
-    string instruction_set_name = 1;
-
     // Id of the instruction to check, 0-based.
-    int32 instruction_id = 2;
+    int32 instruction_number = 1;
 
     // List of documents which should be included in the check.
-    repeated string documents = 3;
+    repeated string documents = 2;
     
     // Optional. The selected item in the file selector.
-    string selected_item = 4;
-}
+    string selected_item = 3;
 
+    // The recognizer that needs to be used.
+    patternpal.Recognizer recognizer = 4;
+}
+      
 // CheckInstruction response message.
 message CheckInstructionResponse {
-    // Result of the check of the instruction.
-    patternpal.RecognizeResult result = 1;
+    // Correctness of the check of the instruction.
+    bool result = 1;
+
+    // Detailed result of the check of the instruction.
+    patternpal.RecognizeResult recognize_result = 2;
 }

@@ -1,48 +1,5 @@
 ﻿{
   FeedbackMessage: Found the required checks for: PatternPal.Tests.Utils.RootNode4Tests.,
-  ChildrenCheckResults: [
-    {
-      FeedbackMessage: ,
-      ChildrenCheckResults: [
-        {
-          FeedbackMessage: Found class 'UsesPrune5',
-          ChildrenCheckResults: [
-            {
-              FeedbackMessage: Modifiers correctly implemented.,
-              Correct: true,
-              MatchedNode: UsesPrune5
-            }
-          ],
-          MatchedNode: UsesPrune5,
-          NodeCheckCollectionWrapper: false
-        }
-      ],
-      CollectionKind: Any,
-      NodeCheckCollectionWrapper: true
-    },
-    {
-      FeedbackMessage: ,
-      ChildrenCheckResults: [
-        {
-          FeedbackMessage: Found class 'PruneTestClass5',
-          ChildrenCheckResults: [
-            {
-              FeedbackMessage: ,
-              CollectionKind: Any,
-              DependencyCount: 1,
-              NodeCheckCollectionWrapper: true
-            }
-          ],
-          DependencyCount: 1,
-          MatchedNode: PruneTestClass5,
-          NodeCheckCollectionWrapper: false
-        }
-      ],
-      CollectionKind: Any,
-      DependencyCount: 1,
-      NodeCheckCollectionWrapper: true
-    }
-  ],
   DependencyCount: 1,
   MatchedNode: root node,
   NodeCheckCollectionWrapper: false

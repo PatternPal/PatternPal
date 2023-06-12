@@ -14,30 +14,28 @@ namespace PatternPal.Core.Recognizers;
 /// A <see cref="IRecognizer"/> that is used to determine if the provided files or project implements the singleton pattern
 /// </summary>
 /// <remarks>
-/// Requirements to fulfill the pattern:<br/>
-/// a) has no public/internal constructor<br/>
-/// b) has at least one private/protected constructor<br/>
-/// c) has a static, private field with the same type as the class<br/>
-/// d0) has a static, public/internal method that acts as a constructor in the following way<br/>
-///     d1) if called and there is no instance saved in the private field, then it calls the private constructor<br/>
-///     d2) if called and there is an instance saved in the private field it returns this instance<br/>
+/// Requirements for the Singleton class:<br/>
+///     a) has no public/internal constructor<br/>
+///     b) has at least one private/protected constructor<br/>
+///     c) has a static, private field with the same type as the class<br/>
+///     d0) has a static, public/internal method that acts as a constructor in the following way<br/>
+///         d1) if called and there is no instance saved in the private field, then it calls the private constructor<br/>
+///         d2) if called and there is an instance saved in the private field it returns this instance<br/>
 /// <br/>
-/// Optional requirement client:<br/>
-/// a) calls the method that acts as a constructor of the singleton class<br/>
+/// Requirement for the Client class:<br/>
+///     a) calls the method that acts as a constructor of the singleton class<br/>
 /// </remarks>
-internal class SingletonRecognizer : IRecognizer
+internal class SingletonRecognizer : IRecognizer,
+                                     IStepByStepRecognizer
 {
-    /// <inheritdoc />
+    /// <inheritdoc cref="IRecognizer" />
     public string Name => "Singleton";
 
-    /// <inheritdoc />
+    /// <inheritdoc cref="IRecognizer" />
     public Recognizer RecognizerType => Recognizer.Singleton;
 
-    /// <summary>
-    /// A method which creates a lot of <see cref="ICheck"/>s that each adheres to the requirements a singleton pattern needs to have implemented.
-    /// It returns the requirements in a tree structure stated per class.
-    /// </summary>
-    public IEnumerable< ICheck > Create()
+    /// <inheritdoc />
+    IEnumerable< ICheck > IRecognizer.Create()
     {
         // Step 1: Checks for requirements Singleton a & b
         ICheck onlyPrivateProtectedConstructor =
@@ -65,36 +63,49 @@ internal class SingletonRecognizer : IRecognizer
         );
     }
 
-    public List<IInstruction> GenerateStepsList()
+    /// <inheritdoc />
+    List< IInstruction > IStepByStepRecognizer.GenerateStepsList()
     {
-        List<IInstruction> res = new List<IInstruction>();
-
+        List< IInstruction > res = new List< IInstruction >();
 
         // !!! THESE STEPS ARE OUTDATED, JUST AN EXAMPLE !!!
         // Step 1: The constructor is ONLY private
-        res.Add(new SimpleInstruction(
-            SingletonInstructions.Step1,
-            SingletonInstructions.Explanation1,
-            new List<ICheck>
-            {
-                OnlyPrivateProtectedConstructor(
-                    out ConstructorCheck privateConstructorCheck)
-            }
-        ));
+        res.Add(
+            new SimpleInstruction(
+                SingletonInstructions.Step1,
+                SingletonInstructions.Explanation1,
+                new List< ICheck >
+                {
+                    Class(
+                        Priority.Knockout,
+                        OnlyPrivateProtectedConstructor(
+                            out ConstructorCheck privateConstructorCheck))
+                }
+            ));
+
+        FieldCheck staticPrivateFieldOfTypeClass =
+            StaticPrivateFieldOfTypeClass();
 
         // Step 2: There is a static private field with the same type as the class
-        FieldCheck fieldPrivateStaticCheck = StaticPrivateFieldOfTypeClass();
-        res.Add(new SimpleInstruction(
-            SingletonInstructions.Step2,
-            SingletonInstructions.Explanation2,
-            new List<ICheck>
-            {
-                fieldPrivateStaticCheck
-            }));
+        res.Add(
+            new SimpleInstruction(
+                SingletonInstructions.Step2,
+                SingletonInstructions.Explanation2,
+                new List< ICheck >
+                {
+                    Class(
+                        Priority.Knockout,
+                        All(
+                            Priority.Low,
+                            staticPrivateFieldOfTypeClass))
+                }
+            ));
 
+        MethodCheck checkMethodActsAsConstructorBehaviour = CheckMethodActsAsConstructorBehaviour(
+            privateConstructorCheck,
+            staticPrivateFieldOfTypeClass);
         // Step 3: There is a method that acts as the constructor
         // TODO
-
 
         // Step 4: There is a client that calls the instance method
         // TODO

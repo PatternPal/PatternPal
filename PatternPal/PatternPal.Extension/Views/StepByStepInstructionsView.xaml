@@ -5,10 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
              xmlns:usercontrol="clr-namespace:PatternPal.Extension.UserControls"
+             xmlns:viewModels="clr-namespace:PatternPal.Extension.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="360"
              d:DesignWidth="300"
-             d:DataContext="{d:DesignData StepByStepInstructionsViewModel |(in PatternPal.Extension.ViewModels)}">
+             d:DataContext="{d:DesignInstance Type=viewModels:StepByStepInstructionsViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
             <Style TargetType="TextBlock">
@@ -86,6 +87,7 @@
         <TextBlock Grid.Row="0"
                    TextWrapping="Wrap"
                    TextAlignment="Left"
+
                    Text="{Binding CurrentInstruction.Title}"
                    FontSize="15"
                    HorizontalAlignment="Center"
@@ -99,15 +101,6 @@
                    HorizontalAlignment="Center"
                    Margin="20,0,20,10"
                    MaxWidth="380" />
-        <ComboBox Grid.Row="2"
-                  Name="ClassSelection"
-                  Margin="20,0,20,10"
-                  Width="200"
-                  HorizontalAlignment="Center"
-                  ItemsSource="{Binding cbItems}"
-                  SelectedItem="{Binding SelectedcbItem}"
-                  DropDownOpened="OnDropDownOpened"
-                  SelectionChanged="OnSelectionChanged"/>
         <StackPanel Grid.Row="3"
                     Orientation="Horizontal"
                     HorizontalAlignment="Center"
@@ -140,7 +133,9 @@
                 &gt;&gt;
             </Button>
         </StackPanel>
-        <TextBlock Grid.Row="4"
+        <TextBlock x:Name ="resultTextBlock"
+                   Text ="Correct!"
+                   Grid.Row="4"
                    TextWrapping="Wrap"
                    TextAlignment="Left"
                    FontSize="15"
@@ -149,14 +144,6 @@
                    Margin="0,0,0,10"
                    MaxWidth="380"
                    Visibility="Hidden">
-            <Run Name="FeedbackTextCorrect"
-                 Foreground="Green"
-                 Text="The class is abstract&#x0a;">
-            </Run>
-            <Run Name="FeedbackTextIncorrect"
-                 Foreground="Red"
-                 Text="The class doesn't have an abstract method">
-            </Run>
         </TextBlock>
         <usercontrol:ExpanderResults x:Name="ExpanderResults" Grid.Row="5" Margin="20,0,20,0" />
     </Grid>

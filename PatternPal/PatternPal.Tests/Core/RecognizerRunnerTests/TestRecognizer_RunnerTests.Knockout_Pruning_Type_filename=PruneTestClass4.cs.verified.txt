@@ -36,20 +36,6 @@
       FeedbackMessage: ,
       ChildrenCheckResults: [
         {
-          FeedbackMessage: Found class 'PruneTestClass4',
-          ChildrenCheckResults: [
-            {
-              FeedbackMessage: ,
-              CollectionKind: Any,
-              DependencyCount: 1,
-              NodeCheckCollectionWrapper: true
-            }
-          ],
-          DependencyCount: 1,
-          MatchedNode: PruneTestClass4,
-          NodeCheckCollectionWrapper: false
-        },
-        {
           FeedbackMessage: Found class 'UsesPrune4',
           ChildrenCheckResults: [
             {

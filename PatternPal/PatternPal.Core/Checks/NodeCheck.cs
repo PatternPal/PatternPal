@@ -270,6 +270,17 @@ internal class NodeCheck< TNode > : CheckBase
         if (results.Count == 0)
         {
             MarkCheckAsSeen(nodeCheck);
+
+			// No node matches were found for the check so return the check was incorrect.
+            results.Add(new LeafCheckResult
+            {
+                FeedbackMessage = "No matches found",
+                Correct = false,
+                Priority = nodeCheck.Priority,
+                DependencyCount = 0,
+                MatchedNode = null,
+                Check = nodeCheck,
+            });
         }
 
         // Return the result.

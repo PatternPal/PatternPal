@@ -10,7 +10,6 @@ using EnvDTE80;
 using PatternPal.Protos;
 using System.Threading;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.PlatformUI.OleComponentSupport;
 using System.Linq;
 
 #endregion
@@ -41,24 +40,11 @@ namespace PatternPal.Extension.Commands
 
         private static FileSystemWatcher _watcher;
 
-        private static string _sessionId;
-
         private static bool _unhandledExceptionThrown;
 
-        public static string SessionId
-        {
-            get { return _sessionId; }
-            set { _sessionId = value; }
-        }
+        public static string SessionId { get; set; }
 
-
-        private static string _subjectId;
-
-        private static string SubjectId
-        {
-            get { return _subjectId; }
-            set { _subjectId = value; }
-        }
+        private static bool _doLog = false;
 
         private static string _pathToUserDataFolder;
 
@@ -81,13 +67,14 @@ namespace PatternPal.Extension.Commands
             _currentSolution = _dte.Solution;
             _dteDocumentEvents = _dte.Events.DocumentEvents;
             _package = package;
-            _pathToUserDataFolder = Path.Combine(_package.UserLocalDataPath.ToString(), "Extensions", "Team PatternPal",
+            _pathToUserDataFolder = Path.Combine(_package.UserLocalDataPath, "Extensions", "Team PatternPal",
                 "PatternPal.Extension", "UserData");
             _cancellationToken = cancellationToken;
 
-            // Any GET of Privacy.Instance activates the DoLogData which is not the expected behaviour.
-            // However, it is necessary here in Initialize to kickstart the Session and Project Open events.
-            SubscribeEvents._subjectId = Privacy.Instance.SubjectId.ToString();
+            // We should call OnChangedLoggingPreference to "load" a possibly stored setting. The
+            // application always stored with the internal flag set to false, so this will only actually
+            // do something when it was stored as true (and subsequently kickstart the logging session).
+            OnChangedLoggingPreference(Privacy.Instance);
         }
 
         /// <summary>
@@ -122,29 +109,56 @@ namespace PatternPal.Extension.Commands
             _dteDocumentEvents.DocumentSaved -= OnDocumentSaved;
         }
 
+        /// <summary>
+        /// Event handler for a changed logging preference in the privacy screen.
+        /// </summary>
+        /// <param name="obj"></param>
+        public static void OnChangedLoggingPreference(Privacy obj)
+        {
+            // We explicitly check if the value has changed. 
+            if (_doLog == obj.DoLogData)
+            {
+                return;
+            }
+
+            _doLog = obj.DoLogData;
+
+            // If the value changes, a new session is either started or ended.
+            ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
+                await (obj.DoLogData
+                    ? SubscribeEventHandlersAsync()
+                    : UnsubscribeEventHandlersAsync());
+            });
+
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (obj.DoLogData)
+            {
+                OnSessionStart();
+                OnSolutionOpen();
+            }
+            else
+            {
+                OnSolutionClose();
+                OnSessionEnd();
+            }
+        }
 
         #region Events
 
         /// <summary>
         /// The event handler for handling the Compile Event. The given parameters are part of the event listener input and among other things necessary to give the right output message.
         /// </summary>
-        /// <param name="Scope"></param>
-        /// <param name="Action"></param>
+        /// <param name="scope"></param>
+        /// <param name="action"></param>
         private static void OnCompileDone(
-            vsBuildScope Scope,
-            vsBuildAction Action)
+            vsBuildScope scope,
+            vsBuildAction action)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            string outputMessage;
-            if (_dte.Solution.SolutionBuild.LastBuildInfo != 0)
-            {
-                outputMessage = string.Format("Build {0} with errors. See the output window for details.",
-                    Action.ToString());
-            }
-            else
-            {
-                outputMessage = string.Format("Build {0} succeeded.", Action.ToString());
-            }
+            ThreadHelper.ThrowIfNotOnUIThread(); ;
+            string outputMessage = _dte.Solution.SolutionBuild.LastBuildInfo != 0 ? 
+                $"Build {action.ToString()} with errors. See the output window for details." : 
+                $"Build {action.ToString()} succeeded.";
 
             LogEventRequest request = CreateStandardLog();
             string pathSolutionFullName = _dte.Solution.FullName;
@@ -166,9 +180,7 @@ namespace PatternPal.Extension.Commands
             request.EventType = EventType.EvtCompile;
             request.CompileResult = outputMessage;
 
-            LogProviderService.LogProviderServiceClient client =
-                new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-            LogEventResponse response = client.LogEvent(request);
+            LogEventResponse response = PushLog(request);
 
             // When the compilation was an error, a Compile Error log needs to be send.
             if (_dte.Solution.SolutionBuild.LastBuildInfo != 0)
@@ -203,7 +215,9 @@ namespace PatternPal.Extension.Commands
         {
             // Only log for the creation of .cs files
             if (Path.GetExtension(fileSystemEventArgs.Name) != ".cs")
+            {
                 return;
+            }
 
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtFileCreate;
@@ -221,6 +235,7 @@ namespace PatternPal.Extension.Commands
         /// </summary>
         internal static void OnSessionStart()
         {
+            //SubjectId = Privacy.Instance.SubjectId;
             SessionId = Guid.NewGuid().ToString();
 
             LogEventRequest request = CreateStandardLog();
@@ -364,7 +379,7 @@ namespace PatternPal.Extension.Commands
         {
             return new LogEventRequest
             {
-                EventId = Guid.NewGuid().ToString(), SubjectId = SubscribeEvents.SessionId, SessionId = _sessionId
+                EventId = Guid.NewGuid().ToString(), SubjectId = Privacy.Instance.SubjectId, SessionId = SessionId
             };
         }
 
@@ -377,32 +392,6 @@ namespace PatternPal.Extension.Commands
                 new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
 
             return client.LogEvent(request);
-        }
-
-        /// <summary>
-        /// Saves the SubjectId of the user, if not set already, as a GUID.
-        /// It creates a folder and a file for this at the UserLocalDataPath in the PatternPal Extension folder as this place is unique per user.
-        /// </summary>
-        private static void SaveSubjectId()
-        {
-            // A SubjectID is only ever generated once per user. If the directory already exists, the SubjectID was already set.
-            string subjectId = Privacy.Instance.SubjectId;
-
-            if (subjectId == "")
-            {
-                subjectId = Guid.NewGuid().ToString();
-                Privacy.Instance.SubjectId = subjectId;
-            }
-        }
-
-        /// <summary>
-        /// Reads the SubjectID from the option model.
-        /// </summary>
-        /// <returns>The SubjectID - It returns the contents of the subjectID property.</returns>
-        private static string GetSubjectId()
-        {
-            // A SubjectID is only ever generated once per user
-            return Privacy.Instance.SubjectId;
         }
 
         /// <summary>
@@ -468,6 +457,7 @@ namespace PatternPal.Extension.Commands
             }
 
             // Create a new FileSystemWatcher instance
+            // TODO We need to explicitely check if that path is not null and handle other cases.
             _watcher = new FileSystemWatcher(Path.GetDirectoryName(_currentSolution.FullName));
 
             // Set the event handlers
