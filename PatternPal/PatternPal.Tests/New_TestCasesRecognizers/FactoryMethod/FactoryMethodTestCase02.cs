@@ -1,6 +1,4 @@
-﻿using PatternPal.Tests.TestClasses.FactoryMethodTest2;
-
-namespace PatternPal.Tests.TestClasses.FactoryMethod
+﻿namespace PatternPal.Tests.TestClasses.FactoryMethod
 {
     /* Pattern:              Factory method
      * Original code source: None
@@ -8,22 +6,22 @@ namespace PatternPal.Tests.TestClasses.FactoryMethod
      * Requirements to fullfill the pattern:
      *         Product
      *               a) is an interface
-     *               b) gets inherited by at least one class
-     *               c) gets inherited by at least two classes
+     *            ✓  b) gets inherited by at least one class
+     *            ✓  c) gets inherited by at least two classes
      *         Concrete Product
-     *               a) inherits Product
-     *               b) gets created in a Concrete Creator
+     *            ✓  a) inherits Product
+     *            ✓  b) gets created in a Concrete Creator
      *         Creator
-     *               a) is an abstract class
-     *               b) gets inherited by at least one class 
-     *               c) gets inherited by at least two classes
-     *               d) contains a factory-method with the following properties
-     *                     1) method is abstract
-     *                     2) method is public
-     *                     3) returns an object of type Product
+     *            ✓  a) is an abstract class
+     *            ✓  b) gets inherited by at least one class 
+     *            ✓  c) gets inherited by at least two classes
+     *            ✓  d) contains a factory-method with the following properties
+     *            ✓        1) method is abstract
+     *            ✓        2) method is public
+     *            ✓        3) returns an object of type Product
      *         Concrete Creator
-     *               a) inherits Creator
-     *               b) has exactly one method that creates and returns a Concrete product
+     *            ✓  a) inherits Creator
+     *            ✓  b) has exactly one method that creates and returns a Concrete product
      */
 
     //Product
