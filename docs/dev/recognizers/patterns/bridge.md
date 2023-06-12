@@ -42,6 +42,10 @@ The priority of a requirement is noted with the (low)-(mid)-(high)-(knockout) cr
 **Concrete Implementations**
 1. (mid) is an implementation of the `Implementation` interface or inherits from the `Implementation` abstract class
 
+**Refined Abstraction** optional
+1. (low) inherits from the `Abstraction` class
+2. (low) has an method
+
 ## References
 [^1]: Refactoring Guru, Creational Patterns - Bridge. https://refactoring.guru/design-patterns/bridge
 
