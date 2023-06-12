@@ -1,4 +1,4 @@
-﻿namespace PatternPal.Tests.TestClasses.FactoryMethodTest1
+﻿namespace PatternPal.Tests.TestClasses.FactoryMethodTest
 {
     //Context class
     internal class DubbleFactory : BeerFactory

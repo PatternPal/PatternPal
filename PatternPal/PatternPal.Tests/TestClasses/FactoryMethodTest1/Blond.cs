@@ -1,4 +1,4 @@
-﻿namespace PatternPal.Tests.TestClasses.FactoryMethodTest1
+﻿namespace PatternPal.Tests.TestClasses.FactoryMethodTest
 {
     public class Blond : IBeer
     {
