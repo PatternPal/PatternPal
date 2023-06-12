@@ -50,7 +50,7 @@ namespace PatternPal.Extension.UserControls
                     {
                         await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-                        DocumentView documentView = await VS.Documents.OpenViaProjectAsync(matchedNode.Path);
+                        DocumentView documentView = await VS.Documents.OpenAsync(matchedNode.Path);
                         if (documentView == null)
                         {
                             GrpcHelper.ShowErrorMessage("Failed to open file");
@@ -64,12 +64,15 @@ namespace PatternPal.Extension.UserControls
                             return;
                         }
 
+                        SnapshotSpan span = new SnapshotSpan(
+                            snapshot,
+                            matchedNode.Start,
+                            matchedNode.Length);
                         documentView.TextView?.Selection.Select(
-                            new SnapshotSpan(
-                                snapshot,
-                                matchedNode.Start,
-                                matchedNode.Length),
+                            span,
                             false);
+                        documentView.TextView?.Caret.MoveTo(span.Start);
+                        documentView.TextView?.ViewScroller.EnsureSpanVisible(span);
                     }
                     catch (Exception exception)
                     {
