@@ -169,8 +169,6 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     /// <summary>
     /// Creates a LogRequest that is populated with info obtained from the supplied
     /// received event and further specific details relevant for the FileDelete-event.
-    /// Note that this LogRequest is discarded when no difference between the last logged
-    /// state of the file and the current state of the file was detected.
     /// </summary>
     /// <param name="receivedRequest">The originally received request from the PP extension</param>
     /// <returns>A LogRequest populated for this specific event</returns>

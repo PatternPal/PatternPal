@@ -235,7 +235,9 @@ namespace PatternPal.Extension.Commands
         {
             // Only log for the creation of .cs files
             if (Path.GetExtension(fileSystemEventArgs.Name) != ".cs")
+            {
                 return;
+            }
 
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtFileDelete;
@@ -469,10 +471,7 @@ namespace PatternPal.Extension.Commands
         /// </summary>
         private static void SetUpFileWatcher()
         {
-            if (_watcher != null)
-            {
-                _watcher.Dispose();
-            }
+            _watcher?.Dispose();
 
             // Create a new FileSystemWatcher instance
             // TODO We need to explicitely check if that path is not null and handle other cases.
@@ -481,7 +480,6 @@ namespace PatternPal.Extension.Commands
             // Set the event handlers
             _watcher.Created += OnFileCreate;
             _watcher.Deleted += OnFileDelete;
-
 
             // Enable the FileSystemWatcher to begin watching for changes
             _watcher.EnableRaisingEvents = true;
