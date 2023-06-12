@@ -101,7 +101,7 @@
     </Compile>
     <Compile Include="ExtensionWindowPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\DetectorViewModel.cs" />
+    <Compile Include="ViewModels\RecognizerViewModel.cs" />
     <Compile Include="ViewModels\ConsentViewModel.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
@@ -110,8 +110,8 @@
     <Compile Include="ViewModels\StepByStepInstructionsViewModel.cs" />
     <Compile Include="ViewModels\StepByStepListViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
-    <Compile Include="Views\DetectorView.xaml.cs">
-      <DependentUpon>DetectorView.xaml</DependentUpon>
+    <Compile Include="Views\RecognizerView.xaml.cs">
+      <DependentUpon>RecognizerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ConsentView.xaml.cs">
       <DependentUpon>ConsentView.xaml</DependentUpon>
@@ -192,7 +192,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\DetectorView.xaml">
+    <Page Include="Views\RecognizerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

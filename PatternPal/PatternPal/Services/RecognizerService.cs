@@ -38,32 +38,89 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
         RecognizerRunner runner = new(
             files,
             request.Recognizers );
-        IList< ICheckResult > results = runner.Run();
+        IList< (Recognizer, ICheckResult) > results = runner.Run();
 
         // KNOWN: The root check result is always a NodeCheckResult.
-        foreach (ICheckResult result in results)
+        foreach ((Recognizer recognizer, ICheckResult rootCheckResult) in results)
         {
-            NodeCheckResult rootCheckResult = (NodeCheckResult)result;
+            RecognizeResult rootResult = new()
+                                         {
+                                             Recognizer = recognizer,
+                                             Feedback = "Goed gedoet"
+                                         };
 
-            foreach (ICheckResult childCheckResult in rootCheckResult.ChildrenCheckResults)
+            Dictionary< string, Result > resultsByRequirement = new();
+            foreach (Result result in GetResults(rootCheckResult))
             {
-                RecognizeResult res = new()
-                                      {
-                                          Recognizer = Recognizer.Singleton,
-                                          ClassName = childCheckResult.MatchedNode?.GetName() ?? "no matched node"
-                                      };
-
-                res.Results.Add(CreateCheckResult(childCheckResult));
-
-                RecognizeResponse response = new()
-                                             {
-                                                 Result = res
-                                             };
-                responseStream.WriteAsync(response);
+                if (!resultsByRequirement.TryGetValue(
+                        result.Requirement,
+                        out Result ? existingResult)
+                    || (existingResult.MatchedNode == null && result.MatchedNode != null))
+                {
+                    resultsByRequirement[ result.Requirement ] = result;
+                }
             }
+
+            foreach (Result result in resultsByRequirement.Values)
+            {
+                rootResult.Results.Add(result);
+            }
+
+            RecognizeResponse response = new()
+                                         {
+                                             Result = rootResult
+                                         };
+            responseStream.WriteAsync(response);
         }
 
         return Task.CompletedTask;
+    }
+
+    private static IEnumerable< Result > GetResults(
+        ICheckResult checkResult)
+    {
+        if (!string.IsNullOrWhiteSpace(checkResult.Check.Requirement))
+        {
+            Result result = new()
+                            {
+                                Requirement = checkResult.Check.Requirement
+                            };
+
+            if (checkResult.MatchedNode != null)
+            {
+                result.MatchedNode = new MatchedNode
+                                     {
+                                         Name = checkResult.MatchedNode.GetName()
+                                     };
+            }
+
+            yield return result;
+        }
+
+        switch (checkResult)
+        {
+            case LeafCheckResult:
+                yield break;
+            case NotCheckResult notCheckResult:
+            {
+                foreach (Result result in GetResults(notCheckResult.NestedResult))
+                {
+                    yield return result;
+                }
+                yield break;
+            }
+            case NodeCheckResult nodeCheckResult:
+            {
+                foreach (ICheckResult childCheckResult in nodeCheckResult.ChildrenCheckResults)
+                {
+                    foreach (Result result in GetResults(childCheckResult))
+                    {
+                        yield return result;
+                    }
+                }
+                yield break;
+            }
+        }
     }
 
     /// <summary>
@@ -126,8 +183,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
     {
         CheckResult newCheckResult = new()
                                      {
-                                         FeedbackType = (CheckResult.Types.FeedbackType.FeedbackCorrect),
-                                         Hidden = false,
+                                         Requirement = checkResult.Check.Requirement ?? string.Empty,
                                          FeedbackMessage = checkResult.FeedbackMessage
                                      };
 
