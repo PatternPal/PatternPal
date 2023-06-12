@@ -305,10 +305,13 @@ public class RecognizerRunner
                 {
                     // Filter the results recursively. If `PruneResults` returns true, the node
                     // check itself should also be pruned.
-                    if (Prune(nodeCheckResult.Priority, pruneAll) && PruneResults(
-                        resultsByNode,
-                        nodeCheckResult,
-                        pruneAll))
+                    if (PruneResults(
+                            resultsByNode,
+                            nodeCheckResult,
+                            pruneAll)
+                        && Prune(
+                            nodeCheckResult.Priority,
+                            pruneAll))
                     {
                         resultsToBePruned.Add(nodeCheckResult);
                         nodeCheckResult.Pruned = true;
