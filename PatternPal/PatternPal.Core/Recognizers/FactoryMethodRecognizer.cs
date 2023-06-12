@@ -31,7 +31,7 @@ namespace PatternPal.Core.Recognizers;
 ///         3) returns an object of type Product<br/>
 /// Requirements for the Concrete Creator class:<br/>
 ///     a) inherits Creator<br/>
-///     b) has exactly one method that creates and returns a Concrete Product<br/>
+///     b) has exactly one method that creates and returns a Concrete product<br/>
 /// </remarks>
 internal class FactoryMethodRecognizer : IRecognizer
 {
