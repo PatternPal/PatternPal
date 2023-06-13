@@ -19,6 +19,7 @@ internal class TypeCheck : CheckBase
     /// Initializes a new instance of the <see cref="TypeCheck"/> class.
     /// </summary>
     /// <param name="priority">Priority of the check.</param>
+    /// <param name="requirement">The optional requirement which this <see cref="ICheck"/> checks.</param>
     /// <param name="getNode">A functor to get the node to compare against.</param>
     internal TypeCheck(
         Priority priority,

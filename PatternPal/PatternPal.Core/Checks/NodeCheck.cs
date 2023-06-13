@@ -13,10 +13,7 @@ internal class NodeCheck< TNode > : CheckBase
     // The kind of this collection of checks.
     private readonly CheckCollectionKind _kind;
 
-    /// <summary>
-    /// Gets a <see cref="Func{TResult}"/> which returns a <see cref="List{T}"/> of <see cref="IEntity"/>s matched by this <see cref="ICheck"/>.
-    /// </summary>
-    /// <returns>A <see cref="List{T}"/> of matched <see cref="IEntity"/>s.</returns>
+    /// <inheritdoc />
     public override Func< List< INode > > Result => () => _matchedEntities
                                                           ?? throw new ArgumentNullException(
                                                               nameof( _matchedEntities ),
@@ -61,6 +58,7 @@ internal class NodeCheck< TNode > : CheckBase
     /// Initializes a new instance of the <see cref="NodeCheck{TNode}"/> class.
     /// </summary>
     /// <param name="priority"><see cref="Priority"/> of the check.</param>
+    /// <param name="requirement">The optional requirement which this <see cref="ICheck"/> checks.</param>
     /// <param name="subChecks">A list of sub-<see cref="ICheck"/>s that should be checked.</param>
     /// <param name="kind">The <see cref="CheckCollectionKind"/> to use for the sub-<see cref="ICheck"/>s.</param>
     internal NodeCheck(
