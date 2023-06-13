@@ -1,4 +1,6 @@
-﻿namespace PatternPal.Services;
+﻿using PatternPal.Core.Checks;
+
+namespace PatternPal.Services;
 
 /// <inheritdoc cref="Protos.RecognizerService"/>
 public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
@@ -50,14 +52,37 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                                          };
 
             Dictionary< string, Result > resultsByRequirement = new();
-            foreach (Result result in GetResults(rootCheckResult))
+            HashSet<INode> nodesUsedForEntityCheck = new();
+
+            foreach ((Result result, INode ? node, ICheck ? check) in GetResults(rootCheckResult))
             {
                 if (!resultsByRequirement.TryGetValue(
                         result.Requirement,
                         out Result ? existingResult)
                     || (existingResult.MatchedNode == null && result.MatchedNode != null))
                 {
-                    resultsByRequirement[ result.Requirement ] = result;
+                    if (node == null)
+                    {
+                        resultsByRequirement[result.Requirement] = result;
+                        continue;
+                    }
+
+                    if (!nodesUsedForEntityCheck.Contains(node))
+                    {
+                        resultsByRequirement[result.Requirement] = result;
+                        nodesUsedForEntityCheck.Add(node);
+
+                        //if (check is ClassCheck or InterfaceCheck)
+                        //{
+                        //}
+
+                        //continue;
+                    }
+
+                    //if(check is not ClassCheck && check is not InterfaceCheck)
+                    //{
+                    //    resultsByRequirement[result.Requirement] = result;
+                    //}
                 }
             }
 
@@ -76,8 +101,13 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
         return Task.CompletedTask;
     }
 
-    private static IEnumerable< Result > GetResults(
-        ICheckResult checkResult)
+    /// <summary>
+    /// This method transforms a <see cref="ICheckResult"/> to a <see cref="Result"/>
+    /// </summary>
+    /// <param name="checkResult"> The check to transform.</param>
+    /// <param name="usedNodes"></param>
+    /// <returns></returns>
+    private static IEnumerable<(Result, INode?, ICheck?)> GetResults(ICheckResult checkResult)
     {
         if (!string.IsNullOrWhiteSpace(checkResult.Check.Requirement))
         {
@@ -99,7 +129,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                                      };
             }
 
-            yield return result;
+            yield return (result, checkResult.MatchedNode, checkResult.Check);
         }
 
         switch (checkResult)
@@ -108,7 +138,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                 yield break;
             case NotCheckResult notCheckResult:
             {
-                foreach (Result result in GetResults(notCheckResult.NestedResult))
+                foreach ((Result, INode?, ICheck?) result in GetResults(notCheckResult.NestedResult))
                 {
                     yield return result;
                 }
@@ -118,7 +148,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
             {
                 foreach (ICheckResult childCheckResult in nodeCheckResult.ChildrenCheckResults)
                 {
-                    foreach (Result result in GetResults(childCheckResult))
+                    foreach ((Result, INode?, ICheck?) result in GetResults(childCheckResult))
                     {
                         yield return result;
                     }
@@ -175,41 +205,5 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                 return null;
             }
         }
-    }
-
-    /// <summary>
-    /// Converts an <see cref="ICheckResult"/> to a <see cref="CheckResult"/>, which can be sent
-    /// over the wire.
-    /// </summary>
-    /// <param name="checkResult">The <see cref="ICheckResult"/> to convert.</param>
-    /// <returns>The <see cref="CheckResult"/> instance created from the given <see cref="ICheckResult"/>.</returns>
-    private static CheckResult CreateCheckResult(
-        ICheckResult checkResult)
-    {
-        CheckResult newCheckResult = new()
-                                     {
-                                         Requirement = checkResult.Check.Requirement ?? string.Empty,
-                                         FeedbackMessage = checkResult.FeedbackMessage
-                                     };
-
-        // Convert sub-check results.
-        switch (checkResult)
-        {
-            case NodeCheckResult nodeCheckResult:
-            {
-                foreach (ICheckResult childCheckResult in nodeCheckResult.ChildrenCheckResults)
-                {
-                    newCheckResult.SubCheckResults.Add(CreateCheckResult(childCheckResult));
-                }
-                break;
-            }
-            case NotCheckResult notCheckResult:
-            {
-                newCheckResult.SubCheckResults.Add(CreateCheckResult(notCheckResult.NestedResult));
-                break;
-            }
-        }
-
-        return newCheckResult;
     }
 }
