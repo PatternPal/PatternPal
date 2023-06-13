@@ -1,5 +1,6 @@
 ﻿#region
 
+using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -110,9 +111,13 @@ public class RecognizerRunner
         _graph = new SyntaxGraph();
         foreach (string file in files)
         {
-            string content = FileManager.MakeStringFromFile(file);
+            if (!File.Exists(file))
+            {
+                throw new ArgumentException($"'{file}' does not exist");
+            }
+
             _graph.AddFile(
-                content,
+                File.ReadAllText(file),
                 file);
         }
         _graph.CreateGraph();
@@ -131,9 +136,13 @@ public class RecognizerRunner
         _graph = new SyntaxGraph();
         foreach (string file in filePaths)
         {
-            string content = FileManager.MakeStringFromFile(file);
+            if (!File.Exists(file))
+            {
+                throw new ArgumentException($"'{file}' does not exist");
+            }
+
             _graph.AddFile(
-                content,
+                File.ReadAllText(file),
                 file);
         }
         _graph.CreateGraph();
