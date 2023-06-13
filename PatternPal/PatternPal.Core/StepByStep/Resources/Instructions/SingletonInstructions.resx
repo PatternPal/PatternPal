@@ -121,13 +121,13 @@
     <value>The constructor is private to prevent direct instantiation of the class from outside the class. This ensures that only one object is created.</value>
   </data>
   <data name="Explanation2" xml:space="preserve">
-    <value>The field is static as a way of accessing the single instance when it is created. </value>
+    <value>The field is static since the Singleton should be stateless</value>
   </data>
   <data name="Explanation3" xml:space="preserve">
-    <value>This method will act as a constructor. It calls the constructor and save the object in the field of the previous step. The following calls will return the same object in the field. </value>
+    <value>This method will act as a constructor. It calls the constructor and saves the object in the field of the previous step. The subsequent calls will return that same instance, instead of creating a new one. </value>
   </data>
   <data name="Explanation4" xml:space="preserve">
-    <value>Any client that accesses the singleton will work with the same instance of the singleton throughout its lifetime.</value>
+    <value>By how we made the Singleton, we ensure that any client accessing the field of the Singleton will get access to the same field instance.</value>
   </data>
   <data name="Step1" xml:space="preserve">
     <value>Create a constructor that is only private.</value>
@@ -136,9 +136,9 @@
     <value>Create a static, private field with the same type as the class.</value>
   </data>
   <data name="Step3" xml:space="preserve">
-    <value>Create a static, public/internal method that acts as the constructor. When called and the field from the previous step is null call the constructor otherwise return the field.</value>
+    <value>Create a static, public/internal method that acts as the constructor. When called and the field from the previous step is null call the constructor, otherwise, return the field.</value>
   </data>
   <data name="Step4" xml:space="preserve">
-    <value>Create a client class that calls the method from the previous step to retrieve the singleton instance. </value>
+    <value>Create a client class that calls the method from the previous step to retrieve the Singleton instance. </value>
   </data>
 </root>
