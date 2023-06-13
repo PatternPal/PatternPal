@@ -61,7 +61,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to !!!ADD STRING WHY!!!.
+        ///   Looks up a localized string similar to The constructor is private to prevent direct instantiation of the class from outside the class. This ensures that only one object is created..
         /// </summary>
         internal static string Explanation1 {
             get {
@@ -70,7 +70,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to !!!ADD STRING WHY!!!.
+        ///   Looks up a localized string similar to The field is static as a way of accessing the single instance when it is created. .
         /// </summary>
         internal static string Explanation2 {
             get {
@@ -79,7 +79,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to !!!ADD STRING WHY!!!.
+        ///   Looks up a localized string similar to This method will act as a constructor. It calls the constructor and save the object in the field of the previous step. The following calls will return the same object in the field. .
         /// </summary>
         internal static string Explanation3 {
             get {
@@ -88,7 +88,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to !!!ADD STRING WHY!!!.
+        ///   Looks up a localized string similar to Any client that accesses the singleton will work with the same instance of the singleton throughout its lifetime..
         /// </summary>
         internal static string Explanation4 {
             get {
@@ -115,7 +115,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a static, public/internal method that acts as the constructor in the following way: if called and there is no instance saved in the private field from the previous step then call the private constructor. If called and there is an instance saved in the private field, return this instance..
+        ///   Looks up a localized string similar to Create a static, public/internal method that acts as the constructor. When called and the field from the previous step is null call the constructor otherwise return the field..
         /// </summary>
         internal static string Step3 {
             get {
@@ -124,7 +124,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a client calls that calls the method that acts as the constructor to retrieve the singleton instance..
+        ///   Looks up a localized string similar to Create a client class that calls the method from the previous step to retrieve the singleton instance. .
         /// </summary>
         internal static string Step4 {
             get {
