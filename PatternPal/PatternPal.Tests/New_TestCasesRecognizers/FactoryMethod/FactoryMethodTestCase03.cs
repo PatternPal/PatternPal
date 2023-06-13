@@ -7,21 +7,21 @@
      *         Product
      *            ✓  a) is an interface
      *            ✓  b) gets inherited by at least one class
-     *            ✓  c) gets inherited by at least two classes
+     *               c) gets inherited by at least two classes
      *         Concrete Product
      *            ✓  a) inherits Product
      *            ✓  b) gets created in a Concrete Creator
      *         Creator
      *            ✓  a) is an abstract class
      *            ✓  b) gets inherited by at least one class 
-     *            ✓  c) gets inherited by at least two classes
+     *               c) gets inherited by at least two classes
      *            ✓  d) contains a factory-method with the following properties
      *            ✓        1) method is abstract
      *            ✓        2) method is public
      *            ✓        3) returns an object of type Product
      *         Concrete Creator
      *            ✓  a) inherits Creator
-     *            ✓  b) has exactly one method that creates and returns a Concrete product
+     *               b) has exactly one method that creates and returns a Concrete product
      */
 
     //Product
@@ -36,15 +36,6 @@
         public string Operation()
         {
             return "{Result of ConcreteProduct1}";
-        }
-    }
-
-    //Concrete product
-    internal class ConcreteProduct2 : IProduct
-    {
-        public string Operation()
-        {
-            return "{Result of ConcreteProduct2}";
         }
     }
 
@@ -70,14 +61,10 @@
         {
             return new ConcreteProduct1();
         }
-    }
 
-    //Concrete creator
-    internal class ConcreteCreator2 : Creator
-    {
-        public override IProduct FactoryMethod()
+        public IProduct Method()
         {
-            return new ConcreteProduct2();
+            return new ConcreteProduct1();
         }
     }
 }

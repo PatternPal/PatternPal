@@ -52,13 +52,12 @@ internal class FactoryMethodRecognizer : IRecognizer
 
         //Product a
         InterfaceCheck productIsInterface = Interface(
-            Priority.Knockout,
-            Any(Priority.Knockout)
+            Priority.Knockout
         );
-        yield return productIsInterface;
+
 
         //Concrete product a & Product b
-        RelationCheck concreteInheritsProduct = Inherits(
+        RelationCheck concreteInheritsProduct = Implements(
             Priority.Knockout,
             productIsInterface);
 
@@ -92,7 +91,6 @@ internal class FactoryMethodRecognizer : IRecognizer
             //c
             factoryMethod
         );
-        yield return creator;
 
         //Concrete Creator a & Creator b
         RelationCheck concreteInheritsCreator = Inherits(
@@ -100,31 +98,41 @@ internal class FactoryMethodRecognizer : IRecognizer
             creator
         );
 
+        ClassCheck concreteProduct = Class(
+            Priority.Low,
+            concreteInheritsProduct
+        );
+
         //Concrete Creator b --Todo does not check if it is exactly one
         MethodCheck methodReturnsConcreteProduct = Method(
             Priority.Low,
             Type(
                 Priority.Low,
-                concreteInheritsProduct
+                concreteProduct
             ),
             Creates(
                 Priority.Low,
-                concreteInheritsProduct
+                concreteProduct
             )
+        );
+
+        //Concrete product b
+        RelationCheck createsConcreteProduct = Creates(
+            Priority.High,
+            concreteProduct
         );
 
         ClassCheck concreteCreator = Class(
             Priority.Low,
             concreteInheritsCreator,
-            methodReturnsConcreteProduct
+            methodReturnsConcreteProduct,
+            createsConcreteProduct
         );
 
-        //Concrete product b
-        RelationCheck getsCreatedInConcreteProduct = CreatedBy(
-            Priority.High,
-            concreteCreator
-        );
-
+        yield return productIsInterface;
+        yield return concreteProduct;
+        yield return creator;
+        yield return concreteCreator;
     }
 
     public List<IInstruction> GenerateStepsList()

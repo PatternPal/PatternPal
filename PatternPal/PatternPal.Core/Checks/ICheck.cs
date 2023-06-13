@@ -595,6 +595,7 @@ internal static class CheckBuilder
         Priority priority,
         ICheck relatedNodeCheck) => new(
         priority,
+        null,
         RelationType.CreatedBy,
         relatedNodeCheck);
 
