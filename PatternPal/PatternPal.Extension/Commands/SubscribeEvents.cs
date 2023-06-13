@@ -258,7 +258,7 @@ namespace PatternPal.Extension.Commands
         internal static void OnFileRename(object sender, RenamedEventArgs e)
         {
             // Only log for the creation of .cs files
-            if (Path.GetExtension(e.Name) != ".cs")
+            if (Path.GetExtension(e.OldName) != ".cs" || Path.GetExtension(e.Name) != ".cs")
             {
                 return;
             }

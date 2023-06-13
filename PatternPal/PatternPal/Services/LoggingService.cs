@@ -45,7 +45,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         // TODO Response error handling
         LogResponse response = client.Log(specificLog.request);
 
-        if (response.Message == "Logged" && specificLog.request.HasData)
+        if (specificLog.request.HasData)
         {
             // We only store the logged data as the previous codeState if we are certain it was successfully logged.
             UpdateHistory(specificLog.request.ProjectId, specificLog.request.Data);
