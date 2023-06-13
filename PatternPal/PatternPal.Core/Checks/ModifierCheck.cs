@@ -18,11 +18,15 @@ internal class ModifierCheck : CheckBase
     /// Initializes a new instance of the <see cref="ModifierCheck"/> class. 
     /// </summary>
     /// <param name="priority">Priority of the check.</param>
+    /// <param name="requirement">The optional requirement which this <see cref="ICheck"/> checks.</param>
     /// <param name="modifiers">A list of modifiers the node should have</param>
     public ModifierCheck(
         Priority priority,
+        string ? requirement,
         IEnumerable< IModifier > modifiers)
-        : base(priority)
+        : base(
+            priority,
+            requirement)
     {
         _modifiers = modifiers;
     }

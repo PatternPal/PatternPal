@@ -31,13 +31,13 @@ namespace PatternPal.Extension.Views
     /// <summary>
     ///     Interaction logic for DetectorView.xaml
     /// </summary>
-    public partial class DetectorView : IVsSolutionEvents,
-                                        IVsRunningDocTableEvents
+    public partial class RecognizerView : IVsSolutionEvents,
+                                          IVsRunningDocTableEvents
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="ExtensionWindowControl" /> class.
         /// </summary>
-        public DetectorView()
+        public RecognizerView()
         {
             InitializeComponent();
             AddViewModels();
@@ -179,7 +179,10 @@ namespace PatternPal.Extension.Views
 
             foreach (RecognizeResult result in results)
             {
-                viewModels.Add(new PatternResultViewModel(result));
+                if (result.Results.Count > 0)
+                {
+                    viewModels.Add(new PatternResultViewModel(result));
+                }
             }
 
             // - Change your UI information here
