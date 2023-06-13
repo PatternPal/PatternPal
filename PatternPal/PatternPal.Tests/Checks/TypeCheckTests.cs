@@ -10,6 +10,7 @@ public class TypeCheckTests
 
         TypeCheck typeCheck = new(
             Priority.Low,
+            null,
             OneOf< ICheck, GetCurrentEntity >.FromT1(
                 ICheck.GetCurrentEntity) );
 
@@ -29,6 +30,7 @@ public class TypeCheckTests
 
         TypeCheck typeCheck = new(
             Priority.Low,
+            null,
             OneOf< ICheck, GetCurrentEntity >.FromT1(
                 ICheck.GetCurrentEntity) );
 

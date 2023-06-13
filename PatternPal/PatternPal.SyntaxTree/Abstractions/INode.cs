@@ -1,6 +1,7 @@
 ﻿#region
 
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Text;
 
 using PatternPal.SyntaxTree.Abstractions.Root;
 
@@ -27,6 +28,11 @@ namespace PatternPal.SyntaxTree.Abstractions
         /// Gets the <see cref="IRoot"/> of the node.
         /// </summary>
         IRoot GetRoot();
+
+        /// <summary>
+        /// Gets the location in the source code where this <see cref="INode"/> is defined.
+        /// </summary>
+        TextSpan GetSourceLocation => GetSyntaxNode().GetLocation().SourceSpan;
 
         /// <summary>
         /// Indicates that this <see cref="INode"/> serves as a placeholder node. This is only

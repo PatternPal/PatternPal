@@ -28,6 +28,14 @@ public interface ICheck
     /// </summary>
     Priority Priority { get; }
 
+    /// <summary>
+    /// The requirement to which this <see cref="ICheck"/> belongs.
+    /// </summary>
+    string ? Requirement { get; }
+
+    /// <summary>
+    /// Returns a <see cref="Func{TResult}"/> which can be invoked to get the results of this <see cref="ICheck"/>.
+    /// </summary>
     Func< List< INode > > Result { get; }
 
     /// <summary>
@@ -54,6 +62,10 @@ internal abstract class CheckBase : ICheck
     /// <inheritdoc />
     public Priority Priority { get; }
 
+    /// <inheritdoc />
+    public string ? Requirement { get; }
+
+    /// <inheritdoc />
     public virtual Func< List< INode > > Result => throw new NotSupportedException($"this check '{this}' is not a NodeCheck");
 
     /// <inheritdoc />
@@ -62,10 +74,14 @@ internal abstract class CheckBase : ICheck
     /// <summary>
     /// Sets the priority.
     /// </summary>
+    /// <param name="priority">The <see cref="Checks.Priority"/> of this <see cref="ICheck"/>.</param>
+    /// <param name="requirement">The optional requirement which this <see cref="ICheck"/> checks.</param>
     protected CheckBase(
-        Priority priority)
+        Priority priority,
+        string ? requirement)
     {
         Priority = priority;
+        Requirement = requirement;
     }
 
     /// <inheritdoc />
@@ -129,8 +145,19 @@ internal static class CheckBuilder
     /// <returns>The created <see cref="NodeCheck{TNode}"/>.</returns>
     internal static NodeCheck< INode > Any(
         Priority priority,
+        params ICheck[ ] checks) => Any(
+        priority,
+        null,
+        checks);
+
+    /// <inheritdoc cref="Any"/>
+    /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
+    internal static NodeCheck< INode > Any(
+        Priority priority,
+        string ? requirement,
         params ICheck[ ] checks) => new(
         priority,
+        requirement,
         checks,
         CheckCollectionKind.Any );
 
@@ -142,20 +169,43 @@ internal static class CheckBuilder
     /// <returns>The created <see cref="NodeCheck{TNode}"/>.</returns>
     internal static NodeCheck< INode > All(
         Priority priority,
+        params ICheck[ ] checks) => All(
+        priority,
+        null,
+        checks);
+
+    /// <inheritdoc cref="All"/>
+    /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
+    internal static NodeCheck< INode > All(
+        Priority priority,
+        string ? requirement,
         params ICheck[ ] checks) => new(
         priority,
+        requirement,
         checks );
 
     /// <summary>
     /// Creates a new <see cref="NotCheck"/>.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="NotCheck"/>.</param>
+    /// <param name="hasNoPublicInternalConstructor"></param>
     /// <param name="check">The <see cref="ICheck"/> to be inverted by the <see cref="NotCheck"/>.</param>
     /// <returns>The created <see cref="NotCheck"/>.</returns>
     internal static NotCheck Not(
         Priority priority,
+        ICheck check) => Not(
+        priority,
+        null,
+        check);
+
+    /// <inheritdoc cref="Not"/>
+    /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
+    internal static NotCheck Not(
+        Priority priority,
+        string ? requirement,
         ICheck check) => new(
         priority,
+        requirement,
         check );
 
     /// <summary>
@@ -166,8 +216,19 @@ internal static class CheckBuilder
     /// <returns>The created <see cref="ClassCheck"/>.</returns>
     internal static ClassCheck Class(
         Priority priority,
+        params ICheck[ ] checks) => Class(
+        priority,
+        null,
+        checks);
+
+    /// <inheritdoc cref="Class"/>
+    /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
+    internal static ClassCheck Class(
+        Priority priority,
+        string ? requirement,
         params ICheck[ ] checks) => new(
         priority,
+        requirement,
         checks );
 
     /// <summary>
@@ -179,8 +240,20 @@ internal static class CheckBuilder
     internal static ClassCheck AbstractClass(
         Priority priority,
         params ICheck[ ] checks) =>
+        AbstractClass(
+            priority,
+            null,
+            checks);
+
+    /// <inheritdoc cref="AbstractClass"/>
+    /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
+    internal static ClassCheck AbstractClass(
+        Priority priority,
+        string ? requirement,
+        params ICheck[ ] checks) =>
         new(
             priority,
+            requirement,
             checks.Prepend(
                 Modifiers(
                     priority,
@@ -194,8 +267,19 @@ internal static class CheckBuilder
     /// <returns>The created <see cref="InterfaceCheck"/>.</returns>
     internal static InterfaceCheck Interface(
         Priority priority,
+        params ICheck[ ] checks) => Interface(
+        priority,
+        null,
+        checks);
+
+    /// <inheritdoc cref="Interface"/>
+    /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
+    internal static InterfaceCheck Interface(
+        Priority priority,
+        string ? requirement,
         params ICheck[ ] checks) => new(
         priority,
+        requirement,
         checks );
 
     /// <summary>
@@ -206,8 +290,19 @@ internal static class CheckBuilder
     /// <returns>The created <see cref="MethodCheck"/>.</returns>
     internal static MethodCheck Method(
         Priority priority,
+        params ICheck[ ] checks) => Method(
+        priority,
+        null,
+        checks);
+
+    /// <inheritdoc cref="Method"/>
+    /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
+    internal static MethodCheck Method(
+        Priority priority,
+        string ? requirement,
         params ICheck[ ] checks) => new(
         priority,
+        requirement,
         checks );
 
     /// <summary>
@@ -218,8 +313,19 @@ internal static class CheckBuilder
     /// <returns>The created <see cref="PropertyCheck"/>.</returns>
     internal static PropertyCheck Property(
         Priority priority,
+        params ICheck[ ] checks) => Property(
+        priority,
+        null,
+        checks);
+
+    /// <inheritdoc cref="Property"/>
+    /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
+    internal static PropertyCheck Property(
+        Priority priority,
+        string ? requirement,
         params ICheck[ ] checks) => new(
         priority,
+        requirement,
         checks );
 
     /// <summary>
@@ -230,8 +336,19 @@ internal static class CheckBuilder
     /// <returns>The created <see cref="ModifierCheck"/>.</returns>
     internal static ModifierCheck Modifiers(
         Priority priority,
+        params IModifier[ ] modifiers) => Modifiers(
+        priority,
+        null,
+        modifiers);
+
+    /// <inheritdoc cref="Modifiers"/>
+    /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
+    internal static ModifierCheck Modifiers(
+        Priority priority,
+        string ? requirement,
         params IModifier[ ] modifiers) => new(
         priority,
+        requirement,
         modifiers );
 
     /// <summary>
@@ -242,8 +359,19 @@ internal static class CheckBuilder
     /// <returns>The created <see cref="ParameterCheck"/>.</returns>
     internal static ParameterCheck Parameters(
         Priority priority,
+        params TypeCheck[ ] parameterTypes) => Parameters(
+        priority,
+        null,
+        parameterTypes);
+
+    /// <inheritdoc cref="Parameters"/>
+    /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
+    internal static ParameterCheck Parameters(
+        Priority priority,
+        string ? requirement,
         params TypeCheck[ ] parameterTypes) => new(
         priority,
+        requirement,
         parameterTypes );
 
     /// <summary>
@@ -254,8 +382,19 @@ internal static class CheckBuilder
     /// <returns>The created <see cref="TypeCheck"/>.</returns>
     internal static TypeCheck Type(
         Priority priority,
+        CheckBase getRelatedCheck) => Type(
+        priority,
+        null,
+        getRelatedCheck);
+
+    /// <inheritdoc cref="Type"/>
+    /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
+    internal static TypeCheck Type(
+        Priority priority,
+        string ? requirement,
         CheckBase getRelatedCheck) => new(
         priority,
+        requirement,
         getRelatedCheck );
 
     /// <summary>
@@ -266,8 +405,19 @@ internal static class CheckBuilder
     /// <returns>The created <see cref="TypeCheck"/>.</returns>
     internal static TypeCheck Type(
         Priority priority,
+        GetCurrentEntity getCurrentEntity) => Type(
+        priority,
+        null,
+        getCurrentEntity);
+
+    /// <inheritdoc cref="Type"/>
+    /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
+    internal static TypeCheck Type(
+        Priority priority,
+        string ? requirement,
         GetCurrentEntity getCurrentEntity) => new(
         priority,
+        requirement,
         getCurrentEntity );
 
     /// <summary>
@@ -279,9 +429,34 @@ internal static class CheckBuilder
     /// <returns>The created <see cref="RelationCheck"/>.</returns>
     internal static RelationCheck Uses(
         Priority priority,
+        ICheck relatedNodeCheck) => Relation(
+        priority,
+        null,
+        RelationType.Uses,
+        relatedNodeCheck);
+
+    /// <inheritdoc cref="Uses"/>
+    /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
+    internal static RelationCheck Uses(
+        Priority priority,
+        string ? requirement,
+        ICheck relatedNodeCheck) => Relation(
+        priority,
+        requirement,
+        RelationType.Uses,
+        relatedNodeCheck);
+
+    /// <inheritdoc cref="Relation"/>
+    /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
+    /// <param name="relationType">The <see cref="RelationType"/> of the relation.</param>
+    private static RelationCheck Relation(
+        Priority priority,
+        string ? requirement,
+        RelationType relationType,
         ICheck relatedNodeCheck) => new(
         priority,
-        RelationType.Uses,
+        requirement,
+        relationType,
         relatedNodeCheck );
 
     /// <summary>
@@ -293,8 +468,19 @@ internal static class CheckBuilder
     /// <returns></returns>
     internal static RelationCheck UsedBy(
         Priority priority,
-        ICheck relatedNodeCheck) => new(
+        ICheck relatedNodeCheck) => UsedBy(
         priority,
+        null,
+        relatedNodeCheck);
+
+    /// <inheritdoc cref="UsedBy"/>
+    /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
+    internal static RelationCheck UsedBy(
+        Priority priority,
+        string ? requirement,
+        ICheck relatedNodeCheck) => Relation(
+        priority,
+        requirement,
         RelationType.UsedBy,
         relatedNodeCheck);
 
@@ -307,10 +493,21 @@ internal static class CheckBuilder
     /// <returns>The created <see cref="RelationCheck"/>.</returns>
     internal static RelationCheck Inherits(
         Priority priority,
-        ICheck relatedNodeCheck) => new(
+        ICheck relatedNodeCheck) => Inherits(
         priority,
+        null,
+        relatedNodeCheck);
+
+    /// <inheritdoc cref="Inherits"/>
+    /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
+    internal static RelationCheck Inherits(
+        Priority priority,
+        string ? requirement,
+        ICheck relatedNodeCheck) => Relation(
+        priority,
+        requirement,
         RelationType.Extends,
-        relatedNodeCheck );
+        relatedNodeCheck);
 
     /// <summary>
     /// Creates a new <see cref="RelationCheck"/> for a <see cref="RelationType.Implements"/> relation.
@@ -321,10 +518,21 @@ internal static class CheckBuilder
     /// <returns>The created <see cref="RelationCheck"/>.</returns>
     internal static RelationCheck Implements(
         Priority priority,
-        ICheck relatedNodeCheck) => new(
+        ICheck relatedNodeCheck) => Implements(
         priority,
+        null,
+        relatedNodeCheck);
+
+    /// <inheritdoc cref="Implements"/>
+    /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
+    internal static RelationCheck Implements(
+        Priority priority,
+        string ? requirement,
+        ICheck relatedNodeCheck) => Relation(
+        priority,
+        requirement,
         RelationType.Implements,
-        relatedNodeCheck );
+        relatedNodeCheck);
 
     /// <summary>
     /// Creates a new <see cref="RelationCheck"/> for a <see cref="RelationType.Overrides"/> relation.
@@ -335,10 +543,21 @@ internal static class CheckBuilder
     /// <returns>The created <see cref="RelationCheck"/>.</returns>
     internal static RelationCheck Overrides(
         Priority priority,
-        ICheck relatedNodeCheck) => new(
+        ICheck relatedNodeCheck) => Overrides(
         priority,
+        null,
+        relatedNodeCheck);
+
+    /// <inheritdoc cref="Overrides"/>
+    /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
+    internal static RelationCheck Overrides(
+        Priority priority,
+        string ? requirement,
+        ICheck relatedNodeCheck) => Relation(
+        priority,
+        requirement,
         RelationType.Overrides,
-        relatedNodeCheck );
+        relatedNodeCheck);
 
     /// <summary>
     /// Creates a new <see cref="RelationCheck"/> for a <see cref="RelationType.Creates"/> relation.
@@ -349,10 +568,21 @@ internal static class CheckBuilder
     /// <returns>The created <see cref="RelationCheck"/></returns>
     internal static RelationCheck Creates(
         Priority priority,
-        ICheck relatedNodeCheck) => new(
+        ICheck relatedNodeCheck) => Creates(
         priority,
+        null,
+        relatedNodeCheck);
+
+    /// <inheritdoc cref="Creates"/>
+    /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
+    internal static RelationCheck Creates(
+        Priority priority,
+        string ? requirement,
+        ICheck relatedNodeCheck) => Relation(
+        priority,
+        requirement,
         RelationType.Creates,
-        relatedNodeCheck );
+        relatedNodeCheck);
 
     /// <summary>
     /// Creates a new <see cref="RelationCheck"/> for a <see cref="RelationType.CreatedBy"/> relation.
@@ -376,8 +606,19 @@ internal static class CheckBuilder
     /// <returns>The created <see cref="FieldCheck"/>.</returns>
     internal static FieldCheck Field(
         Priority priority,
+        params ICheck[ ] checks) => Field(
+        priority,
+        null,
+        checks);
+
+    /// <inheritdoc cref="Field"/>
+    /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
+    internal static FieldCheck Field(
+        Priority priority,
+        string ? requirement,
         params ICheck[ ] checks) => new(
         priority,
+        requirement,
         checks );
 
     /// <summary>
@@ -388,8 +629,19 @@ internal static class CheckBuilder
     /// <returns>The created <see cref="ConstructorCheck"/>.</returns>
     internal static ConstructorCheck Constructor(
         Priority priority,
+        params ICheck[ ] checks) => Constructor(
+        priority,
+        null,
+        checks);
+
+    /// <inheritdoc cref="Constructor"/>
+    /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
+    internal static ConstructorCheck Constructor(
+        Priority priority,
+        string ? requirement,
         params ICheck[ ] checks) => new(
         priority,
+        requirement,
         checks );
 }
 
