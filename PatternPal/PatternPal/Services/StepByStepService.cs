@@ -120,24 +120,4 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
                 });
         }
     }
-
-    // TODO Method can still be useful, common.proto CheckResult is based on old codebase.
-    // TODO Method is unused, comments should be removed from develop and inheritdoc is invalid
-    /// <inheritdoc />
-    private static CheckResult CreateCheckResult(
-        ICheckResult checkResult)
-    {
-        throw new NotImplementedException();
-        //CheckResult newCheckResult = new()
-        //{
-        //    FeedbackType = (CheckResult.Types.FeedbackType)((int)checkResult.GetFeedbackType() + 1),
-        //    Hidden = checkResult.IsHidden,
-        //    FeedbackMessage = ResourceUtils.ResultToString(checkResult),
-        //};
-        //foreach (Recognizers.Abstractions.ICheckResult childCheckResult in checkResult.GetChildFeedback())
-        //{
-        //    newCheckResult.SubCheckResults.Add(CreateCheckResult(childCheckResult));
-        //}
-        //return newCheckResult;
-    }
 }
