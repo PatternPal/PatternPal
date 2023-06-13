@@ -11,7 +11,6 @@ using PatternPal.Protos;
 using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
-using Thread = EnvDTE.Thread;
 
 #endregion
 
