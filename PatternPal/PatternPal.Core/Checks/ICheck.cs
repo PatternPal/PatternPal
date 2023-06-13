@@ -33,7 +33,9 @@ public interface ICheck
     /// </summary>
     string ? Requirement { get; }
 
-    // TODO: Documentation!!!
+    /// <summary>
+    /// Returns a <see cref="Func{TResult}"/> which can be invoked to get the results of this <see cref="ICheck"/>.
+    /// </summary>
     Func< List< INode > > Result { get; }
 
     /// <summary>
@@ -63,6 +65,7 @@ internal abstract class CheckBase : ICheck
     /// <inheritdoc />
     public string ? Requirement { get; }
 
+    /// <inheritdoc />
     public virtual Func< List< INode > > Result => throw new NotSupportedException($"this check '{this}' is not a NodeCheck");
 
     /// <inheritdoc />
@@ -71,6 +74,8 @@ internal abstract class CheckBase : ICheck
     /// <summary>
     /// Sets the priority.
     /// </summary>
+    /// <param name="priority">The <see cref="Checks.Priority"/> of this <see cref="ICheck"/>.</param>
+    /// <param name="requirement">The optional requirement which this <see cref="ICheck"/> checks.</param>
     protected CheckBase(
         Priority priority,
         string ? requirement)
