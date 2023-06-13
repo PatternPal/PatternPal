@@ -23,7 +23,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     /// Stores the last codeState that has been successfully logged to the server. They
     /// are stored as follows: They are stored under [projectID][fileNameRelativeToProjectDir].
     /// </summary>
-    private static Dictionary<String, Dictionary<String, String>> _lastCodeState = new();
+    private static readonly Dictionary<string, Dictionary<string, string>> _lastCodeState = new();
 
     /// <inheritdoc />
     public override Task<LogEventResponse> LogEvent(LogEventRequest receivedRequest, ServerCallContext context)

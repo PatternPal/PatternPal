@@ -11,6 +11,7 @@ using PatternPal.Protos;
 using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
+using Thread = EnvDTE.Thread;
 
 #endregion
 
@@ -43,6 +44,7 @@ namespace PatternPal.Extension.Commands
         private static bool _unhandledExceptionThrown;
 
         public static string SessionId { get; set; }
+        public static string SubjectId { get; set; }
 
         private static bool _doLog = false;
 
@@ -58,6 +60,7 @@ namespace PatternPal.Extension.Commands
             ExtensionWindowPackage package, CancellationToken cancellationToken)
         {
             _dte = dte;
+
             ThreadHelper.ThrowIfNotOnUIThread();
             _dteDebugEvents = _dte.Events.DebuggerEvents;
             _dteSolutionEvents = _dte.Events.SolutionEvents;
@@ -255,7 +258,9 @@ namespace PatternPal.Extension.Commands
         /// </summary>
         internal static void OnSessionStart()
         {
-            //SubjectId = Privacy.Instance.SubjectId;
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            SubjectId = Privacy.Instance.SubjectId;
             SessionId = Guid.NewGuid().ToString();
 
             LogEventRequest request = CreateStandardLog();
@@ -371,6 +376,7 @@ namespace PatternPal.Extension.Commands
         public static void OnPatternRecognized(RecognizeRequest recognizeRequest,
             IList<RecognizeResult> recognizeResults)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             if (_package == null || !Privacy.Instance.DoLogData)
             { 
               return; 
@@ -399,7 +405,7 @@ namespace PatternPal.Extension.Commands
         {
             return new LogEventRequest
             {
-                EventId = Guid.NewGuid().ToString(), SubjectId = Privacy.Instance.SubjectId, SessionId = SessionId
+                EventId = Guid.NewGuid().ToString(), SubjectId = SubjectId, SessionId = SessionId
             };
         }
 
