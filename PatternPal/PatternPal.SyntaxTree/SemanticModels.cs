@@ -1,8 +1,12 @@
+﻿#region
+
 using System;
 using System.Linq;
 using System.Reflection;
 
 using Microsoft.CodeAnalysis.CSharp;
+
+#endregion
 
 namespace PatternPal.SyntaxTree
 {
@@ -29,7 +33,7 @@ namespace PatternPal.SyntaxTree
         /// <param name="trees">The SyntaxTrees to be added.</param>
         public static void AddTreesToCompilation(params Microsoft.CodeAnalysis.SyntaxTree[] trees)
         {
-            foreach (var tree in trees)
+            foreach (Microsoft.CodeAnalysis.SyntaxTree tree in trees)
             {
                 if (!_compilation.SyntaxTrees.Any(x => x == tree))
                 {
