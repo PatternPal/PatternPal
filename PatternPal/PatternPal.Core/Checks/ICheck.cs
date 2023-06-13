@@ -1,5 +1,9 @@
-﻿using PatternPal.SyntaxTree;
+﻿#region
+
+using PatternPal.SyntaxTree;
 using PatternPal.SyntaxTree.Models;
+
+#endregion
 
 namespace PatternPal.Core.Checks;
 

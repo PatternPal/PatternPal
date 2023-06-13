@@ -1,5 +1,6 @@
 ﻿namespace PatternPal.Core.StepByStep
 {
+    // TODO Add comments
     public class SimpleInstruction : IInstruction
     {
         public string Requirement { get; }

@@ -1,7 +1,12 @@
-﻿using System.IO;
+﻿#region
+
+using System.IO;
+
+#endregion 
 
 namespace PatternPal.Core
 {
+    // TODO Add comments
     public class FileManager
     {
         public static string MakeStringFromFile(string filePath)

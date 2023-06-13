@@ -1,6 +1,5 @@
 ﻿#region
 
-using System.ComponentModel;
 using PatternPal.SyntaxTree.Models;
 
 using static PatternPal.Core.Checks.CheckBuilder;
