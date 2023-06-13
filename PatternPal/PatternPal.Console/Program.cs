@@ -51,7 +51,7 @@ internal sealed class PatternPalCommand : Command< Settings >
         IList< (Recognizer, ICheckResult) > result = recognizerRunner.Run();
 
         string jsonOutput = JsonSerializer.Serialize(
-            result.Select((_, r) => r),
+            result.Select(res => res.Item2),
             new JsonSerializerOptions
             {
                 Converters =
@@ -82,8 +82,36 @@ internal sealed class PatternPalCommand : Command< Settings >
                                    }
             });
 
-        AnsiConsole.WriteLine("Results:");
-        AnsiConsole.Write(new JsonText(jsonOutput));
+        if (settings.Save.HasValue
+            && settings.Save.Value)
+        {
+            string pattern = settings.Pattern.ToString();
+            string outputFileName = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                $"{pattern}.json");
+
+            if (File.Exists(outputFileName))
+            {
+                if (!AnsiConsole.Confirm($"'{pattern}.json' already exists, do you want to overwrite it?"))
+                {
+                    string name = AnsiConsole.Ask< string >("Enter a file name:");
+                    outputFileName = Path.Combine(
+                        Directory.GetCurrentDirectory(),
+                        $"{name}.json");
+                }
+            }
+
+            File.WriteAllText(
+                outputFileName,
+                jsonOutput);
+
+            AnsiConsole.WriteLine($"Saved output to '{outputFileName}'");
+        }
+        else
+        {
+            AnsiConsole.WriteLine("Results:");
+            AnsiConsole.Write(new JsonText(jsonOutput));
+        }
 
         return 0;
     }
@@ -104,6 +132,10 @@ internal sealed class Settings : CommandSettings
         1,
         "<FileOrDirectory>")]
     public required string FileOrDirectory { get; set; }
+
+    [Description("Save the JSON output to a file")]
+    [CommandOption("-s|--save")]
+    public bool ? Save { get; set; }
 
     public override ValidationResult Validate()
     {
