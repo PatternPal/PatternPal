@@ -11,8 +11,6 @@ using PatternPal.SyntaxTree.Models.Entities;
 
 namespace PatternPal.SyntaxTree.Utils
 {
-    // TODO Is unused
-
     /// <summary>
     /// Used as a facade to mask the Roslyn library.
     /// </summary>
