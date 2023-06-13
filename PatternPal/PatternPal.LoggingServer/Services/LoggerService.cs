@@ -34,28 +34,56 @@ namespace PatternPal.LoggingServer.Services
         /// </summary>
         /// <param name="request">All information sent along from the Client required to add a new entry</param>
         /// <param name="context">Server context required</param>
-        /// <returns cref="LogResponse">Confirmation</returns>
-        /// <exception cref="RpcException"></exception>
+        /// <returns cref="LogResponse">Confirmation with status code 1 </returns>
+        /// <exception cref="LogResponse">Depends upon the failure type but returns a different statuscode</exception>
         public override async Task<LogResponse> Log(LogRequest request, ServerCallContext context)
         {
-            // GUID parsing
-            Guid eventId = GetGuid(request.EventId, "EventID");
-            Guid sessionId = GetGuid(request.SessionId, "SessionID");
-            string subjectId = request.SubjectId;
-            Guid? parentEventId = request.HasParentEventId ? Guid.Parse(request.ParentEventId) : null;
+
+            // 
+            Guid? eventIdNullable = GetGuid(request.EventId, "EventID");
+            if (eventIdNullable == null)
+            {
+                return await Task.FromResult(CreateInvalidResponse("invalid event id"));
+            }
+            Guid eventId = eventIdNullable.Value;
+
+            Guid? sessionIdNullable = GetGuid(request.SessionId, "SessionID");
+            if (sessionIdNullable == null)
+            {
+                return await Task.FromResult(CreateInvalidResponse("invalid session id"));
+            }
+
+            Guid sessionId = sessionIdNullable.Value;
+
+            Guid? parentEventIdNullable = null;
+            if (request.HasParentEventId)
+            {
+                parentEventIdNullable = GetGuid(request.ParentEventId, "ParentEventID");
+                if (parentEventIdNullable == null)
+                {
+                    return await Task.FromResult(CreateInvalidResponse("invalid parent event id"));
+                }
+            }
+            Guid parentEventId = parentEventIdNullable ?? Guid.Empty;
 
             if (!DateTimeOffset.TryParse(request.ClientTimestamp, out DateTimeOffset cDto))
             {
-                Status status = new Status(StatusCode.InvalidArgument, "Invalid datetime format ( ISO 8601 ) ");
-                throw new RpcException(status);
+                return await Task.FromResult(new LogResponse
+                {
+                    Status = LogStatusCodes.LscInvalidArguments, Message = "invalid client timestamp"
+                });
             }
 
-            Guid? codeStateId = null;
+            Guid? codeStateIdNullable = null;
             if (request.HasData)
             {
-                codeStateId = ParseCodeState(request.Data.ToByteArray());
+                codeStateIdNullable = ParseCodeState(request.Data.ToByteArray());
+                if (codeStateIdNullable == null)
+                {
+                    return await Task.FromResult(CreateInvalidResponse("invalid data"));
+                }
             }
-
+            string subjectId = request.SubjectId;
             int order = await _eventRepository.GetNextOrder(sessionId, subjectId);
 
             ProgSnap2Event newEvent = new ProgSnap2Event
@@ -65,7 +93,7 @@ namespace PatternPal.LoggingServer.Services
                 EventId = eventId,
                 SubjectId = subjectId,
                 ToolInstances = request.ToolInstances,
-                CodeStateId = codeStateId,
+                CodeStateId = codeStateIdNullable,
                 FullCodeState = request.HasFullCodeState ? request.FullCodeState : null,
                 ClientDatetime = cDto,
                 ServerDatetime = DateTimeOffset.Now,
@@ -85,10 +113,7 @@ namespace PatternPal.LoggingServer.Services
             // if inserting in the database fails. For now, this is also caught by running the housekeeping-job.
             await _eventRepository.Insert(newEvent);
 
-            return await Task.FromResult(new LogResponse
-            {
-                Message = "Logged"
-            });
+            return await Task.FromResult(CreateSuccessResponse());
         }
 
         /// <summary>
@@ -96,42 +121,50 @@ namespace PatternPal.LoggingServer.Services
         /// </summary>
         /// <param name="compressed">A bytestring representing the compressed data</param>
         /// <returns>The CodeState-GUID</returns>
-        /// <exception cref="RpcException">Is thrown when the supplied bytestring was not a valid zip archive.</exception>
-        private Guid ParseCodeState(byte[] compressed)
+        private Guid? ParseCodeState(byte[] compressed)
         {
-            Guid codeStateId = Guid.NewGuid();
-
-            if (!IsZipArchive(compressed))
+            try
             {
-                throw new RpcException(new Status(StatusCode.InvalidArgument, "Data is not a valid zip archive"));
-            }
+                Guid codeStateId = Guid.NewGuid();
 
-            string codeStatePath = Path.Combine(_codeStateDirectory, codeStateId.ToString());
-            Directory.CreateDirectory(codeStatePath);
+                string codeStatePath = Path.Combine(_codeStateDirectory, codeStateId.ToString());
 
-            // Convert the byte array to a zip file and extract it
-            using MemoryStream ms = new(compressed);
-            using ZipArchive archive = new(ms);
-            foreach (ZipArchiveEntry entry in archive.Entries)
-            {
-                string fullPath = Path.Combine(codeStatePath, entry.FullName);
-                string? directory = Path.GetDirectoryName(fullPath);
-                // Create the directory if it does not exist (for nested directories)
-                if (directory != null)
+                // Convert the byte array to a zip file and extract it
+                using MemoryStream ms = new(compressed);
+                using ZipArchive archive = new(ms);
+
+                Directory.CreateDirectory(codeStatePath);
+                foreach (ZipArchiveEntry entry in archive.Entries)
                 {
-                    Directory.CreateDirectory(directory);
+                    string fullPath = Path.Combine(codeStatePath, entry.FullName);
+                    string? directory = Path.GetDirectoryName(fullPath);
+                    // Create the directory if it does not exist (for nested directories)
+                    if (directory != null)
+                    {
+                        Directory.CreateDirectory(directory);
+                    }
+
+                    // Skip non-cs files
+                    if (!entry.FullName.EndsWith(".cs"))
+                    {
+                        continue;
+                    }
+
+                    entry.ExtractToFile(fullPath, true);
                 }
 
-                // Skip non-cs files
-                if (!entry.FullName.EndsWith(".cs"))
-                {
-                    continue;
-                }
-
-                entry.ExtractToFile(fullPath, true);
+                return codeStateId;
             }
-
-            return codeStateId;
+            catch (InvalidDataException e)
+            {
+                _logger.LogError(e, "Error while parsing code state");
+                return null;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error while parsing code state");
+                return null;
+            }
         }
 
         /// <summary>
@@ -139,36 +172,28 @@ namespace PatternPal.LoggingServer.Services
         /// </summary>
         /// <param name="guidString">The actual string that needs to be parsed</param>
         /// <param name="guidName">When throwing exception this is the name of the GUID that was being parsed</param>
-        /// <returns cref="Guid">Parsed Guid</returns>
+        /// <returns cref="Guid?">Parsed Guid, if it cannot be parsed it will return null to prevent exception throwing</returns>
         /// <exception cref="RpcException">Exception when parsing fails</exception>
-        private static Guid GetGuid(string guidString, string guidName)
+        private static Guid? GetGuid(string guidString, string guidName)
         {
             if (Guid.TryParse(guidString, out Guid guid))
             {
                 return guid;
             }
-
-            Status status = new Status(StatusCode.InvalidArgument, $"Invalid {guidName} GUID format");
-            throw new RpcException(status);
+            return null;
         }
 
-        /// <summary>
-        /// Checks if the supplied byte array is a valid zip archive
-        /// </summary>
-        /// <param name="compressed">The byte array possibly representing a zip archive</param>
-        /// <returns>Whether the archive is a valid zip archive, or not</returns>
-        private bool IsZipArchive(byte[] compressed)
+
+        #region Responses
+        private LogResponse CreateInvalidResponse(string message)
         {
-            try
-            {
-                using MemoryStream ms = new MemoryStream(compressed);
-                using ZipArchive archive = new ZipArchive(ms);
-                return true;
-            }
-            catch (InvalidDataException)
-            {
-                return false;
-            }
+            return new LogResponse { Status = LogStatusCodes.LscInvalidArguments, Message = message };
         }
+
+        private LogResponse CreateSuccessResponse()
+        {
+            return new LogResponse { Status = LogStatusCodes.LscSuccess, Message = "success" };
+        }
+        #endregion
     }
 }

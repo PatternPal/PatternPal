@@ -1,21 +1,28 @@
 ﻿#region
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.Shell;
-using PatternPal.Extension.Grpc;
 using EnvDTE;
 using EnvDTE80;
+using Microsoft.VisualStudio.Shell;
+using PatternPal.Extension.Grpc;
 using PatternPal.Protos;
-using System.Threading;
-using System.Collections.Generic;
-using System.Linq;
 
 #endregion
 
 namespace PatternPal.Extension.Commands
 {
+    public enum ServerStatusCodes
+    {
+        Available,
+        Unavailable,
+        Error,
+        NoLog
+    }
     /// <summary>
     /// A static class which is responsible for subscribing logged event in ProgSnap2 format.
     /// </summary>
@@ -47,6 +54,22 @@ namespace PatternPal.Extension.Commands
         private static bool _doLog = false;
 
         private static CancellationToken _cancellationToken;
+
+        private static ServerStatusCodes _serverStatus = ServerStatusCodes.NoLog;
+
+        public static ServerStatusCodes ServerStatus
+        {
+            get
+            {
+                if (_doLog) return _serverStatus;
+                else return ServerStatusCodes.NoLog;
+            }
+            set => _serverStatus = value;
+        }
+
+        public static Action ServerStatusChanged = delegate { };
+
+
 
         /// <summary>
         /// Initializes the preparation for the subscription of the logged events. 
@@ -410,8 +433,44 @@ namespace PatternPal.Extension.Commands
         {
             LogProviderService.LogProviderServiceClient client =
                 new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-
-            return client.LogEvent(request);
+            try
+            {
+                LogEventResponse ler = client.LogEvent(request);
+                ServerStatusChanged?.Invoke();
+                switch (ler.Status)
+                {
+                    case LogStatusCodes.LscSuccess:
+                        ServerStatus = ServerStatusCodes.Available;
+                        return ler;
+                    case LogStatusCodes.LscFailure:
+                        ServerStatus = ServerStatusCodes.Error;
+                        return ler;
+                    case LogStatusCodes.LscRejected:
+                        ServerStatus = ServerStatusCodes.Error;
+                        return ler;
+                    case LogStatusCodes.LscInvalidArguments:
+                        ServerStatus = ServerStatusCodes.Error;
+                        return ler;
+                    case LogStatusCodes.LscUnknown:
+                        ServerStatus = ServerStatusCodes.Error;
+                        return ler;
+                    case LogStatusCodes.LscUnavailable:
+                        ServerStatus = ServerStatusCodes.Unavailable;
+                        return ler;
+                    default:
+                        ServerStatus = ServerStatusCodes.Error;
+                        return ler;
+                }
+            }
+            catch (Exception e)
+            {
+                ServerStatus = ServerStatusCodes.Unavailable;
+                return new LogEventResponse
+                {
+                    Status = LogStatusCodes.LscUnknown,
+                    Message = e.Message
+                };
+            }
         }
 
         /// <summary>
