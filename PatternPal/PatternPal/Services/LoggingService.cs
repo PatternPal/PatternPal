@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using Grpc.Net.Client;
 using PatternPal.LoggingServer;
+
 using ExecutionResult = PatternPal.LoggingServer.ExecutionResult;
 
 #endregion
