@@ -1,6 +1,4 @@
-﻿using PatternPal.Core.Checks;
-
-namespace PatternPal.Services;
+﻿namespace PatternPal.Services;
 
 /// <inheritdoc cref="Protos.RecognizerService"/>
 public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
@@ -52,37 +50,16 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                                          };
 
             Dictionary< string, Result > resultsByRequirement = new();
-            HashSet<INode> nodesUsedForEntityCheck = new();
 
-            foreach ((Result result, INode ? node, ICheck ? check) in GetResults(rootCheckResult))
+            foreach (Result result in GetResults(
+                rootCheckResult))
             {
                 if (!resultsByRequirement.TryGetValue(
                         result.Requirement,
                         out Result ? existingResult)
                     || (existingResult.MatchedNode == null && result.MatchedNode != null))
                 {
-                    if (node == null)
-                    {
-                        resultsByRequirement[result.Requirement] = result;
-                        continue;
-                    }
-
-                    if (!nodesUsedForEntityCheck.Contains(node))
-                    {
-                        resultsByRequirement[result.Requirement] = result;
-                        nodesUsedForEntityCheck.Add(node);
-
-                        //if (check is ClassCheck or InterfaceCheck)
-                        //{
-                        //}
-
-                        //continue;
-                    }
-
-                    //if(check is not ClassCheck && check is not InterfaceCheck)
-                    //{
-                    //    resultsByRequirement[result.Requirement] = result;
-                    //}
+                    resultsByRequirement[ result.Requirement ] = result;
                 }
             }
 
@@ -104,56 +81,55 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
     /// <summary>
     /// This method transforms a <see cref="ICheckResult"/> to a <see cref="Result"/>
     /// </summary>
+    /// <param name="resultsToProcess"></param>
     /// <param name="checkResult"> The check to transform.</param>
     /// <param name="usedNodes"></param>
     /// <returns></returns>
-    private static IEnumerable<(Result, INode?, ICheck?)> GetResults(ICheckResult checkResult)
+    private static IEnumerable< Result > GetResults(
+        ICheckResult rootCheckResult)
     {
-        if (!string.IsNullOrWhiteSpace(checkResult.Check.Requirement))
+        Queue< ICheckResult > resultsToProcess = new();
+        resultsToProcess.Enqueue(rootCheckResult);
+        while (resultsToProcess.Count != 0)
         {
-            Result result = new()
-                            {
-                                Requirement = checkResult.Check.Requirement
-                            };
+            ICheckResult resultToProcess = resultsToProcess.Dequeue();
 
-            if (checkResult.MatchedNode != null)
+            if (!string.IsNullOrWhiteSpace(resultToProcess.Check.Requirement))
             {
-                INode matchedNode = checkResult.MatchedNode;
-                TextSpan sourceLocation = matchedNode.GetSourceLocation;
-                result.MatchedNode = new MatchedNode
-                                     {
-                                         Name = matchedNode.GetName(),
-                                         Path = matchedNode.GetRoot().GetSource(),
-                                         Start = sourceLocation.Start,
-                                         Length = sourceLocation.Length
-                                     };
-            }
+                Result result = new()
+                                {
+                                    Requirement = resultToProcess.Check.Requirement
+                                };
 
-            yield return (result, checkResult.MatchedNode, checkResult.Check);
-        }
-
-        switch (checkResult)
-        {
-            case LeafCheckResult:
-                yield break;
-            case NotCheckResult notCheckResult:
-            {
-                foreach ((Result, INode?, ICheck?) result in GetResults(notCheckResult.NestedResult))
+                if (resultToProcess.MatchedNode != null)
                 {
-                    yield return result;
+                    INode matchedNode = resultToProcess.MatchedNode;
+                    TextSpan sourceLocation = matchedNode.GetSourceLocation;
+                    result.MatchedNode = new MatchedNode
+                                         {
+                                             Name = matchedNode.GetName(),
+                                             Path = matchedNode.GetRoot().GetSource(),
+                                             Start = sourceLocation.Start,
+                                             Length = sourceLocation.Length
+                                         };
                 }
-                yield break;
+
+                yield return result;
             }
-            case NodeCheckResult nodeCheckResult:
+
+            switch (resultToProcess)
             {
-                foreach (ICheckResult childCheckResult in nodeCheckResult.ChildrenCheckResults)
-                {
-                    foreach ((Result, INode?, ICheck?) result in GetResults(childCheckResult))
+                case LeafCheckResult:
+                    continue;
+                case NotCheckResult notCheckResult:
+                    resultsToProcess.Enqueue(notCheckResult.NestedResult);
+                    continue;
+                case NodeCheckResult nodeCheckResult:
+                    foreach (ICheckResult childCheckResult in nodeCheckResult.ChildrenCheckResults)
                     {
-                        yield return result;
+                        resultsToProcess.Enqueue(childCheckResult);
                     }
-                }
-                yield break;
+                    continue;
             }
         }
     }
