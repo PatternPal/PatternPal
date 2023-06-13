@@ -63,6 +63,12 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                 }
             }
 
+            // TODO: Check if requirements are correct, or remove result if not.
+
+            // TODO: Collect all requirements from checks.
+
+            // TODO: Generate feedback for incorrect/missing requirements.
+
             foreach (Result result in resultsByRequirement.Values)
             {
                 rootResult.Results.Add(result);
