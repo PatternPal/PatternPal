@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿#region
 
 using Microsoft.CodeAnalysis.CSharp;
 using PatternPal.SyntaxTree.Abstractions;
 using PatternPal.SyntaxTree.Abstractions.Members;
 using PatternPal.SyntaxTree.Utils;
+
+#endregion
 
 namespace PatternPal.SyntaxTree.Models.Members.Constructor
 {

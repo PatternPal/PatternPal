@@ -1,4 +1,8 @@
-﻿using PatternPal.SyntaxTree.Abstractions.Root;
+﻿#region
+
+using PatternPal.SyntaxTree.Abstractions.Root;
+
+#endregion
 
 namespace PatternPal.SyntaxTree.Models.Entities
 {
