@@ -88,14 +88,14 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
         RecognizerRunner runner = new(
             request.Documents,
             instruction );
-        IList< ICheckResult > res = runner.Run(pruneAll: true);
+        IList< (Recognizer, ICheckResult) > res = runner.Run(pruneAll: true);
         // Check whether there is a single file with results.
         if (res.Any())
         {
             // Assume the implementation is wrong only when there is evidence in one of the
             // results that prove otherwise.
             bool assumption = false;
-            foreach (ICheckResult currentRes in res)
+            foreach ((_, ICheckResult currentRes) in res)
             {
                 NodeCheckResult checkRes = (NodeCheckResult)currentRes;
                 if (checkRes.ChildrenCheckResults.Count != 0)

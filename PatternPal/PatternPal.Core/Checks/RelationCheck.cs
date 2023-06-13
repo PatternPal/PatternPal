@@ -21,14 +21,18 @@ internal class RelationCheck : CheckBase
     /// Initializes a new instance of the <see cref="RelationCheck"/> class.
     /// </summary>
     /// <param name="priority">Priority of the check.</param>
+    /// <param name="requirement">The optional requirement which this <see cref="ICheck"/> checks.</param>
     /// <param name="relationType">The type of relation.</param>
     /// <param name="relatedNodeCheck">The <see cref="ICheck"/> which checks for the node
     /// to which there should be a <see cref="_relationType"/> relation.</param>
     internal RelationCheck(
         Priority priority,
+        string ? requirement,
         RelationType relationType,
         ICheck relatedNodeCheck)
-        : base(priority)
+        : base(
+            priority,
+            requirement)
     {
         _relatedNodeCheck = relatedNodeCheck;
         _relationType = relationType;
@@ -46,14 +50,12 @@ internal class RelationCheck : CheckBase
         foreach (INode getNode in _relatedNodeCheck.Result())
         {
             bool hasCorrectRelation = ctx.Graph.GetRelations(
-                                              node,
-                                              RelationTargetKind.All).
-                                          Any(
-                                              relation => relation.GetRelationType() == _relationType
-                                                          &&
-                                                          relation.Target.Match(
-                                                              entity => entity == getNode,
-                                                              method => method == getNode));
+                node,
+                RelationTargetKind.All).Any(
+                relation => relation.GetRelationType() == _relationType
+                            && relation.Target.Match(
+                                entity => entity == getNode,
+                                method => method == getNode));
 
             results.Add(
                 new LeafCheckResult

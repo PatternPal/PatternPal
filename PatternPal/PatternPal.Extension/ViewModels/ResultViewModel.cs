@@ -6,8 +6,6 @@ using System.Windows.Media;
 
 using PatternPal.Protos;
 
-using static PatternPal.Protos.CheckResult.Types;
-
 #endregion
 
 namespace PatternPal.Extension.ViewModels
@@ -26,21 +24,16 @@ namespace PatternPal.Extension.ViewModels
 
         public SolidColorBrush Color => GetColor(100);
 
-        public IEnumerable< CheckResultViewModel > Results =>
-            Result.Results.Select(
-                x => new CheckResultViewModel(
-                    x,
-                    GetFeedbackType()));
+        public IEnumerable< CheckResultViewModel > Results => Enumerable.Empty< CheckResultViewModel >();
+            //Result.Results.Select(
+            //    x => new CheckResultViewModel(
+            //        x,
+            //        GetFeedbackType()));
 
         public SolidColorBrush GetColor(
             int score)
         {
             return score < 40 ? Brushes.Red : score < 80 ? Brushes.Yellow : Brushes.Green;
-        }
-
-        public FeedbackType GetFeedbackType()
-        {
-            return FeedbackType.FeedbackCorrect;
         }
     }
 }

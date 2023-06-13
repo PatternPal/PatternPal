@@ -72,8 +72,8 @@
                 <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}">
                     <views:HomeView />
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type viewmodels:DetectorViewModel}">
-                    <views:DetectorView />
+                <DataTemplate DataType="{x:Type viewmodels:RecognizerViewModel}">
+                    <views:RecognizerView />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type viewmodels:StepByStepListViewModel}">
                     <views:StepByStepListView />

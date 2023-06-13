@@ -8,9 +8,11 @@ internal class ConstructorCheck : NodeCheck< IConstructor >
     /// <inheritdoc />
     internal ConstructorCheck(
         Priority priority,
+        string ? requirement,
         IEnumerable< ICheck > checks)
         : base(
             priority,
+            requirement,
             checks)
     {
     }
