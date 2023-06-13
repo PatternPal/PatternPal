@@ -66,69 +66,79 @@ internal class SingletonRecognizer : IRecognizer,
     /// <inheritdoc />
     List< IInstruction > IStepByStepRecognizer.GenerateStepsList()
     {
-        List< IInstruction > res = new();
+        List< IInstruction > generateStepsList = new();
 
-        ICheck onlyPrivateConstructorCheck =
+        ICheck onlyPrivateProtectedConstructor =
             OnlyPrivateProtectedConstructor(out ConstructorCheck privateConstructorCheck);
         FieldCheck staticPrivateFieldOfTypeClass = StaticPrivateFieldOfTypeClass();
         MethodCheck checkMethodAsConstructorBehaviour =
             CheckMethodActsAsConstructorBehaviour(privateConstructorCheck, staticPrivateFieldOfTypeClass);
 
         // Step 1: The constructor is ONLY private
-        res.Add(
+        generateStepsList.Add(
             new SimpleInstruction(
                 SingletonInstructions.Step1,
                 SingletonInstructions.Explanation1,
                 new List< ICheck >
-                {
-                    Class(Priority.Knockout,
-                        onlyPrivateConstructorCheck)
-                }
+                    {
+                        Class(
+                            Priority.Knockout,
+                            onlyPrivateProtectedConstructor
+                        )
+                    }
             ));
 
         
         // Step 2: There is a static private field with the same type as the class
-        res.Add(
+        generateStepsList.Add(
             new SimpleInstruction(
                 SingletonInstructions.Step2,
                 SingletonInstructions.Explanation2,
                 new List< ICheck >
-                {
-                    Class(Priority.Knockout,
-                        All(Priority.Low,
-                            staticPrivateFieldOfTypeClass))
-                }
+                    {
+                        Class(
+                            Priority.Knockout,
+                            All(
+                                Priority.Low,
+                                staticPrivateFieldOfTypeClass
+                            )
+                        )
+                    }
             ));
         
 
         // Step 3: There is a method that acts as the constructor
-        res.Add(
+        generateStepsList.Add(
             new SimpleInstruction(
                 SingletonInstructions.Step3,
                 SingletonInstructions.Explanation3,
                 new List< ICheck >
-                {
-                    Class(Priority.Knockout,
-                        onlyPrivateConstructorCheck,
-                        staticPrivateFieldOfTypeClass,
-                        checkMethodAsConstructorBehaviour)
-                }));
+                    {
+                        Class(
+                            Priority.Knockout,
+                            onlyPrivateProtectedConstructor,
+                            staticPrivateFieldOfTypeClass,
+                            checkMethodAsConstructorBehaviour
+                        )
+                    }));
 
         // Step 4: There is a client that calls the instance method
-        res.Add(
+        generateStepsList.Add(
             new SimpleInstruction(
                 SingletonInstructions.Step4,
                 SingletonInstructions.Explanation4,
                 new List< ICheck >
                 {
-                    Class(Priority.Knockout,
-                        onlyPrivateConstructorCheck,
+                    Class(
+                        Priority.Knockout,
+                        onlyPrivateProtectedConstructor,
                         staticPrivateFieldOfTypeClass,
-                        checkMethodAsConstructorBehaviour),
+                        checkMethodAsConstructorBehaviour
+                    ),
                     ClientCallsMethodActsAsConstructor(checkMethodAsConstructorBehaviour)
                 }));
 
-        return res;
+        return generateStepsList;
     }
 
     /// <summary>

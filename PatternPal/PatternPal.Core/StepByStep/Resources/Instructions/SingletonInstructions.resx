@@ -118,16 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Explanation1" xml:space="preserve">
-    <value>!!!ADD STRING WHY!!!</value>
+    <value>The constructor is private to prevent direct instantiation of the class from outside the class. This ensures that only one object is created.</value>
   </data>
   <data name="Explanation2" xml:space="preserve">
-    <value>!!!ADD STRING WHY!!!</value>
+    <value>The field is static as a way of accessing the single instance when it is created. </value>
   </data>
   <data name="Explanation3" xml:space="preserve">
-    <value>!!!ADD STRING WHY!!!</value>
+    <value>This method will act as a constructor. It calls the constructor and save the object in the field of the previous step. The following calls will return the same object in the field. </value>
   </data>
   <data name="Explanation4" xml:space="preserve">
-    <value>!!!ADD STRING WHY!!!</value>
+    <value>Any client that accesses the singleton will work with the same instance of the singleton throughout its lifetime.</value>
   </data>
   <data name="Step1" xml:space="preserve">
     <value>Create a constructor that is only private.</value>
@@ -136,9 +136,9 @@
     <value>Create a static, private field with the same type as the class.</value>
   </data>
   <data name="Step3" xml:space="preserve">
-    <value>Create a static, public/internal method that acts as the constructor in the following way: if called and there is no instance saved in the private field from the previous step then call the private constructor. If called and there is an instance saved in the private field, return this instance.</value>
+    <value>Create a static, public/internal method that acts as the constructor. When called and the field from the previous step is null call the constructor otherwise return the field.</value>
   </data>
   <data name="Step4" xml:space="preserve">
-    <value>Create a client calls that calls the method that acts as the constructor to retrieve the singleton instance.</value>
+    <value>Create a client class that calls the method from the previous step to retrieve the singleton instance. </value>
   </data>
 </root>
