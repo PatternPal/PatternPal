@@ -11,6 +11,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace PatternPal.Extension.Grpc
 {
+    // TODO Comment
     internal static class GrpcBackgroundServiceHelper
     {
         private static Process _backgroundService;

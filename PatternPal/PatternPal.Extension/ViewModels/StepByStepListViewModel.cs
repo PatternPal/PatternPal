@@ -1,7 +1,6 @@
 ﻿#region
 
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -21,6 +20,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace PatternPal.Extension.ViewModels
 {
+    // TODO comment
     public class StepByStepListViewModel : ViewModel
     {
         public override string Title => ExtensionUIResources.StepByStepTitle;

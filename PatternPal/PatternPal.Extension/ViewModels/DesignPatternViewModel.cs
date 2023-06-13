@@ -8,9 +8,10 @@ using PatternPal.Protos;
 
 namespace PatternPal.Extension.ViewModels
 {
+    // TODO Comment
     public class DesignPatternViewModel : INotifyPropertyChanged
     {
-        private bool m_IsChecked;
+        private bool _isChecked;
 
         public DesignPatternViewModel(
             Recognizer recognizer)
@@ -19,29 +20,16 @@ namespace PatternPal.Extension.ViewModels
             IsChecked = true;
         }
 
-        //public DesignPatternViewModel(
-        //    string name,
-        //    DesignPattern pattern,
-        //    string wikiPage)
-        //{
-        //    WikiPage = wikiPage;
-        //    Name = name;
-        //    Pattern = pattern;
-        //    IsChecked = true;
-        //}
-
         public Recognizer Recognizer { get; }
 
         public string Name => Recognizer.ToString();
 
-        //public string WikiPage { get; set; }
-
         public bool IsChecked
         {
-            get => m_IsChecked;
+            get => _isChecked;
             set
             {
-                m_IsChecked = value;
+                _isChecked = value;
                 OnPropertyChanged("IsChecked");
             }
         }

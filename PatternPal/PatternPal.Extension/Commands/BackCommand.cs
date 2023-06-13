@@ -9,6 +9,7 @@ using PatternPal.Extension.Stores;
 
 namespace PatternPal.Extension.Commands
 {
+    // TODO Comment
     public class BackCommand : ICommand
     {
         private NavigationStore NavigationStore { get; }

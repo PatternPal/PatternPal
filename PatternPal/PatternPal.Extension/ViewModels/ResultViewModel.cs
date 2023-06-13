@@ -10,6 +10,7 @@ using PatternPal.Protos;
 
 namespace PatternPal.Extension.ViewModels
 {
+    // TODO comment
     public class ResultViewModel
     {
         public ResultViewModel(
@@ -25,11 +26,7 @@ namespace PatternPal.Extension.ViewModels
         public SolidColorBrush Color => GetColor(100);
 
         public IEnumerable< CheckResultViewModel > Results => Enumerable.Empty< CheckResultViewModel >();
-            //Result.Results.Select(
-            //    x => new CheckResultViewModel(
-            //        x,
-            //        GetFeedbackType()));
-
+     
         public SolidColorBrush GetColor(
             int score)
         {

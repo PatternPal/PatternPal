@@ -13,6 +13,7 @@ using PatternPal.Protos;
 
 namespace PatternPal.Extension.ViewModels
 {
+    // TODO comment
     public class StepByStepInstructionsViewModel : ViewModel
     {
         public ICommand NavigateHomeCommand { get; }

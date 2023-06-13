@@ -1,10 +1,14 @@
-﻿using System.Windows.Input;
+﻿#region
+
+using System.Windows.Input;
 using PatternPal.Extension.Commands;
-using PatternPal.Extension.Resources;
 using PatternPal.Extension.Stores;
+
+#endregion
 
 namespace PatternPal.Extension.ViewModels
 {
+    // TODO comment
     public class HomeViewModel : ViewModel
     {
         public override string Title => Resources.ExtensionUIResources.ExtensionName;

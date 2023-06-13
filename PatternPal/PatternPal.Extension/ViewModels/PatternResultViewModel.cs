@@ -1,7 +1,6 @@
 ﻿#region
 
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Media;
 
 using Microsoft.VisualStudio.Imaging;
@@ -98,6 +97,7 @@ namespace PatternPal.Extension.ViewModels
         }
     }
 
+    // TODO Unused
     public class PatternResultPartViewModel
     {
         /// <summary>
