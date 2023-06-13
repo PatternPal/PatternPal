@@ -1,4 +1,8 @@
-﻿using LoggingService = PatternPal.Services.LoggingService;
+﻿#region
+
+using LoggingService = PatternPal.Services.LoggingService;
+
+#endregion
 
 namespace PatternPal;
 

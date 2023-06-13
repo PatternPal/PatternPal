@@ -58,8 +58,8 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
     {
         // Provided with the recognizer and instruction number return the instruction detailed
         // information for display to the user.
-        Recognizer protorecognizer = request.Recognizers;
-        IStepByStepRecognizer recognizer = RecognizerRunner.SupportedStepByStepRecognizers[ protorecognizer ];
+        Recognizer protoRecognizer = request.Recognizers;
+        IStepByStepRecognizer recognizer = RecognizerRunner.SupportedStepByStepRecognizers[ protoRecognizer ];
         IInstruction instruction = recognizer.GenerateStepsList()[ (int)request.InstructionNumber ];
         GetInstructionByIdResponse response = new()
                                               {
@@ -122,6 +122,7 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
     }
 
     // TODO Method can still be useful, common.proto CheckResult is based on old codebase.
+    // TODO Method is unused, comments should be removed from develop and inheritdoc is invalid
     /// <inheritdoc />
     private static CheckResult CreateCheckResult(
         ICheckResult checkResult)
