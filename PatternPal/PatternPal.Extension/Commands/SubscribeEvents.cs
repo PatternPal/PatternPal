@@ -250,6 +250,33 @@ namespace PatternPal.Extension.Commands
         }
 
         /// <summary>
+        /// The event handler for handling the File.Rename Event. The file watcher detects every file renamed,
+        /// so any event triggers with files other than .cs files are unhandled.    
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="fileSystemEventArgs"></param>
+        internal static void OnFileRename(object sender, RenamedEventArgs e)
+        {
+            // Only log for the creation of .cs files
+            if (Path.GetExtension(e.Name) != ".cs")
+            {
+                return;
+            }
+
+            LogEventRequest request = CreateStandardLog();
+            request.EventType = EventType.EvtFileRename;
+            request.CodeStateSection = e.OldName;
+            request.DestinationCodeStateSection = e.Name;
+
+            string projectFullPath = FindContainingCsprojFile(e.FullPath);
+            string projectFolderName = Path.GetDirectoryName(projectFullPath);
+            request.ProjectId = GetRelativePath(projectFolderName, projectFullPath);
+
+            LogEventResponse response = PushLog(request);
+        }
+
+
+        /// <summary>
         /// The event handler for handling the Session.Start Event. When a new session starts, a (new) sessionID is generated.
         /// A new file watcher is also created, as a new session can change the directory the user is working in.
         /// </summary>
@@ -480,6 +507,7 @@ namespace PatternPal.Extension.Commands
             // Set the event handlers
             _watcher.Created += OnFileCreate;
             _watcher.Deleted += OnFileDelete;
+            _watcher.Renamed += OnFileRename;
 
             // Enable the FileSystemWatcher to begin watching for changes
             _watcher.EnableRaisingEvents = true;
