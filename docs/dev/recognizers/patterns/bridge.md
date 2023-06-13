@@ -27,12 +27,12 @@ Usually, the **Client** is only interested in working with the abstraction. Howe
 The priority of a requirement is noted with the (low)-(mid)-(high)-(knockout) criteria.
 
 **Client class**
-1. (mid) calls a method in the `Abstraction` class
+1. (mid) uses a method in the `Abstraction` class
 2. (low) creates a `Concrete Implementation` instance
 3. (low) uses the field or property in `Abstraction`
 
 **Abstraction class**
-1. (knockout) has a field or property with the `Implementation` type
+1. (knockout) has a private / protected field or property with the `Implementation` type
 2. (knockout) has a method 
 3. (high) there is a method that calls a method in `Implementation`
 
@@ -42,7 +42,7 @@ The priority of a requirement is noted with the (low)-(mid)-(high)-(knockout) cr
 
 **Concrete Implementations**
 1. (mid) is an implementation of the `Implementation` interface or inherits from the `Implementation` abstract class
-2. if `Implementation` is an abstract class it should override it's abstract methods
+2. (mid) if `Implementation` is an abstract class it should override it's abstract methods
 
 **Refined Abstraction** optional
 1. (low) inherits from the `Abstraction` class
