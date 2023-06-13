@@ -205,7 +205,7 @@ namespace PatternPal.Extension.Commands
 
         /// <summary>
         /// The event handler for handling the File.Create Event. The file watcher detects every file created,
-        /// so any event triggers with files other than .cs files are unhandled.    
+        /// so any event triggers with files other than .cs files are discarded. 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="fileSystemEventArgs"></param>
@@ -220,9 +220,12 @@ namespace PatternPal.Extension.Commands
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtFileCreate;
             request.CodeStateSection = fileSystemEventArgs.Name;
+
             string projectFullPath = FindContainingCsprojFile(fileSystemEventArgs.FullPath);
-            string projectFolderName = Path.GetDirectoryName(projectFullPath);
-            request.ProjectId = GetRelativePath(projectFolderName, projectFullPath);
+
+            request.ProjectDirectory = Path.GetDirectoryName(projectFullPath);
+            request.ProjectId = GetRelativePath(request.ProjectDirectory, projectFullPath);
+            request.FilePath = fileSystemEventArgs.FullPath;
 
             LogEventResponse response = PushLog(request);
         }
@@ -484,7 +487,7 @@ namespace PatternPal.Extension.Commands
 
             // Set the event handlers
             _watcher.Created += OnFileCreate;
-            _watcher.Deleted += OnFileDelete;
+            _watcher.Deleted += OnFileDelete; 
 
             // Enable the FileSystemWatcher to begin watching for changes
             _watcher.EnableRaisingEvents = true;
