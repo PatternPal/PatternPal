@@ -6,16 +6,12 @@ using PatternPal.SyntaxTree.Abstractions;
 
 namespace PatternPal.SyntaxTree.Models
 {
-    // TODO It feels like this class needs review and has many unused methods.
-
     /// <summary>
     /// Represents a modifier of an <see cref="INode"/>.
     /// </summary>
     /// <example>Examples are private, static, and abstract</example>
     public class Modifier : IModifier
     {
-        // TODO possibly completely change to an Enum instead.
-
         // The type of modifier
         private readonly string _name;
 
