@@ -1,7 +1,13 @@
-﻿using PatternPal.SyntaxTree.Abstractions;
+﻿#region
+
+using PatternPal.SyntaxTree.Abstractions;
+
+#endregion
 
 namespace PatternPal.SyntaxTree.Models
 {
+    // TODO It feels like this class needs review and has many unused methods.
+
     /// <summary>
     /// Represents a modifier of an <see cref="INode"/>.
     /// </summary>

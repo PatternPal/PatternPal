@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿#region
+
+using System.Linq;
 using PatternPal.SyntaxTree.Abstractions;
 using PatternPal.SyntaxTree.Abstractions.Members;
 using PatternPal.SyntaxTree.Abstractions.Root;
@@ -6,6 +8,8 @@ using PatternPal.SyntaxTree.Models.Members.Constructor;
 using PatternPal.SyntaxTree.Models.Members.Method;
 using PatternPal.SyntaxTree.Models.Members.Property;
 using PatternPal.SyntaxTree.Utils;
+
+#endregion
 
 namespace PatternPal.SyntaxTree.Models.Entities
 {
@@ -33,7 +37,7 @@ namespace PatternPal.SyntaxTree.Models.Entities
             _typeDeclarationSyntax = node;
             _parent = parent;
 
-            foreach (var member in node.Members)
+            foreach (MemberDeclarationSyntax member in node.Members)
             {
                 switch (member)
                 {
@@ -90,15 +94,15 @@ namespace PatternPal.SyntaxTree.Models.Entities
         /// <inheritdoc />
         public IEnumerable<IMember> GetAllMembers()
         {
-            var members = GetMembers().ToList();
+            List<IMember> members = GetMembers().ToList();
             
-            foreach (var property in members.OfType<Property>()) {
+            foreach (Property property in members.OfType<Property>()) {
                 if (property.IsField()) members.Add(property.GetField());
                 if (property.HasGetter()) members.Add(property.GetGetter());
                 if (property.HasSetter()) members.Add(property.GetSetter());
             }
             
-            foreach (var constructor in members.OfType<Constructor>())
+            foreach (Constructor constructor in members.OfType<Constructor>())
             {
                 members.Add(constructor.AsMethod());
             }
@@ -153,8 +157,8 @@ namespace PatternPal.SyntaxTree.Models.Entities
         /// <inheritdoc />
         public virtual IEnumerable<IMethod> GetAllMethods()
         {
-            var methods = new List<IMethod>(GetMethods());
-            foreach (var property in GetProperties())
+            List<IMethod> methods = new(GetMethods());
+            foreach (IProperty property in GetProperties())
             {
                 if (property.HasGetter())
                 {

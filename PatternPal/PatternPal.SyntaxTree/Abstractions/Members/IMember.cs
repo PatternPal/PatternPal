@@ -13,6 +13,7 @@
         SyntaxNode GetReturnType();
     }
 
+    // TODO Is unused, can be deleted?
     public static class MemberExtension
     {
         /// <summary>

@@ -1,12 +1,18 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Linq;
 using PatternPal.SyntaxTree.Abstractions;
 using PatternPal.SyntaxTree.Abstractions.Root;
 using PatternPal.SyntaxTree.Models;
 using PatternPal.SyntaxTree.Models.Entities;
 
+#endregion
+
 namespace PatternPal.SyntaxTree.Utils
 {
+    // TODO Is unused
+
     /// <summary>
     /// Used as a facade to mask the Roslyn library.
     /// </summary>

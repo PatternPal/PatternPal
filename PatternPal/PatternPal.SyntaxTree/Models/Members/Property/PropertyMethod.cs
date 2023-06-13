@@ -53,7 +53,7 @@ namespace PatternPal.SyntaxTree.Models.Members.Property
         {
             return (CSharpSyntaxNode)_accessor?.Body
                    ?? _accessor?.ExpressionBody
-                   ?? property.propertyDeclarationSyntax.ExpressionBody;
+                   ?? property.PropertyDeclarationSyntax.ExpressionBody;
         }
 
         /// <inheritdoc />
