@@ -1,17 +1,16 @@
-﻿
+﻿#region
+
 using System.IO.Compression;
-using System.Xml.Linq;
 using Google.Protobuf;
 using Grpc.Core;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using PatternPal.LoggingServer.Data.Interfaces;
 using EventType = PatternPal.LoggingServer.EventType;
+
+#endregion
 
 namespace PatternPal.LoggingServerTests
 {
+    // TODO Comment
     public class LoggerServiceTests
     {
         private Mock<ILogger<LoggerService>> _loggerMock;
@@ -23,10 +22,10 @@ namespace PatternPal.LoggingServerTests
         {
             _loggerMock = new Mock<ILogger<LoggerService>>();
 
-            var options = new DbContextOptionsBuilder<ProgSnap2ContextClass>()
+            DbContextOptions<ProgSnap2ContextClass> options = new DbContextOptionsBuilder<ProgSnap2ContextClass>()
                 .UseInMemoryDatabase("TestDatabase")
                 .Options;
-            var context = new ProgSnap2ContextClass(options);
+            ProgSnap2ContextClass context = new(options);
             _repositoryMock = new Mock<EventRepository>(context);
             _service = new LoggerService(_loggerMock.Object, _repositoryMock.Object);
         }
@@ -45,7 +44,7 @@ namespace PatternPal.LoggingServerTests
         public async Task Log_ValidRequest_InsertsEventIntoDatabase()
         {
             // Arrange
-            var request = new LogRequest
+            LogRequest request = new LogRequest
             {
                 EventId = Guid.NewGuid().ToString(),
                 SessionId = Guid.NewGuid().ToString(),
@@ -66,7 +65,7 @@ namespace PatternPal.LoggingServerTests
         public void Log_InvalidDateTime_ThrowsInvalidArgument()
         {
             // Arrange
-            var request = new LogRequest
+            LogRequest request = new LogRequest
             {
                 EventId = Guid.NewGuid().ToString(),
                 SessionId = Guid.NewGuid().ToString(),
@@ -74,7 +73,7 @@ namespace PatternPal.LoggingServerTests
                 EventType = EventType.EvtProjectOpen,
                 ClientTimestamp = "invalid datetime",
                 ProjectId = "TestProject",
-                Data = ByteString.CopyFrom(new byte[] { 1, 2, 3 })
+                Data = ByteString.CopyFrom(1, 2, 3)
             };
 
             // Act & Assert
@@ -85,7 +84,7 @@ namespace PatternPal.LoggingServerTests
         public void Log_InvalidSessionId_ThrowsInvalidArgument()
         {
             // Arrange
-            var request = new LogRequest
+            LogRequest request = new LogRequest
             {
                 EventId = Guid.NewGuid().ToString(),
                 SessionId = "invalid session ID",
@@ -104,7 +103,7 @@ namespace PatternPal.LoggingServerTests
         public void Log_UnknownEventType_ThrowsInvalidArgument()
         {
             // Arrange
-            var request = new LogRequest
+            LogRequest request = new LogRequest
             {
                 EventId = Guid.NewGuid().ToString(),
                 SessionId = Guid.NewGuid().ToString(),
@@ -124,7 +123,7 @@ namespace PatternPal.LoggingServerTests
         {
             // Arrange
             string filenameCs = Guid.NewGuid().ToString() + ".cs";
-            var request = new PatternPal.LoggingServer.LogRequest
+            LogRequest request = new()
             {
                 EventId = Guid.NewGuid().ToString(),
                 SessionId = Guid.NewGuid().ToString(),
@@ -149,10 +148,10 @@ namespace PatternPal.LoggingServerTests
 
         private byte[] CreateZipArchive(string filename)
         {
-            using MemoryStream ms = new MemoryStream();
-            using ZipArchive archive = new ZipArchive(ms, ZipArchiveMode.Create, true);
+            using MemoryStream ms = new();
+            using ZipArchive archive = new(ms, ZipArchiveMode.Create, true);
             ZipArchiveEntry entry = archive.CreateEntry(filename);
-            using StreamWriter writer = new StreamWriter(entry.Open());
+            using StreamWriter writer = new(entry.Open());
             writer.Write("test");
             writer.Flush();
             writer.Close();
