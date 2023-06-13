@@ -213,8 +213,6 @@ public class RecognizerRunner
                 resultsByNode,
                 rootResult);
 
-            SortCheckResults(rootResult, true);
-
             return rootResult;
         }
     }
@@ -224,21 +222,19 @@ public class RecognizerRunner
     /// </summary>
     /// <param name="result">The <see cref="NodeCheckResult"/> whose child <see cref="ICheckResult"/>s to sort.</param>
     internal static void SortCheckResults(
-        NodeCheckResult result, bool reversed = false)
+        NodeCheckResult result)
     {
         // Sort the child results of `result` recursively.
         foreach (NodeCheckResult nodeCheckResults in result.ChildrenCheckResults.OfType< NodeCheckResult >())
         {
-            SortCheckResults(nodeCheckResults, reversed);
+            SortCheckResults(nodeCheckResults);
         }
-
-        int sortModifier = reversed ? -1 : 1;
 
         // Sort the child results of `result` itself.
         ((List< ICheckResult >)result.ChildrenCheckResults).Sort(
             (
                 x,
-                y) => x.DependencyCount.CompareTo(y.DependencyCount) * sortModifier);
+                y) => x.DependencyCount.CompareTo(y.DependencyCount));
     }
 
     /// <summary>

@@ -173,9 +173,9 @@ internal class StrategyRecognizer : IRecognizer
         // req. a
         _fieldOrPropertyStrategy = Any(
             Priority.Knockout,
-            "has a private field or property that has a Strategy class as type.",
             Field(
                 Priority.Knockout,
+                "has a private field or property that has a Strategy class as type.",
                 Any(
                     Priority.Knockout,
                     Type(
@@ -192,6 +192,7 @@ internal class StrategyRecognizer : IRecognizer
             ),
             Property(
                 Priority.Knockout,
+                "has a private field or property that has a Strategy class as type.",
                 Any(
                     Priority.Knockout,
                     Type(
