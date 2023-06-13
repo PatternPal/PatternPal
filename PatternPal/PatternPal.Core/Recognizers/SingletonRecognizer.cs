@@ -66,51 +66,79 @@ internal class SingletonRecognizer : IRecognizer,
     /// <inheritdoc />
     List< IInstruction > IStepByStepRecognizer.GenerateStepsList()
     {
-        List< IInstruction > res = new List< IInstruction >();
+        List< IInstruction > generateStepsList = new();
 
-        // !!! THESE STEPS ARE OUTDATED, JUST AN EXAMPLE !!!
+        ICheck onlyPrivateProtectedConstructor =
+            OnlyPrivateProtectedConstructor(out ConstructorCheck privateConstructorCheck);
+        FieldCheck staticPrivateFieldOfTypeClass = StaticPrivateFieldOfTypeClass();
+        MethodCheck checkMethodAsConstructorBehaviour =
+            CheckMethodActsAsConstructorBehaviour(privateConstructorCheck, staticPrivateFieldOfTypeClass);
+
         // Step 1: The constructor is ONLY private
-        res.Add(
+        generateStepsList.Add(
             new SimpleInstruction(
                 SingletonInstructions.Step1,
                 SingletonInstructions.Explanation1,
                 new List< ICheck >
-                {
-                    Class(
-                        Priority.Knockout,
-                        OnlyPrivateProtectedConstructor(
-                            out ConstructorCheck privateConstructorCheck))
-                }
+                    {
+                        Class(
+                            Priority.Knockout,
+                            onlyPrivateProtectedConstructor
+                        )
+                    }
             ));
 
-        FieldCheck staticPrivateFieldOfTypeClass =
-            StaticPrivateFieldOfTypeClass();
-
+        
         // Step 2: There is a static private field with the same type as the class
-        res.Add(
+        generateStepsList.Add(
             new SimpleInstruction(
                 SingletonInstructions.Step2,
                 SingletonInstructions.Explanation2,
                 new List< ICheck >
+                    {
+                        Class(
+                            Priority.Knockout,
+                            All(
+                                Priority.Low,
+                                staticPrivateFieldOfTypeClass
+                            )
+                        )
+                    }
+            ));
+        
+
+        // Step 3: There is a method that acts as the constructor
+        generateStepsList.Add(
+            new SimpleInstruction(
+                SingletonInstructions.Step3,
+                SingletonInstructions.Explanation3,
+                new List< ICheck >
+                    {
+                        Class(
+                            Priority.Knockout,
+                            onlyPrivateProtectedConstructor,
+                            staticPrivateFieldOfTypeClass,
+                            checkMethodAsConstructorBehaviour
+                        )
+                    }));
+
+        // Step 4: There is a client that calls the instance method
+        generateStepsList.Add(
+            new SimpleInstruction(
+                SingletonInstructions.Step4,
+                SingletonInstructions.Explanation4,
+                new List< ICheck >
                 {
                     Class(
                         Priority.Knockout,
-                        All(
-                            Priority.Low,
-                            staticPrivateFieldOfTypeClass))
-                }
-            ));
+                        onlyPrivateProtectedConstructor,
+                        staticPrivateFieldOfTypeClass,
+                        checkMethodAsConstructorBehaviour
+                    ),
+                    ClientCallsMethodActsAsConstructor(checkMethodAsConstructorBehaviour)
+                }));
 
-        MethodCheck checkMethodActsAsConstructorBehaviour = CheckMethodActsAsConstructorBehaviour(
-            privateConstructorCheck,
-            staticPrivateFieldOfTypeClass);
-        // Step 3: There is a method that acts as the constructor
-        // TODO
-
-        // Step 4: There is a client that calls the instance method
-        // TODO
-
-        return res;
+        return generateStepsList;
     }
 
     /// <summary>
@@ -122,6 +150,7 @@ internal class SingletonRecognizer : IRecognizer,
     {
         privateProtectedConstructorCheck = Constructor(
             Priority.Knockout,
+            "has at least one private/protected constructor",
             Any(
                 Priority.Knockout,
                 Modifiers(
@@ -137,6 +166,7 @@ internal class SingletonRecognizer : IRecognizer,
 
         NotCheck noPublicInternalConstructorCheck = Not(
             Priority.Knockout,
+            "has no public/internal constructor",
             Constructor(
                 Priority.Knockout,
                 Any(
@@ -165,6 +195,7 @@ internal class SingletonRecognizer : IRecognizer,
     {
         return Field(
             Priority.Knockout,
+            "has a static, private field with the same type as the class",
             Modifiers(
                 Priority.Knockout,
                 Modifier.Static,
@@ -211,6 +242,7 @@ internal class SingletonRecognizer : IRecognizer,
         //TODO: Right now it only checks if the constructor is called somewhere in a method, not at which conditions
         return Uses(
             Priority.Mid,
+            "if called and there is no instance saved in the private field, then it calls the private constructor",
             constructor
         );
     }
@@ -226,10 +258,12 @@ internal class SingletonRecognizer : IRecognizer,
                {
                    Uses(
                        Priority.Mid,
+                       "if called and there is an instance saved in the private field it returns this instance",
                        checkSingletonC
                    ),
                    Type(
                        Priority.Knockout,
+                       "if called and there is an instance saved in the private field it returns this instance",
                        ICheck.GetCurrentEntity
                    )
                };
@@ -253,9 +287,8 @@ internal class SingletonRecognizer : IRecognizer,
 
         return Method(
             Priority.High,
-            hasStaticPublicInternalMethod.Append(
-                checkNoInstanceConstructor).Concat(
-                checkInstanceConstructor).ToArray()
+            "has a static, public/internal method that acts as a constructor in the following way",
+            hasStaticPublicInternalMethod.Append(checkNoInstanceConstructor).Concat(checkInstanceConstructor).ToArray()
         );
     }
 
@@ -267,6 +300,7 @@ internal class SingletonRecognizer : IRecognizer,
     {
         return Class(
             Priority.Low,
+            "calls the method that acts as a constructor of the singleton class",
             Any(
                 Priority.Low,
                 Constructor(

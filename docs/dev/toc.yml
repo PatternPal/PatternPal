@@ -9,6 +9,9 @@
     href: recognizers/patterns/strategy.md
   - name: Bridge
     href: recognizers/patterns/bridge.md
+  - name: Decorator
+    href: recognizers/patterns/decorator.md
+
 
   # -- Design
   - name: Design

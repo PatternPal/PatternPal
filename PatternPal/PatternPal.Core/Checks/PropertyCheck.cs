@@ -8,9 +8,11 @@ internal class PropertyCheck : NodeCheck< IProperty >
     /// <inheritdoc cref="NodeCheck{TNode}"/>
     public PropertyCheck(
         Priority priority,
+        string ? requirement,
         IEnumerable< ICheck > checks)
         : base(
             priority,
+            requirement,
             checks)
     {
     }

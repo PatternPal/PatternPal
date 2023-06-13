@@ -29,11 +29,15 @@ internal class ParameterCheck : CheckBase
     /// Initializes a new instance of the <see cref="ParameterCheck"/> class.
     /// </summary>
     /// <param name="priority">Priority of the check.</param>
+    /// <param name="requirement">The optional requirement which this <see cref="ICheck"/> checks.</param>
     /// <param name="parameterTypes">A list of types the node parameters should have.</param>
     internal ParameterCheck(
         Priority priority,
+        string ? requirement,
         IEnumerable< TypeCheck > parameterTypes)
-        : base(priority)
+        : base(
+            priority,
+            requirement)
     {
         _parameterTypes = parameterTypes;
     }

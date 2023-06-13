@@ -9,11 +9,11 @@ using PatternPal.Extension.Stores;
 
 namespace PatternPal.Extension.ViewModels
 {
-    public class DetectorViewModel : ViewModel
+    public class RecognizerViewModel : ViewModel
     {
         public override string Title => Resources.ExtensionUIResources.DetectorTitle;
         public ICommand NavigateHomeCommand { get; }
-        public DetectorViewModel(NavigationStore navigationStore) 
+        public RecognizerViewModel(NavigationStore navigationStore) 
         {
             NavigateHomeCommand = new NavigateCommand<HomeViewModel>(navigationStore, () => new HomeViewModel(navigationStore));
         }

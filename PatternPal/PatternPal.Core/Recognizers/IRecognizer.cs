@@ -27,5 +27,6 @@ public interface IRecognizer
     /// <returns>The root <see cref="ICheck"/>.</returns>
     internal ICheck CreateRootCheck() => new NodeCheck< INode >(
         Priority.Knockout,
+        null,
         Create());
 }
