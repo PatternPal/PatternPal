@@ -5,6 +5,3 @@ global using Microsoft.CodeAnalysis;
 global using Microsoft.CodeAnalysis.CSharp.Syntax;
 global using OneOf;
 global using PatternPal.SyntaxTree.Abstractions.Entities;
-using System.Runtime.CompilerServices;
-
-//[assembly: InternalsVisibleTo("PatternPal.Tests")]

@@ -1,7 +1,11 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
+﻿#region
+
+using Microsoft.CodeAnalysis.CSharp;
 using PatternPal.SyntaxTree.Abstractions;
 using PatternPal.SyntaxTree.Abstractions.Members;
 using PatternPal.SyntaxTree.Abstractions.Root;
+
+#endregion
 
 namespace PatternPal.SyntaxTree.Models.Members.Constructor
 {
@@ -11,50 +15,50 @@ namespace PatternPal.SyntaxTree.Models.Members.Constructor
     public class ConstructorMethod : IMethod
     {
         // The constructor rapped.
-        public readonly IConstructor constructor;
+        public readonly IConstructor Constructor;
 
-        public ConstructorMethod(IConstructor constructor) { this.constructor = constructor; }
+        public ConstructorMethod(IConstructor constructor) { this.Constructor = constructor; }
 
         /// <inheritdoc />
         public string GetName()
         {
-            return constructor.GetName();
+            return Constructor.GetName();
         }
 
         /// <inheritdoc />
         public SyntaxNode GetSyntaxNode()
         {
-            return constructor.GetSyntaxNode();
+            return Constructor.GetSyntaxNode();
         }
 
         /// <inheritdoc />
         public IRoot GetRoot()
         {
-            return constructor.GetRoot();
+            return Constructor.GetRoot();
         }
 
         /// <inheritdoc />
         public IEnumerable<IModifier> GetModifiers()
         {
-            return constructor.GetModifiers();
+            return Constructor.GetModifiers();
         }
 
         /// <inheritdoc />
         public IEnumerable<TypeSyntax> GetParameters()
         {
-            return constructor.GetParameters();
+            return Constructor.GetParameters();
         }
 
         /// <inheritdoc />
         public CSharpSyntaxNode GetBody()
         {
-            return constructor.GetBody();
+            return Constructor.GetBody();
         }
 
         /// <inheritdoc />
         public IEntity GetParent()
         {
-            return constructor.GetParent();
+            return Constructor.GetParent();
         }
 
         /// <inheritdoc />
@@ -65,7 +69,7 @@ namespace PatternPal.SyntaxTree.Models.Members.Constructor
 
         public override string ToString()
         {
-            return constructor.ToString();
+            return Constructor.ToString();
         }
     }
 }

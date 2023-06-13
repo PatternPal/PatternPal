@@ -3,12 +3,14 @@
   items:
   # -- Design patterns
   - name: Design patterns
+  - name: Adapter
+    href: recognizers/patterns/adapter.md
+  - name: Decorator
+    href: recognizers/patterns/decorator.md
   - name: Singleton
     href: recognizers/patterns/singleton.md
   - name: Strategy
     href: recognizers/patterns/strategy.md
-  - name: Decorator
-    href: recognizers/patterns/decorator.md
 
   # -- Design
   - name: Design
