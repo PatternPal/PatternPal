@@ -64,7 +64,6 @@ namespace PatternPal.LoggingServer.Services
                     return await Task.FromResult(CreateInvalidResponse("invalid parent event id"));
                 }
             }
-            Guid parentEventId = parentEventIdNullable ?? Guid.Empty;
 
             if (!DateTimeOffset.TryParse(request.ClientTimestamp, out DateTimeOffset cDto))
             {
@@ -99,7 +98,7 @@ namespace PatternPal.LoggingServer.Services
                 ServerDatetime = DateTimeOffset.Now,
                 SessionId = sessionId,
                 ProjectId = request.HasProjectId ? request.ProjectId : null,
-                ParentId = parentEventId,
+                ParentId = parentEventIdNullable,
                 CompileMessage = request.HasCompileMessageData ? request.CompileMessageData : null,
                 CompileMessageType = request.HasCompileMessageType ? request.CompileMessageType: null,
                 SourceLocation = request.HasSourceLocation ? request.SourceLocation: null,
