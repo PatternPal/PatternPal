@@ -100,7 +100,8 @@ internal class SingletonRecognizer : IRecognizer,
                             Priority.Knockout,
                             All(
                                 Priority.Low,
-                                staticPrivateFieldOfTypeClass
+                                staticPrivateFieldOfTypeClass,
+                                onlyPrivateProtectedConstructor
                             )
                         )
                     }
