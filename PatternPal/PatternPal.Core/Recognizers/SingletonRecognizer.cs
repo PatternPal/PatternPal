@@ -242,7 +242,6 @@ internal class SingletonRecognizer : IRecognizer,
         //TODO: Right now it only checks if the constructor is called somewhere in a method, not at which conditions
         return Uses(
             Priority.Mid,
-            "if called and there is no instance saved in the private field, then it calls the private constructor",
             constructor
         );
     }
@@ -258,12 +257,10 @@ internal class SingletonRecognizer : IRecognizer,
                {
                    Uses(
                        Priority.Mid,
-                       "if called and there is an instance saved in the private field it returns this instance",
                        checkSingletonC
                    ),
                    Type(
                        Priority.Knockout,
-                       "if called and there is an instance saved in the private field it returns this instance",
                        ICheck.GetCurrentEntity
                    )
                };
@@ -287,7 +284,7 @@ internal class SingletonRecognizer : IRecognizer,
 
         return Method(
             Priority.High,
-            "has a static, public/internal method that acts as a constructor in the following way",
+            "has a static, public/internal method that acts as a constructor in the following way and if called and there is an instance saved in the private field it returns this instance otherwise it calls the private constructor",
             hasStaticPublicInternalMethod.Append(checkNoInstanceConstructor).Concat(checkInstanceConstructor).ToArray()
         );
     }

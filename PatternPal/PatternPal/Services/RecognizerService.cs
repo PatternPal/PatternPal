@@ -50,7 +50,9 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                                          };
 
             Dictionary< string, Result > resultsByRequirement = new();
-            foreach (Result result in GetResults(rootCheckResult))
+
+            foreach (Result result in GetResults(
+                rootCheckResult))
             {
                 if (!resultsByRequirement.TryGetValue(
                         result.Requirement,
@@ -60,6 +62,12 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                     resultsByRequirement[ result.Requirement ] = result;
                 }
             }
+
+            // TODO: Check if requirements are correct, or remove result if not.
+
+            // TODO: Collect all requirements from checks.
+
+            // TODO: Generate feedback for incorrect/missing requirements.
 
             foreach (Result result in resultsByRequirement.Values)
             {
@@ -76,54 +84,58 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
         return Task.CompletedTask;
     }
 
+    /// <summary>
+    /// This method transforms a <see cref="ICheckResult"/> to a <see cref="Result"/>
+    /// </summary>
+    /// <param name="resultsToProcess"></param>
+    /// <param name="checkResult"> The check to transform.</param>
+    /// <param name="usedNodes"></param>
+    /// <returns></returns>
     private static IEnumerable< Result > GetResults(
-        ICheckResult checkResult)
+        ICheckResult rootCheckResult)
     {
-        if (!string.IsNullOrWhiteSpace(checkResult.Check.Requirement))
+        Queue< ICheckResult > resultsToProcess = new();
+        resultsToProcess.Enqueue(rootCheckResult);
+        while (resultsToProcess.Count != 0)
         {
-            Result result = new()
-                            {
-                                Requirement = checkResult.Check.Requirement
-                            };
+            ICheckResult resultToProcess = resultsToProcess.Dequeue();
 
-            if (checkResult.MatchedNode != null)
+            if (!string.IsNullOrWhiteSpace(resultToProcess.Check.Requirement))
             {
-                INode matchedNode = checkResult.MatchedNode;
-                TextSpan sourceLocation = matchedNode.GetSourceLocation;
-                result.MatchedNode = new MatchedNode
-                                     {
-                                         Name = matchedNode.GetName(),
-                                         Path = matchedNode.GetRoot().GetSource(),
-                                         Start = sourceLocation.Start,
-                                         Length = sourceLocation.Length
-                                     };
-            }
+                Result result = new()
+                                {
+                                    Requirement = resultToProcess.Check.Requirement
+                                };
 
-            yield return result;
-        }
-
-        switch (checkResult)
-        {
-            case LeafCheckResult:
-                yield break;
-            case NotCheckResult notCheckResult:
-            {
-                foreach (Result result in GetResults(notCheckResult.NestedResult))
+                if (resultToProcess.MatchedNode != null)
                 {
-                    yield return result;
+                    INode matchedNode = resultToProcess.MatchedNode;
+                    TextSpan sourceLocation = matchedNode.GetSourceLocation;
+                    result.MatchedNode = new MatchedNode
+                                         {
+                                             Name = matchedNode.GetName(),
+                                             Path = matchedNode.GetRoot().GetSource(),
+                                             Start = sourceLocation.Start,
+                                             Length = sourceLocation.Length
+                                         };
                 }
-                yield break;
+
+                yield return result;
             }
-            case NodeCheckResult nodeCheckResult:
+
+            switch (resultToProcess)
             {
-                foreach (ICheckResult childCheckResult in nodeCheckResult.ChildrenCheckResults)
-                {
-                    foreach (Result result in GetResults(childCheckResult))
+                case LeafCheckResult:
+                    continue;
+                case NotCheckResult notCheckResult:
+                    resultsToProcess.Enqueue(notCheckResult.NestedResult);
+                    continue;
+                case NodeCheckResult nodeCheckResult:
+                    foreach (ICheckResult childCheckResult in nodeCheckResult.ChildrenCheckResults)
                     {
-                        yield return result;
+                        resultsToProcess.Enqueue(childCheckResult);
                     }
-                }
-                yield break;
+                    continue;
             }
         }
     }
@@ -175,41 +187,5 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                 return null;
             }
         }
-    }
-
-    /// <summary>
-    /// Converts an <see cref="ICheckResult"/> to a <see cref="CheckResult"/>, which can be sent
-    /// over the wire.
-    /// </summary>
-    /// <param name="checkResult">The <see cref="ICheckResult"/> to convert.</param>
-    /// <returns>The <see cref="CheckResult"/> instance created from the given <see cref="ICheckResult"/>.</returns>
-    private static CheckResult CreateCheckResult(
-        ICheckResult checkResult)
-    {
-        CheckResult newCheckResult = new()
-                                     {
-                                         Requirement = checkResult.Check.Requirement ?? string.Empty,
-                                         FeedbackMessage = checkResult.FeedbackMessage
-                                     };
-
-        // Convert sub-check results.
-        switch (checkResult)
-        {
-            case NodeCheckResult nodeCheckResult:
-            {
-                foreach (ICheckResult childCheckResult in nodeCheckResult.ChildrenCheckResults)
-                {
-                    newCheckResult.SubCheckResults.Add(CreateCheckResult(childCheckResult));
-                }
-                break;
-            }
-            case NotCheckResult notCheckResult:
-            {
-                newCheckResult.SubCheckResults.Add(CreateCheckResult(notCheckResult.NestedResult));
-                break;
-            }
-        }
-
-        return newCheckResult;
     }
 }

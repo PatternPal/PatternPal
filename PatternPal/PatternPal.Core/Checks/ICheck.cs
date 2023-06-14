@@ -1,5 +1,9 @@
-﻿using PatternPal.SyntaxTree;
+﻿#region
+
+using PatternPal.SyntaxTree;
 using PatternPal.SyntaxTree.Models;
+
+#endregion
 
 namespace PatternPal.Core.Checks;
 
@@ -57,7 +61,7 @@ public interface ICheck
 /// <summary>
 /// Base implementation of a check.
 /// </summary>
-internal abstract class CheckBase : ICheck
+public abstract class CheckBase : ICheck
 {
     /// <inheritdoc />
     public Priority Priority { get; }
