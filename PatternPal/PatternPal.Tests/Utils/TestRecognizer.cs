@@ -1,18 +1,19 @@
-﻿#region
+﻿namespace PatternPal.Tests.Utils;
 
-using PatternPal.Core.StepByStep;
 
-#endregion
-
-namespace PatternPal.Tests.Utils;
-
-// TODO These are utils, so I'd like to see them commented.
+/// <summary>
+/// A recognizer that can be used to test the <see cref="RelationCheck"/> of <see cref="RelationType.Uses"/>
+/// between a class and a method
+/// </summary>
 internal class TestRecognizerRelation : IRecognizer
 {
+    /// <inheritdoc />
     public string Name => nameof(TestRecognizerRelation);
 
+    /// <inheritdoc />
     public Protos.Recognizer RecognizerType => Protos.Recognizer.Unknown;
 
+    /// <inheritdoc />
     public IEnumerable<ICheck> Create()
     {
         MethodCheck instanceMethod =
@@ -37,19 +38,20 @@ internal class TestRecognizerRelation : IRecognizer
             )
         );
     }
-
-    public List<IInstruction> GenerateStepsList()
-    {
-        throw new NotImplementedException();
-    }
 }
 
+/// <summary>
+/// A recognizer that can be used to test the <see cref="TypeCheck"/> in combination with a <see cref="MethodCheck"/>
+/// </summary>
 internal class TestRecognizerType : IRecognizer
 {
+    /// <inheritdoc />
     public string Name => nameof(TestRecognizerType);
 
+    /// <inheritdoc />
     public Protos.Recognizer RecognizerType => Protos.Recognizer.Unknown;
 
+    /// <inheritdoc />
     public IEnumerable<ICheck> Create()
     {
         ClassCheck internalClass = Class(
@@ -72,10 +74,5 @@ internal class TestRecognizerType : IRecognizer
                 )
             )
         );
-    }
-
-    public List<IInstruction> GenerateStepsList()
-    {
-        throw new NotImplementedException();
     }
 }
