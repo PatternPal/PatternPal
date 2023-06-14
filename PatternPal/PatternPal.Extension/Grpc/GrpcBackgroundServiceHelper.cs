@@ -1,4 +1,4 @@
-﻿#region
+﻿﻿#region
 
 using System;
 using System.Diagnostics;
@@ -11,60 +11,64 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace PatternPal.Extension.Grpc
 {
-/// <summary>
-/// Helper class for managing a background service process.
-/// </summary>
-public static class GrpcBackgroundServiceHelper
-{
-    private static Process _backgroundService;
-
     /// <summary>
-    /// Starts the background service process.
+    /// Helper class for starting and stopping the background service.
     /// </summary>
-    /// <param name="executablePath">The path to the executable file.</param>
-    /// <param name="arguments">The command line arguments.</param>
-    internal static void StartBackgroundService(string executablePath, string arguments)
+    internal static class GrpcBackgroundServiceHelper
     {
-        try
+        private static Process _backgroundService;
+
+        /// <summary>
+        /// Starts the background service. This method is called when the extension is loaded.
+        /// </summary>
+        internal static void StartBackgroundService()
         {
-            _backgroundService = new Process
+            try
             {
-                StartInfo = new ProcessStartInfo
+                Uri uri = new Uri(
+                    typeof( ExtensionWindowPackage ).Assembly.CodeBase,
+                    UriKind.Absolute);
+
+                string extensionDirectory = Path.GetDirectoryName(uri.LocalPath);
+                if (string.IsNullOrWhiteSpace(extensionDirectory))
                 {
-                    FileName = executablePath,
-                    Arguments = arguments,
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    CreateNoWindow = true
+                    throw new Exception("Unable to find extension installation directory");
                 }
-            };
 
-            _backgroundService.Start();
+                string backgroundServicePath = Path.Combine(
+                    extensionDirectory,
+                    "PatternPal",
+                    "PatternPal.exe");
+
+                _backgroundService = Process.Start(
+                    new ProcessStartInfo(backgroundServicePath)
+                    {
+                        CreateNoWindow = true,
+                        UseShellExecute = false,
+                    });
+            }
+            catch (Exception exception)
+            {
+                VsShellUtilities.ShowMessageBox(
+                    ExtensionWindowPackage.PackageInstance,
+                    $"The background service failed to start: {exception.Message}",
+                    "Background service error",
+                    OLEMSGICON.OLEMSGICON_CRITICAL,
+                    OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+            }
         }
-        catch (Exception exception)
+        /// <summary>
+        ///  Kills the background service. This method is called when the extension is unloaded.
+        /// </summary>
+        internal static void KillBackgroundService()
         {
-            VsShellUtilities.ShowMessageBox(
-                ExtensionWindowPackage.PackageInstance,
-                $"The background service failed to start: {exception.Message}",
-                "Background service error",
-                OLEMSGICON.OLEMSGICON_CRITICAL,
-                OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-        }
-    }
+            if (_backgroundService.HasExited)
+            {
+                return;
+            }
 
-    /// <summary>
-    /// Kills the background service process.
-    /// </summary>
-    internal static void KillBackgroundService()
-    {
-        if (_backgroundService.HasExited)
-        {
-            return;
+            _backgroundService.Kill();
         }
-
-        _backgroundService.Kill();
-    }
     }
 }
