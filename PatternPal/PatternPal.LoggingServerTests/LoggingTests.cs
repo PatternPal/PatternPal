@@ -63,7 +63,7 @@ namespace PatternPal.LoggingServerTests
         }
 
         [Test]
-        public void Log_InvalidDateTime_ThrowsInvalidArgument()
+        public void Log_InvalidDateTime_InvalidArgument()
         {
             // Arrange
             var request = new LogRequest
@@ -78,11 +78,13 @@ namespace PatternPal.LoggingServerTests
             };
 
             // Act & Assert
-            Assert.ThrowsAsync<RpcException>(() => _service.Log(request, Mock.Of<ServerCallContext>()));
+            // assert that response status code is 4
+            Assert.That(_service.Log(request, Mock.Of<ServerCallContext>()).Result.Status, Is.EqualTo(LogStatusCodes.LscInvalidArguments));
+
         }
 
         [Test]
-        public void Log_InvalidSessionId_ThrowsInvalidArgument()
+        public void Log_InvalidSessionId_InvalidArgument()
         {
             // Arrange
             var request = new LogRequest
@@ -97,11 +99,11 @@ namespace PatternPal.LoggingServerTests
             };
 
             // Act & Assert
-            Assert.ThrowsAsync<RpcException>(() => _service.Log(request, Mock.Of<ServerCallContext>()));
+            Assert.That(_service.Log(request, Mock.Of<ServerCallContext>()).Result.Status, Is.EqualTo(LogStatusCodes.LscInvalidArguments));
         }
 
         [Test]
-        public void Log_UnknownEventType_ThrowsInvalidArgument()
+        public void Log_UnknownEventType_InvalidArgument()
         {
             // Arrange
             var request = new LogRequest
@@ -116,7 +118,7 @@ namespace PatternPal.LoggingServerTests
             };
 
             // Act & Assert
-            Assert.ThrowsAsync<RpcException>(() => _service.Log(request, Mock.Of<ServerCallContext>()));
+            Assert.That(_service.Log(request, Mock.Of<ServerCallContext>()).Result.Status, Is.EqualTo(LogStatusCodes.LscInvalidArguments));
         }
 
         [Test]
