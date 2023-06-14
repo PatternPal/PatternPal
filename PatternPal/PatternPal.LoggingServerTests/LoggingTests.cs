@@ -10,13 +10,19 @@ using EventType = PatternPal.LoggingServer.EventType;
 
 namespace PatternPal.LoggingServerTests
 {
-    // TODO Comment
+    /// <summary>
+    /// LoggingService tests is a class that tests the LoggingService class. It uses a mock repository to test the database and a mock logger to test the logging.
+    /// </summary>
     public class LoggerServiceTests
     {
+        
         private Mock<ILogger<LoggerService>> _loggerMock;
         private Mock<EventRepository> _repositoryMock;
         private LoggerService _service;
 
+        /// <summary>
+        /// Setup is a method that is called before each test. It creates a mock logger and a mock repository with a inmemory database and then creates a new LoggingService object.
+        /// </summary>
         [SetUp]
         public void Setup()
         {
@@ -29,7 +35,9 @@ namespace PatternPal.LoggingServerTests
             _repositoryMock = new Mock<EventRepository>(context);
             _service = new LoggerService(_loggerMock.Object, _repositoryMock.Object);
         }
-
+    /// <summary>
+    /// TearDown is a method that is called after each test. It deletes the CodeStates directory that is created by the LoggingService.
+    /// </summary>
     [TearDown]
     public void TearDown()
     {
@@ -39,7 +47,9 @@ namespace PatternPal.LoggingServerTests
             Directory.Delete(basePath, true);
         }
     }
-
+        /// <summary>
+        /// This test checks if the Log method calls the repository's Insert method when given a valid request. This request is created with only the required fields.
+        /// </summary>
         [Test]
         public async Task Log_ValidRequest_InsertsEventIntoDatabase()
         {
@@ -61,6 +71,9 @@ namespace PatternPal.LoggingServerTests
             _repositoryMock.Verify(r => r.Insert(It.IsAny<ProgSnap2Event>()), Times.Once);
         }
 
+        /// <summary>
+        /// This test checks if the log method returns the correct statuscode when given an invalid request. In this case the datetime is invalid.
+        /// </summary>
         [Test]
         public void Log_InvalidDateTime_ThrowsInvalidArgument()
         {
@@ -80,6 +93,9 @@ namespace PatternPal.LoggingServerTests
             Assert.ThrowsAsync<RpcException>(() => _service.Log(request, Mock.Of<ServerCallContext>()));
         }
 
+        /// <summary>
+        /// This session checks if the log method returns the correct statuscode when given an invalid request. In this case the sessionid is invalid.
+        /// </summary>
         [Test]
         public void Log_InvalidSessionId_ThrowsInvalidArgument()
         {
@@ -99,6 +115,9 @@ namespace PatternPal.LoggingServerTests
             Assert.ThrowsAsync<RpcException>(() => _service.Log(request, Mock.Of<ServerCallContext>()));
         }
 
+        /// <summary>
+        /// This test checks if the log method returns the correct statuscode when given an invalid request. In this case the eventtype cannot be unknown.
+        /// </summary>
         [Test]
         public void Log_UnknownEventType_ThrowsInvalidArgument()
         {
@@ -146,6 +165,12 @@ namespace PatternPal.LoggingServerTests
             Assert.That(File.Exists(Path.Combine(codeStatePath, filenameCs)), Is.True);
         }
 
+        /// <summary>
+        /// Helper function to create a zip archive with a single file in it.
+        /// The file is called filename and contains the text "test".
+        /// </summary>
+        /// <param name="filename">Filename of the file to create in the zip archive</param>
+        /// <returns cref="byte[]">Byte array containing the zip archive</returns>
         private byte[] CreateZipArchive(string filename)
         {
             using MemoryStream ms = new();
