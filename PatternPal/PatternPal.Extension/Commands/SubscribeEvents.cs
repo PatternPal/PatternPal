@@ -16,7 +16,7 @@ using PatternPal.Protos;
 
 namespace PatternPal.Extension.Commands
 {
-    public enum ServerStatusCodes
+    public enum ExtensionLogStatusCodes
     {
         Available,
         Unavailable,
@@ -55,14 +55,16 @@ namespace PatternPal.Extension.Commands
 
         private static CancellationToken _cancellationToken;
 
-        private static ServerStatusCodes _serverStatus = ServerStatusCodes.NoLog;
+        private static ExtensionLogStatusCodes _serverStatus = ExtensionLogStatusCodes.NoLog;
 
-        public static ServerStatusCodes ServerStatus
+        public static ExtensionLogStatusCodes ServerStatus
         {
             get
             {
-                if (_doLog) return _serverStatus;
-                else return ServerStatusCodes.NoLog;
+                if (_doLog) {
+                    return _serverStatus;
+                }
+                return ExtensionLogStatusCodes.NoLog;
             }
             set => _serverStatus = value;
         }
@@ -440,31 +442,24 @@ namespace PatternPal.Extension.Commands
                 switch (ler.Status)
                 {
                     case LogStatusCodes.LscSuccess:
-                        ServerStatus = ServerStatusCodes.Available;
-                        return ler;
-                    case LogStatusCodes.LscFailure:
-                        ServerStatus = ServerStatusCodes.Error;
-                        return ler;
-                    case LogStatusCodes.LscRejected:
-                        ServerStatus = ServerStatusCodes.Error;
-                        return ler;
-                    case LogStatusCodes.LscInvalidArguments:
-                        ServerStatus = ServerStatusCodes.Error;
-                        return ler;
-                    case LogStatusCodes.LscUnknown:
-                        ServerStatus = ServerStatusCodes.Error;
+                        ServerStatus = ExtensionLogStatusCodes.Available;
                         return ler;
                     case LogStatusCodes.LscUnavailable:
-                        ServerStatus = ServerStatusCodes.Unavailable;
+                        ServerStatus = ExtensionLogStatusCodes.Unavailable;
                         return ler;
+                    case LogStatusCodes.LscFailure:
+                    case LogStatusCodes.LscRejected:
+                    case LogStatusCodes.LscInvalidArguments:
+                    case LogStatusCodes.LscUnknown:
                     default:
-                        ServerStatus = ServerStatusCodes.Error;
+                        ServerStatus = ExtensionLogStatusCodes.Error;
                         return ler;
                 }
             }
+            // Host not found, timeout exception, etc.
             catch (Exception e)
             {
-                ServerStatus = ServerStatusCodes.Unavailable;
+                ServerStatus = ExtensionLogStatusCodes.Unavailable;
                 return new LogEventResponse
                 {
                     Status = LogStatusCodes.LscUnknown,

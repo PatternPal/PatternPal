@@ -38,6 +38,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
 
         try
         {
+            // TODO add ENV variable for server address
             GrpcChannel grpcChannel = GrpcChannel.ForAddress(
                 "http://161.35.87.186:8080");
             LogCollectorService.LogCollectorServiceClient client = new(grpcChannel);
@@ -58,8 +59,6 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
             switch (e.StatusCode)
             {
                 case StatusCode.Unavailable:
-                    taskResult.Status = Protos.LogStatusCodes.LscUnavailable;
-                    break;
                 case StatusCode.DeadlineExceeded:
                     taskResult.Status = Protos.LogStatusCodes.LscUnavailable;
                     break;

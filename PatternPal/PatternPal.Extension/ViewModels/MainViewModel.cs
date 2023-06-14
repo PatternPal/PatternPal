@@ -1,10 +1,7 @@
-﻿using System.Diagnostics.Eventing.Reader;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
-
 using PatternPal.Extension.Stores;
 using PatternPal.Extension.Commands;
-using System;
 
 namespace PatternPal.Extension.ViewModels
 {
@@ -23,7 +20,6 @@ namespace PatternPal.Extension.ViewModels
         /// </summary>
         private NavigationStore _navigationStore { get; }
 
-        // private bool LogEventStatus;
         public ViewModel CurrentViewModel
         {
             get => _navigationStore.CurrentViewModel;

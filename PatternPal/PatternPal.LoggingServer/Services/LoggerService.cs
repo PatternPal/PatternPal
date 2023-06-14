@@ -39,7 +39,6 @@ namespace PatternPal.LoggingServer.Services
         public override async Task<LogResponse> Log(LogRequest request, ServerCallContext context)
         {
 
-            // 
             Guid? eventIdNullable = GetGuid(request.EventId, "EventID");
             if (eventIdNullable == null)
             {
@@ -55,11 +54,11 @@ namespace PatternPal.LoggingServer.Services
 
             Guid sessionId = sessionIdNullable.Value;
 
-            Guid? parentEventIdNullable = null;
+            Guid? parentEventId = null;
             if (request.HasParentEventId)
             {
-                parentEventIdNullable = GetGuid(request.ParentEventId, "ParentEventID");
-                if (parentEventIdNullable == null)
+                parentEventId = GetGuid(request.ParentEventId, "ParentEventID");
+                if (parentEventId == null)
                 {
                     return await Task.FromResult(CreateInvalidResponse("invalid parent event id"));
                 }
@@ -73,11 +72,11 @@ namespace PatternPal.LoggingServer.Services
                 });
             }
 
-            Guid? codeStateIdNullable = null;
+            Guid? codeStateId = null;
             if (request.HasData)
             {
-                codeStateIdNullable = ParseCodeState(request.Data.ToByteArray());
-                if (codeStateIdNullable == null)
+                codeStateId = ParseCodeState(request.Data.ToByteArray());
+                if (codeStateId == null)
                 {
                     return await Task.FromResult(CreateInvalidResponse("invalid data"));
                 }
@@ -92,13 +91,13 @@ namespace PatternPal.LoggingServer.Services
                 EventId = eventId,
                 SubjectId = subjectId,
                 ToolInstances = request.ToolInstances,
-                CodeStateId = codeStateIdNullable,
+                CodeStateId = codeStateId,
                 FullCodeState = request.HasFullCodeState ? request.FullCodeState : null,
                 ClientDatetime = cDto,
                 ServerDatetime = DateTimeOffset.Now,
                 SessionId = sessionId,
                 ProjectId = request.HasProjectId ? request.ProjectId : null,
-                ParentId = parentEventIdNullable,
+                ParentId = parentEventId,
                 CompileMessage = request.HasCompileMessageData ? request.CompileMessageData : null,
                 CompileMessageType = request.HasCompileMessageType ? request.CompileMessageType: null,
                 SourceLocation = request.HasSourceLocation ? request.SourceLocation: null,
@@ -181,7 +180,6 @@ namespace PatternPal.LoggingServer.Services
             }
             return null;
         }
-
 
         #region Responses
         private LogResponse CreateInvalidResponse(string message)
