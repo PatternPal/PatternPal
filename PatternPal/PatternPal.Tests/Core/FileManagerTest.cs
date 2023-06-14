@@ -1,6 +1,4 @@
-﻿using NUnit.Framework;
-
-namespace PatternPal.Tests.Core
+﻿namespace PatternPal.Tests.Core
 {
     internal class FileManagerTest
     {

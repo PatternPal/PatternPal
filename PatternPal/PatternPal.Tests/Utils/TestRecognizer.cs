@@ -1,7 +1,12 @@
-﻿using PatternPal.Core.StepByStep;
+﻿#region
+
+using PatternPal.Core.StepByStep;
+
+#endregion
 
 namespace PatternPal.Tests.Utils;
 
+// TODO These are utils, so I'd like to see them commented.
 internal class TestRecognizerRelation : IRecognizer
 {
     public string Name => nameof(TestRecognizerRelation);
