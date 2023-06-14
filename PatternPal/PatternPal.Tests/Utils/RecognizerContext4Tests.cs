@@ -1,6 +1,4 @@
-﻿using PatternPal.SyntaxTree.Abstractions.Entities;
-
-namespace PatternPal.Tests.Utils;
+﻿namespace PatternPal.Tests.Utils;
 
 internal class RecognizerContext4Tests : IRecognizerContext
 {

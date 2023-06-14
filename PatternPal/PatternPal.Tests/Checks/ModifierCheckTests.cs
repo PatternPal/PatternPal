@@ -1,6 +1,5 @@
 ﻿#region
 
-using PatternPal.SyntaxTree.Abstractions.Entities;
 using PatternPal.SyntaxTree.Abstractions.Root;
 
 #endregion
