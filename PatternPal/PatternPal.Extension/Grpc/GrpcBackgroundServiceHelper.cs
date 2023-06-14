@@ -11,58 +11,60 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace PatternPal.Extension.Grpc
 {
-    // TODO Comment
-    internal static class GrpcBackgroundServiceHelper
+/// <summary>
+/// Helper class for managing a background service process.
+/// </summary>
+public static class GrpcBackgroundServiceHelper
+{
+    private static Process _backgroundService;
+
+    /// <summary>
+    /// Starts the background service process.
+    /// </summary>
+    /// <param name="executablePath">The path to the executable file.</param>
+    /// <param name="arguments">The command line arguments.</param>
+    internal static void StartBackgroundService(string executablePath, string arguments)
     {
-        private static Process _backgroundService;
-
-        internal static void StartBackgroundService()
+        try
         {
-            try
+            _backgroundService = new Process
             {
-                Uri uri = new Uri(
-                    typeof( ExtensionWindowPackage ).Assembly.CodeBase,
-                    UriKind.Absolute);
-
-                string extensionDirectory = Path.GetDirectoryName(uri.LocalPath);
-                if (string.IsNullOrWhiteSpace(extensionDirectory))
+                StartInfo = new ProcessStartInfo
                 {
-                    throw new Exception("Unable to find extension installation directory");
+                    FileName = executablePath,
+                    Arguments = arguments,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = true
                 }
+            };
 
-                string backgroundServicePath = Path.Combine(
-                    extensionDirectory,
-                    "PatternPal",
-                    "PatternPal.exe");
-
-                _backgroundService = Process.Start(
-                    new ProcessStartInfo(backgroundServicePath)
-                    {
-                        CreateNoWindow = true,
-                        UseShellExecute = false,
-                    });
-            }
-            catch (Exception exception)
-            {
-                // TODO: Improve error handling
-                VsShellUtilities.ShowMessageBox(
-                    ExtensionWindowPackage.PackageInstance,
-                    $"The background service failed to start: {exception.Message}",
-                    "Background service error",
-                    OLEMSGICON.OLEMSGICON_CRITICAL,
-                    OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-            }
+            _backgroundService.Start();
         }
-
-        internal static void KillBackgroundService()
+        catch (Exception exception)
         {
-            if (_backgroundService.HasExited)
-            {
-                return;
-            }
-
-            _backgroundService.Kill();
+            VsShellUtilities.ShowMessageBox(
+                ExtensionWindowPackage.PackageInstance,
+                $"The background service failed to start: {exception.Message}",
+                "Background service error",
+                OLEMSGICON.OLEMSGICON_CRITICAL,
+                OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
         }
+    }
+
+    /// <summary>
+    /// Kills the background service process.
+    /// </summary>
+    internal static void KillBackgroundService()
+    {
+        if (_backgroundService.HasExited)
+        {
+            return;
+        }
+
+        _backgroundService.Kill();
+    }
     }
 }
