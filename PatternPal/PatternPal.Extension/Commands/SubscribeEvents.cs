@@ -11,6 +11,7 @@ using PatternPal.Protos;
 using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 #endregion
 
@@ -208,12 +209,20 @@ namespace PatternPal.Extension.Commands
         /// <param name="fileSystemEventArgs"></param>
         internal static void OnFileCreate(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
+            // Since the fileWatcher will also fire this event for created .cs-files contained in the bin artifacts, we
+            // need to filter for those as well.
+            Regex rgx = new Regex(@"(^|(\\|/))((bin)|(obj))((\\|/))");
+            if (rgx.IsMatch(fileSystemEventArgs.Name))
+            {
+                return;
+            }
+
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtFileCreate;
             request.CodeStateSection = fileSystemEventArgs.Name;
             string projectFullPath = FindContainingCsprojFile(fileSystemEventArgs.FullPath);
-            string projectFolderName = Path.GetDirectoryName(projectFullPath);
-            request.ProjectId = GetRelativePath(projectFolderName, projectFullPath);
+            string projectDirectory = Path.GetDirectoryName(projectFullPath);
+            request.ProjectId = GetRelativePath(projectDirectory, projectFullPath);
 
             LogEventResponse response = PushLog(request);
         }
@@ -232,12 +241,20 @@ namespace PatternPal.Extension.Commands
                 return;
             }
 
+            // Since the fileWatcher will also fire this event for deleted .cs-files contained in the bin artifacts, we
+            // need to filter for those as well.
+            Regex rgx = new Regex(@"(^|(\\|/))((bin)|(obj))((\\|/))");
+            if (rgx.IsMatch(fileSystemEventArgs.Name))
+            {
+                return;
+            }
+
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtFileDelete;
             request.CodeStateSection = fileSystemEventArgs.Name;
             string projectFullPath = FindContainingCsprojFile(fileSystemEventArgs.FullPath);
-            string projectFolderName = Path.GetDirectoryName(projectFullPath);
-            request.ProjectId = GetRelativePath(projectFolderName, projectFullPath);
+            string projectDirectory = Path.GetDirectoryName(projectFullPath);
+            request.ProjectId = GetRelativePath(projectDirectory, projectFullPath);
 
             LogEventResponse response = PushLog(request);
         }
