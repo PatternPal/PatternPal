@@ -41,7 +41,7 @@ The priority of a requirement is noted with the (low)-(mid)-(high)-(knockout) cr
 2. (high) has at least one (abstract) method
 
 **Concrete Implementations**
-1. (mid) is an implementation of the `Implementation` interface or inherits from the `Implementation` abstract class
+1. (high) is an implementation of the `Implementation` interface or inherits from the `Implementation` abstract class
 2. (mid) if `Implementation` is an abstract class it should override it's abstract methods
 
 **Refined Abstraction** optional

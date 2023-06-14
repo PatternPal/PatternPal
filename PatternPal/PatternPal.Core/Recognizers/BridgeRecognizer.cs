@@ -52,8 +52,8 @@ internal class BridgeRecognizer : IRecognizer
     public IEnumerable<ICheck> Create()
     {
         yield return Any(
-            Priority.Low,
-            Any(Priority.Low, _abstractAbstraction.Checks()),
-            All(Priority.Low, _interfaceAbstraction.Checks()));
+            Priority.Knockout,
+            Any(Priority.Knockout, _abstractAbstraction.Checks()),
+            All(Priority.Knockout, _interfaceAbstraction.Checks()));
     }
 }

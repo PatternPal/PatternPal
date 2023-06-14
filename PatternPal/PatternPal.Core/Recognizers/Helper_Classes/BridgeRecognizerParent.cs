@@ -47,8 +47,8 @@ internal abstract class BridgeRecognizerParent
 
         // req. b & c
         ClassCheck clientCheck = Class( 
-            Priority.Low, 
-            methodUseInAbstraction, 
+            Priority.Low,
+            Uses(Priority.Mid, methodInAbstractionWithUse),
             Creates(Priority.Low, concreteImplementationCheck), 
             Uses(Priority.Low, fieldOrProperty) );
 
@@ -95,8 +95,9 @@ internal abstract class BridgeRecognizerParent
             ),
             Property(Priority.Knockout, 
                 Type(Priority.Knockout, implementationCheck), 
-                Modifiers(Priority.Knockout, 
-                    Modifier.Private, Modifier.Protected)
+                Any(Priority.Knockout, 
+                    Modifiers(Priority.Knockout, Modifier.Private), 
+                    Modifiers(Priority.Knockout, Modifier.Protected))
             )
         );
     }
