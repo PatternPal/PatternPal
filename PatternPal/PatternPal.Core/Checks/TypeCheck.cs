@@ -18,6 +18,13 @@ internal class TypeCheck : CheckBase
         _ => 0);
 
     /// <summary>
+    /// Whether this <see cref="TypeCheck "/> is for the current <see cref="IEntity"/>.
+    /// </summary>
+    internal bool IsForCurrentEntity => _getNode.Match(
+        _ => false,
+        _ => true);
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="TypeCheck"/> class.
     /// </summary>
     /// <param name="priority">Priority of the check.</param>

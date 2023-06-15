@@ -565,6 +565,16 @@ public class RecognizerRunner
                             break;
                         }
 
+                        // If the type check is for the current entity, just increment the score
+                        // with 1. Otherwise the score would become infinite ;).
+                        if (leafResult.Check is TypeCheck {IsForCurrentEntity: true})
+                        {
+                            leafResult.Score += Score.CreateScore(
+                                leafResult.Priority,
+                                true);
+                            break;
+                        }
+
                         // Increment the score with the score of the related node. If the related
                         // node is not an entity, take the score of its entity parent. Otherwise,
                         // correctly implemented members in bad parents would weigh more than poorly
