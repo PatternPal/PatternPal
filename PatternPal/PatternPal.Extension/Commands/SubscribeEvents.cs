@@ -71,8 +71,6 @@ namespace PatternPal.Extension.Commands
 
         public static Action ServerStatusChanged = delegate { };
 
-
-
         /// <summary>
         /// Initializes the preparation for the subscription of the logged events. 
         /// </summary>
