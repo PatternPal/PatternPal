@@ -1,7 +1,5 @@
 ﻿#region
 
-using System.ComponentModel;
-using PatternPal.Core.StepByStep;
 using PatternPal.SyntaxTree.Models;
 
 using static PatternPal.Core.Checks.CheckBuilder;

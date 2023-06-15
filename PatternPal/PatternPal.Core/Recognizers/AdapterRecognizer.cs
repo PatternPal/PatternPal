@@ -1,7 +1,10 @@
-﻿using PatternPal.Core.Recognizers.Helper_Classes;
-using PatternPal.Core.StepByStep;
+﻿#region
+
+using PatternPal.Core.Recognizers.Helper_Classes;
 
 using static PatternPal.Core.Checks.CheckBuilder;
+
+#endregion
 
 namespace PatternPal.Core.Recognizers
 {

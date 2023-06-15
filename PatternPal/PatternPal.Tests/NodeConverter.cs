@@ -37,7 +37,6 @@ public class NodeConverter : JsonConverter
         VerifierSettings.IgnoreMember("Pruned");
         VerifierSettings.IgnoreMember("Check");
         VerifierSettings.IgnoreMember("RelatedCheck");
-        
     }
 
 }

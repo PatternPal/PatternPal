@@ -3,7 +3,7 @@
 /// <summary>
 /// <see cref="ICheck"/> implementation for <see cref="IInterface"/> entities.
 /// </summary>
-internal class InterfaceCheck : NodeCheck< IInterface >
+public class InterfaceCheck : NodeCheck< IInterface >
 {
     /// <inheritdoc cref="NodeCheck{TNode}"/>
     internal InterfaceCheck(

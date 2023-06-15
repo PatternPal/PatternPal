@@ -1,4 +1,8 @@
-﻿using System.IO;
+﻿#region
+
+using System.IO;
+
+#endregion
 
 namespace PatternPal.Tests.Utils
 {
@@ -29,8 +33,8 @@ namespace PatternPal.Tests.Utils
         /// <returns>List with all file contents </returns>
         public static List<string> FilesToString(string folderPath)
         {
-            var filesContents = new List<string>();
-            foreach (var file in Directory.EnumerateFiles("TestClasses\\" + folderPath, "*.cs"))
+            List<string> filesContents = new();
+            foreach (string file in Directory.EnumerateFiles("TestClasses\\" + folderPath, "*.cs"))
             {
                 filesContents.Add(File.ReadAllText(file));
             }
