@@ -1,4 +1,4 @@
-#region
+﻿#region
 
 using System;
 using System.Collections.Generic;
@@ -289,8 +289,8 @@ namespace PatternPal.Extension.Commands
         /// <param name="fileSystemEventArgs"></param>
         internal static void OnFileRename(object sender, RenamedEventArgs e)
         {
-            // This event might also be triggered by file edits; we can catch this by filtering based on the old file extension.
-            if (Path.GetExtension(e.OldName) != ".cs")
+            // This event might also be triggered by file edits; we can catch this by filtering based on the file extensions.
+            if (Path.GetExtension(e.Name) != ".cs" || Path.GetExtension(e.OldName) != ".cs")
             {
                 return;
             }
