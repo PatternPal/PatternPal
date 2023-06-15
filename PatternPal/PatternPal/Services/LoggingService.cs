@@ -219,24 +219,31 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     private static (LogRequest request, bool discard) FileEditLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
-        // TODO: Prevent lookup of non-existing project / logging failures
         string currentHash = HashFile(receivedRequest.FilePath);
         string relativePath = Path.GetRelativePath(receivedRequest.ProjectDirectory, receivedRequest.FilePath);
-        string oldHash = _lastCodeState[receivedRequest.ProjectId][relativePath];
 
-        // If these hashes match, the file hasn't changed and the request may be discarded.
-        if (currentHash == oldHash)
+        try
         {
+            string oldHash = _lastCodeState[receivedRequest.ProjectId][relativePath];
+            // If these hashes match, the file hasn't changed and the request may be discarded.
+            if (currentHash == oldHash)
+            {
+                return (sendLog, true);
+            }
+
+            sendLog.EventType = LoggingServer.EventType.EvtFileEdit;
+            sendLog.CodeStateSection = receivedRequest.CodeStateSection;
+            sendLog.ProjectId = receivedRequest.ProjectId;
+            sendLog.Data = ZipPath(receivedRequest.FilePath, relativePath);
+            sendLog.FullCodeState = false;
+
+            return (sendLog, false);
+        }
+        catch
+        {
+            // TODO Determine proper course of action
             return (sendLog, true);
         }
-
-        sendLog.EventType = LoggingServer.EventType.EvtFileEdit;
-        sendLog.CodeStateSection = receivedRequest.CodeStateSection;
-        sendLog.ProjectId = receivedRequest.ProjectId;
-        sendLog.Data = ZipPath(receivedRequest.FilePath, relativePath);
-        sendLog.FullCodeState = false;
-
-        return (sendLog, false);
     }
 
 
