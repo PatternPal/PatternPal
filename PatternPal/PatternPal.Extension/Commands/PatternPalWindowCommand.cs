@@ -1,6 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿#region
+
+using System.Threading.Tasks;
 using Community.VisualStudio.Toolkit;
 using Microsoft.VisualStudio.Shell;
+
+#endregion
 
 namespace PatternPal.Extension
 {

@@ -1,6 +1,10 @@
-﻿using Microsoft.CodeAnalysis;
+﻿#region
+
+using Microsoft.CodeAnalysis;
 
 using PatternPal.SyntaxTree.Abstractions.Root;
+
+#endregion
 
 namespace PatternPal.Tests.Utils;
 

@@ -5,8 +5,6 @@ using System.IO;
 using Grpc.Core;
 using Grpc.Net.Client;
 
-using NUnit.Framework;
-
 using PatternPal.Protos;
 
 #endregion

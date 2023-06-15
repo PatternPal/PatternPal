@@ -1,5 +1,9 @@
-﻿using PatternPal.SyntaxTree;
+﻿#region
+
+using PatternPal.SyntaxTree;
 using PatternPal.SyntaxTree.Models;
+
+#endregion
 
 namespace PatternPal.Core.Checks;
 
@@ -44,6 +48,11 @@ public interface ICheck
     int DependencyCount { get; }
 
     /// <summary>
+    /// The <see cref="ICheck"/> in which this <see cref="ICheck"/> is contained.
+    /// </summary>
+    ICheck ? ParentCheck { get; set; }
+
+    /// <summary>
     /// Runs the current check on the given <see cref="INode"/>.
     /// </summary>
     /// <param name="ctx">The current <see cref="IRecognizerContext"/>.</param>
@@ -57,7 +66,7 @@ public interface ICheck
 /// <summary>
 /// Base implementation of a check.
 /// </summary>
-internal abstract class CheckBase : ICheck
+public abstract class CheckBase : ICheck
 {
     /// <inheritdoc />
     public Priority Priority { get; }
@@ -70,6 +79,9 @@ internal abstract class CheckBase : ICheck
 
     /// <inheritdoc />
     public abstract int DependencyCount { get; }
+
+    /// <inheritdoc />
+    public ICheck ? ParentCheck { get; set; }
 
     /// <summary>
     /// Sets the priority.

@@ -4,7 +4,7 @@
 /// Base class for <see cref="ICheck"/>s which can have sub-<see cref="ICheck"/>s.
 /// </summary>
 /// <typeparam name="TNode">The <see cref="INode"/> type which this <see cref="ICheck"/> supports.</typeparam>
-internal class NodeCheck< TNode > : CheckBase
+public class NodeCheck< TNode > : CheckBase
     where TNode : INode
 {
     // The sub-checks of the current check.
@@ -72,6 +72,11 @@ internal class NodeCheck< TNode > : CheckBase
     {
         _subChecks = subChecks;
         _kind = kind;
+
+        foreach (ICheck subCheck in _subChecks)
+        {
+            subCheck.ParentCheck = this;
+        }
     }
 
     /// <inheritdoc />
@@ -150,17 +155,13 @@ internal class NodeCheck< TNode > : CheckBase
             // These checks can match multiple entities, the results are wrapped in a
             // NodeCheckResult.
             case ClassCheck classCheck:
-                ThrowIfNested(
-                    ctx,
-                    subCheck);
+                ThrowIfNested(subCheck);
                 return RunCheckWithMultipleMatches(
                     ctx,
                     ctx.Graph.GetAll().Values.OfType< IClass >(),
                     classCheck);
             case InterfaceCheck interfaceCheck:
-                ThrowIfNested(
-                    ctx,
-                    subCheck);
+                ThrowIfNested(subCheck);
                 return RunCheckWithMultipleMatches(
                     ctx,
                     ctx.Graph.GetAll().Values.OfType< IInterface >(),
@@ -212,6 +213,7 @@ internal class NodeCheck< TNode > : CheckBase
                     ctx,
                     GetType4TypeCheck(
                         ctx,
+                        typeCheck,
                         castNode));
 
             // Ensure all checks are handled.
@@ -225,16 +227,15 @@ internal class NodeCheck< TNode > : CheckBase
     /// <summary>
     /// Throws an <see cref="InvalidSubCheckException"/> if <paramref name="subCheck"/> is not a root <see cref="ICheck"/>.
     /// </summary>
-    /// <param name="ctx">The current <see cref="IRecognizerContext"/>.</param>
     /// <param name="subCheck">The current <see cref="ICheck"/>.</param>
     /// <exception cref="InvalidSubCheckException">Thrown if <paramref name="subCheck"/> is not a root <see cref="ICheck"/>.</exception>
     private void ThrowIfNested(
-        IRecognizerContext ctx,
         ICheck subCheck)
     {
         // Being nested inside an 'Any' or 'All' check is allowed, as this doesn't influence which
         // entities are passed to the check.
-        if (ctx.ParentCheck.GetType() != typeof( NodeCheck< INode > ))
+        if (subCheck.ParentCheck != null
+            && subCheck.ParentCheck.GetType() != typeof( NodeCheck< INode > ))
         {
             throw CheckHelper.InvalidSubCheck(
                 this,
@@ -366,36 +367,41 @@ internal class NodeCheck< TNode > : CheckBase
     /// Gets the <see cref="IEntity"/> to pass to a <see cref="TypeCheck"/>.
     /// </summary>
     /// <param name="ctx">The current <see cref="IRecognizerContext"/>.</param>
+    /// <param name="check">The <see cref="ICheck"/> from which to get the type for the <see cref="TypeCheck"/>.</param>
     /// <param name="node">The <see cref="INode"/> to be checked.</param>
     /// <returns>The <see cref="IEntity"/> to pass to the <see cref="TypeCheck"/>.</returns>
     protected virtual IEntity GetType4TypeCheck(
         IRecognizerContext ctx,
+        ICheck check,
         TNode node)
     {
         // If the the current check is wrapped in an Any/All check, we need to walk up the checks
         // tree until we find a parent which can be used to get the type.
-        IRecognizerContext ? currentContext = ctx;
-        while (currentContext is {ParentCheck: NodeCheck< INode >})
+        ICheck ? currentCheck = check;
+        while (currentCheck is {ParentCheck: NodeCheck< INode >})
         {
-            currentContext = currentContext.PreviousContext;
+            currentCheck = currentCheck.ParentCheck;
         }
 
-        if (currentContext != null)
+        if (currentCheck != null)
         {
             // NOTE: Only the checks which implement `GetType4TypeCheck` should be matched here.
-            switch (currentContext.ParentCheck)
+            switch (currentCheck.ParentCheck)
             {
                 case FieldCheck fieldCheck:
                     return fieldCheck.GetType4TypeCheck(
-                        currentContext,
+                        ctx,
+                        currentCheck,
                         (IField)node);
                 case MethodCheck methodCheck:
                     return methodCheck.GetType4TypeCheck(
-                        currentContext,
+                        ctx,
+                        currentCheck,
                         (IMethod)node);
                 case PropertyCheck propertyCheck:
                     return propertyCheck.GetType4TypeCheck(
-                        currentContext,
+                        ctx,
+                        currentCheck,
                         (IProperty)node);
             }
         }
