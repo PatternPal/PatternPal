@@ -30,10 +30,23 @@ internal class TypeCheck : CheckBase
         ? _perfectScore = Score.CreateScore(
                               Priority,
                               true)
-                          + _getNode.Match(
-                              relatedCheck => relatedCheck.PerfectScore,
+                          + _getNode.Match( //TODO: When the relatedCheck is no EntityCheck, take the PerfectScore of Entity Parent
+                              PerfectScoreFromRelatedCheck,
                               _ => default)
         : _perfectScore;
+
+    private static Score PerfectScoreFromRelatedCheck(ICheck relatedCheck)
+    {
+        while (true)
+        {
+            if (relatedCheck is ClassCheck or InterfaceCheck)
+            {
+                return relatedCheck.PerfectScore;
+            }
+
+            relatedCheck = relatedCheck.ParentCheck!;
+        }
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TypeCheck"/> class.

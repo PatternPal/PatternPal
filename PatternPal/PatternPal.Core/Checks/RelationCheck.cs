@@ -20,11 +20,24 @@ internal class RelationCheck : CheckBase
 
     /// <inheritdoc />
     public override Score PerfectScore => _perfectScore.Equals(default)
-        ? _perfectScore = _relatedNodeCheck.PerfectScore
+        ? _perfectScore = PerfectScoreFromRelatedCheck(_relatedNodeCheck)  //TODO: When the relatedCheck is no EntityCheck, take the PerfectScore of Entity Parent
                           + Score.CreateScore(
                               Priority,
                               true)
         : _perfectScore;
+
+    private static Score PerfectScoreFromRelatedCheck(ICheck relatedCheck)
+    {
+        while (true)
+        {
+            if (relatedCheck is ClassCheck or InterfaceCheck)
+            {
+                return relatedCheck.PerfectScore;
+            }
+
+            relatedCheck = relatedCheck.ParentCheck!;
+        }
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RelationCheck"/> class.
