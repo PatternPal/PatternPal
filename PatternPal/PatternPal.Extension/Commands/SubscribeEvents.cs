@@ -438,7 +438,7 @@ namespace PatternPal.Extension.Commands
         /// <param name="currentInstructionNumber">Current instruction number </param>
         /// <param name="result">Boolean output</param>
         /// <param name="documents">all documents being checked against</param>
-        public static void OnStepByStepCheck(string recognizer, int currentInstructionNumber, bool result, RepeatedField<string> documents )
+        public static void OnStepByStepCheck(string recognizer, int currentInstructionNumber, bool result)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             if (!_doLog)
