@@ -17,8 +17,9 @@ public class NavigateCommand<T> : ICommand
     /// <summary>
     /// Occurs when changes occur that affect whether or not the command should execute.
     /// </summary>
+#pragma warning disable CS0067
     public event EventHandler CanExecuteChanged;
-
+#pragma warning restore CS0067
     /// <summary>
     /// Gets the navigation store used to manage the current view model.
     /// </summary>
