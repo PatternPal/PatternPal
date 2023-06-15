@@ -252,8 +252,9 @@ namespace PatternPal.Extension.Commands
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtFileCreate;
             request.CodeStateSection = fileSystemEventArgs.Name;
-
             string projectFullPath = FindContainingCsprojFile(fileSystemEventArgs.FullPath);
+            string projectDirectory = Path.GetDirectoryName(projectFullPath);
+            request.ProjectId = GetRelativePath(projectDirectory, projectFullPath);
             request.ProjectDirectory = Path.GetDirectoryName(projectFullPath);
             request.ProjectId = GetRelativePath(request.ProjectDirectory, projectFullPath);
             request.FilePath = fileSystemEventArgs.FullPath;
@@ -292,6 +293,32 @@ namespace PatternPal.Extension.Commands
 
             LogEventResponse response = PushLog(request);
         }
+
+        /// <summary>
+        /// The event handler for handling the File.Rename Event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="fileSystemEventArgs"></param>
+        internal static void OnFileRename(object sender, RenamedEventArgs e)
+        {
+            // This event might also be triggered by file edits; we can catch this by filtering based on the file extensions.
+            if (Path.GetExtension(e.Name) != ".cs" || Path.GetExtension(e.OldName) != ".cs")
+            {
+                return;
+            }
+
+            LogEventRequest request = CreateStandardLog();
+            request.EventType = EventType.EvtFileRename;
+            request.CodeStateSection = e.Name;
+            request.OldFileName = e.OldName;
+
+            string projectFullPath = FindContainingCsprojFile(e.FullPath);
+            string projectFolderName = Path.GetDirectoryName(projectFullPath);
+            request.ProjectId = GetRelativePath(projectFolderName, projectFullPath);
+
+            LogEventResponse response = PushLog(request);
+        }
+
 
         /// <summary>
         /// The event handler for handling the Session.Start Event. When a new session starts, a (new) sessionID is generated.
@@ -558,6 +585,7 @@ namespace PatternPal.Extension.Commands
             
             _watcher.Created += OnFileCreate;
             _watcher.Deleted += OnFileDelete; 
+            _watcher.Renamed += OnFileRename;
 
             _watcher.EnableRaisingEvents = true;
             _watcher.IncludeSubdirectories = true;
