@@ -1,6 +1,4 @@
-﻿using PatternPal.SyntaxTree.Abstractions.Entities;
-
-namespace PatternPal.Tests.Core;
+﻿namespace PatternPal.Tests.Core;
 
 public class RelationTest
 {

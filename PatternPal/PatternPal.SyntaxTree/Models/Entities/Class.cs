@@ -1,9 +1,13 @@
-﻿using System.Linq;
+﻿#region
+
+using System.Linq;
 using PatternPal.SyntaxTree.Abstractions;
 using PatternPal.SyntaxTree.Abstractions.Members;
 using PatternPal.SyntaxTree.Abstractions.Root;
 using PatternPal.SyntaxTree.Models.Members.Constructor;
 using PatternPal.SyntaxTree.Models.Members.Field;
+
+#endregion
 
 namespace PatternPal.SyntaxTree.Models.Entities
 {
@@ -20,7 +24,7 @@ namespace PatternPal.SyntaxTree.Models.Entities
         {
             _typeDeclarationSyntax = typeDeclarationSyntax;
 
-            foreach (var member in typeDeclarationSyntax.Members)
+            foreach (MemberDeclarationSyntax member in typeDeclarationSyntax.Members)
             {
                 switch (member)
                 {

@@ -6,7 +6,9 @@ using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using Grpc.Net.Client;
 using PatternPal.LoggingServer;
+
 using ExecutionResult = PatternPal.LoggingServer.ExecutionResult;
+using LogStatusCodes = PatternPal.LoggingServer.LogStatusCodes;
 
 #endregion
 
@@ -32,26 +34,48 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
 
         if (specificLog.discard)
         {
-            taskResult.ResponseMessage = "Discarded";
             return Task.FromResult(taskResult);
         }
 
-        // TODO This should be somewhere in an env-var, right?
-        GrpcChannel grpcChannel = GrpcChannel.ForAddress(
-            "http://161.35.87.186:8080");
-        LogCollectorService.LogCollectorServiceClient client = new(grpcChannel);
-
-        // TODO Response error handling
-        LogResponse response = client.Log(specificLog.request);
-
-        if (response.Message == "Logged" && specificLog.request.HasData)
+        try
         {
-            // We only store the logged data as the previous codeState if we are certain it was successfully logged.
-            UpdateHistory(specificLog.request.ProjectId, specificLog.request.Data);
-        }
+            // TODO add ENV variable for server address
+            GrpcChannel grpcChannel = GrpcChannel.ForAddress(
+                "http://161.35.87.186:8080");
+            LogCollectorService.LogCollectorServiceClient client = new(grpcChannel);
 
-        taskResult.ResponseMessage = response.Message;
+            LogResponse response = client.Log(specificLog.request, deadline: DateTime.UtcNow.AddSeconds(3));
+
+            if (response.Status == LogStatusCodes.LscSuccess && specificLog.request.HasData)
+            {
+                // We only store the logged data as the previous codeState if we are certain it was successfully logged.
+                UpdateHistory(specificLog.request.ProjectId, specificLog.request.Data);
+            }
+
+            taskResult.Message = response.Message;
+            taskResult.Status = (Protos.LogStatusCodes)response.Status;
+        }
+        catch (RpcException e)
+        {
+            switch (e.StatusCode)
+            {
+                case StatusCode.Unavailable:
+                case StatusCode.DeadlineExceeded:
+                    taskResult.Status = Protos.LogStatusCodes.LscUnavailable;
+                    break;
+                default:
+                    taskResult.Status = Protos.LogStatusCodes.LscFailure;
+                    break;
+            };
+            taskResult.Message = e.Message;
+        }
+        catch (Exception e)
+        {
+            taskResult.Status = Protos.LogStatusCodes.LscFailure;
+            taskResult.Message = e.Message;
+        }
         return Task.FromResult(taskResult);
+
     }
 
     /// <summary>
@@ -191,7 +215,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     private static (LogRequest request, bool discard) FileEditLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
-
+        // TODO: Prevent lookup of non-existing project / logging failures
         string currentHash = HashFile(receivedRequest.FilePath);
         string relativePath = Path.GetRelativePath(receivedRequest.ProjectDirectory, receivedRequest.FilePath);
         string oldHash = _lastCodeState[receivedRequest.ProjectId][relativePath];

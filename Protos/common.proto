@@ -15,28 +15,29 @@ message RecognizeResult {
     repeated Result results = 3;
 }
 
+// Result of one specific check inside a recognizer.
 message Result {
+
+    // The requirement which belongs to the check of this result.
     string requirement = 1;
+
+    // The MatchedNode of this result.
     MatchedNode matched_node = 2;
 }
 
 message MatchedNode {
+
+    //The name of the node.
     string name = 1;
 
+    //The location of the node, used for interactivety in extension.
     string path = 2;
+
+    //The specific start in the code file of this node.
     int32 start = 3;
+
+    //The specific length in the code file of this node.
     int32 length = 4;
-}
-
-// Result of one specific check inside a recognizer.
-message CheckResult {
-    optional string requirement = 1;
-
-    // The feedback message to be presented to the user.
-    string feedback_message = 2;
-
-    // The results for any sub-checks which may be contained in this check.
-    repeated CheckResult sub_check_results = 3;
 }
 
 // Recognizers which can be run.

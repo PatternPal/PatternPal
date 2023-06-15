@@ -1,36 +1,43 @@
-﻿
+﻿#region
+
 using System.IO.Compression;
-using System.Xml.Linq;
 using Google.Protobuf;
 using Grpc.Core;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using PatternPal.LoggingServer.Data.Interfaces;
 using EventType = PatternPal.LoggingServer.EventType;
+
+#endregion
 
 namespace PatternPal.LoggingServerTests
 {
+    /// <summary>
+    /// LoggingService tests is a class that tests the LoggingService class. It uses a mock repository to test the database and a mock logger to test the logging.
+    /// </summary>
     public class LoggerServiceTests
     {
+        
         private Mock<ILogger<LoggerService>> _loggerMock;
         private Mock<EventRepository> _repositoryMock;
         private LoggerService _service;
 
+        /// <summary>
+        /// Setup is a method that is called before each test. It creates a mock logger and a mock repository with a inmemory database and then creates a new LoggingService object.
+        /// </summary>
         [SetUp]
         public void Setup()
         {
             _loggerMock = new Mock<ILogger<LoggerService>>();
 
-            var options = new DbContextOptionsBuilder<ProgSnap2ContextClass>()
+            DbContextOptions<ProgSnap2ContextClass> options = new DbContextOptionsBuilder<ProgSnap2ContextClass>()
                 .UseInMemoryDatabase("TestDatabase")
                 .Options;
-            var context = new ProgSnap2ContextClass(options);
+            ProgSnap2ContextClass context = new(options);
             _repositoryMock = new Mock<EventRepository>(context);
             _service = new LoggerService(_loggerMock.Object, _repositoryMock.Object);
         }
-
+    /// <summary>
+    /// TearDown is a method that is called after each test. It deletes the CodeStates directory that is created by the LoggingService.
+    /// </summary>
     [TearDown]
     public void TearDown()
     {
@@ -40,12 +47,14 @@ namespace PatternPal.LoggingServerTests
             Directory.Delete(basePath, true);
         }
     }
-
+        /// <summary>
+        /// This test checks if the Log method calls the repository's Insert method when given a valid request. This request is created with only the required fields.
+        /// </summary>
         [Test]
         public async Task Log_ValidRequest_InsertsEventIntoDatabase()
         {
             // Arrange
-            var request = new LogRequest
+            LogRequest request = new LogRequest
             {
                 EventId = Guid.NewGuid().ToString(),
                 SessionId = Guid.NewGuid().ToString(),
@@ -62,11 +71,14 @@ namespace PatternPal.LoggingServerTests
             _repositoryMock.Verify(r => r.Insert(It.IsAny<ProgSnap2Event>()), Times.Once);
         }
 
+        /// <summary>
+        /// This test checks if the log method returns the correct statuscode when given an invalid request. In this case the datetime is invalid.
+        /// </summary>
         [Test]
-        public void Log_InvalidDateTime_ThrowsInvalidArgument()
+        public void Log_InvalidDateTime_InvalidArgument()
         {
             // Arrange
-            var request = new LogRequest
+            LogRequest request = new LogRequest
             {
                 EventId = Guid.NewGuid().ToString(),
                 SessionId = Guid.NewGuid().ToString(),
@@ -74,18 +86,23 @@ namespace PatternPal.LoggingServerTests
                 EventType = EventType.EvtProjectOpen,
                 ClientTimestamp = "invalid datetime",
                 ProjectId = "TestProject",
-                Data = ByteString.CopyFrom(new byte[] { 1, 2, 3 })
+                Data = ByteString.CopyFrom(1, 2, 3)
             };
 
             // Act & Assert
-            Assert.ThrowsAsync<RpcException>(() => _service.Log(request, Mock.Of<ServerCallContext>()));
+            // assert that response status code is 4
+            Assert.That(_service.Log(request, Mock.Of<ServerCallContext>()).Result.Status, Is.EqualTo(LogStatusCodes.LscInvalidArguments));
+
         }
 
+        /// <summary>
+        /// This session checks if the log method returns the correct statuscode when given an invalid request. In this case the sessionid is invalid.
+        /// </summary>
         [Test]
-        public void Log_InvalidSessionId_ThrowsInvalidArgument()
+        public void Log_InvalidSessionId_InvalidArgument()
         {
             // Arrange
-            var request = new LogRequest
+            LogRequest request = new LogRequest
             {
                 EventId = Guid.NewGuid().ToString(),
                 SessionId = "invalid session ID",
@@ -97,14 +114,17 @@ namespace PatternPal.LoggingServerTests
             };
 
             // Act & Assert
-            Assert.ThrowsAsync<RpcException>(() => _service.Log(request, Mock.Of<ServerCallContext>()));
+            Assert.That(_service.Log(request, Mock.Of<ServerCallContext>()).Result.Status, Is.EqualTo(LogStatusCodes.LscInvalidArguments));
         }
 
+        /// <summary>
+        /// This test checks if the log method returns the correct statuscode when given an invalid request. In this case the eventtype cannot be unknown.
+        /// </summary>
         [Test]
-        public void Log_UnknownEventType_ThrowsInvalidArgument()
+        public void Log_UnknownEventType_InvalidArgument()
         {
             // Arrange
-            var request = new LogRequest
+            LogRequest request = new LogRequest
             {
                 EventId = Guid.NewGuid().ToString(),
                 SessionId = Guid.NewGuid().ToString(),
@@ -116,7 +136,7 @@ namespace PatternPal.LoggingServerTests
             };
 
             // Act & Assert
-            Assert.ThrowsAsync<RpcException>(() => _service.Log(request, Mock.Of<ServerCallContext>()));
+            Assert.That(_service.Log(request, Mock.Of<ServerCallContext>()).Result.Status, Is.EqualTo(LogStatusCodes.LscInvalidArguments));
         }
 
         [Test]
@@ -124,7 +144,7 @@ namespace PatternPal.LoggingServerTests
         {
             // Arrange
             string filenameCs = Guid.NewGuid().ToString() + ".cs";
-            var request = new PatternPal.LoggingServer.LogRequest
+            LogRequest request = new()
             {
                 EventId = Guid.NewGuid().ToString(),
                 SessionId = Guid.NewGuid().ToString(),
@@ -147,12 +167,18 @@ namespace PatternPal.LoggingServerTests
             Assert.That(File.Exists(Path.Combine(codeStatePath, filenameCs)), Is.True);
         }
 
+        /// <summary>
+        /// Helper function to create a zip archive with a single file in it.
+        /// The file is called filename and contains the text "test".
+        /// </summary>
+        /// <param name="filename">Filename of the file to create in the zip archive</param>
+        /// <returns cref="byte[]">Byte array containing the zip archive</returns>
         private byte[] CreateZipArchive(string filename)
         {
-            using MemoryStream ms = new MemoryStream();
-            using ZipArchive archive = new ZipArchive(ms, ZipArchiveMode.Create, true);
+            using MemoryStream ms = new();
+            using ZipArchive archive = new(ms, ZipArchiveMode.Create, true);
             ZipArchiveEntry entry = archive.CreateEntry(filename);
-            using StreamWriter writer = new StreamWriter(entry.Open());
+            using StreamWriter writer = new(entry.Open());
             writer.Write("test");
             writer.Flush();
             writer.Close();

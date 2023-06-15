@@ -1,4 +1,8 @@
-﻿using PatternPal.SyntaxTree.Abstractions;
+﻿#region
+
+using PatternPal.SyntaxTree.Abstractions;
+
+#endregion
 
 namespace PatternPal.SyntaxTree.Models
 {
@@ -8,8 +12,6 @@ namespace PatternPal.SyntaxTree.Models
     /// <example>Examples are private, static, and abstract</example>
     public class Modifier : IModifier
     {
-        // TODO possibly completely change to an Enum instead.
-
         // The type of modifier
         private readonly string _name;
 

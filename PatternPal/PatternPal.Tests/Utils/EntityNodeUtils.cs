@@ -2,7 +2,6 @@
 
 using Microsoft.CodeAnalysis;
 
-using PatternPal.SyntaxTree.Abstractions.Entities;
 using PatternPal.SyntaxTree.Abstractions.Root;
 using PatternPal.SyntaxTree.Models.Entities;
 using PatternPal.SyntaxTree.Models.Members.Field;
