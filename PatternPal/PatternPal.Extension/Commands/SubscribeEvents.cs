@@ -1,4 +1,4 @@
-#region
+﻿#region
 
 using System;
 using System.Collections.Generic;
@@ -255,8 +255,6 @@ namespace PatternPal.Extension.Commands
             string projectFullPath = FindContainingCsprojFile(fileSystemEventArgs.FullPath);
             string projectDirectory = Path.GetDirectoryName(projectFullPath);
             request.ProjectId = GetRelativePath(projectDirectory, projectFullPath);
-
-            string projectFullPath = FindContainingCsprojFile(fileSystemEventArgs.FullPath);
             request.ProjectDirectory = Path.GetDirectoryName(projectFullPath);
             request.ProjectId = GetRelativePath(request.ProjectDirectory, projectFullPath);
             request.FilePath = fileSystemEventArgs.FullPath;
