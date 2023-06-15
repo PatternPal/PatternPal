@@ -91,7 +91,6 @@ public class LeafCheckResult : ICheckResult
     /// </example>
     [JsonIgnore]
     public ICheck ? RelatedCheck { get; init; }
-
 }
 
 /// <summary>

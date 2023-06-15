@@ -267,6 +267,7 @@ file class TestCheck : ICheck
     public string ? Requirement { get; }
     public Func< List< INode > > Result { get; }
     public int DependencyCount { get; }
+    public ICheck ? ParentCheck { get; set; }
 
     public ICheckResult Check(
         IRecognizerContext ctx,

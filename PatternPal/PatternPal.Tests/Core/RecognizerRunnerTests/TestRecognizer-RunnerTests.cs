@@ -1,7 +1,6 @@
 ﻿using PatternPal.Core.Checks;
-using PatternPal.Core;
 using PatternPal.SyntaxTree;
-using static PatternPal.Core.RecognizerRunner;
+using static PatternPal.Core.Runner.RecognizerRunner;
 
 namespace PatternPal.Tests.Core.RecognizerRunnerTests;
 

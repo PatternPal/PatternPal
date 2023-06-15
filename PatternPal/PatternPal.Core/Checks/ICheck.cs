@@ -48,6 +48,11 @@ public interface ICheck
     int DependencyCount { get; }
 
     /// <summary>
+    /// The <see cref="ICheck"/> in which this <see cref="ICheck"/> is contained.
+    /// </summary>
+    ICheck ? ParentCheck { get; set; }
+
+    /// <summary>
     /// Runs the current check on the given <see cref="INode"/>.
     /// </summary>
     /// <param name="ctx">The current <see cref="IRecognizerContext"/>.</param>
@@ -74,6 +79,9 @@ public abstract class CheckBase : ICheck
 
     /// <inheritdoc />
     public abstract int DependencyCount { get; }
+
+    /// <inheritdoc />
+    public ICheck ? ParentCheck { get; set; }
 
     /// <summary>
     /// Sets the priority.

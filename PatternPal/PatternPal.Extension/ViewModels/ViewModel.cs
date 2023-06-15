@@ -1,4 +1,8 @@
-﻿using System.ComponentModel;
+﻿#region
+
+using System.ComponentModel;
+
+#endregion
 
 namespace PatternPal.Extension.ViewModels
 {
