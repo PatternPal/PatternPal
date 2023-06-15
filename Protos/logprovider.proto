@@ -46,7 +46,17 @@ optional string file_path = 27;
 optional string project_directory = 28;
 }
 
-// Input arguments for recognizer response
+enum LogStatusCodes{
+    LSC_UNKNOWN = 0;
+    LSC_SUCCESS = 1;
+    LSC_UNAVAILABLE = 2;
+    LSC_REJECTED = 3;
+    LSC_INVALID_ARGUMENTS=4;
+    LSC_FAILURE=5;
+}
+
+
 message LogEventResponse {
-    string response_message = 1;
+    LogStatusCodes status = 1;
+    string message = 2;
 }
