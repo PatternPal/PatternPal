@@ -58,6 +58,7 @@ namespace PatternPal.Extension.Commands
 
         private static ExtensionLogStatusCodes _serverStatus = ExtensionLogStatusCodes.NoLog;
 
+        private static string _toolInstances = "";
         public static ExtensionLogStatusCodes ServerStatus
         {
             get
@@ -93,7 +94,7 @@ namespace PatternPal.Extension.Commands
             _dteDocumentEvents = _dte.Events.DocumentEvents;
             _package = package;
             _cancellationToken = cancellationToken;
-
+            _toolInstances = $" { _dte.Version } { _dte.Edition } { _dte.Name } {Vsix.Version}";
             // We should call OnChangedLoggingPreference to "load" a possibly stored setting. The
             // application always stored with the internal flag set to false, so this will only actually
             // do something when it was stored as true (and subsequently kickstart the logging session).
@@ -252,8 +253,9 @@ namespace PatternPal.Extension.Commands
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtFileCreate;
             request.CodeStateSection = fileSystemEventArgs.Name;
-
             string projectFullPath = FindContainingCsprojFile(fileSystemEventArgs.FullPath);
+            string projectDirectory = Path.GetDirectoryName(projectFullPath);
+            request.ProjectId = GetRelativePath(projectDirectory, projectFullPath);
             request.ProjectDirectory = Path.GetDirectoryName(projectFullPath);
             request.ProjectId = GetRelativePath(request.ProjectDirectory, projectFullPath);
             request.FilePath = fileSystemEventArgs.FullPath;
@@ -292,6 +294,32 @@ namespace PatternPal.Extension.Commands
 
             LogEventResponse response = PushLog(request);
         }
+
+        /// <summary>
+        /// The event handler for handling the File.Rename Event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="fileSystemEventArgs"></param>
+        internal static void OnFileRename(object sender, RenamedEventArgs e)
+        {
+            // This event might also be triggered by file edits; we can catch this by filtering based on the file extensions.
+            if (Path.GetExtension(e.Name) != ".cs" || Path.GetExtension(e.OldName) != ".cs")
+            {
+                return;
+            }
+
+            LogEventRequest request = CreateStandardLog();
+            request.EventType = EventType.EvtFileRename;
+            request.CodeStateSection = e.Name;
+            request.OldFileName = e.OldName;
+
+            string projectFullPath = FindContainingCsprojFile(e.FullPath);
+            string projectFolderName = Path.GetDirectoryName(projectFullPath);
+            request.ProjectId = GetRelativePath(projectFolderName, projectFullPath);
+
+            LogEventResponse response = PushLog(request);
+        }
+
 
         /// <summary>
         /// The event handler for handling the Session.Start Event. When a new session starts, a (new) sessionID is generated.
@@ -437,7 +465,7 @@ namespace PatternPal.Extension.Commands
         {
             return new LogEventRequest
             {
-                EventId = Guid.NewGuid().ToString(), SubjectId = SubjectId, SessionId = SessionId
+                EventId = Guid.NewGuid().ToString(), SubjectId = SubjectId, SessionId = SessionId, ToolInstances = _toolInstances
             };
         }
 
@@ -558,6 +586,7 @@ namespace PatternPal.Extension.Commands
             
             _watcher.Created += OnFileCreate;
             _watcher.Deleted += OnFileDelete; 
+            _watcher.Renamed += OnFileRename;
 
             _watcher.EnableRaisingEvents = true;
             _watcher.IncludeSubdirectories = true;

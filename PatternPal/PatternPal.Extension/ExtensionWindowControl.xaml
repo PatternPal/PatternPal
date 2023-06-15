@@ -108,6 +108,9 @@
                         VerticalAlignment="Top"
                         Command="{Binding BackCommand}">
                 </Button>
+                <TextBlock Text="{Binding CurrentViewModel.Title}"
+                           VerticalAlignment="Center"
+                           FontSize="50" />
                 <Image Source="Resources/logo.png"
                        HorizontalAlignment="Center"
                        MaxHeight="80"

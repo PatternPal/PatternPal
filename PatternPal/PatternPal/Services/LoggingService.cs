@@ -90,6 +90,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
             Protos.EventType.EvtCompileError => (CompileErrorLog(receivedRequest), false),
             Protos.EventType.EvtFileCreate => (FileCreateLog(receivedRequest), false),
             Protos.EventType.EvtFileDelete => (FileDeleteLog(receivedRequest), false),
+            Protos.EventType.EvtFileRename => (FileRenameLog(receivedRequest), false),
             // Currently, the only LogEvent that might need to be discarded is the FileEditEvent, since the file might not have been changed after all.
             Protos.EventType.EvtFileEdit => FileEditLog(receivedRequest),
 
@@ -114,7 +115,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         {
             EventId = receivedRequest.EventId,
             SubjectId = receivedRequest.SubjectId,
-            ToolInstances = Environment.Version.ToString(),
+            ToolInstances = receivedRequest.ToolInstances,
             ClientTimestamp =
                 DateTime.UtcNow.ToString(
                     "yyyy-MM-dd HH:mm:ss.fff zzz"), //TODO: DateTimeOffset.Now.ToString("yyyy-MM-dd HH:mm:ss.fff  zzz"), : Logging server cannot work with offsets yet
@@ -218,24 +219,48 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     private static (LogRequest request, bool discard) FileEditLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
-        // TODO: Prevent lookup of non-existing project / logging failures
         string currentHash = HashFile(receivedRequest.FilePath);
         string relativePath = Path.GetRelativePath(receivedRequest.ProjectDirectory, receivedRequest.FilePath);
-        string oldHash = _lastCodeState[receivedRequest.ProjectId][relativePath];
 
-        // If these hashes match, the file hasn't changed and the request may be discarded.
-        if (currentHash == oldHash)
+        try
         {
+            string oldHash = _lastCodeState[receivedRequest.ProjectId][relativePath];
+            // If these hashes match, the file hasn't changed and the request may be discarded.
+            if (currentHash == oldHash)
+            {
+                return (sendLog, true);
+            }
+
+            sendLog.EventType = LoggingServer.EventType.EvtFileEdit;
+            sendLog.CodeStateSection = receivedRequest.CodeStateSection;
+            sendLog.ProjectId = receivedRequest.ProjectId;
+            sendLog.Data = ZipPath(receivedRequest.FilePath, relativePath);
+            sendLog.FullCodeState = false;
+
+            return (sendLog, false);
+        }
+        catch
+        {
+            // TODO Determine proper course of action
             return (sendLog, true);
         }
+    }
 
-        sendLog.EventType = LoggingServer.EventType.EvtFileEdit;
+
+    /// <summary>
+    /// Creates a LogRequest that is populated with info obtained from the supplied
+    /// received event and further specific details relevant for the FileRename-event.
+    /// </summary>
+    /// <param name="receivedRequest">The originally received request from the PP extension</param>
+    /// <returns>A LogRequest populated for this specific event</returns>
+    private static LogRequest FileRenameLog(LogEventRequest receivedRequest)
+    {
+        LogRequest sendLog = StandardLog(receivedRequest);
+        sendLog.EventType = LoggingServer.EventType.EvtFileRename;
         sendLog.CodeStateSection = receivedRequest.CodeStateSection;
         sendLog.ProjectId = receivedRequest.ProjectId;
-        sendLog.Data = ZipPath(receivedRequest.FilePath, relativePath);
-        sendLog.FullCodeState = false;
 
-        return (sendLog, false);
+        return sendLog;
     }
 
     /// <summary>
