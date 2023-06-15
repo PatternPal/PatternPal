@@ -11,6 +11,7 @@ using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using PatternPal.Extension.Grpc;
 using PatternPal.Protos;
+using System.Text.RegularExpressions;
 
 #endregion
 
@@ -227,15 +228,16 @@ namespace PatternPal.Extension.Commands
         }
 
         /// <summary>
-        /// The event handler for handling the File.Create Event. The file watcher detects every file created,
-        /// so any event triggers with files other than .cs files are discarded. 
+        /// The event handler for handling the File.Create Event.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="fileSystemEventArgs"></param>
         internal static void OnFileCreate(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
-            // Only log for the creation of .cs files
-            if (Path.GetExtension(fileSystemEventArgs.Name) != ".cs")
+            // Since the fileWatcher will also fire this event for created .cs-files contained in the bin artifacts, we
+            // need to filter for those as well.
+            Regex rgx = new Regex(@"(^|(\\|/))((bin)|(obj))((\\|/))");
+            if (rgx.IsMatch(fileSystemEventArgs.Name))
             {
                 return;
             }
@@ -245,24 +247,31 @@ namespace PatternPal.Extension.Commands
             request.CodeStateSection = fileSystemEventArgs.Name;
 
             string projectFullPath = FindContainingCsprojFile(fileSystemEventArgs.FullPath);
-
             request.ProjectDirectory = Path.GetDirectoryName(projectFullPath);
             request.ProjectId = GetRelativePath(request.ProjectDirectory, projectFullPath);
             request.FilePath = fileSystemEventArgs.FullPath;
-
+            
             LogEventResponse response = PushLog(request);
         }
 
         /// <summary>
-        /// The event handler for handling the File.Delete Event. The file watcher detects every file deleted,
-        /// so any event triggers with files other than .cs files are unhandled.    
+        /// The event handler for handling the File.Delete Event.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="fileSystemEventArgs"></param>
         internal static void OnFileDelete(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
-            // Only log for the creation of .cs files
-            if (Path.GetExtension(fileSystemEventArgs.Name) != ".cs")
+            // Other operations might also cause the fileWatcher to fire this event, so we explicitly check if the file
+            // does not exist anymore.
+            if (File.Exists(fileSystemEventArgs.FullPath))
+            {
+                return;
+            }
+
+            // Since the fileWatcher will also fire this event for deleted .cs-files contained in the bin artifacts, we
+            // need to filter for those as well.
+            Regex rgx = new Regex(@"(^|(\\|/))((bin)|(obj))((\\|/))");
+            if (rgx.IsMatch(fileSystemEventArgs.Name))
             {
                 return;
             }
@@ -271,8 +280,8 @@ namespace PatternPal.Extension.Commands
             request.EventType = EventType.EvtFileDelete;
             request.CodeStateSection = fileSystemEventArgs.Name;
             string projectFullPath = FindContainingCsprojFile(fileSystemEventArgs.FullPath);
-            string projectFolderName = Path.GetDirectoryName(projectFullPath);
-            request.ProjectId = GetRelativePath(projectFolderName, projectFullPath);
+            string projectDirectory = Path.GetDirectoryName(projectFullPath);
+            request.ProjectId = GetRelativePath(projectDirectory, projectFullPath);
 
             LogEventResponse response = PushLog(request);
         }
@@ -535,7 +544,7 @@ namespace PatternPal.Extension.Commands
 
             // Create a new FileSystemWatcher instance
             // TODO We need to explicitely check if that path is not null and handle other cases.
-            _watcher = new FileSystemWatcher(Path.GetDirectoryName(_currentSolution.FullName));
+            _watcher = new FileSystemWatcher(Path.GetDirectoryName(_currentSolution.FullName), "*.cs");
 
             // Set the event handlers
             _watcher.Created += OnFileCreate;
