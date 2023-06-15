@@ -353,7 +353,6 @@ namespace PatternPal.Extension.Commands
         /// </summary>
         internal static void OnSolutionClose()
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
             LogEachProject(EventType.EvtProjectClose);
 
             // We should dispose of the watcher here; just for safety, we add a null check.
@@ -509,6 +508,7 @@ namespace PatternPal.Extension.Commands
         private static void LogEachProject(EventType eventType)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+
             Projects projects = _dte.Solution.Projects;
 
             foreach (Project project in projects)
