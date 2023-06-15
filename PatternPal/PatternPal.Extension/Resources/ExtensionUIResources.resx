@@ -126,6 +126,10 @@
   <data name="Analyse" xml:space="preserve">
     <value>Analyse</value>
   </data>
+  <data name="ConsentScreenText" xml:space="preserve">
+    <value>Thank you for using our application! Before proceeding, we kindly request your consent to log and analyze your data for research purposes. Your privacy is crucial to us, and we ensure that all data will be handled in compliance with regulations.
+By granting consent, you allow us to collect and process data to enhance the application and conduct academic research. </value>
+  </data>
   <data name="Deny" xml:space="preserve">
     <value>Deny</value>
   </data>

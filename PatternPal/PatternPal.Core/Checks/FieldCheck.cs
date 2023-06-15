@@ -21,6 +21,7 @@ internal class FieldCheck : NodeCheck< IField >
     /// <returns>The <see cref="IEntity"/> which represents the type of the <see cref="IField"/>.</returns>
     protected override IEntity GetType4TypeCheck(
         IRecognizerContext ctx,
+        ICheck check,
         IField node) => ctx.Graph.Relations.GetEntityByName(node.GetFieldType())!;
 
     /// <inheritdoc />

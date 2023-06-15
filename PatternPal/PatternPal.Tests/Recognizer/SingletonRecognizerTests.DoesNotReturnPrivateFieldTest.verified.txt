@@ -20,23 +20,19 @@
                   {
                     FeedbackMessage: Node 'MockClass5' has correct type,
                     Correct: true,
-                    DependencyCount: 1,
                     MatchedNode: MockClass5
                   }
                 ],
                 CollectionKind: Any,
-                DependencyCount: 1,
                 MatchedNode: MockClass5,
                 NodeCheckCollectionWrapper: true
               }
             ],
-            DependencyCount: 1,
             MatchedNode: _instance,
             NodeCheckCollectionWrapper: false
           }
         ],
         CollectionKind: Any,
-        DependencyCount: 1,
         NodeCheckCollectionWrapper: true
       },
       {
@@ -55,12 +51,12 @@
                     FeedbackMessage: No Uses relation found.,
                     Priority: Mid,
                     Correct: false,
-                    DependencyCount: 2,
+                    DependencyCount: 1,
                     MatchedNode: _instance
                   }
                 ],
                 CollectionKind: Any,
-                DependencyCount: 2,
+                DependencyCount: 1,
                 MatchedNode: GetInstance,
                 NodeCheckCollectionWrapper: true
               },
@@ -70,27 +66,25 @@
                   {
                     FeedbackMessage: Node 'MockClass5' has correct type,
                     Correct: true,
-                    DependencyCount: 1,
                     MatchedNode: MockClass5
                   }
                 ],
                 CollectionKind: Any,
-                DependencyCount: 1,
                 MatchedNode: MockClass5,
                 NodeCheckCollectionWrapper: true
               }
             ],
-            DependencyCount: 3,
+            DependencyCount: 1,
             MatchedNode: GetInstance,
             NodeCheckCollectionWrapper: false
           }
         ],
         CollectionKind: Any,
-        DependencyCount: 3,
+        DependencyCount: 1,
         NodeCheckCollectionWrapper: true
       }
     ],
-    DependencyCount: 4,
+    DependencyCount: 1,
     MatchedNode: MockClass5,
     NodeCheckCollectionWrapper: false
   }

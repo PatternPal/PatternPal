@@ -8,6 +8,7 @@ using Grpc.Net.Client;
 using PatternPal.LoggingServer;
 
 using ExecutionResult = PatternPal.LoggingServer.ExecutionResult;
+using LogStatusCodes = PatternPal.LoggingServer.LogStatusCodes;
 
 #endregion
 
@@ -23,7 +24,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     /// Stores the last codeState that has been successfully logged to the server. They
     /// are stored as follows: They are stored under [projectID][fileNameRelativeToProjectDir].
     /// </summary>
-    private static Dictionary<String, Dictionary<String, String>> _lastCodeState = new();
+    private static readonly Dictionary<string, Dictionary<string, string>> _lastCodeState = new();
 
     /// <inheritdoc />
     public override Task<LogEventResponse> LogEvent(LogEventRequest receivedRequest, ServerCallContext context)
@@ -33,25 +34,48 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
 
         if (specificLog.discard)
         {
-            taskResult.ResponseMessage = "Discarded";
             return Task.FromResult(taskResult);
         }
 
-        // TODO This should be somewhere in an env-var, right?
-        GrpcChannel grpcChannel = GrpcChannel.ForAddress(
-            "http://161.35.87.186:8080");
-        LogCollectorService.LogCollectorServiceClient client = new(grpcChannel);
-
-        // TODO Response error handling
-        LogResponse response = client.Log(specificLog.request);
-
-        if (response.Message == "Logged" && specificLog.request.HasData)
+        try
         {
-            // We only store the logged data as the previous codeState if we are certain it was successfully logged.
-            UpdateHistory(specificLog.request.ProjectId, specificLog.request.Data);
+            // TODO add ENV variable for server address
+            GrpcChannel grpcChannel = GrpcChannel.ForAddress(
+                "http://161.35.87.186:8080");
+            LogCollectorService.LogCollectorServiceClient client = new(grpcChannel);
+
+            LogResponse response = client.Log(specificLog.request, deadline: DateTime.UtcNow.AddSeconds(3));
+
+            if (response.Status == LogStatusCodes.LscSuccess && specificLog.request.HasData)
+            {
+                // We only store the logged data as the previous codeState if we are certain it was successfully logged.
+                UpdateHistory(specificLog.request.ProjectId, specificLog.request.Data);
+            }
+
+            taskResult.Message = response.Message;
+            taskResult.Status = (Protos.LogStatusCodes)response.Status;
+        }
+        catch (RpcException e)
+        {
+            switch (e.StatusCode)
+            {
+                case StatusCode.Unavailable:
+                case StatusCode.DeadlineExceeded:
+                    taskResult.Status = Protos.LogStatusCodes.LscUnavailable;
+                    break;
+                default:
+                    taskResult.Status = Protos.LogStatusCodes.LscFailure;
+                    break;
+            };
+            taskResult.Message = e.Message;
         }
 
-        taskResult.ResponseMessage = response.Message;
+        catch (Exception e)
+        {
+            taskResult.Status = Protos.LogStatusCodes.LscFailure;
+            taskResult.Message = e.Message;
+        }
+
         return Task.FromResult(taskResult);
     }
 
@@ -66,6 +90,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
             Protos.EventType.EvtCompileError => (CompileErrorLog(receivedRequest), false),
             Protos.EventType.EvtFileCreate => (FileCreateLog(receivedRequest), false),
             Protos.EventType.EvtFileDelete => (FileDeleteLog(receivedRequest), false),
+            Protos.EventType.EvtFileRename => (FileRenameLog(receivedRequest), false),
             // Currently, the only LogEvent that might need to be discarded is the FileEditEvent, since the file might not have been changed after all.
             Protos.EventType.EvtFileEdit => FileEditLog(receivedRequest),
 
@@ -90,7 +115,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         {
             EventId = receivedRequest.EventId,
             SubjectId = receivedRequest.SubjectId,
-            ToolInstances = Environment.Version.ToString(),
+            ToolInstances = receivedRequest.ToolInstances,
             ClientTimestamp =
                 DateTime.UtcNow.ToString(
                     "yyyy-MM-dd HH:mm:ss.fff zzz"), //TODO: DateTimeOffset.Now.ToString("yyyy-MM-dd HH:mm:ss.fff  zzz"), : Logging server cannot work with offsets yet
@@ -151,9 +176,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
 
     /// <summary>
     /// Creates a LogRequest that is populated with info obtained from the supplied
-    /// received event and further specific details relevant for the FileEdit-event.
-    /// Note that this LogRequest is discarded when no difference between the last logged
-    /// state of the file and the current state of the file was detected.
+    /// received event and further specific details relevant for the FileCreate-event.
     /// </summary>
     /// <param name="receivedRequest">The originally received request from the PP extension</param>
     /// <returns>A LogRequest populated for this specific event</returns>
@@ -163,6 +186,10 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         sendLog.EventType = LoggingServer.EventType.EvtFileCreate;
         sendLog.CodeStateSection = receivedRequest.CodeStateSection;
         sendLog.ProjectId = receivedRequest.ProjectId;
+
+        string relativePath = Path.GetRelativePath(receivedRequest.ProjectDirectory, receivedRequest.FilePath);
+        sendLog.Data = ZipPath(receivedRequest.FilePath, relativePath);
+        sendLog.FullCodeState = false;
 
         return sendLog;
     }
@@ -192,24 +219,48 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     private static (LogRequest request, bool discard) FileEditLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
-
         string currentHash = HashFile(receivedRequest.FilePath);
         string relativePath = Path.GetRelativePath(receivedRequest.ProjectDirectory, receivedRequest.FilePath);
-        string oldHash = _lastCodeState[receivedRequest.ProjectId][relativePath];
 
-        // If these hashes match, the file hasn't changed and the request may be discarded.
-        if (currentHash == oldHash)
+        try
         {
+            string oldHash = _lastCodeState[receivedRequest.ProjectId][relativePath];
+            // If these hashes match, the file hasn't changed and the request may be discarded.
+            if (currentHash == oldHash)
+            {
+                return (sendLog, true);
+            }
+
+            sendLog.EventType = LoggingServer.EventType.EvtFileEdit;
+            sendLog.CodeStateSection = receivedRequest.CodeStateSection;
+            sendLog.ProjectId = receivedRequest.ProjectId;
+            sendLog.Data = ZipPath(receivedRequest.FilePath, relativePath);
+            sendLog.FullCodeState = false;
+
+            return (sendLog, false);
+        }
+        catch
+        {
+            // TODO Determine proper course of action
             return (sendLog, true);
         }
+    }
 
-        sendLog.EventType = LoggingServer.EventType.EvtFileEdit;
+
+    /// <summary>
+    /// Creates a LogRequest that is populated with info obtained from the supplied
+    /// received event and further specific details relevant for the FileRename-event.
+    /// </summary>
+    /// <param name="receivedRequest">The originally received request from the PP extension</param>
+    /// <returns>A LogRequest populated for this specific event</returns>
+    private static LogRequest FileRenameLog(LogEventRequest receivedRequest)
+    {
+        LogRequest sendLog = StandardLog(receivedRequest);
+        sendLog.EventType = LoggingServer.EventType.EvtFileRename;
         sendLog.CodeStateSection = receivedRequest.CodeStateSection;
         sendLog.ProjectId = receivedRequest.ProjectId;
-        sendLog.Data = ZipPath(receivedRequest.FilePath, relativePath);
-        sendLog.FullCodeState = false;
 
-        return (sendLog, false);
+        return sendLog;
     }
 
     /// <summary>

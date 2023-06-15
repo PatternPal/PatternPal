@@ -1,5 +1,6 @@
 ﻿#region
 
+using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -12,7 +13,7 @@ using PatternPal.SyntaxTree.Abstractions.Root;
 
 #endregion
 
-namespace PatternPal.Core;
+namespace PatternPal.Core.Runner;
 
 /// <summary>
 /// This class is the driver which handles running the recognizers.
@@ -110,9 +111,13 @@ public class RecognizerRunner
         _graph = new SyntaxGraph();
         foreach (string file in files)
         {
-            string content = FileManager.MakeStringFromFile(file);
+            if (!File.Exists(file))
+            {
+                throw new ArgumentException($"'{file}' does not exist");
+            }
+
             _graph.AddFile(
-                content,
+                File.ReadAllText(file),
                 file);
         }
         _graph.CreateGraph();
@@ -131,9 +136,13 @@ public class RecognizerRunner
         _graph = new SyntaxGraph();
         foreach (string file in filePaths)
         {
-            string content = FileManager.MakeStringFromFile(file);
+            if (!File.Exists(file))
+            {
+                throw new ArgumentException($"'{file}' does not exist");
+            }
+
             _graph.AddFile(
-                content,
+                File.ReadAllText(file),
                 file);
         }
         _graph.CreateGraph();
@@ -261,9 +270,6 @@ public class RecognizerRunner
         NodeCheckResult parentCheckResult,
         bool pruneAll = false)
     {
-        // TODO: Properly handle CheckCollectionKind.
-        // TODO: Properly handle Priorities.
-
         // Pass 1: Collect results to be pruned.
 
         // The results which should be pruned.
@@ -358,20 +364,17 @@ public class RecognizerRunner
                                     resultsByNode,
                                     nodeCheckResult,
                                     pruneAll)
-                                && (Prune(
+                                && Prune(
                                     notCheckResult.Priority,
-                                    pruneAll)))
+                                    pruneAll))
                             {
                                 resultsToBePruned.Add(notCheckResult);
                                 notCheckResult.Pruned = true;
                             }
                             break;
                         }
-                        case NotCheckResult nestedNotCheckResult:
-                        {
-                            // TODO: Check this during check creation?
+                        case NotCheckResult:
                             throw new ArgumentException("Nested not checks not supported");
-                        }
                         default:
                             throw new ArgumentException(
                                 $"Unknown check result '{notCheckResult.NestedResult}'",
@@ -672,11 +675,6 @@ public interface IRecognizerContext
     internal IEntity CurrentEntity { get; }
 
     /// <summary>
-    /// The <see cref="ICheck"/> which is the direct parent of the current <see cref="ICheck"/>.
-    /// </summary>
-    internal ICheck ParentCheck { get; }
-
-    /// <summary>
     /// The <see cref="ICheck"/> belonging to the <see cref="CurrentEntity"/>.
     /// </summary>
     internal ICheck EntityCheck { get; }
@@ -752,136 +750,4 @@ file class RootNode : INode
 
     /// <inheritdoc />
     bool INode.IsPlaceholder => true;
-}
-
-/// <summary>
-/// The Score of a <see cref="ICheckResult"/>, used to sort the final root <see cref="ICheckResult"/>.
-/// </summary>
-public struct Score : IComparable< Score >
-{
-    internal int Knockout,
-                 High,
-                 Mid,
-                 Low;
-
-    /// <summary>
-    /// Adds up every component of the right <see cref="Score"/> from the left <see cref="Score"/>.
-    /// </summary>
-    public static Score operator +(
-        Score a,
-        Score b) =>
-        new()
-        {
-            Knockout = a.Knockout + b.Knockout,
-            High = a.High + b.High,
-            Mid = a.Mid + b.Mid,
-            Low = a.Low + b.Low
-        };
-
-    /// <summary>
-    /// Subtracts every component of the right <see cref="Score"/> from the left <see cref="Score"/>.
-    /// </summary>
-    public static Score operator -(
-        Score a,
-        Score b) =>
-        new()
-        {
-            Knockout = a.Knockout - b.Knockout,
-            High = a.High - b.High,
-            Mid = a.Mid - b.Mid,
-            Low = a.Low - b.Low
-        };
-
-    /// <summary>
-    /// Calculates and returns the <see cref="Score"/> property belonging to a <see cref="LeafCheckResult"/>.
-    /// </summary>
-    /// <param name="priority">The priority of the <see cref="LeafCheckResult"/></param>
-    /// <param name="correct">Whether the <see cref="LeafCheckResult"/> was correct</param>
-    internal static Score CreateScore(
-        Priority priority,
-        bool correct)
-    {
-        int score = correct
-            ? 1
-            : 0;
-        switch (priority)
-        {
-            case Priority.Knockout:
-                return new Score
-                       {
-                           Knockout = score
-                       };
-            case Priority.High:
-                return new Score
-                       {
-                           High = score
-                       };
-            case Priority.Mid:
-                return new Score
-                       {
-                           Mid = score
-                       };
-            case Priority.Low:
-                return new Score
-                       {
-                           Low = score
-                       };
-            default:
-                throw new ArgumentException($"{priority} is an unhandled type of priority.");
-        }
-    }
-
-    /// <summary>
-    /// Calculates what the <see cref="Score"/> of the <see cref="NodeCheckResult"/> of a <see cref="NotCheck"/>,
-    /// based on the <see cref="Score"/> of the <see cref="ICheckResult"/> of its <see cref="NotCheck.NestedCheck"/>.
-    /// </summary>
-    /// <param name="priority">The <see cref="Priority"/> of the parent <see cref="NotCheck"/></param>
-    /// <param name="score">The <see cref="Score"/> of the computed <see cref="NotCheck.NestedCheck"/></param>
-    /// <returns>The <see cref="Score"/> belonging to the parent <see cref="NotCheck"/></returns>
-    internal static Score GetNot(
-        Priority priority,
-        Score score) =>
-        new()
-        {
-            Knockout = (priority == Priority.Knockout && score.Knockout == 0)
-                ? 1
-                : 0,
-            High = (priority == Priority.High && score.High == 0)
-                ? 1
-                : 0,
-            Mid = (priority == Priority.Mid && score.Mid == 0)
-                ? 1
-                : 0,
-            Low = (priority == Priority.Low && score.Low == 0)
-                ? 1
-                : 0
-        };
-
-    /// <inheritdoc />>
-    public int CompareTo(
-        Score other)
-    {
-        if (Knockout > other.Knockout)
-            return -1;
-        if (Knockout < other.Knockout)
-            return 1;
-        if (High > other.High)
-            return -1;
-        if (High < other.High)
-            return 1;
-        if (Mid > other.Mid)
-            return -1;
-        if (Mid < other.Mid)
-            return 1;
-        if (Low > other.Low)
-            return -1;
-        if (Low < other.Low)
-            return 1;
-        return 0;
-    }
-
-    public override string ToString()
-    {
-        return $"Knockout: {Knockout}, High: {High}, Mid: {Mid}, Low: {Low}";
-    }
 }

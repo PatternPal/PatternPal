@@ -1,8 +1,4 @@
-﻿#region
-
-#endregion
-
-namespace PatternPal.Tests.Checks;
+﻿namespace PatternPal.Tests.Checks;
 
 [TestFixture]
 public class ParameterCheckTests
@@ -271,6 +267,7 @@ file class TestCheck : ICheck
     public string ? Requirement { get; }
     public Func< List< INode > > Result { get; }
     public int DependencyCount { get; }
+    public ICheck ? ParentCheck { get; set; }
 
     public ICheckResult Check(
         IRecognizerContext ctx,

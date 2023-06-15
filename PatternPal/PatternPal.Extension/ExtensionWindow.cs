@@ -1,9 +1,10 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Forms.VisualStyles;
 using PatternPal.Extension.Resources;
 using PatternPal.Extension.Stores;
 using PatternPal.Extension.ViewModels;
@@ -11,6 +12,8 @@ using Microsoft.VisualStudio.Shell;
 using PatternPal.Extension.Grpc;
 using Community.VisualStudio.Toolkit;
 using Microsoft.VisualStudio.Imaging;
+
+#endregion
 
 namespace PatternPal.Extension
 {

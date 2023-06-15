@@ -1,4 +1,6 @@
-﻿namespace PatternPal.TestRunner;
+﻿using PatternPal.Core.Runner;
+
+namespace PatternPal.TestRunner;
 
 internal class Program
 {

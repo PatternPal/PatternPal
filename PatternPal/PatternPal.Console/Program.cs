@@ -11,6 +11,7 @@ using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 
 using PatternPal.Core;
+using PatternPal.Core.Runner;
 using PatternPal.Protos;
 
 using Spectre.Console;

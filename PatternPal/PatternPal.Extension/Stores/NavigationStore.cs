@@ -1,7 +1,10 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using PatternPal.Extension.ViewModels;
+
+#endregion
 
 namespace PatternPal.Extension.Stores
 {

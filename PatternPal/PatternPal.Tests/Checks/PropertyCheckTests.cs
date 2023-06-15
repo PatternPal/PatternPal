@@ -1,8 +1,4 @@
-﻿#region
-
-#endregion
-
-namespace PatternPal.Tests.Checks;
+﻿namespace PatternPal.Tests.Checks;
 
 internal class PropertyCheckTests
 {

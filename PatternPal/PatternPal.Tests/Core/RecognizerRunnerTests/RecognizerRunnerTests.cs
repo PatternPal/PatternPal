@@ -1,6 +1,4 @@
-﻿using PatternPal.SyntaxTree.Models.Entities;
-
-namespace PatternPal.Tests.Core.RecognizerRunnerTests;
+﻿namespace PatternPal.Tests.Core.RecognizerRunnerTests;
 
 [TestFixture]
 public class RecognizerRunnerTests
