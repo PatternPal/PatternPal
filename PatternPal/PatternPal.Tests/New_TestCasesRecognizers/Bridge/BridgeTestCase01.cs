@@ -18,16 +18,23 @@ namespace PatternPal.Tests.New_TestCasesRecognizers.Bridge
      *            ✓  a) has a private/protected field or property with the type of the Implementation interface or abstract class
      *            ✓  b) has a method
      *            ✓  c) has a method that calls a method in the Implementation interface or abstract class
+     *            ✓  d) has either,
+     *                  1) the property option as described in a, or has
+     *            ✓     2) a constructor with a parameter with the Implementation type and that uses the field as described in a, or has
+     *                  3) a method with a parameter with the Implementation type and that uses the field as described in a
      *         Concrete Implementation
      *            ✓  a) is an implementation of the Implementation interface or inherits from the 'Implementation' abstract class
-     *            ✓  b) if Implementation is an abstract class it should override it's abstract methods
+     *               b) if Implementation is an abstract class it should override it's abstract methods
      *         Refined Abstraction:
      *            ✓  a) inherits from the Abstraction class
      *            ✓  b) has an method
      *         Client class: 
      *            ✓  a) uses a method in the Abstraction class
      *            ✓  b) creates a Concrete Implementation instance
-     *            ✓  c) uses the field or property in Abstraction
+     *            ✓  c) sets the field or property in Abstraction, either through
+     *                  1) it is a property and it sets this, or through
+     *            ✓     2) a constructor as described in Abstraction d2
+     *                  3) a method as described in Abstraction d3
      */
 
     // Implementation class

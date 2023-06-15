@@ -29,24 +29,31 @@ The priority of a requirement is noted with the (low)-(mid)-(high)-(knockout) cr
 **Client class**
 1. (mid) uses a method in the `Abstraction` class
 2. (low) creates a `Concrete Implementation` instance
-3. (low) uses the field or property in `Abstraction`
+3. (low) sets the field or property in `Abstraction`, either through 
+    1. a constructor in `Abstraction` with a parameter of type `Implementation`, or through
+    2. a method in `Abstraction` with a parameter of type `Implementation`, or through 
+    3. setting the property
 
 **Abstraction class**
 1. (knockout) has a private / protected field or property with the `Implementation` type
 2. (knockout) has a method 
 3. (high) there is a method that calls a method in `Implementation`
+4. (mid) has either
+    1. the property option as described in 1, or has
+    2. a constructor with a parameter with the `Implementation` type and that uses the field as described in 1, or has
+    3. a method with a parameter with the `Impelementation` type and that uses the field as described in 1
 
 **Implementation**
 1. (knockout) is an interface or abstract class
 2. (high) has at least one (abstract) method
 
 **Concrete Implementations**
-1. (high) is an implementation of the `Implementation` interface or inherits from the `Implementation` abstract class
-2. (mid) if `Implementation` is an abstract class it should override it's abstract methods
+1. (knockout) is an implementation of the `Implementation` interface or inherits from the `Implementation` abstract class
+2. (high) if `Implementation` is an abstract class it should override it's abstract methods
 
-**Refined Abstraction** optional
-1. (low) inherits from the `Abstraction` class
-2. (low) has an method
+**Refined Abstraction**
+1. (knockout) inherits from the `Abstraction` class
+2. (high) has an method
 
 ## References
 [^1]: Refactoring Guru, Creational Patterns - Bridge. https://refactoring.guru/design-patterns/bridge

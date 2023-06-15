@@ -30,14 +30,14 @@ namespace PatternPal.Core.Recognizers.Helper_Classes
         public override ClassCheck ConcreteImplementation(CheckBase implementationCheck, MethodCheck methodInImplementation)
         {
             return Class(
-                Priority.High,
+                Priority.Knockout,
                 Inherits(
-                    Priority.High,
+                    Priority.Knockout,
                     implementationCheck),
                 Method(
-                    Priority.Mid,
+                    Priority.High,
                     Overrides(
-                        Priority.Mid,
+                        Priority.High,
                         methodInImplementation)
                     )
             );

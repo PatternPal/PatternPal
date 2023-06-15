@@ -18,7 +18,7 @@ internal abstract class BridgeRecognizerParent
 
         // requirements checks for Abstraction class
         // req. a
-        ICheck fieldOrProperty = HasFieldOrProperty(implementationCheck);
+        ICheck fieldOrProperty = HasFieldOrProperty(out PropertyCheck implementationProperty, implementationCheck);
 
         // req. b
         MethodCheck methodInAbstraction = Method(Priority.Knockout);
@@ -26,7 +26,12 @@ internal abstract class BridgeRecognizerParent
         // req. c
         MethodCheck methodInAbstractionWithUse = HasMethodWithUse(methodInImplementation);
 
-        ClassCheck abstractionCheck = Class(Priority.High, fieldOrProperty, methodInAbstraction, methodInAbstractionWithUse);
+        // req. d
+        ICheck setAvailabilityFieldOrProperty = SetAvailabilityFieldOrPropertyCheck(
+            out ConstructorCheck setImplementationConstructor, out MethodCheck setImplementationMethod, 
+            implementationCheck, implementationProperty);
+
+        ClassCheck abstractionCheck = Class(Priority.High, fieldOrProperty, methodInAbstraction, methodInAbstractionWithUse, setAvailabilityFieldOrProperty);
 
         // requirements checks for Concrete Implementations
         // req. a & b 
@@ -34,23 +39,26 @@ internal abstract class BridgeRecognizerParent
 
         // requirements checks for Refined Abstraction
         // req. a
-        ICheck inheritsFromAbstraction = Inherits(Priority.Low, abstractionCheck);
+        ICheck inheritsFromAbstraction = Inherits(Priority.Knockout, abstractionCheck);
 
         // req. b
-        ICheck methodInRefinedAbstraction = Method(Priority.Low);
+        ICheck methodInRefinedAbstraction = Method(Priority.High);
 
-        ClassCheck refinedAbstraction = Class(Priority.Low, inheritsFromAbstraction, methodInRefinedAbstraction);
+        ClassCheck refinedAbstraction = Class(Priority.High, inheritsFromAbstraction, methodInRefinedAbstraction);
 
         // requirements checks for Client
         // req. a 
         MethodCheck methodUseInAbstraction = Method(Priority.Mid, Uses(Priority.Mid, methodInAbstractionWithUse));
 
-        // req. b & c
+        // req. c
+        ICheck setsImplementationField = SetsImplementationFieldCheck(implementationProperty, setImplementationConstructor, setImplementationMethod);
+
+        
         ClassCheck clientCheck = Class( 
             Priority.Low,
-            Uses(Priority.Mid, methodInAbstractionWithUse),
+            methodUseInAbstraction,
             Creates(Priority.Low, concreteImplementationCheck), 
-            Uses(Priority.Low, fieldOrProperty) );
+            setsImplementationField );
 
         return new ICheck[]
         {
@@ -81,8 +89,15 @@ internal abstract class BridgeRecognizerParent
     /// <param name="implementationCheck"> A <see cref="CheckBase"/> that either holds a <see cref="InterfaceCheck"/>
     /// or a <see cref="ClassCheck"/>.</param>
     /// <returns>A <see cref="ICheck"/> that checks for the existence of either a field or a property. </returns>
-    public ICheck HasFieldOrProperty(CheckBase implementationCheck)
+    public ICheck HasFieldOrProperty(out PropertyCheck implementationProperty, CheckBase implementationCheck)
     {
+        implementationProperty = Property(Priority.Knockout,
+            Type(Priority.Knockout, implementationCheck),
+            Any(Priority.Knockout,
+                Modifiers(Priority.Knockout, Modifier.Private),
+                Modifiers(Priority.Knockout, Modifier.Protected))
+        );
+
         return Any(
             Priority.Knockout,
             Field(
@@ -93,12 +108,7 @@ internal abstract class BridgeRecognizerParent
                     Modifiers(Priority.Knockout, Modifier.Protected)
                 )
             ),
-            Property(Priority.Knockout, 
-                Type(Priority.Knockout, implementationCheck), 
-                Any(Priority.Knockout, 
-                    Modifiers(Priority.Knockout, Modifier.Private), 
-                    Modifiers(Priority.Knockout, Modifier.Protected))
-            )
+            implementationProperty
         );
     }
 
@@ -117,6 +127,34 @@ internal abstract class BridgeRecognizerParent
                 methodInImplementation));
     }
 
+    internal ICheck SetAvailabilityFieldOrPropertyCheck(out ConstructorCheck setImplementationConstructor, out MethodCheck setImplementationMethod,
+        CheckBase implementationCheck, PropertyCheck implementationProperty)
+    {
+        ICheck[] properties = new ICheck[]
+        {
+            Not(Priority.Mid,
+                Modifiers(Priority.Mid,
+                    Modifier.Private)),            
+            Not(Priority.Mid,
+                Modifiers(Priority.Mid,
+                    Modifier.Protected)),
+            Parameters(
+                Priority.Mid,
+                Type(Priority.Mid, implementationCheck))
+        };
+
+        setImplementationConstructor = Constructor(Priority.Mid, properties);
+
+        setImplementationMethod = Method(Priority.Mid, properties);
+
+        return Any(
+            Priority.Mid,
+            implementationProperty,
+            setImplementationConstructor,
+            setImplementationMethod
+        );
+    }
+
     /// <summary>
     /// A <see cref="ClassCheck"/> that checks the requirements of the Concrete Implementation class, which holds a
     /// <see cref="RelationCheck"/> to check the relation with the Implementation class or interface
@@ -126,4 +164,14 @@ internal abstract class BridgeRecognizerParent
     /// <returns>A <see cref="ClassCheck"/> that checks for a class that adheres to the requirements of an instance of
     /// the concreteImplementation</returns>
     public abstract ClassCheck ConcreteImplementation(CheckBase implementationCheck, MethodCheck methodInImplementation);
+    
+    internal ICheck SetsImplementationFieldCheck(ICheck fieldOrProperty, ConstructorCheck setImplementationConstructor, MethodCheck setImplementationMethod)
+    {
+        return Any(
+            Priority.Low,
+            Uses(Priority.Low, setImplementationConstructor),
+            Uses(Priority.Low, setImplementationMethod),
+            Uses(Priority.Low, fieldOrProperty)
+        );
+    }
 }

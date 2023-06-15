@@ -19,6 +19,10 @@ namespace PatternPal.Core.Recognizers;
 ///     a) has a private/protected field or property with the type of the Implementation interface or abstract class <br/>
 ///     b) has a method
 ///     c) has a method that calls a method in the Implementation interface or abstract class <br/>
+///     d) has either <br/>
+///         1. the property option as described in a, or has <br/>
+///         2. a constructor with a parameter with the Implementation type and that uses the field as described in a, or has <br/>
+///         3. a method with a parameter with the Implementation type and that uses the field as described in a  <br/>
 /// <br/>
 /// 
 /// Requirements for the Concrete Implementations: <br/>
@@ -34,7 +38,10 @@ namespace PatternPal.Core.Recognizers;
 /// Requirements for the Client class: <br/>
 ///     a) calls a method in the Abstraction class <br/>
 ///     b) creates a Concrete Implementation instance <br/>
-///     c) uses the field or property in Abstraction <br/>
+///     c) sets the field or property in Abstraction, either through
+///         1. it is a property and it sets this, or through
+///         2. a constructor as described in Abstraction d2
+///         3. a method as described in Abstraction d3
 /// </remarks>
 
 internal class BridgeRecognizer : IRecognizer
