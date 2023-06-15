@@ -49,10 +49,10 @@ internal sealed class PatternPalCommand : Command< Settings >
                 settings.Pattern
             } );
 
-        IList< (Recognizer, ICheckResult) > result = recognizerRunner.Run();
+        IList< RecognizerRunner.RunResult > result = recognizerRunner.Run();
 
         string jsonOutput = JsonSerializer.Serialize(
-            result.Select(res => res.Item2),
+            result.Select(res => res.CheckResult),
             new JsonSerializerOptions
             {
                 Converters =

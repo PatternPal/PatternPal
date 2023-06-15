@@ -148,27 +148,70 @@ public class RecognizerRunner
         _graph.CreateGraph();
     }
 
+    public record RunResult(
+        Recognizer ? RecognizerType,
+        ICheckResult CheckResult,
+        IList< string > ? Requirements);
+
+    private static IEnumerable< string > GetRequirementsFromCheckResult(
+        ICheckResult checkResult)
+    {
+        if (!string.IsNullOrEmpty(checkResult.Check.Requirement))
+        {
+            yield return checkResult.Check.Requirement;
+        }
+
+        switch (checkResult)
+        {
+            case LeafCheckResult:
+                yield break;
+            case NotCheckResult notCheckResult:
+                foreach (string requirement in GetRequirementsFromCheckResult(notCheckResult.NestedResult))
+                {
+                    yield return requirement;
+                }
+                yield break;
+            case NodeCheckResult nodeCheckResult:
+                foreach (ICheckResult childCheckResult in nodeCheckResult.ChildrenCheckResults)
+                {
+                    foreach (string requirement in GetRequirementsFromCheckResult(childCheckResult))
+                    {
+                        yield return requirement;
+                    }
+                }
+                yield break;
+        }
+    }
+
     /// <summary>
     /// Runs the configured <see cref="IRecognizer"/>s.
     /// </summary>
     /// <param name="pruneAll">Whether to prune regardless of <see cref="Priority"/>s</param>
     /// <returns>The result of the <see cref="IRecognizer"/>, or <see langword="null"/> if the <see cref="SyntaxGraph"/> is empty.</returns>
-    public IList< (Recognizer, ICheckResult) > Run(
+    public IList< RunResult > Run(
         bool pruneAll = false)
     {
         // If the graph is empty, we don't have to do any work.
         if (_graph.IsEmpty)
         {
-            return new List< (Recognizer, ICheckResult) >();
+            return new List< RunResult >();
         }
 
-        IList< (Recognizer, ICheckResult) > results = new List< (Recognizer, ICheckResult) >();
+        List< RunResult > results = new();
         if (_recognizers != null)
         {
             foreach (IRecognizer recognizer in _recognizers)
             {
                 ICheck rootCheck = recognizer.CreateRootCheck();
-                results.Add((recognizer.RecognizerType, RunImpl(rootCheck)));
+                ICheckResult rootCheckResult = RunImpl(rootCheck);
+                // TODO: Sort. Prepend e.g. '1.1', '2', '3.2' to requirement, and sort based on this.
+                IList< string > requirements = GetRequirementsFromCheckResult(rootCheckResult).ToList();
+
+                results.Add(
+                    new RunResult(
+                        recognizer.RecognizerType,
+                        rootCheckResult,
+                        requirements));
             }
         }
         else
@@ -179,8 +222,11 @@ public class RecognizerRunner
                     Priority.Knockout,
                     null,
                     _instruction.Checks);
-                // TODO: Get recognizer
-                results.Add((Recognizer.Unknown, RunImpl(rootCheck)));
+                results.Add(
+                    new RunResult(
+                        null,
+                        RunImpl(rootCheck),
+                        null));
             }
             else
             {

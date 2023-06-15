@@ -7,11 +7,13 @@
 public class NodeCheck< TNode > : CheckBase
     where TNode : INode
 {
-    // The sub-checks of the current check.
-    private readonly IEnumerable< ICheck > _subChecks;
-
     // The kind of this collection of checks.
     private readonly CheckCollectionKind _kind;
+
+    /// <summary>
+    /// The sub-<see cref="ICheck"/>s of this <see cref="ICheck"/>.
+    /// </summary>
+    internal IEnumerable< ICheck > SubChecks { get; }
 
     /// <inheritdoc />
     public override Func< List< INode > > Result => () => _matchedEntities
@@ -33,7 +35,7 @@ public class NodeCheck< TNode > : CheckBase
 
     /// <summary>
     /// The dependencies to other <see cref="INode"/>s this check has.
-    /// While calculating the dependencies, it calculates the dependencies of its <see cref="_subChecks"/>.
+    /// While calculating the dependencies, it calculates the dependencies of its <see cref="SubChecks"/>.
     /// </summary>
     public override int DependencyCount
     {
@@ -43,7 +45,7 @@ public class NodeCheck< TNode > : CheckBase
             if (_dependencyCount is null)
             {
                 int dependencyCount = 0;
-                foreach (ICheck subCheck in _subChecks)
+                foreach (ICheck subCheck in SubChecks)
                 {
                     dependencyCount += subCheck.DependencyCount;
                 }
@@ -66,12 +68,12 @@ public class NodeCheck< TNode > : CheckBase
                 // don't want to increment the perfect score.
                 if (typeof( INode ) != typeof( TNode ))
                 {
-                    _perfectScore = Score.CreateScore(
-                        Priority,
-                        true);
+                    //_perfectScore = Score.CreateScore(
+                    //    Priority,
+                    //    true);
                 }
 
-                foreach (ICheck subCheck in _subChecks)
+                foreach (ICheck subCheck in SubChecks)
                 {
                     _perfectScore += subCheck.PerfectScore;
                 }
@@ -97,10 +99,10 @@ public class NodeCheck< TNode > : CheckBase
             priority,
             requirement)
     {
-        _subChecks = subChecks;
+        SubChecks = subChecks;
         _kind = kind;
 
-        foreach (ICheck subCheck in _subChecks)
+        foreach (ICheck subCheck in SubChecks)
         {
             subCheck.ParentCheck = this;
         }
@@ -116,7 +118,7 @@ public class NodeCheck< TNode > : CheckBase
 
         // Run the sub-checks.
         IList< ICheckResult > subCheckResults = new List< ICheckResult >();
-        foreach (ICheck subCheck in _subChecks)
+        foreach (ICheck subCheck in SubChecks)
         {
             subCheckResults.Add(
                 RunCheck(
@@ -336,7 +338,7 @@ public class NodeCheck< TNode > : CheckBase
     {
         nodeCheck._matchedEntities ??= new List< INode >();
 
-        foreach (ICheck subCheck in nodeCheck._subChecks)
+        foreach (ICheck subCheck in nodeCheck.SubChecks)
         {
             MarkCheckAsSeenImpl(subCheck);
         }

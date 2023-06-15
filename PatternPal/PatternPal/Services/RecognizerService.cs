@@ -40,21 +40,21 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
         RecognizerRunner runner = new(
             files,
             request.Recognizers );
-        IList< (Recognizer, ICheckResult) > results = runner.Run();
+        IList< RecognizerRunner.RunResult > results = runner.Run();
 
         // KNOWN: The root check result is always a NodeCheckResult.
-        foreach ((Recognizer recognizer, ICheckResult rootCheckResult) in results)
+        foreach (RecognizerRunner.RunResult runResult in results)
         {
             RecognizeResult rootResult = new()
                                          {
-                                             Recognizer = recognizer,
+                                             Recognizer = runResult.RecognizerType!.Value,
                                              Feedback = "Goed gedoet"
                                          };
 
             Dictionary< string, Result > resultsByRequirement = new();
 
-            foreach (Result result in GetResults(
-                rootCheckResult))
+            // Get all requirements for which we have results.
+            foreach (Result result in GetResults(runResult.CheckResult))
             {
                 if (!resultsByRequirement.TryGetValue(
                         result.Requirement,
@@ -65,9 +65,20 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                 }
             }
 
-            // TODO: Check if requirements are correct, or remove result if not.
-
-            // TODO: Collect all requirements from checks.
+            // Check which requirements have no results (because the results were pruned).
+            foreach (string requirement in runResult.Requirements!)
+            {
+                if (!resultsByRequirement.TryGetValue(
+                    requirement,
+                    out Result ? foundResult))
+                {
+                    resultsByRequirement[ requirement ] = new Result
+                                                          {
+                                                              Requirement = requirement,
+                                                          };
+                    continue;
+                }
+            }
 
             // TODO: Generate feedback for incorrect/missing requirements.
 
@@ -122,7 +133,14 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                                          };
                 }
 
-                yield return result;
+                // Handle incorrect results.
+                Score perfectScore = resultToProcess.Check.PerfectScore;
+                Score actualScore = resultToProcess.Score;
+
+                if (perfectScore.Equals(actualScore))
+                {
+                    yield return result;
+                }
             }
 
             switch (resultToProcess)

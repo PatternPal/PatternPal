@@ -27,11 +27,12 @@ internal class TypeCheck : CheckBase
 
     /// <inheritdoc />
     public override Score PerfectScore => _perfectScore.Equals(default)
-        ? _perfectScore = _getNode.Match(
-            relatedCheck => relatedCheck.PerfectScore,
-            _ => Score.CreateScore(
-                Priority,
-                true))
+        ? _perfectScore = Score.CreateScore(
+                              Priority,
+                              true)
+                          + _getNode.Match(
+                              relatedCheck => relatedCheck.PerfectScore,
+                              _ => default)
         : _perfectScore;
 
     /// <summary>
