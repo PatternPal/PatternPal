@@ -260,15 +260,14 @@ namespace PatternPal.Extension.Commands
         }
 
         /// <summary>
-        /// The event handler for handling the File.Rename Event. The file watcher detects every file renamed,
-        /// so any event triggers with files other than .cs files are unhandled.    
+        /// The event handler for handling the File.Rename Event.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="fileSystemEventArgs"></param>
         internal static void OnFileRename(object sender, RenamedEventArgs e)
         {
-            // Only log for the creation of .cs files
-            if (Path.GetExtension(e.OldName) != ".cs" || Path.GetExtension(e.Name) != ".cs")
+            // This event might also be triggered by file edits; we can catch this by filtering based on the old file extension.
+            if (Path.GetExtension(e.OldName) != ".cs")
             {
                 return;
             }
@@ -292,7 +291,6 @@ namespace PatternPal.Extension.Commands
         /// </summary>
         internal static void OnSessionStart()
         {
-            //SubjectId = Privacy.Instance.SubjectId;
             SessionId = Guid.NewGuid().ToString();
 
             LogEventRequest request = CreateStandardLog();
