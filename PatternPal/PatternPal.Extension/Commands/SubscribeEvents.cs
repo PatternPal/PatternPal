@@ -62,9 +62,11 @@ namespace PatternPal.Extension.Commands
         {
             get
             {
-                if (_doLog) {
+                if (_doLog)
+                {
                     return _serverStatus;
                 }
+
                 return ExtensionLogStatusCodes.NoLog;
             }
             set => _serverStatus = value;
@@ -175,6 +177,11 @@ namespace PatternPal.Extension.Commands
             vsBuildScope scope,
             vsBuildAction action)
         {
+            if (action == vsBuildAction.vsBuildActionClean)
+            {
+                return;
+            }
+
             ThreadHelper.ThrowIfNotOnUIThread(); ;
             string outputMessage = _dte.Solution.SolutionBuild.LastBuildInfo != 0 ? 
                 $"Build {action.ToString()} with errors. See the output window for details." : 
@@ -193,7 +200,6 @@ namespace PatternPal.Extension.Commands
             else
             {
                 string pathSolutionDirectory = Path.GetDirectoryName(_currentSolution.FullName);
-
                 request.CodeStateSection = GetRelativePath(pathSolutionDirectory, pathSolutionFile);
             }
 
