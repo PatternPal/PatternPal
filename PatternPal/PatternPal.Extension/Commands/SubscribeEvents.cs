@@ -51,6 +51,7 @@ namespace PatternPal.Extension.Commands
         private static bool _unhandledExceptionThrown;
 
         public static string SessionId { get; set; }
+        public static string SubjectId { get; set; }
 
         private static bool _doLog = false;
 
@@ -82,6 +83,7 @@ namespace PatternPal.Extension.Commands
             ExtensionWindowPackage package, CancellationToken cancellationToken)
         {
             _dte = dte;
+
             ThreadHelper.ThrowIfNotOnUIThread();
             _dteDebugEvents = _dte.Events.DebuggerEvents;
             _dteSolutionEvents = _dte.Events.SolutionEvents;
@@ -243,10 +245,12 @@ namespace PatternPal.Extension.Commands
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtFileCreate;
             request.CodeStateSection = fileSystemEventArgs.Name;
-            string projectFullPath = FindContainingCsprojFile(fileSystemEventArgs.FullPath);
-            string projectDirectory = Path.GetDirectoryName(projectFullPath);
-            request.ProjectId = GetRelativePath(projectDirectory, projectFullPath);
 
+            string projectFullPath = FindContainingCsprojFile(fileSystemEventArgs.FullPath);
+            request.ProjectDirectory = Path.GetDirectoryName(projectFullPath);
+            request.ProjectId = GetRelativePath(request.ProjectDirectory, projectFullPath);
+            request.FilePath = fileSystemEventArgs.FullPath;
+            
             LogEventResponse response = PushLog(request);
         }
 
@@ -288,7 +292,9 @@ namespace PatternPal.Extension.Commands
         /// </summary>
         internal static void OnSessionStart()
         {
-            //SubjectId = Privacy.Instance.SubjectId;
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            SubjectId = Privacy.Instance.SubjectId;
             SessionId = Guid.NewGuid().ToString();
 
             LogEventRequest request = CreateStandardLog();
@@ -404,6 +410,7 @@ namespace PatternPal.Extension.Commands
         public static void OnPatternRecognized(RecognizeRequest recognizeRequest,
             IList<RecognizeResult> recognizeResults)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             if (_package == null || !Privacy.Instance.DoLogData)
             { 
               return; 
@@ -432,7 +439,7 @@ namespace PatternPal.Extension.Commands
         {
             return new LogEventRequest
             {
-                EventId = Guid.NewGuid().ToString(), SubjectId = Privacy.Instance.SubjectId, SessionId = SessionId
+                EventId = Guid.NewGuid().ToString(), SubjectId = SubjectId, SessionId = SessionId
             };
         }
 
@@ -541,7 +548,7 @@ namespace PatternPal.Extension.Commands
 
             // Set the event handlers
             _watcher.Created += OnFileCreate;
-            _watcher.Deleted += OnFileDelete;
+            _watcher.Deleted += OnFileDelete; 
 
             // Enable the FileSystemWatcher to begin watching for changes
             _watcher.EnableRaisingEvents = true;

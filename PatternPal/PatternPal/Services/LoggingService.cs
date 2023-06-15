@@ -1,4 +1,4 @@
-﻿#region
+#region
 
 using Google.Protobuf;
 using System.IO.Compression;
@@ -24,7 +24,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     /// Stores the last codeState that has been successfully logged to the server. They
     /// are stored as follows: They are stored under [projectID][fileNameRelativeToProjectDir].
     /// </summary>
-    private static Dictionary<String, Dictionary<String, String>> _lastCodeState = new();
+    private static readonly Dictionary<string, Dictionary<string, string>> _lastCodeState = new();
 
     /// <inheritdoc />
     public override Task<LogEventResponse> LogEvent(LogEventRequest receivedRequest, ServerCallContext context)
@@ -174,9 +174,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
 
     /// <summary>
     /// Creates a LogRequest that is populated with info obtained from the supplied
-    /// received event and further specific details relevant for the FileEdit-event.
-    /// Note that this LogRequest is discarded when no difference between the last logged
-    /// state of the file and the current state of the file was detected.
+    /// received event and further specific details relevant for the FileCreate-event.
     /// </summary>
     /// <param name="receivedRequest">The originally received request from the PP extension</param>
     /// <returns>A LogRequest populated for this specific event</returns>
@@ -186,6 +184,10 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         sendLog.EventType = LoggingServer.EventType.EvtFileCreate;
         sendLog.CodeStateSection = receivedRequest.CodeStateSection;
         sendLog.ProjectId = receivedRequest.ProjectId;
+
+        string relativePath = Path.GetRelativePath(receivedRequest.ProjectDirectory, receivedRequest.FilePath);
+        sendLog.Data = ZipPath(receivedRequest.FilePath, relativePath);
+        sendLog.FullCodeState = false;
 
         return sendLog;
     }
