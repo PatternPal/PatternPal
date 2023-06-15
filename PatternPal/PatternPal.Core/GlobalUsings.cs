@@ -9,6 +9,7 @@ global using System.Text.Json.Serialization;
 global using OneOf;
 
 global using PatternPal.Core.Checks;
+global using PatternPal.Core.Runner;
 global using PatternPal.Protos;
 global using PatternPal.SyntaxTree.Abstractions;
 global using PatternPal.SyntaxTree.Abstractions.Entities;

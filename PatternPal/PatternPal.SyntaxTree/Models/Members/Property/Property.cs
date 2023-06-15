@@ -1,9 +1,13 @@
-﻿using System.Linq;
+﻿#region
+
+using System.Linq;
 
 using Microsoft.CodeAnalysis.CSharp;
 using PatternPal.SyntaxTree.Abstractions;
 using PatternPal.SyntaxTree.Abstractions.Members;
 using PatternPal.SyntaxTree.Utils;
+
+#endregion
 
 namespace PatternPal.SyntaxTree.Models.Members.Property
 {
@@ -11,24 +15,24 @@ namespace PatternPal.SyntaxTree.Models.Members.Property
     public class Property : AbstractNode, IProperty
     {
         private readonly IEntity _parent;
-        internal readonly PropertyDeclarationSyntax propertyDeclarationSyntax;
+        internal readonly PropertyDeclarationSyntax PropertyDeclarationSyntax;
 
         public Property(PropertyDeclarationSyntax node, IEntity parent) : base(node, parent?.GetRoot())
         {
-            propertyDeclarationSyntax = node;
+            PropertyDeclarationSyntax = node;
             _parent = parent;
         }
 
         /// <inheritdoc />
         public override string GetName()
         {
-            return propertyDeclarationSyntax.Identifier.Text;
+            return PropertyDeclarationSyntax.Identifier.Text;
         }
 
         /// <inheritdoc />
         public IEnumerable<IModifier> GetModifiers()
         {
-            return propertyDeclarationSyntax.Modifiers.ToModifiers();
+            return PropertyDeclarationSyntax.Modifiers.ToModifiers();
         }
 
         /// <inheritdoc />
@@ -40,7 +44,7 @@ namespace PatternPal.SyntaxTree.Models.Members.Property
         /// <inheritdoc />
         public TypeSyntax GetPropertyType()
         {
-            return propertyDeclarationSyntax.Type;
+            return PropertyDeclarationSyntax.Type;
         }
 
         /// <inheritdoc />
@@ -58,35 +62,35 @@ namespace PatternPal.SyntaxTree.Models.Members.Property
         /// <inheritdoc />
         public bool HasGetter()
         {
-            if (propertyDeclarationSyntax.ExpressionBody != null)
+            if (PropertyDeclarationSyntax.ExpressionBody != null)
             {
                 return true;
             }
 
-            if (propertyDeclarationSyntax.AccessorList == null)
+            if (PropertyDeclarationSyntax.AccessorList == null)
             {
                 return false;
             }
 
-            return propertyDeclarationSyntax.AccessorList.Accessors.Any(SyntaxKind.GetAccessorDeclaration);
+            return PropertyDeclarationSyntax.AccessorList.Accessors.Any(SyntaxKind.GetAccessorDeclaration);
         }
 
         /// <inheritdoc />
         public bool HasSetter()
         {
-            if (propertyDeclarationSyntax.AccessorList == null)
+            if (PropertyDeclarationSyntax.AccessorList == null)
             {
                 return false;
             }
 
-            return propertyDeclarationSyntax.AccessorList.Accessors.Any(SyntaxKind.SetAccessorDeclaration);
+            return PropertyDeclarationSyntax.AccessorList.Accessors.Any(SyntaxKind.SetAccessorDeclaration);
         }
 
         /// <inheritdoc />
         public IMethod GetGetter()
         {
             return new PropertyGetMethod(
-                this, propertyDeclarationSyntax.AccessorList?
+                this, PropertyDeclarationSyntax.AccessorList?
                     .Accessors.First(s => s.Kind() == SyntaxKind.GetAccessorDeclaration)
             );
         }
@@ -95,7 +99,7 @@ namespace PatternPal.SyntaxTree.Models.Members.Property
         public IMethod GetSetter()
         {
             return new PropertySetMethod(
-                this, propertyDeclarationSyntax.AccessorList?
+                this, PropertyDeclarationSyntax.AccessorList?
                     .Accessors.First(s => s.Kind() == SyntaxKind.SetAccessorDeclaration)
             );
         }
@@ -103,12 +107,12 @@ namespace PatternPal.SyntaxTree.Models.Members.Property
         /// <inheritdoc />
         public bool IsField()
         {
-            if (propertyDeclarationSyntax.AccessorList == null)
+            if (PropertyDeclarationSyntax.AccessorList == null)
             {
                 return false;
             }
 
-            var accessors = propertyDeclarationSyntax.AccessorList.Accessors;
+            SyntaxList<AccessorDeclarationSyntax> accessors = PropertyDeclarationSyntax.AccessorList.Accessors;
             return accessors.Any(SyntaxKind.GetAccessorDeclaration) &&
                    accessors.All(a => a.Body == null && a.ExpressionBody == null);
         }

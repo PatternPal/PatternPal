@@ -1,5 +1,6 @@
 ﻿#region
 
+using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -12,7 +13,7 @@ using PatternPal.SyntaxTree.Abstractions.Root;
 
 #endregion
 
-namespace PatternPal.Core;
+namespace PatternPal.Core.Runner;
 
 /// <summary>
 /// This class is the driver which handles running the recognizers.
@@ -110,9 +111,13 @@ public class RecognizerRunner
         _graph = new SyntaxGraph();
         foreach (string file in files)
         {
-            string content = FileManager.MakeStringFromFile(file);
+            if (!File.Exists(file))
+            {
+                throw new ArgumentException($"'{file}' does not exist");
+            }
+
             _graph.AddFile(
-                content,
+                File.ReadAllText(file),
                 file);
         }
         _graph.CreateGraph();
@@ -131,9 +136,13 @@ public class RecognizerRunner
         _graph = new SyntaxGraph();
         foreach (string file in filePaths)
         {
-            string content = FileManager.MakeStringFromFile(file);
+            if (!File.Exists(file))
+            {
+                throw new ArgumentException($"'{file}' does not exist");
+            }
+
             _graph.AddFile(
-                content,
+                File.ReadAllText(file),
                 file);
         }
         _graph.CreateGraph();
@@ -209,7 +218,10 @@ public class RecognizerRunner
                 rootResult,
                 pruneAll);
 
-            PrioritySort(rootResult);
+            SortResultsByPriorities(
+                resultsByNode,
+                rootResult);
+
             return rootResult;
         }
     }
@@ -355,9 +367,9 @@ public class RecognizerRunner
                                     resultsByNode,
                                     nodeCheckResult,
                                     pruneAll)
-                                && (Prune(
+                                && Prune(
                                     notCheckResult.Priority,
-                                    pruneAll)))
+                                    pruneAll))
                             {
                                 resultsToBePruned.Add(notCheckResult);
                                 notCheckResult.Pruned = true;
@@ -513,12 +525,15 @@ public class RecognizerRunner
     /// based their <see cref="Priority"/>s and the <see cref="Score"/>s and <see cref="Priority"/>s
     /// of their children.
     /// </summary>
-    internal static void PrioritySort(
+    internal static void SortResultsByPriorities(
+        IReadOnlyDictionary< INode, List< ICheckResult > > resultsByNode,
         NodeCheckResult result)
     {
         foreach (ICheckResult childResult in result.ChildrenCheckResults)
         {
-            PrioritySortHelper(childResult);
+            SortResultsByPrioritiesImpl(
+                resultsByNode,
+                childResult);
             result.Score += childResult.Score;
         }
 
@@ -526,44 +541,122 @@ public class RecognizerRunner
             (
                 a,
                 b) => a.Score.CompareTo(b.Score));
-    }
 
-    /// <summary>
-    /// Sorts and determines the <see cref="Score"/> of the childResult based on the type of childResult.
-    /// </summary>
-    private static void PrioritySortHelper(
-        ICheckResult childResult)
-    {
-        switch (childResult)
+        static void SortResultsByPrioritiesImpl(
+            IReadOnlyDictionary< INode, List< ICheckResult > > resultsByNode,
+            ICheckResult childResult)
         {
-            case LeafCheckResult leafResult:
-                leafResult.Score = Score.CreateScore(
-                    leafResult.Priority,
-                    leafResult.Correct);
-                //TODO add Relation and TypeCheck. Idea underneath. However not as straightforward since a RelationCheck and a TypeCheck are NodeCheckResults
-                /*if (leafResult is { Correct: true, Check: RelationCheck or TypeCheck })
+            switch (childResult)
+            {
+                case LeafCheckResult leafResult:
                 {
-                    // Get the CheckResults belonging to the related node.
-                    List<ICheckResult> resultsOfNode = resultsByNode[leafResult.MatchedNode];
+                    leafResult.Score = Score.CreateScore(
+                        leafResult.Priority,
+                        leafResult.Correct);
 
-                    // Find the CheckResult linked to the check which searched for the related node.
-                    ICheckResult? relevantResult = resultsOfNode.FirstOrDefault(
-                        result => result.Check == leafResult.RelatedCheck);
+                    // Take into account the score of the related node if this result belongs to a
+                    // Relation- or TypeCheck.
+                    if (leafResult is {Correct: true, Check: RelationCheck or TypeCheck, MatchedNode: not null})
+                    {
+                        // Get the CheckResults belonging to the related node.
+                        List< ICheckResult > resultsOfNode = resultsByNode[ leafResult.MatchedNode ];
 
-                    leafResult.Score += relevantResult.Score;
-                }*/
-                break;
-            case NodeCheckResult nodeResult:
-                PrioritySort(nodeResult);
-                break;
-            case NotCheckResult notResult:
-                PrioritySortHelper(notResult.NestedResult);
-                notResult.Score = Score.GetNot(
-                    notResult.NestedResult.Priority,
-                    notResult.NestedResult.Score);
-                break;
-            default:
-                throw new ArgumentException($"{childResult} is not a supported ICheckResult");
+                        // Find the CheckResult linked to the check which searched for the related node.
+                        ICheckResult ? relevantResult = resultsOfNode.FirstOrDefault(
+                            result => result.Check == leafResult.RelatedCheck);
+
+                        if (relevantResult == null)
+                        {
+                            // Probably unreachable.
+                            break;
+                        }
+
+                        // Increment the score with the score of the related node. If the related
+                        // node is not an entity, take the score of its entity parent. Otherwise,
+                        // correctly implemented members in bad parents would weigh more than poorly
+                        // implemented members in good parents.
+                        leafResult.Score += leafResult.MatchedNode switch
+                        {
+                            IEntity => relevantResult.Score,
+                            IMember member => GetParentScoreFromMember(
+                                resultsByNode,
+                                relevantResult,
+                                member),
+                            _ => throw new UnreachableException("Relation to non-IMember or IEntity")
+                        };
+
+                        // Gets the score of the `member`s parent of type Entity.
+                        static Score GetParentScoreFromMember(
+                            IReadOnlyDictionary< INode, List< ICheckResult > > resultsByNode,
+                            ICheckResult relevantResult,
+                            IMember member)
+                        {
+                            IEntity parent = member.GetParent();
+
+                            foreach (ICheckResult parentResult in resultsByNode[ parent ])
+                            {
+                                if (parentResult is LeafCheckResult)
+                                {
+                                    continue;
+                                }
+
+                                if (HasDescendantResult(
+                                    parentResult,
+                                    relevantResult))
+                                {
+                                    return parentResult.Score;
+                                }
+                            }
+
+                            return default;
+
+                            // Checks if `relevantResult` is a descendant of `parentResult`.
+                            static bool HasDescendantResult(
+                                ICheckResult parentResult,
+                                ICheckResult relevantResult)
+                            {
+                                if (parentResult == relevantResult)
+                                {
+                                    return true;
+                                }
+
+                                switch (parentResult)
+                                {
+                                    case LeafCheckResult:
+                                        return false;
+                                    case NotCheckResult notCheckResult:
+                                        return HasDescendantResult(
+                                            notCheckResult.NestedResult,
+                                            relevantResult);
+                                    case NodeCheckResult nodeCheckResult:
+                                        return nodeCheckResult.ChildrenCheckResults.Any(
+                                            childResult => HasDescendantResult(
+                                                childResult,
+                                                relevantResult));
+                                    default:
+                                        throw new ArgumentException($"Unsupported CheckResult type: {parentResult.GetType()}");
+                                }
+                            }
+                        }
+                    }
+                    break;
+                }
+                case NodeCheckResult nodeResult:
+                    SortResultsByPriorities(
+                        resultsByNode,
+                        nodeResult);
+                    break;
+                case NotCheckResult notResult:
+                    SortResultsByPrioritiesImpl(
+                        resultsByNode,
+                        notResult.NestedResult);
+                    notResult.Score = Score.GetNot(
+                        notResult.NestedResult.Priority,
+                        notResult.NestedResult.Score);
+                    break;
+                default:
+                    throw new ArgumentException($"{childResult} is not a supported ICheckResult");
+            }
         }
     }
 }
@@ -668,136 +761,4 @@ file class RootNode : INode
 
     /// <inheritdoc />
     bool INode.IsPlaceholder => true;
-}
-
-/// <summary>
-/// The Score of a <see cref="ICheckResult"/>, used to sort the final root <see cref="ICheckResult"/>.
-/// </summary>
-public struct Score : IComparable< Score >
-{
-    internal int Knockout,
-                 High,
-                 Mid,
-                 Low;
-
-    /// <summary>
-    /// Adds up every component of the right <see cref="Score"/> from the left <see cref="Score"/>.
-    /// </summary>
-    public static Score operator +(
-        Score a,
-        Score b) =>
-        new()
-        {
-            Knockout = a.Knockout + b.Knockout,
-            High = a.High + b.High,
-            Mid = a.Mid + b.Mid,
-            Low = a.Low + b.Low
-        };
-
-    /// <summary>
-    /// Subtracts every component of the right <see cref="Score"/> from the left <see cref="Score"/>.
-    /// </summary>
-    public static Score operator -(
-        Score a,
-        Score b) =>
-        new()
-        {
-            Knockout = a.Knockout - b.Knockout,
-            High = a.High - b.High,
-            Mid = a.Mid - b.Mid,
-            Low = a.Low - b.Low
-        };
-
-    /// <summary>
-    /// Calculates and returns the <see cref="Score"/> property belonging to a <see cref="LeafCheckResult"/>.
-    /// </summary>
-    /// <param name="priority">The priority of the <see cref="LeafCheckResult"/></param>
-    /// <param name="correct">Whether the <see cref="LeafCheckResult"/> was correct</param>
-    internal static Score CreateScore(
-        Priority priority,
-        bool correct)
-    {
-        int score = correct
-            ? 1
-            : 0;
-        switch (priority)
-        {
-            case Priority.Knockout:
-                return new Score
-                       {
-                           Knockout = score
-                       };
-            case Priority.High:
-                return new Score
-                       {
-                           High = score
-                       };
-            case Priority.Mid:
-                return new Score
-                       {
-                           Mid = score
-                       };
-            case Priority.Low:
-                return new Score
-                       {
-                           Low = score
-                       };
-            default:
-                throw new ArgumentException($"{priority} is an unhandled type of priority.");
-        }
-    }
-
-    /// <summary>
-    /// Calculates what the <see cref="Score"/> of the <see cref="NodeCheckResult"/> of a <see cref="NotCheck"/>,
-    /// based on the <see cref="Score"/> of the <see cref="ICheckResult"/> of its <see cref="NotCheck.NestedCheck"/>.
-    /// </summary>
-    /// <param name="priority">The <see cref="Priority"/> of the parent <see cref="NotCheck"/></param>
-    /// <param name="score">The <see cref="Score"/> of the computed <see cref="NotCheck.NestedCheck"/></param>
-    /// <returns>The <see cref="Score"/> belonging to the parent <see cref="NotCheck"/></returns>
-    internal static Score GetNot(
-        Priority priority,
-        Score score) =>
-        new()
-        {
-            Knockout = (priority == Priority.Knockout && score.Knockout == 0)
-                ? 1
-                : 0,
-            High = (priority == Priority.High && score.High == 0)
-                ? 1
-                : 0,
-            Mid = (priority == Priority.Mid && score.Mid == 0)
-                ? 1
-                : 0,
-            Low = (priority == Priority.Low && score.Low == 0)
-                ? 1
-                : 0
-        };
-
-    /// <inheritdoc />>
-    public int CompareTo(
-        Score other)
-    {
-        if (Knockout > other.Knockout)
-            return -1;
-        if (Knockout < other.Knockout)
-            return 1;
-        if (High > other.High)
-            return -1;
-        if (High < other.High)
-            return 1;
-        if (Mid > other.Mid)
-            return -1;
-        if (Mid < other.Mid)
-            return 1;
-        if (Low > other.Low)
-            return -1;
-        if (Low < other.Low)
-            return 1;
-        return 0;
-    }
-
-    public override string ToString()
-    {
-        return $"Knockout: {Knockout}, High: {High}, Mid: {Mid}, Low: {Low}";
-    }
 }

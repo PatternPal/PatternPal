@@ -1,12 +1,4 @@
-﻿#region
-
-using PatternPal.SyntaxTree.Abstractions.Entities;
-
-using static PatternPal.Core.Checks.CheckBuilder;
-
-#endregion
-
-namespace PatternPal.Tests.Checks;
+﻿namespace PatternPal.Tests.Checks;
 
 [TestFixture]
 public class ClassCheckTests

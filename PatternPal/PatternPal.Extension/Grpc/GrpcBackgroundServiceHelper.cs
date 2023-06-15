@@ -1,4 +1,4 @@
-﻿#region
+﻿﻿#region
 
 using System;
 using System.Diagnostics;
@@ -11,10 +11,16 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace PatternPal.Extension.Grpc
 {
+    /// <summary>
+    /// Helper class for starting and stopping the background service.
+    /// </summary>
     internal static class GrpcBackgroundServiceHelper
     {
         private static Process _backgroundService;
 
+        /// <summary>
+        /// Starts the background service. This method is called when the extension is loaded.
+        /// </summary>
         internal static void StartBackgroundService()
         {
             try
@@ -43,7 +49,6 @@ namespace PatternPal.Extension.Grpc
             }
             catch (Exception exception)
             {
-                // TODO: Improve error handling
                 VsShellUtilities.ShowMessageBox(
                     ExtensionWindowPackage.PackageInstance,
                     $"The background service failed to start: {exception.Message}",
@@ -53,7 +58,9 @@ namespace PatternPal.Extension.Grpc
                     OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
             }
         }
-
+        /// <summary>
+        ///  Kills the background service. This method is called when the extension is unloaded.
+        /// </summary>
         internal static void KillBackgroundService()
         {
             if (_backgroundService.HasExited)

@@ -4,7 +4,7 @@
 /// Base class for <see cref="ICheck"/>s which can have sub-<see cref="ICheck"/>s.
 /// </summary>
 /// <typeparam name="TNode">The <see cref="INode"/> type which this <see cref="ICheck"/> supports.</typeparam>
-internal class NodeCheck< TNode > : CheckBase
+public class NodeCheck< TNode > : CheckBase
     where TNode : INode
 {
     // The sub-checks of the current check.

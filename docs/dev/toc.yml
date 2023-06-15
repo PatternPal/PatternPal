@@ -2,7 +2,9 @@
 - name: Pattern recognition
   items:
   # -- Design patterns
-  - name: Design patterns
+  - name: Design pattern
+  - name: Adapter
+    href: recognizers/patterns/adapter.md
   - name: Bridge
     href: recognizers/patterns/bridge.md
   - name: Decorator
@@ -11,8 +13,7 @@
     href: recognizers/patterns/singleton.md
   - name: Strategy
     href: recognizers/patterns/strategy.md
-
-
+    
   # -- Design
   - name: Design
   - name: Recognizer

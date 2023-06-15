@@ -1,5 +1,6 @@
 ﻿#region
 
+using PatternPal.Core.Runner;
 using PatternPal.Core.StepByStep;
 
 using InstructionSet = PatternPal.Protos.InstructionSet;
@@ -58,8 +59,8 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
     {
         // Provided with the recognizer and instruction number return the instruction detailed
         // information for display to the user.
-        Recognizer protorecognizer = request.Recognizers;
-        IStepByStepRecognizer recognizer = RecognizerRunner.SupportedStepByStepRecognizers[ protorecognizer ];
+        Recognizer protoRecognizer = request.Recognizers;
+        IStepByStepRecognizer recognizer = RecognizerRunner.SupportedStepByStepRecognizers[ protoRecognizer ];
         IInstruction instruction = recognizer.GenerateStepsList()[ (int)request.InstructionNumber ];
         GetInstructionByIdResponse response = new()
                                               {
@@ -119,24 +120,5 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
                     Result = false
                 });
         }
-    }
-
-    // TODO Method can still be useful, common.proto CheckResult is based on old codebase.
-    /// <inheritdoc />
-    private static CheckResult CreateCheckResult(
-        ICheckResult checkResult)
-    {
-        throw new NotImplementedException();
-        //CheckResult newCheckResult = new()
-        //{
-        //    FeedbackType = (CheckResult.Types.FeedbackType)((int)checkResult.GetFeedbackType() + 1),
-        //    Hidden = checkResult.IsHidden,
-        //    FeedbackMessage = ResourceUtils.ResultToString(checkResult),
-        //};
-        //foreach (Recognizers.Abstractions.ICheckResult childCheckResult in checkResult.GetChildFeedback())
-        //{
-        //    newCheckResult.SubCheckResults.Add(CreateCheckResult(childCheckResult));
-        //}
-        //return newCheckResult;
     }
 }

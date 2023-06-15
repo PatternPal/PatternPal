@@ -1,5 +1,8 @@
 ﻿namespace PatternPal.Core.StepByStep;
 
+/// <summary>
+/// Represents a single step in a <see cref="IStepByStepRecognizer"/> implementation.
+/// </summary>
 public interface IInstruction
 {
     /// <summary>
@@ -15,10 +18,5 @@ public interface IInstruction
     /// <summary>
     /// Checks that need to be passed to continue.
     /// </summary>
-    List<ICheck> Checks { get; }
-
-    /// <summary>
-    /// The file for which the <see cref="Checks"/> need to run on.
-    /// </summary>
-    string FileId { get; set; }
+    List< ICheck > Checks { get; }
 }

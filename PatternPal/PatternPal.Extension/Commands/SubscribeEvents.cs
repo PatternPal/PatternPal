@@ -1,21 +1,29 @@
 ﻿#region
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.Shell;
-using PatternPal.Extension.Grpc;
 using EnvDTE;
 using EnvDTE80;
+using Microsoft.VisualStudio.Shell;
+using PatternPal.Extension.Grpc;
 using PatternPal.Protos;
-using System.Threading;
-using System.Collections.Generic;
-using System.Linq;
+using System.Text.RegularExpressions;
 
 #endregion
 
 namespace PatternPal.Extension.Commands
 {
+    public enum ExtensionLogStatusCodes
+    {
+        Available,
+        Unavailable,
+        Error,
+        NoLog
+    }
     /// <summary>
     /// A static class which is responsible for subscribing logged event in ProgSnap2 format.
     /// </summary>
@@ -43,10 +51,29 @@ namespace PatternPal.Extension.Commands
         private static bool _unhandledExceptionThrown;
 
         public static string SessionId { get; set; }
+        public static string SubjectId { get; set; }
 
         private static bool _doLog = false;
 
         private static CancellationToken _cancellationToken;
+
+        private static ExtensionLogStatusCodes _serverStatus = ExtensionLogStatusCodes.NoLog;
+
+        public static ExtensionLogStatusCodes ServerStatus
+        {
+            get
+            {
+                if (_doLog)
+                {
+                    return _serverStatus;
+                }
+
+                return ExtensionLogStatusCodes.NoLog;
+            }
+            set => _serverStatus = value;
+        }
+
+        public static Action ServerStatusChanged = delegate { };
 
         /// <summary>
         /// Initializes the preparation for the subscription of the logged events. 
@@ -58,6 +85,7 @@ namespace PatternPal.Extension.Commands
             ExtensionWindowPackage package, CancellationToken cancellationToken)
         {
             _dte = dte;
+
             ThreadHelper.ThrowIfNotOnUIThread();
             _dteDebugEvents = _dte.Events.DebuggerEvents;
             _dteSolutionEvents = _dte.Events.SolutionEvents;
@@ -151,6 +179,11 @@ namespace PatternPal.Extension.Commands
             vsBuildScope scope,
             vsBuildAction action)
         {
+            if (action == vsBuildAction.vsBuildActionClean)
+            {
+                return;
+            }
+
             ThreadHelper.ThrowIfNotOnUIThread(); ;
             string outputMessage = _dte.Solution.SolutionBuild.LastBuildInfo != 0 ? 
                 $"Build {action.ToString()} with errors. See the output window for details." : 
@@ -169,7 +202,6 @@ namespace PatternPal.Extension.Commands
             else
             {
                 string pathSolutionDirectory = Path.GetDirectoryName(_currentSolution.FullName);
-
                 request.CodeStateSection = GetRelativePath(pathSolutionDirectory, pathSolutionFile);
             }
 
@@ -202,15 +234,16 @@ namespace PatternPal.Extension.Commands
         }
 
         /// <summary>
-        /// The event handler for handling the File.Create Event. The file watcher detects every file created,
-        /// so any event triggers with files other than .cs files are unhandled.    
+        /// The event handler for handling the File.Create Event.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="fileSystemEventArgs"></param>
         internal static void OnFileCreate(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
-            // Only log for the creation of .cs files
-            if (Path.GetExtension(fileSystemEventArgs.Name) != ".cs")
+            // Since the fileWatcher will also fire this event for created .cs-files contained in the bin artifacts, we
+            // need to filter for those as well.
+            Regex rgx = new Regex(@"(^|(\\|/))((bin)|(obj))((\\|/))");
+            if (rgx.IsMatch(fileSystemEventArgs.Name))
             {
                 return;
             }
@@ -218,23 +251,33 @@ namespace PatternPal.Extension.Commands
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtFileCreate;
             request.CodeStateSection = fileSystemEventArgs.Name;
-            string projectFullPath = FindContainingCsprojFile(fileSystemEventArgs.FullPath);
-            string projectFolderName = Path.GetDirectoryName(projectFullPath);
-            request.ProjectId = GetRelativePath(projectFolderName, projectFullPath);
 
+            string projectFullPath = FindContainingCsprojFile(fileSystemEventArgs.FullPath);
+            request.ProjectDirectory = Path.GetDirectoryName(projectFullPath);
+            request.ProjectId = GetRelativePath(request.ProjectDirectory, projectFullPath);
+            request.FilePath = fileSystemEventArgs.FullPath;
+            
             LogEventResponse response = PushLog(request);
         }
 
         /// <summary>
-        /// The event handler for handling the File.Delete Event. The file watcher detects every file deleted,
-        /// so any event triggers with files other than .cs files are unhandled.    
+        /// The event handler for handling the File.Delete Event.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="fileSystemEventArgs"></param>
         internal static void OnFileDelete(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
-            // Only log for the creation of .cs files
-            if (Path.GetExtension(fileSystemEventArgs.Name) != ".cs")
+            // Other operations might also cause the fileWatcher to fire this event, so we explicitly check if the file
+            // does not exist anymore.
+            if (File.Exists(fileSystemEventArgs.FullPath))
+            {
+                return;
+            }
+
+            // Since the fileWatcher will also fire this event for deleted .cs-files contained in the bin artifacts, we
+            // need to filter for those as well.
+            Regex rgx = new Regex(@"(^|(\\|/))((bin)|(obj))((\\|/))");
+            if (rgx.IsMatch(fileSystemEventArgs.Name))
             {
                 return;
             }
@@ -243,8 +286,8 @@ namespace PatternPal.Extension.Commands
             request.EventType = EventType.EvtFileDelete;
             request.CodeStateSection = fileSystemEventArgs.Name;
             string projectFullPath = FindContainingCsprojFile(fileSystemEventArgs.FullPath);
-            string projectFolderName = Path.GetDirectoryName(projectFullPath);
-            request.ProjectId = GetRelativePath(projectFolderName, projectFullPath);
+            string projectDirectory = Path.GetDirectoryName(projectFullPath);
+            request.ProjectId = GetRelativePath(projectDirectory, projectFullPath);
 
             LogEventResponse response = PushLog(request);
         }
@@ -255,7 +298,9 @@ namespace PatternPal.Extension.Commands
         /// </summary>
         internal static void OnSessionStart()
         {
-            //SubjectId = Privacy.Instance.SubjectId;
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            SubjectId = Privacy.Instance.SubjectId;
             SessionId = Guid.NewGuid().ToString();
 
             LogEventRequest request = CreateStandardLog();
@@ -371,6 +416,7 @@ namespace PatternPal.Extension.Commands
         public static void OnPatternRecognized(RecognizeRequest recognizeRequest,
             IList<RecognizeResult> recognizeResults)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             if (_package == null || !Privacy.Instance.DoLogData)
             { 
               return; 
@@ -399,7 +445,7 @@ namespace PatternPal.Extension.Commands
         {
             return new LogEventRequest
             {
-                EventId = Guid.NewGuid().ToString(), SubjectId = Privacy.Instance.SubjectId, SessionId = SessionId
+                EventId = Guid.NewGuid().ToString(), SubjectId = SubjectId, SessionId = SessionId
             };
         }
 
@@ -410,8 +456,37 @@ namespace PatternPal.Extension.Commands
         {
             LogProviderService.LogProviderServiceClient client =
                 new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-
-            return client.LogEvent(request);
+            try
+            {
+                LogEventResponse ler = client.LogEvent(request);
+                ServerStatusChanged?.Invoke();
+                switch (ler.Status)
+                {
+                    case LogStatusCodes.LscSuccess:
+                        ServerStatus = ExtensionLogStatusCodes.Available;
+                        return ler;
+                    case LogStatusCodes.LscUnavailable:
+                        ServerStatus = ExtensionLogStatusCodes.Unavailable;
+                        return ler;
+                    case LogStatusCodes.LscFailure:
+                    case LogStatusCodes.LscRejected:
+                    case LogStatusCodes.LscInvalidArguments:
+                    case LogStatusCodes.LscUnknown:
+                    default:
+                        ServerStatus = ExtensionLogStatusCodes.Error;
+                        return ler;
+                }
+            }
+            // Host not found, timeout exception, etc.
+            catch (Exception e)
+            {
+                ServerStatus = ExtensionLogStatusCodes.Unavailable;
+                return new LogEventResponse
+                {
+                    Status = LogStatusCodes.LscUnknown,
+                    Message = e.Message
+                };
+            }
         }
 
         /// <summary>
@@ -475,11 +550,11 @@ namespace PatternPal.Extension.Commands
 
             // Create a new FileSystemWatcher instance
             // TODO We need to explicitely check if that path is not null and handle other cases.
-            _watcher = new FileSystemWatcher(Path.GetDirectoryName(_currentSolution.FullName));
+            _watcher = new FileSystemWatcher(Path.GetDirectoryName(_currentSolution.FullName), "*.cs");
 
             // Set the event handlers
             _watcher.Created += OnFileCreate;
-            _watcher.Deleted += OnFileDelete;
+            _watcher.Deleted += OnFileDelete; 
 
             // Enable the FileSystemWatcher to begin watching for changes
             _watcher.EnableRaisingEvents = true;
