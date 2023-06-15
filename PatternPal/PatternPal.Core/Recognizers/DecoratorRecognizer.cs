@@ -97,7 +97,7 @@ internal abstract class DecoratorRecognizerParent
         ClassCheck baseDecorator = BaseDecorator(component, baseDecoratorField, baseDecoratorConstructor, baseDecoratorMethod);
 
         //Checks for requirement 4
-        MethodCheck concreteDecoratorExtraMethod = ConcreteDecoratorExtraMethod();
+        MethodCheck concreteDecoratorExtraMethod = ConcreteDecoratorExtraMethod(componentMethod);
         ClassCheck concreteDecorator = ConcreteDecorator(baseDecorator, concreteDecoratorExtraMethod, baseDecoratorMethod);
 
         //Checks for requirement 5
@@ -241,9 +241,16 @@ internal abstract class DecoratorRecognizerParent
     /// <remarks>
     /// Checks part 4c of the requirements defined for a Decorator.
     /// </remarks>
-    protected MethodCheck ConcreteDecoratorExtraMethod() => Method(
+    protected MethodCheck ConcreteDecoratorExtraMethod(MethodCheck componentMethod) => Method(
         Priority.Mid, 
-        "has a function providing extra behaviour which it calls in the implementation of the method of Component.");
+        "has a function providing extra behaviour which it calls in the implementation of the method of Component.",
+        Not(
+            Priority.Low,
+            Uses(
+                Priority.Low,
+                componentMethod
+            )
+        ));
 
     /// <summary>
     /// Check for the ConcreteDecorator of the Decorator pattern.
@@ -275,7 +282,6 @@ internal abstract class DecoratorRecognizerParent
                     ),
                     Uses(
                         Priority.Mid,
-                        "pizza",
                         concreteDecoratorExtraMethod
                     )
                 )
@@ -526,7 +532,7 @@ internal class DecoratorRecognizerWithInterface : DecoratorRecognizerParent, ISt
                     )
                 }));
 
-        MethodCheck concreteDecoratorExtraMethod = ConcreteDecoratorExtraMethod();
+        MethodCheck concreteDecoratorExtraMethod = ConcreteDecoratorExtraMethod(componentMethod);
         ClassCheck concreteDecorator =
             ConcreteDecorator(baseDecorator, concreteDecoratorExtraMethod, baseDecoratorMethod);
 
