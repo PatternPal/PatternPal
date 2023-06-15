@@ -19,6 +19,7 @@ global using OneOf;
 global using PatternPal.Core;
 global using PatternPal.Core.Checks;
 global using PatternPal.Core.Recognizers;
+global using PatternPal.Core.Runner;
 global using PatternPal.SyntaxTree;
 global using PatternPal.SyntaxTree.Abstractions;
 global using PatternPal.SyntaxTree.Abstractions.Entities;
