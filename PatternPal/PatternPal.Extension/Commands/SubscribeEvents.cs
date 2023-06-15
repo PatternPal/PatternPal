@@ -549,9 +549,9 @@ namespace PatternPal.Extension.Commands
 
             // Create new watcher, subscribe events and set properties
             string solutionDirectory = Path.GetDirectoryName(_dte.Solution.FullName);
-            if (solutionDirectory == null)
+            if (solutionDirectory == null || !Directory.Exists(solutionDirectory))
             {
-                // We shouldn't set up the watcher if the solutionDirectory is null; however, it is known to be not null here, so this is is just a safety measure.
+                // We shouldn't set up the watcher if the solutionDirectory is null or non-existent; however, it is known to be not null here, so this is is just a safety measure.
                 return;
             }
             _watcher = new FileSystemWatcher(solutionDirectory, "*.cs");
