@@ -1,4 +1,4 @@
-#region
+﻿#region
 
 using Google.Protobuf;
 using System.IO.Compression;
@@ -69,13 +69,14 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
             };
             taskResult.Message = e.Message;
         }
+
         catch (Exception e)
         {
             taskResult.Status = Protos.LogStatusCodes.LscFailure;
             taskResult.Message = e.Message;
         }
-        return Task.FromResult(taskResult);
 
+        return Task.FromResult(taskResult);
     }
 
     /// <summary>

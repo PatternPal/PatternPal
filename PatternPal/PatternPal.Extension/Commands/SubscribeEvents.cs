@@ -24,6 +24,7 @@ namespace PatternPal.Extension.Commands
         Error,
         NoLog
     }
+
     /// <summary>
     /// A static class which is responsible for subscribing logged event in ProgSnap2 format.
     /// </summary>
@@ -43,8 +44,6 @@ namespace PatternPal.Extension.Commands
         private static SolutionEvents _dteSolutionEvents;
 
         private static BuildEvents _dteBuildEvents;
-
-        private static Solution _currentSolution;
 
         private static FileSystemWatcher _watcher;
 
@@ -87,10 +86,10 @@ namespace PatternPal.Extension.Commands
             _dte = dte;
 
             ThreadHelper.ThrowIfNotOnUIThread();
+
             _dteDebugEvents = _dte.Events.DebuggerEvents;
             _dteSolutionEvents = _dte.Events.SolutionEvents;
             _dteBuildEvents = _dte.Events.BuildEvents;
-            _currentSolution = _dte.Solution;
             _dteDocumentEvents = _dte.Events.DocumentEvents;
             _package = package;
             _cancellationToken = cancellationToken;
@@ -192,6 +191,7 @@ namespace PatternPal.Extension.Commands
             LogEventRequest request = CreateStandardLog();
             string pathSolutionFullName = _dte.Solution.FullName;
             string pathSolutionFile = _dte.Solution.FileName;
+
             // Distinguish a sln file or just a csproj file to be opened
             if (pathSolutionFullName == "")
             {
@@ -199,9 +199,10 @@ namespace PatternPal.Extension.Commands
                 Array startupProjects = (Array)_dte.Solution.SolutionBuild.StartupProjects;
                 request.CodeStateSection = (string)startupProjects.GetValue(0);
             }
+
             else
             {
-                string pathSolutionDirectory = Path.GetDirectoryName(_currentSolution.FullName);
+                string pathSolutionDirectory = Path.GetDirectoryName(pathSolutionFullName);
                 request.CodeStateSection = GetRelativePath(pathSolutionDirectory, pathSolutionFile);
             }
 
@@ -294,7 +295,6 @@ namespace PatternPal.Extension.Commands
 
         /// <summary>
         /// The event handler for handling the Session.Start Event. When a new session starts, a (new) sessionID is generated.
-        /// A new file watcher is also created, as a new session can change the directory the user is working in.
         /// </summary>
         internal static void OnSessionStart()
         {
@@ -307,9 +307,6 @@ namespace PatternPal.Extension.Commands
             request.EventType = EventType.EvtSessionStart;
 
             LogEventResponse response = PushLog(request);
-
-            // As a new session has started, the file watcher has to be reset so that the "current solution" is up to date
-            SetUpFileWatcher();
         }
 
         /// <summary>
@@ -321,9 +318,6 @@ namespace PatternPal.Extension.Commands
             request.EventType = EventType.EvtSessionEnd;
 
             LogEventResponse response = PushLog(request);
-
-            // When a session has ended, no logs are sent anymore so the watcher can be disposed.
-            _watcher.Dispose();
         }
 
         /// <summary>
@@ -344,27 +338,26 @@ namespace PatternPal.Extension.Commands
         }
 
         /// <summary>
-        /// The event handler for handling the Project.Open Event.
+        /// The event handler for handling the Solution.Open Event.
         /// </summary>
         internal static void OnSolutionOpen()
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
             LogEachProject(EventType.EvtProjectOpen);
 
-            // When a user opens a new solution, the watcher has to be setup again to entail the new solution. 
+            // After a solution has opened we set up the file watcher for the solution directory. 
             SetUpFileWatcher();
         }
 
         /// <summary>
-        /// The event handler for handling the Project.Close Event.
+        /// The event handler for handling the Solution.Close Event.
         /// </summary>
         internal static void OnSolutionClose()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             LogEachProject(EventType.EvtProjectClose);
 
-            // When a user closes a solution, the watcher has to be disposed as the directory saved is then not up-to-date anymore.
-            _watcher.Dispose();
+            // We should dispose of the watcher here; just for safety, we add a null check.
+            _watcher?.Dispose();
         }
 
         /// <summary>
@@ -465,9 +458,11 @@ namespace PatternPal.Extension.Commands
                     case LogStatusCodes.LscSuccess:
                         ServerStatus = ExtensionLogStatusCodes.Available;
                         return ler;
+
                     case LogStatusCodes.LscUnavailable:
                         ServerStatus = ExtensionLogStatusCodes.Unavailable;
                         return ler;
+
                     case LogStatusCodes.LscFailure:
                     case LogStatusCodes.LscRejected:
                     case LogStatusCodes.LscInvalidArguments:
@@ -499,6 +494,7 @@ namespace PatternPal.Extension.Commands
             Uri uri = new Uri(relativeTo);
             string rel = Uri.UnescapeDataString(uri.MakeRelativeUri(new Uri(path)).ToString())
                 .Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+
             if (rel.Contains(Path.DirectorySeparatorChar.ToString()) == false)
             {
                 rel = $".{Path.DirectorySeparatorChar}{rel}";
@@ -546,20 +542,24 @@ namespace PatternPal.Extension.Commands
         /// </summary>
         private static void SetUpFileWatcher()
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            // We dispose of the current fileWatcher if it had already been set and not properly been disposed off.
             _watcher?.Dispose();
 
-            // Create a new FileSystemWatcher instance
-            // TODO We need to explicitely check if that path is not null and handle other cases.
-            _watcher = new FileSystemWatcher(Path.GetDirectoryName(_currentSolution.FullName), "*.cs");
-
-            // Set the event handlers
+            // Create new watcher, subscribe events and set properties
+            string solutionDirectory = Path.GetDirectoryName(_dte.Solution.FullName);
+            if (solutionDirectory == null)
+            {
+                // We shouldn't set up the watcher if the solutionDirectory is null; however, it is known to be not null here, so this is is just a safety measure.
+                return;
+            }
+            _watcher = new FileSystemWatcher(solutionDirectory, "*.cs");
+            
             _watcher.Created += OnFileCreate;
             _watcher.Deleted += OnFileDelete; 
 
-            // Enable the FileSystemWatcher to begin watching for changes
             _watcher.EnableRaisingEvents = true;
-
-            // Enable watching for in the subdirectories as well
             _watcher.IncludeSubdirectories = true;
         }
 
@@ -577,7 +577,9 @@ namespace PatternPal.Extension.Commands
                 string csprojFile = Directory.GetFiles(directory, "*.csproj").FirstOrDefault();
 
                 if (!string.IsNullOrEmpty(csprojFile))
+                {
                     return csprojFile;
+                }
 
                 directory = Path.GetDirectoryName(directory);
             }
