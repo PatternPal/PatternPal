@@ -1,10 +1,4 @@
-﻿#region
-
-using PatternPal.SyntaxTree.Abstractions.Entities;
-
-#endregion
-
-namespace PatternPal.Tests.Checks;
+﻿namespace PatternPal.Tests.Checks;
 
 internal class NotCheckTests
 {
