@@ -319,6 +319,7 @@ internal abstract class DecoratorRecognizerParent
 /// <summary>
 /// A class implementing the parts of the Decorator recognizer in case it uses an abstract class.
 /// </summary>
+//TODO check whether can be file scoped
 internal class DecoratorRecognizerWithAbstractClass : DecoratorRecognizerParent
 {
     /// <inheritdoc />
