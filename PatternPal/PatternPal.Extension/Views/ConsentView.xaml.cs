@@ -36,34 +36,14 @@ namespace PatternPal.Extension.Views
         {
 
             // check subjectID input is not empty and if it is parse it as a GUID
-
-            consentSubjectID.Text = consentSubjectID.Text.Trim();
-            string subjectId = "";
-            if (consentSubjectID.Text.Length == 0)
-            { 
-                VSConstants.MessageBoxResult result = VS.MessageBox.Show("SubjectID", "This subjectID is not valid, do you want to continue with a randomly generated subjectID?", OLEMSGICON.OLEMSGICON_INFO, OLEMSGBUTTON.OLEMSGBUTTON_OKCANCEL);
-
-                if (result == VSConstants.MessageBoxResult.IDOK)
-                {
-                    subjectId = Guid.NewGuid().ToString();
-                }
-                else
-                {
-                    return;
-                }
-            }
-            else
-            {
-                subjectId = consentSubjectID.Text;
-            }
-
+            Guid subjectId = Guid.NewGuid();
 
             _ = Task.Run(async () =>
             {
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 ConsentViewModel context = ((ConsentViewModel)DataContext);
                 // generate a random GUID
-                context.ConfigPrivacy.SubjectId = subjectId;
+                context.ConfigPrivacy.SubjectId = subjectId.ToString();
                 context.ConfigPrivacy.DoLogData = true;
                 context.ConfigPrivacy.FirstTime = false;
                 await context.ConfigPrivacy.SaveAsync();

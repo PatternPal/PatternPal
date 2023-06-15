@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Input;
-
 using PatternPal.Extension.Stores;
 using PatternPal.Extension.Commands;
 
@@ -12,6 +11,7 @@ namespace PatternPal.Extension.ViewModels
         {
             _navigationStore = navigationStore;
             _navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
+            SubscribeEvents.ServerStatusChanged += OnServerStatusChanged;
             BackCommand = new BackCommand(navigationStore);
         }
 
@@ -29,9 +29,15 @@ namespace PatternPal.Extension.ViewModels
         public override string Title => "PatternPal";
 
         public ICommand BackCommand { get; }
+
+        public string ServerStatus
+        {
+            get => SubscribeEvents.ServerStatus.ToString();
+        }
+
         public Visibility BackButtonVisibility
         {
-            get => CurrentViewModel.GetType() == typeof(HomeViewModel)
+            get => CurrentViewModel.GetType() == typeof(HomeViewModel) || CurrentViewModel.GetType() == typeof(ConsentViewModel)
                 ? Visibility.Collapsed
                 : Visibility.Visible;
         }
@@ -43,6 +49,11 @@ namespace PatternPal.Extension.ViewModels
         {
             OnPropertyChanged(nameof(CurrentViewModel));
             OnPropertyChanged(nameof(BackButtonVisibility));
+        }
+
+        protected virtual void OnServerStatusChanged()
+        {
+            OnPropertyChanged(nameof(ServerStatus));
         }
     }
 }
