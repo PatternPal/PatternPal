@@ -69,7 +69,7 @@
                     Orientation="Vertical" VerticalAlignment="Top" Height="346">
             <ScrollViewer Height="250">
                 <TextBlock TextWrapping="Wrap"
-                    Width="150" FontSize="8" Height="250" Text="{x:Static UIResources:ExtensionUIResources.ConsentScreenText}"></TextBlock>
+                    Width="150" FontSize="11" Height="250" Text="{x:Static UIResources:ExtensionUIResources.ConsentScreenText}"></TextBlock>
             </ScrollViewer>
             <StackPanel Margin="20,10,20,0"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
