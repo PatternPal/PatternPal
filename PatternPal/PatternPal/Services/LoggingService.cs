@@ -115,7 +115,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         {
             EventId = receivedRequest.EventId,
             SubjectId = receivedRequest.SubjectId,
-            ToolInstances = Environment.Version.ToString(),
+            ToolInstances = receivedRequest.ToolInstances,
             ClientTimestamp =
                 DateTime.UtcNow.ToString(
                     "yyyy-MM-dd HH:mm:ss.fff zzz"), //TODO: DateTimeOffset.Now.ToString("yyyy-MM-dd HH:mm:ss.fff  zzz"), : Logging server cannot work with offsets yet
