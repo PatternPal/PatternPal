@@ -270,9 +270,6 @@ public class RecognizerRunner
         NodeCheckResult parentCheckResult,
         bool pruneAll = false)
     {
-        // TODO: Properly handle CheckCollectionKind.
-        // TODO: Properly handle Priorities.
-
         // Pass 1: Collect results to be pruned.
 
         // The results which should be pruned.
@@ -376,11 +373,8 @@ public class RecognizerRunner
                             }
                             break;
                         }
-                        case NotCheckResult nestedNotCheckResult:
-                        {
-                            // TODO: Check this during check creation?
+                        case NotCheckResult:
                             throw new ArgumentException("Nested not checks not supported");
-                        }
                         default:
                             throw new ArgumentException(
                                 $"Unknown check result '{notCheckResult.NestedResult}'",
@@ -679,11 +673,6 @@ public interface IRecognizerContext
     /// <see cref="CurrentEntity"/> contains the parent <see cref="IEntity"/> of the <see cref="IMethod"/>.
     /// </remarks>
     internal IEntity CurrentEntity { get; }
-
-    /// <summary>
-    /// The <see cref="ICheck"/> which is the direct parent of the current <see cref="ICheck"/>.
-    /// </summary>
-    internal ICheck ParentCheck { get; }
 
     /// <summary>
     /// The <see cref="ICheck"/> belonging to the <see cref="CurrentEntity"/>.
