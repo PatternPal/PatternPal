@@ -44,7 +44,7 @@ string recognizer_result = 25;
 string recognizer_config = 26;
 optional string file_path = 27;
 optional string project_directory = 28;
-string destination_code_state_section = 29;
+string old_file_name = 29;
 }
 
 enum LogStatusCodes{

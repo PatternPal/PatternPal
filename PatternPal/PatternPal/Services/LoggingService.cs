@@ -248,7 +248,6 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         LogRequest sendLog = StandardLog(receivedRequest);
         sendLog.EventType = LoggingServer.EventType.EvtFileRename;
         sendLog.CodeStateSection = receivedRequest.CodeStateSection;
-        sendLog.DestinationCodeStateSection = receivedRequest.DestinationCodeStateSection;
         sendLog.ProjectId = receivedRequest.ProjectId;
 
         return sendLog;

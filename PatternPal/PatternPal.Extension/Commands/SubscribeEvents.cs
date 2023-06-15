@@ -297,8 +297,8 @@ namespace PatternPal.Extension.Commands
 
             LogEventRequest request = CreateStandardLog();
             request.EventType = EventType.EvtFileRename;
-            request.CodeStateSection = e.OldName;
-            request.DestinationCodeStateSection = e.Name;
+            request.CodeStateSection = e.Name;
+            request.OldFileName = e.OldName;
 
             string projectFullPath = FindContainingCsprojFile(e.FullPath);
             string projectFolderName = Path.GetDirectoryName(projectFullPath);
