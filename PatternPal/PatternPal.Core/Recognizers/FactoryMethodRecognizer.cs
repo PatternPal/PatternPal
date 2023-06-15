@@ -59,6 +59,11 @@ internal class FactoryMethodRecognizer : IRecognizer
         yield return ConcreteCreator(creator, concreteProduct);
     }
 
+    /// <summary>
+    /// Creates a <see cref="InterfaceCheck"/> that checks if there exists an interface.
+    /// This method corresponds to Step 1 in the step-by-step mode: "Create an interface. We refer to this interface as the Product."
+    /// </summary>
+    /// <returns>A <see cref="InterfaceCheck"/> that checks for the existence of an interface</returns>
     InterfaceCheck Product()
     {
         //Product a
@@ -68,6 +73,14 @@ internal class FactoryMethodRecognizer : IRecognizer
         );
     }
 
+    /// <summary>
+    /// Creates a <see cref="ClassCheck"/> that checks if a class is abstract and if it contains a "Factory Method".
+    /// This method needs to be abstract and public, and should return an object of type "Product"
+    /// This method corresponds to Step 3 in the step-by-step mode: "Create an abstract class which will contain an
+    /// public abstract method which will return something of type Product. This class will be referred to as Creator."
+    /// </summary>
+    /// <param name="product"> this should be an interface check for the product interface.</param>
+    /// <returns>A <see cref="ClassCheck"/> which should result in the Creator class.</returns>
     ClassCheck Creator(InterfaceCheck product)
     {
         //Creator a
@@ -102,6 +115,13 @@ internal class FactoryMethodRecognizer : IRecognizer
         );
     }
 
+    /// <summary>
+    /// Creates a <see cref="ClassCheck"/> which checks if a class is implementing the <param name="product"></param>> interface.
+    /// This method corresponds to Step 2 in the step-by-step mode: "Create two new classes which inherit the Product.
+    /// We refer to these classes as Concrete Product."
+    /// </summary>
+    /// <param name="product"> this should be an interface check for the product interface.</param>
+    /// <returns>A <see cref="ClassCheck"/> which should result in the Concrete Product class.</returns>
     ClassCheck ConcreteProduct(InterfaceCheck product)
     {
         //Concrete product a & Product b
@@ -116,6 +136,15 @@ internal class FactoryMethodRecognizer : IRecognizer
         );
     }
 
+    /// <summary>
+    /// Creates a <see cref="ClassCheck"/> which checks multiple things about a class. It checks if the class inherits the <param name="creator"></param>
+    /// class, it checks if it creates a concrete product and it checks if it contains a method which will create and return a concrete product.
+    /// This method corresponds to Step 4 in the step-by-step mode: "Create two classes which will inherit from the Creator class. Each class will have
+    /// exactly one method which will create and return a different concrete product. This class will be referred to as Concrete Creator"
+    /// </summary>
+    /// <param name="creator"> this should be a class check of the class Creator</param>
+    /// <param name="concreteProduct"> this should be a class check of the class Concrete Product</param>
+    /// <returns>A <see cref="ClassCheck"/> which should result in the Concrete Creator class.</returns>
     ClassCheck ConcreteCreator(ClassCheck creator, ClassCheck concreteProduct)
     {
         //Concrete Creator a & Creator b
@@ -138,7 +167,7 @@ internal class FactoryMethodRecognizer : IRecognizer
                 concreteProduct
             )
         );
-
+        //Looks like duplication of the check above, but this one has a higher priority and is more often correct than the check above
         //Concrete product b
         RelationCheck createsConcreteProduct = Creates(
             Priority.High,
