@@ -102,8 +102,8 @@ namespace PatternPal.LoggingServer.Services
                 CompileMessageType = request.HasCompileMessageType ? request.CompileMessageType: null,
                 SourceLocation = request.HasSourceLocation ? request.SourceLocation: null,
                 CodeStateSection = request.HasCodeStateSection ? request.CodeStateSection : null,
-                RecognizerConfig = request.EventType is EventType.EvtXRecognizerRun or EventType.EvtXStepByStepStep ? request.RecognizerConfig : null,
-                RecognizerResult = request.EventType is EventType.EvtXRecognizerRun or EventType.EvtXStepByStepStep ? request.RecognizerResult : null,
+                RecognizerConfig = request.HasRecognizerConfig ? request.RecognizerConfig : null,
+                RecognizerResult = request.HasRecognizerResult ? request.RecognizerResult : null,
                 ExecutionResult = request.HasExecutionResult ? request.ExecutionResult : null
             };
 

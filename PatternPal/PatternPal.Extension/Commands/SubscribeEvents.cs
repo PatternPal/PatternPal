@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using EnvDTE;
@@ -12,8 +13,8 @@ using Microsoft.VisualStudio.Shell;
 using PatternPal.Extension.Grpc;
 using PatternPal.Protos;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
+using Google.Protobuf.Collections;
 
 #endregion
 
@@ -430,11 +431,17 @@ namespace PatternPal.Extension.Commands
 
             LogEventResponse response = PushLog(request);
         }
-
-        public static void OnStepByStepCheck(string recognizer, int CurrentInstructionNumber, bool result)
+        /// <summary>
+        /// Function to push a step by step event to the server. It compiles all required information and sends it to the server.
+        /// </summary>
+        /// <param name="recognizer">Recognizer being used by step-by-step </param>
+        /// <param name="currentInstructionNumber">Current instruction number </param>
+        /// <param name="result">Boolean output</param>
+        /// <param name="documents">all documents being checked against</param>
+        public static void OnStepByStepCheck(string recognizer, int currentInstructionNumber, bool result, RepeatedField<string> documents )
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            if (_package == null || !Privacy.Instance.DoLogData)
+            if (!_doLog)
             {
                 return;
             }
@@ -444,8 +451,9 @@ namespace PatternPal.Extension.Commands
             Dictionary<string,string> config = new Dictionary<string, string>()
             {
                 { "recognizer", recognizer },
-                { "currentInstructionNumber", CurrentInstructionNumber.ToString()}
+                { "currentInstructionNumber", currentInstructionNumber.ToString()}
             };
+
             request.RecognizerConfig = JsonSerializer.Serialize(config);
             Dictionary<string,string> results = new Dictionary<string, string>()
             {
@@ -453,6 +461,10 @@ namespace PatternPal.Extension.Commands
             };
 
             request.RecognizerResult = JsonSerializer.Serialize(results);
+            
+            Project project = _dte.ActiveDocument.ProjectItem.ContainingProject;
+            request.ProjectId = project.UniqueName;
+
             LogEventResponse response = PushLog(request);
         }
         #endregion

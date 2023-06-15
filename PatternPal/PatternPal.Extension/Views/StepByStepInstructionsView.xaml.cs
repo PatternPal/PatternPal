@@ -148,7 +148,7 @@ namespace PatternPal.Extension.Views
             try
             {
                 bool result = GrpcHelper.StepByStepClient.CheckInstruction(request).Result;
-                SubscribeEvents.OnStepByStepCheck( request.Recognizer.ToString(), request.InstructionNumber, result );
+                SubscribeEvents.OnStepByStepCheck( request.Recognizer.ToString(), request.InstructionNumber, result);
                 if (!result)
                 {
                     resultTextBlock.Visibility = Visibility.Hidden;

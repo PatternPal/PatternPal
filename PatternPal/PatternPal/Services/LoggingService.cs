@@ -325,12 +325,18 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         return sendLog;
     }
 
+    /// <summary>
+    /// Creates a LogRequest that is populated with info obtained from the supplied StepByStep event. This log is ran whenever the client presses check during the step by step process.
+    /// </summary>
+    /// <param name="receivedRequest">Request received from extension</param>
+    /// <returns>A logRequest populated for Step-By-Step event</returns>
     private static LogRequest StepByStepLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
         sendLog.EventType = LoggingServer.EventType.EvtXStepByStepStep;
         sendLog.RecognizerConfig = receivedRequest.RecognizerConfig;
         sendLog.RecognizerResult = receivedRequest.RecognizerResult;
+        sendLog.ProjectId = receivedRequest.ProjectId;
         return sendLog;
     }
 
