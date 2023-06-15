@@ -10,7 +10,6 @@ using PatternPal.Protos;
 
 namespace PatternPal.Extension.ViewModels
 {
-    // TODO comment
     public class ResultViewModel
     {
         public ResultViewModel(

@@ -6,7 +6,6 @@ using PatternPal.Protos;
 
 namespace PatternPal.Extension.ViewModels
 {
-    // TODO Comment
     public class CheckResultViewModel
     {
         public string Requirement { get; }

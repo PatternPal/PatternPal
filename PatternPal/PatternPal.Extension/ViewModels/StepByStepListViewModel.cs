@@ -5,39 +5,68 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
+
 using EnvDTE;
-using Microsoft.VisualStudio.Shell.Interop;
+
 using Microsoft.VisualStudio.Shell;
-using PatternPal.Extension.Commands;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.WindowsAPICodePack.Dialogs;
+
 using PatternPal.Extension.Grpc;
 using PatternPal.Extension.Resources;
 using PatternPal.Extension.Stores;
 using PatternPal.Protos;
+
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
-using Microsoft.WindowsAPICodePack.Dialogs;
 
 #endregion
 
 namespace PatternPal.Extension.ViewModels
 {
-    // TODO comment
+    /// <summary>
+    /// The view model for the Step by Step page.
+    /// </summary>
     public class StepByStepListViewModel : ViewModel
     {
+        /// <inheritdoc />
         public override string Title => ExtensionUIResources.StepByStepTitle;
 
+        /// <summary>
+        /// Command to navigate home.
+        /// </summary>
         public ICommand NavigateHomeCommand { get; }
-        public ICommand NavigateStepByStepInstructionsCommand { get; }
-        public ICommand NavigateContinueStepByStepInstructionsCommand { get; }
-        public IList< Recognizer > InstructionSetList { get; set; }
-        public Recognizer SelectedInstructionSet { get; set;  }
 
+        /// <summary>
+        /// Command to navigate to the first step.
+        /// </summary>
+        public ICommand NavigateStepByStepInstructionsCommand { get; }
+
+        /// <summary>
+        /// Command to allow user to select new file before going to next step.
+        /// </summary>
+        public ICommand NavigateContinueStepByStepInstructionsCommand { get; }
+
+        /// <summary>
+        /// Selectable Step by Step implementations.
+        /// </summary>
+        public IList< Recognizer > InstructionSetList { get; set; }
+
+        /// <summary>
+        /// The selected Step by Step implementation.
+        /// </summary>
+        public Recognizer SelectedInstructionSet { get; set; }
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="StepByStepListViewModel"/> class.
+        /// </summary>
+        /// <param name="navigationStore">The <see cref="NavigationStore"/> to use for navigation commands.</param>
         public StepByStepListViewModel(
             NavigationStore navigationStore)
         {
             NavigateHomeCommand = new NavigateCommand< HomeViewModel >(
                 navigationStore,
                 () => new HomeViewModel(navigationStore));
-            
+
             // Next button 
             NavigateStepByStepInstructionsCommand =
                 new NavigateCommand< StepByStepInstructionsViewModel >(
@@ -47,10 +76,10 @@ namespace PatternPal.Extension.ViewModels
                         SelectedInstructionSet,
                         StepByStepModes.New,
                         CreateNewWorkFileInSolution()));
-            
+
             // Continue button
             NavigateContinueStepByStepInstructionsCommand =
-                new NavigateCommand<StepByStepInstructionsViewModel>(
+                new NavigateCommand< StepByStepInstructionsViewModel >(
                     navigationStore,
                     () => new StepByStepInstructionsViewModel(
                         navigationStore,
@@ -58,23 +87,31 @@ namespace PatternPal.Extension.ViewModels
                         StepByStepModes.Continue,
                         ContinueButtonBehavior()));
 
-            GetInstructionSetsResponse instructionSetsResponse = 
+            GetInstructionSetsResponse instructionSetsResponse =
                 GrpcHelper.StepByStepClient.GetInstructionSets(new GetInstructionSetsRequest());
 
             InstructionSetList = instructionSetsResponse.Recognizers;
             SelectedInstructionSet = InstructionSetList.FirstOrDefault();
         }
 
-        private List<string> ContinueButtonBehavior()
+        /// <summary>
+        /// Handles letting a user select a file with which to continue the Step by Step implementation.
+        /// </summary>
+        private List< string > ContinueButtonBehavior()
         {
-            List<string> result = new List<string>();
+            List< string > result = new List< string >();
 
-            OpenFileDialog ofd = new OpenFileDialog() { Multiselect = true, Filter = "cs files (*.cs)|*.cs", };
+            OpenFileDialog ofd = new OpenFileDialog()
+                                 {
+                                     Multiselect = true,
+                                     Filter = "cs files (*.cs)|*.cs",
+                                 };
 
             while (result.Count == 0)
             {
-                bool? res = ofd.ShowDialog();
-                if (res.HasValue && res.Value)
+                bool ? res = ofd.ShowDialog();
+                if (res.HasValue
+                    && res.Value)
                 {
                     result = ofd.FileNames.ToList();
                 }
@@ -86,36 +123,35 @@ namespace PatternPal.Extension.ViewModels
 
             ThreadHelper.ThrowIfNotOnUIThread();
             // Obtain the currently running visual studio instance.
-            DTE dte = (DTE)Package.GetGlobalService(typeof(SDTE));
+            DTE dte = (DTE)Package.GetGlobalService(typeof( SDTE ));
             foreach (string file in result)
             {
                 dte.ItemOperations.OpenFile(file);
             }
 
             return result;
-            
         }
 
         /// <summary>
         /// Prompts the user to add a file to the opened solution and adds it to a project or 
         /// creates a project.
         /// </summary>
-        public List<string> CreateNewWorkFileInSolution()
+        private List< string > CreateNewWorkFileInSolution()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
             // Obtain the currently running visual studio instance.
-            DTE dte = (DTE)Package.GetGlobalService(typeof(SDTE));
+            DTE dte = (DTE)Package.GetGlobalService(typeof( SDTE ));
 
             if (VsShellUtilities.PromptYesNo(
-                            "Do you want to add a file to the current solution?",
-                            "",
-                            OLEMSGICON.OLEMSGICON_QUERY,
-                            (IVsUIShell)Package.GetGlobalService(typeof(IVsUIShell))))
+                "Do you want to add a file to the current solution?",
+                "",
+                OLEMSGICON.OLEMSGICON_QUERY,
+                (IVsUIShell)Package.GetGlobalService(typeof( IVsUIShell ))))
             {
                 if (dte.Solution.IsOpen)
                 {
-                    List<string> result = CreateNewWorkFile(out string filePath);
+                    List< string > result = CreateNewWorkFile(out string filePath);
                     if (filePath == string.Empty)
                     {
                         MessageBox.Show("No save location was provided");
@@ -127,7 +163,9 @@ namespace PatternPal.Extension.ViewModels
                         if (dte.Solution.Projects.Count == 0)
                         {
                             string projectName = "NewProject";
-                            string projectPath = System.IO.Path.Combine(dte.Solution.FullName, projectName);
+                            string projectPath = Path.Combine(
+                                dte.Solution.FullName,
+                                projectName);
                             Project csTemplateProject =
                                 dte.Solution.AddFromTemplate(
                                     "ConsoleApplication",
@@ -147,16 +185,16 @@ namespace PatternPal.Extension.ViewModels
                     }
 
                     // User wanted to add to the solution but did not provide a path.
-                    return new List<string>();
+                    return new List< string >();
                 }
 
                 MessageBox.Show("There is no solution open");
-                return new List<string>();
+                return new List< string >();
             }
             else
             {
                 // Call what you would do otherwise when there is no solution loaded.
-                List<string> result = CreateNewWorkFile(out string filePath);
+                List< string > result = CreateNewWorkFile(out string filePath);
                 if (filePath == string.Empty)
                 {
                     MessageBox.Show("No save location was provided");
@@ -171,15 +209,16 @@ namespace PatternPal.Extension.ViewModels
         /// <summary>
         /// Prompts the user to provide a filepath and creates a new .cs file and opens it.
         /// </summary>
-        public List<string> CreateNewWorkFile(out string filePath)
+        private List< string > CreateNewWorkFile(
+            out string filePath)
         {
             // Save location for project provided by user
             string folderPath = string.Empty;
 
             using (CommonOpenFileDialog fdb = new CommonOpenFileDialog
-            {
-                IsFolderPicker = true,
-            })
+                                              {
+                                                  IsFolderPicker = true,
+                                              })
             {
                 if (fdb.ShowDialog() == CommonFileDialogResult.Ok)
                 {
@@ -188,20 +227,23 @@ namespace PatternPal.Extension.ViewModels
                 else
                 {
                     filePath = string.Empty;
-                    return new List<string>();
+                    return new List< string >();
                 }
             }
 
-            filePath = 
+            filePath =
                 Path.Combine(
                     folderPath,
                     "NewFile.cs");
             if (folderPath == string.Empty)
             {
-                return new List<string>();
+                return new List< string >();
             }
             using (FileStream fs = File.Create(filePath)) { }
-            return new List<string>() { filePath };
+            return new List< string >()
+                   {
+                       filePath
+                   };
         }
     }
 }
