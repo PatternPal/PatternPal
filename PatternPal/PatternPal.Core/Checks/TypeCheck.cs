@@ -13,7 +13,9 @@ internal class TypeCheck : CheckBase
     /// <summary>
     /// A <see cref="TypeCheck"/> is dependent on the result of <see cref="_getNode"/>.
     /// </summary>
-    public override int DependencyCount => 1;
+    public override int DependencyCount => _getNode.Match(
+        relatedCheck => 1 + relatedCheck.DependencyCount,
+        _ => 0);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TypeCheck"/> class.
@@ -41,7 +43,7 @@ internal class TypeCheck : CheckBase
         INode node)
     {
         // Get the node to match against.
-        List< ICheckResult > results = _getNode.Match< List< ICheckResult > >(
+        List< ICheckResult > results = _getNode.Match(
             relatedCheck =>
             {
                 List< ICheckResult > subResults = new();
@@ -69,7 +71,7 @@ internal class TypeCheck : CheckBase
                 // Construct and return the check result.
                 INode nodeToMatch = getCurrentEntity(ctx);
                 bool isMatch = node == nodeToMatch;
-                return new List< ICheckResult >()
+                return new List< ICheckResult >
                        {
                            new LeafCheckResult
                            {

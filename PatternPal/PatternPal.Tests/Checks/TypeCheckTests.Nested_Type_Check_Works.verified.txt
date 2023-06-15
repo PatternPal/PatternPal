@@ -16,33 +16,27 @@
                     {
                       FeedbackMessage: Node 'Test' has correct type,
                       Correct: true,
-                      DependencyCount: 1,
                       MatchedNode: Test
                     }
                   ],
                   CollectionKind: Any,
-                  DependencyCount: 1,
                   MatchedNode: Test,
                   NodeCheckCollectionWrapper: true
                 }
               ],
               CollectionKind: Any,
-              DependencyCount: 1,
               MatchedNode: _test,
               NodeCheckCollectionWrapper: false
             }
           ],
-          DependencyCount: 1,
           MatchedNode: _test,
           NodeCheckCollectionWrapper: false
         }
       ],
       CollectionKind: Any,
-      DependencyCount: 1,
       NodeCheckCollectionWrapper: true
     }
   ],
-  DependencyCount: 1,
   MatchedNode: Test,
   NodeCheckCollectionWrapper: false
 }
