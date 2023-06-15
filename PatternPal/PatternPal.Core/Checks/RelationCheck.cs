@@ -11,11 +11,20 @@ internal class RelationCheck : CheckBase
 
     // The type of relation which should be present.
     private readonly RelationType _relationType;
+    private Score _perfectScore;
 
     /// <summary>
     /// A <see cref="RelationCheck"/> is dependent on the <see cref="INode"/> to which it has an <see cref="Relation"/>.
     /// </summary>
     public override int DependencyCount => 1 + _relatedNodeCheck.DependencyCount;
+
+    /// <inheritdoc />
+    public override Score PerfectScore => _perfectScore.Equals(default)
+        ? _perfectScore = _relatedNodeCheck.PerfectScore
+                          + Score.CreateScore(
+                              Priority,
+                              true)
+        : _perfectScore;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RelationCheck"/> class.

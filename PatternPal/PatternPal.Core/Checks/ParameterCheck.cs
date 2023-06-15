@@ -11,6 +11,7 @@ internal class ParameterCheck : CheckBase
     // The dependency count, declared as nullable so we can check whether we have calculated it
     // already.
     private int ? _dependencyCount;
+    private Score _perfectScore;
 
     /// <summary>
     /// As a <see cref="TypeCheck"/> is a dependency to another <see cref="INode"/>, all <see cref="TypeCheck"/>s
@@ -22,6 +23,23 @@ internal class ParameterCheck : CheckBase
         {
             _dependencyCount ??= _parameterTypes.Count();
             return _dependencyCount.Value;
+        }
+    }
+
+    /// <inheritdoc />
+    public override Score PerfectScore
+    {
+        get
+        {
+            if (_perfectScore.Equals(default))
+            {
+                foreach (TypeCheck parameterTypeCheck in _parameterTypes)
+                {
+                    _perfectScore += parameterTypeCheck.PerfectScore;
+                }
+            }
+
+            return _perfectScore;
         }
     }
 

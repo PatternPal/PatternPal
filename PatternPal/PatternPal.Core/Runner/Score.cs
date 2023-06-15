@@ -3,7 +3,8 @@
 /// <summary>
 /// The Score of a <see cref="ICheckResult"/>, used to sort the final root <see cref="ICheckResult"/>.
 /// </summary>
-public struct Score : IComparable< Score >
+public struct Score : IComparable< Score >,
+                      IEquatable< Score >
 {
     private int _knockout;
     private int _high;
@@ -120,6 +121,9 @@ public struct Score : IComparable< Score >
             return 1;
         return 0;
     }
+
+    public bool Equals(
+        Score other) => _knockout == other._knockout && _high == other._high && _mid == other._mid && _low == other._low;
 
     public override string ToString()
     {
