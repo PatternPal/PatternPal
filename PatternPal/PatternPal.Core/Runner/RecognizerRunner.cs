@@ -270,9 +270,6 @@ public class RecognizerRunner
         NodeCheckResult parentCheckResult,
         bool pruneAll = false)
     {
-        // TODO: Properly handle CheckCollectionKind.
-        // TODO: Properly handle Priorities.
-
         // Pass 1: Collect results to be pruned.
 
         // The results which should be pruned.
@@ -376,11 +373,8 @@ public class RecognizerRunner
                             }
                             break;
                         }
-                        case NotCheckResult nestedNotCheckResult:
-                        {
-                            // TODO: Check this during check creation?
+                        case NotCheckResult:
                             throw new ArgumentException("Nested not checks not supported");
-                        }
                         default:
                             throw new ArgumentException(
                                 $"Unknown check result '{notCheckResult.NestedResult}'",
