@@ -1,22 +1,29 @@
 ﻿#region
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.Shell;
-using PatternPal.Extension.Grpc;
 using EnvDTE;
 using EnvDTE80;
+using Microsoft.VisualStudio.Shell;
+using PatternPal.Extension.Grpc;
 using PatternPal.Protos;
-using System.Threading;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 #endregion
 
 namespace PatternPal.Extension.Commands
 {
+    public enum ExtensionLogStatusCodes
+    {
+        Available,
+        Unavailable,
+        Error,
+        NoLog
+    }
     /// <summary>
     /// A static class which is responsible for subscribing logged event in ProgSnap2 format.
     /// </summary>
@@ -48,6 +55,22 @@ namespace PatternPal.Extension.Commands
         private static bool _doLog = false;
 
         private static CancellationToken _cancellationToken;
+
+        private static ExtensionLogStatusCodes _serverStatus = ExtensionLogStatusCodes.NoLog;
+
+        public static ExtensionLogStatusCodes ServerStatus
+        {
+            get
+            {
+                if (_doLog) {
+                    return _serverStatus;
+                }
+                return ExtensionLogStatusCodes.NoLog;
+            }
+            set => _serverStatus = value;
+        }
+
+        public static Action ServerStatusChanged = delegate { };
 
         /// <summary>
         /// Initializes the preparation for the subscription of the logged events. 
@@ -420,8 +443,37 @@ namespace PatternPal.Extension.Commands
         {
             LogProviderService.LogProviderServiceClient client =
                 new LogProviderService.LogProviderServiceClient(GrpcHelper.Channel);
-
-            return client.LogEvent(request);
+            try
+            {
+                LogEventResponse ler = client.LogEvent(request);
+                ServerStatusChanged?.Invoke();
+                switch (ler.Status)
+                {
+                    case LogStatusCodes.LscSuccess:
+                        ServerStatus = ExtensionLogStatusCodes.Available;
+                        return ler;
+                    case LogStatusCodes.LscUnavailable:
+                        ServerStatus = ExtensionLogStatusCodes.Unavailable;
+                        return ler;
+                    case LogStatusCodes.LscFailure:
+                    case LogStatusCodes.LscRejected:
+                    case LogStatusCodes.LscInvalidArguments:
+                    case LogStatusCodes.LscUnknown:
+                    default:
+                        ServerStatus = ExtensionLogStatusCodes.Error;
+                        return ler;
+                }
+            }
+            // Host not found, timeout exception, etc.
+            catch (Exception e)
+            {
+                ServerStatus = ExtensionLogStatusCodes.Unavailable;
+                return new LogEventResponse
+                {
+                    Status = LogStatusCodes.LscUnknown,
+                    Message = e.Message
+                };
+            }
         }
 
         /// <summary>

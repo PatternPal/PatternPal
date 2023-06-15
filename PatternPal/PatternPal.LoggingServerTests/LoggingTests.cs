@@ -75,7 +75,7 @@ namespace PatternPal.LoggingServerTests
         /// This test checks if the log method returns the correct statuscode when given an invalid request. In this case the datetime is invalid.
         /// </summary>
         [Test]
-        public void Log_InvalidDateTime_ThrowsInvalidArgument()
+        public void Log_InvalidDateTime_InvalidArgument()
         {
             // Arrange
             LogRequest request = new LogRequest
@@ -90,14 +90,16 @@ namespace PatternPal.LoggingServerTests
             };
 
             // Act & Assert
-            Assert.ThrowsAsync<RpcException>(() => _service.Log(request, Mock.Of<ServerCallContext>()));
+            // assert that response status code is 4
+            Assert.That(_service.Log(request, Mock.Of<ServerCallContext>()).Result.Status, Is.EqualTo(LogStatusCodes.LscInvalidArguments));
+
         }
 
         /// <summary>
         /// This session checks if the log method returns the correct statuscode when given an invalid request. In this case the sessionid is invalid.
         /// </summary>
         [Test]
-        public void Log_InvalidSessionId_ThrowsInvalidArgument()
+        public void Log_InvalidSessionId_InvalidArgument()
         {
             // Arrange
             LogRequest request = new LogRequest
@@ -112,14 +114,14 @@ namespace PatternPal.LoggingServerTests
             };
 
             // Act & Assert
-            Assert.ThrowsAsync<RpcException>(() => _service.Log(request, Mock.Of<ServerCallContext>()));
+            Assert.That(_service.Log(request, Mock.Of<ServerCallContext>()).Result.Status, Is.EqualTo(LogStatusCodes.LscInvalidArguments));
         }
 
         /// <summary>
         /// This test checks if the log method returns the correct statuscode when given an invalid request. In this case the eventtype cannot be unknown.
         /// </summary>
         [Test]
-        public void Log_UnknownEventType_ThrowsInvalidArgument()
+        public void Log_UnknownEventType_InvalidArgument()
         {
             // Arrange
             LogRequest request = new LogRequest
@@ -134,7 +136,7 @@ namespace PatternPal.LoggingServerTests
             };
 
             // Act & Assert
-            Assert.ThrowsAsync<RpcException>(() => _service.Log(request, Mock.Of<ServerCallContext>()));
+            Assert.That(_service.Log(request, Mock.Of<ServerCallContext>()).Result.Status, Is.EqualTo(LogStatusCodes.LscInvalidArguments));
         }
 
         [Test]
