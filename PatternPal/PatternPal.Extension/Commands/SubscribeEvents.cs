@@ -58,6 +58,7 @@ namespace PatternPal.Extension.Commands
 
         private static ExtensionLogStatusCodes _serverStatus = ExtensionLogStatusCodes.NoLog;
 
+        private static string _toolInstances = "";
         public static ExtensionLogStatusCodes ServerStatus
         {
             get
@@ -93,7 +94,7 @@ namespace PatternPal.Extension.Commands
             _dteDocumentEvents = _dte.Events.DocumentEvents;
             _package = package;
             _cancellationToken = cancellationToken;
-
+            _toolInstances = $" { _dte.Version } { _dte.Edition } { _dte.Name } {Vsix.Version}";
             // We should call OnChangedLoggingPreference to "load" a possibly stored setting. The
             // application always stored with the internal flag set to false, so this will only actually
             // do something when it was stored as true (and subsequently kickstart the logging session).
@@ -464,7 +465,7 @@ namespace PatternPal.Extension.Commands
         {
             return new LogEventRequest
             {
-                EventId = Guid.NewGuid().ToString(), SubjectId = SubjectId, SessionId = SessionId
+                EventId = Guid.NewGuid().ToString(), SubjectId = SubjectId, SessionId = SessionId, ToolInstances = _toolInstances
             };
         }
 
