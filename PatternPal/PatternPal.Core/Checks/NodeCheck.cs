@@ -73,6 +73,9 @@ public class NodeCheck< TNode > : CheckBase
                     //    true);
                 }
 
+                // TODO: `Any` checks shouldn't get the total of their sub-checks.
+                // Perhaps we can't precompute this, and we instead need to pass in some information
+                // to decide which `Any` child to use for the perfect score.
                 foreach (ICheck subCheck in SubChecks)
                 {
                     _perfectScore += subCheck.PerfectScore;
