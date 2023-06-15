@@ -1,7 +1,11 @@
-﻿using System.Windows;
+﻿#region
+
+using System.Windows;
 using System.Windows.Input;
 using PatternPal.Extension.Stores;
 using PatternPal.Extension.Commands;
+
+#endregion
 
 namespace PatternPal.Extension.ViewModels
 {
