@@ -207,6 +207,18 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         sendLog.CodeStateSection = receivedRequest.CodeStateSection;
         sendLog.ProjectId = receivedRequest.ProjectId;
 
+        try
+        {
+            string projectDirectory = Path.GetDirectoryName(sendLog.ProjectId);
+            string filePathInProjectDir = Path.GetRelativePath(projectDirectory, sendLog.CodeStateSection);
+            
+            _lastCodeState[sendLog.ProjectId].Remove(filePathInProjectDir);
+        }
+        catch(Exception ex)
+        {
+            // ignored
+        }
+
         return sendLog;
     }
 
