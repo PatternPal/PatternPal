@@ -15,6 +15,7 @@ using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Win32;
+using PatternPal.Extension.Commands;
 using PatternPal.Extension.Grpc;
 using PatternPal.Extension.ViewModels;
 using PatternPal.Protos;
@@ -147,7 +148,7 @@ namespace PatternPal.Extension.Views
             try
             {
                 bool result = GrpcHelper.StepByStepClient.CheckInstruction(request).Result;
-
+                SubscribeEvents.OnStepByStepCheck( request.Recognizer.ToString(), request.InstructionNumber, result );
                 if (!result)
                 {
                     resultTextBlock.Visibility = Visibility.Hidden;

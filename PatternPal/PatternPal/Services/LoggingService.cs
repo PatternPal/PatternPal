@@ -1,4 +1,4 @@
-#region
+﻿#region
 
 using Google.Protobuf;
 using System.IO.Compression;
@@ -98,6 +98,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
             Protos.EventType.EvtSessionStart => (SessionStartLog(receivedRequest), false),
             Protos.EventType.EvtSessionEnd => (SessionEndLog(receivedRequest), false),
             Protos.EventType.EvtXRecognizerRun => (RecognizeLog(receivedRequest), false),
+            Protos.EventType.EvtXStepByStepStep => (StepByStepLog(receivedRequest), false),
             _ => (StandardLog(receivedRequest), false)
         };
     }
@@ -321,6 +322,15 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         LogRequest sendLog = StandardLog(receivedRequest);
         sendLog.EventType = LoggingServer.EventType.EvtSessionEnd;
 
+        return sendLog;
+    }
+
+    private static LogRequest StepByStepLog(LogEventRequest receivedRequest)
+    {
+        LogRequest sendLog = StandardLog(receivedRequest);
+        sendLog.EventType = LoggingServer.EventType.EvtXStepByStepStep;
+        sendLog.RecognizerConfig = receivedRequest.RecognizerConfig;
+        sendLog.RecognizerResult = receivedRequest.RecognizerResult;
         return sendLog;
     }
 

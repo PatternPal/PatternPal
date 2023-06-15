@@ -12,6 +12,8 @@ using Microsoft.VisualStudio.Shell;
 using PatternPal.Extension.Grpc;
 using PatternPal.Protos;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 #endregion
 
@@ -429,6 +431,30 @@ namespace PatternPal.Extension.Commands
             LogEventResponse response = PushLog(request);
         }
 
+        public static void OnStepByStepCheck(string recognizer, int CurrentInstructionNumber, bool result)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (_package == null || !Privacy.Instance.DoLogData)
+            {
+                return;
+            }
+            LogEventRequest request = CreateStandardLog();
+            request.EventType = EventType.EvtXStepByStepStep;
+            // config should be dict with recognizer name and current instruction number
+            Dictionary<string,string> config = new Dictionary<string, string>()
+            {
+                { "recognizer", recognizer },
+                { "currentInstructionNumber", CurrentInstructionNumber.ToString()}
+            };
+            request.RecognizerConfig = JsonSerializer.Serialize(config);
+            Dictionary<string,string> results = new Dictionary<string, string>()
+            {
+                { "result", result.ToString() }
+            };
+
+            request.RecognizerResult = JsonSerializer.Serialize(results);
+            LogEventResponse response = PushLog(request);
+        }
         #endregion
 
         /// <summary>
