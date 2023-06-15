@@ -675,11 +675,6 @@ public interface IRecognizerContext
     internal IEntity CurrentEntity { get; }
 
     /// <summary>
-    /// The <see cref="ICheck"/> which is the direct parent of the current <see cref="ICheck"/>.
-    /// </summary>
-    internal ICheck ParentCheck { get; }
-
-    /// <summary>
     /// The <see cref="ICheck"/> belonging to the <see cref="CurrentEntity"/>.
     /// </summary>
     internal ICheck EntityCheck { get; }
