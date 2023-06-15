@@ -13,7 +13,7 @@ using PatternPal.SyntaxTree.Abstractions.Root;
 
 #endregion
 
-namespace PatternPal.Core;
+namespace PatternPal.Core.Runner;
 
 /// <summary>
 /// This class is the driver which handles running the recognizers.
@@ -367,9 +367,9 @@ public class RecognizerRunner
                                     resultsByNode,
                                     nodeCheckResult,
                                     pruneAll)
-                                && (Prune(
+                                && Prune(
                                     notCheckResult.Priority,
-                                    pruneAll)))
+                                    pruneAll))
                             {
                                 resultsToBePruned.Add(notCheckResult);
                                 notCheckResult.Pruned = true;
@@ -852,16 +852,16 @@ public struct Score : IComparable< Score >
         Score score) =>
         new()
         {
-            Knockout = (priority == Priority.Knockout && score.Knockout == 0)
+            Knockout = priority == Priority.Knockout && score.Knockout == 0
                 ? 1
                 : 0,
-            High = (priority == Priority.High && score.High == 0)
+            High = priority == Priority.High && score.High == 0
                 ? 1
                 : 0,
-            Mid = (priority == Priority.Mid && score.Mid == 0)
+            Mid = priority == Priority.Mid && score.Mid == 0
                 ? 1
                 : 0,
-            Low = (priority == Priority.Low && score.Low == 0)
+            Low = priority == Priority.Low && score.Low == 0
                 ? 1
                 : 0
         };

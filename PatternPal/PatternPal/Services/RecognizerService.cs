@@ -1,4 +1,6 @@
-﻿namespace PatternPal.Services;
+﻿using PatternPal.Core.Runner;
+
+namespace PatternPal.Services;
 
 /// <inheritdoc cref="Protos.RecognizerService"/>
 public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
