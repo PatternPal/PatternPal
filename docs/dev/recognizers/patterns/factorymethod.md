@@ -1,9 +1,10 @@
-# Adapter
+# Factory-Method
 ## Introduction
-A Factory-Method pattern is a design pattern which is very useful when one wants to reduice code duiplication when creating different objects with the same caracteristics. The explanation on this page is based on the definition of previous development teams, the website _refactoring guru_[^1] and the book _Design Patterns Explained_[^2].
+A Factory-Method pattern is a design pattern which is very useful when one wants to reduice code duiplication when creating different objects with the same characteristics. The explanation on this page is based on the definition of previous development teams, the website _refactoring guru_[^1] and the book _Design Patterns Explained_[^2].
 
 ### Context of use
-The Factory-Method is great for situations when one wants to do the same thing in different ways. Via the Factory-Method you can easily reduce code duplication because the overlapping things can be written in an abstract class and every different ‘way’ can use these overlapping methods. The different things can be implemented via an overwrite of the default class. With this pattern you will only have to write every piece of code one time which makes the code more maintainable.
+The Factory-Method is great for when a class needs to instantiate a derivation of another class, but doesn't
+know which one. Factory Method allows a derived class to make this decision. Via the Factory-Method you can easily reduce code duplication because the overlapping things can be written in an abstract class and every different derivation can use these overlapping methods. The different things can be implemented via an overwrite of the default class. With this pattern you will only have to write every piece of code one time which makes the code more maintainable.
 
 ### Example of use
 An example of use for this pattern is creating a button on a different IOS. You create a ‘Creator’ class in which you can write all the overlapping information. Then every ‘ConcreteCreator’ class will inherit from the Creator class and overwrite the things which are different for its own. For example, the text on the button can be written in the superclass Creator, but the behavior of the button (for example ‘go to settings’) will be written in the subclass because this is different for each IOS
@@ -12,7 +13,6 @@ An example of use for this pattern is creating a button on a different IOS. You 
 ![UML Factory-Method](https://refactoring.guru/images/patterns/diagrams/factory-method/example-2x.png?id=a2470830778e318263155000dbdc5870)
 
 The **Service** class is the class in which the adapted code is located. This code should not be altered and is already written (possibly by a third party) and is not directly usable by the `Client`.
-
 The **Product** interface is the interface in which the properties of the `Concrete Products` gets declared.
 The **Concrete** Product classes are the specific products that the corresponding `Concrete Creators` will create.
 The **Creator** class declares the factory which will contain the factory method which will create a `Product`.

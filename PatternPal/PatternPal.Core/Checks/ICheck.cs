@@ -601,8 +601,8 @@ internal static class CheckBuilder
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="RelationCheck"/>.</param>
     /// <param name="relatedNodeCheck">The <see cref="ICheck"/> which checks for the node
-    /// to which there should be a <see cref="RelationType.Creates"/> relation.</param>
-    /// <returns>The entity which creates in the <see cref="RelationCheck"/></returns>
+    /// to which there should be a <see cref="RelationType.CreatedBy"/> relation.</param>
+    /// <returns>The entity which is the creator in this <see cref="RelationCheck"/></returns>
     internal static RelationCheck CreatedBy(
         Priority priority,
         ICheck relatedNodeCheck) => new(

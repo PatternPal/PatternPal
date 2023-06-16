@@ -24,7 +24,7 @@
      *            ✓  b) has exactly one method that creates and returns a Concrete product
      */
 
-    //Product
+    // Product
     internal abstract class CreditCard
     {
         public abstract string CardType { get; }
@@ -32,7 +32,7 @@
         public abstract int AnnualCharge { get; set; }
     }
     
-    //Concrete product
+    // Concrete product
     internal class MoneyBackCreditCard : CreditCard
     {
         private int _annualCharge;
@@ -60,7 +60,7 @@
         }
     }
 
-    //Concrete product
+    // Concrete product
     internal class PlatinumCreditCard : CreditCard
     {
         private int _annualCharge;
@@ -88,7 +88,7 @@
         }
     }
 
-    //Concrete product
+    // Concrete product
     internal class TitaniumCreditCard : CreditCard
     {
         private int _annualCharge;
@@ -116,13 +116,13 @@
         }
     }
 
-    //Creator
+    // Creator
     internal abstract class CardFactory
     {
         public abstract CreditCard GetCreditCard();
     }
 
-    //Concrete creator
+    // Concrete creator
     internal class MoneyBackFactory : CardFactory
     {
         private readonly int _annualCharge;
@@ -140,7 +140,7 @@
         }
     }
 
-    //Concrete creator
+    // Concrete creator
     internal class PlatinumFactory : CardFactory
     {
         private readonly int _annualCharge;
@@ -158,7 +158,7 @@
         }
     }
 
-    //Concrete creator
+    // Concrete creator
     internal class TitaniumFactory : CardFactory
     {
         private readonly int _annualCharge;

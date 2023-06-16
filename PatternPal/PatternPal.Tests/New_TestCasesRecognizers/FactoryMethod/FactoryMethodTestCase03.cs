@@ -24,13 +24,13 @@
      *               b) has exactly one method that creates and returns a Concrete product
      */
 
-    //Product
+    // Product
     public interface IProduct
     {
         string Operation();
     }
 
-    //Concrete product
+    // Concrete product
     internal class ConcreteProduct1 : IProduct
     {
         public string Operation()
@@ -39,7 +39,7 @@
         }
     }
 
-    //Creator
+    // Creator
     internal abstract class Creator
     {
         public abstract IProduct FactoryMethod();
@@ -54,7 +54,7 @@
         }
     }
 
-    //Concrete creator
+    // Concrete creator
     internal class ConcreteCreator1 : Creator
     {
         public override IProduct FactoryMethod()

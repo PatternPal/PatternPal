@@ -24,7 +24,7 @@
      *            ✓  b) has exactly one method that creates and returns a Concrete product
      */
 
-    //Product
+    // Product
     public interface IBeer
     {
         int BatchSize { get; set; }
@@ -44,7 +44,7 @@
         string GetBeer();
     }
 
-    //Concrete product
+    // Concrete product
     public class Blond : IBeer
     {
         public double AlcoholPercentage
@@ -67,7 +67,7 @@
         }
     }
 
-    //Concrete product
+    // Concrete product
     public class Dubbel : IBeer
     {
         public double AlcoholPercentage
@@ -90,7 +90,7 @@
         }
     }
 
-    //Creator
+    // Creator
     internal abstract class BeerFactory
     {
         public int amount;
@@ -141,7 +141,7 @@
         }
     }
 
-    //Concrete creator
+    // Concrete creator
     internal class BlondFactory : BeerFactory
     {
         public override IBeer BrewBier()
@@ -150,7 +150,7 @@
         }
     }
 
-    //Concrete creator
+    // Concrete creator
     internal class DubbleFactory : BeerFactory
     {
         public override IBeer BrewBier()

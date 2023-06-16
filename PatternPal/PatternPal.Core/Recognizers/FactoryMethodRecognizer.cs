@@ -1,30 +1,27 @@
 ﻿#region
-
 using PatternPal.Core.StepByStep;
 using PatternPal.SyntaxTree.Models;
-
 using static PatternPal.Core.Checks.CheckBuilder;
-
 #endregion
 
 namespace PatternPal.Core.Recognizers;
 
 /// <summary>
-/// A method which creates a lot of <see cref="ICheck"/>s that each adheres to the requirements a factory-method pattern needs to have implemented.
-/// It returns the requirements in a tree structure stated per class.
+/// A <see cref="IRecognizer"/> that is used to determine if the provided file is an implementation
+/// of the factory-method pattern.
 /// </summary>
 /// <remarks>
 /// Requirements for the Product class:<br/>
 ///     a) is an interface<br/>
 ///     b) gets inherited by at least one class<br/>
-///     c) gets inherited by at least two classes<br/>                          --todo: check this
+///     c) gets inherited by at least two classes<br/>                          --todo: check this, not possible in current test suite
 /// Requirements for the Concrete Product class:<br/>
 ///     a) inherits Product<br/>
 ///     b) gets created in a Concrete Creator<br/>
 /// Requirements for the Creator class:<br/>
 ///     a) is an abstract class<br/>
 ///     b) gets inherited by at least one class<br/>
-///     c) gets inherited by at least two classes<br/>                          --todo: check this
+///     c) gets inherited by at least two classes<br/>                          --todo: check this, not possible in current test suite
 ///     d) contains a factory-method with the following properties<br/>
 ///         1) method is abstract<br/>
 ///         2) method is public<br/>
@@ -45,6 +42,7 @@ internal class FactoryMethodRecognizer : IRecognizer
     /// A method which creates a lot of <see cref="ICheck"/>s that each adheres to the requirements a singleton pattern needs to have implemented.
     /// It returns the requirements in a tree structure stated per class.
     /// </summary>
+    /// <inheritdoc />
     public IEnumerable<ICheck> Create()
     {
         InterfaceCheck product = Product();
@@ -70,6 +68,27 @@ internal class FactoryMethodRecognizer : IRecognizer
         return Interface(
             Priority.Knockout,
             "is an interface"
+        );
+    }
+
+    /// <summary>
+    /// Creates a <see cref="ClassCheck"/> which checks if a class is implementing the <param name="product"></param>> interface.
+    /// This method corresponds to Step 2 in the step-by-step mode: "Create two new classes which inherit the Product.
+    /// We refer to these classes as Concrete Product."
+    /// </summary>
+    /// <param name="product"> this should be an interface check for the product interface.</param>
+    /// <returns>A <see cref="ClassCheck"/> which should result in the Concrete Product class.</returns>
+    ClassCheck ConcreteProduct(InterfaceCheck product)
+    {
+        //Concrete product a & Product b
+        RelationCheck concreteInheritsProduct = Implements(
+            Priority.Knockout,
+            "gets inherited by at least one class + Concrete Product inherits Product",
+            product);
+
+        return Class(
+            Priority.Low,
+            concreteInheritsProduct
         );
     }
 
@@ -112,27 +131,6 @@ internal class FactoryMethodRecognizer : IRecognizer
             Priority.Low,
             isAbstract,
             factoryMethod
-        );
-    }
-
-    /// <summary>
-    /// Creates a <see cref="ClassCheck"/> which checks if a class is implementing the <param name="product"></param>> interface.
-    /// This method corresponds to Step 2 in the step-by-step mode: "Create two new classes which inherit the Product.
-    /// We refer to these classes as Concrete Product."
-    /// </summary>
-    /// <param name="product"> this should be an interface check for the product interface.</param>
-    /// <returns>A <see cref="ClassCheck"/> which should result in the Concrete Product class.</returns>
-    ClassCheck ConcreteProduct(InterfaceCheck product)
-    {
-        //Concrete product a & Product b
-        RelationCheck concreteInheritsProduct = Implements(
-            Priority.Knockout,
-            "gets inherited by at least one class + Concrete Product inherits Product",
-            product);
-
-        return Class(
-            Priority.Low,
-            concreteInheritsProduct
         );
     }
 

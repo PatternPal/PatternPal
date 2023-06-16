@@ -24,32 +24,32 @@
      *               b) has exactly one method that creates and returns a Concrete product
      */
 
-    //Product
+    // Product
     internal abstract class Ingredient
     {
     }
 
-    //Concrete product
+    // Concrete product
     internal class Lettuce : Ingredient
     {
     }
 
-    //Concrete product
+    // Concrete product
     internal class Bread : Ingredient
     {
     }
 
-    //Concrete product
+    // Concrete product
     internal class Mayonnaise : Ingredient
     {
     }
 
-    //Concrete product
+    // Concrete product
     internal class Turkey : Ingredient
     {
     }
 
-    //Creator
+    // Creator
     internal abstract class Sandwich
     {
         public Sandwich()
@@ -59,11 +59,11 @@
 
         public List<Ingredient> Ingredients { get; } = new List<Ingredient>();
 
-        //Factory method
+        // Factory method
         public abstract void CreateIngredients();
     }
 
-    //Concrete creator
+    // Concrete creator
     internal class TurkeySandwich : Sandwich
     {
         public override void CreateIngredients()
@@ -77,7 +77,7 @@
         }
     }
 
-    //Concrete creator
+    // Concrete creator
     internal class Dagwood : Sandwich //OM NOM NOM
     {
         public override void CreateIngredients()
