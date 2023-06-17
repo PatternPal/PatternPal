@@ -75,7 +75,7 @@ internal class DecoratorRecognizer : IRecognizer
 /// It has implemented the methods which are the same in case of an interface or abstract class,
 /// and it has defined the methods which are different in case of an interface or abstract class.
 /// </summary>
-internal abstract class DecoratorRecognizerParent
+abstract file class DecoratorRecognizerParent
 {
     /// <summary>
     /// Makes a list of checks that form the requirements to be a Decorator recognizer.
@@ -321,7 +321,7 @@ internal abstract class DecoratorRecognizerParent
 /// A class implementing the parts of the Decorator recognizer in case it uses an abstract class.
 /// </summary>
 //TODO check whether can be file scoped
-internal class DecoratorRecognizerWithAbstractClass : DecoratorRecognizerParent
+file class DecoratorRecognizerWithAbstractClass : DecoratorRecognizerParent
 {
     /// <inheritdoc />
     protected override MethodCheck ComponentMethod() =>
@@ -386,7 +386,7 @@ internal class DecoratorRecognizerWithAbstractClass : DecoratorRecognizerParent
 /// <summary>
 /// A class implementing the parts of the Decorator recognizer in case it uses an interface.
 /// </summary>
-internal class DecoratorRecognizerWithInterface : DecoratorRecognizerParent, IStepByStepRecognizer
+file class DecoratorRecognizerWithInterface : DecoratorRecognizerParent, IStepByStepRecognizer
 {
     /// <inheritdoc />
     protected override MethodCheck ComponentMethod() => Method(
