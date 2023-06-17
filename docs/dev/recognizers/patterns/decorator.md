@@ -69,6 +69,7 @@ The priority of a requirement is noted with the (low)-(mid)-(high)-(knockout) cr
 1. (knockout) inherits from `BaseDecorator`
 2. (knockout) calls the method of its parent in the implementation of the method of `Component`
 3. (mid) has a function providing extra behavior which it calls in the implementation of the method of `Component`
+4. (low) the function providing extra behaviour does not use the method of Component 
 
 ## References
 [^1]: Refactoring Guru, Structural Patterns - Decorator. https://refactoring.guru/design-patterns/decorator

@@ -32,7 +32,8 @@ namespace PatternPal.Core.Recognizers;
 /// 4) Requirements for Concrete Decorator:
 ///     a) inherits from Base Decorator
 ///     b) calls the method of its parent in the implementation of the method of Component
-///     c) has a function providing extra behaviour which it calls in the implementation of the method of Component<br/>
+///     c) has a function providing extra behaviour which it calls in the implementation of the method of Component
+///     d) the function providing extra behaviour does not use the method of Component<br/>
 /// 5) Requirements for Client:
 ///     a) has created an object of the type ConcreteComponent
 ///     b) has created an object of the type ConcreteDecorator, to which it passes the ConcreteComponent
