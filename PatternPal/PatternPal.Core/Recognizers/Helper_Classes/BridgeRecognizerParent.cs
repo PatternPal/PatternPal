@@ -5,8 +5,15 @@ using static PatternPal.Core.Checks.CheckBuilder;
 
 namespace PatternPal.Core.Recognizers.Helper_Classes;
 
+/// <summary>
+/// The basis of the bridge pattern, it is used in the bridge interface checks creation and the bridge abstract class checks
+/// </summary>
 internal abstract class BridgeRecognizerParent
 {
+    /// <summary>
+    /// A method that creates a list of <see cref="ICheck"/>s that represent the basis of the Bridge pattern.  
+    /// </summary>
+    /// <returns>A array of <see cref="ICheck"/>s containing the five class checks that a bridge pattern holds.</returns>
     public ICheck[] Checks()
     {
         // requirements checks for Implementation 
@@ -127,6 +134,21 @@ internal abstract class BridgeRecognizerParent
                 methodInImplementation));
     }
 
+    /// <summary>
+    /// A method that creates a <see cref="NodeCheck{TNode}"/> to verify the existence of
+    /// either the <paramref name="setImplementationConstructor"/> check or the
+    /// <paramref name="setImplementationMethod" /> check or the <paramref name="implementationProperty"/> check.
+    /// </summary>
+    /// <param name="setImplementationConstructor">A <see cref="ConstructorCheck"/> that checks whether there is a
+    /// not private or protected constructor with a <paramref name="implementationCheck"/> as type.</param>
+    /// <param name="setImplementationMethod">A <see cref="MethodCheck"/> that checks whether there is a
+    /// not private and not protected method with a <paramref name="implementationCheck"/> as type.</param>
+    /// <param name="implementationCheck">A <see cref="CheckBase"/> that the instances the other checks verify have to have as type.</param>
+    /// <param name="implementationProperty">A <see cref="PropertyCheck"/> that checks the existence of a property of
+    /// <paramref name="implementationCheck"/></param>
+    /// <returns>A <see cref="ICheck"/> that holds a check that verifies the existence of an instance that adheres to
+    /// the <paramref name="setImplementationConstructor"/> check or the <paramref name="setImplementationMethod" /> check
+    /// or the <paramref name="implementationProperty"/> check.</returns>
     internal ICheck SetAvailabilityFieldOrPropertyCheck(out ConstructorCheck setImplementationConstructor, out MethodCheck setImplementationMethod,
         CheckBase implementationCheck, PropertyCheck implementationProperty)
     {
@@ -164,14 +186,23 @@ internal abstract class BridgeRecognizerParent
     /// <returns>A <see cref="ClassCheck"/> that checks for a class that adheres to the requirements of an instance of
     /// the concreteImplementation</returns>
     public abstract ClassCheck ConcreteImplementation(CheckBase implementationCheck, MethodCheck methodInImplementation);
-    
-    internal ICheck SetsImplementationFieldCheck(ICheck fieldOrProperty, ConstructorCheck setImplementationConstructor, MethodCheck setImplementationMethod)
+
+    /// <summary>
+    /// A method that creates a check that checks whether there is a <see cref="RelationType.Uses"/> relation with either <paramref name="implementationProperty"/>
+    /// or a <paramref name="setImplementationConstructor"/> or a <paramref name="setImplementationMethod"/>.
+    /// </summary>
+    /// <param name="implementationProperty">The <see cref="PropertyCheck"/> of a property in the Implementation class that could be used.</param>
+    /// <param name="setImplementationConstructor">The <see cref="ConstructorCheck"/> of a constructor in the Implementation class that could be used.</param>
+    /// <param name="setImplementationMethod">The <see cref="MethodCheck"/> of a method in the Implementation class that could be used</param>
+    /// <returns></returns>
+    internal ICheck SetsImplementationFieldCheck(PropertyCheck implementationProperty, ConstructorCheck setImplementationConstructor, MethodCheck setImplementationMethod)
     {
         return Any(
             Priority.Low,
             Uses(Priority.Low, setImplementationConstructor),
             Uses(Priority.Low, setImplementationMethod),
-            Uses(Priority.Low, fieldOrProperty)
+            Uses(Priority.Low, implementationProperty)
         );
     }
+
 }
