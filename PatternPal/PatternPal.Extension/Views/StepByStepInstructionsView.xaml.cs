@@ -35,7 +35,6 @@ namespace PatternPal.Extension.Views
         {   
             InitializeComponent();
             InitializeViewModelAndButtons();
-            //ContinueButtonBehavior();
 
             Dispatcher.VerifyAccess();
             LoadProject();
