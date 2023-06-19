@@ -26,7 +26,8 @@ namespace PatternPal.Core.Recognizers;
 ///     a) is an implementation of Component
 ///     b) is an abstract class
 ///     c) has a field of type Component
-///     d) has a constructor with a parameter of type Component, which it passes to its field
+///     d) the field is private
+///     d) has a non-private constructor with a parameter of type Component, which it passes to its field
 ///     e) calls the method of its field in the implementation of the method of Component<br/>
 ///         i) if Component is an abstract class, it overrides the method of Component
 /// 4) Requirements for Concrete Decorator:
@@ -185,6 +186,10 @@ abstract file class DecoratorRecognizerParent
                 Type(
                     Priority.Knockout,
                     (CheckBase)component
+                ),
+                Modifiers(
+                    Priority.High,
+                    Modifier.Private
                 )
             );
 
@@ -208,6 +213,13 @@ abstract file class DecoratorRecognizerParent
         Constructor(
             Priority.High,
             "has a constructor with a parameter of type Component, which it passes to its field.",
+            Not(
+                Priority.High,
+                Modifiers(
+                    Priority.High,
+                    Modifier.Private
+                )
+            ),
             Uses(
                 Priority.High,
                 baseDecoratorField
@@ -474,7 +486,7 @@ file class DecoratorRecognizerWithInterface : DecoratorRecognizerParent, IStepBy
         generateStepsList.Add(
             new SimpleInstruction(
                 DecoratorInstructions.Step1,
-                "Add string why",
+                DecoratorInstructions.Explanation1,
                 new List<ICheck> { component }));
 
         ClassCheck concreteComponent = ConcreteComponent(component, componentMethod);
@@ -482,7 +494,7 @@ file class DecoratorRecognizerWithInterface : DecoratorRecognizerParent, IStepBy
         generateStepsList.Add(
             new SimpleInstruction(
                 DecoratorInstructions.Step2,
-                "Add string why",
+                DecoratorInstructions.Explanation2,
                 new List<ICheck>{
                     component,
                     concreteComponent}));
@@ -492,7 +504,7 @@ file class DecoratorRecognizerWithInterface : DecoratorRecognizerParent, IStepBy
         generateStepsList.Add(
             new SimpleInstruction(
                 DecoratorInstructions.Step3,
-                "Add string why",
+                DecoratorInstructions.Explanation3,
                 new List<ICheck>
                 {
                     component,
@@ -516,7 +528,7 @@ file class DecoratorRecognizerWithInterface : DecoratorRecognizerParent, IStepBy
         generateStepsList.Add(
             new SimpleInstruction(
                 DecoratorInstructions.Step4,
-                "Add string why",
+                DecoratorInstructions.Explanation4,
                 new List<ICheck>
                 {
                     component,
@@ -543,7 +555,7 @@ file class DecoratorRecognizerWithInterface : DecoratorRecognizerParent, IStepBy
         generateStepsList.Add(
             new SimpleInstruction(
                 DecoratorInstructions.Step5,
-                "Add string why",
+                DecoratorInstructions.Explanation5,
                 new List<ICheck>
                 {
                     component,
@@ -556,7 +568,7 @@ file class DecoratorRecognizerWithInterface : DecoratorRecognizerParent, IStepBy
         generateStepsList.Add(
             new SimpleInstruction(
                 DecoratorInstructions.Step6,
-                "Add string why",
+                DecoratorInstructions.Explanation6,
                 new List<ICheck>
                 {
                     component,
@@ -591,7 +603,7 @@ file class DecoratorRecognizerWithInterface : DecoratorRecognizerParent, IStepBy
         generateStepsList.Add(
             new SimpleInstruction(
                 DecoratorInstructions.Step7,
-                "Add string why",
+                DecoratorInstructions.Explanation7,
                 new List<ICheck>
                 {
                     component,
@@ -606,7 +618,7 @@ file class DecoratorRecognizerWithInterface : DecoratorRecognizerParent, IStepBy
         generateStepsList.Add(
             new SimpleInstruction(
                 DecoratorInstructions.Step8,
-                "Add string why",
+                DecoratorInstructions.Explanation8,
                 new List<ICheck>
                 {
                     component,

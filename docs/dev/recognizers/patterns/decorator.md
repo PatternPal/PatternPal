@@ -60,8 +60,9 @@ The priority of a requirement is noted with the (low)-(mid)-(high)-(knockout) cr
 1. (knockout) is an implementation of `Component`
 2. (high) is an abstract class
 3. (knockout) has a field of type `Component`
-4. (high) has a constructor with a parameter of type `Component`, which it passes to its field 
-5. (knockout) calls the method of its field in the implementation of the method of `Component`
+4. (high) the field is private
+5. (high) has a non-private constructor with a parameter of type `Component`, which it passes to its field 
+6. (knockout) calls the method of its field in the implementation of the method of `Component`
     1. if Component is an abstract class, it overrides the method of Component
 7. (knockout) is inherited by at least 1 other class
 

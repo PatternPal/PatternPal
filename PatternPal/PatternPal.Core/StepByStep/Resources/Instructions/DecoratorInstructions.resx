@@ -117,6 +117,30 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Explanation1" xml:space="preserve">
+    <value>This will be the common interface for both wrappers (decorators) and wrapped objects (concrete components).</value>
+  </data>
+  <data name="Explanation2" xml:space="preserve">
+    <value>This class defines the basic behabvior we want, which, when we are done, can be altered by decorators.</value>
+  </data>
+  <data name="Explanation3" xml:space="preserve">
+    <value>This class is abstract, since its only job is delegating operations to the wrapped object, i.e. the field. The field needs to have Component as type, since this class should be able to both wrap both concrete components and decorators. It should be private since its only purpose should be to be called in the method. The specific extra behavior will be added by classes inheriting from this class.</value>
+  </data>
+  <data name="Explanation4" xml:space="preserve">
+    <value>This constructor is needed to actually wrap a component. It should not be private since a class inheriting from this class should be able to pass an instance of to the parameter.</value>
+  </data>
+  <data name="Explanation5" xml:space="preserve">
+    <value>This call ensures a decorator will always execute the behavior of its wrapped object</value>
+  </data>
+  <data name="Explanation6" xml:space="preserve">
+    <value>By calling the method of the parent, we ensure that the behaviour of the wrapped object is executed.</value>
+  </data>
+  <data name="Explanation7" xml:space="preserve">
+    <value>Now, the decorator does really add additional behavior to the wrapped object.</value>
+  </data>
+  <data name="Explanation8" xml:space="preserve">
+    <value>The client can now wrap components in multiple layers of decorators. </value>
+  </data>
   <data name="Step1" xml:space="preserve">
     <value>Make an interface with a method. We refer to this interface as `Component`.</value>
   </data>
@@ -124,10 +148,10 @@
     <value>Make a class that implements Component. Also implement the method. We refer to this class as `ConcreteComponent`.</value>
   </data>
   <data name="Step3" xml:space="preserve">
-    <value>Make an abstract class that implements Component. Implement the method of Component by making it virtual. Give it a field with type Component. We refer to this class as `Decorator`.</value>
+    <value>Make an abstract class that implements Component. Implement the method of Component by making it virtual. Give it a private field with type Component. We refer to this class as `Decorator`.</value>
   </data>
   <data name="Step4" xml:space="preserve">
-    <value>Give Decorator a constructor with a parameter that gets assigned to the field. </value>
+    <value>Give Decorator a non-private constructor with a parameter that gets assigned to the field. </value>
   </data>
   <data name="Step5" xml:space="preserve">
     <value>In Decorator, call the method of the field in the implementation of the method.</value>
@@ -136,9 +160,9 @@
     <value>Make a class that inherits from Decorator. Override its method by calling the method of Decorator; base.Method(). We refer to this class as `ConcreteDecorator`.</value>
   </data>
   <data name="Step7" xml:space="preserve">
-    <value>Add a method to ConcreteDecorator providing additional behaviour and call it in the overrided method either before or after the call to the parent's method.</value>
+    <value>Add a method to ConcreteDecorator providing additional behavior and call it in the overrided method either before or after the call to the parent's method.</value>
   </data>
   <data name="Step8" xml:space="preserve">
-    <value>Make a class with a method that instantiates an instance of ConcreteDecorator by passing to its constructor a new instance of ConcreteComponent. Now call the method of the instanciated variable.</value>
+    <value>Make a class with a method that instantiates an instance of ConcreteDecorator by passing to its constructor a new instance of ConcreteComponent. Now call the method of the instantiated variable.</value>
   </data>
 </root>

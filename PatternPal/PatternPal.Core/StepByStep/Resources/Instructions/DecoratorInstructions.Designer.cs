@@ -61,6 +61,78 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This will be the common interface for both wrappers (decorators) and wrapped objects (concrete components)..
+        /// </summary>
+        internal static string Explanation1 {
+            get {
+                return ResourceManager.GetString("Explanation1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This class defines the basic behabvior we want, which, when we are done, can be altered by decorators..
+        /// </summary>
+        internal static string Explanation2 {
+            get {
+                return ResourceManager.GetString("Explanation2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This class is abstract, since its only job is delegating operations to the wrapped object, i.e. the field. The field needs to have Component as type, since this class should be able to both wrap both concrete components and decorators. It should be private since its only purpose should be to be called in the method. The specific extra behavior will be added by classes inheriting from this class..
+        /// </summary>
+        internal static string Explanation3 {
+            get {
+                return ResourceManager.GetString("Explanation3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This constructor is needed to actually wrap a component. It should not be private since a class inheriting from this class should be able to pass an instance of to the parameter..
+        /// </summary>
+        internal static string Explanation4 {
+            get {
+                return ResourceManager.GetString("Explanation4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This call ensures a decorator will always execute the behavior of its wrapped object.
+        /// </summary>
+        internal static string Explanation5 {
+            get {
+                return ResourceManager.GetString("Explanation5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By calling the method of the parent, we ensure that the behaviour of the wrapped object is executed..
+        /// </summary>
+        internal static string Explanation6 {
+            get {
+                return ResourceManager.GetString("Explanation6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Now, the decorator does really add additional behavior to the wrapped object..
+        /// </summary>
+        internal static string Explanation7 {
+            get {
+                return ResourceManager.GetString("Explanation7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The client can now wrap components in multiple layers of decorators. .
+        /// </summary>
+        internal static string Explanation8 {
+            get {
+                return ResourceManager.GetString("Explanation8", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Make an interface with a method. We refer to this interface as `Component`..
         /// </summary>
         internal static string Step1 {
@@ -79,7 +151,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make an abstract class that implements Component. Implement the method of Component by making it virtual. Give it a field with type Component. We refer to this class as `Decorator`..
+        ///   Looks up a localized string similar to Make an abstract class that implements Component. Implement the method of Component by making it virtual. Give it a private field with type Component. We refer to this class as `Decorator`..
         /// </summary>
         internal static string Step3 {
             get {
@@ -88,7 +160,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Give Decorator a constructor with a parameter that gets assigned to the field. .
+        ///   Looks up a localized string similar to Give Decorator a non-private constructor with a parameter that gets assigned to the field. .
         /// </summary>
         internal static string Step4 {
             get {
@@ -115,7 +187,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add a method to ConcreteDecorator providing additional behaviour and call it in the overrided method either before or after the call to the parent&apos;s method..
+        ///   Looks up a localized string similar to Add a method to ConcreteDecorator providing additional behavior and call it in the overrided method either before or after the call to the parent&apos;s method..
         /// </summary>
         internal static string Step7 {
             get {
@@ -124,7 +196,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make a class with a method that instantiates an instance of ConcreteDecorator by passing to its constructor a new instance of ConcreteComponent. Now call the method of the instanciated variable..
+        ///   Looks up a localized string similar to Make a class with a method that instantiates an instance of ConcreteDecorator by passing to its constructor a new instance of ConcreteComponent. Now call the method of the instantiated variable..
         /// </summary>
         internal static string Step8 {
             get {
