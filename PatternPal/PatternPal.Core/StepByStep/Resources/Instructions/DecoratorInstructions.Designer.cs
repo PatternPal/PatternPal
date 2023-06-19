@@ -88,7 +88,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This constructor is needed to actually wrap a component. It should not be private since a class inheriting from this class should be able to pass an instance of to the parameter..
+        ///   Looks up a localized string similar to This constructor is needed to actually wrap a component. It should not be private since a class inheriting from this class should be able to pass an instance of Component as parameter to the constructor..
         /// </summary>
         internal static string Explanation4 {
             get {

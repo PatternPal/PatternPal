@@ -127,7 +127,7 @@
     <value>This class is abstract, since its only job is delegating operations to the wrapped object, i.e. the field. The field needs to have Component as type, since this class should be able to both wrap concrete components and decorators. It should be private since its only purpose should be to be called in the method. The specific extra behavior will be added by classes inheriting from this class.</value>
   </data>
   <data name="Explanation4" xml:space="preserve">
-    <value>This constructor is needed to actually wrap a component. It should not be private since a class inheriting from this class should be able to pass an instance of to the parameter.</value>
+    <value>This constructor is needed to actually wrap a component. It should not be private since a class inheriting from this class should be able to pass an instance of Component as parameter to the constructor.</value>
   </data>
   <data name="Explanation5" xml:space="preserve">
     <value>This call ensures a decorator will always execute the behavior of its wrapped object</value>
