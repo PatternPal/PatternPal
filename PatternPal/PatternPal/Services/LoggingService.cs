@@ -285,23 +285,20 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         sendLog.OldFileName = receivedRequest.OldFileName;
         sendLog.ProjectId = receivedRequest.ProjectId;
 
+        string oldFilePathInProjectDir = Path.GetRelativePath(receivedRequest.ProjectDirectory, sendLog.OldFileName);
+        string newFilePathInProjectDir = Path.GetRelativePath(receivedRequest.ProjectDirectory, sendLog.CodeStateSection);
         try
         {
             // To rename the key that stores the hash in _lastCodeState, we obtain its value, reinsert it under the new key
             // and delete the old entry.
-            string projectDirectory = Path.GetDirectoryName(sendLog.ProjectId);
-            string oldFilePathInProjectDir = Path.GetRelativePath(projectDirectory, sendLog.OldFileName);
-            string newFilePathInProjectDir = Path.GetRelativePath(projectDirectory, sendLog.CodeStateSection);
-
             string hash = _lastCodeState[sendLog.ProjectId][oldFilePathInProjectDir];
 
             _lastCodeState[sendLog.ProjectId][newFilePathInProjectDir] = hash;
             _lastCodeState[sendLog.ProjectId].Remove(oldFilePathInProjectDir);
         }
-        catch (Exception ex)
+        catch
         {
-            // ignored
-            // TODO Handled in a different ticket; maybe send entire codebase to be sure?
+            return OnFailedDictionaryAction(sendLog, receivedRequest.ProjectDirectory);
         }
 
         return sendLog;
