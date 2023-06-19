@@ -32,9 +32,8 @@ The entity to be implemented (e.g. fields/methods/classes/interfaces) requires a
 states explicitly what needs to be implemented and what the underlying `ICheck` will test for. For example: 
 "Implement a static private field of the same type as the class". 
 
-In addition a `Description` of the step 
-for education purposes should be provided that explains why the one should implement as instructed for example:
-"The field is static as a way of accessing the single instance when it is created.".
+For education purposes a `Description` of the step should be provided. It should explain why the step should
+be implemented as instructed for example: "The field is static as a way of accessing the single instance when it is created.".
 
 
 ## The `IStepByStepRecognizer` interface and library requirements
