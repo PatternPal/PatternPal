@@ -88,7 +88,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This constructor is needed to actually wrap a component. It should not be private since a class inheriting from this class should be able to pass an instance of Component as parameter to the constructor..
+        ///   Looks up a localized string similar to This constructor is needed to wrap a component. It should not be private since a class inheriting from this class should be able to pass an instance of Component as a parameter to the constructor..
         /// </summary>
         internal static string Explanation4 {
             get {
@@ -97,7 +97,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This call ensures a decorator will always execute the behavior of its wrapped object.
+        ///   Looks up a localized string similar to This call ensures a decorator will always execute the behavior of its wrapped object..
         /// </summary>
         internal static string Explanation5 {
             get {
@@ -106,7 +106,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to By calling the method of the parent, we ensure that the behaviour of the wrapped object is executed..
+        ///   Looks up a localized string similar to By calling the method of the parent, we ensure that the behavior of the wrapped object is executed..
         /// </summary>
         internal static string Explanation6 {
             get {
@@ -115,7 +115,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Now, the decorator does really add additional behavior to the wrapped object..
+        ///   Looks up a localized string similar to Now, the decorator does add additional behavior to the wrapped object..
         /// </summary>
         internal static string Explanation7 {
             get {
