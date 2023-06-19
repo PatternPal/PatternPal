@@ -16,14 +16,20 @@ public struct Score : IComparable< Score >,
     /// </summary>
     public static Score operator +(
         Score a,
-        Score b) =>
-        new()
+        Score b)
+    {
+        if (a._mid > 0
+            && b._mid > 0)
+        {
+        }
+        return new()
         {
             _knockout = a._knockout + b._knockout,
             _high = a._high + b._high,
             _mid = a._mid + b._mid,
             _low = a._low + b._low
         };
+    }
 
     /// <summary>
     /// Subtracts every component of the right <see cref="Score"/> from the left <see cref="Score"/>.

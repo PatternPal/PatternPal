@@ -58,7 +58,7 @@ internal class RelationCheck : CheckBase
                         // We're recursively trying to calculate the Perfect Score of the current
                         // entity. To prevent a stack overflow, return default here, as this doesn't
                         // influence the score.
-                        return default;
+                        return perfectScore;
                     }
                 }
 

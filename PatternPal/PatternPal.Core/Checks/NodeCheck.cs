@@ -66,6 +66,9 @@ public class NodeCheck< TNode > : CheckBase
         if (nodeCheckResult.NodeCheckCollectionWrapper)
         {
             NodeCheckResult matchedNodeResult = (NodeCheckResult)nodeCheckResult.ChildrenCheckResults.First();
+            if (nodeCheckResult.Check is MethodCheck)
+            {
+            }
 
             foreach (ICheck subCheck in SubChecks)
             {
