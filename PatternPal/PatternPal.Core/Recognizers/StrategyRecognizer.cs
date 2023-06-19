@@ -25,7 +25,7 @@ namespace PatternPal.Core.Recognizers;
 ///     a) is an implementation of the Strategy interface<br/>
 ///     b) if the class is used, it must be used via the context class      -- Todo Create stricter check<br/>
 ///     c) if the class is not used it should be used via the context class -- Check by Context Class<br/>
-///     d) is stored in the context class<br/>
+///     d) is stored in the context class   -- checked in Context Class - <br/>
 ///  Context<br/>
 ///     a) has a private field or property that has a Strategy class as type<br/>
 ///     b) has a function setStrategy() to set the non-public field / property with parameter of type Strategy<br/>
@@ -94,22 +94,21 @@ internal class StrategyRecognizer : IRecognizer
         // req. b
         interfaceMethodExecuteStrategy = Method(
             Priority.Knockout,
-            "has declared a method.");
+            "1b. Has declared a method.");
 
         // req. a - interface option
         _interfaceStrategyCheck = Interface(
             Priority.Knockout,
-            "is an interface / abstract class.",
+            "1a. Is an interface.",
             interfaceMethodExecuteStrategy
         );
 
         // req. b0
         abstractMethodExecuteStrategy = Method(
             Priority.High,
-            "has declared a method.",
+            "1b. Has declared an abstract method.",
             Modifiers(
                 Priority.High,
-                "if the class is an abstract instead of an interface the method has to be an abstract method.",
                 Modifier.Abstract
             )
         );
@@ -117,14 +116,14 @@ internal class StrategyRecognizer : IRecognizer
         // req. a - abstract class option
         _abstractClassStrategyCheck = AbstractClass(
             Priority.Knockout,
-            "is an interface / abstract class.",
+            "1a. Is an abstract class.",
             abstractMethodExecuteStrategy
         );
 
         // Strategy implementation check
         return Any(
             Priority.Knockout,
-            "Strategy class",
+            "1. Strategy Class",
             _interfaceStrategyCheck,
             _abstractClassStrategyCheck
         );
@@ -143,10 +142,10 @@ internal class StrategyRecognizer : IRecognizer
         // req. a
         _concreteClassCheck = Class(
             Priority.Knockout,
-            "Concrete Strategy",
+            "2. Concrete Strategy Class",
             Any(
                 Priority.Knockout,
-                "is an implementation of the Strategy interface.",
+                "2a. Is an implementation of the Strategy interface.",
                 Implements(
                     Priority.Knockout,
                     _interfaceStrategyCheck),
@@ -173,7 +172,7 @@ internal class StrategyRecognizer : IRecognizer
         // req. a
         _fieldOrPropertyStrategy = Any(
             Priority.Knockout,
-            "has a private field or property that has a Strategy class as type.",
+            "3a. Has a private field or property that has a Strategy class as type.",
             Field(
                 Priority.Knockout,
                 Any(
@@ -210,7 +209,7 @@ internal class StrategyRecognizer : IRecognizer
 
         return Class(
             Priority.Knockout,
-            "Context class",
+            "3. Context Class",
             new ICheck[ ]
             {
                 _fieldOrPropertyStrategy
@@ -234,7 +233,7 @@ internal class StrategyRecognizer : IRecognizer
         // req. b
         setStrategyMethodCheck = Method(
             Priority.High,
-            "has a function setStrategy() to set the non-public field / property with parameter of type Strategy.",
+            "3b. Has a function setStrategy() to set the non-public field / property with parameter of type Strategy.",
             Uses(
                 Priority.High,
                 _fieldOrPropertyStrategy));
@@ -267,7 +266,7 @@ internal class StrategyRecognizer : IRecognizer
         // req. c
         usageExecuteStrategy = Method(
             Priority.Mid,
-            "has a function useStrategy() to execute the strategy.",
+            "3c. Has a function useStrategy() to execute the strategy.",
             Any(
                 Priority.Mid,
                 Uses(
@@ -299,12 +298,12 @@ internal class StrategyRecognizer : IRecognizer
         // req. a
         RelationCheck creationConcreteStrategy = Creates(
             Priority.Mid,
-            "has created an object of the type ConcreteStrategy.",
+            "4a. Has created an object of the type ConcreteStrategy.",
             _concreteClassCheck);
 
         return Class(
             Priority.Mid,
-            "Client class",
+            "4. Client class",
             new ICheck[ ]
             {
                 creationConcreteStrategy
@@ -327,7 +326,7 @@ internal class StrategyRecognizer : IRecognizer
         // req. b
         RelationCheck usageSetStrategy = Uses(
             Priority.Low,
-            "has used the setStrategy() in the Context class to store the ConcreteStrategy object.",
+            "4b. Has used the setStrategy() in the Context class to store the ConcreteStrategy object.",
             setStrategyMethodCheck);
 
         return CheckCreationConcreteStrategy(
@@ -355,7 +354,7 @@ internal class StrategyRecognizer : IRecognizer
         // req. c
         RelationCheck usageDoSomething = Uses(
             Priority.Low,
-            "has executed the ConcreteStrategy via the Context class.",
+            "4c. Has executed the ConcreteStrategy via the Context class.",
             usageExecuteStrategy
         );
         return CheckUsageSetStrategy(
