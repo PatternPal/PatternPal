@@ -21,6 +21,22 @@ is  preferred to make the steps small and that they are supported by the availab
 communicate to the user what is required to pass the step and optionally an explanation why the 
 requirement is the way it is. 
 
+### Requirement and explanation per step
+The goal is to make a step as small as possible. Defining a single class/interface, a single field, 
+or a single method is considered a step. Defining a method can be more detailed because the behaviour 
+of the method needs to be described (return types, modifiers, parameters), while defining a field is the 
+smallest step (including modifiers). Anything defined in one step should be closed in such a way that you
+don't have to go back the the method/interface/field in a later step. 
+
+The entity to be implemented (e.g. fields/methods/classes/interfaces) requires an explicit `Requirement` that
+states explicitly what needs to be implemented and what the underlying `ICheck` will test for. For example: 
+"Implement a static private field of the same type as the class". 
+
+In addition a `Description` of the step 
+for education purposes should be provided that explains why the one should implement as instructed for example:
+"The field is static as a way of accessing the single instance when it is created.".
+
+
 ## Implementing the GenerateStepsList method
 
 To support a Pattern for Step-By-Step one must add the following `using` statement to the top of 
