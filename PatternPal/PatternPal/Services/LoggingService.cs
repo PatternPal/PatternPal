@@ -119,7 +119,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
             ToolInstances = receivedRequest.ToolInstances,
             ClientTimestamp =
                 DateTime.UtcNow.ToString(
-                    "yyyy-MM-dd HH:mm:ss.fff zzz"), //TODO: DateTimeOffset.Now.ToString("yyyy-MM-dd HH:mm:ss.fff  zzz"), : Logging server cannot work with offsets yet
+                    "yyyy-MM-dd HH:mm:ss.fff zzz"),
             SessionId =
                 receivedRequest.SessionId
         };
@@ -207,6 +207,19 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         sendLog.EventType = LoggingServer.EventType.EvtFileDelete;
         sendLog.CodeStateSection = receivedRequest.CodeStateSection;
         sendLog.ProjectId = receivedRequest.ProjectId;
+
+        try
+        {
+            string projectDirectory = Path.GetDirectoryName(sendLog.ProjectId);
+            string filePathInProjectDir = Path.GetRelativePath(projectDirectory, sendLog.CodeStateSection);
+            
+            _lastCodeState[sendLog.ProjectId].Remove(filePathInProjectDir);
+        }
+        catch(Exception ex)
+        {
+            // ignored
+            // TODO Handled in a different ticket; maybe send entire codebase to be sure?
+        }
 
         return sendLog;
     }
