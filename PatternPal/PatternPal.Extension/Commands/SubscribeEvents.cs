@@ -193,6 +193,7 @@ namespace PatternPal.Extension.Commands
                 $"Build {action.ToString()} succeeded.";
 
             LogEventRequest request = CreateStandardLog();
+
             string pathSolutionFullName = _dte.Solution.FullName;
             string pathSolutionFile = _dte.Solution.FileName;
 
@@ -254,13 +255,16 @@ namespace PatternPal.Extension.Commands
             }
 
             LogEventRequest request = CreateStandardLog();
+
             request.EventType = EventType.EvtFileCreate;
             request.CodeStateSection = fileSystemEventArgs.Name;
+
             string projectFullPath = FindContainingCsprojFile(fileSystemEventArgs.FullPath);
             string projectDirectory = Path.GetDirectoryName(projectFullPath);
             request.ProjectId = GetRelativePath(projectDirectory, projectFullPath);
             request.ProjectDirectory = Path.GetDirectoryName(projectFullPath);
-            request.ProjectId = GetRelativePath(request.ProjectDirectory, projectFullPath);
+            request.ProjectId = GetRelativePath(projectDirectory, projectFullPath);
+
             request.FilePath = fileSystemEventArgs.FullPath;
             
             LogEventResponse response = PushLog(request);
@@ -289,10 +293,13 @@ namespace PatternPal.Extension.Commands
             }
 
             LogEventRequest request = CreateStandardLog();
+
             request.EventType = EventType.EvtFileDelete;
             request.CodeStateSection = fileSystemEventArgs.Name;
+
             string projectFullPath = FindContainingCsprojFile(fileSystemEventArgs.FullPath);
             string projectDirectory = Path.GetDirectoryName(projectFullPath);
+            request.ProjectDirectory = projectDirectory;
             request.ProjectId = GetRelativePath(projectDirectory, projectFullPath);
 
             LogEventResponse response = PushLog(request);
@@ -312,13 +319,15 @@ namespace PatternPal.Extension.Commands
             }
 
             LogEventRequest request = CreateStandardLog();
+
             request.EventType = EventType.EvtFileRename;
             request.CodeStateSection = e.Name;
             request.OldFileName = e.OldName;
 
             string projectFullPath = FindContainingCsprojFile(e.FullPath);
-            string projectFolderName = Path.GetDirectoryName(projectFullPath);
-            request.ProjectId = GetRelativePath(projectFolderName, projectFullPath);
+            string projectDirectory = Path.GetDirectoryName(projectFullPath);
+            request.ProjectDirectory = projectDirectory;
+            request.ProjectId = GetRelativePath(projectDirectory, projectFullPath);
 
             LogEventResponse response = PushLog(request);
         }
@@ -358,6 +367,7 @@ namespace PatternPal.Extension.Commands
             string sourceLocation, string codeStateSection)
         {
             LogEventRequest request = CreateStandardLog();
+
             request.EventType = EventType.EvtCompileError;
             request.ParentEventId = parent.EventId;
             request.CompileMessageType = compileMessagetype;
@@ -396,6 +406,7 @@ namespace PatternPal.Extension.Commands
         private static void OnDebugProgram(dbgEventReason reason)
         {
             LogEventRequest request = CreateStandardLog();
+
             request.EventType = EventType.EvtDebugProgram;
             request.ExecutionId = Guid.NewGuid().ToString();
 
@@ -423,8 +434,8 @@ namespace PatternPal.Extension.Commands
             ThreadHelper.ThrowIfNotOnUIThread();
 
             LogEventRequest request = CreateStandardLog();
+
             request.EventType = EventType.EvtFileEdit;
-            
             request.CodeStateSection = GetRelativePath(Path.GetDirectoryName(document.FullName), document.FullName);
             request.ProjectId = document.ProjectItem.ContainingProject.UniqueName;
             request.ProjectDirectory = Path.GetDirectoryName(document.ProjectItem.ContainingProject.FullName);
@@ -446,6 +457,7 @@ namespace PatternPal.Extension.Commands
             }
             
             LogEventRequest request = CreateStandardLog();
+
             request.EventType = EventType.EvtXRecognizerRun;
             string config = recognizeRequest.Recognizers.ToString();
 
@@ -472,6 +484,7 @@ namespace PatternPal.Extension.Commands
                 return;
             }
             LogEventRequest request = CreateStandardLog();
+
             request.EventType = EventType.EvtXStepByStepStep;
             // config should be dict with recognizer name and current instruction number
             Dictionary<string,string> config = new Dictionary<string, string>()
