@@ -1,6 +1,5 @@
 ﻿#region 
 using PatternPal.Core.Recognizers.Helper_Classes;
-using PatternPal.Core.StepByStep;
 using static PatternPal.Core.Checks.CheckBuilder;
 #endregion
 
@@ -12,17 +11,17 @@ namespace PatternPal.Core.Recognizers;
 /// <remarks>
 /// Requirements for the Implementation interface or abstract class:<br/>
 ///     a) is an interface or abstract class <br/>
-///     b) has at least one (abstract) method <br/>
+///     b) has at least one (if possible: abstract) method <br/>
 /// <br/>
 ///
 /// Requirements for the Abstraction class: <br/>
 ///     a) has a private/protected field or property with the type of the Implementation interface or abstract class <br/>
-///     b) has a method
+///     b) has a method <br/>
 ///     c) has a method that calls a method in the Implementation interface or abstract class <br/>
 ///     d) has either <br/>
-///         1. the property option as described in a, or has <br/>
-///         2. a constructor with a parameter with the Implementation type and that uses the field as described in a, or has <br/>
-///         3. a method with a parameter with the Implementation type and that uses the field as described in a  <br/>
+///         1. the property option as described in a <br/>
+///         2. a constructor with a parameter with the Implementation type and that uses the field as described in a) <br/>
+///         3. a method with a parameter with the Implementation type and that uses the field as described in a)  <br/>
 /// <br/>
 /// 
 /// Requirements for the Concrete Implementations: <br/>
@@ -38,12 +37,11 @@ namespace PatternPal.Core.Recognizers;
 /// Requirements for the Client class: <br/>
 ///     a) calls a method in the Abstraction class <br/>
 ///     b) creates a Concrete Implementation instance <br/>
-///     c) sets the field or property in Abstraction, either through
-///         1. it is a property and it sets this, or through
-///         2. a constructor as described in Abstraction d2
-///         3. a method as described in Abstraction d3
+///     c) sets the field or property in Abstraction, either through <br/>
+///         1. it is a property and it sets this <br/>
+///         2. a constructor as described in Abstraction d2 <br/>
+///         3. a method as described in Abstraction d3 <br/>
 /// </remarks>
-
 internal class BridgeRecognizer : IRecognizer
 {
     /// <inheritdoc />

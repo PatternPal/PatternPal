@@ -8,12 +8,12 @@ namespace PatternPal.Tests.New_TestCasesRecognizers.Bridge
 
     //This test is a possible bridge implementation.
     /* Pattern:              Bridge
-     * Original code source:
+     * Original code source: none
      *
-     * Requirements to fullfill the pattern:
+     * Requirements to fulfill the pattern:
      *         Implementation interface or abstract class:
-     *            ✓  a) is an interface or abstract class <br/>
-     *            ✓  b) has at least one (abstract) method <br/>
+     *            ✓  a) is an interface or abstract class
+     *            ✓  b) has at least one (if possible: abstract) method
      *         Abstraction class:
      *               a) has a private/protected field or property with the type of the Implementation interface or abstract class
      *               b) has a method
@@ -33,7 +33,7 @@ namespace PatternPal.Tests.New_TestCasesRecognizers.Bridge
     // Implementation class
     abstract file class Color
     {
-         internal abstract void draw();
+         internal abstract void Draw();
     }
 
     // Abstraction class
@@ -51,7 +51,7 @@ namespace PatternPal.Tests.New_TestCasesRecognizers.Bridge
     // Concrete implementation
     file class Red : Color
     {
-        internal override void draw()
+        internal override void Draw()
         {
 
             Console.WriteLine("Draw with Red");
@@ -64,9 +64,9 @@ namespace PatternPal.Tests.New_TestCasesRecognizers.Bridge
         internal Circle (Color color) : base(color)
         { }
 
-        internal void drawColor()
+        internal void DrawColor()
         {
-            this._color.draw();
+            this._color.Draw();
         }
     }
 
@@ -76,7 +76,7 @@ namespace PatternPal.Tests.New_TestCasesRecognizers.Bridge
         internal Client()
         {
             Circle circle = new Circle(new Red());
-            circle.drawColor();
+            circle.DrawColor();
         }
 
     }

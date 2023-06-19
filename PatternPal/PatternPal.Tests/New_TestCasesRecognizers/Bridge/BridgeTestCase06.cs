@@ -8,15 +8,15 @@ namespace PatternPal.Tests.New_TestCasesRecognizers.Bridge
 
     //This test misses all the viable criteria for a bridge implementation.
     /* Pattern:              Bridge
-     * Original code source:
+     * Original code source: none
      *
-     * Requirements to fullfill the pattern:
+     * Requirements to fulfill the pattern:
      *         Implementation interface or abstract class:
-     *               a) is an interface or abstract class <br/>
-     *               b) has at least one (abstract) method <br/>
+     *               a) is an interface or abstract class
+     *               b) has at least one (if possible: abstract) method
      *         Abstraction class:
      *               a) has a private/protected field or property with the type of the Implementation interface or abstract class
-     *               b) has a method
+     *            ✓  b) has a method
      *               c) has a method that calls a method in the Implementation interface or abstract class
      *         Concrete Implementation
      *            ✓  a) is an implementation of the Implementation interface or inherits from the 'Implementation' abstract class
@@ -33,12 +33,12 @@ namespace PatternPal.Tests.New_TestCasesRecognizers.Bridge
     // Implementation class
     file class Color
     {
-        internal void paint()
+        internal void Paint()
         {
             Console.WriteLine("Just paint with some coler");
         }
 
-        internal void draw()
+        internal void Draw()
         {
             Console.WriteLine("Just draw with some coler");
         }
@@ -54,7 +54,7 @@ namespace PatternPal.Tests.New_TestCasesRecognizers.Bridge
             _color = color;
         }
 
-        internal void paintColor()
+        internal void PaintColor()
         {
             Console.WriteLine("Could have painted with a color");
         }
@@ -64,11 +64,11 @@ namespace PatternPal.Tests.New_TestCasesRecognizers.Bridge
     // Concrete implementation
     file class Red : Color
     {
-        internal new void paint()
+        internal new void Paint()
         {
             Console.WriteLine("Paint with Red");
         }
-        internal new void draw()
+        internal new void Draw()
         {
 
             Console.WriteLine("Draw with Red");
@@ -81,9 +81,9 @@ namespace PatternPal.Tests.New_TestCasesRecognizers.Bridge
         internal Circle (Color color) : base(color)
         { }
 
-        internal void drawColor()
+        internal void DrawColor()
         {
-            this._color.draw();
+            this._color.Draw();
         }
     }
 
@@ -92,15 +92,15 @@ namespace PatternPal.Tests.New_TestCasesRecognizers.Bridge
     {
         internal Client()
         {
-            this.goPaint();
+            this.GoPaint();
             Circle circle = new Circle(new Red());
-            circle.drawColor();
+            circle.DrawColor();
         }
 
-        private void goPaint()
+        private void GoPaint()
         {
             Shape shape = new Shape(new Red());
-            shape.paintColor();
+            shape.PaintColor();
         }
 
 

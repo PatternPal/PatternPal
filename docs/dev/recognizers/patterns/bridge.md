@@ -29,9 +29,9 @@ The priority of a requirement is noted with the (low)-(mid)-(high)-(knockout) cr
 **Client class**
 1. (mid) uses a method in the `Abstraction` class
 2. (low) creates a `Concrete Implementation` instance
-3. (low) sets the field or property in `Abstraction`, either through 
-    1. a constructor in `Abstraction` with a parameter of type `Implementation`, or through
-    2. a method in `Abstraction` with a parameter of type `Implementation`, or through 
+3. (low) sets the field or property in `Abstraction`, either through
+    1. a constructor in `Abstraction` with a parameter of type `Implementation`
+    2. a method in `Abstraction` with a parameter of type `Implementation` 
     3. setting the property
 
 **Abstraction class**
@@ -39,9 +39,9 @@ The priority of a requirement is noted with the (low)-(mid)-(high)-(knockout) cr
 2. (knockout) has a method 
 3. (high) there is a method that calls a method in `Implementation`
 4. (mid) has either
-    1. the property option as described in 1, or has
-    2. a constructor with a parameter with the `Implementation` type and that uses the field as described in 1, or has
-    3. a method with a parameter with the `Impelementation` type and that uses the field as described in 1
+    1. the property option as described in 1.
+    2. a constructor with a parameter with the `Implementation` type and that uses the field as described in 1.
+    3. a method with a parameter with the `Impelementation` type and that uses the field as described in 1.
 
 **Implementation**
 1. (knockout) is an interface or abstract class

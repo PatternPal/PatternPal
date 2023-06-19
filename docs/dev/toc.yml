@@ -2,7 +2,7 @@
 - name: Pattern recognition
   items:
   # -- Design patterns
-  - name: Design pattern
+  - name: Design patterns
   - name: Adapter
     href: recognizers/patterns/adapter.md
   - name: Bridge
