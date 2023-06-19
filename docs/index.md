@@ -17,4 +17,11 @@ access PatternPal from `View > Other Windows > PatternPal Extension`.
 
 You can open the main view of the extension through `View > Other Windows > PatternPal Extension`.
 
+### Step-By-Step
+This module offers the flexibility for users to choose between two options: starting the implementation of a new design pattern or continuing their work on a design pattern they have previously worked on.
+
+When the user opts to initiate a new implementation, users are presented with the option to add a file to the current solution or not, in either case, they are subsequently provided with a dialog that asks for the place to save this new file. This new file will then open in Visual Studio. Alternatively, if the user prefers to continue their work they are presented with a dialog to open the file(s) they wish to resume their implementation on. These files(s) are then opened in Visual Studio.
+
+In both cases the user is presented with a description of the requirement and explanation of the step. The user should implement the requirement in the opened file and click the 'Check' button. Only when the implementation is correct does the 'next instruction' button become available.
+
 [releases page]: https://github.com/PatternPal/PatternPal/releases/latest
