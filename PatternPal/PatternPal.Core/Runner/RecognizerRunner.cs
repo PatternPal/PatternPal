@@ -154,7 +154,7 @@ public class RecognizerRunner
     /// <param name="pruneAll">Whether to prune regardless of <see cref="Priority"/>s</param>
     /// <returns>The result of the <see cref="IRecognizer"/>, or <see langword="null"/> if the <see cref="SyntaxGraph"/> is empty.</returns>
     public IList< (Recognizer, ICheckResult) > Run(
-        bool pruneAll = true)
+        bool pruneAll = false)
     {
         // If the graph is empty, we don't have to do any work.
         if (_graph.IsEmpty)
