@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using EnvDTE;
@@ -12,6 +13,8 @@ using Microsoft.VisualStudio.Shell;
 using PatternPal.Extension.Grpc;
 using PatternPal.Protos;
 using System.Text.RegularExpressions;
+using JsonSerializer = System.Text.Json.JsonSerializer;
+using Google.Protobuf.Collections;
 
 #endregion
 
@@ -454,7 +457,42 @@ namespace PatternPal.Extension.Commands
 
             LogEventResponse response = PushLog(request);
         }
+        /// <summary>
+        /// Function to push a step by step event to the server. It compiles all required information and sends it to the server.
+        /// </summary>
+        /// <param name="recognizer">Recognizer being used by step-by-step </param>
+        /// <param name="currentInstructionNumber">Current instruction number </param>
+        /// <param name="result">Boolean output</param>
+        /// <param name="documents">all documents being checked against</param>
+        public static void OnStepByStepCheck(string recognizer, int currentInstructionNumber, bool result)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (!_doLog)
+            {
+                return;
+            }
+            LogEventRequest request = CreateStandardLog();
+            request.EventType = EventType.EvtXStepByStepStep;
+            // config should be dict with recognizer name and current instruction number
+            Dictionary<string,string> config = new Dictionary<string, string>()
+            {
+                { "recognizer", recognizer },
+                { "currentInstructionNumber", currentInstructionNumber.ToString()}
+            };
 
+            request.RecognizerConfig = JsonSerializer.Serialize(config);
+            Dictionary<string,string> results = new Dictionary<string, string>()
+            {
+                { "result", result.ToString() }
+            };
+
+            request.RecognizerResult = JsonSerializer.Serialize(results);
+            
+            Project project = _dte.ActiveDocument.ProjectItem.ContainingProject;
+            request.ProjectId = project.UniqueName;
+
+            LogEventResponse response = PushLog(request);
+        }
         #endregion
 
         /// <summary>
