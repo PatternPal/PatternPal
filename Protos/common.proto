@@ -13,7 +13,19 @@ message RecognizeResult {
     string feedback = 2;
 
     // The results for the individual checks which make up the recognizer.
-    repeated Result results = 3;
+    repeated EntityResult entity_results = 3;
+}
+
+// Result of an Entity Check.
+message EntityResult {
+    // Name of the Entity check, for example: Singleton Class.
+    string name = 1;
+
+    // The MatchedNode of this result, in this case an Entity.
+    MatchedNode matched_node = 2;
+
+    // The results of the requirements of this Entity check.
+    repeated Result requirements = 3;
 }
 
 // Result of one specific check inside a recognizer.
