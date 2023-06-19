@@ -1,4 +1,5 @@
-﻿using PatternPal.Core.Runner;
+﻿using PatternPal.Core.Checks;
+using PatternPal.Core.Runner;
 
 namespace PatternPal.Services;
 
@@ -107,6 +108,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
     private static IEnumerable< Result > GetResults(
         ICheckResult rootCheckResult)
     {
+        IDictionary< ICheck, ICheckResult > resultsByCheck = new Dictionary< ICheck, ICheckResult >();
         Queue< ICheckResult > resultsToProcess = new();
         resultsToProcess.Enqueue(rootCheckResult);
         while (resultsToProcess.Count != 0)
@@ -134,10 +136,13 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                 }
 
                 // Handle incorrect results.
-                Score perfectScore = resultToProcess.Check.PerfectScore;
+                Score perfectScore = resultToProcess.Check.PerfectScore(
+                    resultsByCheck,
+                    resultToProcess);
                 Score actualScore = resultToProcess.Score;
 
-                if (perfectScore.Equals(actualScore))
+                if (!perfectScore.Equals(default)
+                    && perfectScore.Equals(actualScore))
                 {
                     yield return result;
                 }
@@ -151,8 +156,26 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                     resultsToProcess.Enqueue(notCheckResult.NestedResult);
                     continue;
                 case NodeCheckResult nodeCheckResult:
+                    //bool first = true;
                     foreach (ICheckResult childCheckResult in nodeCheckResult.ChildrenCheckResults)
                     {
+                        if (childCheckResult is NodeCheckResult {NodeCheckCollectionWrapper: true} childNodeCheckResult)
+                        {
+                            if (childNodeCheckResult.ChildrenCheckResults.FirstOrDefault() is NodeCheckResult matchedNodeCheckResult)
+                            {
+                                resultsByCheck[ matchedNodeCheckResult.Check ] = matchedNodeCheckResult;
+                            }
+                        }
+                        //if (!((Dictionary< ICheck, ICheckResult >)resultsByCheck).TryAdd(
+                        //    childCheckResult.Check,
+                        //    childCheckResult))
+                        //{
+                        //    if (nodeCheckResult.NodeCheckCollectionWrapper && first)
+                        //    {
+                        //        resultsByCheck[ childCheckResult.Check ] = childCheckResult;
+                        //        first = false;
+                        //    }
+                        //}
                         resultsToProcess.Enqueue(childCheckResult);
                     }
                     continue;

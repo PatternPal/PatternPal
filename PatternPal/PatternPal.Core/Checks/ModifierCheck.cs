@@ -6,6 +6,8 @@
 /// </summary>
 internal class ModifierCheck : CheckBase
 {
+    private readonly Score _perfectScore;
+
     // All modifiers the node should have.
     private readonly IEnumerable< IModifier > _modifiers;
 
@@ -15,7 +17,9 @@ internal class ModifierCheck : CheckBase
     public override int DependencyCount => 0;
 
     /// <inheritdoc />
-    public override Score PerfectScore { get; }
+    public override Score PerfectScore(
+        IDictionary< ICheck, ICheckResult > resultsByCheck,
+        ICheckResult result) => _perfectScore;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ModifierCheck"/> class. 
@@ -32,7 +36,7 @@ internal class ModifierCheck : CheckBase
             requirement)
     {
         _modifiers = modifiers;
-        PerfectScore = Score.CreateScore(
+        _perfectScore = Score.CreateScore(
             Priority,
             true);
     }

@@ -11,7 +11,6 @@ internal class RelationCheck : CheckBase
 
     // The type of relation which should be present.
     private readonly RelationType _relationType;
-    private Score _perfectScore;
 
     /// <summary>
     /// A <see cref="RelationCheck"/> is dependent on the <see cref="INode"/> to which it has an <see cref="Relation"/>.
@@ -19,24 +18,64 @@ internal class RelationCheck : CheckBase
     public override int DependencyCount => 1 + _relatedNodeCheck.DependencyCount;
 
     /// <inheritdoc />
-    public override Score PerfectScore => _perfectScore.Equals(default)
-        ? _perfectScore = PerfectScoreFromRelatedCheck(_relatedNodeCheck)  //TODO: When the relatedCheck is no EntityCheck, take the PerfectScore of Entity Parent
-                          + Score.CreateScore(
-                              Priority,
-                              true)
-        : _perfectScore;
-
-    private static Score PerfectScoreFromRelatedCheck(ICheck relatedCheck)
+    public override Score PerfectScore(
+        IDictionary< ICheck, ICheckResult > resultsByCheck,
+        ICheckResult result)
     {
+        Score perfectScore = Score.CreateScore(
+            Priority,
+            true);
+
+        ICheck relatedCheck = _relatedNodeCheck;
         while (true)
         {
             if (relatedCheck is ClassCheck or InterfaceCheck)
             {
-                return relatedCheck.PerfectScore;
+                ICheckResult relatedCheckResult = resultsByCheck[ relatedCheck ];
+                if (result.MatchedNode == null
+                    || relatedCheckResult.MatchedNode == null)
+                {
+                    return default;
+                }
+
+                if (null != result.MatchedNode
+                    && null != relatedCheckResult.MatchedNode)
+                {
+                    IEntity ? selfMatchedEntity = result.MatchedNode switch
+                    {
+                        IEntity entity => entity,
+                        IMember member => member.GetParent(),
+                        _ => null
+                    };
+                    IEntity ? relatedMatchedEntity = relatedCheckResult.MatchedNode switch
+                    {
+                        IEntity relatedEntity => relatedEntity,
+                        IMember relatedMember => relatedMember.GetParent(),
+                        _ => null
+                    };
+                    if (selfMatchedEntity == relatedMatchedEntity)
+                    {
+                        // We're recursively trying to calculate the Perfect Score of the current
+                        // entity. To prevent a stack overflow, return default here, as this doesn't
+                        // influence the score.
+                        return default;
+                    }
+                }
+
+                perfectScore += relatedCheck.PerfectScore(
+                    resultsByCheck,
+                    relatedCheckResult);
+                break;
             }
 
-            relatedCheck = relatedCheck.ParentCheck!;
+            if (relatedCheck.ParentCheck == null)
+            {
+                break;
+            }
+            relatedCheck = relatedCheck.ParentCheck;
         }
+
+        return perfectScore;
     }
 
     /// <summary>

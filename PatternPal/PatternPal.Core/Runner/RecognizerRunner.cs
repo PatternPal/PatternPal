@@ -574,13 +574,21 @@ public class RecognizerRunner
             SortResultsByPrioritiesImpl(
                 resultsByNode,
                 childResult);
-            result.Score += childResult.Score;
+            if (result.CollectionKind != CheckCollectionKind.Any)
+            {
+                result.Score += childResult.Score;
+            }
         }
 
         ((List< ICheckResult >)result.ChildrenCheckResults).Sort(
             (
                 a,
                 b) => a.Score.CompareTo(b.Score));
+
+        if (result.CollectionKind == CheckCollectionKind.Any)
+        {
+            result.Score = result.ChildrenCheckResults.FirstOrDefault()?.Score ?? default;
+        }
 
         static void SortResultsByPrioritiesImpl(
             IReadOnlyDictionary< INode, List< ICheckResult > > resultsByNode,
@@ -611,13 +619,17 @@ public class RecognizerRunner
                             break;
                         }
 
-                        // If the type check is for the current entity, just increment the score
-                        // with 1. Otherwise the score would become infinite ;).
+                        // If the type check is for the current entity, just use a score of 1 (which
+                        // we already assigned above). Otherwise the score would become infinite ;).
                         if (leafResult.Check is TypeCheck {IsForCurrentEntity: true})
                         {
-                            leafResult.Score += Score.CreateScore(
-                                leafResult.Priority,
-                                true);
+                            break;
+                        }
+
+                        // Ensure we don't try to use the score of the current entity, because we're
+                        // still calculating it.
+                        if (GetParentEntityCheck(leafResult.Check) == GetParentEntityCheck(relevantResult.Check))
+                        {
                             break;
                         }
 
@@ -634,6 +646,26 @@ public class RecognizerRunner
                                 member),
                             _ => throw new UnreachableException("Relation to non-IMember or IEntity")
                         };
+
+                        static ICheck GetParentEntityCheck(
+                            ICheck currentCheck)
+                        {
+                            while (true)
+                            {
+                                if (currentCheck is ClassCheck or InterfaceCheck)
+                                {
+                                    break;
+                                }
+
+                                if (currentCheck.ParentCheck == null)
+                                {
+                                    // Should only be reached in tests.
+                                    break;
+                                }
+                                currentCheck = currentCheck.ParentCheck;
+                            }
+                            return currentCheck;
+                        }
 
                         // Gets the score of the `member`s parent of type Entity.
                         static Score GetParentScoreFromMember(
@@ -779,6 +811,7 @@ file class RecognizerContext : IRecognizerContext
     /// <inheritdoc />
     public required IEntity CurrentEntity { get; init; }
 
+    // TODO: Cleanup
     /// <inheritdoc />
     public required ICheck ParentCheck { get; init; }
 

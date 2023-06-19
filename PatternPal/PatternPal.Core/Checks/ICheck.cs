@@ -53,10 +53,19 @@ public interface ICheck
     ICheck ? ParentCheck { get; set; }
 
     /// <summary>
+    /// Calculates the Perfect Score of this <see cref="ICheck"/>. The <paramref name="result"/> is
+    /// used to decide which sub-<see cref="ICheck"/> to include when the <see cref="CheckCollectionKind"/>
+    /// is <see cref="CheckCollectionKind.Any"/>.
+    /// </summary>
+    /// <param name="resultsByCheck">Contains the <see cref="ICheckResult"/> for each <see cref="ICheck"/>.</param>
+    /// <param name="result">The <see cref="ICheckResult"/> of this <see cref="ICheck"/>.</param>
+    /// <returns>
     /// The <see cref="Score"/> of the <see cref="ICheckResult"/> of this <see cref="ICheck"/> when
     /// it is implemented correctly.
-    /// </summary>
-    Score PerfectScore { get; }
+    /// </returns>
+    Score PerfectScore(
+        IDictionary< ICheck, ICheckResult > resultsByCheck,
+        ICheckResult result);
 
     /// <summary>
     /// Runs the current check on the given <see cref="INode"/>.
@@ -90,7 +99,9 @@ public abstract class CheckBase : ICheck
     public ICheck ? ParentCheck { get; set; }
 
     /// <inheritdoc />
-    public abstract Score PerfectScore { get; }
+    public abstract Score PerfectScore(
+        IDictionary< ICheck, ICheckResult > resultsByCheck,
+        ICheckResult result);
 
     /// <summary>
     /// Sets the priority.

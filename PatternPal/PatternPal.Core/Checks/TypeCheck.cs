@@ -9,7 +9,6 @@ internal class TypeCheck : CheckBase
 {
     // Used to get the node to compare against.
     private readonly OneOf< ICheck, GetCurrentEntity > _getNode;
-    private Score _perfectScore;
 
     /// <summary>
     /// A <see cref="TypeCheck"/> is dependent on the result of <see cref="_getNode"/>.
@@ -26,26 +25,37 @@ internal class TypeCheck : CheckBase
         _ => true);
 
     /// <inheritdoc />
-    public override Score PerfectScore => _perfectScore.Equals(default)
-        ? _perfectScore = Score.CreateScore(
-                              Priority,
-                              true)
-                          + _getNode.Match( //TODO: When the relatedCheck is no EntityCheck, take the PerfectScore of Entity Parent
-                              PerfectScoreFromRelatedCheck,
-                              _ => default)
-        : _perfectScore;
-
-    private static Score PerfectScoreFromRelatedCheck(ICheck relatedCheck)
+    public override Score PerfectScore(
+        IDictionary< ICheck, ICheckResult > resultsByCheck,
+        ICheckResult result)
     {
-        while (true)
-        {
-            if (relatedCheck is ClassCheck or InterfaceCheck)
-            {
-                return relatedCheck.PerfectScore;
-            }
+        Score perfectScore = Score.CreateScore(
+            Priority,
+            true);
 
-            relatedCheck = relatedCheck.ParentCheck!;
+        if (_getNode.IsT0)
+        {
+            ICheck relatedCheck = _getNode.AsT0;
+            while (true)
+            {
+                if (relatedCheck is ClassCheck or InterfaceCheck)
+                {
+                    ICheckResult relatedCheckResult = resultsByCheck[ relatedCheck ];
+                    perfectScore += relatedCheck.PerfectScore(
+                        resultsByCheck,
+                        relatedCheckResult);
+                    break;
+                }
+
+                if (relatedCheck.ParentCheck == null)
+                {
+                    break;
+                }
+                relatedCheck = relatedCheck.ParentCheck;
+            }
         }
+
+        return perfectScore;
     }
 
     /// <summary>

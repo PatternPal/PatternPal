@@ -31,7 +31,6 @@ public class NodeCheck< TNode > : CheckBase
     // The dependency count, declared as nullable so we can check whether we have calculated it
     // already.
     private int ? _dependencyCount;
-    private Score _perfectScore;
 
     /// <summary>
     /// The dependencies to other <see cref="INode"/>s this check has.
@@ -58,32 +57,56 @@ public class NodeCheck< TNode > : CheckBase
     }
 
     /// <inheritdoc />
-    public override Score PerfectScore
+    public override Score PerfectScore(
+        IDictionary< ICheck, ICheckResult > resultsByCheck,
+        ICheckResult result)
     {
-        get
+        Score perfectScore = default;
+        NodeCheckResult nodeCheckResult = (NodeCheckResult)result;
+        if (nodeCheckResult.NodeCheckCollectionWrapper)
         {
-            if (_perfectScore.Equals(default))
-            {
-                // If `TNode` is not `INode`, we're inside an Any or an All check. In that case we
-                // don't want to increment the perfect score.
-                if (typeof( INode ) != typeof( TNode ))
-                {
-                    //_perfectScore = Score.CreateScore(
-                    //    Priority,
-                    //    true);
-                }
+            NodeCheckResult matchedNodeResult = (NodeCheckResult)nodeCheckResult.ChildrenCheckResults.First();
 
-                // TODO: `Any` checks shouldn't get the total of their sub-checks.
-                // Perhaps we can't precompute this, and we instead need to pass in some information
-                // to decide which `Any` child to use for the perfect score.
-                foreach (ICheck subCheck in SubChecks)
+            foreach (ICheck subCheck in SubChecks)
+            {
+                ICheckResult ? subCheckResult = matchedNodeResult.ChildrenCheckResults.FirstOrDefault(r => r.Check == subCheck);
+                if (null != subCheckResult)
                 {
-                    _perfectScore += subCheck.PerfectScore;
+                    perfectScore += subCheck.PerfectScore(
+                        resultsByCheck,
+                        subCheckResult);
                 }
             }
-
-            return _perfectScore;
         }
+        else
+        {
+            foreach (ICheck subCheck in SubChecks)
+            {
+                if (_kind == CheckCollectionKind.Any)
+                {
+                    ICheckResult ? subCheckResult = nodeCheckResult.ChildrenCheckResults.FirstOrDefault();
+                    if (subCheckResult?.Check == subCheck)
+                    {
+                        perfectScore = subCheck.PerfectScore(
+                            resultsByCheck,
+                            subCheckResult);
+                        break;
+                    }
+                }
+                else
+                {
+                    ICheckResult ? subCheckResult = nodeCheckResult.ChildrenCheckResults.FirstOrDefault(r => r.Check == subCheck);
+                    if (null != subCheckResult)
+                    {
+                        perfectScore += subCheck.PerfectScore(
+                            resultsByCheck,
+                            subCheckResult);
+                    }
+                }
+            }
+        }
+
+        return perfectScore;
     }
 
     /// <summary>
