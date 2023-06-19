@@ -40,7 +40,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logging", "Logging", "{92AD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatternPal.LoggingServerTests", "PatternPal.LoggingServerTests\PatternPal.LoggingServerTests.csproj", "{08E5C551-9568-4D5D-8416-BB4BA8445EC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatternPal.ProgSnapExport", "PatternPal.ProgsnapExport\PatternPal.ProgSnapExport.csproj", "{A3766C67-CE33-4CD7-956D-C9237262B5E4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatternPal.ProgSnapExport", "PatternPal.ProgSnapExport\PatternPal.ProgSnapExport.csproj", "{A3766C67-CE33-4CD7-956D-C9237262B5E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
