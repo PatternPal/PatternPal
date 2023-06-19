@@ -19,7 +19,7 @@ namespace PatternPal.Core.Recognizers;
 ///     b) has a method <br/>
 ///     c) has a method that calls a method in the Implementation interface or abstract class <br/>
 ///     d) has either <br/>
-///         1. the property option as described in a <br/>
+///         1. the property option as described in a) <br/>
 ///         2. a constructor with a parameter with the Implementation type and that uses the field as described in a) <br/>
 ///         3. a method with a parameter with the Implementation type and that uses the field as described in a)  <br/>
 /// <br/>
