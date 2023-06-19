@@ -61,6 +61,15 @@ namespace PatternPal.Extension.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Accept.
+        /// </summary>
+        public static string Accept {
+            get {
+                return ResourceManager.GetString("Accept", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Active Document.
         /// </summary>
         public static string ActiveDocument {
@@ -75,6 +84,25 @@ namespace PatternPal.Extension.Resources {
         public static string Analyse {
             get {
                 return ResourceManager.GetString("Analyse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thank you for using our application! Before proceeding, we kindly request your consent to log and analyze your data for research purposes. Your privacy is crucial to us, and we ensure that all data will be handled in compliance with regulations.
+        ///By granting consent, you allow us to collect and process data to enhance the application and conduct academic research. .
+        /// </summary>
+        public static string ConsentScreenText {
+            get {
+                return ResourceManager.GetString("ConsentScreenText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deny.
+        /// </summary>
+        public static string Deny {
+            get {
+                return ResourceManager.GetString("Deny", resourceCulture);
             }
         }
         

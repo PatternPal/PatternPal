@@ -4,46 +4,40 @@ package patternpal;
 
 option csharp_namespace = "PatternPal.Protos";
 
-// Result of the recognizer.
+// Root result of a recognizer.
 message RecognizeResult {
     // The recognizer which was used to obtain this result.
     Recognizer recognizer = 1;
 
-    // Name of the class on which the pattern was detected.
-    string class_name = 2;
+    string feedback = 2;
 
     // The results for the individual checks which make up the recognizer.
-    repeated CheckResult results = 3;
+    repeated Result results = 3;
 }
 
 // Result of one specific check inside a recognizer.
-message CheckResult {
-    // Indicates the type of feedback.
-    FeedbackType feedback_type = 1;
+message Result {
 
-    // The feedback message to be presented to the user.
-    string feedback_message = 2;
+    // The requirement which belongs to the check of this result.
+    string requirement = 1;
 
-    // Indicates whether the check should be hidden in the results view.
-    bool hidden = 3;
+    // The MatchedNode of this result.
+    MatchedNode matched_node = 2;
+}
 
-    // The results for any sub-checks which may be contained in this check.
-    repeated CheckResult sub_check_results = 4;
+message MatchedNode {
 
-    // The type of feedback for the current check.
-    enum FeedbackType {
-        // Not used. This is the default value required by the Protocol Buffer spec.
-        FEEDBACK_UNKNOWN = 0;
+    //The name of the node.
+    string name = 1;
 
-        // The check is implemented correctly.
-        FEEDBACK_CORRECT = 1;
+    //The location of the node, used for interactivety in extension.
+    string path = 2;
 
-        // The check has some sub-checks which are not implemented correctly.
-        FEEDBACK_SEMI_CORRECT = 2;
+    //The specific start in the code file of this node.
+    int32 start = 3;
 
-        // The check is implemented incorrectly.
-        FEEDBACK_INCORRECT = 3;
-    }
+    //The specific length in the code file of this node.
+    int32 length = 4;
 }
 
 // Recognizers which can be run.

@@ -1,10 +1,4 @@
-﻿#region
-
-using static PatternPal.Core.Checks.CheckBuilder;
-
-#endregion
-
-namespace PatternPal.Tests.Checks;
+﻿namespace PatternPal.Tests.Checks;
 
 [TestFixture]
 public class ParameterCheckTests
@@ -16,51 +10,51 @@ public class ParameterCheckTests
         IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
 
         // Obtain the StringTestFunction method (3 parameters)
-        IMember stringNode = Relations.GetMemberFromGraph(
+        IMethod stringNode = EntityNodeUtils.GetMemberFromGraph< IMethod >(
             graph,
             "StringTest",
             "StringTestFunction");
 
         // Obtain the IntTest method (1 StringTest parameter)
-        IMember intNode = Relations.GetMemberFromGraph(
+        IMethod intNode = EntityNodeUtils.GetMemberFromGraph< IMethod >(
             graph,
             "IntTest",
             "IntTestFunction");
 
-        // Create same typecheck for two different parameters and one other type parameter
-        TypeCheck typeIntNode1 = new TypeCheck(
-            Priority.Low,
-            OneOf< Func< List< INode > >, GetCurrentEntity >.FromT0(
-                () => new List< INode >
-                      {
-                          ctx.Graph.Relations.GetEntityByName(intNode.GetReturnType())
-                      }));
-        TypeCheck typeIntNode2 = typeIntNode1;
-        TypeCheck typeStringNode = new TypeCheck(
-            Priority.Low,
-            OneOf< Func< List< INode > >, GetCurrentEntity >.FromT0(
-                () => new List< INode >
-                      {
-                          ctx.Graph.Relations.GetEntityByName(stringNode.GetReturnType())
-                      }));
+        TestCheck intNodeCheck = new( ctx.Graph.Relations.GetEntityByName(intNode.GetReturnType()) );
+        TestCheck stringNodeCheck = new( ctx.Graph.Relations.GetEntityByName(stringNode.GetReturnType()) );
 
-        List< TypeCheck > collectiontest = new List< TypeCheck >
+        // Create same typecheck for two different parameters and one other type parameter
+        TypeCheck typeIntNode1 = new(
+            Priority.Low,
+            null,
+            intNodeCheck );
+
+        TypeCheck typeIntNode2 = typeIntNode1;
+        TypeCheck typeStringNode = new(
+            Priority.Low,
+            null,
+            stringNodeCheck );
+
+        List< TypeCheck > collectiontest = new()
                                            {
                                                typeIntNode1,
                                                typeIntNode2,
                                                typeStringNode
                                            };
 
-        ParameterCheck usedParamCheck = new ParameterCheck(
+        ParameterCheck usedParamCheck = new(
             Priority.Low,
-            collectiontest);
+            null,
+            collectiontest );
 
-        MethodCheck method3 = new MethodCheck(
+        MethodCheck method3 = new(
             Priority.Low,
+            null,
             new List< ICheck >
             {
                 usedParamCheck
-            });
+            } );
 
         ICheckResult res = method3.Check(
             ctx,
@@ -74,43 +68,37 @@ public class ParameterCheckTests
         SyntaxGraph graph = EntityNodeUtils.CreateMethodWithParamaters();
         IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
 
-        // Obtain the StringTestFunction method (3 parameters)
-        IMember stringNode = Relations.GetMemberFromGraph(
-            graph,
-            "StringTest",
-            "StringTestFunction");
-
         // Obtain the IntTest method (1 StringTest parameter)
-        IMember intNode = Relations.GetMemberFromGraph(
+        IMethod intNode = EntityNodeUtils.GetMemberFromGraph< IMethod >(
             graph,
             "IntTest",
             "IntTestFunction");
 
-        // TypeCheck of the StringTestFunction method (return type is StringTest)
-        TypeCheck typeIntNode = new TypeCheck(
-            Priority.Low,
-            OneOf< Func< List< INode > >, GetCurrentEntity >.FromT0(
-                () => new List< INode >
-                      {
-                          ctx.Graph.Relations.GetEntityByName(intNode.GetReturnType())
-                      }));
-        var test = ctx.Graph.Relations.GetEntityByName(intNode.GetReturnType());
+        TestCheck intNodeCheck = new( ctx.Graph.Relations.GetEntityByName(intNode.GetReturnType()) );
 
-        List< TypeCheck > collectiontest = new List< TypeCheck >
+        // TypeCheck of the StringTestFunction method (return type is StringTest)
+        TypeCheck typeIntNode = new(
+            Priority.Low,
+            null,
+            intNodeCheck );
+
+        List< TypeCheck > collectiontest = new()
                                            {
                                                typeIntNode
                                            };
 
-        ParameterCheck usedParamCheck = new ParameterCheck(
+        ParameterCheck usedParamCheck = new(
             Priority.Low,
-            collectiontest);
+            null,
+            collectiontest );
 
-        MethodCheck method3 = new MethodCheck(
+        MethodCheck method3 = new(
             Priority.Low,
+            null,
             new List< ICheck >
             {
                 usedParamCheck
-            });
+            } );
 
         // Incorrect parameter type check because typecheck has different type from parameter
         // of provided intNode.
@@ -127,41 +115,42 @@ public class ParameterCheckTests
         IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
 
         // Obtain the StringTestFunction method (3 parameters)
-        IMember stringNode = Relations.GetMemberFromGraph(
+        IMethod stringNode = EntityNodeUtils.GetMemberFromGraph< IMethod >(
             graph,
             "StringTest",
             "StringTestFunction");
 
         // Obtain the IntTest method (1 StringTest parameter)
-        IMember intNode = Relations.GetMemberFromGraph(
+        IMethod intNode = EntityNodeUtils.GetMemberFromGraph< IMethod >(
             graph,
             "IntTest",
             "IntTestFunction");
 
-        // TypeCheck of the StringTestFunction method (return type is StringTest)
-        TypeCheck typeStringNode = new TypeCheck(
-            Priority.Low,
-            OneOf< Func< List< INode > >, GetCurrentEntity >.FromT0(
-                () => new List< INode >
-                      {
-                          ctx.Graph.Relations.GetEntityByName(stringNode.GetReturnType())
-                      }));
+        TestCheck stringNodeCheck = new( ctx.Graph.Relations.GetEntityByName(stringNode.GetReturnType()) );
 
-        List< TypeCheck > collectiontest = new List< TypeCheck >
+        // TypeCheck of the StringTestFunction method (return type is StringTest)
+        TypeCheck typeStringNode = new(
+            Priority.Low,
+            null,
+            stringNodeCheck );
+
+        List< TypeCheck > collectiontest = new()
                                            {
                                                typeStringNode
                                            };
 
-        ParameterCheck usedParamCheck = new ParameterCheck(
+        ParameterCheck usedParamCheck = new(
             Priority.Low,
-            collectiontest);
+            null,
+            collectiontest );
 
-        MethodCheck method3 = new MethodCheck(
+        MethodCheck method3 = new(
             Priority.Low,
+            null,
             new List< ICheck >
             {
                 usedParamCheck
-            });
+            } );
 
         ICheckResult res = method3.Check(
             ctx,
@@ -176,7 +165,8 @@ public class ParameterCheckTests
         IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
 
         // Obtain method with 0 parameters from syntax graph.
-        IMember stringNode = Relations.GetMemberFromGraph(
+
+        IMethod stringNode = EntityNodeUtils.GetMemberFromGraph< IMethod >(
             graph,
             "Uses",
             "UsesFunction");
@@ -185,6 +175,7 @@ public class ParameterCheckTests
         ParameterCheck usedParamCheck =
             new ParameterCheck(
                 Priority.Low,
+                null,
                 new List< TypeCheck >
                 {
                 });
@@ -196,57 +187,101 @@ public class ParameterCheckTests
     }
 
     [Test]
+    public Task Parameter_Check_No_Type_Checks()
+    {
+        SyntaxGraph graph = EntityNodeUtils.CreateMethodWithParamaters();
+        IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
+
+        IMethod intNode = EntityNodeUtils.GetMemberFromGraph< IMethod >(
+            graph,
+            "IntTest",
+            "IntTestFunction");
+
+        ParameterCheck usedParamCheck = Parameters(Priority.High);
+
+        ICheckResult res = usedParamCheck.Check(
+            ctx,
+            intNode);
+        return Verifier.Verify(res);
+    }
+
+    [Test]
     public Task Less_Parameters_Than_TypeChecks()
     {
         SyntaxGraph graph = EntityNodeUtils.CreateMethodWithParamaters();
         IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
 
         // Obtain the StringTestFunction method (3 parameters)
-        IMember stringNode = Relations.GetMemberFromGraph(
+        IMethod stringNode = EntityNodeUtils.GetMemberFromGraph< IMethod >(
             graph,
             "StringTest",
             "StringTestFunction");
 
         // Obtain the IntTest method (1 StringTest parameter)
-        IMember intNode = Relations.GetMemberFromGraph(
+        IMethod intNode = EntityNodeUtils.GetMemberFromGraph< IMethod >(
             graph,
             "IntTest",
             "IntTestFunction");
 
-        // Create two typechecks for a parameter check on a method with one parameter
-        TypeCheck typeIntNode = new TypeCheck(
-            Priority.Low,
-            OneOf< Func< List< INode > >, GetCurrentEntity >.FromT0(
-                () => new List< INode >
-                      {
-                          ctx.Graph.Relations.GetEntityByName(intNode.GetReturnType())
-                      }));
-        TypeCheck typeStringNode = new TypeCheck(
-            Priority.Low,
-            OneOf< Func< List< INode > >, GetCurrentEntity >.FromT0(
-                () => new List< INode >
-                      {
-                          ctx.Graph.Relations.GetEntityByName(stringNode.GetReturnType())
-                      }));
+        TestCheck intNodeCheck = new( ctx.Graph.Relations.GetEntityByName(intNode.GetReturnType()) );
+        TestCheck stringNodeCheck = new( ctx.Graph.Relations.GetEntityByName(stringNode.GetReturnType()) );
 
-        List< TypeCheck > collectiontest = new List< TypeCheck >
+        // Create two typechecks for a parameter check on a method with one parameter
+        TypeCheck typeIntNode = new(
+            Priority.Low,
+            null,
+            intNodeCheck );
+        TypeCheck typeStringNode = new(
+            Priority.Low,
+            null,
+            stringNodeCheck );
+
+        List< TypeCheck > collectiontest = new()
                                            {
                                                typeStringNode,
                                                typeIntNode
                                            };
-        ParameterCheck usedParamCheck = new ParameterCheck(
+
+        ParameterCheck usedParamCheck = new(
             Priority.Low,
-            collectiontest);
-        MethodCheck method3 = new MethodCheck(
+            null,
+            collectiontest );
+        MethodCheck method3 = new(
             Priority.Low,
+            null,
             new List< ICheck >
             {
                 usedParamCheck
-            });
+            } );
 
         ICheckResult res = method3.Check(
             ctx,
             intNode);
         return Verifier.Verify(res);
+    }
+}
+
+file class TestCheck : ICheck
+{
+    public Priority Priority { get; }
+    public string ? Requirement { get; }
+    public Func< List< INode > > Result { get; }
+    public int DependencyCount { get; }
+    public ICheck ? ParentCheck { get; set; }
+
+    public ICheckResult Check(
+        IRecognizerContext ctx,
+        INode node)
+    {
+        throw new NotImplementedException();
+    }
+
+    internal TestCheck(
+        IEntity entity)
+    {
+        Result = () => new List< INode >
+                       {
+                           entity
+                       };
     }
 }

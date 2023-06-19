@@ -39,7 +39,9 @@ public class RecognizerRunnerTests
                 Check = null
             };
 
-        RecognizerRunner.PruneResults(null, rootCheckResult);
+        RecognizerRunner.PruneResults(
+            null,
+            rootCheckResult);
 
         // One child is pruned.
         Assert.AreEqual(
@@ -73,7 +75,9 @@ public class RecognizerRunnerTests
                 Check = null
             };
 
-        RecognizerRunner.PruneResults(null, rootCheckResult);
+        RecognizerRunner.PruneResults(
+            null,
+            rootCheckResult);
 
         // The child is not pruned.
         Assert.AreEqual(
@@ -107,7 +111,9 @@ public class RecognizerRunnerTests
                 Check = null
             };
 
-        bool parentShouldBePruned = RecognizerRunner.PruneResults(null, rootCheckResult);
+        bool parentShouldBePruned = RecognizerRunner.PruneResults(
+            null,
+            rootCheckResult);
 
         // The root node should be pruned.
         Assert.IsTrue(parentShouldBePruned);
@@ -119,7 +125,71 @@ public class RecognizerRunnerTests
     }
 
     [Test]
-    public void Node_Check_Is_Pruned_If_Empty()
+    public void Node_Check_Is_Pruned_If_Empty_And_Knockout()
+    {
+        NodeCheckResult rootCheckResult =
+            new()
+            {
+                FeedbackMessage = string.Empty,
+                CollectionKind = CheckCollectionKind.Any,
+                ChildrenCheckResults =
+                    new List< ICheckResult >
+                    {
+                        new LeafCheckResult
+                        {
+                            FeedbackMessage = string.Empty,
+                            Priority = Priority.Knockout,
+                            Correct = true,
+                            DependencyCount = 0,
+                            MatchedNode = null,
+                            Check = null
+                        },
+                        new NodeCheckResult
+                        {
+                            FeedbackMessage = string.Empty,
+                            ChildrenCheckResults =
+                                new List< ICheckResult >
+                                {
+                                    new LeafCheckResult
+                                    {
+                                        FeedbackMessage = string.Empty,
+                                        Priority = Priority.Knockout,
+                                        Correct = false,
+                                        DependencyCount = 0,
+                                        MatchedNode = null,
+                                        Check = null
+                                    }
+                                },
+                            Priority = Priority.Knockout,
+                            DependencyCount = 0,
+                            MatchedNode = null,
+                            Check = null
+                        }
+                    },
+                Priority = Priority.Low,
+                DependencyCount = 0,
+                MatchedNode = null,
+                Check = null
+            };
+
+        bool rootShouldBePruned = RecognizerRunner.PruneResults(
+            null,
+            rootCheckResult);
+
+        // Root should not be pruned.
+        Assert.IsFalse(rootShouldBePruned);
+
+        // Nested NodeCheckResult is pruned.
+        Assert.AreEqual(
+            rootCheckResult.ChildrenCheckResults.Count,
+            1);
+
+        // The leftover child result is the leaf result.
+        Assert.IsInstanceOf< LeafCheckResult >(rootCheckResult.ChildrenCheckResults[ 0 ]);
+    }
+
+    [Test]
+    public void Node_Check_Is_Not_Pruned_If_Empty_But_Not_Knockout()
     {
         NodeCheckResult rootCheckResult =
             new()
@@ -166,7 +236,9 @@ public class RecognizerRunnerTests
                 Check = null
             };
 
-        bool rootShouldBePruned = RecognizerRunner.PruneResults(null, rootCheckResult);
+        bool rootShouldBePruned = RecognizerRunner.PruneResults(
+            null,
+            rootCheckResult);
 
         // Root should not be pruned.
         Assert.IsFalse(rootShouldBePruned);
@@ -174,7 +246,7 @@ public class RecognizerRunnerTests
         // Nested NodeCheckResult is pruned.
         Assert.AreEqual(
             rootCheckResult.ChildrenCheckResults.Count,
-            1);
+            2);
 
         // The leftover child result is the leaf result.
         Assert.IsInstanceOf< LeafCheckResult >(rootCheckResult.ChildrenCheckResults[ 0 ]);
@@ -224,7 +296,10 @@ public class RecognizerRunnerTests
             };
 
         // Nested not check throws ArgumentException.
-        Assert.Throws< ArgumentException >(() => RecognizerRunner.PruneResults(null, rootCheckResult));
+        Assert.Throws< ArgumentException >(
+            () => RecognizerRunner.PruneResults(
+                null,
+                rootCheckResult));
     }
 
     [Test]
@@ -270,7 +345,9 @@ public class RecognizerRunnerTests
                 Check = null
             };
 
-        RecognizerRunner.PruneResults(null, rootCheckResult);
+        RecognizerRunner.PruneResults(
+            null,
+            rootCheckResult);
 
         // Not check itself is not pruned.
         Assert.AreEqual(
@@ -325,7 +402,9 @@ public class RecognizerRunnerTests
                 Check = null
             };
 
-        RecognizerRunner.PruneResults(null, rootCheckResult);
+        RecognizerRunner.PruneResults(
+            null,
+            rootCheckResult);
 
         // Not check itself is pruned.
         Assert.AreEqual(
@@ -393,7 +472,9 @@ public class RecognizerRunnerTests
                 Check = null
             };
 
-        RecognizerRunner.PruneResults(null, rootCheckResult);
+        RecognizerRunner.PruneResults(
+            null,
+            rootCheckResult);
 
         // Not check is pruned.
         Assert.AreEqual(
@@ -460,7 +541,9 @@ public class RecognizerRunnerTests
                 Check = null
             };
 
-        RecognizerRunner.PruneResults(null, rootCheckResult);
+        RecognizerRunner.PruneResults(
+            null,
+            rootCheckResult);
 
         // Not check is not pruned.
         Assert.AreEqual(
@@ -482,7 +565,7 @@ public class RecognizerRunnerTests
                                       DependencyCount = 1,
                                       MatchedNode = null,
                                       Check = null
-        };
+                                  };
         LeafCheckResult result2 = new()
                                   {
                                       FeedbackMessage = string.Empty,
@@ -491,7 +574,7 @@ public class RecognizerRunnerTests
                                       DependencyCount = 0,
                                       MatchedNode = null,
                                       Check = null
-        };
+                                  };
 
         NodeCheckResult rootCheckResult =
             new()
@@ -609,5 +692,241 @@ public class RecognizerRunnerTests
         Assert.AreEqual(
             result1,
             nestedNodeCheckResult.ChildrenCheckResults[ 1 ]);
+    }
+
+    [Test]
+    public Task All_Bad_Results_Are_Pruned_When_PruneAll_Enabled()
+    {
+        NodeCheckResult rootCheckResult =
+            new()
+            {
+                FeedbackMessage = string.Empty,
+                ChildrenCheckResults =
+                    new List< ICheckResult >
+                    {
+                        new NodeCheckResult
+                        {
+                            Priority = Priority.Mid,
+                            FeedbackMessage = String.Empty,
+                            DependencyCount = 0,
+                            MatchedNode = null,
+                            Check = null,
+                            ChildrenCheckResults = new List< ICheckResult >
+                                                   {
+                                                       new LeafCheckResult
+                                                       {
+                                                           Correct = false,
+                                                           Priority = Priority.High,
+                                                           FeedbackMessage = String.Empty,
+                                                           DependencyCount = 0,
+                                                           MatchedNode = null,
+                                                           Check = null
+                                                       }
+                                                   }
+                        },
+                        new LeafCheckResult
+                        {
+                            Correct = false,
+                            Priority = Priority.Mid,
+                            FeedbackMessage = String.Empty,
+                            DependencyCount = 0,
+                            MatchedNode = null,
+                            Check = null
+                        }
+                    },
+                Priority = Priority.Low,
+                DependencyCount = 0,
+                MatchedNode = null,
+                Check = null
+            };
+
+        RecognizerRunner.SortCheckResults(rootCheckResult);
+        RecognizerRunner.PruneResults(
+            null,
+            rootCheckResult,
+            true);
+
+        return Verifier.Verify(rootCheckResult);
+    }
+
+    [Test]
+    public Task Good_Results_Not_Pruned_When_PruneAll_Enabled()
+    {
+        NodeCheckResult rootCheckResult =
+            new()
+            {
+                FeedbackMessage = string.Empty,
+                ChildrenCheckResults =
+                    new List< ICheckResult >
+                    {
+                        new NodeCheckResult
+                        {
+                            Priority = Priority.Mid,
+                            FeedbackMessage = String.Empty,
+                            DependencyCount = 0,
+                            MatchedNode = null,
+                            Check = null,
+                            ChildrenCheckResults = new List< ICheckResult >
+                                                   {
+                                                       new LeafCheckResult
+                                                       {
+                                                           Correct = true,
+                                                           Priority = Priority.High,
+                                                           FeedbackMessage = String.Empty,
+                                                           DependencyCount = 0,
+                                                           MatchedNode = null,
+                                                           Check = null
+                                                       }
+                                                   }
+                        },
+                        new LeafCheckResult
+                        {
+                            Correct = false,
+                            Priority = Priority.Mid,
+                            FeedbackMessage = String.Empty,
+                            DependencyCount = 0,
+                            MatchedNode = null,
+                            Check = null
+                        }
+                    },
+                Priority = Priority.Low,
+                DependencyCount = 0,
+                MatchedNode = null,
+                Check = null,
+                CollectionKind = CheckCollectionKind.Any
+            };
+
+        RecognizerRunner.SortCheckResults(rootCheckResult);
+        RecognizerRunner.PruneResults(
+            null,
+            rootCheckResult,
+            true);
+
+        return Verifier.Verify(rootCheckResult);
+    }
+
+    [Test]
+    public Task Results_Are_Pruned_Once()
+    {
+        SyntaxGraph graph = EntityNodeUtils.CreateGraphFromInput(
+            """
+            public class C1
+            {
+            }
+
+            internal class C2
+            {
+            }
+
+            public class C3
+            {
+                public C3()
+                {
+                    new C1();
+                    new C2();
+                }
+            }
+            """);
+        IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
+
+        IEntity classEntity = graph.GetAll()[ "C1" ];
+
+        ClassCheck classCheck = Class(
+            Priority.Knockout,
+            Modifiers(
+                Priority.Knockout,
+                Modifier.Internal
+            )
+        );
+        ICheck check = All(
+            Priority.Knockout,
+            classCheck,
+            Class(
+                Priority.Knockout,
+                Creates(
+                    Priority.Knockout,
+                    classCheck
+                )
+            )
+        );
+
+        NodeCheckResult result = (NodeCheckResult)check.Check(
+            ctx,
+            classEntity);
+
+        RecognizerRunner.SortCheckResults(result);
+
+        Dictionary< INode, List< ICheckResult > > resultsByNode = new();
+        RecognizerRunner.PruneResults(
+            resultsByNode,
+            result);
+
+        return Verifier.Verify(result);
+    }
+
+    [Test]
+    public Task Incorrect_Relation_Result_Is_Pruned()
+    {
+        SyntaxGraph graph = EntityNodeUtils.CreateGraphFromInput(
+            """
+            public class C1
+            {
+            }
+
+            internal class C2
+            {
+            }
+
+            public class C3
+            {
+                public C3()
+                {
+                    new C1();
+                }
+
+                public void M()
+                {
+                    new C2();
+                }
+            }
+            """);
+        IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
+
+        IEntity classEntity = graph.GetAll()[ "C1" ];
+
+        ClassCheck classCheck = Class(
+            Priority.Knockout,
+            Modifiers(
+                Priority.Knockout,
+                Modifier.Internal
+            )
+        );
+        ICheck check = All(
+            Priority.High,
+            classCheck,
+            Class(
+                Priority.High,
+                Constructor(
+                    Priority.Knockout,
+                    Creates(
+                        Priority.High,
+                        classCheck
+                    )
+                )
+            )
+        );
+
+        NodeCheckResult result = (NodeCheckResult)check.Check(
+            ctx,
+            classEntity);
+
+        RecognizerRunner.SortCheckResults(result);
+
+        Dictionary< INode, List< ICheckResult > > resultsByNode = new();
+        RecognizerRunner.PruneResults(
+            resultsByNode,
+            result);
+
+        return Verifier.Verify(result);
     }
 }

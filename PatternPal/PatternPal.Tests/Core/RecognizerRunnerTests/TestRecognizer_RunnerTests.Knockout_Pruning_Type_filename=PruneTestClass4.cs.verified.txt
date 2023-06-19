@@ -1,0 +1,86 @@
+﻿{
+  FeedbackMessage: Found the required checks for: PatternPal.Tests.Utils.RootNode4Tests.,
+  ChildrenCheckResults: [
+    {
+      FeedbackMessage: ,
+      ChildrenCheckResults: [
+        {
+          FeedbackMessage: Found class 'PruneTestClass4',
+          ChildrenCheckResults: [
+            {
+              FeedbackMessage: Modifiers correctly implemented.,
+              Correct: true,
+              MatchedNode: PruneTestClass4
+            }
+          ],
+          MatchedNode: PruneTestClass4,
+          NodeCheckCollectionWrapper: false
+        },
+        {
+          FeedbackMessage: Found class 'UsesPrune4',
+          ChildrenCheckResults: [
+            {
+              FeedbackMessage: Modifiers correctly implemented.,
+              Correct: true,
+              MatchedNode: UsesPrune4
+            }
+          ],
+          MatchedNode: UsesPrune4,
+          NodeCheckCollectionWrapper: false
+        }
+      ],
+      CollectionKind: Any,
+      NodeCheckCollectionWrapper: true
+    },
+    {
+      FeedbackMessage: ,
+      ChildrenCheckResults: [
+        {
+          FeedbackMessage: Found class 'UsesPrune4',
+          ChildrenCheckResults: [
+            {
+              FeedbackMessage: ,
+              ChildrenCheckResults: [
+                {
+                  FeedbackMessage: Found method: pizza().,
+                  ChildrenCheckResults: [
+                    {
+                      FeedbackMessage: Found node 'PruneTestClass4',
+                      ChildrenCheckResults: [
+                        {
+                          FeedbackMessage: Node 'PruneTestClass4' has correct type,
+                          Correct: true,
+                          DependencyCount: 1,
+                          MatchedNode: PruneTestClass4
+                        }
+                      ],
+                      CollectionKind: Any,
+                      DependencyCount: 1,
+                      MatchedNode: PruneTestClass4,
+                      NodeCheckCollectionWrapper: true
+                    }
+                  ],
+                  DependencyCount: 1,
+                  MatchedNode: pizza,
+                  NodeCheckCollectionWrapper: false
+                }
+              ],
+              CollectionKind: Any,
+              DependencyCount: 1,
+              NodeCheckCollectionWrapper: true
+            }
+          ],
+          DependencyCount: 1,
+          MatchedNode: UsesPrune4,
+          NodeCheckCollectionWrapper: false
+        }
+      ],
+      CollectionKind: Any,
+      DependencyCount: 1,
+      NodeCheckCollectionWrapper: true
+    }
+  ],
+  DependencyCount: 1,
+  MatchedNode: root node,
+  NodeCheckCollectionWrapper: false
+}

@@ -1,16 +1,20 @@
-﻿using System.IO.Compression;
+﻿#region
+
+using System.IO.Compression;
 using Grpc.Core;
-using Microsoft.Extensions.Logging;
-using PatternPal.LoggingServer;
 using PatternPal.LoggingServer.Data;
-using PatternPal.LoggingServer.Data.Interfaces;
 using PatternPal.LoggingServer.Models;
+
+#endregion
+
 namespace PatternPal.LoggingServer.Services
 {
     public class LoggerService : LogCollectorService.LogCollectorServiceBase
     {
         private readonly ILogger<LoggerService> _logger;
         private readonly EventRepository _eventRepository;
+
+        private readonly string _codeStateDirectory;
         
         /// <summary>
         /// Constructor for the LoggerService. This service is responsible for logging events to the database. If any other helper classes are needed, they should be added here as well using dependency injection.
@@ -21,6 +25,7 @@ namespace PatternPal.LoggingServer.Services
         {
             _logger = logger;
             _eventRepository = repository;
+            _codeStateDirectory = Path.Combine(Directory.GetCurrentDirectory(), "CodeStates");
         }
 
         /// <summary>
@@ -29,79 +34,54 @@ namespace PatternPal.LoggingServer.Services
         /// </summary>
         /// <param name="request">All information sent along from the Client required to add a new entry</param>
         /// <param name="context">Server context required</param>
-        /// <returns cref="LogResponse">Confirmation</returns>
-        /// <exception cref="RpcException"></exception>
+        /// <returns cref="LogResponse">Confirmation with status code 1 </returns>
+        /// <exception cref="LogResponse">Depends upon the failure type but returns a different statuscode</exception>
         public override async Task<LogResponse> Log(LogRequest request, ServerCallContext context)
         {
 
-            // GUID parsing
-            Guid eventId = GetGuid(request.EventId, "EventID");
-            Guid sessionId = GetGuid(request.SessionId, "SessionID");
-            Guid subjectId = GetGuid(request.SubjectId, "SubjectID");
-            Guid parentEventId = Guid.Empty;
+            Guid? eventIdNullable = GetGuid(request.EventId, "EventID");
+            if (eventIdNullable == null)
+            {
+                return await Task.FromResult(CreateInvalidResponse("invalid event id"));
+            }
+            Guid eventId = eventIdNullable.Value;
+
+            Guid? sessionIdNullable = GetGuid(request.SessionId, "SessionID");
+            if (sessionIdNullable == null)
+            {
+                return await Task.FromResult(CreateInvalidResponse("invalid session id"));
+            }
+
+            Guid sessionId = sessionIdNullable.Value;
+
+            Guid? parentEventId = null;
             if (request.HasParentEventId)
             {
                 parentEventId = GetGuid(request.ParentEventId, "ParentEventID");
-            }
-
-
-            if (request.EventType == EventType.EvtUnknown)
-            {
-                Status status = new Status(StatusCode.InvalidArgument, "Unknown event type");
-                throw new RpcException(status);
+                if (parentEventId == null)
+                {
+                    return await Task.FromResult(CreateInvalidResponse("invalid parent event id"));
+                }
             }
 
             if (!DateTimeOffset.TryParse(request.ClientTimestamp, out DateTimeOffset cDto))
             {
-                Status status = new Status(StatusCode.InvalidArgument, "Invalid datetime format ( ISO 8601 ) ");
-                throw new RpcException(status);
+                return await Task.FromResult(new LogResponse
+                {
+                    Status = LogStatusCodes.LscInvalidArguments, Message = "invalid client timestamp"
+                });
             }
 
-            string? recognizeResult = null, recognizeConfig = null;
-            if (request.EventType == EventType.EvtXRecognizerRun)
-            {
-                recognizeResult = request.RecognizerResult;
-                recognizeConfig = request.RecognizerConfig;
-            }
-            
-            Guid codeStateId = await _eventRepository.GetPreviousCodeState(sessionId, subjectId, request.ProjectId);
+            Guid? codeStateId = null;
             if (request.HasData)
             {
-                codeStateId = Guid.NewGuid();
-                byte[] compressed = request.Data.ToByteArray();
-                string basePath = Path.Combine(Directory.GetCurrentDirectory(), "CodeStates");
-                string codeStatePath = Path.Combine(basePath, codeStateId.ToString());
-                // Create the directory if it does not exist
-                if (!Directory.Exists(codeStatePath))
+                codeStateId = ParseCodeState(request.Data.ToByteArray());
+                if (codeStateId == null)
                 {
-                    Directory.CreateDirectory(codeStatePath);
-                }
-
-                // Convert the byte array to a zip file and extract it
-                using MemoryStream ms = new MemoryStream(compressed);
-                using ZipArchive archive = new ZipArchive(ms);
-                foreach (ZipArchiveEntry entry in archive.Entries)
-                {
-                    string fullPath = Path.Combine(codeStatePath, entry.FullName);
-                    string? directory = Path.GetDirectoryName(fullPath);
-                    // Create the directory if it does not exist (for nested directories). This does not need to check for existence because it will just continue if it does exist already.4
-                    if (directory != null)
-                    {
-                        Directory.CreateDirectory(directory);
-                    }
-
-                    // Skip non-cs files
-                    if (!entry.FullName.EndsWith(".cs"))
-                    {
-                        continue;
-                    }
-                            
-                    entry.ExtractToFile(fullPath, true);
+                    return await Task.FromResult(CreateInvalidResponse("invalid data"));
                 }
             }
-
-
-            
+            string subjectId = request.SubjectId;
             int order = await _eventRepository.GetNextOrder(sessionId, subjectId);
 
             ProgSnap2Event newEvent = new ProgSnap2Event
@@ -112,44 +92,105 @@ namespace PatternPal.LoggingServer.Services
                 SubjectId = subjectId,
                 ToolInstances = request.ToolInstances,
                 CodeStateId = codeStateId,
+                FullCodeState = request.HasFullCodeState ? request.FullCodeState : null,
                 ClientDatetime = cDto,
                 ServerDatetime = DateTimeOffset.Now,
                 SessionId = sessionId,
-                ProjectId = request.ProjectId,
+                ProjectId = request.HasProjectId ? request.ProjectId : null,
                 ParentId = parentEventId,
-                CompileMessage = request.CompileMessageData,
-                CompileMessageType = request.CompileMessageType,
-                SourceLocation = request.SourceLocation,
-                CodeStateSection = request.CodeStateSection,
-                RecognizerConfig = recognizeConfig,
-                RecognizerResult = recognizeResult,
-                ExecutionResult = request.ExecutionResult
-
+                CompileMessage = request.HasCompileMessageData ? request.CompileMessageData : null,
+                CompileMessageType = request.HasCompileMessageType ? request.CompileMessageType: null,
+                SourceLocation = request.HasSourceLocation ? request.SourceLocation: null,
+                CodeStateSection = request.HasCodeStateSection ? request.CodeStateSection : null,
+                RecognizerConfig = request.EventType == EventType.EvtXRecognizerRun ? request.RecognizerConfig : null,
+                RecognizerResult = request.EventType == EventType.EvtXRecognizerRun ? request.RecognizerResult : null,
+                ExecutionResult = request.HasExecutionResult ? request.ExecutionResult : null
             };
 
+            // For atomic transactions, it would be a good future improvement to delete the respective codeState-directory
+            // if inserting in the database fails. For now, this is also caught by running the housekeeping-job.
             await _eventRepository.Insert(newEvent);
 
-            return await Task.FromResult(new LogResponse
-            {
-                Message = "Logged"
-            });
+            return await Task.FromResult(CreateSuccessResponse());
         }
+
+        /// <summary>
+        /// Unpacks the supplied compressed data to their respective codeState-subdirectory.
+        /// </summary>
+        /// <param name="compressed">A bytestring representing the compressed data</param>
+        /// <returns>The CodeState-GUID</returns>
+        private Guid? ParseCodeState(byte[] compressed)
+        {
+            try
+            {
+                Guid codeStateId = Guid.NewGuid();
+
+                string codeStatePath = Path.Combine(_codeStateDirectory, codeStateId.ToString());
+
+                // Convert the byte array to a zip file and extract it
+                using MemoryStream ms = new(compressed);
+                using ZipArchive archive = new(ms);
+
+                Directory.CreateDirectory(codeStatePath);
+                foreach (ZipArchiveEntry entry in archive.Entries)
+                {
+                    string fullPath = Path.Combine(codeStatePath, entry.FullName);
+                    string? directory = Path.GetDirectoryName(fullPath);
+                    // Create the directory if it does not exist (for nested directories)
+                    if (directory != null)
+                    {
+                        Directory.CreateDirectory(directory);
+                    }
+
+                    // Skip non-cs files
+                    if (!entry.FullName.EndsWith(".cs"))
+                    {
+                        continue;
+                    }
+
+                    entry.ExtractToFile(fullPath, true);
+                }
+
+                return codeStateId;
+            }
+            catch (InvalidDataException e)
+            {
+                _logger.LogError(e, "Error while parsing code state");
+                return null;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error while parsing code state");
+                return null;
+            }
+        }
+
         /// <summary>
         /// Helper function to shorten the log function by parsing a GUID from a string and throwing an exception if it is not valid
         /// </summary>
         /// <param name="guidString">The actual string that needs to be parsed</param>
         /// <param name="guidName">When throwing exception this is the name of the GUID that was being parsed</param>
-        /// <returns cref="Guid">Parsed Guid</returns>
+        /// <returns cref="Guid?">Parsed Guid, if it cannot be parsed it will return null to prevent exception throwing</returns>
         /// <exception cref="RpcException">Exception when parsing fails</exception>
-        private static Guid GetGuid(string guidString, string guidName)
+        private static Guid? GetGuid(string guidString, string guidName)
         {
             if (Guid.TryParse(guidString, out Guid guid))
             {
                 return guid;
             }
-
-            Status status = new Status(StatusCode.InvalidArgument, $"Invalid {guidName} GUID format");
-            throw new RpcException(status);
+            return null;
         }
+
+        #region Responses
+        private LogResponse CreateInvalidResponse(string message)
+        {
+            return new LogResponse { Status = LogStatusCodes.LscInvalidArguments, Message = message };
+        }
+
+        private LogResponse CreateSuccessResponse()
+        {
+            return new LogResponse { Status = LogStatusCodes.LscSuccess, Message = "success" };
+        }
+        #endregion
     }
 }

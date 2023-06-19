@@ -37,59 +37,25 @@
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="{Binding PatternName}"
                                                Margin="2,0,5,0" />
-                                    <ProgressBar x:Name="patternScore" 
-                                                 Height="5" 
+                                    <ProgressBar x:Name="patternScore"
+                                                 Height="5"
                                                  Value="{Binding Path=Score, Mode=OneWay}"
-                                                 Width="30" Margin="10 0 0 0" 
-                                                 BorderBrush="{Binding ProgressBarColor}" 
+                                                 Width="30" Margin="10 0 0 0"
+                                                 BorderBrush="{Binding ProgressBarColor}"
                                                  BorderThickness="1"
                                                  Foreground="{Binding ProgressBarColor}" />
                                 </StackPanel>
                             </Expander.Header>
                             <StackPanel>
-                                <TextBlock Text="{Binding PatternCompletionStatusText}">
-                                </TextBlock>
+                                <TextBlock Text="{Binding Result.Feedback}" />
                                 <ItemsControl Name="ResultsViewParts" ItemsSource="{Binding Children}">
                                     <ItemsControl.ItemTemplate>
-                                        <DataTemplate DataType="{x:Type models:PatternResultPartViewModel}">
+                                        <DataTemplate DataType="{x:Type models:CheckResultViewModel}">
                                             <StackPanel Orientation="Vertical">
-                                                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                                    <imaging:CrispImage Width="32" 
-                                                        Height="32" 
-                                                        HorizontalAlignment="Left"
-                                                        Moniker="{Binding Icon}" />
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Text="{Binding SummaryText}"
-                                                               VerticalAlignment="Center"
-                                                               Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}">
-                                                        </TextBlock>
-                                                    </StackPanel>
-                                                </StackPanel>
-                                                <StackPanel>
-                                                    <ItemsControl Name="CheckResultView" ItemsSource="{Binding ChildViewModels}">
-                                                        <ItemsControl.ItemTemplate>
-                                                            <DataTemplate DataType="{x:Type models:CheckResultViewModel}">
-                                                                <StackPanel>
-                                                                    <StackPanel Orientation="Horizontal" Height="24" Margin="0,5,0,0">
-                                                                        <TextBlock Text="{Binding Message}" 
-                                                                                   VerticalAlignment="Center"
-                                                                                   FontSize="14"
-                                                                                   Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
-                                                                    </StackPanel>
-                                                                    <StackPanel>
-                                                                        <ItemsControl ItemsSource="{Binding SubResults}">
-                                                                            <ItemsControl.ItemTemplate>
-                                                                                <DataTemplate DataType="{x:Type models:CheckResultViewModel}">
-                                                                                    <TextBlock Text="{Binding Message, StringFormat=- {0}}" VerticalAlignment="Center"
-                                                                                               Foreground="{DynamicResource {x:Static vsshell:VsBrushes.BrandedUITextKey}}" />
-                                                                                </DataTemplate>
-                                                                            </ItemsControl.ItemTemplate>
-                                                                        </ItemsControl>
-                                                                    </StackPanel>
-                                                                </StackPanel>
-                                                            </DataTemplate>
-                                                        </ItemsControl.ItemTemplate>
-                                                    </ItemsControl>
+                                                <StackPanel Margin="0,0,0,10">
+                                                    <TextBlock Text="{Binding Requirement}" />
+                                                    <Label Content="{Binding MatchedNodeName}"
+                                                           MouseDoubleClick="Control_OnMouseDoubleClick" />
                                                 </StackPanel>
                                             </StackPanel>
                                         </DataTemplate>

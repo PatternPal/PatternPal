@@ -1,7 +1,6 @@
 # PatternPal
 
 A Visual Studio extension that detects design patterns and helps users implement them.
-Documentation (as of 03/2023: outdated) on the [Wiki](https://github.com/PatternPal/PatternPal/wiki).
 
 ## Requirements
 
@@ -16,41 +15,13 @@ access PatternPal from `View > Other Windows > PatternPal Extension`.
 
 ## Usage
 
-### Opening extension
-
 You can open the main view of the extension through `View > Other Windows > PatternPal Extension`.
 
-## Authors
+### Step-By-Step
+This module offers the flexibility for users to choose between two options: starting the implementation of a new design pattern or continuing their work on a design pattern they have previously worked on.
 
-Project coordinator: [Hieke Keuning](https://github.com/hiekekeuning) (h.w.keuning@uu.nl), Utrecht University
+When the user opts to initiate a new implementation, users are presented with the option to add a file to the current solution or not, in either case, they are subsequently provided with a dialog that asks for the place to save this new file. This new file will then open in Visual Studio. Alternatively, if the user prefers to continue their work they are presented with a dialog to open the file(s) they wish to resume their implementation on. These files(s) are then opened in Visual Studio.
 
-### Team 2023 (Utrecht University)
-
-- [Matteo Bertorotta](https://github.com/viciousdoormat)
-- [Daan van Dam](https://github.com/danielvandamme)
-- [Wing Toh Wong](https://github.com/wingtoh)
-- [Casper Verhaar](https://github.com/knapsac)
-- [Siem van den Tweel](https://github.com/justnireon)
-- [Rutger Vincken](https://github.com/rutgervincken)
-- [Linde van Werven](https://github.com/lvanwerven)
-- [Jeroen van Dam](https://github.com/captainjeroen)
-- [Olaf van der Aart](https://github.com/ovda96)
-
-### Team 2021-2022 (Windesheim University of Applied Sciences)
-
-- [Frank Stam](https://github.com/FrankS01)
-- Jasper van Veenhuizen
-- [Nienke Hulzebos](https://github.com/nienkehulzebos)
-- [Sven Boogaard](https://github.com/sven2102)
-- [Zeewar Ghafir](https://github.com/zeewar)
-- [Koen van Staveren](https://github.com/UnderKoen)
-
-### Team 2019-2020 (Windesheim University of Applied Sciences)
-
-- Henrico Pops
-- Jacq Wattel
-- Tristan Heizenberg
-- Nick Chen
-- Shanna van Grevengoed
+In both cases the user is presented with a description of the requirement and explanation of the step. The user should implement the requirement in the opened file and click the 'Check' button. Only when the implementation is correct does the 'next instruction' button become available.
 
 [releases page]: https://github.com/PatternPal/PatternPal/releases/latest

@@ -4,6 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.15.0"
+             xmlns:toolkit="clr-namespace:Community.VisualStudio.Toolkit;assembly=Community.VisualStudio.Toolkit"
+             xmlns:imaging="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.Imaging"
+             xmlns:catalog="clr-namespace:Microsoft.VisualStudio.Imaging;assembly=Microsoft.VisualStudio.ImageCatalog"
+             toolkit:Themes.UseVsTheme="True"
              xmlns:viewmodels="clr-namespace:PatternPal.Extension.ViewModels"
              xmlns:views="clr-namespace:PatternPal.Extension.Views"
              d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
@@ -11,7 +15,6 @@
              d:DesignHeight="600"
              d:DesignWidth="300"
              Name="PatternPalExtension">
-
     <UserControl.Resources>
         <ResourceDictionary>
             <Style TargetType="TextBlock">
@@ -70,14 +73,17 @@
                 <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}">
                     <views:HomeView />
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type viewmodels:DetectorViewModel}">
-                    <views:DetectorView />
+                <DataTemplate DataType="{x:Type viewmodels:RecognizerViewModel}">
+                    <views:RecognizerView />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type viewmodels:StepByStepListViewModel}">
                     <views:StepByStepListView />
                 </DataTemplate>
                 <DataTemplate DataType="{x:Type viewmodels:StepByStepInstructionsViewModel}">
                     <views:StepByStepInstructionsView />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:ConsentViewModel}">
+                    <views:ConsentView />
                 </DataTemplate>
             </Grid.Resources>
 
@@ -102,13 +108,41 @@
                         VerticalAlignment="Top"
                         Command="{Binding BackCommand}">
                 </Button>
-                <Image Source="Resources/logo.png"
-                       HorizontalAlignment="Center"
-                       MaxHeight="80"
-                       VerticalAlignment="Top" />
                 <TextBlock Text="{Binding CurrentViewModel.Title}"
                            VerticalAlignment="Center"
                            FontSize="50" />
+                <Image Source="Resources/logo.png"
+                       HorizontalAlignment="Center"
+                       MaxHeight="80"
+                       VerticalAlignment="Top" 
+                />
+                <imaging:CrispImage
+                       HorizontalAlignment="Right"
+                       MaxHeight="40"
+                       MaxWidth="40"
+                       VerticalAlignment="Center"
+                       >
+                    <imaging:CrispImage.Style>
+                        <Style TargetType="imaging:CrispImage">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ServerStatus}" Value="Available">
+                                    <Setter Property="Moniker" Value="{x:Static
+                                        catalog:KnownMonikers.OnlineStatusAvailable}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ServerStatus}" Value="Unavailable">
+                                    <Setter Property="Moniker" Value="{x:Static catalog:KnownMonikers.OnlineStatusOffline}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ServerStatus}" Value="Error">
+                                    <Setter Property="Moniker" Value="{x:Static catalog:KnownMonikers.OnlineStatusUnknown}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ServerStatus}" Value="NoLog">
+                                    <Setter Property="Moniker" Value="{x:Static catalog:KnownMonikers.OnlineStatusBusy}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </imaging:CrispImage.Style>
+                </imaging:CrispImage>
+
             </StackPanel>
 
             <ContentControl Content="{Binding CurrentViewModel}"

@@ -343,7 +343,6 @@ ASALocalRun/
 # Local History for Visual Studio
 .localhistory/
 
-
 *.orig
 
 # PatternPal background service publish output folder which is included in the VSIX
@@ -351,3 +350,6 @@ PatternPal/PatternPal.Extension/PatternPal/
 PatternPal/PatternPal.Console/Properties/launchSettings.json
 PatternPal/PatternPal.LoggingServer/CodeStates/*
 !PatternPal/PatterPal.LoggingServer/CodeStates/.gitkeep
+
+# macOS File Indexing
+.DS_Store

@@ -8,18 +8,14 @@ internal class ConstructorCheck : NodeCheck< IConstructor >
     /// <inheritdoc />
     internal ConstructorCheck(
         Priority priority,
+        string ? requirement,
         IEnumerable< ICheck > checks)
         : base(
             priority,
+            requirement,
             checks)
     {
     }
-
-    /// <inheritdoc path="//summary|//param" />
-    /// <returns>The <see cref="IEntity"/> which represents the type constructed by the <see cref="IConstructor"/>.</returns>
-    protected override IEntity GetType4TypeCheck(
-        IRecognizerContext ctx,
-        IConstructor node) => node.GetParent();
 
     /// <inheritdoc />
     protected override string GetFeedbackMessage(

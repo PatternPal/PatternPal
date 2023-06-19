@@ -1,7 +1,7 @@
 ﻿#region
 
 using Microsoft.CodeAnalysis;
-using PatternPal.SyntaxTree.Abstractions.Entities;
+
 using PatternPal.SyntaxTree.Abstractions.Root;
 using PatternPal.SyntaxTree.Models.Entities;
 using PatternPal.SyntaxTree.Models.Members.Field;
@@ -91,6 +91,19 @@ namespace PatternPal.Tests.Utils
                 GetInterfaceDeclaration(),
                 new TestRoot());
 
+        internal static IInterface CreateInterface(
+            out SyntaxGraph graph)
+        {
+            graph = CreateGraphFromInput(
+                """
+                public interface I
+                {
+                }
+                """);
+
+            return (IInterface)graph.GetAll().Values.First();
+        }
+
         /// <summary>
         /// Creates a <see cref="INamespace"/> instance which can be used in tests.
         /// </summary>
@@ -98,6 +111,21 @@ namespace PatternPal.Tests.Utils
             new Namespace(
                 GetNamespaceDeclaration(),
                 new TestRoot());
+
+        /// <summary>
+        /// Tries to get a method from a <see cref="SyntaxGraph"/> by matching the method's name to all methods in a specific class
+        /// </summary>
+        /// <param name="graph">The <see cref="SyntaxGraph"/> in which the method can be found.</param>
+        /// <param name="className">The name of the class in which the method resides</param>
+        /// <param name="methodName">The name of the method</param>
+        /// <returns></returns>
+        public static T GetMemberFromGraph< T >(
+            SyntaxGraph graph,
+            string className,
+            string methodName)
+        {
+            return (T)graph.GetAll()[ className ].GetMembers().FirstOrDefault(x => x is T && x.GetName() == methodName);
+        }
 
         /// <summary>
         /// Creates an <see cref="IMethod"/> instance which can be used in tests.
@@ -211,11 +239,19 @@ namespace PatternPal.Tests.Utils
             return CreateGraphFromInput(INPUT);
         }
 
+        internal static SyntaxGraph CreateFieldTypeCheck() => CreateGraphFromInput(
+            """
+            public class Test
+            {
+                private Test _test;
+            }
+            """);
+
         /// <summary>
         /// Creates a SyntaxGraph from a string representing a file
         /// </summary>
         /// <returns>A <see cref="SyntaxGraph"/> to be used inside tests.</returns>
-        private static SyntaxGraph CreateGraphFromInput(
+        internal static SyntaxGraph CreateGraphFromInput(
             string input)
         {
             SyntaxGraph graph = new();
@@ -227,6 +263,314 @@ namespace PatternPal.Tests.Utils
 
             return graph;
         }
+
+        #region singletonTesting
+
+        /// <summary>
+        /// contains multiple constructors with different modifiers
+        /// </summary>
+        internal static SyntaxGraph CreateMultipleConstructors()
+        {
+            const string INPUT = """
+                                 public class MockClass1
+                                 {
+                                    private MockClass1()
+                                    {
+                                    }
+                                 }
+
+                                 public class MockClass2
+                                 {
+                                    protected MockClass2()
+                                    {
+                                    }
+                                 }
+
+                                 public class MockClass3
+                                 {
+                                    public MockClass3()
+                                    {
+                                    }
+                                 }
+
+                                 public class MockClass4
+                                 {
+                                    internal MockClass4()
+                                    {
+                                    }
+                                 }
+
+                                 public class MockClass5
+                                 {
+                                    internal MockClass5()
+                                    {
+                                    }
+
+                                    private MockClass5(int i)
+                                    {
+                                    }
+                                 }
+                                 """;
+            SyntaxGraph graph = new();
+            graph.AddFile(
+                INPUT,
+                "0");
+            graph.CreateGraph();
+            return graph;
+        }
+
+        /// <summary>
+        /// contains multiple fields with different modifiers and return types
+        /// </summary>
+        internal static SyntaxGraph CreateMultipleFields()
+        {
+            const string INPUT = """
+                                 public class MockClass1
+                                 {
+                                    static private MockClass1 name;
+                                 }
+
+                                 public class MockClass2
+                                 {
+                                    private MockClass2 name;
+                                 }
+
+                                 public class MockClass3
+                                 {
+                                    static protected MockClass3 name;
+                                 }
+
+                                 public class MockClass4
+                                 {
+                                    static private MockClass1 name;
+                                 }
+                                 """;
+            SyntaxGraph graph = new();
+            graph.AddFile(
+                INPUT,
+                "0");
+            graph.CreateGraph();
+            return graph;
+        }
+
+        /// <summary>
+        /// contains multiple simplistic singleton examples with different methods
+        /// </summary>
+        internal static SyntaxGraph CreateCorrectSingleton()
+        {
+            const string INPUT = """
+                                 //Correct
+                                 public class MockClass1
+                                 {
+                                     static private MockClass1 _instance;
+
+                                     private MockClass1()
+                                     {
+                                     }
+
+                                     public static MockClass1 GetInstance()
+                                     {
+                                         if (_instance == null)
+                                         {
+                                             _instance = new MockClass1();
+                                         }
+
+                                         return _instance;
+                                     }
+                                 }
+                                 """;
+            SyntaxGraph graph = new();
+            graph.AddFile(
+                INPUT,
+                "0");
+            graph.CreateGraph();
+            return graph;
+        }
+
+        internal static SyntaxGraph CreateSingletonWrongMethodModifiers()
+        {
+            const string INPUT = """
+                                 //Wrong method modifiers 1
+                                 public class MockClass2
+                                 {
+                                     static private MockClass2 _instance;
+
+                                     private MockClass2()
+                                     {
+                                     }
+
+                                     public MockClass2 GetInstance()
+                                     {
+                                         if (_instance == null)
+                                         {
+                                             _instance = new MockClass2();
+                                         }
+
+                                         return _instance;
+                                     }
+                                 }
+
+                                 //Wrong method modifiers 2
+                                 public class MockClass3
+                                 {
+                                     static private MockClass3 _instance;
+
+                                     private MockClass3()
+                                     {
+                                     }
+
+                                     private static MockClass3 GetInstance()
+                                     {
+                                         if (_instance == null)
+                                         {
+                                             _instance = new MockClass3();
+                                         }
+
+                                         return _instance;
+                                     }
+                                 }
+                                 """;
+            SyntaxGraph graph = new();
+            graph.AddFile(
+                INPUT,
+                "0");
+            graph.CreateGraph();
+            return graph;
+        }
+
+        internal static SyntaxGraph CreateSingletonNoConstructorCall()
+        {
+            const string INPUT = """
+                                 //Constructor not being called
+                                 public class MockClass4
+                                 {
+                                     static private MockClass4 _instance;
+
+                                     private MockClass4()
+                                     {
+                                     }
+
+                                     public static MockClass4 GetInstance()
+                                     {
+                                         if (_instance == null)
+                                         {
+                                             return _instance;
+                                         }
+
+                                         return _instance;
+                                     }
+                                 }
+                                 """;
+            SyntaxGraph graph = new();
+            graph.AddFile(
+                INPUT,
+                "0");
+            graph.CreateGraph();
+            return graph;
+        }
+
+        internal static SyntaxGraph CreateSingletonNoFieldUsage()
+        {
+            const string INPUT = """
+                                 //does not use private field
+                                 public class MockClass5
+                                 {
+                                     static private MockClass5 _instance;
+
+                                     private MockClass5()
+                                     {
+                                     }
+
+                                     public static MockClass5 GetInstance()
+                                     {
+                                         return new MockClass5();
+                                     }
+                                 }
+                                 """;
+            SyntaxGraph graph = new();
+            graph.AddFile(
+                INPUT,
+                "0");
+            graph.CreateGraph();
+            return graph;
+        }
+
+        internal static SyntaxGraph CreateCorrectClientSingleton()
+        {
+            const string INPUT = """
+                                 public class MockClass1
+                                 {
+                                    static private MockClass1 _instance;
+
+                                    private MockClass1()
+                                    {
+                                    }
+
+                                    public static MockClass1 GetInstance()
+                                    {
+                                        if (_instance == null)
+                                        {
+                                            _instance = new MockClass1();
+                                        }
+
+                                        return _instance;
+                                    }
+                                 }
+
+                                 public class Client1
+                                 {
+                                    public Client1()
+                                    {
+                                        MockClass1 singleton = MockClass1.GetInstance();
+                                    }
+                                 }
+                                 """;
+            SyntaxGraph graph = new();
+            graph.AddFile(
+                INPUT,
+                "0");
+            graph.CreateGraph();
+            return graph;
+        }
+
+        internal static SyntaxGraph CreateWrongClientSingleton()
+        {
+            const string INPUT = """
+                                 public class MockClass2
+                                 {
+                                     static private MockClass2 _instance;
+
+                                     private MockClass2()
+                                     {
+                                     }
+
+                                     public static MockClass2 GetInstance()
+                                     {
+                                         if (_instance == null)
+                                         {
+                                             _instance = new MockClass2();
+                                         }
+
+                                         return _instance;
+                                     }
+                                 }
+
+                                 public class Client2
+                                 {
+                                     public Client2()
+                                     {
+                                     }
+                                 }
+                                 """;
+            SyntaxGraph graph = new();
+            graph.AddFile(
+                INPUT,
+                "0");
+            graph.CreateGraph();
+            return graph;
+        }
+
+        #endregion
 
         internal static SyntaxGraph CreateMethodWithParamaters()
         {
@@ -275,8 +619,9 @@ namespace PatternPal.Tests.Utils
                                      {
                                      }
 
-                                     internal void DoSomething()
+                                     internal Test DoSomething()
                                      {
+                                        return this;
                                      }
 
                                      protected int TestProperty { get; set; }

@@ -1,10 +1,4 @@
-﻿#region
-
-using static PatternPal.Core.Checks.CheckBuilder;
-
-#endregion
-
-namespace PatternPal.Tests.Checks;
+﻿namespace PatternPal.Tests.Checks;
 
 internal class MethodCheckTests
 {

@@ -18,11 +18,15 @@ internal class ModifierCheck : CheckBase
     /// Initializes a new instance of the <see cref="ModifierCheck"/> class. 
     /// </summary>
     /// <param name="priority">Priority of the check.</param>
+    /// <param name="requirement">The optional requirement which this <see cref="ICheck"/> checks.</param>
     /// <param name="modifiers">A list of modifiers the node should have</param>
     public ModifierCheck(
         Priority priority,
+        string ? requirement,
         IEnumerable< IModifier > modifiers)
-        : base(priority)
+        : base(
+            priority,
+            requirement)
     {
         _modifiers = modifiers;
     }
@@ -49,25 +53,25 @@ internal class ModifierCheck : CheckBase
             if (!modifiers.Contains(modifier)) // if the needed modifier is not one of the node's modifiers
             {
                 return new LeafCheckResult
-                       {
-                           FeedbackMessage = $"The node {node} does not have the {modifier} modifier.",
-                           Correct = false,
-                           Priority = Priority,
-                           DependencyCount = DependencyCount,
-                           MatchedNode = node,
-                           Check = this,
-                       };
+                {
+                   FeedbackMessage = $"The node {node} does not have the {modifier} modifier.",
+                   Correct = false,
+                   Priority = Priority,
+                   DependencyCount = DependencyCount,
+                   MatchedNode = node, 
+                   Check = this,
+                };
             }
         }
 
         return new LeafCheckResult
-               {
-                   FeedbackMessage = "Modifiers correctly implemented.",
-                   Correct = true,
-                   Priority = Priority,
-                   DependencyCount = DependencyCount,
-                   MatchedNode = node,
-                   Check = this,
-               };
+        {
+           FeedbackMessage = "Modifiers correctly implemented.",
+           Correct = true,
+           Priority = Priority,
+           DependencyCount = DependencyCount,
+           MatchedNode = node,
+           Check = this,
+        };
     }
 }

@@ -1,0 +1,42 @@
+﻿{
+  FeedbackMessage: Found class 'Test',
+  ChildrenCheckResults: [
+    {
+      FeedbackMessage: ,
+      ChildrenCheckResults: [
+        {
+          FeedbackMessage: Found field '_test',
+          ChildrenCheckResults: [
+            {
+              FeedbackMessage: Found the required checks for: _test.,
+              ChildrenCheckResults: [
+                {
+                  FeedbackMessage: Found node 'Test',
+                  ChildrenCheckResults: [
+                    {
+                      FeedbackMessage: Node 'Test' has correct type,
+                      Correct: true,
+                      MatchedNode: Test
+                    }
+                  ],
+                  CollectionKind: Any,
+                  MatchedNode: Test,
+                  NodeCheckCollectionWrapper: true
+                }
+              ],
+              CollectionKind: Any,
+              MatchedNode: _test,
+              NodeCheckCollectionWrapper: false
+            }
+          ],
+          MatchedNode: _test,
+          NodeCheckCollectionWrapper: false
+        }
+      ],
+      CollectionKind: Any,
+      NodeCheckCollectionWrapper: true
+    }
+  ],
+  MatchedNode: Test,
+  NodeCheckCollectionWrapper: false
+}

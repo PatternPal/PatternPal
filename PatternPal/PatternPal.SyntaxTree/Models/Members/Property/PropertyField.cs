@@ -1,6 +1,10 @@
-﻿using PatternPal.SyntaxTree.Abstractions;
+﻿#region
+
+using PatternPal.SyntaxTree.Abstractions;
 using PatternPal.SyntaxTree.Abstractions.Members;
 using PatternPal.SyntaxTree.Abstractions.Root;
+
+#endregion
 
 namespace PatternPal.SyntaxTree.Models.Members.Property
 {

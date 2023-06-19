@@ -1,4 +1,4 @@
-﻿using ICheckResult = PatternPal.Core.ICheckResult;
+﻿using PatternPal.Core.Runner;
 
 namespace PatternPal.Services;
 
@@ -12,20 +12,9 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
     {
         GetSupportedRecognizersResponse response = new();
 
-        bool initialValue = true;
-        foreach (Recognizer recognizer in Enum.GetValues< Recognizer >())
+        foreach (Recognizer supportedRecognizer in RecognizerRunner.SupportedRecognizers.Keys)
         {
-            // Skip the first value of the enum. This value is required by the Protocol Buffer
-            // spec, but it shouldn't be used directly, because it's impossible to know whether
-            // the value was set to the default value, or no value was set (because when no
-            // value is set, the default value is used).
-            if (initialValue)
-            {
-                initialValue = false;
-                continue;
-            }
-
-            response.Recognizers.Add(recognizer);
+            response.Recognizers.Add(supportedRecognizer);
         }
 
         return Task.FromResult(response);
@@ -51,33 +40,106 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
         RecognizerRunner runner = new(
             files,
             request.Recognizers );
-        ICheckResult ? result = runner.RunV2();
-        if (result is null)
-        {
-            return Task.CompletedTask;
-        }
+        IList< (Recognizer, ICheckResult) > results = runner.Run();
 
         // KNOWN: The root check result is always a NodeCheckResult.
-        NodeCheckResult rootCheckResult = (NodeCheckResult)result;
-
-        foreach (ICheckResult childCheckResult in rootCheckResult.ChildrenCheckResults)
+        foreach ((Recognizer recognizer, ICheckResult rootCheckResult) in results)
         {
-            RecognizeResult res = new()
-                                  {
-                                      Recognizer = Recognizer.Singleton,
-                                      ClassName = childCheckResult.MatchedNode?.GetName() ?? "no matched node"
-                                  };
+            RecognizeResult rootResult = new()
+                                         {
+                                             Recognizer = recognizer,
+                                             Feedback = "Goed gedoet"
+                                         };
 
-            res.Results.Add(CreateCheckResult(childCheckResult));
+            Dictionary< string, Result > resultsByRequirement = new();
+
+            foreach (Result result in GetResults(
+                rootCheckResult))
+            {
+                if (!resultsByRequirement.TryGetValue(
+                        result.Requirement,
+                        out Result ? existingResult)
+                    || (existingResult.MatchedNode == null && result.MatchedNode != null))
+                {
+                    resultsByRequirement[ result.Requirement ] = result;
+                }
+            }
+
+            // TODO: Check if requirements are correct, or remove result if not.
+
+            // TODO: Collect all requirements from checks.
+
+            // TODO: Generate feedback for incorrect/missing requirements.
+
+            foreach (Result result in resultsByRequirement.Values)
+            {
+                rootResult.Results.Add(result);
+            }
 
             RecognizeResponse response = new()
                                          {
-                                             Result = res
+                                             Result = rootResult
                                          };
             responseStream.WriteAsync(response);
         }
 
         return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// This method transforms a <see cref="ICheckResult"/> to a <see cref="Result"/>
+    /// </summary>
+    /// <param name="resultsToProcess"></param>
+    /// <param name="checkResult"> The check to transform.</param>
+    /// <param name="usedNodes"></param>
+    /// <returns></returns>
+    private static IEnumerable< Result > GetResults(
+        ICheckResult rootCheckResult)
+    {
+        Queue< ICheckResult > resultsToProcess = new();
+        resultsToProcess.Enqueue(rootCheckResult);
+        while (resultsToProcess.Count != 0)
+        {
+            ICheckResult resultToProcess = resultsToProcess.Dequeue();
+
+            if (!string.IsNullOrWhiteSpace(resultToProcess.Check.Requirement))
+            {
+                Result result = new()
+                                {
+                                    Requirement = resultToProcess.Check.Requirement
+                                };
+
+                if (resultToProcess.MatchedNode != null)
+                {
+                    INode matchedNode = resultToProcess.MatchedNode;
+                    TextSpan sourceLocation = matchedNode.GetSourceLocation;
+                    result.MatchedNode = new MatchedNode
+                                         {
+                                             Name = matchedNode.GetName(),
+                                             Path = matchedNode.GetRoot().GetSource(),
+                                             Start = sourceLocation.Start,
+                                             Length = sourceLocation.Length
+                                         };
+                }
+
+                yield return result;
+            }
+
+            switch (resultToProcess)
+            {
+                case LeafCheckResult:
+                    continue;
+                case NotCheckResult notCheckResult:
+                    resultsToProcess.Enqueue(notCheckResult.NestedResult);
+                    continue;
+                case NodeCheckResult nodeCheckResult:
+                    foreach (ICheckResult childCheckResult in nodeCheckResult.ChildrenCheckResults)
+                    {
+                        resultsToProcess.Enqueue(childCheckResult);
+                    }
+                    continue;
+            }
+        }
     }
 
     /// <summary>
@@ -127,42 +189,5 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                 return null;
             }
         }
-    }
-
-    /// <summary>
-    /// Converts an <see cref="ICheckResult"/> to a <see cref="CheckResult"/>, which can be sent
-    /// over the wire.
-    /// </summary>
-    /// <param name="checkResult">The <see cref="ICheckResult"/> to convert.</param>
-    /// <returns>The <see cref="CheckResult"/> instance created from the given <see cref="ICheckResult"/>.</returns>
-    private static CheckResult CreateCheckResult(
-        ICheckResult checkResult)
-    {
-        CheckResult newCheckResult = new()
-                                     {
-                                         FeedbackType = (CheckResult.Types.FeedbackType.FeedbackCorrect),
-                                         Hidden = false,
-                                         FeedbackMessage = checkResult.FeedbackMessage
-                                     };
-
-        // Convert sub-check results.
-        switch (checkResult)
-        {
-            case NodeCheckResult nodeCheckResult:
-            {
-                foreach (ICheckResult childCheckResult in nodeCheckResult.ChildrenCheckResults)
-                {
-                    newCheckResult.SubCheckResults.Add(CreateCheckResult(childCheckResult));
-                }
-                break;
-            }
-            case NotCheckResult notCheckResult:
-            {
-                newCheckResult.SubCheckResults.Add(CreateCheckResult(notCheckResult.NestedResult));
-                break;
-            }
-        }
-
-        return newCheckResult;
     }
 }

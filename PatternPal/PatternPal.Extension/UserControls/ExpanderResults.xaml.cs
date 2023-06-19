@@ -1,13 +1,19 @@
-﻿using System;
-using System.Linq;
+﻿#region
+
+using System;
 using System.Windows.Controls;
 using System.Windows.Input;
-using PatternPal.Extension.ViewModels;
-using Microsoft.CodeAnalysis;
-using Microsoft.VisualStudio.ComponentModelHost;
-using Microsoft.VisualStudio.LanguageServices;
+
+using Community.VisualStudio.Toolkit;
+
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.TextManager.Interop;
+using Microsoft.VisualStudio.Text;
+
+using PatternPal.Extension.Grpc;
+using PatternPal.Extension.ViewModels;
+using PatternPal.Protos;
+
+#endregion
 
 namespace PatternPal.Extension.UserControls
 {
@@ -21,52 +27,58 @@ namespace PatternPal.Extension.UserControls
             InitializeComponent();
         }
 
-        //TODO: Handle clicking on a node to bring the user to the right document
-        private void EventSetter_OnHandler(object sender, MouseButtonEventArgs e)
+        private void Control_OnMouseDoubleClick(
+            object sender,
+            MouseButtonEventArgs e)
         {
-            var viewItem = sender as TreeViewItem;
-
-            if (!(viewItem?.DataContext is CheckResultViewModel viewModel))
+            Label label = sender as Label;
+            if (!(label?.DataContext is CheckResultViewModel viewModel))
             {
                 return;
             }
 
-            //var element = viewModel.Result.GetElement();
-            //if (element == null)
-            //{
-            //    return;
-            //}
-
-            //var node = element.GetSyntaxNode();
-            //if (node == null)
-            //{
-            //    return;
-            //}
-
-            //SelectNodeInEditor(node, element.GetRoot().GetSource());
-        }
-
-        /// <summary>
-        ///     Clicking on the node brings you to the right document.
-        /// </summary>
-        private void SelectNodeInEditor(SyntaxNode node, string file)
-        {
-            try
+            MatchedNode matchedNode = viewModel.Result.MatchedNode;
+            if (null == matchedNode)
             {
-                var tm = (IVsTextManager)Package.GetGlobalService(typeof(SVsTextManager));
-                var cm = (IComponentModel)Package.GetGlobalService(typeof(SComponentModel));
-                var ws = (Workspace)cm.GetService<VisualStudioWorkspace>();
-                var did = ws.CurrentSolution.GetDocumentIdsWithFilePath(file);
-                ws.OpenDocument(did.FirstOrDefault());
-                tm.GetActiveView(1, null, out var av);
-                var sp = node.GetLocation().GetMappedLineSpan().StartLinePosition;
-                var ep = node.GetLocation().GetMappedLineSpan().EndLinePosition;
-                av.SetSelection(sp.Line, sp.Character, ep.Line, ep.Character);
+                return;
             }
-            catch (Exception e)
-            {
-                _ = e.Message;
-            }
+
+            ThreadHelper.JoinableTaskFactory.Run(
+                async delegate
+                {
+                    try
+                    {
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+                        DocumentView documentView = await VS.Documents.OpenAsync(matchedNode.Path);
+                        if (documentView == null)
+                        {
+                            GrpcHelper.ShowErrorMessage("Failed to open file");
+                            return;
+                        }
+
+                        ITextSnapshot snapshot = documentView.TextBuffer?.CurrentSnapshot;
+                        if (snapshot == null)
+                        {
+                            GrpcHelper.ShowErrorMessage("Failed to get snapshot");
+                            return;
+                        }
+
+                        SnapshotSpan span = new SnapshotSpan(
+                            snapshot,
+                            matchedNode.Start,
+                            matchedNode.Length);
+                        documentView.TextView?.Selection.Select(
+                            span,
+                            false);
+                        documentView.TextView?.Caret.MoveTo(span.Start);
+                        documentView.TextView?.ViewScroller.EnsureSpanVisible(span);
+                    }
+                    catch (Exception exception)
+                    {
+                        GrpcHelper.ShowErrorMessage(exception.Message);
+                    }
+                });
         }
     }
 }

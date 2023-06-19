@@ -3,36 +3,22 @@
     <TargetFramework>net7.0</TargetFramework>
     <Authors>PatternPal</Authors>
     <OutputType>Exe</OutputType>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PatternPal.CommonResources\PatternPal.CommonResources.csproj" />
     <ProjectReference Include="..\PatternPal.Core\PatternPal.Core.csproj" />
-    <ProjectReference Include="..\PatternPal.Regonizers\PatternPal.Recognizers.csproj" />
-    <ProjectReference Include="..\PatternPal.SyntaxTree\PatternPal.SyntaxTree.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Humanizer.Core" Version="2.14.1" />
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="7.0.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.5.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.5.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.5.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.5.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" Version="4.5.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="4.5.0" />
-    <PackageReference Include="NDesk.Options" Version="0.2.1" />
+    <PackageReference Include="Spectre.Console" Version="0.47.0" />
+    <PackageReference Include="Spectre.Console.Cli" Version="0.47.0" />
+    <PackageReference Include="Spectre.Console.Json" Version="0.47.0" />
     <PackageReference Include="System.Buffers" Version="4.5.1" />
     <PackageReference Include="System.Collections.Immutable" Version="7.0.0" />
     <PackageReference Include="System.Composition" Version="7.0.0" />
-    <PackageReference Include="System.Composition.AttributedModel" Version="7.0.0" />
-    <PackageReference Include="System.Composition.Convention" Version="7.0.0" />
-    <PackageReference Include="System.Composition.Hosting" Version="7.0.0" />
-    <PackageReference Include="System.Composition.Runtime" Version="7.0.0" />
-    <PackageReference Include="System.Composition.TypedParts" Version="7.0.0" />
-    <PackageReference Include="System.IO.Pipelines" Version="7.0.0" />
     <PackageReference Include="System.Memory" Version="4.5.5" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
     <PackageReference Include="System.Reflection.Metadata" Version="7.0.1" />

@@ -2,17 +2,19 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.Internal.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-
+using Microsoft.Win32;
 using PatternPal.Extension.Grpc;
 using PatternPal.Extension.ViewModels;
 using PatternPal.Protos;
@@ -30,9 +32,10 @@ namespace PatternPal.Extension.Views
         private StepByStepInstructionsViewModel _viewModel;
 
         public StepByStepInstructionsView()
-        {
+        {   
             InitializeComponent();
             InitializeViewModelAndButtons();
+            //ContinueButtonBehavior();
 
             Dispatcher.VerifyAccess();
             LoadProject();
@@ -59,6 +62,7 @@ namespace PatternPal.Extension.Views
         {
             if (_viewModel.TrySelectPreviousInstruction())
             {
+                resultTextBlock.Visibility = Visibility.Hidden;
                 CheckIfNextPreviousButtonsAvailable();
             }
         }
@@ -74,6 +78,7 @@ namespace PatternPal.Extension.Views
         {
             if (_viewModel.TrySelectNextInstruction())
             {
+                resultTextBlock.Visibility = Visibility.Hidden;
                 CheckIfNextPreviousButtonsAvailable();
             }
         }
@@ -97,28 +102,31 @@ namespace PatternPal.Extension.Views
             DataContextChanged += delegate
                                   {
                                       // only bind events when dataContext is set, not unset
-                                      if (this.DataContext == null)
+                                      if (DataContext == null)
                                       {
                                           return;
                                       }
 
-                                      _viewModel = (StepByStepInstructionsViewModel)(this.DataContext);
-
+                                      _viewModel = (StepByStepInstructionsViewModel)(DataContext);
                                       CheckIfNextPreviousButtonsAvailable();
                                   };
         }
 
+        /// <summary>
+        /// Checks if the check implementation button is able to be clicked
+        /// </summary>
         private void CheckIfCheckIsAvailable()
         {
-            ClassSelection.Visibility = _viewModel.CurrentInstruction.ShowFileSelector
-                ? Visibility.Visible
-                : Visibility.Hidden;
-            CheckImplementationButton.IsEnabled = !_viewModel.CurrentInstruction.ShowFileSelector || ClassSelection.SelectedItem != null;
-
+            CheckImplementationButton.IsEnabled = _viewModel.FilePaths.Any();
+            
             NextInstructionButton.IsEnabled = false;
             ExpanderResults.ResultsView.ItemsSource = new List< PatternResultViewModel >();
         }
 
+        /// <summary>
+        /// Given the current step checks whether any of the files provided have implemented
+        /// the check.
+        /// </summary>
         private void CheckImplementationButton_OnClick(
             object sender,
             RoutedEventArgs e)
@@ -126,47 +134,33 @@ namespace PatternPal.Extension.Views
             NextInstructionButton.IsEnabled = false;
 
             CheckInstructionRequest request = new CheckInstructionRequest
-                                              {
-                                                  InstructionSetName = _viewModel.InstructionSet.Name,
-                                                  InstructionId = _viewModel.CurrentInstructionNumber - 1,
-                                                  SelectedItem = _viewModel.SelectedcbItem,
-                                              };
-
-            LoadProject();
-
-            foreach (Project project in Projects)
             {
-                foreach (Document document in project.Documents)
-                {
-                    request.Documents.Add(document.FilePath);
-                }
+                InstructionNumber = _viewModel.CurrentInstructionNumber - 1,
+                Recognizer = _viewModel.Recognizer
+            };
+
+            foreach (string file in _viewModel.FilePaths)
+            {
+                request.Documents.Add(file);
             }
 
             try
             {
-                RecognizeResult result = GrpcHelper.StepByStepClient.CheckInstruction(request).Result;
+                bool result = GrpcHelper.StepByStepClient.CheckInstruction(request).Result;
 
-                List< PatternResultViewModel > viewModels = new List< PatternResultViewModel >
-                                                            {
-                                                                new PatternResultViewModel(result)
-                                                                {
-                                                                    Expanded = true
-                                                                }
-                                                            };
-
-                bool correct = result.Results.All(c => c.FeedbackType == CheckResult.Types.FeedbackType.FeedbackCorrect);
-
-                ExpanderResults.ResultsView.ItemsSource = viewModels;
-
-                if (!correct)
+                if (!result)
+                {
+                    resultTextBlock.Visibility = Visibility.Hidden;
                     return;
+                }
             }
-            catch (Exception exception)
+            catch(Exception exception)
             {
                 Console.WriteLine(exception);
                 return;
             }
 
+            resultTextBlock.Visibility = Visibility.Visible;
             NextInstructionButton.IsEnabled = true;
         }
 
@@ -247,6 +241,9 @@ namespace PatternPal.Extension.Views
 
         #endregion
 
+        /// <summary>
+        /// Obtains the current solution projects
+        /// </summary>
         private void LoadProject()
         {
             IComponentModel cm = (IComponentModel)Package.GetGlobalService(typeof( SComponentModel ));
@@ -305,36 +302,5 @@ namespace PatternPal.Extension.Views
         }
 
         #endregion
-
-        private void OnDropDownOpened(
-            object sender,
-            EventArgs e)
-        {
-            _viewModel.cbItems.Clear();
-            LoadProject();
-
-            GetSelectableClassesRequest request = new GetSelectableClassesRequest();
-            foreach (Project project in Projects)
-            {
-                foreach (Document document in project.Documents)
-                {
-                    request.Documents.Add(document.FilePath);
-                }
-            }
-
-            GetSelectableClassesResponse response = GrpcHelper.StepByStepClient.GetSelectableClasses(request);
-            foreach (string selectableClass in response.SelectableClasses)
-            {
-                _viewModel.cbItems.Add(selectableClass);
-            }
-        }
-
-        private void OnSelectionChanged(
-            object sender,
-            SelectionChangedEventArgs e)
-        {
-            CheckImplementationButton.IsEnabled = true;
-            NextInstructionButton.IsEnabled = false;
-        }
     }
 }

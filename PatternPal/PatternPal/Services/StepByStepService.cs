@@ -1,150 +1,124 @@
-﻿using PatternPal.SyntaxTree;
-using PatternPal.SyntaxTree.Abstractions.Entities;
+﻿#region
+
+using PatternPal.Core.Runner;
+using PatternPal.Core.StepByStep;
+
+using InstructionSet = PatternPal.Protos.InstructionSet;
+
+#endregion
 
 namespace PatternPal.Services;
 
 public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
 {
+    /// <inheritdoc />
     public override Task< GetInstructionSetsResponse > GetInstructionSets(
         GetInstructionSetsRequest request,
         ServerCallContext context)
     {
         GetInstructionSetsResponse response = new();
-        foreach ((string name, IInstructionSet set) in InstructionSetsCreator.InstructionSets)
+
+        foreach (Recognizer recognizer in RecognizerRunner.SupportedStepByStepRecognizers.Keys)
         {
-            response.InstructionSets.Add(
-                new InstructionSet
-                {
-                    Name = name,
-                    NumberOfInstructions = (uint)set.Instructions.Count()
-                });
+            response.Recognizers.Add(recognizer);
         }
 
         return Task.FromResult(response);
     }
 
-    public override Task< GetSelectableClassesResponse > GetSelectableClasses(
-        GetSelectableClassesRequest request,
+    /// <inheritdoc />
+    public override Task< GetInstructionSetResponse > GetInstructionSet(
+        GetInstructionSetRequest request,
         ServerCallContext context)
     {
-        SyntaxGraph graph = new();
+        // Provided with the recognizer return information on the instruction set required by the
+        // InstructionsViewModel to navigate between steps.
+        Recognizer providedRecognizer = request.Recognizer;
+        IStepByStepRecognizer recognizer = RecognizerRunner.SupportedStepByStepRecognizers[ providedRecognizer ];
+        List< IInstruction > instructions = recognizer.GenerateStepsList();
 
-        foreach (string document in request.Documents)
-        {
-            graph.AddFile(
-                FileManager.MakeStringFromFile(document),
-                document);
-        }
+        InstructionSet res =
+            new()
+            {
+                Name = recognizer.Name,
+                NumberOfInstructions = (uint)instructions.Count
+            };
 
-        graph.CreateGraph();
+        GetInstructionSetResponse response = new()
+                                             {
+                                                 SelectedInstructionset = res
+                                             };
 
-        GetSelectableClassesResponse selectableClasses = new();
-        foreach ((string source, _) in graph.GetAll().OrderByDescending(p => File.GetLastWriteTime(p.Value.GetRoot().GetSource())))
-        {
-            selectableClasses.SelectableClasses.Add(source);
-        }
-
-        return Task.FromResult(selectableClasses);
+        return Task.FromResult(response);
     }
 
+    /// <inheritdoc />
     public override Task< GetInstructionByIdResponse > GetInstructionById(
         GetInstructionByIdRequest request,
         ServerCallContext context)
     {
-        IInstructionSet set = InstructionSetsCreator.InstructionSets[ request.InstructionSetName ];
-        IInstruction instruction = set.Instructions.ToList()[ request.InstructionId ];
-
+        // Provided with the recognizer and instruction number return the instruction detailed
+        // information for display to the user.
+        Recognizer protoRecognizer = request.Recognizers;
+        IStepByStepRecognizer recognizer = RecognizerRunner.SupportedStepByStepRecognizers[ protoRecognizer ];
+        IInstruction instruction = recognizer.GenerateStepsList()[ (int)request.InstructionNumber ];
         GetInstructionByIdResponse response = new()
                                               {
                                                   Instruction = new Instruction
                                                                 {
-                                                                    Title = instruction.Title,
+                                                                    Title = instruction.Requirement,
                                                                     Description = instruction.Description,
-                                                                    ShowFileSelector = instruction is IFileSelector,
-                                                                    FileId = instruction is IFileSelector fileSelector
-                                                                        ? fileSelector.FileId
-                                                                        : string.Empty
+                                                                    FileId = ""
                                                                 }
                                               };
 
         return Task.FromResult(response);
     }
 
+    /// <inheritdoc />
     public override Task< CheckInstructionResponse > CheckInstruction(
         CheckInstructionRequest request,
         ServerCallContext context)
     {
-        IInstructionSet set = InstructionSetsCreator.InstructionSets[ request.InstructionSetName ];
-        IInstruction instruction = set.Instructions.ToList()[ request.InstructionId ];
+        // Retrieve the checks based on the instruction number and recognizer.
+        Recognizer protoRecognizer = request.Recognizer;
+        IStepByStepRecognizer recognizer = RecognizerRunner.SupportedStepByStepRecognizers[ protoRecognizer ];
+        IInstruction instruction = recognizer.GenerateStepsList()[ request.InstructionNumber ];
 
-        SyntaxGraph graph = new();
-
-        foreach (string document in request.Documents)
+        // Run the checks on the provided files.
+        RecognizerRunner runner = new(
+            request.Documents,
+            instruction );
+        IList< (Recognizer, ICheckResult) > res = runner.Run(pruneAll: true);
+        // Check whether there is a single file with results.
+        if (res.Any())
         {
-            graph.AddFile(
-                FileManager.MakeStringFromFile(document),
-                document);
-        }
-
-        graph.CreateGraph();
-
-        if (instruction is IFileSelector fileSelector)
-        {
-            State.StateKeyed[ fileSelector.FileId ] = request.SelectedItem;
-        }
-
-        IInstructionState state = new InstructionState();
-        foreach (KeyValuePair< string, string > pair in State.StateKeyed)
-        {
-            state[ pair.Key ] = graph.GetAll()[ pair.Value ];
-        }
-
-        RecognizeResult res = new()
-                              {
-                                  //Recognizer = 0,
-                                  //ClassName = result.EntityNode.GetFullName(),
-                              };
-        foreach (Recognizers.Abstractions.ICheckResult checkResult in instruction.Checks.Select(check => check.Correct(state)))
-        {
-            res.Results.Add(CreateCheckResult(checkResult));
-        }
-
-        bool correct = res.Results.All(c => c.FeedbackType == CheckResult.Types.FeedbackType.FeedbackCorrect);
-
-        if (correct)
-        {
-            //Save all changed state to the state between instructions, only when all is successful
-            foreach (KeyValuePair< string, IEntity > pair in state)
+            // Assume the implementation is wrong only when there is evidence in one of the
+            // results that prove otherwise.
+            bool assumption = false;
+            foreach ((_, ICheckResult currentRes) in res)
             {
-                State.StateKeyed[ pair.Key ] = pair.Value.GetFullName();
+                NodeCheckResult checkRes = (NodeCheckResult)currentRes;
+                if (checkRes.ChildrenCheckResults.Count != 0)
+                {
+                    assumption = true;
+                }
             }
+
+            return Task.FromResult(
+                new CheckInstructionResponse
+                {
+                    Result = assumption
+                });
         }
-
-        CheckInstructionResponse response = new()
-                                            {
-                                                Result = res
-                                            };
-        return Task.FromResult(response);
-    }
-
-    private static CheckResult CreateCheckResult(
-        Recognizers.Abstractions.ICheckResult checkResult)
-    {
-        CheckResult newCheckResult = new()
-                                     {
-                                         FeedbackType = (CheckResult.Types.FeedbackType)((int)checkResult.GetFeedbackType() + 1),
-                                         Hidden = checkResult.IsHidden,
-                                         FeedbackMessage = ResourceUtils.ResultToString(checkResult)
-                                     };
-        foreach (Recognizers.Abstractions.ICheckResult childCheckResult in checkResult.GetChildFeedback())
+        // There was no content in the file that was able to run in the runner.
+        else
         {
-            newCheckResult.SubCheckResults.Add(CreateCheckResult(childCheckResult));
+            return Task.FromResult(
+                new CheckInstructionResponse
+                {
+                    Result = false
+                });
         }
-        return newCheckResult;
-    }
-
-    private static class State
-    {
-        internal static readonly Dictionary< string, string > StateKeyed = new();
     }
 }

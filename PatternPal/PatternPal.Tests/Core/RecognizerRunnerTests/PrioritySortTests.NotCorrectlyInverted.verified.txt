@@ -1,0 +1,19 @@
+﻿{
+  FeedbackMessage: ,
+  Priority: Low,
+  ChildrenCheckResults: [
+    {
+      FeedbackMessage: ,
+      Priority: Low,
+      NestedResult: {
+        FeedbackMessage: ,
+        Priority: Mid,
+        Correct: false
+      },
+      Score: Knockout: 0, High: 0, Mid: 1, Low: 0
+    }
+  ],
+  CollectionKind: Any,
+  NodeCheckCollectionWrapper: false,
+  Score: Knockout: 0, High: 0, Mid: 1, Low: 0
+}

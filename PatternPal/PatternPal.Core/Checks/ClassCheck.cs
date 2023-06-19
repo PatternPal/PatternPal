@@ -3,14 +3,16 @@
 /// <summary>
 /// <see cref="ICheck"/> implementation for <see cref="IClass"/> entities.
 /// </summary>
-internal class ClassCheck : NodeCheck< IClass >
+public class ClassCheck : NodeCheck< IClass >
 {
     /// <inheritdoc cref="NodeCheck{TNode}"/>
     internal ClassCheck(
         Priority priority,
+        string ? requirement,
         IEnumerable< ICheck > checks)
         : base(
             priority,
+            requirement,
             checks)
     {
     }

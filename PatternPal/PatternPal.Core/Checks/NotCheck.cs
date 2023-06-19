@@ -20,11 +20,15 @@ internal class NotCheck : CheckBase
     /// Initializes a new instance of the <see cref="NotCheck"/> class.
     /// </summary>
     /// <param name="priority"><see cref="Priority"/> of the check.</param>
+    /// <param name="requirement">The optional requirement which this <see cref="ICheck"/> checks.</param>
     /// <param name="check"><see cref="ICheck"/> which should not pass.</param>
     internal NotCheck(
         Priority priority,
+        string ? requirement,
         ICheck check)
-        : base(priority)
+        : base(
+            priority,
+            requirement)
     {
         NestedCheck = check;
     }

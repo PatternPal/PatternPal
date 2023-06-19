@@ -8,22 +8,28 @@
 internal class TypeCheck : CheckBase
 {
     // Used to get the node to compare against.
-    private readonly OneOf< Func< List< INode > >, GetCurrentEntity > _getNode;
+    private readonly OneOf< ICheck, GetCurrentEntity > _getNode;
 
     /// <summary>
     /// A <see cref="TypeCheck"/> is dependent on the result of <see cref="_getNode"/>.
     /// </summary>
-    public override int DependencyCount => 1;
+    public override int DependencyCount => _getNode.Match(
+        relatedCheck => 1 + relatedCheck.DependencyCount,
+        _ => 0);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TypeCheck"/> class.
     /// </summary>
     /// <param name="priority">Priority of the check.</param>
+    /// <param name="requirement">The optional requirement which this <see cref="ICheck"/> checks.</param>
     /// <param name="getNode">A functor to get the node to compare against.</param>
     internal TypeCheck(
         Priority priority,
-        OneOf< Func< List< INode > >, GetCurrentEntity > getNode)
-        : base(priority)
+        string ? requirement,
+        OneOf< ICheck, GetCurrentEntity > getNode)
+        : base(
+            priority,
+            requirement)
     {
         _getNode = getNode;
     }
@@ -37,11 +43,11 @@ internal class TypeCheck : CheckBase
         INode node)
     {
         // Get the node to match against.
-        return _getNode.Match< ICheckResult >(
-            getNodes =>
+        List< ICheckResult > results = _getNode.Match(
+            relatedCheck =>
             {
                 List< ICheckResult > subResults = new();
-                foreach (INode getNode in getNodes())
+                foreach (INode getNode in relatedCheck.Result())
                 {
                     bool isMatch = node == getNode;
                     subResults.Add(
@@ -55,35 +61,43 @@ internal class TypeCheck : CheckBase
                             DependencyCount = DependencyCount,
                             MatchedNode = getNode,
                             Check = this,
+                            RelatedCheck = relatedCheck
                         });
                 }
-
-                return new NodeCheckResult
-                       {
-                           Priority = Priority,
-                           ChildrenCheckResults = subResults,
-                           FeedbackMessage = $"Found node '{node}'",
-                           DependencyCount = DependencyCount,
-                           MatchedNode = node,
-                           Check = this,
-                       };
+                return subResults;
             },
             getCurrentEntity =>
             {
                 // Construct and return the check result.
                 INode nodeToMatch = getCurrentEntity(ctx);
                 bool isMatch = node == nodeToMatch;
-                return new LeafCheckResult
-                       {
-                           Priority = Priority,
-                           Correct = isMatch,
-                           FeedbackMessage = isMatch
-                               ? $"Node '{node}' has correct type"
-                               : $"Node '{node}' has incorrect type, expected '{nodeToMatch}'",
-                           DependencyCount = DependencyCount,
-                           MatchedNode = node,
-                           Check = this,
-                       };
+                return new List< ICheckResult >
+                {
+                   new LeafCheckResult
+                   {
+                       Priority = Priority,
+                       Correct = isMatch,
+                       FeedbackMessage = isMatch
+                           ? $"Node '{node}' has correct type"
+                           : $"Node '{node}' has incorrect type, expected '{nodeToMatch}'",
+                       DependencyCount = DependencyCount,
+                       MatchedNode = nodeToMatch, //TODO is this right or should this be node?
+                       Check = this,
+                       RelatedCheck = ctx.EntityCheck
+                   }
+                };
             });
+
+        return new NodeCheckResult
+        {
+           Priority = Priority,
+           ChildrenCheckResults = results,
+           FeedbackMessage = $"Found node '{node}'",
+           DependencyCount = DependencyCount,
+           MatchedNode = node,
+           Check = this,
+           NodeCheckCollectionWrapper = true,
+           CollectionKind = CheckCollectionKind.Any
+        };
     }
 }

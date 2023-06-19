@@ -1,0 +1,6 @@
+﻿{
+  FeedbackMessage: Found the required checks for: PatternPal.Tests.Utils.RootNode4Tests.,
+  DependencyCount: 1,
+  MatchedNode: root node,
+  NodeCheckCollectionWrapper: false
+}

@@ -1,7 +1,10 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using PatternPal.Extension.ViewModels;
+
+#endregion
 
 namespace PatternPal.Extension.Stores
 {
@@ -47,7 +50,7 @@ namespace PatternPal.Extension.Stores
             if (ViewModelHistory.Count > 0)
             {
                 if (CurrentViewModel.GetType() == typeof(StepByStepListViewModel))
-                    PatternPalExtensionPackage.CurrentMode = Mode.Default;
+                    ExtensionWindowPackage.CurrentMode = Mode.Default;
                 _currentViewModel = ViewModelHistory.Pop();
                 CurrentViewModelChanged?.Invoke();
                 return _currentViewModel;

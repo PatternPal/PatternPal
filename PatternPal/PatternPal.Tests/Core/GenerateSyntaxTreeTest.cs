@@ -1,15 +1,7 @@
-﻿using Microsoft.CodeAnalysis;
-using NUnit.Framework;
-using PatternPal.SyntaxTree.Abstractions.Entities;
-
-namespace PatternPal.Tests.Core
+﻿namespace PatternPal.Tests.Core
 {
     internal class GenerateSyntaxTreeTest
     {
-        private readonly Dictionary<string, IEntity> entityNodes =
-            new Dictionary<string, IEntity>();
-
-
         [TestCase(
             @"namespace TestNamespace {
                     class TestClass {
@@ -200,9 +192,9 @@ namespace PatternPal.Tests.Core
         )]
         public void TestIfAmountOfUsingsIsRight(string file, int amountOfUsings)
         {
-            var graph = new SyntaxGraph();
+            SyntaxGraph graph = new SyntaxGraph();
             graph.AddFile(file, "testFile");
-            var count = graph.GetRoots().SelectMany(r => r.GetUsing()).Count();
+            int count = graph.GetRoots().SelectMany(r => r.GetUsing()).Count();
 
             Assert.AreEqual(amountOfUsings, count);
         }

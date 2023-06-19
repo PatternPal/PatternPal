@@ -1,4 +1,8 @@
-﻿using PatternPal.SyntaxTree.Abstractions.Members;
+﻿#region
+
+using PatternPal.SyntaxTree.Abstractions.Members;
+
+#endregion
 
 namespace PatternPal.SyntaxTree.Abstractions;
 
@@ -12,6 +16,7 @@ public class Relation
 
     // The source of the relation.
     public OneOf< IEntity, IMember > Source { get; }
+
     // The target of the relation.
     public OneOf< IEntity, IMember > Target { get; }
 
@@ -61,6 +66,8 @@ public enum RelationType
     ImplementedBy,
     Extends,
     ExtendedBy,
+    Overrides,
+    OverriddenBy,
     Uses,
     UsedBy,
     Creates,

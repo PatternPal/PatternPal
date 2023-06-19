@@ -1,10 +1,4 @@
-﻿#region
-
-using static PatternPal.Core.Checks.CheckBuilder;
-
-#endregion
-
-namespace PatternPal.Tests.Checks;
+﻿namespace PatternPal.Tests.Checks;
 
 [TestFixture]
 public class RelationCheckTests
@@ -52,7 +46,7 @@ public class RelationCheckTests
         //the Uses class node from the syntax graph 
         INode usesNode = graph.GetAll()[ "Uses" ];
         //the UsedFunction node from the syntax graph 
-        INode usedNode = Relations.GetMemberFromGraph(
+        INode usedNode = EntityNodeUtils.GetMemberFromGraph< INode >(
             graph,
             "Used",
             "UsedFunction");
@@ -86,12 +80,12 @@ public class RelationCheckTests
         IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
 
         //the UsesFunction node from the syntax graph 
-        INode usesNode = Relations.GetMemberFromGraph(
+        INode usesNode = EntityNodeUtils.GetMemberFromGraph< INode >(
             graph,
             "Uses",
             "UsesFunction");
         //the UsedFunction node from the syntax graph 
-        INode usedNode = Relations.GetMemberFromGraph(
+        INode usedNode = EntityNodeUtils.GetMemberFromGraph< INode >(
             graph,
             "Used",
             "UsedFunction");
@@ -315,6 +309,129 @@ public class RelationCheckTests
             ctx,
             createdNode);
 
+        return Verifier.Verify(result);
+    }
+
+    [Test]
+    public void Relation_To_Non_Node_Check_Throws()
+    {
+        SyntaxGraph graph = EntityNodeUtils.CreateUsesRelation();
+        IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
+
+        INode creatingNode = graph.GetAll()[ "Uses" ];
+
+        ClassCheck check = Class(
+            Priority.High,
+            Uses(
+                Priority.High,
+                Modifiers(
+                    Priority.High,
+                    Modifier.Abstract)));
+
+        Assert.Throws< NotSupportedException >(
+            () => check.Check(
+                ctx,
+                creatingNode));
+    }
+
+    [Test]
+    public Task Overrides_Check_Returns_Correct_True_Result()
+    {
+        SyntaxGraph graph = EntityNodeUtils.CreateGraphFromInput(
+            """
+            public abstract class C1
+            {
+                public abstract void M();
+            }
+
+            public class C2 : C1
+            {
+                public override void M()
+                {
+                }
+            }
+            """);
+        IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
+
+        INode node = graph.GetAll()[ "C1" ];
+
+        MethodCheck baseM = Method(
+            Priority.High,
+            Modifiers(
+                Priority.High,
+                Modifier.Abstract));
+
+        ICheck check = All(
+            Priority.High,
+            AbstractClass(
+                Priority.High,
+                baseM
+            ),
+            Class(
+                Priority.High,
+                Method(
+                    Priority.High,
+                    Overrides(
+                        Priority.High,
+                        baseM
+                    )
+                )
+            )
+        );
+
+        ICheckResult result = check.Check(
+            ctx,
+            node);
+        return Verifier.Verify(result);
+    }
+
+    [Test]
+    public Task Overrides_Check_Returns_Correct_False_Result()
+    {
+        SyntaxGraph graph = EntityNodeUtils.CreateGraphFromInput(
+            """
+            public abstract class C1
+            {
+            }
+
+            public class C2 : C1
+            {
+                public void M()
+                {
+                }
+            }
+            """);
+        IRecognizerContext ctx = RecognizerContext4Tests.Create(graph);
+
+        INode node = graph.GetAll()[ "C1" ];
+
+        MethodCheck baseM = Method(
+            Priority.High,
+            Modifiers(
+                Priority.High,
+                Modifier.Abstract));
+
+        ICheck check = All(
+            Priority.High,
+            AbstractClass(
+                Priority.High,
+                baseM
+            ),
+            Class(
+                Priority.High,
+                Method(
+                    Priority.High,
+                    Overrides(
+                        Priority.High,
+                        baseM
+                    )
+                )
+            )
+        );
+
+        ICheckResult result = check.Check(
+            ctx,
+            node);
         return Verifier.Verify(result);
     }
 }
