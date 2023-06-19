@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 
 using EnvDTE;
+using EnvDTE80;
 
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -151,41 +152,42 @@ namespace PatternPal.Extension.ViewModels
             {
                 if (dte.Solution.IsOpen)
                 {
-                    List< string > result = CreateNewWorkFile(out string filePath);
-                    if (filePath == string.Empty)
+                    string filePath;
+                    if (dte.Solution.Projects.Count == 0)
                     {
-                        MessageBox.Show("No save location was provided");
-                        return result;
+                        string projectName = "NewProject";
+                        string projectPath = Path.Combine(
+                            Path.GetDirectoryName(dte.Solution.FullName),
+                            projectName);
+                        DTE2 dte2 = (DTE2)Package.GetGlobalService(typeof(SDTE));
+                        Solution2 soln = (Solution2)dte2.Solution;
+                        string templatePath = soln.GetProjectTemplate("ConsoleApplication.zip", "CSharp");
+                        Project csTemplateProject =
+                            dte.Solution.AddFromTemplate(
+                                templatePath,
+                                projectPath,
+                                projectName,
+                                false);
+                        filePath =
+                            Path.Combine(
+                                projectPath,
+                                "NewFile.cs");
+                        using (FileStream fs = File.Create(filePath)) { }
+                        // TODO Iterate over projects and add.
+                        //csTemplateProject.ProjectItems.AddFromFile(filePath);
                     }
-
-                    if (filePath != string.Empty)
+                    else
                     {
-                        if (dte.Solution.Projects.Count == 0)
-                        {
-                            string projectName = "NewProject";
-                            string projectPath = Path.Combine(
-                                dte.Solution.FullName,
-                                projectName);
-                            Project csTemplateProject =
-                                dte.Solution.AddFromTemplate(
-                                    "ConsoleApplication",
-                                    projectPath,
-                                    projectName,
-                                    false);
-
-                            csTemplateProject.ProjectItems.AddFromFile(filePath);
-                        }
-                        else
-                        {
-                            Project project = dte.Solution.Projects.Item(1);
-                            project.ProjectItems.AddFromFile(filePath);
-                        }
-                        dte.ItemOperations.OpenFile(filePath);
-                        return result;
+                        Project project = dte.Solution.Projects.Item(1);
+                        filePath = Path.Combine(
+                            Path.GetDirectoryName(dte.Solution.FullName),
+                            project.Name,
+                            "NewFile.cs");
+                        using (FileStream fs = File.Create(filePath)) { }
+                        project.ProjectItems.AddFromFile(filePath);
                     }
-
-                    // User wanted to add to the solution but did not provide a path.
-                    return new List< string >();
+                    dte.ItemOperations.OpenFile(filePath);
+                    return new List<string> { filePath };
                 }
 
                 MessageBox.Show("There is no solution open");
