@@ -37,7 +37,7 @@ for education purposes should be provided that explains why the one should imple
 "The field is static as a way of accessing the single instance when it is created.".
 
 
-## Implementing the GenerateStepsList method
+## The `IStepByStepRecognizer` interface and library requirements
 
 To support a Pattern for Step-By-Step one must add the following `using` statement to the top of 
 file and implement `IStepByStepRecognizer`:
@@ -68,7 +68,7 @@ internal class MyStepBySteps : IStepByStepRecognizer
 }
 ```
 
-## Implementing the method
+## Implementing the `GenerateStepsList` method
 The return type is a list of `IInstruction`s. These instructions require a `string Requirement` 
 (the previously mentioned explicit instruction), `string Description` (the previously mentioned explanation) 
 and a list of `ICheck`s that reflect the requirement of the step. 
