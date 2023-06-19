@@ -1,5 +1,9 @@
 ﻿using PatternPal.Core.Checks;
 using PatternPal.Core.Runner;
+using PatternPal.SyntaxTree.Abstractions.Entities;
+using PatternPal.SyntaxTree.Abstractions.Members;
+
+using IMethod = PatternPal.SyntaxTree.Abstractions.Members.IMethod;
 
 namespace PatternPal.Services;
 
@@ -79,6 +83,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                     resultsByRequirement[ requirement ] = (new Result
                                                            {
                                                                Requirement = requirement,
+                                                               Correctness = Result.Types.Correctness.CIncorrect,
                                                            }, _ => false);
                     continue;
                 }
@@ -129,7 +134,8 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
             {
                 Result result = new()
                                 {
-                                    Requirement = resultToProcess.Check.Requirement
+                                    Requirement = resultToProcess.Check.Requirement,
+                                    Correctness = Result.Types.Correctness.CCorrect,
                                 };
 
                 if (resultToProcess.MatchedNode != null)
@@ -141,7 +147,17 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                                              Name = matchedNode.GetName(),
                                              Path = matchedNode.GetRoot().GetSource(),
                                              Start = sourceLocation.Start,
-                                             Length = sourceLocation.Length
+                                             Length = sourceLocation.Length,
+                                             Kind = resultToProcess.MatchedNode switch
+                                             {
+                                                 IClass => MatchedNode.Types.MatchedNodeKind.MnkClass,
+                                                 IInterface => MatchedNode.Types.MatchedNodeKind.MnkInterface,
+                                                 IConstructor => MatchedNode.Types.MatchedNodeKind.MnkConstructor,
+                                                 IMethod => MatchedNode.Types.MatchedNodeKind.MnkMethod,
+                                                 IField => MatchedNode.Types.MatchedNodeKind.MnkField,
+                                                 IProperty => MatchedNode.Types.MatchedNodeKind.MnkProperty,
+                                                 _ => MatchedNode.Types.MatchedNodeKind.MnkUnknown,
+                                             }
                                          };
                 }
 

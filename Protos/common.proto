@@ -9,6 +9,7 @@ message RecognizeResult {
     // The recognizer which was used to obtain this result.
     Recognizer recognizer = 1;
 
+    // General feedback about how well a pattern is implemented.
     string feedback = 2;
 
     // The results for the individual checks which make up the recognizer.
@@ -17,16 +18,33 @@ message RecognizeResult {
 
 // Result of one specific check inside a recognizer.
 message Result {
-
     // The requirement which belongs to the check of this result.
     string requirement = 1;
 
     // The MatchedNode of this result.
     MatchedNode matched_node = 2;
+
+    // How far the requirement has been implemented.
+    Correctness correctness = 3;
+
+    // How far a requirement has been implemented.
+    enum Correctness {
+        // The default value.
+        C_UNKNOWN = 0;
+
+        // The requirement has been implemented correctly.
+        C_CORRECT = 1;
+
+        // The requirement has been partially implemented.
+        C_PARTIALLY_CORRECT = 2;
+
+        // The requirement has not been implemented.
+        C_INCORRECT = 3;
+    }
 }
 
+// Node matched by a requirement.
 message MatchedNode {
-
     //The name of the node.
     string name = 1;
 
@@ -38,6 +56,20 @@ message MatchedNode {
 
     //The specific length in the code file of this node.
     int32 length = 4;
+
+    // The kind of matched node.
+    MatchedNodeKind kind = 5;
+
+    enum MatchedNodeKind {
+        MNK_UNKNOWN = 0;
+
+        MNK_INTERFACE = 1;
+        MNK_CLASS = 2;
+        MNK_CONSTRUCTOR = 3;
+        MNK_FIELD = 4;
+        MNK_METHOD = 5;
+        MNK_PROPERTY = 6;
+    }
 }
 
 // Recognizers which can be run.
