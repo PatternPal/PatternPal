@@ -135,7 +135,7 @@ abstract file class DecoratorRecognizerParent
     /// <remarks>
     /// Checks part 2a and 3a of the requirements defined for a Decorator.
     /// </remarks>
-    protected abstract RelationCheck Extends(ICheck parent);
+    protected abstract RelationCheck Extends(ICheck parent, string requirement);
 
     /// <summary>
     /// Check for the method of ConcreteComponent of the Decorator pattern.
@@ -156,12 +156,12 @@ abstract file class DecoratorRecognizerParent
     protected ClassCheck ConcreteComponent(ICheck component, MethodCheck componentMethod) =>
             Class(
                 Priority.Knockout,
-                "Concrete Component class",
-                Extends(component),
+                "2. Concrete Component Class",
+                Extends(component, "2a. Is an implementation of the Component."),
                 ConcreteComponentMethod(componentMethod),
                 Not(
                     Priority.Knockout,
-                    "does not have a field of type Component.",
+                    "2b. Does not have a field of type Component.",
                     BaseDecoratorField(component)
                 )
             );
@@ -176,7 +176,7 @@ abstract file class DecoratorRecognizerParent
     protected FieldCheck BaseDecoratorField(ICheck component) =>
             Field(
                 Priority.Knockout,
-                "has a field of type Component.",
+                "3c. Has a field of type Component.",
                 Type(
                     Priority.Knockout,
                     (CheckBase)component
@@ -202,17 +202,17 @@ abstract file class DecoratorRecognizerParent
     protected ClassCheck BaseDecorator(ICheck component, FieldCheck baseDecoratorField, MethodCheck baseDecoratorMethod) =>
             Class(
                 Priority.Knockout,
-                "Base Decorator class",
+                "3. Base Decorator Class",
                 Modifiers(
                     Priority.High,
-                    "is an abstract class.",
+                    "3b. Is an abstract class.",
                     Modifier.Abstract
                 ),
-                Extends(component),
+                Extends(component, "3a. Is an implementation of the Component."),
                 baseDecoratorField,
                 Constructor(
                     Priority.High,
-                    "has a constructor with a parameter of type Component, which it passes to its field.",
+                    "3d. Has a constructor with a parameter of type Component, which it passes to its field.",
                     Uses(
                         Priority.High,
                         baseDecoratorField
@@ -237,7 +237,7 @@ abstract file class DecoratorRecognizerParent
     /// </remarks>
     protected MethodCheck ConcreteDecoratorExtraMethod() => Method(
         Priority.Mid, 
-        "has a function providing extra behaviour which it calls in the implementation of the method of Component.");
+        "4c. Has a function providing extra behaviour which it calls in the implementation of the method of Component.");
 
     /// <summary>
     /// Check for the ConcreteDecorator of the Decorator pattern.
@@ -249,16 +249,16 @@ abstract file class DecoratorRecognizerParent
     protected ClassCheck ConcreteDecorator(ClassCheck baseDecorator, MethodCheck concreteDecoratorExtraMethod, MethodCheck baseDecoratorMethod) =>
             Class(
                 Priority.Knockout,
-                "Concrete Decorator class",
+                "4. Concrete Decorator Class",
                 Inherits(
                     Priority.Knockout,
-                    "inherits from Base Decorator.",
+                    "4a. Inherits from Base Decorator.",
                     baseDecorator
                 ),
                 concreteDecoratorExtraMethod,
                 Method(
                     Priority.Knockout,
-                    "calls the method of its parent in the implementation of the method of Component.",
+                    "4b. Calls the method of its parent in the implementation of the method of the Component.",
                     Overrides(
                         Priority.Knockout,
                         baseDecoratorMethod
@@ -284,20 +284,20 @@ abstract file class DecoratorRecognizerParent
     protected ClassCheck Client(MethodCheck componentMethod, ClassCheck concreteDecorator, ClassCheck concreteComponent) =>
             Class(
                 Priority.Low,
-                "Client class",
+                "5. Client Class",
                 Uses(
                     Priority.Low,
-                    "has called the method of ConcreteDecorator.",
+                    "5c. Has called the method of ConcreteDecorator.",
                     componentMethod
                 ),
                 Creates(
                     Priority.Low,
-                    "has created an object of the type ConcreteDecorator, to which it passes the ConcreteComponent.",
+                    "5b. Has created an object of the type ConcreteDecorator, to which it passes the ConcreteComponent.",
                     concreteDecorator
                 ),
                 Creates(
                     Priority.Low,
-                    "has created an object of the type ConcreteComponent.",
+                    "5a. Has created an object of the type ConcreteComponent.",
                     concreteComponent
                 )
             );
@@ -312,10 +312,9 @@ file class DecoratorRecognizerWithAbstractClass : DecoratorRecognizerParent
     protected override MethodCheck ComponentMethod() =>
             Method(
                 Priority.Knockout,
-                "has declared a method.",
+                "1b. Has declared an abstract method.",
                 Modifiers(
                     Priority.Knockout,
-                    "if the class is an abstract class instead of an interface the method has to be an abstract method.",
                     Modifier.Abstract
                 )
             );
@@ -324,15 +323,15 @@ file class DecoratorRecognizerWithAbstractClass : DecoratorRecognizerParent
     protected override ClassCheck Component(MethodCheck componentMethod) =>
             AbstractClass(
                 Priority.Knockout,
-                "Component class",
+                "1. Component Class",
                 componentMethod
             );
 
     /// <inheritdoc />
-    protected override RelationCheck Extends(ICheck parent) =>
+    protected override RelationCheck Extends(ICheck parent, string requirement) =>
             Inherits(
                 Priority.Knockout,
-                "is an implementation of Component.",
+                requirement,
                 parent
             );
 
@@ -340,7 +339,7 @@ file class DecoratorRecognizerWithAbstractClass : DecoratorRecognizerParent
     protected override MethodCheck ConcreteComponentMethod(ICheck componentMethod) =>
             Method(
                 Priority.Knockout,
-                "if Component is an abstract class, it overrides the method of Component.",
+                "2c. If the Component is an abstract class, it overrides the method of the Component.",
                 Overrides(
                     Priority.Knockout,
                     componentMethod
@@ -351,7 +350,7 @@ file class DecoratorRecognizerWithAbstractClass : DecoratorRecognizerParent
     protected override MethodCheck BaseDecoratorMethod(MethodCheck componentMethod, FieldCheck baseDecoratorField) =>
             Method(
                 Priority.Knockout,
-                "calls the method of its field in the implementation of the method of Component.",
+                "3e. There is a method which overrides a method of the Component, and uses a method of the instance saved in it's field.",
                 Uses(
                     Priority.Knockout,
                     componentMethod
@@ -362,7 +361,6 @@ file class DecoratorRecognizerWithAbstractClass : DecoratorRecognizerParent
                 ),
                 Overrides(
                     Priority.Knockout,
-                    "if Component is an abstract class, it overrides the method of Component.",
                     componentMethod
                 )
             );
@@ -376,21 +374,21 @@ file class DecoratorRecognizerWithInterface : DecoratorRecognizerParent
     /// <inheritdoc />
     protected override MethodCheck ComponentMethod() => Method(
         Priority.Knockout, 
-        "has declared a method.");
+        "1b. Has declared a method.");
 
     /// <inheritdoc />
     protected override InterfaceCheck Component(MethodCheck componentMethod) =>
         Interface(
             Priority.Knockout,
-            "Component interface",
+            "1. Component Interface",
             componentMethod
         );
 
     /// <inheritdoc />
-    protected override RelationCheck Extends(ICheck parent) =>
+    protected override RelationCheck Extends(ICheck parent, string requirement) =>
             Implements(
                 Priority.Knockout,
-                "is an implementation of Component.",
+                requirement,
                 parent
             );
 
@@ -401,7 +399,7 @@ file class DecoratorRecognizerWithInterface : DecoratorRecognizerParent
     protected override MethodCheck BaseDecoratorMethod(MethodCheck componentMethod, FieldCheck baseDecoratorField) =>
             Method(
                 Priority.Knockout,
-                "calls the method of its field in the implementation of the method of Component.",
+                "3e. There is a method which uses a method of the instance saved in it's field.",
                 Uses(
                     Priority.Knockout,
                     componentMethod
