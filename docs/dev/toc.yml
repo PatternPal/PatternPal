@@ -29,7 +29,7 @@
     href: recognizers/guides/implement_recognizer.md
   - name: Implementing a Check
     href: recognizers/guides/implement_check.md
-  - name: Implementing an InstructionSet
+  - name: Adding a design pattern to Step-By-Step
     href: stepbystep/guides/implement_an_instructionset.md
 
 # Pattern recognition --------------------
