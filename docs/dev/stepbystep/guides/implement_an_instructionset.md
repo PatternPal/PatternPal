@@ -68,6 +68,37 @@ internal class MyStepBySteps : IStepByStepRecognizer
 }
 ```
 
+## The `SimpleInstruction` object
+Everything that is required by the program to retrieve information for a step and display that to the user 
+is encased in `SimpleInstruction`s. These are the `Requirement`, `Description` and a list of `ICheck`s. An 
+example of a `SimpleInstruction` would be: 
+
+```csharp
+new SimpleInstruction(
+                "Implement a...",
+                "You have to implement it this way because...",
+                new List< ICheck >
+				{
+					Class(
+						Priority.Knockout,
+						Field(
+							Priority.Knockout,
+							"Feedback message",
+							Modifiers(
+								Priority.Knockout,
+								Modifier.Static,
+								Modifier.Private
+							),
+							Type(
+								Priority.Knockout,
+								ICheck.GetCurrentEntity
+							)
+						)
+					)
+				}
+            )
+```
+
 ## Implementing the `GenerateStepsList` method
 The return type is a list of `IInstruction`s. These instructions require a `string Requirement` 
 (the previously mentioned explicit instruction), `string Description` (the previously mentioned explanation) 
