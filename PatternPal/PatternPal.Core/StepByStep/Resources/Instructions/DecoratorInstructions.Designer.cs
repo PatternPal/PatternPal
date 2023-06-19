@@ -79,7 +79,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make an abstract class that implements Component. Give it a field with type Component. We refer to this class as `Decorator`..
+        ///   Looks up a localized string similar to Make an abstract class that implements Component. Implement the method of Component by making it virtual. Give it a field with type Component. We refer to this class as `Decorator`..
         /// </summary>
         internal static string Step3 {
             get {
@@ -115,7 +115,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add a method  to ConcreteDecorator providing additional behaviour and call it in the overrided method either before or after the call to the parent&apos;s method..
+        ///   Looks up a localized string similar to Add a method to ConcreteDecorator providing additional behaviour and call it in the overrided method either before or after the call to the parent&apos;s method..
         /// </summary>
         internal static string Step7 {
             get {
@@ -124,7 +124,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make a method that instantiates an instance of ConcreteDecorator by passing to its constructor a new instance of ConcreteComponent. Now call the method of the instanciated variable..
+        ///   Looks up a localized string similar to Make a class with a method that instantiates an instance of ConcreteDecorator by passing to its constructor a new instance of ConcreteComponent. Now call the method of the instanciated variable..
         /// </summary>
         internal static string Step8 {
             get {

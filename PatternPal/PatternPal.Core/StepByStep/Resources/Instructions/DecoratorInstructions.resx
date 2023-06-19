@@ -124,7 +124,7 @@
     <value>Make a class that implements Component. Also implement the method. We refer to this class as `ConcreteComponent`.</value>
   </data>
   <data name="Step3" xml:space="preserve">
-    <value>Make an abstract class that implements Component. Give it a field with type Component. We refer to this class as `Decorator`.</value>
+    <value>Make an abstract class that implements Component. Implement the method of Component by making it virtual. Give it a field with type Component. We refer to this class as `Decorator`.</value>
   </data>
   <data name="Step4" xml:space="preserve">
     <value>Give Decorator a constructor with a parameter that gets assigned to the field. </value>
@@ -136,9 +136,9 @@
     <value>Make a class that inherits from Decorator. Override its method by calling the method of Decorator; base.Method(). We refer to this class as `ConcreteDecorator`.</value>
   </data>
   <data name="Step7" xml:space="preserve">
-    <value>Add a method  to ConcreteDecorator providing additional behaviour and call it in the overrided method either before or after the call to the parent's method.</value>
+    <value>Add a method to ConcreteDecorator providing additional behaviour and call it in the overrided method either before or after the call to the parent's method.</value>
   </data>
   <data name="Step8" xml:space="preserve">
-    <value>Make a method that instantiates an instance of ConcreteDecorator by passing to its constructor a new instance of ConcreteComponent. Now call the method of the instanciated variable.</value>
+    <value>Make a class with a method that instantiates an instance of ConcreteDecorator by passing to its constructor a new instance of ConcreteComponent. Now call the method of the instanciated variable.</value>
   </data>
 </root>

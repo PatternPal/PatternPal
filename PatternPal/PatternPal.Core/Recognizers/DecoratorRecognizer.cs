@@ -447,6 +447,10 @@ file class DecoratorRecognizerWithInterface : DecoratorRecognizerParent, IStepBy
             Method(
                 Priority.Knockout,
                 "calls the method of its field in the implementation of the method of Component.",
+                Modifiers(
+                    Priority.Knockout,
+                    Modifier.Virtual
+                ),
                 Uses(
                     Priority.Knockout,
                     componentMethod
@@ -496,7 +500,14 @@ file class DecoratorRecognizerWithInterface : DecoratorRecognizerParent, IStepBy
                     AbstractClass(
                         Priority.Knockout,
                         Extends(component),
-                        baseDecoratorField
+                        baseDecoratorField,
+                        Method(
+                            Priority.Knockout, 
+                            Modifiers(
+                                Priority.Knockout,
+                                Modifier.Virtual
+                            )
+                        )
                     )
                 })
             );
@@ -514,7 +525,14 @@ file class DecoratorRecognizerWithInterface : DecoratorRecognizerParent, IStepBy
                         Priority.Knockout,
                         Extends(component),
                         baseDecoratorField,
-                        baseDecoratorConstructor
+                        baseDecoratorConstructor,
+                        Method(
+                            Priority.Knockout,
+                            Modifiers(
+                                Priority.Knockout,
+                                Modifier.Virtual
+                            )
+                        )
                     )
                 })
         );
