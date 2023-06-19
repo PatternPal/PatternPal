@@ -101,7 +101,7 @@ namespace PatternPal.Tests.New_TestCasesRecognizers.Bridge
         {
             Shape shape = new Shape();
             shape.Color = new Red();
-            shape.paintColor();
+            shape.PaintColor();
             
         }
 
