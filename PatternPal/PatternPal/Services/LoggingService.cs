@@ -282,7 +282,24 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         LogRequest sendLog = StandardLog(receivedRequest);
         sendLog.EventType = LoggingServer.EventType.EvtFileRename;
         sendLog.CodeStateSection = receivedRequest.CodeStateSection;
+        sendLog.OldFileName = receivedRequest.OldFileName;
         sendLog.ProjectId = receivedRequest.ProjectId;
+
+        string oldFilePathInProjectDir = Path.GetRelativePath(receivedRequest.ProjectDirectory, sendLog.OldFileName);
+        string newFilePathInProjectDir = Path.GetRelativePath(receivedRequest.ProjectDirectory, sendLog.CodeStateSection);
+        try
+        {
+            // To rename the key that stores the hash in _lastCodeState, we obtain its value, reinsert it under the new key
+            // and delete the old entry.
+            string hash = _lastCodeState[sendLog.ProjectId][oldFilePathInProjectDir];
+
+            _lastCodeState[sendLog.ProjectId][newFilePathInProjectDir] = hash;
+            _lastCodeState[sendLog.ProjectId].Remove(oldFilePathInProjectDir);
+        }
+        catch
+        {
+            return OnFailedDictionaryAction(sendLog, receivedRequest.ProjectDirectory);
+        }
 
         return sendLog;
     }

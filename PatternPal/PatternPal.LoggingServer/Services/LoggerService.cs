@@ -92,6 +92,7 @@ namespace PatternPal.LoggingServer.Services
                 SubjectId = subjectId,
                 ToolInstances = request.ToolInstances,
                 CodeStateId = codeStateId,
+                OldFileName = request.HasOldFileName ? request.OldFileName : null,
                 FullCodeState = request.HasFullCodeState ? request.FullCodeState : null,
                 ClientDatetime = cDto,
                 ServerDatetime = DateTimeOffset.Now,
