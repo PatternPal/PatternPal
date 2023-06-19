@@ -52,17 +52,20 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                                              Feedback = "Goed gedoet"
                                          };
 
-            Dictionary< string, Result > resultsByRequirement = new();
+            Dictionary< string, (Result Result, Func< IDictionary< ICheck, ICheckResult >, bool >) > resultsByRequirement = new();
 
             // Get all requirements for which we have results.
-            foreach (Result result in GetResults(runResult.CheckResult))
+            IDictionary< ICheck, ICheckResult > resultsByCheck = new Dictionary< ICheck, ICheckResult >();
+            foreach ((Result Result, Func< IDictionary< ICheck, ICheckResult >, bool >) result in GetResults(
+                resultsByCheck,
+                runResult.CheckResult))
             {
                 if (!resultsByRequirement.TryGetValue(
-                        result.Requirement,
-                        out Result ? existingResult)
-                    || (existingResult.MatchedNode == null && result.MatchedNode != null))
+                        result.Result.Requirement,
+                        out (Result Result, Func< IDictionary< ICheck, ICheckResult >, bool >) existingResult)
+                    || (existingResult.Result.MatchedNode == null && result.Result.MatchedNode != null))
                 {
-                    resultsByRequirement[ result.Requirement ] = result;
+                    resultsByRequirement[ result.Result.Requirement ] = result;
                 }
             }
 
@@ -71,20 +74,25 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
             {
                 if (!resultsByRequirement.TryGetValue(
                     requirement,
-                    out Result ? foundResult))
+                    out (Result Result, Func< IDictionary< ICheck, ICheckResult >, bool >) foundResult))
                 {
-                    resultsByRequirement[ requirement ] = new Result
-                                                          {
-                                                              Requirement = requirement,
-                                                          };
+                    resultsByRequirement[ requirement ] = (new Result
+                                                           {
+                                                               Requirement = requirement,
+                                                           }, _ => false);
                     continue;
                 }
             }
 
             // TODO: Generate feedback for incorrect/missing requirements.
 
-            foreach (Result result in resultsByRequirement.Values)
+            foreach ((Result result, Func< IDictionary< ICheck, ICheckResult >, bool > calcCorrect) in resultsByRequirement.Values)
             {
+                if (!calcCorrect(resultsByCheck))
+                {
+                    result.MatchedNode = null;
+                }
+
                 rootResult.Results.Add(result);
             }
 
@@ -101,14 +109,16 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
     /// <summary>
     /// This method transforms a <see cref="ICheckResult"/> to a <see cref="Result"/>
     /// </summary>
+    /// <param name="resultsByCheck"></param>
+    /// <param name="rootCheckResult"></param>
     /// <param name="resultsToProcess"></param>
     /// <param name="checkResult"> The check to transform.</param>
     /// <param name="usedNodes"></param>
     /// <returns></returns>
-    private static IEnumerable< Result > GetResults(
+    private static IEnumerable< (Result, Func< IDictionary< ICheck, ICheckResult >, bool >) > GetResults(
+        IDictionary< ICheck, ICheckResult > resultsByCheck,
         ICheckResult rootCheckResult)
     {
-        IDictionary< ICheck, ICheckResult > resultsByCheck = new Dictionary< ICheck, ICheckResult >();
         Queue< ICheckResult > resultsToProcess = new();
         resultsToProcess.Enqueue(rootCheckResult);
         while (resultsToProcess.Count != 0)
@@ -135,17 +145,17 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                                          };
                 }
 
-                // Handle incorrect results.
-                Score perfectScore = resultToProcess.Check.PerfectScore(
-                    resultsByCheck,
-                    resultToProcess);
-                Score actualScore = resultToProcess.Score;
+                Func< IDictionary< ICheck, ICheckResult >, bool > calcCorrect = check2Result =>
+                                                                                {
+                                                                                    Score perfectScore = resultToProcess.Check.PerfectScore(
+                                                                                        check2Result,
+                                                                                        resultToProcess);
+                                                                                    Score actualScore = resultToProcess.Score;
 
-                if (!perfectScore.Equals(default)
-                    && perfectScore.Equals(actualScore))
-                {
-                    yield return result;
-                }
+                                                                                    return !perfectScore.Equals(default)
+                                                                                           && perfectScore.Equals(actualScore);
+                                                                                };
+                yield return (result, calcCorrect);
             }
 
             switch (resultToProcess)

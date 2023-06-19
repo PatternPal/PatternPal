@@ -606,6 +606,10 @@ public class RecognizerRunner
                     // Relation- or TypeCheck.
                     if (leafResult is {Correct: true, Check: RelationCheck or TypeCheck, MatchedNode: not null})
                     {
+                        if (leafResult.Priority == Priority.Mid && leafResult.Check is RelationCheck)
+                        {
+                        }
+
                         // Get the CheckResults belonging to the related node.
                         List< ICheckResult > resultsOfNode = resultsByNode[ leafResult.MatchedNode ];
 
