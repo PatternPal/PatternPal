@@ -598,6 +598,7 @@ public class RecognizerRunner
             {
                 case LeafCheckResult leafResult:
                 {
+                    //TODO: Place this after the if?
                     leafResult.Score = Score.CreateScore(
                         leafResult.Priority,
                         leafResult.Correct);
@@ -735,6 +736,7 @@ public class RecognizerRunner
                     notResult.Score = Score.GetNot(
                         notResult.NestedResult.Priority,
                         notResult.NestedResult.Score);
+                    //TODO: Make NestedResult Score 0?
                     break;
                 default:
                     throw new ArgumentException($"{childResult} is not a supported ICheckResult");

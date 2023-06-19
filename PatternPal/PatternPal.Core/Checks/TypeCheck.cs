@@ -1,4 +1,4 @@
-﻿namespace PatternPal.Core.Checks;
+namespace PatternPal.Core.Checks;
 
 /// <summary>
 /// Checks for the type of an entity. Depending on the <see cref="Func{TResult}"/> provided, this
