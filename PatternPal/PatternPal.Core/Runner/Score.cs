@@ -128,6 +128,15 @@ public struct Score : IComparable< Score >,
         return 0;
     }
 
+    public int PercentageTo(
+        Score perfectScore)
+    {
+        int perfect = perfectScore._knockout * 4 + perfectScore._high * 3 + perfectScore._mid * 2 + perfectScore._low;
+        int own = _knockout * 4 +_high * 3 + _mid * 2 + _low;
+
+        return own / perfect * 100;
+    }
+
     public bool Equals(
         Score other) => _knockout == other._knockout && _high == other._high && _mid == other._mid && _low == other._low;
 

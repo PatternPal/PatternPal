@@ -598,11 +598,10 @@ public class RecognizerRunner
             {
                 case LeafCheckResult leafResult:
                 {
-                    //TODO: Place this after the if?
                     leafResult.Score = Score.CreateScore(
                         leafResult.Priority,
                         leafResult.Correct);
-
+                    
                     // Take into account the score of the related node if this result belongs to a
                     // Relation- or TypeCheck.
                     if (leafResult is {Correct: true, Check: RelationCheck or TypeCheck, MatchedNode: not null})
@@ -740,7 +739,6 @@ public class RecognizerRunner
                     notResult.Score = Score.GetNot(
                         notResult.NestedResult.Priority,
                         notResult.NestedResult.Score);
-                    //TODO: Make NestedResult Score 0?
                     break;
                 default:
                     throw new ArgumentException($"{childResult} is not a supported ICheckResult");
