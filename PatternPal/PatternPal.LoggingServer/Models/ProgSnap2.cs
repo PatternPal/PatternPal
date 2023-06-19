@@ -46,6 +46,7 @@ namespace PatternPal.LoggingServer.Models
         /// <summary>
         /// Whether the stored codeState was complete or partial.
         /// </summary>
+        ///
         public bool? FullCodeState { get; set;  }
 
         /// <summary>
@@ -92,6 +93,11 @@ namespace PatternPal.LoggingServer.Models
         /// The section of the code state associated with this compile event. For example in compile.error, this would be the section of code that caused the error.
         /// </summary>
         public string? CodeStateSection { get; set; }
+
+        /// <summary>
+        ///  The old filename of a file in case of a rename event.
+        /// </summary>
+        public string? OldFileName { get; set; }
 
         /// <summary>
         /// Result in case of debug.run event. Value can be "success", "failure", "timeout", "error", "unknown".
