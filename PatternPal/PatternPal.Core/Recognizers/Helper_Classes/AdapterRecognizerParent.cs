@@ -16,8 +16,6 @@ internal abstract class AdapterRecognizerParent
 {
     public ICheck[] Checks()
     {
-        ICheck[] result = new ICheck[4];
-
         //Check Client interface c, ci
         MethodCheck clientInterfaceMethod = ContainsOverridableMethod();
 
@@ -88,20 +86,14 @@ internal abstract class AdapterRecognizerParent
                 adapterMethodsUsingService
             )
         );
-
-        result[0] = clientInterfaceClassType;
-
-        result[1] = service;
-
-        result[2] = adapter;
-
-        result[3] = Class(
+        
+        ICheck client =  Class(
             Priority.Low,
             createsAdapter,
             clientUsesServiceViaAdapter
         );
 
-        return result;
+        return new ICheck[] {clientInterfaceClassType, service, adapter, client};
     }
 
 
