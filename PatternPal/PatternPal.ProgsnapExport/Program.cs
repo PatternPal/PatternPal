@@ -1,7 +1,7 @@
 ﻿#region
 
 using System.ComponentModel;
-using System.Dynamic;
+
 using Spectre.Console.Cli;
 using Spectre.Console;
 
