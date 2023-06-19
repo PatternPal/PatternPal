@@ -47,15 +47,30 @@
                                 </StackPanel>
                             </Expander.Header>
                             <StackPanel>
-                                <TextBlock Text="{Binding Result.Feedback}" />
+                                <TextBlock Text="{Binding Result.Feedback}" Margin="0,0,0,10" />
                                 <ItemsControl Name="ResultsViewParts" ItemsSource="{Binding Children}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate DataType="{x:Type models:CheckResultViewModel}">
-                                            <StackPanel Orientation="Vertical">
-                                                <StackPanel Margin="0,0,0,10">
-                                                    <TextBlock Text="{Binding Requirement}" />
-                                                    <Label Content="{Binding MatchedNodeName}"
-                                                           MouseDoubleClick="Control_OnMouseDoubleClick" />
+                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                                <imaging:CrispImage Width="24"
+                                                                    Height="24"
+                                                                    HorizontalAlignment="Left"
+                                                                    Margin="0,0,10,0"
+                                                                    Moniker="{Binding Icon}" />
+                                                <StackPanel Orientation="Vertical">
+                                                    <TextBlock Text="{Binding Requirement}" Height="16"
+                                                               TextWrapping="Wrap" />
+                                                    <Button>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <imaging:CrispImage Width="16"
+                                                                Height="16"
+                                                                HorizontalAlignment="Left"
+                                                                Margin="0,0,10,0"
+                                                                Moniker="{Binding MatchedNodeIcon}" />
+                                                            <Label Content="{Binding MatchedNodeName}"
+                                                                   MouseDoubleClick="Control_OnMouseDoubleClick" />
+                                                        </StackPanel>
+                                                    </Button>
                                                 </StackPanel>
                                             </StackPanel>
                                         </DataTemplate>
