@@ -79,7 +79,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This class is abstract, since its only job is delegating operations to the wrapped object, i.e. the field. The field needs to have Component as type, since this class should be able to both wrap both concrete components and decorators. It should be private since its only purpose should be to be called in the method. The specific extra behavior will be added by classes inheriting from this class..
+        ///   Looks up a localized string similar to This class is abstract, since its only job is delegating operations to the wrapped object, i.e. the field. The field needs to have Component as type, since this class should be able to both wrap concrete components and decorators. It should be private since its only purpose should be to be called in the method. The specific extra behavior will be added by classes inheriting from this class..
         /// </summary>
         internal static string Explanation3 {
             get {
