@@ -44,6 +44,7 @@ optional string recognizer_result = 24;
 optional string recognizer_config = 25;
 optional bytes data = 26;
 optional bool full_code_state = 27;
+optional string old_file_name = 28;
 }
 
 message LogResponse {
