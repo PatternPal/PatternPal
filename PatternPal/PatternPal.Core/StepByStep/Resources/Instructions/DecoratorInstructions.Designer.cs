@@ -70,7 +70,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This class defines the basic behabvior we want, which, when we are done, can be altered by decorators..
+        ///   Looks up a localized string similar to This class defines the basic behavior we want, which, when we are done, can be altered by decorators..
         /// </summary>
         internal static string Explanation2 {
             get {
