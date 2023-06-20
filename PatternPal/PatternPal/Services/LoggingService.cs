@@ -119,7 +119,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
             ToolInstances = receivedRequest.ToolInstances,
             ClientTimestamp =
                 DateTime.UtcNow.ToString(
-                    "yyyy-MM-dd HH:mm:ss.fff zzz"),
+                    "yyyy-MM-dd HH:mm:ss.fff"),
             SessionId =
                 receivedRequest.SessionId
         };

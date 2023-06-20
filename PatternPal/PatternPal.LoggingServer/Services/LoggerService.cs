@@ -95,7 +95,7 @@ namespace PatternPal.LoggingServer.Services
                 OldFileName = request.HasOldFileName ? request.OldFileName : null,
                 FullCodeState = request.HasFullCodeState ? request.FullCodeState : null,
                 ClientDatetime = clientDateTime,
-                ServerDatetime = DateTime.Now,
+                ServerDatetime = DateTime.UtcNow,
                 SessionId = sessionId,
                 ProjectId = request.HasProjectId ? request.ProjectId : null,
                 ParentId = parentEventId,
