@@ -90,15 +90,53 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
             }
 
             // TODO: Generate feedback for incorrect/missing requirements.
+            int oldEntityCheck = 0;
+            EntityResult entityResult = new();
 
             foreach ((Result result, Func< IDictionary< ICheck, ICheckResult >, bool > calcCorrect) in resultsByRequirement.Values.OrderBy(r => r.Result.Requirement))
             {
-                if (!calcCorrect(resultsByCheck))
+                string[] splittedRequirement = result.Requirement.Split(". ");
+                if (int.TryParse(splittedRequirement[0], out int newEntityCheck) && oldEntityCheck != newEntityCheck)
                 {
-                    result.MatchedNode = null;
-                }
+                    if (oldEntityCheck > 0)
+                    {
+                        rootResult.EntityResults.Add(entityResult);
+                    }
+                    oldEntityCheck = newEntityCheck;
 
-                rootResult.Results.Add(result);
+                    entityResult = new EntityResult
+                    {
+                        Name = splittedRequirement[1],
+                        MatchedNode = result.MatchedNode
+                    };
+
+                    if (!calcCorrect(resultsByCheck))
+                    {
+                        entityResult.MatchedNode = null;
+                    }
+                }
+                else
+                {
+                    if (!calcCorrect(resultsByCheck))
+                    {
+                        result.MatchedNode = null;
+                    }
+
+                    int position = 0;
+                    string isThisInt = splittedRequirement[0];
+                    while (char.IsDigit(isThisInt[position]))
+                    {
+                        position++;
+                    }
+
+                    result.Requirement = splittedRequirement[0][position..] + ") " + splittedRequirement[1];
+                    entityResult.Requirements.Add(result);
+                }
+            }
+
+            if (entityResult.Requirements.Count > 0)
+            {
+                rootResult.EntityResults.Add(entityResult);
             }
 
             RecognizeResponse response = new()
@@ -132,6 +170,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
 
             if (!string.IsNullOrWhiteSpace(resultToProcess.Check.Requirement))
             {
+
                 Result result = new()
                                 {
                                     Requirement = resultToProcess.Check.Requirement,

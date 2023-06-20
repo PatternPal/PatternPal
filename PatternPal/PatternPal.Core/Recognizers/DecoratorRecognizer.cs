@@ -312,7 +312,7 @@ file class DecoratorRecognizerWithAbstractClass : DecoratorRecognizerParent
     protected override MethodCheck ComponentMethod() =>
             Method(
                 Priority.Knockout,
-                "1b. Has declared an abstract method.",
+                "1a. Has declared an abstract method.",
                 Modifiers(
                     Priority.Knockout,
                     Modifier.Abstract
@@ -374,7 +374,7 @@ file class DecoratorRecognizerWithInterface : DecoratorRecognizerParent
     /// <inheritdoc />
     protected override MethodCheck ComponentMethod() => Method(
         Priority.Knockout, 
-        "1b. Has declared a method.");
+        "1a. Has declared a method.");
 
     /// <inheritdoc />
     protected override InterfaceCheck Component(MethodCheck componentMethod) =>

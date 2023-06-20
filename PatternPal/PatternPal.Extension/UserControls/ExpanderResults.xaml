@@ -48,29 +48,65 @@
                             </Expander.Header>
                             <StackPanel>
                                 <TextBlock Text="{Binding Result.Feedback}" Margin="0,0,0,10" />
-                                <ItemsControl Name="ResultsViewParts" ItemsSource="{Binding Children}">
+                                <ItemsControl Name="EntityResults" ItemsSource="{Binding EntityChecks}">
                                     <ItemsControl.ItemTemplate>
-                                        <DataTemplate DataType="{x:Type models:CheckResultViewModel}">
-                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                                <imaging:CrispImage Width="24"
-                                                                    Height="24"
-                                                                    HorizontalAlignment="Left"
-                                                                    Margin="0,0,10,0"
-                                                                    Moniker="{Binding Icon}" />
-                                                <StackPanel Orientation="Vertical">
-                                                    <TextBlock Text="{Binding Requirement}" Height="16"
-                                                               TextWrapping="NoWrap" />
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <imaging:CrispImage Width="16"
-                                                                            Height="16"
-                                                                            HorizontalAlignment="Left"
-                                                                            Margin="0,0,10,0"
-                                                                            Moniker="{Binding MatchedNodeIcon}" />
-                                                        <Label Content="{Binding MatchedNodeName}"
-                                                               MouseDoubleClick="Control_OnMouseDoubleClick" />
+                                        <DataTemplate DataType="{x:Type models:EntityCheckResultViewModel}">
+                                            <Expander Padding="5,5,0,5"
+                                                      HorizontalAlignment="Stretch"
+                                                      VerticalAlignment="Stretch"
+                                                      ExpandDirection="Down"
+                                                      IsExpanded="{Binding Expanded}">
+                                                <Expander.Header>
+                                                    <StackPanel Orientation="Vertical">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="{Binding Name}"
+                                                                       Margin="2,0,5,0" />
+                                                            <ProgressBar x:Name="patternScore"
+                                                                         Height="5"
+                                                                         Value="{Binding Path=Score, Mode=OneWay}"
+                                                                         Width="30" Margin="10 0 0 0"
+                                                                         BorderBrush="{Binding ProgressBarColor}"
+                                                                         BorderThickness="1"
+                                                                         Foreground="{Binding ProgressBarColor}" />
+                                                        </StackPanel>
+                                                        <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                                                            <imaging:CrispImage Width="16"
+                                                                                Height="16"
+                                                                                HorizontalAlignment="Left"
+                                                                                Margin="0,0,10,0"
+                                                                                Moniker="{Binding MatchedNodeIcon}" />
+                                                            <Label Content="{Binding MatchedNodeName}"
+                                                                   MouseDoubleClick="Control_OnMouseDoubleClick" />
+                                                        </StackPanel>
                                                     </StackPanel>
-                                                </StackPanel>
-                                            </StackPanel>
+                                                </Expander.Header>
+                                                    <ItemsControl Name="ResultsViewParts" ItemsSource="{Binding Children}">
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate DataType="{x:Type models:CheckResultViewModel}">
+                                                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                                                    <imaging:CrispImage Width="24"
+                                                                                        Height="24"
+                                                                                        HorizontalAlignment="Left"
+                                                                                        Margin="0,0,10,0"
+                                                                                        Moniker="{Binding Icon}" />
+                                                                    <StackPanel Orientation="Vertical">
+                                                                        <TextBlock Text="{Binding Requirement}" Height="16"
+                                                                                   TextWrapping="NoWrap" />
+                                                                        <StackPanel Orientation="Horizontal">
+                                                                            <imaging:CrispImage Width="16"
+                                                                                                Height="16"
+                                                                                                HorizontalAlignment="Left"
+                                                                                                Margin="0,0,10,0"
+                                                                                                Moniker="{Binding MatchedNodeIcon}" />
+                                                                            <Label Content="{Binding MatchedNodeName}"
+                                                                                   MouseDoubleClick="Control_OnMouseDoubleClick" />
+                                                                        </StackPanel>
+                                                                    </StackPanel>
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                            </Expander>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
