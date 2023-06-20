@@ -13,7 +13,8 @@ message RecognizeResult {
     string feedback = 2;
 
     // The results for the individual checks which make up the recognizer.
-    repeated EntityResult entity_results = 3;
+    //repeated EntityResult entity_results = 3;
+    repeated Result results = 3;
 }
 
 // Result of an Entity Check.

@@ -264,9 +264,11 @@ public partial class RecognizerRunner
                 rootResult,
                 pruneAll);
 
-            SortResultsByPriorities(
+            CalcScores(
                 resultsByNode,
                 rootResult);
+
+            SortResultsByPriorities(rootResult);
 
             return rootResult;
         }

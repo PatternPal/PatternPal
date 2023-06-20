@@ -80,7 +80,7 @@ internal class PrioritySortTests
                 Check = null
             };
 
-        RecognizerRunner.SortResultsByPriorities(null,rootCheckResult);
+        RecognizerRunner.CalcScores(null,rootCheckResult);
 
         return Verifier.Verify(rootCheckResult, _settings);
     }
@@ -182,7 +182,7 @@ internal class PrioritySortTests
                 Check = null
             };
 
-        RecognizerRunner.SortResultsByPriorities(null,rootCheckResult);
+        RecognizerRunner.CalcScores(null,rootCheckResult);
 
         return Verifier.Verify(rootCheckResult, _settings);
     }
@@ -284,7 +284,7 @@ internal class PrioritySortTests
                 Check = null
             };
 
-        RecognizerRunner.SortResultsByPriorities(null,rootCheckResult);
+        RecognizerRunner.CalcScores(null,rootCheckResult);
 
         return Verifier.Verify(rootCheckResult, _settings);
     }
@@ -386,7 +386,7 @@ internal class PrioritySortTests
                 Check = null
             };
 
-        RecognizerRunner.SortResultsByPriorities(null,rootCheckResult);
+        RecognizerRunner.CalcScores(null,rootCheckResult);
 
         return Verifier.Verify(rootCheckResult, _settings);
     }
@@ -426,7 +426,7 @@ internal class PrioritySortTests
                 Check = null
             };
 
-        RecognizerRunner.SortResultsByPriorities(null,rootCheckResult);
+        RecognizerRunner.CalcScores(null,rootCheckResult);
 
         return Verifier.Verify(rootCheckResult, _settings);
     }

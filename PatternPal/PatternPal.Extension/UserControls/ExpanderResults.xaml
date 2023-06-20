@@ -59,18 +59,16 @@
                                                                     Moniker="{Binding Icon}" />
                                                 <StackPanel Orientation="Vertical">
                                                     <TextBlock Text="{Binding Requirement}" Height="16"
-                                                               TextWrapping="Wrap" />
-                                                    <Button>
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <imaging:CrispImage Width="16"
-                                                                Height="16"
-                                                                HorizontalAlignment="Left"
-                                                                Margin="0,0,10,0"
-                                                                Moniker="{Binding MatchedNodeIcon}" />
-                                                            <Label Content="{Binding MatchedNodeName}"
-                                                                   MouseDoubleClick="Control_OnMouseDoubleClick" />
-                                                        </StackPanel>
-                                                    </Button>
+                                                               TextWrapping="NoWrap" />
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <imaging:CrispImage Width="16"
+                                                                            Height="16"
+                                                                            HorizontalAlignment="Left"
+                                                                            Margin="0,0,10,0"
+                                                                            Moniker="{Binding MatchedNodeIcon}" />
+                                                        <Label Content="{Binding MatchedNodeName}"
+                                                               MouseDoubleClick="Control_OnMouseDoubleClick" />
+                                                    </StackPanel>
                                                 </StackPanel>
                                             </StackPanel>
                                         </DataTemplate>

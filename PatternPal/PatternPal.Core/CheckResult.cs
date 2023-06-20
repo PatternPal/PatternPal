@@ -83,7 +83,6 @@ public abstract class BaseCheckResult : ICheckResult
     public void SetScore(
         bool perfect,
         Score score)
-
     {
         if (perfect)
         {

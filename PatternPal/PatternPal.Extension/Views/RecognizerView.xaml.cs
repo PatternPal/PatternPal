@@ -179,10 +179,10 @@ namespace PatternPal.Extension.Views
 
             foreach (RecognizeResult result in results)
             {
-                //if (result.Results.Count > 0)
-                //{
-                //    viewModels.Add(new PatternResultViewModel(result));
-                //}
+                if (result.Results.Count > 0)
+                {
+                    viewModels.Add(new PatternResultViewModel(result));
+                }
             }
 
             // - Change your UI information here

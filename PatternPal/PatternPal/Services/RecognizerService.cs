@@ -91,14 +91,14 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
 
             // TODO: Generate feedback for incorrect/missing requirements.
 
-            foreach ((Result result, Func< IDictionary< ICheck, ICheckResult >, bool > calcCorrect) in resultsByRequirement.Values)
+            foreach ((Result result, Func< IDictionary< ICheck, ICheckResult >, bool > calcCorrect) in resultsByRequirement.Values.OrderBy(r => r.Result.Requirement))
             {
                 if (!calcCorrect(resultsByCheck))
                 {
                     result.MatchedNode = null;
                 }
 
-                //rootResult.Results.Add(result);
+                rootResult.Results.Add(result);
             }
 
             RecognizeResponse response = new()
@@ -163,13 +163,14 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
 
                 Func< IDictionary< ICheck, ICheckResult >, bool > calcCorrect = check2Result =>
                                                                                 {
-                                                                                    Score perfectScore = resultToProcess.Check.PerfectScore(
-                                                                                        check2Result,
-                                                                                        resultToProcess);
-                                                                                    Score actualScore = resultToProcess.Score;
+                                                                                    //Score perfectScore = resultToProcess.Check.PerfectScore(
+                                                                                    //    check2Result,
+                                                                                    //    resultToProcess);
+                                                                                    //Score actualScore = resultToProcess.Score;
 
-                                                                                    return !perfectScore.Equals(default)
-                                                                                           && perfectScore.Equals(actualScore);
+                                                                                    return resultToProcess.Score.Equals(resultToProcess.PerfectScore);
+                                                                                    //return !perfectScore.Equals(default)
+                                                                                    //       && perfectScore.Equals(actualScore);
                                                                                 };
                 yield return (result, calcCorrect);
             }
