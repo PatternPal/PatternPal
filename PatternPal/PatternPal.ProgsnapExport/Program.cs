@@ -18,7 +18,6 @@ using PatternPal.LoggingServer;
 
 namespace PatternPal.ProgSnapExport;
 
-// ReSharper disable once ClassNeverInstantiated.Global
 internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Settings>
 {
     private ProgSnap2ContextClass _dbContext;
@@ -31,7 +30,6 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
     /// <summary>
     /// Defines all CLI-arguments.
     /// </summary>
-    // ReSharper disable once ClassNeverInstantiated.Global
     public sealed class Settings : CommandSettings
     {
         // CLI Settings
@@ -492,7 +490,6 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
     #endregion
 }
 
-// ReSharper disable once ClassNeverInstantiated.Global
 internal class Program
 {
     private static int Main(string[] args)
