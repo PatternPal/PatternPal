@@ -61,7 +61,7 @@ namespace PatternPal.LoggingServerTests
                 SessionId = Guid.NewGuid().ToString(),
                 SubjectId = Guid.NewGuid().ToString(),
                 EventType = EventType.EvtSessionStart,
-                ClientTimestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff zzz"),
+                ClientTimestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"),
                 ProjectId = "TestProject",
             };
 
@@ -109,7 +109,7 @@ namespace PatternPal.LoggingServerTests
                 SessionId = "invalid session ID",
                 SubjectId = Guid.NewGuid().ToString(),
                 EventType = EventType.EvtProjectOpen,
-                ClientTimestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff zzz"),
+                ClientTimestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"),
                 ProjectId = "TestProject",
                 Data = ByteString.CopyFrom(new byte[] { 1, 2, 3 })
             };
@@ -131,7 +131,7 @@ namespace PatternPal.LoggingServerTests
                 SessionId = Guid.NewGuid().ToString(),
                 SubjectId = Guid.NewGuid().ToString(),
                 EventType = EventType.EvtUnknown,
-                ClientTimestamp = DateTime.UtcNow.ToString(CultureInfo.InvariantCulture),
+                ClientTimestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"),
                 ProjectId = "TestProject",
                 Data = ByteString.CopyFrom(new byte[] { 1, 2, 3 })
             };
@@ -151,7 +151,7 @@ namespace PatternPal.LoggingServerTests
                 SessionId = Guid.NewGuid().ToString(),
                 SubjectId = Guid.NewGuid().ToString(),
                 EventType = EventType.EvtProjectClose,
-                ClientTimestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff zzz"),
+                ClientTimestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"),
                 ProjectId = "TestProject",
                 Data = ByteString.CopyFrom(CreateZipArchive(filenameCs))
             };
