@@ -3,9 +3,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 using System.Windows.Input;
-
+using System.Windows;
 using EnvDTE;
 using EnvDTE80;
 
@@ -17,8 +16,6 @@ using PatternPal.Extension.Grpc;
 using PatternPal.Extension.Resources;
 using PatternPal.Extension.Stores;
 using PatternPal.Protos;
-
-using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 #endregion
 
@@ -118,7 +115,7 @@ namespace PatternPal.Extension.ViewModels
                 }
                 else
                 {
-                    MessageBox.Show("No files were provided!");
+                    System.Windows.MessageBox.Show("No files were provided!");
                 }
             }
 
@@ -153,28 +150,36 @@ namespace PatternPal.Extension.ViewModels
                 if (dte.Solution.IsOpen)
                 {
                     string filePath;
-                    if (dte.Solution.Projects.Count == 0)
+
+                    // The solution is empty.
+                    if (dte.Documents.Count == 0)
                     {
+                        // Create a project based on a template from VS2022 add it to the 
+                        // solution. Then iterate over the projects of the solution and 
+                        // add a file.
                         string projectName = "NewProject";
                         string projectPath = Path.Combine(
                             Path.GetDirectoryName(dte.Solution.FullName),
                             projectName);
+
+                        // Obtain the template path for a project.
                         DTE2 dte2 = (DTE2)Package.GetGlobalService(typeof(SDTE));
-                        Solution2 soln = (Solution2)dte2.Solution;
+                        Solution2 soln = dte2.Solution as Solution2;
                         string templatePath = soln.GetProjectTemplate("ConsoleApplication.zip", "CSharp");
-                        Project csTemplateProject =
-                            dte.Solution.AddFromTemplate(
-                                templatePath,
-                                projectPath,
-                                projectName,
-                                false);
+
+                        // Add project to the solution and add a new file to that project.
+                        dte.Solution.AddFromTemplate(
+                            templatePath,
+                            projectPath,
+                            projectName,
+                            false);
+                        Project project = dte.Solution.Projects.Item(1);
                         filePath =
                             Path.Combine(
                                 projectPath,
                                 "NewFile.cs");
                         using (FileStream fs = File.Create(filePath)) { }
-                        // TODO Iterate over projects and add.
-                        //csTemplateProject.ProjectItems.AddFromFile(filePath);
+                        project.ProjectItems.AddFromFile(filePath);
                     }
                     else
                     {
@@ -242,8 +247,8 @@ namespace PatternPal.Extension.ViewModels
                 return new List< string >();
             }
             using (FileStream fs = File.Create(filePath)) { }
-            return new List< string >()
-                   {
+            return new List< string >
+            {
                        filePath
                    };
         }
