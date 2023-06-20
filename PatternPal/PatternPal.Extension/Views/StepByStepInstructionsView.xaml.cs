@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-
+using System.Windows.Media;
 using Microsoft.CodeAnalysis;
 using Microsoft.Internal.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio;
@@ -63,7 +63,6 @@ namespace PatternPal.Extension.Views
             if (_viewModel.TrySelectPreviousInstruction())
             {
                 correctTextBlock.Visibility = Visibility.Hidden;
-                incorrectTextBlock.Visibility = Visibility.Hidden;
                 CheckIfNextPreviousButtonsAvailable();
             }
         }
@@ -80,7 +79,6 @@ namespace PatternPal.Extension.Views
             if (_viewModel.TrySelectNextInstruction())
             {
                 correctTextBlock.Visibility = Visibility.Hidden;
-                incorrectTextBlock.Visibility = Visibility.Hidden;
                 CheckIfNextPreviousButtonsAvailable();
             }
         }
@@ -152,9 +150,9 @@ namespace PatternPal.Extension.Views
                 SubscribeEvents.OnStepByStepCheck( request.Recognizer.ToString(), request.InstructionNumber, result);
                 if (!result)
                 {
-                    correctTextBlock.Visibility = Visibility.Hidden;
-                    incorrectTextBlock.Visibility = Visibility.Visible;
-
+                    correctTextBlock.Text = "Incorrect!";
+                    correctTextBlock.Foreground = new SolidColorBrush(Colors.Red);
+                    correctTextBlock.Visibility = Visibility.Visible;
                     return;
                 }
             }
@@ -164,9 +162,9 @@ namespace PatternPal.Extension.Views
                 return;
             }
 
-            incorrectTextBlock.Visibility = Visibility.Hidden;
+            correctTextBlock.Text = "Correct!";
+            correctTextBlock.Foreground = new SolidColorBrush(Colors.Green);
             correctTextBlock.Visibility = Visibility.Visible;
-            
 
             NextInstructionButton.IsEnabled = true;
         }

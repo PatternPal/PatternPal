@@ -145,18 +145,6 @@
                    MaxWidth="380"
                    Visibility="Hidden">
         </TextBlock>
-        <TextBlock x:Name ="incorrectTextBlock"
-                   Text ="Incorrect!"
-                   Grid.Row="4"
-                   TextWrapping="Wrap"
-                   TextAlignment="Left"
-                   FontSize="15"
-                   Foreground="Red"
-                   HorizontalAlignment="Center"
-                   Margin="0,0,0,10"
-                   MaxWidth="380"
-                   Visibility="Hidden">
-        </TextBlock>
         <usercontrol:ExpanderResults x:Name="ExpanderResults" Grid.Row="5" Margin="20,0,20,0" />
     </Grid>
 </UserControl>
