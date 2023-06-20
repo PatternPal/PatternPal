@@ -27,6 +27,9 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
     private string _csvFile;
     private string _codeStateExportDir;
 
+    private DateTime _lowerBound;
+    private DateTime _upperBound;
+
     /// <summary>
     /// Defines all CLI-arguments.
     /// </summary>
@@ -176,26 +179,11 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
             return 105; // https://github.com/dotnet/templating/wiki/Exit-Codes
         }
 
-        // We set the lower and the upper bounds to our query;
-        // if StartInterval is defined we check if it is later than epoch and -- if so -- convert to UTC.
-        // Similarly we parse the EndInterval, but we compare it against now.
-        DateTime lower = DateTime.UnixEpoch;
-        if (_settings.StartInterval != null && _settings.StartInterval.Value > lower)
-        {
-            lower = DateTime.SpecifyKind(_settings.StartInterval.Value, DateTimeKind.Utc);
-        }
-
-        DateTime upper = DateTime.UtcNow;
-        if (_settings.EndInterval != null && _settings.EndInterval.Value < upper)
-        {
-            upper = DateTime.SpecifyKind(_settings.EndInterval.Value, DateTimeKind.Utc);
-        }
-
         // Obtain distinct sessionIds
         // Note that we order by ClientDateTime to maintain that ordening in the eventual .csv-export.
         LogInfo("Obtaining distinct sessionIDs...");
         List<Guid> sessions = _dbContext.Events
-            .Where(e => e.ClientDatetime >= lower && e.ClientDatetime <= upper)
+            .Where(e => e.ClientDatetime >= _lowerBound && e.ClientDatetime <= _upperBound)
             .OrderBy(e => e.ClientDatetime)
             .Select(e => e.SessionId)
             .Distinct()
@@ -242,6 +230,22 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
         using (FileStream fs = File.Create(_logFile)) ;
         Directory.CreateDirectory(_codeStateExportDir);
 
+        // Prepare interval bounds
+        // We set the lower and the upper bounds to our query;
+        // if StartInterval is defined we check if it is later than epoch and -- if so -- convert to UTC.
+        // Similarly we parse the EndInterval, but we compare it against now.
+        _lowerBound = DateTime.UnixEpoch;
+        if (_settings.StartInterval != null && _settings.StartInterval.Value > _lowerBound)
+        {
+            _lowerBound = DateTime.SpecifyKind(_settings.StartInterval.Value, DateTimeKind.Utc);
+        }
+
+        _upperBound = DateTime.UtcNow;
+        if (_settings.EndInterval != null && _settings.EndInterval.Value < _upperBound)
+        {
+            _upperBound = DateTime.SpecifyKind(_settings.EndInterval.Value, DateTimeKind.Utc);
+        }
+        
         // Set-up database
         _dbContext = new ProgSnap2ContextClass(_settings.ConnectionString);
         
@@ -260,6 +264,7 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
         LogInfo($"Parsing session [bold]{sessionId}[/]");
         LogInfo($"Obtaining data...");
         List<ProgSnap2Event> data = _dbContext.Events
+            .Where(e => e.ClientDatetime >= _lowerBound && e.ClientDatetime <= _upperBound)
             .Where(e => e.SessionId == sessionId)
             .OrderBy(e => e.Order)
             .ToList();
@@ -315,6 +320,12 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
     /// <param name="data"></param>
     private void RestoreCodeState(ref List<ProgSnap2Event> data)
     {
+        List<string?> projects = _dbContext.Events
+            .Where(e => e.ClientDatetime >= _lowerBound && e.ClientDatetime <= _upperBound)
+            .Select(e => e.ProjectId)
+            .Distinct()
+            .ToList();
+        
         // TODO This should actually be done on a per-project basis
         (Guid Id, bool Full)? previousCodeState = null; 
         
