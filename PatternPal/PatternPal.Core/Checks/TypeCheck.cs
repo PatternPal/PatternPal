@@ -72,32 +72,32 @@ internal class TypeCheck : CheckBase
                 INode nodeToMatch = getCurrentEntity(ctx);
                 bool isMatch = node == nodeToMatch;
                 return new List< ICheckResult >
-                       {
-                           new LeafCheckResult
-                           {
-                               Priority = Priority,
-                               Correct = isMatch,
-                               FeedbackMessage = isMatch
-                                   ? $"Node '{node}' has correct type"
-                                   : $"Node '{node}' has incorrect type, expected '{nodeToMatch}'",
-                               DependencyCount = DependencyCount,
-                               MatchedNode = nodeToMatch, //TODO is this right or should this be node?
-                               Check = this,
-                               RelatedCheck = ctx.EntityCheck
-                           }
-                       };
+                {
+                   new LeafCheckResult
+                   {
+                       Priority = Priority,
+                       Correct = isMatch,
+                       FeedbackMessage = isMatch
+                           ? $"Node '{node}' has correct type"
+                           : $"Node '{node}' has incorrect type, expected '{nodeToMatch}'",
+                       DependencyCount = DependencyCount,
+                       MatchedNode = nodeToMatch, //TODO is this right or should this be node?
+                       Check = this,
+                       RelatedCheck = ctx.EntityCheck
+                   }
+                };
             });
 
         return new NodeCheckResult
-               {
-                   Priority = Priority,
-                   ChildrenCheckResults = results,
-                   FeedbackMessage = $"Found node '{node}'",
-                   DependencyCount = DependencyCount,
-                   MatchedNode = node,
-                   Check = this,
-                   NodeCheckCollectionWrapper = true,
-                   CollectionKind = CheckCollectionKind.Any
-               };
+        {
+           Priority = Priority,
+           ChildrenCheckResults = results,
+           FeedbackMessage = $"Found node '{node}'",
+           DependencyCount = DependencyCount,
+           MatchedNode = node,
+           Check = this,
+           NodeCheckCollectionWrapper = true,
+           CollectionKind = CheckCollectionKind.Any
+        };
     }
 }
