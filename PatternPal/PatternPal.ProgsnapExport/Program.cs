@@ -260,7 +260,6 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
     /// <param name="sessionId"></param>
     private void ParseSession(Guid sessionId)
     {
-        // TODO Included markdown is currently showing in log file
         LogInfo($"Parsing session [bold]{sessionId}[/]");
         LogInfo($"Obtaining data...");
         List<ProgSnap2Event> data = _dbContext.Events
@@ -274,13 +273,22 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
             // We first restore the codeStates since this process might add
             // extra details to the eventual database.
             LogInfo($"Restoring CodeStates...");
-            RestoreCodeState(ref data);
+            
+            // We need to obtain all unique projectIDs...
+            List<string> projects = _dbContext.Events
+                .Where(e => e.ClientDatetime >= _lowerBound && e.ClientDatetime <= _upperBound)
+                .Select(e => e.ProjectId)
+                .Where(projectId => projectId != null)
+                .Distinct()
+                .ToList()!;
+            
+            projects.ForEach(projectId => RestoreProject(projectId, ref data));
+            
+            // TODO Should we create a warning for each event without a projectId?
         }
         
         LogInfo($"Writing data to csv...");
         WriteDataToCsv(data, _csvFile);
-
-        
     }
 
     /// <summary>
@@ -313,20 +321,16 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
             csv.WriteRecords(data);
         }
     }
-
+    
     /// <summary>
     /// TODO
     /// </summary>
+    /// <param name="projectId"></param>
     /// <param name="data"></param>
-    private void RestoreCodeState(ref List<ProgSnap2Event> data)
+    private void RestoreProject(string projectId, ref List<ProgSnap2Event> data)
     {
-        List<string?> projects = _dbContext.Events
-            .Where(e => e.ClientDatetime >= _lowerBound && e.ClientDatetime <= _upperBound)
-            .Select(e => e.ProjectId)
-            .Distinct()
-            .ToList();
+        LogInfo($"Restoring project [bold]{projectId}[/]");
         
-        // TODO This should actually be done on a per-project basis
         (Guid Id, bool Full)? previousCodeState = null; 
         
         foreach (ProgSnap2Event ev in data)
@@ -343,6 +347,7 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
                     // TODO Should maybe be ERROR; included markdown is currently showing in log file
                     LogWarning($"CodeState not present in source directory\n" +
                                $"\t[bold]SessionID[/]:\t{ev.SessionId}\n" +
+                               $"\t[bold]ProjectID[/]:\t{projectId}\n" +
                                $"\t[bold]CodeStateID[/]:\t{ev.CodeStateId}");
 
                     // TODO Determine what to do; copy the last complete one? 
@@ -456,11 +461,13 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
     {
         if (toConsole)
         {
+            // TODO logging multiple lines renders improperly in conjunction with the progress bar
             AnsiConsole.Write(new Markup($"{consoleHead}{message}\n"));
         }
 
         if (toFile)
         {
+            // TODO Markdown directives are currently included in log file
             using FileStream fs = File.Open(_logFile, FileMode.Append);
             using StreamWriter sw = new(fs);
             sw.WriteLine($"{fileHead}{message}");
