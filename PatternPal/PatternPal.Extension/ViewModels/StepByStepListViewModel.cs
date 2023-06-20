@@ -69,7 +69,7 @@ namespace PatternPal.Extension.ViewModels
 
             // Next button 
             NavigateStepByStepInstructionsCommand =
-                new NavigateCommand< StepByStepInstructionsViewModel >(
+                new SBScommand< StepByStepInstructionsViewModel >(
                     navigationStore,
                     () => new StepByStepInstructionsViewModel(
                         navigationStore,
@@ -79,7 +79,7 @@ namespace PatternPal.Extension.ViewModels
 
             // Continue button
             NavigateContinueStepByStepInstructionsCommand =
-                new NavigateCommand< StepByStepInstructionsViewModel >(
+                new SBScommand<StepByStepInstructionsViewModel>(
                     navigationStore,
                     () => new StepByStepInstructionsViewModel(
                         navigationStore,
@@ -87,6 +87,7 @@ namespace PatternPal.Extension.ViewModels
                         StepByStepModes.Continue,
                         ContinueButtonBehavior()));
 
+            // Obtain the available instruction sets for Step-By-Step.
             GetInstructionSetsResponse instructionSetsResponse =
                 GrpcHelper.StepByStepClient.GetInstructionSets(new GetInstructionSetsRequest());
 
@@ -101,23 +102,22 @@ namespace PatternPal.Extension.ViewModels
         {
             List< string > result = new List< string >();
 
-            OpenFileDialog ofd = new OpenFileDialog()
-                                 {
-                                     Multiselect = true,
-                                     Filter = "cs files (*.cs)|*.cs",
-                                 };
-
-            while (result.Count == 0)
+            using (CommonOpenFileDialog ofd = new CommonOpenFileDialog
+                   {
+                       Multiselect = true,
+                       Filters = { new CommonFileDialogFilter(
+                           "cs files",
+                           "cs") }
+            })
             {
-                bool ? res = ofd.ShowDialog();
-                if (res.HasValue
-                    && res.Value)
+                CommonFileDialogResult res = ofd.ShowDialog();
+                if (res == CommonFileDialogResult.Ok)
                 {
                     result = ofd.FileNames.ToList();
                 }
                 else
                 {
-                    MessageBox.Show("No files were provided");
+                    MessageBox.Show("No files were provided!");
                 }
             }
 

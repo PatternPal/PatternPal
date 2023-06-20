@@ -5,15 +5,19 @@
   - name: Design patterns
   - name: Adapter
     href: recognizers/patterns/adapter.md
+  - name: Bridge
+    href: recognizers/patterns/bridge.md
   - name: Decorator
     href: recognizers/patterns/decorator.md
+  - name: Factory-Method
+    href: recognizers/patterns/factorymethod.md
   - name: Observer
     href: recognizers/patterns/observer.md
   - name: Singleton
     href: recognizers/patterns/singleton.md
   - name: Strategy
     href: recognizers/patterns/strategy.md
-
+    
   # -- Design
   - name: Design
   - name: Recognizer
@@ -31,6 +35,8 @@
     href: recognizers/guides/implement_recognizer.md
   - name: Implementing a Check
     href: recognizers/guides/implement_check.md
+  - name: Adding a design pattern to Step-By-Step
+    href: stepbystep/guides/implement_an_instructionset.md
 
 # Pattern recognition --------------------
 - name: Data logging

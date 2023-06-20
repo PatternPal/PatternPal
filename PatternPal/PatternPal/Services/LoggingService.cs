@@ -100,6 +100,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
             Protos.EventType.EvtSessionStart => (SessionStartLog(receivedRequest), false),
             Protos.EventType.EvtSessionEnd => (SessionEndLog(receivedRequest), false),
             Protos.EventType.EvtXRecognizerRun => (RecognizeLog(receivedRequest), false),
+            Protos.EventType.EvtXStepByStepStep => (StepByStepLog(receivedRequest), false),
             _ => (StandardLog(receivedRequest), false)
         };
     }
@@ -118,7 +119,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
             ToolInstances = receivedRequest.ToolInstances,
             ClientTimestamp =
                 DateTime.UtcNow.ToString(
-                    "yyyy-MM-dd HH:mm:ss.fff zzz"), //TODO: DateTimeOffset.Now.ToString("yyyy-MM-dd HH:mm:ss.fff  zzz"), : Logging server cannot work with offsets yet
+                    "yyyy-MM-dd HH:mm:ss.fff zzz"),
             SessionId =
                 receivedRequest.SessionId
         };
@@ -136,9 +137,11 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     {
         // TODO PatternPal only supports running the recognizer on a single project, so the projectID should be set as well.
         LogRequest sendLog = StandardLog(receivedRequest);
+
         sendLog.EventType = LoggingServer.EventType.EvtXRecognizerRun;
         sendLog.RecognizerResult = receivedRequest.RecognizerResult;
         sendLog.RecognizerConfig = receivedRequest.RecognizerConfig;
+
         return sendLog;
     }
 
@@ -165,12 +168,14 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     private static LogRequest CompileErrorLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
+
         sendLog.EventType = LoggingServer.EventType.EvtCompileError;
         sendLog.CompileMessageData = receivedRequest.CompileMessageData;
         sendLog.CompileMessageType = receivedRequest.CompileMessageType;
         sendLog.CodeStateSection = receivedRequest.CodeStateSection;
         sendLog.ParentEventId = receivedRequest.ParentEventId;
         sendLog.SourceLocation = receivedRequest.SourceLocation;
+
         return sendLog;
     }
 
@@ -183,6 +188,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     private static LogRequest FileCreateLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
+
         sendLog.EventType = LoggingServer.EventType.EvtFileCreate;
         sendLog.CodeStateSection = receivedRequest.CodeStateSection;
         sendLog.ProjectId = receivedRequest.ProjectId;
@@ -203,9 +209,21 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     private static LogRequest FileDeleteLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
+
         sendLog.EventType = LoggingServer.EventType.EvtFileDelete;
         sendLog.CodeStateSection = receivedRequest.CodeStateSection;
         sendLog.ProjectId = receivedRequest.ProjectId;
+
+        string filePathInProjectDir = Path.GetRelativePath(receivedRequest.ProjectDirectory, sendLog.CodeStateSection);
+
+        try
+        {
+            _lastCodeState[sendLog.ProjectId].Remove(filePathInProjectDir);
+        }
+        catch
+        {
+            return OnFailedDictionaryAction(sendLog, receivedRequest.ProjectDirectory);
+        }
 
         return sendLog;
     }
@@ -219,31 +237,37 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     private static (LogRequest request, bool discard) FileEditLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
+
         string currentHash = HashFile(receivedRequest.FilePath);
         string relativePath = Path.GetRelativePath(receivedRequest.ProjectDirectory, receivedRequest.FilePath);
 
-        try
+        sendLog.EventType = LoggingServer.EventType.EvtFileEdit;
+        sendLog.CodeStateSection = receivedRequest.CodeStateSection;
+        sendLog.ProjectId = receivedRequest.ProjectId;
+
+        // We try to obtain the previous hash of the file to compare it to the new one;
+        // if a lookup fails, we reupload the entire codeState.
         {
-            string oldHash = _lastCodeState[receivedRequest.ProjectId][relativePath];
-            // If these hashes match, the file hasn't changed and the request may be discarded.
+            string oldHash;
+            try
+            {
+                oldHash = _lastCodeState[receivedRequest.ProjectId][relativePath];
+            }
+            catch
+            {
+                return (OnFailedDictionaryAction(sendLog, receivedRequest.ProjectDirectory), false);
+            }
+
             if (currentHash == oldHash)
             {
                 return (sendLog, true);
             }
-
-            sendLog.EventType = LoggingServer.EventType.EvtFileEdit;
-            sendLog.CodeStateSection = receivedRequest.CodeStateSection;
-            sendLog.ProjectId = receivedRequest.ProjectId;
-            sendLog.Data = ZipPath(receivedRequest.FilePath, relativePath);
-            sendLog.FullCodeState = false;
-
-            return (sendLog, false);
         }
-        catch
-        {
-            // TODO Determine proper course of action
-            return (sendLog, true);
-        }
+
+        sendLog.Data = ZipPath(receivedRequest.FilePath, relativePath);
+        sendLog.FullCodeState = false;
+
+        return (sendLog, false);
     }
 
 
@@ -258,7 +282,24 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         LogRequest sendLog = StandardLog(receivedRequest);
         sendLog.EventType = LoggingServer.EventType.EvtFileRename;
         sendLog.CodeStateSection = receivedRequest.CodeStateSection;
+        sendLog.OldFileName = receivedRequest.OldFileName;
         sendLog.ProjectId = receivedRequest.ProjectId;
+
+        string oldFilePathInProjectDir = Path.GetRelativePath(receivedRequest.ProjectDirectory, sendLog.OldFileName);
+        string newFilePathInProjectDir = Path.GetRelativePath(receivedRequest.ProjectDirectory, sendLog.CodeStateSection);
+        try
+        {
+            // To rename the key that stores the hash in _lastCodeState, we obtain its value, reinsert it under the new key
+            // and delete the old entry.
+            string hash = _lastCodeState[sendLog.ProjectId][oldFilePathInProjectDir];
+
+            _lastCodeState[sendLog.ProjectId][newFilePathInProjectDir] = hash;
+            _lastCodeState[sendLog.ProjectId].Remove(oldFilePathInProjectDir);
+        }
+        catch
+        {
+            return OnFailedDictionaryAction(sendLog, receivedRequest.ProjectDirectory);
+        }
 
         return sendLog;
     }
@@ -272,6 +313,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     private static LogRequest ProjectCloseLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
+
         sendLog.EventType = LoggingServer.EventType.EvtProjectClose;
         sendLog.ProjectId = receivedRequest.ProjectId;
 
@@ -293,6 +335,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     private static LogRequest ProjectOpenLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
+
         sendLog.EventType = LoggingServer.EventType.EvtProjectOpen;
         sendLog.ProjectId = receivedRequest.ProjectId;
 
@@ -315,6 +358,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     {
         // TODO Should include ProjectID
         LogRequest sendLog = StandardLog(receivedRequest);
+
         sendLog.EventType = LoggingServer.EventType.EvtDebugProgram;
         sendLog.ExecutionId = receivedRequest.ExecutionId;
         sendLog.ExecutionResult = (ExecutionResult)receivedRequest.ExecutionResult;
@@ -350,6 +394,23 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         return sendLog;
     }
 
+    /// <summary>
+    /// Creates a LogRequest that is populated with info obtained from the supplied StepByStep event. This log is ran whenever the client presses check during the step by step process.
+    /// </summary>
+    /// <param name="receivedRequest">Request received from extension</param>
+    /// <returns>A logRequest populated for Step-By-Step event</returns>
+    private static LogRequest StepByStepLog(LogEventRequest receivedRequest)
+    {
+        LogRequest sendLog = StandardLog(receivedRequest);
+
+        sendLog.EventType = LoggingServer.EventType.EvtXStepByStepStep;
+        sendLog.RecognizerConfig = receivedRequest.RecognizerConfig;
+        sendLog.RecognizerResult = receivedRequest.RecognizerResult;
+        sendLog.ProjectId = receivedRequest.ProjectId;
+        
+        return sendLog;
+    }
+
     #endregion
 
     #region Utils
@@ -365,8 +426,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     /// <returns>A ByteString of the resulting archive</returns>
     public static ByteString ZipPath(string path, string relativePath = "")
     {
-        // TODO: Protect against too large codebases.
-        // Note: Calculating dirSize in C# is not trivial; omitting this for now.
+        // Note: Calculating dirSize in C# is not trivial; we are currently not protecting against large codeBases.
 
         bool isDirectory = Directory.Exists(path);
         Byte[] bytes;
@@ -460,10 +520,30 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
 
             using MD5 md5 = MD5.Create();
             using Stream stream = entry.Open();
+
+            // The lookup on key projectID will always succeed since we created that entry a few lines above.    
             _lastCodeState[projectID][entry.FullName] = Convert.ToBase64String(md5.ComputeHash(stream));
         }
 
     }
+
+   /// <summary>
+   /// Tries to resolve a failed dictionary action (like a lookup) by reuploading the entire codeBase
+   /// and thus also repopulating the stored lastCodeState for the current project.
+   /// </summary>
+   /// <param name="sendLog">The LogRequest as populated thus far</param>
+   /// <param name="projectDirectory">Path to the project directory</param>
+   /// <returns></returns>
+    private static LogRequest OnFailedDictionaryAction(LogRequest sendLog, string projectDirectory)
+   {
+       // We explicitly remove the currently stored lastCodeState for the project.
+       _lastCodeState.Remove(sendLog.ProjectId);
+
+       sendLog.Data = ZipPath(projectDirectory);
+       sendLog.FullCodeState = true;
+
+       return sendLog;
+   }
     
     #endregion
 }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using EnvDTE;
@@ -12,6 +13,8 @@ using Microsoft.VisualStudio.Shell;
 using PatternPal.Extension.Grpc;
 using PatternPal.Protos;
 using System.Text.RegularExpressions;
+using JsonSerializer = System.Text.Json.JsonSerializer;
+using Google.Protobuf.Collections;
 
 #endregion
 
@@ -190,6 +193,7 @@ namespace PatternPal.Extension.Commands
                 $"Build {action.ToString()} succeeded.";
 
             LogEventRequest request = CreateStandardLog();
+
             string pathSolutionFullName = _dte.Solution.FullName;
             string pathSolutionFile = _dte.Solution.FileName;
 
@@ -251,13 +255,16 @@ namespace PatternPal.Extension.Commands
             }
 
             LogEventRequest request = CreateStandardLog();
+
             request.EventType = EventType.EvtFileCreate;
             request.CodeStateSection = fileSystemEventArgs.Name;
+
             string projectFullPath = FindContainingCsprojFile(fileSystemEventArgs.FullPath);
             string projectDirectory = Path.GetDirectoryName(projectFullPath);
             request.ProjectId = GetRelativePath(projectDirectory, projectFullPath);
             request.ProjectDirectory = Path.GetDirectoryName(projectFullPath);
-            request.ProjectId = GetRelativePath(request.ProjectDirectory, projectFullPath);
+            request.ProjectId = GetRelativePath(projectDirectory, projectFullPath);
+
             request.FilePath = fileSystemEventArgs.FullPath;
             
             LogEventResponse response = PushLog(request);
@@ -286,10 +293,13 @@ namespace PatternPal.Extension.Commands
             }
 
             LogEventRequest request = CreateStandardLog();
+
             request.EventType = EventType.EvtFileDelete;
             request.CodeStateSection = fileSystemEventArgs.Name;
+
             string projectFullPath = FindContainingCsprojFile(fileSystemEventArgs.FullPath);
             string projectDirectory = Path.GetDirectoryName(projectFullPath);
+            request.ProjectDirectory = projectDirectory;
             request.ProjectId = GetRelativePath(projectDirectory, projectFullPath);
 
             LogEventResponse response = PushLog(request);
@@ -309,13 +319,15 @@ namespace PatternPal.Extension.Commands
             }
 
             LogEventRequest request = CreateStandardLog();
+
             request.EventType = EventType.EvtFileRename;
             request.CodeStateSection = e.Name;
             request.OldFileName = e.OldName;
 
             string projectFullPath = FindContainingCsprojFile(e.FullPath);
-            string projectFolderName = Path.GetDirectoryName(projectFullPath);
-            request.ProjectId = GetRelativePath(projectFolderName, projectFullPath);
+            string projectDirectory = Path.GetDirectoryName(projectFullPath);
+            request.ProjectDirectory = projectDirectory;
+            request.ProjectId = GetRelativePath(projectDirectory, projectFullPath);
 
             LogEventResponse response = PushLog(request);
         }
@@ -355,6 +367,7 @@ namespace PatternPal.Extension.Commands
             string sourceLocation, string codeStateSection)
         {
             LogEventRequest request = CreateStandardLog();
+
             request.EventType = EventType.EvtCompileError;
             request.ParentEventId = parent.EventId;
             request.CompileMessageType = compileMessagetype;
@@ -393,6 +406,7 @@ namespace PatternPal.Extension.Commands
         private static void OnDebugProgram(dbgEventReason reason)
         {
             LogEventRequest request = CreateStandardLog();
+
             request.EventType = EventType.EvtDebugProgram;
             request.ExecutionId = Guid.NewGuid().ToString();
 
@@ -420,8 +434,8 @@ namespace PatternPal.Extension.Commands
             ThreadHelper.ThrowIfNotOnUIThread();
 
             LogEventRequest request = CreateStandardLog();
+
             request.EventType = EventType.EvtFileEdit;
-            
             request.CodeStateSection = GetRelativePath(Path.GetDirectoryName(document.FullName), document.FullName);
             request.ProjectId = document.ProjectItem.ContainingProject.UniqueName;
             request.ProjectDirectory = Path.GetDirectoryName(document.ProjectItem.ContainingProject.FullName);
@@ -443,6 +457,7 @@ namespace PatternPal.Extension.Commands
             }
             
             LogEventRequest request = CreateStandardLog();
+
             request.EventType = EventType.EvtXRecognizerRun;
             string config = recognizeRequest.Recognizers.ToString();
 
@@ -454,7 +469,43 @@ namespace PatternPal.Extension.Commands
 
             LogEventResponse response = PushLog(request);
         }
+        /// <summary>
+        /// Function to push a step by step event to the server. It compiles all required information and sends it to the server.
+        /// </summary>
+        /// <param name="recognizer">Recognizer being used by step-by-step </param>
+        /// <param name="currentInstructionNumber">Current instruction number </param>
+        /// <param name="result">Boolean output</param>
+        /// <param name="documents">all documents being checked against</param>
+        public static void OnStepByStepCheck(string recognizer, int currentInstructionNumber, bool result)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            if (!_doLog)
+            {
+                return;
+            }
+            LogEventRequest request = CreateStandardLog();
 
+            request.EventType = EventType.EvtXStepByStepStep;
+            // config should be dict with recognizer name and current instruction number
+            Dictionary<string,string> config = new Dictionary<string, string>()
+            {
+                { "recognizer", recognizer },
+                { "currentInstructionNumber", currentInstructionNumber.ToString()}
+            };
+
+            request.RecognizerConfig = JsonSerializer.Serialize(config);
+            Dictionary<string,string> results = new Dictionary<string, string>()
+            {
+                { "result", result.ToString() }
+            };
+
+            request.RecognizerResult = JsonSerializer.Serialize(results);
+            
+            Project project = _dte.ActiveDocument.ProjectItem.ContainingProject;
+            request.ProjectId = project.UniqueName;
+
+            LogEventResponse response = PushLog(request);
+        }
         #endregion
 
         /// <summary>
