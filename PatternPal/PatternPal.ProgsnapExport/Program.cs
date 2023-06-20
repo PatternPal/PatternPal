@@ -171,27 +171,7 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
     /// <returns></returns>
     public override int Execute(CommandContext context, Settings settings)
     {
-        _settings = settings;
-        _csvFile = Path.Join(settings.ExportDirectory, "data.csv");
-        _logFile = Path.Join(settings.ExportDirectory, "log.txt");
-        _codeStateExport = Path.Join(settings.ExportDirectory, "codestates");
-        
-        // Create export directory
-        if (_settings.ForceExportDirectory && Directory.Exists(_settings.ExportDirectory))
-        {
-            Directory.Delete(_settings.ExportDirectory, true);
-        }
-        Directory.CreateDirectory(_settings.ExportDirectory);
-        
-        // Create log file
-        using (FileStream fs = File.Create(_logFile)) ;
-        
-        // Create CodeState export directory
-        Directory.CreateDirectory(_codeStateExport);
-
-        // Set-up database
-        _dbContext = new ProgSnap2ContextClass(_settings.ConnectionString);
-        if (!_dbContext.Database.CanConnect())
+        if (!SetUp(settings))
         {
             LogError("Failed connecting to the PostgreSQL-database");
             return 105; // https://github.com/dotnet/templating/wiki/Exit-Codes
@@ -227,6 +207,39 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
         return 0;
     }
 
+    /// <summary>
+    /// Handles the initialization of relevant fields,
+    /// preparing the export directory and establishing a
+    /// connection to the PostgreSQL-database.
+    /// </summary>
+    /// <param name="settings"></param>
+    /// <returns>Whether the database-connection could be established</returns>
+    private bool SetUp(Settings settings)
+    {
+        _settings = settings;
+        _csvFile = Path.Join(settings.ExportDirectory, "data.csv");
+        _logFile = Path.Join(settings.ExportDirectory, "log.txt");
+        _codeStateExport = Path.Join(settings.ExportDirectory, "codestates");
+        
+        // Create export directory
+        if (_settings.ForceExportDirectory && Directory.Exists(_settings.ExportDirectory))
+        {
+            Directory.Delete(_settings.ExportDirectory, true);
+        }
+        Directory.CreateDirectory(_settings.ExportDirectory);
+        
+        // Create log file
+        using (FileStream fs = File.Create(_logFile)) ;
+        
+        // Create CodeState export directory
+        Directory.CreateDirectory(_codeStateExport);
+
+        // Set-up database
+        _dbContext = new ProgSnap2ContextClass(_settings.ConnectionString);
+        
+        return _dbContext.Database.CanConnect();
+    }
+    
     #region Session parsing
     /// <summary>
     /// Parses a single session by obtaining its data, writing it to *.csv and
@@ -308,17 +321,9 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
     /// <param name="message"></param>
     private void LogInfo(string message)
     {
-        if(_settings is {Quiet: false, Verbose: true})
-        {
-            AnsiConsole.Write(new Markup($"[blue]Info:[/] {message}.\n"));
-        }
-
-        if (_settings.LogLevel >= LogLevel.Info)
-        {
-            using FileStream fs = File.Open(_logFile, FileMode.Append);
-            using StreamWriter sw = new StreamWriter(fs);
-            sw.WriteLine($"[INFO] {message}");
-        }
+        bool toConsole = _settings is {Quiet: false, Verbose: true};
+        bool toFile = _settings.LogLevel >= LogLevel.Info;
+        Log(message, "[blue]Info:[/] ", toConsole, "[INFO] ", toFile);
     }
 
     /// <summary>
@@ -328,17 +333,9 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
     /// <param name="message"></param>
     private void LogWarning(string message)
     {
-        if (!_settings.Quiet)
-        {
-            AnsiConsole.Write(new Markup($"[orange]Warning:[/] {message}.\n"));
-        }
-        
-        if (_settings.LogLevel >= LogLevel.Warning)
-        {
-            using FileStream fs = File.Open(_logFile, FileMode.Append);
-            using StreamWriter sw = new StreamWriter(fs);
-            sw.WriteLine($"[WARNING] {message}");
-        }
+        bool toConsole = !_settings.Quiet;
+        bool toFile = _settings.LogLevel >= LogLevel.Warning;
+        Log(message, "[orange]Warning:[/] ", toConsole, "[WARNING] ", toFile);
     }
     
     /// <summary>
@@ -348,16 +345,32 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
     /// <param name="message"></param>
     private void LogError(string message)
     {
-        if (!_settings.Quiet)
+        bool toConsole = !_settings.Quiet;
+        bool toFile = _settings.LogLevel >= LogLevel.Error;
+        Log(message, "[red]Error:[/] ", toConsole, "[ERROR] ", toFile);
+    }
+
+    /// <summary>
+    /// Wraps all logging (to the logfile and the console) used by the application while
+    /// enabling finer customization.
+    /// </summary>
+    /// <param name="message">The message to be logged</param>
+    /// <param name="consoleHead">String to be included before the message when logging to the console</param>
+    /// <param name="toConsole">Whether to log to the console</param>
+    /// <param name="fileHead">String to be included before the message when logging to the logfile</param>
+    /// <param name="toFile">Whether to log to the logfile</param>
+    private void Log(string message, string consoleHead, bool toConsole, string fileHead, bool toFile)
+    {
+        if (toConsole)
         {
-            AnsiConsole.Write(new Markup($"[red]Error:[/] {message}.\n"));
+            AnsiConsole.Write(new Markup($"{consoleHead}{message}.\n"));
         }
-        
-        if (_settings.LogLevel >= LogLevel.Error)
+
+        if (toFile)
         {
             using FileStream fs = File.Open(_logFile, FileMode.Append);
             using StreamWriter sw = new StreamWriter(fs);
-            sw.WriteLine($"[ERROR] {message}");
+            sw.WriteLine($"{fileHead}{message}.");
         }
     }
     #endregion
