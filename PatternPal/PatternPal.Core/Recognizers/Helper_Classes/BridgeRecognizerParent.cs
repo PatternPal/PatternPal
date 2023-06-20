@@ -28,7 +28,7 @@ internal abstract class BridgeRecognizerParent
         ICheck fieldOrProperty = HasFieldOrPropertyCheck(out PropertyCheck implementationProperty, implementationCheck);
 
         // req. b
-        MethodCheck methodInAbstraction = Method(Priority.Knockout);
+        MethodCheck methodInAbstraction = Method(Priority.Knockout, "2b. Has a method.");
 
         // req. c
         MethodCheck methodInAbstractionWithUse = HasMethodWithUseCheck(methodInImplementation);
@@ -38,7 +38,12 @@ internal abstract class BridgeRecognizerParent
             out ConstructorCheck setImplementationConstructor, out MethodCheck setImplementationMethod, 
             implementationCheck, implementationProperty);
 
-        ClassCheck abstractionCheck = Class(Priority.High, fieldOrProperty, methodInAbstraction, methodInAbstractionWithUse, setAvailabilityFieldOrProperty);
+        ClassCheck abstractionCheck = Class(Priority.High,
+            "2. Abstraction class.",
+            fieldOrProperty, 
+            methodInAbstraction, 
+            methodInAbstractionWithUse, 
+            setAvailabilityFieldOrProperty);
 
         // requirements checks for Concrete Implementations
         // req. a & b 
@@ -46,16 +51,16 @@ internal abstract class BridgeRecognizerParent
 
         // requirements checks for Refined Abstraction
         // req. a
-        ICheck inheritsFromAbstraction = Inherits(Priority.Knockout, abstractionCheck);
+        ICheck inheritsFromAbstraction = Inherits(Priority.Knockout,"4a. Inherits from the Abstraction class.", abstractionCheck);
 
         // req. b
-        ICheck methodInRefinedAbstraction = Method(Priority.High);
+        ICheck methodInRefinedAbstraction = Method(Priority.High, "4b. Has a method.");
 
-        ClassCheck refinedAbstractionCheck = Class(Priority.High, inheritsFromAbstraction, methodInRefinedAbstraction);
+        ClassCheck refinedAbstractionCheck = Class(Priority.High,"4. Is the Refined Abstraction class.", inheritsFromAbstraction, methodInRefinedAbstraction);
 
         // requirements checks for Client
         // req. a 
-        MethodCheck methodUseInAbstraction = Method(Priority.Mid, Uses(Priority.Mid, methodInAbstractionWithUse));
+        MethodCheck methodUseInAbstraction = Method(Priority.Mid, "5a. Has a method that calls a method in the Abstraction class.", Uses(Priority.Mid, methodInAbstractionWithUse));
 
         // req. c
         ICheck setsImplementationField = SetsImplementationFieldCheck(implementationProperty, setImplementationConstructor, setImplementationMethod);
@@ -63,8 +68,9 @@ internal abstract class BridgeRecognizerParent
         
         ClassCheck clientCheck = Class( 
             Priority.Low,
+            "5.Is the Client class.",
             methodUseInAbstraction,
-            Creates(Priority.Low, concreteImplementationCheck), 
+            Creates(Priority.Low, "5b. Creates a Concrete Implementation instance.", concreteImplementationCheck), 
             setsImplementationField );
 
         return new ICheck[]
@@ -114,6 +120,7 @@ internal abstract class BridgeRecognizerParent
 
         return Any(
             Priority.Knockout,
+            "2a. Has a private or protected field or property with the Implementation type.",
             Field(
                 Priority.Knockout,
                 Type( Priority.Knockout, 
@@ -142,6 +149,7 @@ internal abstract class BridgeRecognizerParent
     {
         return Method(
             Priority.High,
+            "2c. Has a method that calls a method in the Implementation interface or abstract class.",
             Uses(
                 Priority.High,
                 methodInImplementation
@@ -193,6 +201,7 @@ internal abstract class BridgeRecognizerParent
 
         return Any(
             Priority.Mid,
+            "2d. Has either a property as described in 2a), or a constructor or a method with a parameter that has the Implementation type and uses the field as described in 2a).",
             implementationProperty,
             setImplementationConstructor,
             setImplementationMethod
@@ -221,6 +230,7 @@ internal abstract class BridgeRecognizerParent
     {
         return Any(
             Priority.Low,
+            "5c. Sets the field or property in Abstraction using a constructor, method or property.",
             Uses(Priority.Low, 
                 setImplementationConstructor
             ),
