@@ -362,7 +362,6 @@ abstract file class DecoratorRecognizerParent
 /// <summary>
 /// A class implementing the parts of the Decorator recognizer in case it uses an abstract class.
 /// </summary>
-//TODO check whether can be file scoped
 file class DecoratorRecognizerWithAbstractClass : DecoratorRecognizerParent
 {
     /// <inheritdoc />
@@ -482,7 +481,6 @@ file class DecoratorRecognizerWithInterface : DecoratorRecognizerParent, IStepBy
         MethodCheck componentMethod = ComponentMethod();
         ICheck component = Component(componentMethod);
 
-        // Step 1: The constructor is ONLY private
         generateStepsList.Add(
             new SimpleInstruction(
                 DecoratorInstructions.Step1,
