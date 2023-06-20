@@ -80,12 +80,12 @@ internal class SingletonRecognizer : IRecognizer,
                 SingletonInstructions.Step1,
                 SingletonInstructions.Explanation1,
                 new List< ICheck >
-                    {
-                        Class(
-                            Priority.Knockout,
-                            onlyPrivateProtectedConstructor
-                        )
-                    }
+                        {
+                            Class(
+                                Priority.Knockout,
+                                onlyPrivateProtectedConstructor
+                            )
+                        }
             ));
 
         
@@ -215,23 +215,23 @@ internal class SingletonRecognizer : IRecognizer,
     internal ICheck[ ] IsStaticPublicOrInternal()
     {
         return new ICheck[ ]
-               {
-                   Modifiers(
-                       Priority.Knockout,
-                       Modifier.Static
-                   ),
-                   Any(
-                       Priority.Knockout,
-                       Modifiers(
-                           Priority.Knockout,
-                           Modifier.Public
-                       ),
-                       Modifiers(
-                           Priority.Knockout,
-                           Modifier.Internal
-                       )
-                   )
-               };
+        {
+           Modifiers(
+               Priority.Knockout,
+               Modifier.Static
+           ),
+           Any(
+               Priority.Knockout,
+               Modifiers(
+                   Priority.Knockout,
+                   Modifier.Public
+               ),
+               Modifiers(
+                   Priority.Knockout,
+                   Modifier.Internal
+               )
+           )
+        };
     }
 
     /// <summary>
@@ -255,16 +255,16 @@ internal class SingletonRecognizer : IRecognizer,
     {
         //TODO: Right now it only checks if the field is called somewhere in a method and if the return type is the same as the class, not at which conditions
         return new ICheck[ ]
-               {
-                   Uses(
-                       Priority.Mid,
-                       checkSingletonC
-                   ),
-                   Type(
-                       Priority.Knockout,
-                       ICheck.GetCurrentEntity
-                   )
-               };
+        {
+           Uses(
+               Priority.Mid,
+               checkSingletonC
+           ),
+           Type(
+               Priority.Knockout,
+               ICheck.GetCurrentEntity
+           )
+        };
     }
 
     /// <summary>
