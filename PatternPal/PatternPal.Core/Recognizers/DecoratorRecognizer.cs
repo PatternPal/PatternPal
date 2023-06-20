@@ -1,7 +1,8 @@
-﻿#region
+#region
 
 using PatternPal.Core.StepByStep;
 using PatternPal.SyntaxTree.Models;
+
 using PatternPal.Core.StepByStep.Resources.Instructions;
 
 using static PatternPal.Core.Checks.CheckBuilder;
@@ -14,31 +15,29 @@ namespace PatternPal.Core.Recognizers;
 /// A <see cref="IRecognizer"/> that is used to determine if the provided files or project implements the decorator pattern
 /// </summary>
 /// <remarks>
-/// 1) Requirements for Component:
-///     a) is an interface / abstract class
-///     b) has declared a method
-///         i) if the class is an abstract class instead of an interface the method has to be an abstract method
-/// 2) Requirements for Concrete Component:
-///     a) is an implementation of Component<br/>
-///     b) does not have a field of type Component
-///     c) if Component is an abstract class, it overrides the method of Component
-/// 3) Requirements for Base Decorator:
-///     a) is an implementation of Component
-///     b) is an abstract class
-///     c) has a field of type Component
-///     d) the field is private
-///     d) has a non-private constructor with a parameter of type Component, which it passes to its field
-///     e) calls the method of its field in the implementation of the method of Component<br/>
-///         i) if Component is an abstract class, it overrides the method of Component
-/// 4) Requirements for Concrete Decorator:
-///     a) inherits from Base Decorator
-///     b) calls the method of its parent in the implementation of the method of Component
-///     c) has a function providing extra behaviour which it calls in the implementation of the method of Component
-///     d) the function providing extra behaviour does not use the method of Component<br/>
-/// 5) Requirements for Client:
-///     a) has created an object of the type ConcreteComponent
-///     b) has created an object of the type ConcreteDecorator, to which it passes the ConcreteComponent
-///     c) has called the method of ConcreteDecorator
+///     Requirements for Component: <br/>
+///         a) is an interface / abstract class <br/>
+///         b) has declared a method <br/>
+///             i) if the class is an abstract class instead of an interface the method has to be an abstract method <br/>
+///     Requirements for Concrete Component: <br/>
+///         a) is an implementation of Component <br/>
+///         b) does not have a field of type Component <br/>
+///         c) if Component is an abstract class, it overrides the method of Component <br/>
+///     Requirements for Base Decorator: <br/>
+///         a) is an implementation of Component <br/>
+///         b) is an abstract class <br/>
+///         c) has a field of type Component <br/>
+///         d) has a constructor with a parameter of type Component, which it passes to its field <br/>
+///         e) calls the method of its field in the implementation of the method of Component <br/>
+///             i) if Component is an abstract class, it overrides the method of Component <br/>
+///     Requirements for Concrete Decorator: <br/>
+///         a) inherits from Base Decorator <br/>
+///         b) calls the method of its parent in the implementation of the method of Component <br/>
+///         c) has a function providing extra behaviour which it calls in the implementation of the method of Component <br/>
+///     Requirements for Client: <br/>
+///         a) has created an object of the type ConcreteComponent <br/>
+///         b) has created an object of the type ConcreteDecorator, to which it passes the ConcreteComponent <br/>
+///         c) has called the method of ConcreteDecorator <br/>
 /// </remarks>
 internal class DecoratorRecognizer : IRecognizer
 {
@@ -85,20 +84,20 @@ abstract file class DecoratorRecognizerParent
     {
         ICheck[] result = new ICheck[5];
 
-        //Checks for requirement 1
+        //Checks for Component entity
         MethodCheck componentMethod = ComponentMethod();
         ICheck component = Component(componentMethod);
 
-        //Checks for requirement 2
+        //Checks for Concrete Component entity
         ClassCheck concreteComponent = ConcreteComponent(component, componentMethod);
 
-        //Checks for requirement 3
+        //Checks for Base Decorator entity
         FieldCheck baseDecoratorField = BaseDecoratorField(component);
         MethodCheck baseDecoratorMethod = BaseDecoratorMethod(componentMethod, baseDecoratorField);
         ConstructorCheck baseDecoratorConstructor = BaseDecoratorConstructor(baseDecoratorField, component);
         ClassCheck baseDecorator = BaseDecorator(component, baseDecoratorField, baseDecoratorConstructor, baseDecoratorMethod);
 
-        //Checks for requirement 4
+        //Checks for Concrete Decorator entity
         MethodCheck concreteDecoratorExtraMethod = ConcreteDecoratorExtraMethod(componentMethod);
         MethodCheck concreteDecoratorMethod = ConcreteDecoratorMethod(baseDecoratorMethod, concreteDecoratorExtraMethod);
         ClassCheck concreteDecorator = ConcreteDecorator(baseDecorator, concreteDecoratorExtraMethod, concreteDecoratorMethod);
@@ -241,19 +240,19 @@ abstract file class DecoratorRecognizerParent
     /// Checks part 3 of the requirements defined for a Decorator.
     /// </remarks>
     protected ClassCheck BaseDecorator(ICheck component, FieldCheck baseDecoratorField, ConstructorCheck baseDecoratorConstructor, MethodCheck baseDecoratorMethod) =>
-            Class(
-                Priority.Knockout,
-                "Base Decorator class",
-                Modifiers(
-                    Priority.High,
-                    "is an abstract class.",
-                    Modifier.Abstract
-                ),
-                Extends(component),
-                baseDecoratorField,
-                baseDecoratorConstructor,
-                baseDecoratorMethod
-            );
+        Class(
+            Priority.Knockout,
+            "Base Decorator class",
+            Modifiers(
+                Priority.High,
+                "is an abstract class.",
+                Modifier.Abstract
+            ),
+            Extends(component),
+            baseDecoratorField,
+            baseDecoratorConstructor,
+            baseDecoratorMethod
+        );
 
     /// <summary>
     /// Check for the extra <see cref="MethodCheck"/> of the ConcreteDecorator of the Decorator pattern.
@@ -263,7 +262,7 @@ abstract file class DecoratorRecognizerParent
     /// Checks part 4c of the requirements defined for a Decorator.
     /// </remarks>
     protected MethodCheck ConcreteDecoratorExtraMethod(MethodCheck componentMethod) => Method(
-        Priority.Mid, 
+        Priority.Mid,
         "has a function providing extra behaviour which it calls in the implementation of the method of Component.",
         Not(
             Priority.Low,
@@ -307,17 +306,17 @@ abstract file class DecoratorRecognizerParent
     /// Checks part 4 of the requirements defined for a Decorator.
     /// </remarks>
     protected ClassCheck ConcreteDecorator(ClassCheck baseDecorator, MethodCheck concreteDecoratorExtraMethod, MethodCheck concreteDecoratorMethod) =>
-            Class(
+        Class(
+            Priority.Knockout,
+            "Concrete Decorator class",
+            Inherits(
                 Priority.Knockout,
-                "Concrete Decorator class",
-                Inherits(
-                    Priority.Knockout,
-                    "inherits from Base Decorator.",
-                    baseDecorator
-                ),
-                concreteDecoratorExtraMethod,
-                concreteDecoratorMethod
-            );
+                "inherits from Base Decorator.",
+                baseDecorator
+            ),
+            concreteDecoratorExtraMethod,
+            concreteDecoratorMethod
+        );
 
     /// <summary>
     /// Check for the Client of the Decorator pattern.
@@ -327,37 +326,37 @@ abstract file class DecoratorRecognizerParent
     /// Checks part 5 of the requirements defined for a Decorator.
     /// </remarks>
     protected ClassCheck Client(MethodCheck componentMethod, MethodCheck baseDecoratorMethod, MethodCheck concreteDecoratorMethod, ClassCheck concreteDecorator, ClassCheck concreteComponent) =>
-            Class(
+        Class(
+            Priority.Low,
+            "Client class",
+            Any(
                 Priority.Low,
-                "Client class",
-                Any(
+                "has called the method of ConcreteDecorator.",
+                Uses(
                     Priority.Low,
-                    "has called the method of ConcreteDecorator.",
-                    Uses(
-                        Priority.Low,
-                        componentMethod
-                    ),
-                    Uses(
-                        Priority.Low,
-                        baseDecoratorMethod
-                    ),
-                    Uses(
-                        Priority.Low,
-                        concreteDecoratorMethod
-                    )
+                    componentMethod
                 ),
-                Creates(
+                Uses(
                     Priority.Low,
-                    "has created an object of the type ConcreteDecorator, to which it passes the ConcreteComponent.",
-                    concreteDecorator
+                    baseDecoratorMethod
                 ),
-                Creates(
+                Uses(
                     Priority.Low,
-                    "has created an object of the type ConcreteComponent.",
-                    concreteComponent
+                    concreteDecoratorMethod
                 )
-            );
-    }
+            ),
+            Creates(
+                Priority.Low,
+                "has created an object of the type ConcreteDecorator, to which it passes the ConcreteComponent.",
+                concreteDecorator
+            ),
+            Creates(
+                Priority.Low,
+                "has created an object of the type ConcreteComponent.",
+                concreteComponent
+            )
+        );
+}
 
 /// <summary>
 /// A class implementing the parts of the Decorator recognizer in case it uses an abstract class.
@@ -512,7 +511,7 @@ file class DecoratorRecognizerWithInterface : DecoratorRecognizerParent, IStepBy
                         Extends(component),
                         baseDecoratorField,
                         Method(
-                            Priority.Knockout, 
+                            Priority.Knockout,
                             Modifiers(
                                 Priority.Knockout,
                                 Modifier.Virtual
