@@ -62,7 +62,8 @@ namespace PatternPal.Extension.Views
         {
             if (_viewModel.TrySelectPreviousInstruction())
             {
-                resultTextBlock.Visibility = Visibility.Hidden;
+                correctTextBlock.Visibility = Visibility.Hidden;
+                incorrectTextBlock.Visibility = Visibility.Hidden;
                 CheckIfNextPreviousButtonsAvailable();
             }
         }
@@ -78,7 +79,8 @@ namespace PatternPal.Extension.Views
         {
             if (_viewModel.TrySelectNextInstruction())
             {
-                resultTextBlock.Visibility = Visibility.Hidden;
+                correctTextBlock.Visibility = Visibility.Hidden;
+                incorrectTextBlock.Visibility = Visibility.Hidden;
                 CheckIfNextPreviousButtonsAvailable();
             }
         }
@@ -150,7 +152,9 @@ namespace PatternPal.Extension.Views
                 SubscribeEvents.OnStepByStepCheck( request.Recognizer.ToString(), request.InstructionNumber, result);
                 if (!result)
                 {
-                    resultTextBlock.Visibility = Visibility.Hidden;
+                    correctTextBlock.Visibility = Visibility.Hidden;
+                    incorrectTextBlock.Visibility = Visibility.Visible;
+
                     return;
                 }
             }
@@ -160,7 +164,10 @@ namespace PatternPal.Extension.Views
                 return;
             }
 
-            resultTextBlock.Visibility = Visibility.Visible;
+            incorrectTextBlock.Visibility = Visibility.Hidden;
+            correctTextBlock.Visibility = Visibility.Visible;
+            
+
             NextInstructionButton.IsEnabled = true;
         }
 

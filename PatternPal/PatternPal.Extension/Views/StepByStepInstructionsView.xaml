@@ -133,13 +133,25 @@
                 &gt;&gt;
             </Button>
         </StackPanel>
-        <TextBlock x:Name ="resultTextBlock"
+        <TextBlock x:Name ="correctTextBlock"
                    Text ="Correct!"
                    Grid.Row="4"
                    TextWrapping="Wrap"
                    TextAlignment="Left"
                    FontSize="15"
                    Foreground="Green"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,10"
+                   MaxWidth="380"
+                   Visibility="Hidden">
+        </TextBlock>
+        <TextBlock x:Name ="incorrectTextBlock"
+                   Text ="Incorrect!"
+                   Grid.Row="4"
+                   TextWrapping="Wrap"
+                   TextAlignment="Left"
+                   FontSize="15"
+                   Foreground="Red"
                    HorizontalAlignment="Center"
                    Margin="0,0,0,10"
                    MaxWidth="380"
