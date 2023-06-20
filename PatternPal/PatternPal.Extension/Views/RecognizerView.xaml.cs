@@ -179,7 +179,7 @@ namespace PatternPal.Extension.Views
 
             foreach (RecognizeResult result in results)
             {
-                if (result.Results.Count > 0)
+                if (result.EntityResults.Count > 0)
                 {
                     viewModels.Add(new PatternResultViewModel(result));
                 }
