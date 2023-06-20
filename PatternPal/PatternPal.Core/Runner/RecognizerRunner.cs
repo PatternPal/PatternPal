@@ -126,7 +126,7 @@ public class RecognizerRunner
     /// <summary>
     /// Create a new recognizer runner instance.
     /// </summary>
-    /// <param name="filePaths">The path of the file to run the <paramref name="instruction"/> on.</param>
+    /// <param name="filePaths">The paths of the file to run the <paramref name="instruction"/> on.</param>
     /// <param name="instruction">The <see cref="IInstruction"/> to run.</param>
     public RecognizerRunner(
         IEnumerable< string > filePaths,
