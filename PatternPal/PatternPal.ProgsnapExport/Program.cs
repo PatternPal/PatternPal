@@ -13,14 +13,16 @@ namespace PatternPal.ProgSnapExport;
 // ReSharper disable once ClassNeverInstantiated.Global
 internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Settings>
 {
+    /// <summary>
+    /// Defines all CLI-arguments.
+    /// </summary>
     // ReSharper disable once ClassNeverInstantiated.Global
     public sealed class Settings : CommandSettings
     {
-        // TODO Add validation
+        // CLI Settings
         [Description("Path to config file; defaults to \"./config.json\".")]
         [CommandArgument(0, "[configFile]")]
         [DefaultValue("./config.json")]
-        // ReSharper disable once 
         public string ConfigFile { get; init; }
 
         [Description("Path to export directory; defaults to \"./export\".")]
@@ -29,14 +31,14 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
         public string ExportDirectory { get; init;  }
 
         // TODO Add format description to timestamps; add validation; proper type
-        [Description("Specifies the starting point of the time interval to be exported.")]
+        [Description("Specifies the starting point of the time interval to be exported. Format: \"YYYY-MM-DD HH:MM:SS\".")]
         [CommandOption("-s|--start")]
-        public string? StartInterval { get; init; }
+        public string? StartIntervalStr { get; init; }
 
         // TODO Add format description to timestamps; add validation; proper type
-        [Description("Specifies the ending point of the time interval to be exported.")]
+        [Description("Specifies the ending point of the time interval to be exported. Format: \"YYYY-MM-DD HH:MM:SS\".")]
         [CommandOption("-e|--end")]
-        public string? EndInterval { get; init; }
+        public string? EndIntervalStr { get; init; }
         
         [CommandOption("--csv-only")]
         [DefaultValue(false)]
@@ -46,12 +48,13 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
         [DefaultValue(false)]
         public bool Verbose { get; init; }
 
+        // Properties
         public string ConnectionString { get; private set; }
-
-        // TODO Add storage option for online
+        public DateTimeOffset? StartInterval { get; private set; } = null;
+        public DateTimeOffset? EndInterval { get; private set; } = null;
 
         /// <summary>
-        /// TODO
+        /// Extends the build-in validation of the supplied CLI-arguments.
         /// </summary>
         /// <returns></returns>
         public override ValidationResult Validate()
@@ -64,26 +67,47 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
             }
 
             // Config file
+            if (!File.Exists(ConfigFile))
+            { 
+                return ValidationResult.Error($"Invalid path to config file specified: \"{ConfigFile}\".");
+            }
+
+            try
             {
-                if (!File.Exists(ConfigFile))
+                Dictionary<string, string> config =
+                    JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(ConfigFile));
+                ConnectionString =
+                    $"Server={config["ServerUrl"]};Username={config["Username"]};Database={config["Database"]};Password={config["Password"]}";
+            }
+            catch (JsonException)
+            {
+                return ValidationResult.Error("Config file contained invalid JSON.");
+            }
+            catch (KeyNotFoundException e)
+            {
+                return ValidationResult.Error(e.Message);
+            }
+
+            // Intervals
+            if (StartIntervalStr != null)
+            {
+                if (!DateTimeOffset.TryParse(StartIntervalStr, out DateTimeOffset parsed))
                 {
-                    return ValidationResult.Error("Invalid path to config file specified");
+                    return ValidationResult.Error($"Format of start interval was invalid: \"{StartIntervalStr}\".");
                 }
 
-                try
-                {
-                    Dictionary<string, string> config =
-                        JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(ConfigFile));
-                    ConnectionString =
-                        $"Server={config["ServerUrl"]};Username={config["Username"]};Database={config["Database"]};Password={config["Password"]}";
-                }
-                catch
-                {
-                    return ValidationResult.Error("Invalid JSON specified");
-                }
+                StartInterval = parsed;
             }
             
-            // TODO Add timestamp validation
+            if (EndIntervalStr != null)
+            {
+                if (!DateTimeOffset.TryParse(EndIntervalStr, out DateTimeOffset parsed))
+                {
+                    return ValidationResult.Error($"Format of end interval was invalid: \"{EndIntervalStr}\".");
+                }
+
+                EndInterval = parsed;
+            }
             
             return ValidationResult.Success();
         }
