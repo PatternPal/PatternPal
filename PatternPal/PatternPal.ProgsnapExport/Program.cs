@@ -303,6 +303,7 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
     /// <param name="data"></param>
     private void RestoreCodeState(ref List<ProgSnap2Event> data)
     {
+        // TODO This should actually be done on a per-project basis
         (Guid Id, bool Full)? previousCodeState = null; 
         
         foreach (ProgSnap2Event ev in data)
