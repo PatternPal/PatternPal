@@ -59,35 +59,35 @@ internal class ParameterCheck : CheckBase
         if (!nodeParameters.Any())
         {
             return new NodeCheckResult
-                   {
-                       ChildrenCheckResults = new List<ICheckResult>{new LeafCheckResult
-                       {
-                           Correct = false,
-                           Priority = Priority,
-                           Check = this,
-                           MatchedNode = null,
-                           DependencyCount = 0,
-                           FeedbackMessage = String.Empty
-                       }},
-                       FeedbackMessage = $"The method has no parameters.",
-                       Priority = Priority,
-                       DependencyCount = DependencyCount,
-                       MatchedNode = node,
-                       Check = this,
-                   };
+            {
+               ChildrenCheckResults = new List<ICheckResult>{new LeafCheckResult
+               {
+                   Correct = false,
+                   Priority = Priority,
+                   Check = this,
+                   MatchedNode = null,
+                   DependencyCount = 0,
+                   FeedbackMessage = String.Empty
+               }},
+               FeedbackMessage = $"The method has no parameters.",
+               Priority = Priority,
+               DependencyCount = DependencyCount,
+               MatchedNode = node,
+               Check = this,
+            };
         }
         // No TypeChecks were provided
         if (!_parameterTypes.Any())
         {
             return new NodeCheckResult
-                   {
-                       ChildrenCheckResults = subCheckResultsResults,
-                       FeedbackMessage = $"No TypeChecks were provided.",
-                       Priority = Priority,
-                       DependencyCount = DependencyCount,
-                       MatchedNode = node,
-                       Check = this,
-                   };
+            {
+               ChildrenCheckResults = subCheckResultsResults,
+               FeedbackMessage = $"No TypeChecks were provided.",
+               Priority = Priority,
+               DependencyCount = DependencyCount,
+               MatchedNode = node,
+               Check = this,
+            };
         }
 
         // For each typeCheck, check whether one of the parameters of node has the correct type
@@ -100,14 +100,14 @@ internal class ParameterCheck : CheckBase
             if (nodeParameters.Count == 0)
             {
                 ICheckResult temp = new LeafCheckResult
-                                    {
-                                        Priority = Priority,
-                                        Correct = false,
-                                        FeedbackMessage = "There are less parameters than TypeChecks",
-                                        DependencyCount = typeCheck.DependencyCount,
-                                        MatchedNode = node,
-                                        Check = this,
-                                    };
+                {
+                    Priority = Priority,
+                    Correct = false,
+                    FeedbackMessage = "There are less parameters than TypeChecks",
+                    DependencyCount = typeCheck.DependencyCount,
+                    MatchedNode = node,
+                    Check = this,
+                };
                 subCheckResultsResults.Add(temp);
                 break;
             }
@@ -138,13 +138,13 @@ internal class ParameterCheck : CheckBase
         }
 
         return new NodeCheckResult
-               {
-                   ChildrenCheckResults = subCheckResultsResults,
-                   FeedbackMessage = $"Found parameters for following node: {node}.",
-                   Priority = Priority,
-                   DependencyCount = DependencyCount,
-                   MatchedNode = node,
-                   Check = this,
-               };
+        {
+           ChildrenCheckResults = subCheckResultsResults,
+           FeedbackMessage = $"Found parameters for following node: {node}.",
+           Priority = Priority,
+           DependencyCount = DependencyCount,
+           MatchedNode = node,
+           Check = this,
+        };
     }
 }

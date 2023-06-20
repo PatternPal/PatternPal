@@ -1,7 +1,6 @@
 ﻿#region
 
 using PatternPal.SyntaxTree.Models;
-
 using static PatternPal.Core.Checks.CheckBuilder;
 
 #endregion
@@ -162,8 +161,7 @@ internal abstract class AdapterRecognizerParent
     /// </summary>
     public FieldCheck ContainsServiceField(ClassCheck service)
     {
-        {
-            return Field(
+        return Field(
                 Priority.Knockout,
                 Modifiers(
                     Priority.Knockout,
@@ -173,8 +171,7 @@ internal abstract class AdapterRecognizerParent
                     Priority.Knockout,
                     service
                 )
-            );
-        }
+        );
     }
 
     /// <summary>
@@ -195,7 +192,7 @@ internal abstract class AdapterRecognizerParent
     }
 
     /// <summary>
-    /// An <see cref="ICheck"/> which will determine if the parentcheck ueses the <paramref name="service"/> class directly or via the <paramref name="serviceField"/> field.
+    /// An <see cref="ICheck"/> which will determine if the parentcheck uses the <paramref name="service"/> class directly or via the <paramref name="serviceField"/> field.
     /// </summary>
     ICheck UsesServiceClass(ClassCheck service, FieldCheck serviceField)
     {

@@ -126,7 +126,7 @@ public class RecognizerRunner
     /// <summary>
     /// Create a new recognizer runner instance.
     /// </summary>
-    /// <param name="filePath">The path of the file to run the <paramref name="instruction"/> on.</param>
+    /// <param name="filePaths">The paths of the file to run the <paramref name="instruction"/> on.</param>
     /// <param name="instruction">The <see cref="IInstruction"/> to run.</param>
     public RecognizerRunner(
         IEnumerable< string > filePaths,
@@ -618,15 +618,18 @@ public class RecognizerRunner
                                 {
                                     case LeafCheckResult:
                                         return false;
+
                                     case NotCheckResult notCheckResult:
                                         return HasDescendantResult(
                                             notCheckResult.NestedResult,
                                             relevantResult);
+
                                     case NodeCheckResult nodeCheckResult:
                                         return nodeCheckResult.ChildrenCheckResults.Any(
                                             childResult => HasDescendantResult(
                                                 childResult,
                                                 relevantResult));
+
                                     default:
                                         throw new ArgumentException($"Unsupported CheckResult type: {parentResult.GetType()}");
                                 }
@@ -640,6 +643,7 @@ public class RecognizerRunner
                         resultsByNode,
                         nodeResult);
                     break;
+
                 case NotCheckResult notResult:
                     SortResultsByPrioritiesImpl(
                         resultsByNode,
@@ -648,6 +652,7 @@ public class RecognizerRunner
                         notResult.NestedResult.Priority,
                         notResult.NestedResult.Score);
                     break;
+
                 default:
                     throw new ArgumentException($"{childResult} is not a supported ICheckResult");
             }
