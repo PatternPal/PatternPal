@@ -78,8 +78,8 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
         // Properties
         public string ConnectionString { get; private set; }
         public string? CodeStateDirectory { get; private set; }
-        public DateTimeOffset? StartInterval { get; private set; } = null;
-        public DateTimeOffset? EndInterval { get; private set; } = null;
+        public DateTime? StartInterval { get; private set; } = null;
+        public DateTime? EndInterval { get; private set; } = null;
 
         /// <summary>
         /// Extends the build-in validation of the supplied CLI-arguments.
@@ -140,7 +140,7 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
             // Intervals
             if (StartIntervalStr != null)
             {
-                if (!DateTimeOffset.TryParse(StartIntervalStr, out DateTimeOffset parsed))
+                if (!DateTime.TryParse(StartIntervalStr, out DateTime parsed))
                 {
                     return ValidationResult.Error($"Format of start interval was invalid: \"{StartIntervalStr}\".");
                 }
@@ -150,7 +150,7 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
             
             if (EndIntervalStr != null)
             {
-                if (!DateTimeOffset.TryParse(EndIntervalStr, out DateTimeOffset parsed))
+                if (!DateTime.TryParse(EndIntervalStr, out DateTime parsed))
                 {
                     return ValidationResult.Error($"Format of end interval was invalid: \"{EndIntervalStr}\".");
                 }
@@ -176,14 +176,26 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
             return 105; // https://github.com/dotnet/templating/wiki/Exit-Codes
         }
 
-        // TODO We should always query within the interval the first query was performed in, as in:
-        //  1) If no bounds are specified, define a Now() here.
-        //  2) If a bound is specified, check if it's not later in the future than now.
+        // We set the lower and the upper bounds to our query;
+        // if StartInterval is defined we check if it is later than epoch and -- if so -- convert to UTC.
+        // Similarly we parse the EndInterval, but we compare it against now.
+        DateTime lower = DateTime.UnixEpoch;
+        if (_settings.StartInterval != null && _settings.StartInterval.Value > lower)
+        {
+            lower = DateTime.SpecifyKind(_settings.StartInterval.Value, DateTimeKind.Utc);
+        }
+
+        DateTime upper = DateTime.UtcNow;
+        if (_settings.EndInterval != null && _settings.EndInterval.Value < upper)
+        {
+            upper = DateTime.SpecifyKind(_settings.EndInterval.Value, DateTimeKind.Utc);
+        }
 
         // Obtain distinct sessionIds
         // Note that we order by ClientDateTime to maintain that ordening in the eventual .csv-export.
         LogInfo("Obtaining distinct sessionIDs...");
         List<Guid> sessions = _dbContext.Events
+            .Where(e => e.ClientDatetime >= lower && e.ClientDatetime <= upper)
             .OrderBy(e => e.ClientDatetime)
             .Select(e => e.SessionId)
             .Distinct()
