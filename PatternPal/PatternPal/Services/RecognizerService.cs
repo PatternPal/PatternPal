@@ -98,7 +98,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                     result.MatchedNode = null;
                 }
 
-                rootResult.Results.Add(result);
+                //rootResult.Results.Add(result);
             }
 
             RecognizeResponse response = new()

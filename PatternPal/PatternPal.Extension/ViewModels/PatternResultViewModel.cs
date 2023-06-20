@@ -33,10 +33,10 @@ namespace PatternPal.Extension.ViewModels
             {
                 List< CheckResultViewModel > results = new List< CheckResultViewModel >();
 
-                foreach (Result result in Result.Results)
-                {
-                    results.Add(new CheckResultViewModel(result));
-                }
+                //foreach (Result result in Result.Results)
+                //{
+                //    results.Add(new CheckResultViewModel(result));
+                //}
 
                 return results;
             }

@@ -44,24 +44,22 @@ public interface ICheckResult
     /// <see cref="Score"/> of its children, and whether the <see cref="LeafCheckResult"/>
     /// are correct.
     /// </summary>
-    Score Score { get; set; }
+    Score Score { get; }
+
+    Score PerfectScore { get; }
+
+    void SetScore(
+        bool perfect,
+        Score score);
 }
 
-/// <summary>
-/// Represents the result of a check which is not a collection of other checks, like <see cref="ModifierCheck"/>, and <see cref="RelationCheck"/>.
-/// </summary>
-public class LeafCheckResult : ICheckResult
+public abstract class BaseCheckResult : ICheckResult
 {
     /// <inheritdoc />
     public required string FeedbackMessage { get; init; }
 
     /// <inheritdoc />
     public required Priority Priority { get; init; }
-
-    /// <summary>
-    /// Whether the check succeeded or failed.
-    /// </summary>
-    public required bool Correct { get; init; }
 
     /// <inheritdoc />
     public required int DependencyCount { get; init; }
@@ -77,7 +75,36 @@ public class LeafCheckResult : ICheckResult
     public bool Pruned { get; set; }
 
     /// <inheritdoc />
-    public Score Score { get; set; }
+    public Score Score { get; private set; }
+
+    /// <inheritdoc />
+    public Score PerfectScore { get; private set; }
+
+    public void SetScore(
+        bool perfect,
+        Score score)
+
+    {
+        if (perfect)
+        {
+            PerfectScore = score;
+        }
+        else
+        {
+            Score = score;
+        }
+    }
+}
+
+/// <summary>
+/// Represents the result of a check which is not a collection of other checks, like <see cref="ModifierCheck"/>, and <see cref="RelationCheck"/>.
+/// </summary>
+public class LeafCheckResult : BaseCheckResult
+{
+    /// <summary>
+    /// Whether the check succeeded or failed.
+    /// </summary>
+    public required bool Correct { get; init; }
 
     /// <summary>
     /// If this <see cref="LeafCheckResult"/> belongs to a <see cref="RelationCheck"/>,
@@ -96,47 +123,19 @@ public class LeafCheckResult : ICheckResult
 /// <summary>
 /// Represents the result of a <see cref="NotCheck"/>.
 /// </summary>
-public class NotCheckResult : ICheckResult
+public class NotCheckResult : BaseCheckResult
 {
-    /// <inheritdoc />
-    public required string FeedbackMessage { get; init; }
-
-    /// <inheritdoc />
-    public required Priority Priority { get; init; }
-
     /// <summary>
     /// The <see cref="ICheckResult"/> of the <see cref="ICheck"/> nested in the <see cref="NotCheck"/>.
     /// </summary>
     public required ICheckResult NestedResult { get; init; }
-
-    /// <inheritdoc />
-    public required int DependencyCount { get; init; }
-
-    /// <inheritdoc />
-    public required INode ? MatchedNode { get; init; }
-
-    /// <inheritdoc />
-    [JsonIgnore]
-    public required ICheck Check { get; init; }
-
-    /// <inheritdoc />
-    public bool Pruned { get; set; }
-
-    /// <inheritdoc />
-    public Score Score { get; set; }
 }
 
 /// <summary>
 /// Represents the result of a check which is a collection of other checks, like <see cref="ClassCheck"/>, and <see cref="FieldCheck"/>.
 /// </summary>
-public class NodeCheckResult : ICheckResult
+public class NodeCheckResult : BaseCheckResult
 {
-    /// <inheritdoc />
-    public required string FeedbackMessage { get; init; }
-
-    /// <inheritdoc />
-    public required Priority Priority { get; init; }
-
     /// <summary>
     /// Collection of the results of the childChecks, like the MethodCheck inside a ClassCheck
     /// </summary>
@@ -146,12 +145,6 @@ public class NodeCheckResult : ICheckResult
     /// Behavior of the collection of sub-<see cref="ICheck"/>s.
     /// </summary>
     public CheckCollectionKind CollectionKind { get; init; } = CheckCollectionKind.All;
-
-    /// <inheritdoc />
-    public required int DependencyCount { get; init; }
-
-    /// <inheritdoc />
-    public required INode ? MatchedNode { get; init; }
 
     /// <summary>
     /// <see langword="true"/> if the sub-<see cref="ICheckResult"/>s are the result of one
@@ -165,14 +158,4 @@ public class NodeCheckResult : ICheckResult
     /// to <see langword="true"/>.
     /// </remarks>
     public bool NodeCheckCollectionWrapper { get; set; }
-
-    /// <inheritdoc />
-    [JsonIgnore]
-    public required ICheck Check { get; init; }
-
-    /// <inheritdoc />
-    public bool Pruned { get; set; }
-
-    /// <inheritdoc />
-    public Score Score { get; set; }
 }
