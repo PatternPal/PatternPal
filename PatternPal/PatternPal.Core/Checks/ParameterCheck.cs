@@ -8,6 +8,8 @@ internal class ParameterCheck : CheckBase
     // Parameters of the provided INode should have types corresponding with this list of TypeChecks.
     private readonly IEnumerable< TypeCheck > _parameterTypes;
 
+    private Score _perfectScore;
+
     // The dependency count, declared as nullable so we can check whether we have calculated it
     // already.
     private int ? _dependencyCount;
@@ -25,21 +27,20 @@ internal class ParameterCheck : CheckBase
         }
     }
 
-    /// <inheritdoc />
-    public override Score PerfectScore(
-        IDictionary< ICheck, ICheckResult > resultsByCheck,
-        ICheckResult result)
+    public override Score PerfectScore
     {
-        Score perfectScore = default;
-        NodeCheckResult nodeCheckResult = (NodeCheckResult)result;
-        foreach (TypeCheck parameterTypeCheck in _parameterTypes)
+        get
         {
-            perfectScore += parameterTypeCheck.PerfectScore(
-                resultsByCheck,
-                nodeCheckResult.ChildrenCheckResults.First(r => r.Check == parameterTypeCheck));
-        }
+            if (_perfectScore.Equals(default))
+            {
+                foreach (TypeCheck parameterTypeCheck in _parameterTypes)
+                {
+                    _perfectScore += parameterTypeCheck.PerfectScore;
+                }
+            }
 
-        return perfectScore;
+            return _perfectScore;
+        }
     }
 
     /// <summary>

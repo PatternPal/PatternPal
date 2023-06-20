@@ -1,4 +1,4 @@
-namespace PatternPal.Core.Checks;
+﻿namespace PatternPal.Core.Checks;
 
 /// <summary>
 /// Checks for the type of an entity. Depending on the <see cref="Func{TResult}"/> provided, this
@@ -9,6 +9,8 @@ internal class TypeCheck : CheckBase
 {
     // Used to get the node to compare against.
     private readonly OneOf< ICheck, GetCurrentEntity > _getNode;
+
+    private Score _perfectScore;
 
     /// <summary>
     /// A <see cref="TypeCheck"/> is dependent on the result of <see cref="_getNode"/>.
@@ -25,37 +27,31 @@ internal class TypeCheck : CheckBase
         _ => true);
 
     /// <inheritdoc />
-    public override Score PerfectScore(
-        IDictionary< ICheck, ICheckResult > resultsByCheck,
-        ICheckResult result)
+    public override Score PerfectScore => _perfectScore.Equals(default)
+        ? _perfectScore = Score.CreateScore(
+                              Priority,
+                              true)
+                          + _getNode.Match(
+                              PerfectScoreFromRelatedCheck,
+                              _ => default)
+        : _perfectScore;
+
+    private static Score PerfectScoreFromRelatedCheck(
+        ICheck relatedCheck)
     {
-        Score perfectScore = Score.CreateScore(
-            Priority,
-            true);
-
-        if (_getNode.IsT0)
+        while (true)
         {
-            ICheck relatedCheck = _getNode.AsT0;
-            while (true)
+            if (relatedCheck is ClassCheck or InterfaceCheck)
             {
-                if (relatedCheck is ClassCheck or InterfaceCheck)
-                {
-                    ICheckResult relatedCheckResult = resultsByCheck[ relatedCheck ];
-                    perfectScore += relatedCheck.PerfectScore(
-                        resultsByCheck,
-                        relatedCheckResult);
-                    break;
-                }
-
-                if (relatedCheck.ParentCheck == null)
-                {
-                    break;
-                }
-                relatedCheck = relatedCheck.ParentCheck;
+                return relatedCheck.PerfectScore;
             }
-        }
 
-        return perfectScore;
+            if (relatedCheck.ParentCheck == null)
+            {
+                return default;
+            }
+            relatedCheck = relatedCheck.ParentCheck;
+        }
     }
 
     /// <summary>

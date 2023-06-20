@@ -161,6 +161,12 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                                          };
                 }
 
+                result.Correctness = resultToProcess.Score.PercentageTo(resultToProcess.PerfectScore) switch
+                {
+                    100 => Result.Types.Correctness.CCorrect,
+                    > 50 => Result.Types.Correctness.CPartiallyCorrect,
+                    _ => Result.Types.Correctness.CIncorrect,
+                };
                 Func< IDictionary< ICheck, ICheckResult >, bool > calcCorrect = check2Result =>
                                                                                 {
                                                                                     //Score perfectScore = resultToProcess.Check.PerfectScore(

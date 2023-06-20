@@ -268,10 +268,7 @@ file class TestCheck : ICheck
     public Func< List< INode > > Result { get; }
     public int DependencyCount { get; }
     public ICheck ? ParentCheck { get; set; }
-
-    public Score PerfectScore(
-        IDictionary< ICheck, ICheckResult > resultsByCheck,
-        ICheckResult result) => default;
+    public Score PerfectScore { get; }
 
     public ICheckResult Check(
         IRecognizerContext ctx,

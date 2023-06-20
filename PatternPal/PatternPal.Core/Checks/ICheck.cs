@@ -63,9 +63,7 @@ public interface ICheck
     /// The <see cref="Score"/> of the <see cref="ICheckResult"/> of this <see cref="ICheck"/> when
     /// it is implemented correctly.
     /// </returns>
-    Score PerfectScore(
-        IDictionary< ICheck, ICheckResult > resultsByCheck,
-        ICheckResult result);
+    Score PerfectScore { get; }
 
     /// <summary>
     /// Runs the current check on the given <see cref="INode"/>.
@@ -99,9 +97,7 @@ public abstract class CheckBase : ICheck
     public ICheck ? ParentCheck { get; set; }
 
     /// <inheritdoc />
-    public abstract Score PerfectScore(
-        IDictionary< ICheck, ICheckResult > resultsByCheck,
-        ICheckResult result);
+    public abstract Score PerfectScore { get; }
 
     /// <summary>
     /// Sets the priority.

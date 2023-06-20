@@ -44,17 +44,84 @@ public partial class RecognizerRunner
         }
     }
 
+    private static void CalcPerfectScore(
+        NodeCheckResult result,
+        ref Score totalPerfectChildScore)
+    {
+        if (result.Check.Requirement == "2. Client Class")
+        {
+        }
+        if (result.Check.Requirement?.StartsWith("3c.") ?? false)
+        {
+        }
+        //if (result is {ChildrenCheckResults.Count: 0})
+        //{
+        //    // Results were pruned.
+        //    return;
+        //}
+
+        // Calculate perfect score for pruned results.
+        if (result is {NodeCheckCollectionWrapper: true, ChildrenCheckResults.Count: 0})
+        {
+            // Results were pruned.
+            totalPerfectChildScore = result.Check.PerfectScore;
+            return;
+        }
+
+        IEnumerable< ICheck > checksToEvaluate = result.Check is NodeCheckBase nodeCheckBase
+            ? nodeCheckBase.SubChecks
+            : new[ ]
+              {
+                  result.Check
+              };
+
+        NodeCheckResult bestResult = result.NodeCheckCollectionWrapper
+            ? result.ChildrenCheckResults.MaxBy(r => r.Score)! as NodeCheckResult ?? result
+            : result;
+
+        switch (bestResult.CollectionKind)
+        {
+            case CheckCollectionKind.Any:
+            {
+                Score bestScore = default;
+                foreach (ICheck subCheck in checksToEvaluate)
+                {
+                    bestScore = subCheck.PerfectScore.CompareTo(bestScore) > 0
+                        ? bestScore
+                        : subCheck.PerfectScore;
+                }
+                totalPerfectChildScore = bestScore;
+                break;
+            }
+            case CheckCollectionKind.All:
+            {
+                foreach (ICheck subCheck in checksToEvaluate)
+                {
+                    if (bestResult.ChildrenCheckResults.Count != 0
+                        && bestResult.ChildrenCheckResults.All(r => r.Check != subCheck))
+                    {
+                        // Result was pruned.
+                        totalPerfectChildScore += subCheck.PerfectScore;
+                    }
+                }
+                break;
+            }
+            default:
+                throw new ArgumentException($"Unknown CheckCollectionKind '{bestResult.CollectionKind}'");
+        }
+    }
+
     internal static void CalcScores(
         IReadOnlyDictionary< INode, List< ICheckResult > > resultsByNode,
         NodeCheckResult result)
     {
+        if (result.Check.Requirement?.StartsWith("3c.") ?? false)
+        {
+        }
         Score totalChildScore = default;
         Score totalPerfectChildScore = default;
         foreach (ICheckResult childResult in result.ChildrenCheckResults)
         {
-            if (childResult.FeedbackMessage == "Node SingleTonTestCase5User() has a Uses relation with node GetInstance()")
-            {
-            }
             CalcScoreImpl(
                 resultsByNode,
                 childResult);
@@ -63,18 +130,24 @@ public partial class RecognizerRunner
             totalPerfectChildScore += childResult.PerfectScore;
         }
 
-        // TODO: Calc perfect score for missing results
-        // Be careful with NodeCheckCollectionWrappers
+        CalcPerfectScore(
+            result,
+            ref totalPerfectChildScore);
+
+        //if (totalPerfectChildScore.Equals(default))
+        //{
+        //}
 
         switch (result.CollectionKind)
         {
             case CheckCollectionKind.Any:
+                ICheckResult ? childResult = result.ChildrenCheckResults.MaxBy(r => r.Score);
                 result.SetScore(
                     false,
-                    result.ChildrenCheckResults.MaxBy(r => r.Score)?.Score ?? default);
+                    childResult?.Score ?? default);
                 result.SetScore(
                     true,
-                    result.ChildrenCheckResults.MaxBy(r => r.PerfectScore)?.PerfectScore ?? default);
+                    childResult?.PerfectScore ?? totalPerfectChildScore);
                 break;
             case CheckCollectionKind.All:
                 result.SetScore(

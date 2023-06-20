@@ -1,19 +1,39 @@
 ﻿namespace PatternPal.Core.Checks;
 
-/// <summary>
-/// Base class for <see cref="ICheck"/>s which can have sub-<see cref="ICheck"/>s.
-/// </summary>
-/// <typeparam name="TNode">The <see cref="INode"/> type which this <see cref="ICheck"/> supports.</typeparam>
-public class NodeCheck< TNode > : CheckBase
-    where TNode : INode
+public abstract class NodeCheckBase : CheckBase
 {
-    // The kind of this collection of checks.
-    private readonly CheckCollectionKind _kind;
-
     /// <summary>
     /// The sub-<see cref="ICheck"/>s of this <see cref="ICheck"/>.
     /// </summary>
     internal IEnumerable< ICheck > SubChecks { get; }
+
+    protected NodeCheckBase(
+        Priority priority,
+        string ? requirement,
+        IEnumerable< ICheck > subChecks)
+        : base(
+            priority,
+            requirement)
+    {
+        SubChecks = subChecks;
+
+        foreach (ICheck subCheck in SubChecks)
+        {
+            subCheck.ParentCheck = this;
+        }
+    }
+}
+
+/// <summary>
+/// Base class for <see cref="ICheck"/>s which can have sub-<see cref="ICheck"/>s.
+/// </summary>
+/// <typeparam name="TNode">The <see cref="INode"/> type which this <see cref="ICheck"/> supports.</typeparam>
+public class NodeCheck< TNode > : NodeCheckBase
+    where TNode : INode
+{
+    // The kind of this collection of checks.
+    private readonly CheckCollectionKind _kind;
+    private Score _perfectScore;
 
     /// <inheritdoc />
     public override Func< List< INode > > Result => () => _matchedEntities
@@ -56,60 +76,20 @@ public class NodeCheck< TNode > : CheckBase
         }
     }
 
-    /// <inheritdoc />
-    public override Score PerfectScore(
-        IDictionary< ICheck, ICheckResult > resultsByCheck,
-        ICheckResult result)
+    public override Score PerfectScore
     {
-        Score perfectScore = default;
-        NodeCheckResult nodeCheckResult = (NodeCheckResult)result;
-        if (nodeCheckResult.NodeCheckCollectionWrapper)
+        get
         {
-            NodeCheckResult matchedNodeResult = (NodeCheckResult)nodeCheckResult.ChildrenCheckResults.First();
-            if (nodeCheckResult.Check is MethodCheck)
+            if (_perfectScore.Equals(default))
             {
+                foreach (ICheck subCheck in SubChecks)
+                {
+                    _perfectScore += subCheck.PerfectScore;
+                }
             }
 
-            foreach (ICheck subCheck in SubChecks)
-            {
-                ICheckResult ? subCheckResult = matchedNodeResult.ChildrenCheckResults.FirstOrDefault(r => r.Check == subCheck);
-                if (null != subCheckResult)
-                {
-                    perfectScore += subCheck.PerfectScore(
-                        resultsByCheck,
-                        subCheckResult);
-                }
-            }
+            return _perfectScore;
         }
-        else
-        {
-            foreach (ICheck subCheck in SubChecks)
-            {
-                if (_kind == CheckCollectionKind.Any)
-                {
-                    ICheckResult ? subCheckResult = nodeCheckResult.ChildrenCheckResults.FirstOrDefault();
-                    if (subCheckResult?.Check == subCheck)
-                    {
-                        perfectScore = subCheck.PerfectScore(
-                            resultsByCheck,
-                            subCheckResult);
-                        break;
-                    }
-                }
-                else
-                {
-                    ICheckResult ? subCheckResult = nodeCheckResult.ChildrenCheckResults.FirstOrDefault(r => r.Check == subCheck);
-                    if (null != subCheckResult)
-                    {
-                        perfectScore += subCheck.PerfectScore(
-                            resultsByCheck,
-                            subCheckResult);
-                    }
-                }
-            }
-        }
-
-        return perfectScore;
     }
 
     /// <summary>
@@ -126,15 +106,10 @@ public class NodeCheck< TNode > : CheckBase
         CheckCollectionKind kind = CheckCollectionKind.All)
         : base(
             priority,
-            requirement)
+            requirement,
+            subChecks)
     {
-        SubChecks = subChecks;
         _kind = kind;
-
-        foreach (ICheck subCheck in SubChecks)
-        {
-            subCheck.ParentCheck = this;
-        }
     }
 
     /// <inheritdoc />

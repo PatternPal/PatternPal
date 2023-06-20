@@ -11,25 +11,35 @@ public struct Score : IComparable< Score >,
     private int _mid;
     private int _low;
 
+    public static Score MaxValue => new()
+                                    {
+                                        _knockout = int.MaxValue,
+                                        _high = int.MaxValue,
+                                        _mid = int.MaxValue,
+                                        _low = int.MaxValue
+                                    };
+
     /// <summary>
     /// Adds up every component of the right <see cref="Score"/> from the left <see cref="Score"/>.
     /// </summary>
     public static Score operator +(
         Score a,
-        Score b)
-    {
-        if (a._mid > 0
-            && b._mid > 0)
+        Score b) =>
+        new()
         {
-        }
-        return new()
-        {
-            _knockout = a._knockout + b._knockout,
-            _high = a._high + b._high,
-            _mid = a._mid + b._mid,
-            _low = a._low + b._low
+            _knockout = a._knockout == int.MaxValue || b._knockout == int.MaxValue
+                ? int.MaxValue
+                : a._knockout + b._knockout,
+            _high = a._high == int.MaxValue || b._high == int.MaxValue
+                ? int.MaxValue
+                : a._high + b._high,
+            _mid = a._mid == int.MaxValue || b._mid == int.MaxValue
+                ? int.MaxValue
+                : a._mid + b._mid,
+            _low = a._low == int.MaxValue || b._low == int.MaxValue
+                ? int.MaxValue
+                : a._low + b._low,
         };
-    }
 
     /// <summary>
     /// Subtracts every component of the right <see cref="Score"/> from the left <see cref="Score"/>.
@@ -132,9 +142,14 @@ public struct Score : IComparable< Score >,
         Score perfectScore)
     {
         int perfect = perfectScore._knockout * 4 + perfectScore._high * 3 + perfectScore._mid * 2 + perfectScore._low;
-        int own = _knockout * 4 +_high * 3 + _mid * 2 + _low;
+        if (perfect == 0)
+        {
+            return 0;
+        }
 
-        return own / perfect * 100;
+        int own = _knockout * 4 + _high * 3 + _mid * 2 + _low;
+
+        return (int)(own / (float)perfect * 100);
     }
 
     public bool Equals(

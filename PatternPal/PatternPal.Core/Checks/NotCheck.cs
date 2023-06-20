@@ -5,8 +5,6 @@
 /// </summary>
 internal class NotCheck : CheckBase
 {
-    private readonly Score _perfectScore;
-
     /// <summary>
     /// The nested <see cref="ICheck"/> which should not pass.
     /// </summary>
@@ -19,9 +17,7 @@ internal class NotCheck : CheckBase
     public override int DependencyCount => NestedCheck.DependencyCount;
 
     /// <inheritdoc />
-    public override Score PerfectScore(
-        IDictionary< ICheck, ICheckResult > resultsByCheck,
-        ICheckResult result) => _perfectScore;
+    public override Score PerfectScore { get; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="NotCheck"/> class.
@@ -37,7 +33,7 @@ internal class NotCheck : CheckBase
             requirement)
     {
         NestedCheck = check;
-        _perfectScore = Score.CreateScore(
+        PerfectScore = Score.CreateScore(
             Priority,
             true);
     }
