@@ -60,7 +60,15 @@ internal class ParameterCheck : CheckBase
         {
             return new NodeCheckResult
                    {
-                       ChildrenCheckResults = subCheckResultsResults,
+                       ChildrenCheckResults = new List<ICheckResult>{new LeafCheckResult
+                       {
+                           Correct = false,
+                           Priority = Priority,
+                           Check = this,
+                           MatchedNode = null,
+                           DependencyCount = 0,
+                           FeedbackMessage = String.Empty
+                       }},
                        FeedbackMessage = $"The method has no parameters.",
                        Priority = Priority,
                        DependencyCount = DependencyCount,
