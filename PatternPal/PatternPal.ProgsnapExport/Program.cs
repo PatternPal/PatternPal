@@ -2,7 +2,7 @@
 
 using System.ComponentModel;
 using System.Text.Json;
-
+using PatternPal.ProgSnapExport.Data;
 using Spectre.Console.Cli;
 using Spectre.Console;
 
@@ -13,6 +13,8 @@ namespace PatternPal.ProgSnapExport;
 // ReSharper disable once ClassNeverInstantiated.Global
 internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Settings>
 {
+    private ProgSnap2ContextClass _context;
+    
     /// <summary>
     /// Defines all CLI-arguments.
     /// </summary>
@@ -121,7 +123,18 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
     /// <returns></returns>
     public override int Execute(CommandContext context, Settings settings)
     {
-        Console.WriteLine(settings.ConnectionString);
+        // Set-up database
+        _context = new ProgSnap2ContextClass(settings.ConnectionString);
+        if (!_context.Database.CanConnect())
+        {
+            Console.WriteLine("Could not connect");
+            return 1;
+        }
+        else
+        {
+            Console.WriteLine("Yay, connected!");
+        }
+
         return 0;
     }
 }
