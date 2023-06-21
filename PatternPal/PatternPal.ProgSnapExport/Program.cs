@@ -1,26 +1,29 @@
 ﻿#region
 
-using System.ComponentModel;
 using System.Globalization;
-using System.Text.Json;
 
 using PatternPal.ProgSnapExport.Data;
 using PatternPal.LoggingServer.Models;
+using PatternPal.LoggingServer;
 
 using Spectre.Console.Cli;
 using Spectre.Console;
 
 using CsvHelper;
 using CsvHelper.Configuration;
-using PatternPal.LoggingServer;
 
 #endregion
 
 namespace PatternPal.ProgSnapExport;
 
-internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Settings>
+// ReSharper disable once ClassNeverInstantiated.Global
+internal sealed class ProgSnapExportCommand : Command<Settings>
 {
+    // We are disabling this warning since we know for sure that in every context
+    // these fields are used, they will be set.
+#pragma warning disable CS8618
     private ProgSnap2ContextClass _dbContext;
+
     private Settings _settings;
 
     private string _logFile;
@@ -29,141 +32,7 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
 
     private DateTime _lowerBound;
     private DateTime _upperBound;
-
-    /// <summary>
-    /// Defines all CLI-arguments.
-    /// </summary>
-    public sealed class Settings : CommandSettings
-    {
-        // CLI Settings
-        [Description("Path to config file; defaults to \"./config.json\".")]
-        [CommandArgument(0, "[configFile]")]
-        [DefaultValue("./config.json")]
-        public string ConfigFile { get; init; }
-
-        [Description("Path to export directory; defaults to \"./export\".")]
-        [CommandArgument(1, "[exportDirectory]")]
-        [DefaultValue("./export")]
-        public string ExportDirectory { get; init;  }
-
-        [Description("Specifies the starting point of the time interval to be exported. Format: \"YYYY-MM-DD HH:MM:SS\".")]
-        [CommandOption("-s|--start")]
-        public string? StartIntervalStr { get; init; }
-
-        [Description("Specifies the ending point of the time interval to be exported. Format: \"YYYY-MM-DD HH:MM:SS\".")]
-        [CommandOption("-e|--end")]
-        public string? EndIntervalStr { get; init; }
-        
-        [Description("Overwrites the contents of the export directory (if any).")]
-        [CommandOption("-f|--force")]
-        public bool ForceExportDirectory { get; init; }
-        
-        [Description("Does not include the CodeStates in the export.")]
-        [CommandOption("--csv-only")]
-        [DefaultValue(false)]
-        public bool CsvOnly { get; init; }
-        
-        [Description("Sets the log level of what is logged to the logfile. Format: INFO|WARNING|ERROR (default: \"WARNING\").")]
-        [CommandOption("--log-level")]
-        [DefaultValue(LogLevel.Warning)]
-        public LogLevel LogLevel { get; init; }
-        
-        [Description("Prints all messages to the console.")]
-        [CommandOption("-v|--verbose")]
-        [DefaultValue(false)]
-        public bool Verbose { get; init; }
-        
-        [Description("Surpresses all messages on the console.")]
-        [CommandOption("-q|--quiet")]
-        [DefaultValue(false)]
-        public bool Quiet { get; init; }
-
-        // Properties
-        public string ConnectionString { get; private set; }
-        public string? CodeStateDirectory { get; private set; }
-        public DateTime? StartInterval { get; private set; } = null;
-        public DateTime? EndInterval { get; private set; } = null;
-
-        /// <summary>
-        /// Extends the build-in validation of the supplied CLI-arguments.
-        /// </summary>
-        /// <returns></returns>
-        public override ValidationResult Validate()
-        {
-            ValidationResult baseValidationResult = base.Validate();
-
-            if (!baseValidationResult.Successful)
-            {
-                return baseValidationResult;
-            }
-
-            // Config file
-            if (!File.Exists(ConfigFile))
-            { 
-                return ValidationResult.Error($"Invalid path to config file specified: \"{ConfigFile}\".");
-            }
-
-            try
-            {
-                Dictionary<string, string> config =
-                    JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(ConfigFile));
-                ConnectionString =
-                    $"Server={config["ServerUrl"]};Username={config["Username"]};Database={config["Database"]};Password={config["Password"]}";
-
-                if (!CsvOnly)
-                {
-                    // We do not check for the presence of CodeStateDirectory in the config file when
-                    // --csv-only is set.
-                    CodeStateDirectory = config["CodeStateDirectory"];
-                }
-            }
-            catch (JsonException)
-            {
-                return ValidationResult.Error("Config file contained invalid JSON.");
-            }
-            catch (KeyNotFoundException e)
-            {
-                return ValidationResult.Error(e.Message);
-            }
-
-            // Export Directory
-            if (!ForceExportDirectory && Directory.Exists(ExportDirectory) && Directory.EnumerateFileSystemEntries(ExportDirectory).Any())
-            {
-                // We use a lazy way to check whether a directory is empty or not.
-                return ValidationResult.Error($"The supplied export directory is not empty: \"{ExportDirectory}\".");
-            }
-            
-            // CodeState Directory
-            if (CodeStateDirectory != null && !Directory.Exists(CodeStateDirectory))
-            {
-                return ValidationResult.Error(
-                    $"Invalid path to CodeState-directory specified: \"{CodeStateDirectory}\".");
-            }
-            
-            // Intervals
-            if (StartIntervalStr != null)
-            {
-                if (!DateTime.TryParse(StartIntervalStr, out DateTime parsed))
-                {
-                    return ValidationResult.Error($"Format of start interval was invalid: \"{StartIntervalStr}\".");
-                }
-
-                StartInterval = parsed;
-            }
-            
-            if (EndIntervalStr != null)
-            {
-                if (!DateTime.TryParse(EndIntervalStr, out DateTime parsed))
-                {
-                    return ValidationResult.Error($"Format of end interval was invalid: \"{EndIntervalStr}\".");
-                }
-
-                EndInterval = parsed;
-            }
-            
-            return ValidationResult.Success();
-        }
-    }
+#pragma warning restore CS8618
 
     /// <summary>
     /// Defines the main program logic.
@@ -227,7 +96,7 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
         Directory.CreateDirectory(_settings.ExportDirectory);
         
         // Create log file, CodeState export directory
-        using (FileStream fs = File.Create(_logFile)) ;
+        File.Create(_logFile).Close();
         Directory.CreateDirectory(_codeStateExportDir);
 
         // Prepare interval bounds
@@ -404,14 +273,6 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
     #endregion
 
     #region Logging
-    
-    internal enum LogLevel
-    {
-        Error,
-        Warning, 
-        Info
-    }
-
     /// <summary>
     /// Prints a formatted info message to the AnsiConsole (if verbose-mode is enabled).
     /// Automatically adds a trailing "." and newline.
@@ -521,6 +382,7 @@ internal sealed class ProgSnapExportCommand : Command<ProgSnapExportCommand.Sett
     #endregion
 }
 
+// ReSharper disable once ClassNeverInstantiated.Global
 internal class Program
 {
     private static int Main(string[] args)
