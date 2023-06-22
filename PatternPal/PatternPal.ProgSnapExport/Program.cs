@@ -381,7 +381,7 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
     /// enabling finer customization.
     /// </summary>
     /// <param name="message">The message to be logged</param>
-    /// <param name="metadata"></param>
+    /// <param name="metadata">Metadata that should also be printed. Format: (Name, Value)</param>
     /// <param name="consoleHead">String to be included before the message when logging to the console</param>
     /// <param name="toConsole">Whether to log to the console</param>
     /// <param name="fileHead">String to be included before the message when logging to the logfile</param>
