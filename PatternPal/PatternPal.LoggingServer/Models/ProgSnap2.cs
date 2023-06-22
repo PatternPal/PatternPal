@@ -57,12 +57,12 @@ namespace PatternPal.LoggingServer.Models
         /// <summary>
         /// The date and time of the event, in the server's time zone.
         /// </summary>
-        public DateTimeOffset ServerDatetime { get; set; }
+        public DateTime ServerDatetime { get; set; }
 
         /// <summary>
         /// The date and time of the event, in the client's time zone.
         /// </summary>
-        public DateTimeOffset ClientDatetime { get; set; }
+        public DateTime ClientDatetime { get; set; }
 
         /// <summary>
         /// The ID of the parent event, if any. Used in cases such as compile.error, where the parent event is compile.

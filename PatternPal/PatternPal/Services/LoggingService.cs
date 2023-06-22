@@ -1,4 +1,4 @@
-﻿#region
+#region
 
 using Google.Protobuf;
 using System.IO.Compression;
@@ -117,9 +117,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
             EventId = receivedRequest.EventId,
             SubjectId = receivedRequest.SubjectId,
             ToolInstances = receivedRequest.ToolInstances,
-            ClientTimestamp =
-                DateTime.UtcNow.ToString(
-                    "yyyy-MM-dd HH:mm:ss.fff zzz"),
+            ClientTimestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"),
             SessionId =
                 receivedRequest.SessionId
         };

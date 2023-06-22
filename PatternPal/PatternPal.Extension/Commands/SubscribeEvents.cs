@@ -436,9 +436,9 @@ namespace PatternPal.Extension.Commands
             LogEventRequest request = CreateStandardLog();
 
             request.EventType = EventType.EvtFileEdit;
-            request.CodeStateSection = GetRelativePath(Path.GetDirectoryName(document.FullName), document.FullName);
             request.ProjectId = document.ProjectItem.ContainingProject.UniqueName;
             request.ProjectDirectory = Path.GetDirectoryName(document.ProjectItem.ContainingProject.FullName);
+            request.CodeStateSection = GetRelativePath(request.ProjectDirectory, document.FullName);
             request.FilePath = document.FullName;
 
             LogEventResponse response = PushLog(request);
