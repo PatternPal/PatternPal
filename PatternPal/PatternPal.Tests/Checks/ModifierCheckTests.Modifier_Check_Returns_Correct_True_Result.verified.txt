@@ -1,6 +1,6 @@
 ﻿{
+  Correct: true,
   FeedbackMessage: Modifiers correctly implemented.,
   Priority: Low,
-  Correct: true,
   MatchedNode: Test
 }

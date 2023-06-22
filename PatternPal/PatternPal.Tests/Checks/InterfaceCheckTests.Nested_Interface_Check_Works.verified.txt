@@ -1,23 +1,23 @@
 ﻿{
-  FeedbackMessage: Found the required checks for: I.,
-  Priority: High,
   ChildrenCheckResults: [
     {
-      FeedbackMessage: ,
-      Priority: Low,
       ChildrenCheckResults: [
         {
+          NodeCheckCollectionWrapper: false,
           FeedbackMessage: Found interface 'I',
           Priority: Low,
-          MatchedNode: I,
-          NodeCheckCollectionWrapper: false
+          MatchedNode: I
         }
       ],
       CollectionKind: Any,
-      NodeCheckCollectionWrapper: true
+      NodeCheckCollectionWrapper: true,
+      FeedbackMessage: ,
+      Priority: Low
     }
   ],
   CollectionKind: Any,
-  MatchedNode: I,
-  NodeCheckCollectionWrapper: false
+  NodeCheckCollectionWrapper: false,
+  FeedbackMessage: Found the required checks for: I.,
+  Priority: High,
+  MatchedNode: I
 }

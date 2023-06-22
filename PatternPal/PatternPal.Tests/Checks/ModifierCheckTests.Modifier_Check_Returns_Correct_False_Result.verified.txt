@@ -1,6 +1,6 @@
 ﻿{
+  Correct: false,
   FeedbackMessage: The node Test does not have the private modifier.,
   Priority: Low,
-  Correct: false,
   MatchedNode: Test
 }

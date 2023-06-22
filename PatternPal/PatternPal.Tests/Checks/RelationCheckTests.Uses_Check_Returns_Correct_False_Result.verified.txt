@@ -1,26 +1,26 @@
 ﻿{
-  FeedbackMessage: Found method: UsedFunction().,
-  Priority: Low,
   ChildrenCheckResults: [
     {
-      FeedbackMessage: Found Uses relations for UsedFunction().,
-      Priority: Low,
       ChildrenCheckResults: [
         {
+          Correct: false,
           FeedbackMessage: No Uses relation found.,
           Priority: Low,
-          Correct: false,
           DependencyCount: 1,
           MatchedNode: UsesFunction
         }
       ],
       CollectionKind: Any,
+      NodeCheckCollectionWrapper: true,
+      FeedbackMessage: Found Uses relations for UsedFunction().,
+      Priority: Low,
       DependencyCount: 1,
-      MatchedNode: UsedFunction,
-      NodeCheckCollectionWrapper: true
+      MatchedNode: UsedFunction
     }
   ],
+  NodeCheckCollectionWrapper: false,
+  FeedbackMessage: Found method: UsedFunction().,
+  Priority: Low,
   DependencyCount: 1,
-  MatchedNode: UsedFunction,
-  NodeCheckCollectionWrapper: false
+  MatchedNode: UsedFunction
 }

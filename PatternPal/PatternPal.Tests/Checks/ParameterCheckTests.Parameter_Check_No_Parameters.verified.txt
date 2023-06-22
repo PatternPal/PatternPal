@@ -1,6 +1,6 @@
 ﻿{
+  NodeCheckCollectionWrapper: false,
   FeedbackMessage: The method has no parameters.,
   Priority: Low,
-  MatchedNode: UsesFunction,
-  NodeCheckCollectionWrapper: false
+  MatchedNode: UsesFunction
 }

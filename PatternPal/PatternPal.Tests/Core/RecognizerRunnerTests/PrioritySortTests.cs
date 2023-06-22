@@ -80,7 +80,8 @@ internal class PrioritySortTests
                 Check = null
             };
 
-        RecognizerRunner.CalcScores(null,rootCheckResult);
+        Dictionary< INode, List< ICheckResult > > resultsByNode = new();
+        RecognizerRunner.CalcScores(resultsByNode,rootCheckResult);
         RecognizerRunner.SortResultsByPriorities(rootCheckResult);
 
         return Verifier.Verify(rootCheckResult, _settings);
@@ -183,7 +184,8 @@ internal class PrioritySortTests
                 Check = null
             };
 
-        RecognizerRunner.CalcScores(null,rootCheckResult);
+        Dictionary< INode, List< ICheckResult > > resultsByNode = new();
+        RecognizerRunner.CalcScores(resultsByNode,rootCheckResult);
         RecognizerRunner.SortResultsByPriorities(rootCheckResult);
 
         return Verifier.Verify(rootCheckResult, _settings);
@@ -286,7 +288,8 @@ internal class PrioritySortTests
                 Check = null
             };
 
-        RecognizerRunner.CalcScores(null,rootCheckResult);
+        Dictionary< INode, List< ICheckResult > > resultsByNode = new();
+        RecognizerRunner.CalcScores(resultsByNode,rootCheckResult);
         RecognizerRunner.SortResultsByPriorities(rootCheckResult);
 
         return Verifier.Verify(rootCheckResult, _settings);
@@ -389,7 +392,8 @@ internal class PrioritySortTests
                 Check = null
             };
 
-        RecognizerRunner.CalcScores(null,rootCheckResult);
+        Dictionary< INode, List< ICheckResult > > resultsByNode = new();
+        RecognizerRunner.CalcScores(resultsByNode,rootCheckResult);
         RecognizerRunner.SortResultsByPriorities(rootCheckResult);
 
         return Verifier.Verify(rootCheckResult, _settings);
@@ -430,7 +434,8 @@ internal class PrioritySortTests
                 Check = null
             };
 
-        RecognizerRunner.CalcScores(null,rootCheckResult);
+        Dictionary< INode, List< ICheckResult > > resultsByNode = new();
+        RecognizerRunner.CalcScores(resultsByNode,rootCheckResult);
         RecognizerRunner.SortResultsByPriorities(rootCheckResult);
 
         return Verifier.Verify(rootCheckResult, _settings);
