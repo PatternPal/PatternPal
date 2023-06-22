@@ -39,7 +39,7 @@ internal abstract class BridgeRecognizerParent
             implementationCheck, implementationProperty);
 
         ClassCheck abstractionCheck = Class(Priority.High,
-            "2. Abstraction class",
+            "2. Abstraction Class",
             fieldOrProperty, 
             methodInAbstraction, 
             methodInAbstractionWithUse, 

@@ -35,12 +35,12 @@ internal class BridgeRecognizerAbstractClass : BridgeRecognizerParent
         return Class(Priority.Knockout,
             "3. Concrete Implementation Class",
             Inherits(Priority.Knockout,
-                "3a) Inherits from the Implementation abstract class.",
+                "3a. Inherits from the Implementation abstract class.",
                 implementationCheck
             ),
             Method(Priority.High,
                 Overrides(Priority.High,
-                    "3b) Overrides a method.",
+                    "3b. Overrides a method.",
                     methodInImplementation
                 )
             )
