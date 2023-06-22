@@ -332,7 +332,6 @@ namespace PatternPal.Extension.Views
         int IVsRunningDocTableEvents.OnAfterSave(
             uint docCookie)
         {
-            ThreadHelper.JoinableTaskFactory.Run(AnalyzeAsync);
             return VSConstants.S_OK;
         }
 
