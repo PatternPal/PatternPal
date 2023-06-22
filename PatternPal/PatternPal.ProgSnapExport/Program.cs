@@ -287,45 +287,59 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
                 }
 
                 // Now we know that the current event does not have an included codeState but there is one available for the current project,
-                // we are able to restore. In every case here, we need to generate a codeStateID and create a folder for the current event
-                // in the export directory...
-                ev.CodeStateId = Guid.NewGuid();
-                string codeStateDest = Path.Join(_codeStateExportDir, ev.CodeStateId.ToString());
-                Directory.CreateDirectory(codeStateDest);
-
-                //.. and subsequently copy the contents of the previous src to the destination.
-                string prevCodeStateSrc = Path.Join(_codeStateExportDir, previousCodeState[ev.ProjectId].ToString());
-                CopyDirectory(prevCodeStateSrc, codeStateDest);
-
-                // Now, some more work is required on a per-event basis.
+                // we are able to restore. The work now differs per event.
                 switch (ev.EventType)
                 {
                     case EventType.EvtFileDelete:
                     {
-                        // A file was deleted and thus we must delete it as well from the current CodeState.
+                        // We generate a new CodeStateID and create a new corresponding directory in the export...
+                        ev.CodeStateId = Guid.NewGuid();
+                        string codeStateDest = Path.Join(_codeStateExportDir, ev.CodeStateId.ToString());
+                        Directory.CreateDirectory(codeStateDest);
+
+                        //.. and subsequently copy the contents of the previous src to that destination.
+                        string prevCodeStateSrc = Path.Join(_codeStateExportDir, previousCodeState[ev.ProjectId].ToString());
+                        CopyDirectory(prevCodeStateSrc, codeStateDest);
+                        
+                        // Since a file was deleted, we must delete it from the current CodeState.
                         // Some work is needed to remove the project directory from the path (i.e. ProjectDir/FileToDelete.cs).
                         string projectDirectory = Path.GetDirectoryName(ev.ProjectId);
                         string file = Path.GetRelativePath(projectDirectory!, ev.CodeStateSection!);
                         File.Delete(Path.Join(codeStateDest, file));
+                        
+                        // Finally, the new previous codeState is the one we just created.
+                        previousCodeState[ev.ProjectId] = ev.CodeStateId.Value;
                         break;
                     }
 
                     case EventType.EvtFileRename:
                     {
-                        // A file was renamed and thus we must rename it as well in the current CodeState.
+                        // We generate a new CodeStateID and create a new corresponding directory in the export...
+                        ev.CodeStateId = Guid.NewGuid();
+                        string codeStateDest = Path.Join(_codeStateExportDir, ev.CodeStateId.ToString());
+                        Directory.CreateDirectory(codeStateDest);
+
+                        //.. and subsequently copy the contents of the previous src to that destination.
+                        string prevCodeStateSrc = Path.Join(_codeStateExportDir, previousCodeState[ev.ProjectId].ToString());
+                        CopyDirectory(prevCodeStateSrc, codeStateDest);
+
+                        // Since a file was renamed, we must rename it in the current CodeState.
+                        // Some work is needed to remove the project directory from the path (i.e. ProjectDir/FileToDelete.cs).
                         string projectDirectory = Path.GetDirectoryName(ev.ProjectId);
                         string oldFile = Path.GetRelativePath(projectDirectory!, ev.OldFileName!);
                         string newFile = Path.GetRelativePath(projectDirectory!, ev.CodeStateSection!);
                         File.Move(Path.Join(codeStateDest, oldFile), Path.Join(codeStateDest, newFile));
+                        
+                        // Finally, the new previous codeState is the one we just created.
+                        previousCodeState[ev.ProjectId] = ev.CodeStateId.Value;
                         break;
                     }
 
                     default:
-                        // All other cases do not require any further work; leaving in default statement for clarity.
+                        // In all other cases, simply referring to the previous codeState in the export is enough.
+                        ev.CodeStateId = previousCodeState[ev.ProjectId];
                         break;
                 }
-
-                previousCodeState[ev.ProjectId] = ev.CodeStateId.Value;
             }
         }
     }
