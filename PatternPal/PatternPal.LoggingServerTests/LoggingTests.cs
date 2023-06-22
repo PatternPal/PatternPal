@@ -1,5 +1,6 @@
 ﻿#region
 
+using System.Globalization;
 using System.IO.Compression;
 using Google.Protobuf;
 using Grpc.Core;
@@ -60,7 +61,7 @@ namespace PatternPal.LoggingServerTests
                 SessionId = Guid.NewGuid().ToString(),
                 SubjectId = Guid.NewGuid().ToString(),
                 EventType = EventType.EvtSessionStart,
-                ClientTimestamp = DateTimeOffset.Now.ToString("o"),
+                ClientTimestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"),
                 ProjectId = "TestProject",
             };
 
@@ -108,7 +109,7 @@ namespace PatternPal.LoggingServerTests
                 SessionId = "invalid session ID",
                 SubjectId = Guid.NewGuid().ToString(),
                 EventType = EventType.EvtProjectOpen,
-                ClientTimestamp = DateTimeOffset.Now.ToString("o"),
+                ClientTimestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"),
                 ProjectId = "TestProject",
                 Data = ByteString.CopyFrom(new byte[] { 1, 2, 3 })
             };
@@ -130,7 +131,7 @@ namespace PatternPal.LoggingServerTests
                 SessionId = Guid.NewGuid().ToString(),
                 SubjectId = Guid.NewGuid().ToString(),
                 EventType = EventType.EvtUnknown,
-                ClientTimestamp = DateTimeOffset.Now.ToString("o"),
+                ClientTimestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"),
                 ProjectId = "TestProject",
                 Data = ByteString.CopyFrom(new byte[] { 1, 2, 3 })
             };
@@ -150,7 +151,7 @@ namespace PatternPal.LoggingServerTests
                 SessionId = Guid.NewGuid().ToString(),
                 SubjectId = Guid.NewGuid().ToString(),
                 EventType = EventType.EvtProjectClose,
-                ClientTimestamp = DateTimeOffset.Now.ToString("o"),
+                ClientTimestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"),
                 ProjectId = "TestProject",
                 Data = ByteString.CopyFrom(CreateZipArchive(filenameCs))
             };
