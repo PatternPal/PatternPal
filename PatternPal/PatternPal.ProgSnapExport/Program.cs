@@ -67,7 +67,7 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
         for (int i = 0; i < sessions.Count; ++i)
         {
             Guid sessionId = sessions[i];
-            LogInfo($"Parsing session {sessionId} ({i}/{sessions.Count})");
+            LogInfo($"Parsing session {sessionId} ({i + 1}/{sessions.Count})");
             ParseSession(sessionId);
         }
 
