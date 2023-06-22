@@ -41,7 +41,8 @@ internal class StrategyRecognizer : IRecognizer
     private InterfaceCheck ? _interfaceStrategyCheck;
     private ClassCheck ? _abstractClassStrategyCheck;
 
-    private ICheck ? _fieldOrPropertyStrategy;
+    private ICheck ? _fieldStrategy;
+    private ICheck ? _propertyStrategy;
 
     /// <inheritdoc />
     public string Name => "Strategy";
@@ -170,50 +171,50 @@ internal class StrategyRecognizer : IRecognizer
         params ICheck[ ] checks)
     {
         // req. a
-        _fieldOrPropertyStrategy = Any(
+        _fieldStrategy = Field(
             Priority.Knockout,
             "3a. Has a private field or property that has a Strategy class as type.",
-            Field(
+            Any(
                 Priority.Knockout,
-                Any(
+                Type(
                     Priority.Knockout,
-                    Type(
-                        Priority.Knockout,
-                        _interfaceStrategyCheck),
-                    Type(
-                        Priority.Knockout,
-                        _abstractClassStrategyCheck)
-                ),
-                Modifiers(
+                    _interfaceStrategyCheck),
+                Type(
                     Priority.Knockout,
-                    Modifier.Private
-                )
+                    _abstractClassStrategyCheck)
             ),
-            Property(
+            Modifiers(
                 Priority.Knockout,
-                Any(
+                Modifier.Private
+            )
+        );
+        _propertyStrategy = Property(
+            Priority.Knockout,
+            "3a. Has a private field or property that has a Strategy class as type.",
+            Any(
+                Priority.Knockout,
+                Type(
                     Priority.Knockout,
-                    Type(
-                        Priority.Knockout,
-                        _interfaceStrategyCheck),
-                    Type(
-                        Priority.Knockout,
-                        _abstractClassStrategyCheck)
-                ),
-                Modifiers(
+                    _interfaceStrategyCheck),
+                Type(
                     Priority.Knockout,
-                    Modifier.Private
-                )
+                    _abstractClassStrategyCheck)
+            ),
+            Modifiers(
+                Priority.Knockout,
+                Modifier.Private
             )
         );
 
         return Class(
             Priority.Knockout,
             "3. Context Class",
-            new ICheck[ ]
-            {
-                _fieldOrPropertyStrategy
-            }.Concat(checks).ToArray());
+            checks.Append(
+                Any(
+                    Priority.Knockout,
+                    _fieldStrategy,
+                    _propertyStrategy)
+            ).ToArray());
     }
 
     /// <summary>
@@ -234,9 +235,16 @@ internal class StrategyRecognizer : IRecognizer
         setStrategyMethodCheck = Method(
             Priority.High,
             "3b. Has a function setStrategy() to set the non-public field / property with parameter of type Strategy.",
-            Uses(
+            Any(
                 Priority.High,
-                _fieldOrPropertyStrategy));
+                Uses(
+                    Priority.High,
+                    _fieldStrategy),
+                Uses(
+                    Priority.High,
+                    _propertyStrategy)
+            )
+        );
 
         return CheckContextClassExistence(
             new ICheck[ ]
