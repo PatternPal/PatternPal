@@ -19,7 +19,7 @@ internal class BridgeRecognizerInterface : BridgeRecognizerParent
     public override InterfaceCheck HasInterfaceOrAbstractClassWithMethodCheck(MethodCheck methodInImplementation)
     {
         return Interface(Priority.Knockout,
-            "1. Is the Implementation interface.",
+            "1. Implementation interface",
             methodInImplementation
         );
     }
@@ -28,8 +28,9 @@ internal class BridgeRecognizerInterface : BridgeRecognizerParent
     public override ClassCheck ConcreteImplementationCheck(CheckBase implementationCheck, MethodCheck methodInImplementation)
     {
         return Class(Priority.Knockout,
-            "3. Is the Concrete Implementation class and implements the Implementation interface.",
+            "3. Concrete Implementation class",
             Implements(Priority.Knockout,
+                "3a) Implements the Implementation interface.",
                 implementationCheck
             )
         );

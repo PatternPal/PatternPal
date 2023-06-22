@@ -39,7 +39,7 @@ internal abstract class BridgeRecognizerParent
             implementationCheck, implementationProperty);
 
         ClassCheck abstractionCheck = Class(Priority.High,
-            "2. Abstraction class.",
+            "2. Abstraction class",
             fieldOrProperty, 
             methodInAbstraction, 
             methodInAbstractionWithUse, 
@@ -56,7 +56,7 @@ internal abstract class BridgeRecognizerParent
         // req. b
         ICheck methodInRefinedAbstraction = Method(Priority.High, "4b. Has a method.");
 
-        ClassCheck refinedAbstractionCheck = Class(Priority.High,"4. Is the Refined Abstraction class.", inheritsFromAbstraction, methodInRefinedAbstraction);
+        ClassCheck refinedAbstractionCheck = Class(Priority.High,"4. Refined Abstraction Class", inheritsFromAbstraction, methodInRefinedAbstraction);
 
         // requirements checks for Client
         // req. a 
@@ -68,7 +68,7 @@ internal abstract class BridgeRecognizerParent
         
         ClassCheck clientCheck = Class( 
             Priority.Low,
-            "5.Is the Client class.",
+            "5. Client Class",
             methodUseInAbstraction,
             Creates(Priority.Low, "5b. Creates a Concrete Implementation instance.", concreteImplementationCheck), 
             setsImplementationField );
