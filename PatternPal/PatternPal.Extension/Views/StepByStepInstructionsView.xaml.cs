@@ -150,7 +150,7 @@ namespace PatternPal.Extension.Views
                 SubscribeEvents.OnStepByStepCheck( request.Recognizer.ToString(), request.InstructionNumber, result);
                 if (!result)
                 {
-                    correctTextBlock.Text = "Incorrect!";
+                    correctTextBlock.Text = "Incorrect";
                     correctTextBlock.Foreground = new SolidColorBrush(Colors.Red);
                     correctTextBlock.Visibility = Visibility.Visible;
                     return;
