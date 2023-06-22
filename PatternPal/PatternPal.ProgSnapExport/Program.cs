@@ -92,7 +92,7 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
         _settings = settings;
         _csvFile = Path.Join(settings.ExportDirectory, "data.csv");
         _logFile = Path.Join(settings.ExportDirectory, "log.txt");
-        _codeStateExportDir = Path.Join(settings.ExportDirectory, "codestates");
+        _codeStateExportDir = Path.Join(settings.ExportDirectory, "CodeStates");
         
         // Create export directory
         if (_settings.ForceExportDirectory && Directory.Exists(_settings.ExportDirectory))
@@ -103,7 +103,10 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
         
         // Create log file, CodeState export directory
         File.Create(_logFile).Close();
-        Directory.CreateDirectory(_codeStateExportDir);
+        if (!_settings.CsvOnly)
+        {
+            Directory.CreateDirectory(_codeStateExportDir);
+        }
 
         // Prepare interval bounds
         // We set the lower and the upper bounds to our query;
@@ -127,6 +130,7 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
         return _dbContext.Database.CanConnect();
     }
     
+    
     #region Session parsing
     /// <summary>
     /// Parses a single session by obtaining its data, writing it to *.csv and
@@ -135,8 +139,8 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
     /// <param name="sessionId"></param>
     private void ParseSession(Guid sessionId)
     {
-        LogInfo($"Parsing session [bold]{sessionId}[/]");
-        LogInfo($"Obtaining data...");
+        LogInfo($"Parsing session {sessionId}");
+        LogInfo("Obtaining data...");
         List<ProgSnap2Event> data = _dbContext.Events
             .Where(e => e.ClientDatetime >= _lowerBound && e.ClientDatetime <= _upperBound)
             .Where(e => e.SessionId == sessionId)
@@ -147,11 +151,11 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
         {
             // We first restore the codeStates since this process might add
             // extra details to the eventual database.
-            LogInfo($"Restoring CodeStates...");
+            LogInfo("Restoring CodeStates...");
             RestoreCodeState(ref data);
         }
         
-        LogInfo($"Writing data to csv...");
+        LogInfo("Writing data to csv...");
         WriteDataToCsv(data, _csvFile);
     }
 
@@ -187,93 +191,144 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
     }
 
     /// <summary>
-    /// TODO
+    /// Restores the codeState based on the supplied data and the codeState source.
     /// </summary>
     /// <param name="data"></param>
     private void RestoreCodeState(ref List<ProgSnap2Event> data)
     {
-        Dictionary<string, (Guid Id, bool Full)> previousCodeState = new();
-        
-        
-    }
-    
-    /// <summary>
-    /// TODO
-    /// </summary>
-    /// <param name="projectId"></param>
-    /// <param name="data"></param>
-    [Obsolete]
-    private void RestoreProject(string projectId, ref List<ProgSnap2Event> data)
-    {
-        LogInfo($"Restoring project [bold]{projectId}[/]");
-        
-        (Guid Id, bool Full)? previousCodeState = null; 
-        
+        Dictionary<string, Guid> previousCodeState = new();
         foreach (ProgSnap2Event ev in data)
         {
-            string codeStateDir;
-            if (ev.CodeStateId != null)
+            if (ev.ProjectId == null)
             {
-                // If the codeStateId was set, a CodeState has been stored in the source for the 
-                // current event. We check if that respective directory actually exists and issue
-                // a warning if not.
-                codeStateDir = Path.Join(_codeStateExportDir, ev.CodeStateId.ToString());
-                if (!Directory.Exists(codeStateDir))
-                {
-                    // TODO Should maybe be ERROR; included markdown is currently showing in log file
-                    LogWarning($"CodeState not present in source directory\n" +
-                               $"\t[bold]SessionID[/]:\t{ev.SessionId}\n" +
-                               $"\t[bold]ProjectID[/]:\t{projectId}\n" +
-                               $"\t[bold]CodeStateID[/]:\t{ev.CodeStateId}");
-
-                    // TODO Determine what to do; copy the last complete one? 
-                    continue;
-                }
-                
-                // TODO Differentiate between full and partial states
-                previousCodeState = (ev.CodeStateId.Value, ev.FullCodeState.Value);
+                // Cannot reliably assess what codeState should be restored without projectID. Note that
+                // not every event (i.e. Session.Start and Session.End) has a relevant CodeState. We do
+                // know that no codeState is included when the projectId is not set, so we omit that check.
+                LogWarning(
+                    "Event does not have a projectID: could not include a reconstructed CodeState.",
+                    (nameof(ev.EventId), ev.EventId.ToString()), (nameof(ev.EventType), ev.EventType.ToString())
+                    );
+                continue;
             }
 
-            else
+            // Case 1: Event included codeState
+            if (ev.CodeStateId != null)
             {
-                // If the codeStateId was not set, we know for sure that we will have to create a new directory
-                // in the export for the current event and register the corresponding ID in the exported database.
-                // Also, in all cases, we need to copy the contents of the previous codeState to this new directory.
-                
-                if (previousCodeState == null)
+                string codeStateSrc = Path.Join(_settings.CodeStateDirectory, ev.CodeStateId.ToString());
+
+                if (!Directory.Exists(codeStateSrc))
                 {
-                    // If no previous codeState is known, we are not able to perform any work for the current event,
-                    // thus we continue.
-                    // TODO Should a message be included here?
+                    // We need to check if the specified codeState actually exists; if it does not,
+                    // we issue an error.
+                    LogError(
+                        "CodeState not present in source directory.",
+                        (nameof(ev.SessionId), ev.SessionId.ToString()), (nameof(ev.ProjectId), ev.ProjectId), 
+                        (nameof(ev.CodeStateId),ev.CodeStateId.ToString())
+                        );
                     continue;
                 }
-                ev.CodeStateId = new Guid();
-                codeStateDir = Path.Join(_codeStateExportDir, ev.CodeStateId.ToString());
-                Directory.CreateDirectory(codeStateDir);
 
-                string previousCodeStateDir = Path.Join(_codeStateExportDir, previousCodeState.Value.Id.ToString());
-                CopyDirectory(previousCodeStateDir, codeStateDir, true);
+                string codeStateDest = Path.Join(_codeStateExportDir, ev.CodeStateId.ToString());
+                Directory.CreateDirectory(codeStateDest);
                 
+                // Case 1: Included full codeState
+                if (ev.FullCodeState!.Value)
+                {
+                    if (ev.EventType is EventType.EvtFileEdit or EventType.EvtFileDelete or EventType.EvtFileRename)
+                    {
+                        // These events might cause a full codeState-log in case of specific errors, even though that is not the
+                        // expected behaviour. If that is the case, we include a warning as well.
+                        LogWarning(
+                            "Event unexpectedly included a full codeState in source: please check validity of result.",
+                            (nameof(ev.ProjectId), ev.ProjectId), (nameof(ev.EventId), ev.EventId.ToString()), 
+                            (nameof(ev.EventType), ev.EventType.ToString())
+                        );
+                    }
+
+                    // We copy the entire source to the dest.
+                    CopyDirectory(codeStateSrc, codeStateDest);
+                }
+
+                // Case 2: Did not include full codeState
+                else
+                {
+                    if (!previousCodeState.ContainsKey(ev.ProjectId))
+                    {
+                        // If no previous codeState was evaluated for the current project, we can only copy the partial codeState from the
+                        // source to the destination export.
+                        LogWarning(
+                            "No previous codeState is known for the current projectID: only including partial CodeState.",
+                            (nameof(ev.ProjectId), ev.ProjectId), (nameof(ev.CodeStateId), ev.CodeStateId.ToString()), 
+                            (nameof(ev.EventId), ev.EventId.ToString()), (nameof(ev.EventType), ev.EventType.ToString())
+                        );
+                        
+                        CopyDirectory(codeStateSrc, codeStateDest);
+                        continue;
+                    }
+
+                    string prevCodeState = Path.Join(_codeStateExportDir, previousCodeState[ev.ProjectId].ToString());
+                    CopyDirectory(prevCodeState, codeStateDest);
+                    CopyDirectory(codeStateSrc, codeStateDest, true);
+                }
+
+                previousCodeState[ev.ProjectId] = ev.CodeStateId.Value;
+            }
+
+            // Case 2: Event did not include codeState
+            else
+            {
+                if (!previousCodeState.ContainsKey(ev.ProjectId))
+                {
+                    // If no previous codeState is known for the current project, we are not able to perform any work for the current event,
+                    // thus we continue.
+                    LogWarning(
+                        "No previous codeState is known for the current projectID: could not include a reconstructed CodeState.",
+                        (nameof(ev.ProjectId), ev.ProjectId), (nameof(ev.EventId), ev.EventId.ToString()),
+                        (nameof(ev.EventType), ev.EventType.ToString())
+                    );
+                    continue;
+                }
+
+                // Now we know that the current event does not have an included codeState but there is one available for the current project,
+                // we are able to restore. In every case here, we need to generate a codeStateID and create a folder for the current event
+                // in the export directory...
+                ev.CodeStateId = Guid.NewGuid();
+                string codeStateDest = Path.Join(_codeStateExportDir, ev.CodeStateId.ToString());
+                Directory.CreateDirectory(codeStateDest);
+
+                //.. and subsequently copy the contents of the previous src to the destination.
+                string prevCodeStateSrc = Path.Join(_codeStateExportDir, previousCodeState[ev.ProjectId].ToString());
+                CopyDirectory(prevCodeStateSrc, codeStateDest);
+
                 // Now, some more work is required on a per-event basis.
                 switch (ev.EventType)
                 {
                     case EventType.EvtFileDelete:
+                    {
                         // A file was deleted and thus we must delete it as well from the current CodeState.
-                        // In this case, the current codeState will also be the previous one for the next iteration.
-                        string path = Path.Join(codeStateDir, ev.CodeStateSection);
-                        File.Delete(path);
-                        previousCodeState = (ev.CodeStateId.Value, false);
+                        // Some work is needed to remove the project directory from the path (i.e. ProjectDir/FileToDelete.cs).
+                        string projectDirectory = Path.GetDirectoryName(ev.ProjectId);
+                        string file = Path.GetRelativePath(projectDirectory!, ev.CodeStateSection!);
+                        File.Delete(Path.Join(codeStateDest, file));
                         break;
-                    
+                    }
+
                     case EventType.EvtFileRename:
+                    {
                         // A file was renamed and thus we must rename it as well in the current CodeState.
-                        // In this case, the current codeState will also be the previous one for the next iteration.
-                        string oldPath = Path.Join(codeStateDir, ev.OldFileName);
-                        string newPath = Path.Join(codeStateDir, ev.CodeStateSection);
-                        File.Move(oldPath, newPath);
-                        previousCodeState = (ev.CodeStateId.Value, false);
+                        string projectDirectory = Path.GetDirectoryName(ev.ProjectId);
+                        string oldFile = Path.GetRelativePath(projectDirectory!, ev.OldFileName!);
+                        string newFile = Path.GetRelativePath(projectDirectory!, ev.CodeStateSection!);
+                        File.Move(Path.Join(codeStateDest, oldFile), Path.Join(codeStateDest, newFile));
+                        break;
+                    }
+
+                    default:
+                        // All other cases do not require any further work; leaving in default statement for clarity.
                         break;
                 }
+
+                previousCodeState[ev.ProjectId] = ev.CodeStateId.Value;
             }
         }
     }
@@ -281,15 +336,16 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
 
     #region Logging
     /// <summary>
-    /// Prints a formatted info message to the AnsiConsole (if verbose-mode is enabled).
+    ///  Prints a formatted info message to the AnsiConsole (if verbose-mode is enabled).
     /// Automatically adds a trailing "." and newline.
     /// </summary>
     /// <param name="message"></param>
-    private void LogInfo(string message)
+    /// <param name="metadata"></param>
+    private void LogInfo(string message, params (string Name, string Value)[] metadata)
     {
         bool toConsole = _settings is {Quiet: false, Verbose: true};
         bool toFile = _settings.LogLevel >= LogLevel.Info;
-        Log(message, "[blue]Info:[/] ", toConsole, "[INFO] ", toFile);
+        Log(message, metadata, "[blue]Info:[/] ", toConsole, "[INFO] ", toFile);
     }
 
     /// <summary>
@@ -297,23 +353,27 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
     /// Automatically adds a trailing "." and newline.
     /// </summary>
     /// <param name="message"></param>
-    private void LogWarning(string message)
+    /// <param name="metadata"></param>
+
+    private void LogWarning(string message, params (string Name, string Value)[] metadata)
     {
         bool toConsole = !_settings.Quiet;
         bool toFile = _settings.LogLevel >= LogLevel.Warning;
-        Log(message, "[yellow]Warning:[/] ", toConsole, "[WARNING] ", toFile);
+        Log(message, metadata, "[yellow]Warning:[/] ", toConsole, "[WARNING] ", toFile);
     }
-    
+
     /// <summary>
     /// Prints a formatted error to the AnsiConsole.
     /// Automatically adds a trailing "." and newline.
     /// </summary>
     /// <param name="message"></param>
-    private void LogError(string message)
+    /// <param name="metadata"></param>
+
+    private void LogError(string message, params (string Name, string Value)[] metadata)
     {
         bool toConsole = !_settings.Quiet;
         bool toFile = _settings.LogLevel >= LogLevel.Error;
-        Log(message, "[red]Error:[/] ", toConsole, "[ERROR] ", toFile);
+        Log(message, metadata, "[red]Error:[/] ", toConsole, "[ERROR] ", toFile);
     }
 
     /// <summary>
@@ -321,24 +381,27 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
     /// enabling finer customization.
     /// </summary>
     /// <param name="message">The message to be logged</param>
+    /// <param name="metadata"></param>
     /// <param name="consoleHead">String to be included before the message when logging to the console</param>
     /// <param name="toConsole">Whether to log to the console</param>
     /// <param name="fileHead">String to be included before the message when logging to the logfile</param>
     /// <param name="toFile">Whether to log to the logfile</param>
-    private void Log(string message, string consoleHead, bool toConsole, string fileHead, bool toFile)
+    /// 
+    private void Log(string message, (string Name, string Value)[] metadata, string consoleHead, bool toConsole, string fileHead, bool toFile)
     {
         if (toConsole)
         {
             // TODO logging multiple lines renders improperly in conjunction with the progress bar
-            AnsiConsole.Write(new Markup($"{consoleHead}{message}\n"));
+           string info = metadata.Aggregate("", (current, next) => current + $"\n\t[bold]{next.Name}[/]:\t{next.Value}");
+           AnsiConsole.Write(new Markup($"{consoleHead}{message}{info}\n"));
         }
 
         if (toFile)
         {
-            // TODO Markdown directives are currently included in log file
             using FileStream fs = File.Open(_logFile, FileMode.Append);
             using StreamWriter sw = new(fs);
-            sw.WriteLine($"{fileHead}{message}");
+            string info = metadata.Aggregate("", (current, next) => current + $"\n\t{next.Name}:\t{next.Value}");
+            sw.WriteLine($"{fileHead}{message}{info}");
         }
     }
     #endregion
@@ -350,9 +413,10 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
     /// <see href="https://learn.microsoft.com/en-us/dotnet/standard/io/how-to-copy-directories">Source (Microsoft)</see>
     /// <param name="sourceDir"></param>
     /// <param name="destinationDir"></param>
-    /// <param name="recursive"></param>
+    /// <param name="overwrite">Defaults to false</param>
+    /// <param name="recursive">Defaults to true</param>
     /// <exception cref="DirectoryNotFoundException"></exception>
-    private static void CopyDirectory(string sourceDir, string destinationDir, bool recursive)
+    private static void CopyDirectory(string sourceDir, string destinationDir, bool overwrite = false, bool recursive = true)
     {
         // Get information about the source directory
         DirectoryInfo dir = new(sourceDir);
@@ -373,7 +437,7 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
         foreach (FileInfo file in dir.GetFiles())
         {
             string targetFilePath = Path.Combine(destinationDir, file.Name);
-            file.CopyTo(targetFilePath);
+            file.CopyTo(targetFilePath ,overwrite);
         }
 
         // If recursive and copying subdirectories, recursively call this method
