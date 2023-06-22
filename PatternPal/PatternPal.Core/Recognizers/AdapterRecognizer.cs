@@ -1,15 +1,18 @@
 ﻿#region
 
+using System.Runtime.ExceptionServices;
 using PatternPal.Core.StepByStep;
 using PatternPal.SyntaxTree.Models;
 using static PatternPal.Core.Checks.CheckBuilder;
+using Method = Google.Protobuf.WellKnownTypes.Method;
+using PatternPal.Core.StepByStep.Resources.Instructions;
 
 #endregion
 
 namespace PatternPal.Core.Recognizers;
 
 /// <summary>
-/// A <see cref="IRecognizer"/> that is used to determine if the provided files or project implements the adapter pattern
+/// A <see cref="IRecognizer"/> that is used to determine if the provided files or project implement the adapter pattern
 /// </summary>
 /// <remarks>
 /// Requirements for the Service class:<br/>
@@ -30,7 +33,7 @@ namespace PatternPal.Core.Recognizers;
 ///     a) inherits/implements the Client Interface<br/>
 ///     b) creates an Service object or gets one via the constructor<br/>
 ///     c) contains a private field in which the Service is stored<br/>
-///     d) does not return an instance of the Service<br/>
+///     d) does not return an instance of the Service<br/> //TODO this is currently checked only for possible methods, but a property could also return the service
 ///     e) a method uses the Service class<br/>
 /// </remarks>
 internal class AdapterRecognizer : IRecognizer
@@ -78,82 +81,27 @@ abstract file class AdapterRecognizerParent
         ICheck clientInterfaceClassType = IsInterfaceOrAbstractClassWithMethod(clientInterfaceMethod);
 
         //Helps check Client b
-        MethodCheck allServiceMethods = Method(Priority.Low);
+        MethodCheck serviceMethod = ServiceMethod();
 
         //Check Concrete Service a
-        ClassCheck service = Class(
-            Priority.Low,
-            Not(
-                Priority.Knockout,
-                DoesInheritFrom(clientInterfaceClassType)
-            ),
-            allServiceMethods
-        );
-
-        //Check Adapter a, Client interface b
-        RelationCheck inheritsClientInterface = DoesInheritFrom(clientInterfaceClassType);
-
-        //Check Adapter b
-        ICheck createsServiceObject = CreatesObjectOrGetViaConstructor(service);
+        ClassCheck service = Service(serviceMethod, clientInterfaceClassType);
 
         //Check Adapter c
         FieldCheck containsServiceField = ContainsServiceField(service);
 
-        //Check Adapter d
-        ICheck noServiceReturn = NoServiceReturn(service);
+        MethodCheck adapterMethod = AdapterMethod(containsServiceField, serviceMethod);
 
-        //Check Adapter e, Service b
-        ICheck usesServiceClass = Method(
-            Priority.High,
-            UsesServiceClass(service, containsServiceField)
-        );
+        ICheck createsObjectOrGetViaConstructor = CreateServiceOrGetViaConstructor(service, containsServiceField);
 
-        //Helps Client b
-        MethodCheck adapterMethodsUsingService = Method(
-            Priority.Low,
-            Uses(
-                Priority.Low,
-                allServiceMethods
-            )
-        );
+        ClassCheck adapter = Adapter(clientInterfaceClassType, createsObjectOrGetViaConstructor, service, containsServiceField, adapterMethod);
 
-        ClassCheck adapter = Class(
-            Priority.Low,
-            inheritsClientInterface,
-            createsServiceObject,
-            containsServiceField,
-            noServiceReturn,
-            usesServiceClass,
-            adapterMethodsUsingService
-        );
+        ICheck client = Client(adapter, adapterMethod);
 
-        //Check Client a
-        RelationCheck createsAdapter = Creates(
-            Priority.Mid,
-            adapter
-        );
-
-        //Check Client b
-        MethodCheck clientUsesServiceViaAdapter = Method(
-            Priority.Low,
-            Uses(
-                Priority.Low,
-                adapterMethodsUsingService
-            )
-        );
-
-        ICheck client = Class(
-            Priority.Low,
-            createsAdapter,
-            clientUsesServiceViaAdapter
-        );
-
-        return new ICheck[] { clientInterfaceClassType, service, adapter, client };
+        return new[] { clientInterfaceClassType, service, adapter, client };
     }
 
-
     /// <summary>
-    /// An <see cref="ICheck"/> which will determine if a <see langword="node"/> is either an <see langword="interface"/> or an <see langword="abstract class"/>.
+    /// An <see cref="ICheck"/> which will determine if an <see cref="INode"/> is either an <see langword="interface"/> or an <see langword="abstract class"/>.
     /// </summary>
     public abstract ICheck IsInterfaceOrAbstractClassWithMethod(MethodCheck method);
 
@@ -164,51 +112,138 @@ abstract file class AdapterRecognizerParent
     public abstract MethodCheck ContainsOverridableMethod();
 
     /// <summary>
+    /// An <see cref="ICheck"/> searching for the <see cref="IMethod"/> of Service. 
+    /// </summary>
+    public MethodCheck ServiceMethod()
+    {
+        return Method(Priority.Low);
+    }
+
+    /// <summary>
+    /// An <see cref="ICheck"/> searching for the Service <see cref="IClass"/>, encompassing all requirements of the Service class.
+    /// It should have an <see cref="IMethod"/> and may not inherit from  / implement ClientInterface
+    /// </summary>
+    public ClassCheck Service(MethodCheck serviceMethod, ICheck clientInterfaceClassType)
+    {
+        return Class(
+            Priority.Low,
+            Not(
+                Priority.Knockout,
+                DoesInheritFrom(clientInterfaceClassType)
+            ),
+            serviceMethod
+        );
+    }
+
+    /// <summary>
+    /// An <see cref="ICheck"/> searching for the <see cref="IMethod"/> of Adapter. Checks whether the method uses the method of Service via the field.
+    /// </summary>
+    protected MethodCheck AdapterMethod(FieldCheck serviceField, MethodCheck serviceMethod)
+    {
+        return
+            Method(
+                Priority.High,
+                Uses(
+                    Priority.High,
+                    serviceField
+                ),
+                Uses(
+                    Priority.Low,
+                    serviceMethod
+                )
+            );
+    }
+
+    /// <summary>
+    /// An <see cref="ICheck"/> searching for the Adapter <see cref="IClass"/>, encompassing all requirements of the Adapter class.
+    /// </summary>
+    protected ClassCheck Adapter(ICheck clientInterfaceClassType, ICheck createsObjectOrGetViaConstructor, ClassCheck service, FieldCheck containsServiceField, MethodCheck adapterMethod)
+    {
+        return Class(
+            Priority.Low,
+            DoesInheritFrom(clientInterfaceClassType),
+            containsServiceField,
+            createsObjectOrGetViaConstructor,
+            Not(
+                Priority.High,
+                Method(
+                    Priority.High,
+                    Type(
+                        Priority.High,
+                        service
+                    )
+                )
+            ),
+            adapterMethod
+        );
+    }
+
+    /// <summary>
     /// An <see cref="ICheck"/> which will determine if the parentcheck inherits from the <paramref name="parent"/> node.
     /// </summary>
     public abstract RelationCheck DoesInheritFrom(ICheck parent);
 
     /// <summary>
-    /// An <see cref="ICheck"/> which will determine if the parentcheck creates the <paramref name="obj"/> node or if it is given als parameter with a constructor.
-    /// In the second case it also checks if there is no constructor without the  <paramref name="obj"/> type.
+    /// An <see cref="ICheck"/> which will determine if the parentcheck creates the <paramref name="service"/> node 
     /// </summary>
-    private ICheck CreatesObjectOrGetViaConstructor(ClassCheck obj)
+    protected RelationCheck CreateService(ClassCheck service)
     {
-        return Any(
+        return Creates(
             Priority.Knockout,
-            Creates(
+            service
+        );
+    }
+
+    /// <summary>
+    /// An <see cref="ICheck"/> which will determine if the parentcheck is a parameter of all constructors, and the parameter gets passed to the field.
+    /// </summary>
+    protected ICheck GetServiceFromConstructor(ClassCheck service, FieldCheck serviceField)
+    {
+        return All( //TODO check for field usage 
+            Priority.Knockout,
+            Constructor(
                 Priority.Knockout,
-                obj
+                Parameters(
+                    Priority.Knockout,
+                    Type(
+                        Priority.Knockout,
+                        service
+                    )
+                ),
+                Uses(
+                    Priority.Knockout,
+                    serviceField
+                )
             ),
-            All(
+            Not(
                 Priority.Knockout,
                 Constructor(
                     Priority.Knockout,
-                    Parameters(
+                    Not(
                         Priority.Knockout,
-                        Type(
+                        Parameters(
                             Priority.Knockout,
-                            obj
-                        )
-                    )
-                ),
-                Not(
-                    Priority.Knockout,
-                    Constructor(
-                        Priority.Knockout,
-                        Not(
-                            Priority.Knockout,
-                            Parameters(
+                            Type(
                                 Priority.Knockout,
-                                Type(
-                                    Priority.Knockout,
-                                    obj
-                                )
+                                service
                             )
                         )
                     )
                 )
             )
+        );
+    }
+
+    /// <summary>
+    /// An <see cref="ICheck"/> which will determine if the parentcheck creates the <paramref name="service"/> node or if it is a parameter of all constructors,
+    /// and the parameter gets passed to the field
+    /// </summary>
+    protected ICheck CreateServiceOrGetViaConstructor(ClassCheck service, FieldCheck serviceField)
+    {
+        return Any(
+            Priority.Knockout,
+            CreateService(service),
+            GetServiceFromConstructor(service, serviceField)
         );
     }
 
@@ -232,36 +267,23 @@ abstract file class AdapterRecognizerParent
     }
 
     /// <summary>
-    /// An <see cref="ICheck"/> which will determine if the parentclass does not have a method which returns an object of the <paramref name="service"/> type.
+    /// An <see cref="ICheck"/> searching for the Client <see cref="IClass"/>, encompassing all requirements of the Client class.
+    /// It should create and use the Adapter.
     /// </summary>
-    ICheck NoServiceReturn(ClassCheck service)
+    protected ClassCheck Client(ClassCheck adapter, MethodCheck adapterMethod)
     {
-        return Not(
-            Priority.High,
-            Method(
-                Priority.High,
-                Type(
-                    Priority.High,
-                    service
-                )
-            )
-        );
-    }
-
-    /// <summary>
-    /// An <see cref="ICheck"/> which will determine if the parentcheck ueses the <paramref name="service"/> class directly or via the <paramref name="serviceField"/> field.
-    /// </summary>
-    ICheck UsesServiceClass(ClassCheck service, FieldCheck serviceField)
-    {
-        return Any(
-            Priority.High,
-            Uses(
-                Priority.High,
-                service
+        return Class(
+            Priority.Low,
+            Creates(
+                Priority.Mid,
+                adapter
             ),
-            Uses(
-                Priority.High,
-                serviceField
+            Method(
+                Priority.Low,
+                Uses(
+                    Priority.Low,
+                    adapterMethod
+                )
             )
         );
     }
@@ -320,8 +342,10 @@ file class AdapterRecognizerAbstractClass : AdapterRecognizerParent
 /// </summary>
 file class AdapterRecognizerInterface : AdapterRecognizerParent, IStepByStepRecognizer 
 {
+    /// <inheritdoc />
     public string Name => "Adapter with interface";
 
+    /// <inheritdoc />
     public Recognizer RecognizerType => Recognizer.Adapter;
 
     /// <inheritdoc />
@@ -348,18 +372,63 @@ file class AdapterRecognizerInterface : AdapterRecognizerParent, IStepByStepReco
         );
     }
 
+    /// <inheritdoc />
     public List<IInstruction> GenerateStepsList()
     {
         List<IInstruction> generateStepsList = new();
 
-        MethodCheck clientInterfaceMethod = ContainsOverridableMethod();
-        ICheck clientInterfaceClassType = IsInterfaceOrAbstractClassWithMethod(clientInterfaceMethod);
+        MethodCheck adapterInterfaceMethod = ContainsOverridableMethod();
+        ICheck adapterInterface = IsInterfaceOrAbstractClassWithMethod(adapterInterfaceMethod);
 
         generateStepsList.Add(
             new SimpleInstruction(
-                "TODO",
-                "TODO",
-                new List<ICheck> { clientInterfaceClassType }));
+                AdapterInstructions.Step1,
+                AdapterInstructions.Explanation1,
+                new List<ICheck> { adapterInterface }));
+
+        MethodCheck serviceMethod = ServiceMethod();
+        ClassCheck service = Service(serviceMethod, adapterInterface);
+
+        generateStepsList.Add(
+            new SimpleInstruction(
+                AdapterInstructions.Step2,
+                AdapterInstructions.Explanation2,
+                new List<ICheck>
+                {
+                    adapterInterface,
+                    service
+                }));
+
+        FieldCheck containsServiceField = ContainsServiceField(service);
+
+        MethodCheck adapterMethod = AdapterMethod(containsServiceField, serviceMethod);
+        RelationCheck createsService = CreateService(service);
+        ClassCheck adapter = Adapter(adapterInterface, createsService, service, containsServiceField, adapterMethod);
+
+        generateStepsList.Add(
+            new SimpleInstruction(
+                AdapterInstructions.Step3,
+                AdapterInstructions.Explanation3,
+                new List<ICheck>
+                {
+                    adapterInterface,
+                    service,
+                    adapter
+                }));
+
+        ICheck client = Client(adapter, adapterMethod);
+
+        generateStepsList.Add(
+            new SimpleInstruction(
+                AdapterInstructions.Step4,
+                AdapterInstructions.Explanation4,
+                new List<ICheck>
+                {
+                    adapterInterface,
+                    service,
+                    adapter,
+                    client
+                }));
 
         return generateStepsList;
     }

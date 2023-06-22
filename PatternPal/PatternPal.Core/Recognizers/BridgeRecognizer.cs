@@ -6,7 +6,7 @@ using static PatternPal.Core.Checks.CheckBuilder;
 namespace PatternPal.Core.Recognizers;
 
 /// <summary>
-/// A <see cref="IRecognizer"/> that is used to determine if the provided files or project implements the bridge pattern
+/// A <see cref="IRecognizer"/> that is used to determine if the provided files or project implement the bridge pattern
 /// </summary>
 /// <remarks>
 /// Requirements for the Implementation interface or abstract class:<br/>
