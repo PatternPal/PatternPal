@@ -4,17 +4,19 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+
 using EnvDTE;
 using EnvDTE80;
+
 using Microsoft.VisualStudio.Shell;
+
 using PatternPal.Extension.Grpc;
 using PatternPal.Protos;
-using System.Text.RegularExpressions;
+
 using JsonSerializer = System.Text.Json.JsonSerializer;
-using Google.Protobuf.Collections;
 
 #endregion
 
@@ -98,6 +100,7 @@ namespace PatternPal.Extension.Commands
             _package = package;
             _cancellationToken = cancellationToken;
             _toolInstances = $" { _dte.Version } { _dte.Edition } { _dte.Name } {Vsix.Version}";
+
             // We should call OnChangedLoggingPreference to "load" a possibly stored setting. The
             // application always stored with the internal flag set to false, so this will only actually
             // do something when it was stored as true (and subsequently kickstart the logging session).
@@ -592,14 +595,9 @@ namespace PatternPal.Extension.Commands
 
             foreach (Project project in projects)
             {
-                if (project == null)
-                {
-                    continue;
-                }
-
                 // This catches miscellaneous projects without a defined project.Fullname; the cause of this is unknown since
                 // we are using internal-use-only libraries for event catching.
-                if (project.FullName == null || !File.Exists((project.FullName)))
+                if (project?.FullName == null || !File.Exists((project.FullName)))
                 {
                     continue;
                 }
