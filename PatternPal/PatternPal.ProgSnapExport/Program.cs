@@ -193,10 +193,14 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
         foreach (ProgSnap2Event ev in data)
         {
             if (ev.ProjectId == null)
-            {
-                // Cannot reliably assess what codeState should be restored without projectID. Note that
-                // not every event (i.e. Session.Start and Session.End) has a relevant CodeState. We do
-                // know that no codeState is included when the projectId is not set, so we omit that check.
+            {   
+                // Not every codeState should have a projectID; we omit the warning for session start and session end.
+                if (ev.EventType is EventType.EvtSessionStart or EventType.EvtSessionEnd)
+                {
+                    continue;
+                }
+
+                // Cannot reliably assess what codeState should be restored without projectID.
                 LogWarning(
                     "Event does not have a projectID: could not include a reconstructed CodeState.",
                     (nameof(ev.EventId), ev.EventId.ToString()), (nameof(ev.EventType), ev.EventType.ToString())
