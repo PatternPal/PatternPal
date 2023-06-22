@@ -201,7 +201,7 @@ internal abstract class BridgeRecognizerParent
 
         return Any(
             Priority.Mid,
-            "2d. Has either a property as described in 2a), or a constructor or a method with a parameter that has the Implementation type and uses the field as described in 2a).",
+            "2d. Has either a property as described in the first requirement, or a constructor or a method with a parameter that has the Implementation type and uses the field as described in the first requirement.",
             implementationProperty,
             setImplementationConstructor,
             setImplementationMethod
