@@ -57,6 +57,12 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
             .Select(e => e.SessionId)
             .Distinct()
             .ToList();
+        
+        if (sessions.Count == 0) 
+        {
+            LogInfo("None found within query.");
+            return 0;
+        }
 
         // Parse all sessions
         // This is wrapped in a progressContext to display a progress bar.
@@ -136,24 +142,13 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
             .Where(e => e.SessionId == sessionId)
             .OrderBy(e => e.Order)
             .ToList();
-        
+
         if (!_settings.CsvOnly)
         {
             // We first restore the codeStates since this process might add
             // extra details to the eventual database.
             LogInfo($"Restoring CodeStates...");
-            
-            // We need to obtain all unique projectIDs...
-            List<string> projects = _dbContext.Events
-                .Where(e => e.ClientDatetime >= _lowerBound && e.ClientDatetime <= _upperBound)
-                .Select(e => e.ProjectId)
-                .Where(projectId => projectId != null)
-                .Distinct()
-                .ToList()!;
-            
-            projects.ForEach(projectId => RestoreProject(projectId, ref data));
-            
-            // TODO Should we create a warning for each event without a projectId?
+            RestoreCodeState(ref data);
         }
         
         LogInfo($"Writing data to csv...");
@@ -190,12 +185,24 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
             csv.WriteRecords(data);
         }
     }
+
+    /// <summary>
+    /// TODO
+    /// </summary>
+    /// <param name="data"></param>
+    private void RestoreCodeState(ref List<ProgSnap2Event> data)
+    {
+        Dictionary<string, (Guid Id, bool Full)> previousCodeState = new();
+        
+        
+    }
     
     /// <summary>
     /// TODO
     /// </summary>
     /// <param name="projectId"></param>
     /// <param name="data"></param>
+    [Obsolete]
     private void RestoreProject(string projectId, ref List<ProgSnap2Event> data)
     {
         LogInfo($"Restoring project [bold]{projectId}[/]");
