@@ -27,12 +27,26 @@ public class ClearCodeStatesJob : IJob
         _logger.LogInformation("Clearing CodeState folders");
         List<Guid?> uniqueCodeStates = await _eventRepository.GetUniqueCodeStates();
 
-        foreach (string folderName in Directory.EnumerateDirectories("CodeStates"))
+        foreach (string folderName in Directory.EnumerateDirectories(Path.Combine(Directory.GetCurrentDirectory(), "CodeStates")))
         {
-            if (!uniqueCodeStates.Contains(Guid.Parse(folderName.Split('\\').Last())))
+            DirectoryInfo info = new(folderName);
+            string name = info.Name;
+
+            if (Guid.TryParse(name, out Guid directoryGuid))
             {
-                Directory.Delete(folderName, true);
-                _logger.LogInformation($"Deleted {folderName}");
+                if (!uniqueCodeStates.Contains(directoryGuid))
+                {
+                    Directory.Delete(folderName, true);
+                    _logger.LogInformation($"Deleted {folderName}");
+                }
+                else
+                {
+                    _logger.LogInformation($"Kept {folderName}");
+                }
+            }
+            else
+            {
+                _logger.LogWarning($"Could not parse {folderName} as a Guid");
             }
         }
 
