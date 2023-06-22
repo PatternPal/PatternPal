@@ -466,6 +466,7 @@ namespace PatternPal.Extension.Commands
             IList<RecognizeResult> recognizeResults)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
+
             if (_package == null || !Privacy.Instance.DoLogData)
             { 
               return; 
@@ -474,7 +475,28 @@ namespace PatternPal.Extension.Commands
             LogEventRequest request = CreateStandardLog();
 
             request.EventType = EventType.EvtXRecognizerRun;
+
+            if (recognizeRequest.FileOrProjectCase == RecognizeRequest.FileOrProjectOneofCase.File)
+            {
+                // The extension either runs on the currently active document or an entire project.
+                // In case of the current active document, we try obtaining the projectID using eventDTE.
+                if (_dte.SelectedItems.Count > 0)
+                {
+                    SelectedItem selectedItem = _dte.SelectedItems.Item(0);
+                    if (selectedItem.Project != null)
+                    {
+                        request.ProjectId = selectedItem.Project.UniqueName;
+                    }
+
+                }
+            }
+            else
+            {
+                
+            }
+
             string config = recognizeRequest.Recognizers.ToString();
+
 
             request.RecognizerConfig = config;
             foreach (RecognizeResult result in recognizeResults)
