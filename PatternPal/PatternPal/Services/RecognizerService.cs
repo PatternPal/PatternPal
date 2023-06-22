@@ -1,9 +1,8 @@
-﻿using PatternPal.Core.Checks;
-using PatternPal.Core.Runner;
-using PatternPal.SyntaxTree.Abstractions.Entities;
-using PatternPal.SyntaxTree.Abstractions.Members;
+﻿#region
 
 using IMethod = PatternPal.SyntaxTree.Abstractions.Members.IMethod;
+
+#endregion
 
 namespace PatternPal.Services;
 
@@ -31,8 +30,6 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
         IServerStreamWriter< RecognizeResponse > responseStream,
         ServerCallContext context)
     {
-        // TODO CV: Handle error cases
-
         // Get the list of files on which to run the recognizers.
         IList< string > ? files = GetFiles(request);
         if (files is null)
@@ -40,8 +37,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
             return Task.CompletedTask;
         }
 
-        // Run the recognizers. We need to cast the result to a `List` to access the `Sort` method,
-        // which is defined on the class, not on the `IList` contract.
+        // Run the recognizers.
         RecognizerRunner runner = new(
             files,
             request.Recognizers );
@@ -53,23 +49,23 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
             RecognizeResult rootResult = new()
                                          {
                                              Recognizer = runResult.RecognizerType!.Value,
-                                             Feedback = "Goed gedoet"
+                                             Feedback = "To be determined" // TODO: Generate feedback
                                          };
 
-            Dictionary< string, (Result Result, Func< IDictionary< ICheck, ICheckResult >, bool >) > resultsByRequirement = new();
+            Dictionary< string, Result > resultsByRequirement = new();
 
             // Get all requirements for which we have results.
             IDictionary< ICheck, ICheckResult > resultsByCheck = new Dictionary< ICheck, ICheckResult >();
-            foreach ((Result Result, Func< IDictionary< ICheck, ICheckResult >, bool >) result in GetResults(
+            foreach (Result result in GetResults(
                 resultsByCheck,
                 runResult.CheckResult))
             {
                 if (!resultsByRequirement.TryGetValue(
-                        result.Result.Requirement,
-                        out (Result Result, Func< IDictionary< ICheck, ICheckResult >, bool >) existingResult)
-                    || (existingResult.Result.MatchedNode == null && result.Result.MatchedNode != null))
+                        result.Requirement,
+                        out Result ? existingResult)
+                    || (existingResult.MatchedNode == null && result.MatchedNode != null))
                 {
-                    resultsByRequirement[ result.Result.Requirement ] = result;
+                    resultsByRequirement[ result.Requirement ] = result;
                 }
             }
 
@@ -78,25 +74,26 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
             {
                 if (!resultsByRequirement.TryGetValue(
                     requirement,
-                    out (Result Result, Func< IDictionary< ICheck, ICheckResult >, bool >) foundResult))
+                    out Result ? foundResult))
                 {
-                    resultsByRequirement[ requirement ] = (new Result
-                                                           {
-                                                               Requirement = requirement,
-                                                               Correctness = Result.Types.Correctness.CIncorrect,
-                                                           }, _ => false);
-                    continue;
+                    resultsByRequirement[ requirement ] = new Result
+                                                          {
+                                                              Requirement = requirement,
+                                                              Correctness = Result.Types.Correctness.CIncorrect,
+                                                          };
                 }
             }
 
-            // TODO: Generate feedback for incorrect/missing requirements.
             int oldEntityCheck = 0;
             EntityResult entityResult = new();
 
-            foreach ((Result result, Func< IDictionary< ICheck, ICheckResult >, bool > calcCorrect) in resultsByRequirement.Values.OrderBy(r => r.Result.Requirement))
+            foreach (Result result in resultsByRequirement.Values.OrderBy(r => r.Requirement))
             {
-                string[] splittedRequirement = result.Requirement.Split(". ");
-                if (int.TryParse(splittedRequirement[0], out int newEntityCheck) && oldEntityCheck != newEntityCheck)
+                string[ ] splittedRequirement = result.Requirement.Split(". ");
+                if (int.TryParse(
+                        splittedRequirement[ 0 ],
+                        out int newEntityCheck)
+                    && oldEntityCheck != newEntityCheck)
                 {
                     if (oldEntityCheck > 0)
                     {
@@ -105,31 +102,21 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                     oldEntityCheck = newEntityCheck;
 
                     entityResult = new EntityResult
-                    {
-                        Name = splittedRequirement[1],
-                        MatchedNode = result.MatchedNode
-                    };
-
-                    if (!calcCorrect(resultsByCheck))
-                    {
-                        entityResult.MatchedNode = null;
-                    }
+                                   {
+                                       Name = splittedRequirement[ 1 ],
+                                       MatchedNode = result.MatchedNode
+                                   };
                 }
                 else
                 {
-                    if (!calcCorrect(resultsByCheck))
-                    {
-                        result.MatchedNode = null;
-                    }
-
                     int position = 0;
-                    string isThisInt = splittedRequirement[0];
-                    while (char.IsDigit(isThisInt[position]))
+                    string isThisInt = splittedRequirement[ 0 ];
+                    while (char.IsDigit(isThisInt[ position ]))
                     {
                         position++;
                     }
 
-                    result.Requirement = splittedRequirement[0][position..] + ") " + splittedRequirement[1];
+                    result.Requirement = splittedRequirement[ 0 ][ position.. ] + ") " + splittedRequirement[ 1 ];
                     entityResult.Requirements.Add(result);
                 }
             }
@@ -137,6 +124,22 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
             if (entityResult.Requirements.Count > 0)
             {
                 rootResult.EntityResults.Add(entityResult);
+            }
+
+            // Get an entity from the requirements if the entity result doesn't have one yet.
+            foreach (EntityResult result in rootResult.EntityResults)
+            {
+                if (result.MatchedNode == null)
+                {
+                    foreach (Result childResult in result.Requirements)
+                    {
+                        if (childResult.MatchedNode is {Kind: MatchedNode.Types.MatchedNodeKind.MnkClass or MatchedNode.Types.MatchedNodeKind.MnkInterface})
+                        {
+                            result.MatchedNode = childResult.MatchedNode;
+                            break;
+                        }
+                    }
+                }
             }
 
             RecognizeResponse response = new()
@@ -150,15 +153,13 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
     }
 
     /// <summary>
-    /// This method transforms a <see cref="ICheckResult"/> to a <see cref="Result"/>
+    /// Converts the <see cref="ICheckResult"/>s to <see cref="Result"/>s, which can be sent to the
+    /// frontend.
     /// </summary>
-    /// <param name="resultsByCheck"></param>
-    /// <param name="rootCheckResult"></param>
-    /// <param name="resultsToProcess"></param>
-    /// <param name="checkResult"> The check to transform.</param>
-    /// <param name="usedNodes"></param>
-    /// <returns></returns>
-    private static IEnumerable< (Result, Func< IDictionary< ICheck, ICheckResult >, bool >) > GetResults(
+    /// <param name="resultsByCheck">Maps <see cref="ICheck"/>s to their <see cref="ICheckResult"/>s.</param>
+    /// <param name="rootCheckResult">The root <see cref="ICheckResult"/>.</param>
+    /// <returns><see cref="Result"/>s.</returns>
+    private static IEnumerable< Result > GetResults(
         IDictionary< ICheck, ICheckResult > resultsByCheck,
         ICheckResult rootCheckResult)
     {
@@ -170,7 +171,6 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
 
             if (!string.IsNullOrWhiteSpace(resultToProcess.Check.Requirement))
             {
-
                 Result result = new()
                                 {
                                     Requirement = resultToProcess.Check.Requirement,
@@ -200,24 +200,14 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                                          };
                 }
 
-                result.Correctness = resultToProcess.Score.PercentageTo(resultToProcess.PerfectScore) switch
+                result.Correctness = resultToProcess.Score.PercentageOf(resultToProcess.PerfectScore) switch
                 {
                     100 => Result.Types.Correctness.CCorrect,
                     > 50 => Result.Types.Correctness.CPartiallyCorrect,
                     _ => Result.Types.Correctness.CIncorrect,
                 };
-                Func< IDictionary< ICheck, ICheckResult >, bool > calcCorrect = check2Result =>
-                                                                                {
-                                                                                    //Score perfectScore = resultToProcess.Check.PerfectScore(
-                                                                                    //    check2Result,
-                                                                                    //    resultToProcess);
-                                                                                    //Score actualScore = resultToProcess.Score;
 
-                                                                                    return resultToProcess.Score.Equals(resultToProcess.PerfectScore);
-                                                                                    //return !perfectScore.Equals(default)
-                                                                                    //       && perfectScore.Equals(actualScore);
-                                                                                };
-                yield return (result, calcCorrect);
+                yield return result;
             }
 
             switch (resultToProcess)
@@ -228,7 +218,6 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                     resultsToProcess.Enqueue(notCheckResult.NestedResult);
                     continue;
                 case NodeCheckResult nodeCheckResult:
-                    //bool first = true;
                     foreach (ICheckResult childCheckResult in nodeCheckResult.ChildrenCheckResults)
                     {
                         if (childCheckResult is NodeCheckResult {NodeCheckCollectionWrapper: true} childNodeCheckResult)
@@ -238,16 +227,6 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                                 resultsByCheck[ matchedNodeCheckResult.Check ] = matchedNodeCheckResult;
                             }
                         }
-                        //if (!((Dictionary< ICheck, ICheckResult >)resultsByCheck).TryAdd(
-                        //    childCheckResult.Check,
-                        //    childCheckResult))
-                        //{
-                        //    if (nodeCheckResult.NodeCheckCollectionWrapper && first)
-                        //    {
-                        //        resultsByCheck[ childCheckResult.Check ] = childCheckResult;
-                        //        first = false;
-                        //    }
-                        //}
                         resultsToProcess.Enqueue(childCheckResult);
                     }
                     continue;
@@ -258,8 +237,10 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
     /// <summary>
     /// Gets the list of files on which to run the recognizers.
     /// </summary>
-    /// <returns><see langword="null"/> if the request contains no valid file or project directory,
-    /// or a list of files otherwise.</returns>
+    /// <returns>
+    /// <see langword="null"/> if the request contains no valid file or project directory, or a list
+    /// of files otherwise.
+    /// </returns>
     private static IList< string > ? GetFiles(
         RecognizeRequest request)
     {

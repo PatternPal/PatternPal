@@ -9,8 +9,14 @@ using PatternPal.Protos;
 
 namespace PatternPal.Extension.ViewModels
 {
+    /// <summary>
+    /// View model for <see cref="Protos.Result"/>s.
+    /// </summary>
     public class CheckResultViewModel
     {
+        /// <summary>
+        /// Icon representing the correctness of this <see cref="Result"/>.
+        /// </summary>
         public ImageMoniker Icon
         {
             get
@@ -29,8 +35,14 @@ namespace PatternPal.Extension.ViewModels
             }
         }
 
+        /// <summary>
+        /// Requirement to which this <see cref="Result"/> belongs.
+        /// </summary>
         public string Requirement { get; }
 
+        /// <summary>
+        /// Icon for the matched node.
+        /// </summary>
         public ImageMoniker MatchedNodeIcon
         {
             get
@@ -59,10 +71,20 @@ namespace PatternPal.Extension.ViewModels
             }
         }
 
+        /// <summary>
+        /// Name of the matched node.
+        /// </summary>
         public string MatchedNodeName { get; }
 
+        /// <summary>
+        /// The <see cref="Protos.Result"/> this view model represents.
+        /// </summary>
         public Result Result { get; }
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="CheckResultViewModel"/> class.
+        /// </summary>
+        /// <param name="result">The <see cref="Protos.Result"/> this view model is for.</param>
         public CheckResultViewModel(
             Result result)
         {

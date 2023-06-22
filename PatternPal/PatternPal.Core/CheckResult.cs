@@ -46,13 +46,25 @@ public interface ICheckResult
     /// </summary>
     Score Score { get; }
 
+    /// <summary>
+    /// The <see cref="Score"/> of this <see cref="ICheckResult"/> if it is completely correct.
+    /// </summary>
     Score PerfectScore { get; }
 
+    /// <summary>
+    /// Sets the <see cref="Runner.Score"/>. <paramref name="perfect"/> controls the kind of
+    /// <see cref="Runner.Score"/> to set.
+    /// </summary>
+    /// <param name="perfect">Whether to store <paramref name="score"/> as <see cref="Score"/> or as <see cref="PerfectScore"/>.</param>
+    /// <param name="score">The <see cref="Runner.Score"/> to store.</param>
     void SetScore(
         bool perfect,
         Score score);
 }
 
+/// <summary>
+/// Base class for <see cref="ICheckResult"/>s.
+/// </summary>
 public abstract class BaseCheckResult : ICheckResult
 {
     /// <inheritdoc />
@@ -80,6 +92,7 @@ public abstract class BaseCheckResult : ICheckResult
     /// <inheritdoc />
     public Score PerfectScore { get; private set; }
 
+    /// <inheritdoc />
     public void SetScore(
         bool perfect,
         Score score)

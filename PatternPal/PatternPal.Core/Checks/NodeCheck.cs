@@ -1,5 +1,8 @@
 ﻿namespace PatternPal.Core.Checks;
 
+/// <summary>
+/// Base class for <see cref="NodeCheck{TNode}"/>s.
+/// </summary>
 public abstract class NodeCheckBase : CheckBase
 {
     /// <summary>
@@ -7,6 +10,12 @@ public abstract class NodeCheckBase : CheckBase
     /// </summary>
     internal IEnumerable< ICheck > SubChecks { get; }
 
+    /// <summary>
+    /// Creates a new instance of <see cref="NodeCheckBase"/>.
+    /// </summary>
+    /// <param name="priority"><see cref="Priority"/> of the check.</param>
+    /// <param name="requirement">The optional requirement which this <see cref="ICheck"/> checks.</param>
+    /// <param name="subChecks">A list of sub-<see cref="ICheck"/>s that should be checked.</param>
     protected NodeCheckBase(
         Priority priority,
         string ? requirement,
@@ -76,6 +85,7 @@ public class NodeCheck< TNode > : NodeCheckBase
         }
     }
 
+    /// <inheritdoc />
     public override Score PerfectScore
     {
         get

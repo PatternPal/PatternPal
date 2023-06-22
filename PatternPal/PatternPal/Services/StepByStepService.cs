@@ -1,6 +1,5 @@
 ﻿#region
 
-using PatternPal.Core.Runner;
 using PatternPal.Core.StepByStep;
 
 using InstructionSet = PatternPal.Protos.InstructionSet;

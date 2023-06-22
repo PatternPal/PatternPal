@@ -13,7 +13,6 @@ message RecognizeResult {
     string feedback = 2;
 
     // The results for the individual checks which make up the recognizer.
-    //repeated EntityResult entity_results = 3;
     repeated EntityResult entity_results = 3;
 }
 
@@ -37,10 +36,10 @@ message Result {
     // The MatchedNode of this result.
     MatchedNode matched_node = 2;
 
-    // How far the requirement has been implemented.
+    // How well the requirement has been implemented.
     Correctness correctness = 3;
 
-    // How far a requirement has been implemented.
+    // How well a requirement has been implemented.
     enum Correctness {
         // The default value.
         C_UNKNOWN = 0;
@@ -73,14 +72,27 @@ message MatchedNode {
     // The kind of matched node.
     MatchedNodeKind kind = 5;
 
+    // The kind of matched node.
     enum MatchedNodeKind {
+        // The default value.
         MNK_UNKNOWN = 0;
 
+        // Interface.
         MNK_INTERFACE = 1;
+
+        // Class.
         MNK_CLASS = 2;
+
+        // Constructor.
         MNK_CONSTRUCTOR = 3;
+
+        // Field.
         MNK_FIELD = 4;
+
+        // Method.
         MNK_METHOD = 5;
+
+        // Property.
         MNK_PROPERTY = 6;
     }
 }

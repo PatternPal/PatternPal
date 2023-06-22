@@ -27,7 +27,12 @@ internal class RelationCheck : CheckBase
                               true)
         : _perfectScore;
 
-    private static Score PerfectScoreFromRelatedCheck(
+    /// <summary>
+    /// Gets the perfect <see cref="Score"/> of the <paramref name="relatedCheck"/>.
+    /// </summary>
+    /// <param name="relatedCheck">The related <see cref="ICheck"/>.</param>
+    /// <returns>The <see cref="ICheck.PerfectScore"/> of the <paramref name="relatedCheck"/>.</returns>
+    internal static Score PerfectScoreFromRelatedCheck(
         ICheck relatedCheck)
     {
         while (true)

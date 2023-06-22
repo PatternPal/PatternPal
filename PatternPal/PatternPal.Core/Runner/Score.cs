@@ -11,14 +11,6 @@ public struct Score : IComparable< Score >,
     private int _mid;
     private int _low;
 
-    public static Score MaxValue => new()
-                                    {
-                                        _knockout = int.MaxValue,
-                                        _high = int.MaxValue,
-                                        _mid = int.MaxValue,
-                                        _low = int.MaxValue
-                                    };
-
     /// <summary>
     /// Adds up every component of the right <see cref="Score"/> from the left <see cref="Score"/>.
     /// </summary>
@@ -27,18 +19,10 @@ public struct Score : IComparable< Score >,
         Score b) =>
         new()
         {
-            _knockout = a._knockout == int.MaxValue || b._knockout == int.MaxValue
-                ? int.MaxValue
-                : a._knockout + b._knockout,
-            _high = a._high == int.MaxValue || b._high == int.MaxValue
-                ? int.MaxValue
-                : a._high + b._high,
-            _mid = a._mid == int.MaxValue || b._mid == int.MaxValue
-                ? int.MaxValue
-                : a._mid + b._mid,
-            _low = a._low == int.MaxValue || b._low == int.MaxValue
-                ? int.MaxValue
-                : a._low + b._low,
+            _knockout = a._knockout + b._knockout,
+            _high = a._high + b._high,
+            _mid = a._mid + b._mid,
+            _low = a._low + b._low,
         };
 
     /// <summary>
@@ -138,7 +122,12 @@ public struct Score : IComparable< Score >,
         return 0;
     }
 
-    public int PercentageTo(
+    /// <summary>
+    /// Calculates the percentage of priorities this <see cref="Score"/> has in common with <paramref name="perfectScore"/>.
+    /// </summary>
+    /// <param name="perfectScore">The <see cref="Score"/> to check against.</param>
+    /// <returns>The percentage of correct priorities this <see cref="Score"/> has.</returns>
+    public int PercentageOf(
         Score perfectScore)
     {
         int perfect = perfectScore._knockout * 4 + perfectScore._high * 3 + perfectScore._mid * 2 + perfectScore._low;
@@ -152,9 +141,14 @@ public struct Score : IComparable< Score >,
         return (int)(own / (float)perfect * 100);
     }
 
+    /// <inheritdoc />
     public bool Equals(
         Score other) => _knockout == other._knockout && _high == other._high && _mid == other._mid && _low == other._low;
 
+    /// <summary>
+    /// Creates a string representation of this <see cref="Score"/>.
+    /// </summary>
+    /// <returns>A string representation of this <see cref="Score"/>.</returns>
     public override string ToString()
     {
         return $"Knockout: {_knockout}, High: {_high}, Mid: {_mid}, Low: {_low}";

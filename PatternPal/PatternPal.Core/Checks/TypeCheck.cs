@@ -32,27 +32,9 @@ internal class TypeCheck : CheckBase
                               Priority,
                               true)
                           + _getNode.Match(
-                              PerfectScoreFromRelatedCheck,
+                              RelationCheck.PerfectScoreFromRelatedCheck,
                               _ => default)
         : _perfectScore;
-
-    private static Score PerfectScoreFromRelatedCheck(
-        ICheck relatedCheck)
-    {
-        while (true)
-        {
-            if (relatedCheck is ClassCheck or InterfaceCheck)
-            {
-                return relatedCheck.PerfectScore;
-            }
-
-            if (relatedCheck.ParentCheck == null)
-            {
-                return default;
-            }
-            relatedCheck = relatedCheck.ParentCheck;
-        }
-    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TypeCheck"/> class.

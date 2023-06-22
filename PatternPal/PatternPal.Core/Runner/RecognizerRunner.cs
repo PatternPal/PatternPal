@@ -243,7 +243,6 @@ public partial class RecognizerRunner
                                      {
                                          Graph = _graph,
                                          CurrentEntity = null!,
-                                         ParentCheck = rootCheck,
                                          EntityCheck = rootCheck,
                                          PreviousContext = null!,
                                      };
@@ -343,7 +342,6 @@ public interface IRecognizerContext
                                {
                                    Graph = oldCtx.Graph,
                                    CurrentEntity = currentNode as IEntity ?? oldCtx.CurrentEntity,
-                                   ParentCheck = parentCheck,
                                    EntityCheck = currentNode is IEntity
                                        ? parentCheck
                                        : oldCtx.EntityCheck,
@@ -362,10 +360,6 @@ file class RecognizerContext : IRecognizerContext
 
     /// <inheritdoc />
     public required IEntity CurrentEntity { get; init; }
-
-    // TODO: Cleanup
-    /// <inheritdoc />
-    public required ICheck ParentCheck { get; init; }
 
     /// <inheritdoc />
     public required ICheck EntityCheck { get; init; }

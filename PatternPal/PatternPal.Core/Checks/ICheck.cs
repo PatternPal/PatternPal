@@ -53,16 +53,9 @@ public interface ICheck
     ICheck ? ParentCheck { get; set; }
 
     /// <summary>
-    /// Calculates the Perfect Score of this <see cref="ICheck"/>. The <paramref name="result"/> is
-    /// used to decide which sub-<see cref="ICheck"/> to include when the <see cref="CheckCollectionKind"/>
-    /// is <see cref="CheckCollectionKind.Any"/>.
-    /// </summary>
-    /// <param name="resultsByCheck">Contains the <see cref="ICheckResult"/> for each <see cref="ICheck"/>.</param>
-    /// <param name="result">The <see cref="ICheckResult"/> of this <see cref="ICheck"/>.</param>
-    /// <returns>
     /// The <see cref="Score"/> of the <see cref="ICheckResult"/> of this <see cref="ICheck"/> when
     /// it is implemented correctly.
-    /// </returns>
+    /// </summary>
     Score PerfectScore { get; }
 
     /// <summary>

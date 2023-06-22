@@ -27,6 +27,7 @@ internal class ParameterCheck : CheckBase
         }
     }
 
+    /// <inheritdoc />
     public override Score PerfectScore
     {
         get
@@ -71,7 +72,7 @@ internal class ParameterCheck : CheckBase
         // IEntities.
         List< IEntity > nodeParameters = hasParameters.GetParameters().Select(x => ctx.Graph.Relations.GetEntityByName(x)).Where(x => x != null).Select(x => x!).ToList();
 
-        List< ICheckResult > subCheckResultsResults = new List< ICheckResult >();
+        List< ICheckResult > subCheckResultsResults = new();
 
         // Node has no parameters
         if (!nodeParameters.Any())

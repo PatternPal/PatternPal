@@ -3,23 +3,39 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
+
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Imaging.Interop;
+
 using PatternPal.Protos;
 
 #endregion
 
 namespace PatternPal.Extension.ViewModels
 {
+    /// <summary>
+    /// View model for a <see cref="RecognizeResult"/>.
+    /// </summary>
     public class PatternResultViewModel
     {
+        /// <summary>
+        /// Creates a new instance of the <see cref="PatternResultViewModel"/> class.
+        /// </summary>
+        /// <param name="result">The <see cref="RecognizeResult"/> this view model is for.</param>
         public PatternResultViewModel(
             RecognizeResult result)
         {
             Result = result;
         }
 
+        /// <summary>
+        /// The <see cref="RecognizeResult"/> this view model is for.
+        /// </summary>
         public RecognizeResult Result { get; }
+
+        /// <summary>
+        /// The name of the <see cref="Recognizer"/> to which the result belongs.
+        /// </summary>
         public string PatternName => Result.Recognizer.ToString();
 
         /// <summary>
@@ -27,37 +43,50 @@ namespace PatternPal.Extension.ViewModels
         /// </summary>
         public int Score => 100;
 
+        /// <summary>
+        /// Whether this view model is currently expanded.
+        /// </summary>
         public bool Expanded { get; set; }
-
-        public List<EntityCheckResultViewModel> EntityChecks
-        {
-            get
-            {
-                return Result.EntityResults.Select(result => new EntityCheckResultViewModel(result)).ToList();
-            }
-        }
-
-        public SolidColorBrush ProgressBarColor => GetProgressBarColor();
 
         /// <summary>
-        /// Returns the progress bar color based on the score value.
+        /// The top level results of this <see cref="Result"/>.
         /// </summary>
-        /// <returns></returns>
-        public SolidColorBrush GetProgressBarColor()
-        {
-            int score = Score;
-            return score < 40 ? Brushes.Red : score < 80 ? Brushes.Yellow : Brushes.Green;
-        }
+        public List< EntityCheckResultViewModel > EntityChecks => Result.EntityResults.Select(result => new EntityCheckResultViewModel(result)).ToList();
+
+        /// <summary>
+        /// The color of the progress bar.
+        /// </summary>
+        public SolidColorBrush ProgressBarColor => Score < 40 ? Brushes.Red : Score < 80 ? Brushes.Yellow : Brushes.Green;
     }
 
+    /// <summary>
+    /// View model for a <see cref="Protos.EntityResult"/>.
+    /// </summary>
     public class EntityCheckResultViewModel
     {
-        public EntityResult EntityResult;
+        /// <summary>
+        /// The <see cref="Protos.EntityResult"/> this view model represents.
+        /// </summary>
+        public readonly EntityResult EntityResult;
+
+        /// <summary>
+        /// Whether this view model is currently expanded.
+        /// </summary>
         public bool Expanded { get; set; }
+
+        /// <summary>
+        /// The description of this <see cref="EntityResult"/>.
+        /// </summary>
         public string Name => EntityResult.Name;
 
+        /// <summary>
+        /// The name of the matched node.
+        /// </summary>
         public string MatchedNodeName { get; }
 
+        /// <summary>
+        /// Icon for the matched node.
+        /// </summary>
         public ImageMoniker MatchedNodeIcon
         {
             get
@@ -91,17 +120,25 @@ namespace PatternPal.Extension.ViewModels
         /// </summary>
         public int Score => 100;
 
-        public EntityCheckResultViewModel(EntityResult entityResult)
+        /// <summary>
+        /// Creates a new instance of the <see cref="EntityCheckResultViewModel"/> class.
+        /// </summary>
+        /// <param name="entityResult">The <see cref="Protos.EntityResult"/> this view model is for.</param>
+        public EntityCheckResultViewModel(
+            EntityResult entityResult)
         {
             EntityResult = entityResult;
             MatchedNodeName = entityResult.MatchedNode?.Name;
         }
 
-        public List<CheckResultViewModel> Children
+        /// <summary>
+        /// The view models of the child results of this <see cref="EntityResult"/>.
+        /// </summary>
+        public List< CheckResultViewModel > Children
         {
             get
             {
-                List<CheckResultViewModel> results = new List<CheckResultViewModel>();
+                List< CheckResultViewModel > results = new List< CheckResultViewModel >();
 
                 foreach (Result result in EntityResult.Requirements)
                 {
@@ -112,16 +149,9 @@ namespace PatternPal.Extension.ViewModels
             }
         }
 
-        public SolidColorBrush ProgressBarColor => GetProgressBarColor();
-
         /// <summary>
-        /// Returns the progress bar color based on the score value.
+        /// The color of the progress bar.
         /// </summary>
-        /// <returns></returns>
-        public SolidColorBrush GetProgressBarColor()
-        {
-            int score = Score;
-            return score < 40 ? Brushes.Red : score < 80 ? Brushes.Yellow : Brushes.Green;
-        }
+        public SolidColorBrush ProgressBarColor => Score < 40 ? Brushes.Red : Score < 80 ? Brushes.Yellow : Brushes.Green;
     }
 }
