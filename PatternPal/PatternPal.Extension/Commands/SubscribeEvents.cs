@@ -185,6 +185,7 @@ namespace PatternPal.Extension.Commands
             vsBuildScope scope,
             vsBuildAction action)
         {
+            // TODO This method needs major refactoring and error handling
             if (action == vsBuildAction.vsBuildActionClean)
             {
                 return;
@@ -199,7 +200,7 @@ namespace PatternPal.Extension.Commands
 
             string pathSolutionFullName = _dte.Solution.FullName;
             string pathSolutionFile = _dte.Solution.FileName;
-
+        
             // Distinguish a sln file or just a csproj file to be opened
             if (pathSolutionFullName == "")
             {
@@ -212,6 +213,16 @@ namespace PatternPal.Extension.Commands
             {
                 string pathSolutionDirectory = Path.GetDirectoryName(pathSolutionFullName);
                 request.CodeStateSection = GetRelativePath(pathSolutionDirectory, pathSolutionFile);
+            }
+
+            if(scope == vsBuildScope.vsBuildScopeProject)
+            {
+                // If the build scope was a project and not the entire solution, we know for
+                // sure that a start-up project has been specified and thus we can say something useful
+                // about the projectId. We chose to only store the first one because building multiple
+                // projects seems out of the scope of PatternPal and ProgSnap2.
+                Array startupProjects = (Array)_dte.Solution.SolutionBuild.StartupProjects;
+                request.ProjectId = (string)startupProjects.GetValue(0);
             }
 
             request.EventType = EventType.EvtCompile;
@@ -377,6 +388,7 @@ namespace PatternPal.Extension.Commands
             request.CompileMessageData = compileMessageData;
             request.SourceLocation = sourceLocation;
             request.CodeStateSection = codeStateSection;
+            request.ProjectId = parent.ProjectId;
 
             LogEventResponse response = PushLog(request);
         }

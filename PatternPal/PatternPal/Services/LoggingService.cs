@@ -152,8 +152,11 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     private static LogRequest CompileLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
+
         sendLog.EventType = LoggingServer.EventType.EvtCompile;
         sendLog.CompileResult = receivedRequest.CompileResult;
+        sendLog.ProjectId = receivedRequest.ProjectId;
+
         return sendLog;
     }
 
@@ -173,6 +176,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         sendLog.CodeStateSection = receivedRequest.CodeStateSection;
         sendLog.ParentEventId = receivedRequest.ParentEventId;
         sendLog.SourceLocation = receivedRequest.SourceLocation;
+        sendLog.ProjectId = receivedRequest.ProjectId;
 
         return sendLog;
     }
