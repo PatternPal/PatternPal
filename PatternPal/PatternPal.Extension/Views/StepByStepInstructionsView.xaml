@@ -133,7 +133,7 @@
                 &gt;&gt;
             </Button>
         </StackPanel>
-        <TextBlock x:Name ="resultTextBlock"
+        <TextBlock x:Name ="correctTextBlock"
                    Text ="Correct!"
                    Grid.Row="4"
                    TextWrapping="Wrap"

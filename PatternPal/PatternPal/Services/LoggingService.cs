@@ -117,9 +117,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
             EventId = receivedRequest.EventId,
             SubjectId = receivedRequest.SubjectId,
             ToolInstances = receivedRequest.ToolInstances,
-            ClientTimestamp =
-                DateTime.UtcNow.ToString(
-                    "yyyy-MM-dd HH:mm:ss.fff zzz"),
+            ClientTimestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"),
             SessionId =
                 receivedRequest.SessionId
         };
@@ -214,7 +212,8 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         sendLog.CodeStateSection = receivedRequest.CodeStateSection;
         sendLog.ProjectId = receivedRequest.ProjectId;
 
-        string filePathInProjectDir = Path.GetRelativePath(receivedRequest.ProjectDirectory, sendLog.CodeStateSection);
+        // The included path is only relative to the direct parent directory of the .csproj-file.
+        string filePathInProjectDir = Path.GetRelativePath(Path.GetDirectoryName(sendLog.ProjectId)!, sendLog.CodeStateSection);
 
         try
         {
@@ -285,8 +284,8 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         sendLog.OldFileName = receivedRequest.OldFileName;
         sendLog.ProjectId = receivedRequest.ProjectId;
 
-        string oldFilePathInProjectDir = Path.GetRelativePath(receivedRequest.ProjectDirectory, sendLog.OldFileName);
-        string newFilePathInProjectDir = Path.GetRelativePath(receivedRequest.ProjectDirectory, sendLog.CodeStateSection);
+        string oldFilePathInProjectDir = Path.GetRelativePath(Path.GetDirectoryName(sendLog.ProjectId)!, sendLog.OldFileName);
+        string newFilePathInProjectDir = Path.GetRelativePath(Path.GetDirectoryName(sendLog.ProjectId)!, sendLog.CodeStateSection);
         try
         {
             // To rename the key that stores the hash in _lastCodeState, we obtain its value, reinsert it under the new key

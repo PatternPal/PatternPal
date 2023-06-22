@@ -14,6 +14,7 @@ internal class BridgeRecognizerAbstractClass : BridgeRecognizerParent
     public override MethodCheck HasMethodCheck()
     {
         return Method(Priority.High,
+            "1b. Has an abstract method.",
             Modifiers(Priority.High,
                 Modifier.Abstract
             )
@@ -23,7 +24,7 @@ internal class BridgeRecognizerAbstractClass : BridgeRecognizerParent
     /// <inheritdoc />
     public override ClassCheck HasInterfaceOrAbstractClassWithMethodCheck(MethodCheck methodInImplementation)
     {
-        return AbstractClass(Priority.Knockout,
+        return AbstractClass(Priority.Knockout, "1. Implementation Abstract Class",
             methodInImplementation
         );
     }
@@ -32,11 +33,14 @@ internal class BridgeRecognizerAbstractClass : BridgeRecognizerParent
     public override ClassCheck ConcreteImplementationCheck(CheckBase implementationCheck, MethodCheck methodInImplementation)
     {
         return Class(Priority.Knockout,
+            "3. Concrete Implementation Class",
             Inherits(Priority.Knockout,
+                "3a. Inherits from the Implementation abstract class.",
                 implementationCheck
             ),
             Method(Priority.High,
                 Overrides(Priority.High,
+                    "3b. Overrides a method.",
                     methodInImplementation
                 )
             )
