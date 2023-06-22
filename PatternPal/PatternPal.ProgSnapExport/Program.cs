@@ -64,19 +64,13 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
             return 0;
         }
 
-        // Parse all sessions
-        // This is wrapped in a progressContext to display a progress bar.
-        AnsiConsole.Progress()
-            .Start(ctx =>
-            {
-                ProgressTask task = ctx.AddTask("Parsing entries...", true, sessions.Count);
-                foreach (Guid sessionId in sessions)
-                {
-                    ParseSession(sessionId);
-                    task.Increment(1);
-                }
-            });
-        
+        for (int i = 0; i < sessions.Count; ++i)
+        {
+            Guid sessionId = sessions[i];
+            LogInfo($"Parsing session {sessionId} ({i + 1}/{sessions.Count})");
+            ParseSession(sessionId);
+        }
+
         return 0;
     }
 
@@ -139,7 +133,6 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
     /// <param name="sessionId"></param>
     private void ParseSession(Guid sessionId)
     {
-        LogInfo($"Parsing session {sessionId}");
         LogInfo("Obtaining data...");
         List<ProgSnap2Event> data = _dbContext.Events
             .Where(e => e.ClientDatetime >= _lowerBound && e.ClientDatetime <= _upperBound)
@@ -391,7 +384,6 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
     {
         if (toConsole)
         {
-            // TODO logging multiple lines renders improperly in conjunction with the progress bar
            string info = metadata.Aggregate("", (current, next) => current + $"\n\t[bold]{next.Name}[/]:\t{next.Value}");
            AnsiConsole.Write(new Markup($"{consoleHead}{message}{info}\n"));
         }
