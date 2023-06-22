@@ -295,7 +295,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
             _lastCodeState[sendLog.ProjectId][newFilePathInProjectDir] = hash;
             _lastCodeState[sendLog.ProjectId].Remove(oldFilePathInProjectDir);
         }
-        catch (Exception e)
+        catch
         {
             return OnFailedDictionaryAction(sendLog, receivedRequest.ProjectDirectory);
         }
