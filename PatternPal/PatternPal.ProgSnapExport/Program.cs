@@ -63,8 +63,13 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
             LogInfo("None found within query.");
             return 0;
         }
-        
-        sessions.ForEach(ParseSession);
+
+        for (int i = 0; i < sessions.Count; ++i)
+        {
+            Guid sessionId = sessions[i];
+            LogInfo($"Parsing session {sessionId} ({i}/{sessions.Count})");
+            ParseSession(sessionId);
+        }
 
         return 0;
     }
@@ -128,7 +133,6 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
     /// <param name="sessionId"></param>
     private void ParseSession(Guid sessionId)
     {
-        LogInfo($"Parsing session {sessionId}");
         LogInfo("Obtaining data...");
         List<ProgSnap2Event> data = _dbContext.Events
             .Where(e => e.ClientDatetime >= _lowerBound && e.ClientDatetime <= _upperBound)
