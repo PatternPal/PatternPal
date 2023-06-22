@@ -63,20 +63,9 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
             LogInfo("None found within query.");
             return 0;
         }
-
-        // Parse all sessions
-        // This is wrapped in a progressContext to display a progress bar.
-        AnsiConsole.Progress()
-            .Start(ctx =>
-            {
-                ProgressTask task = ctx.AddTask("Parsing entries...", true, sessions.Count);
-                foreach (Guid sessionId in sessions)
-                {
-                    ParseSession(sessionId);
-                    task.Increment(1);
-                }
-            });
         
+        sessions.ForEach(ParseSession);
+
         return 0;
     }
 
@@ -391,7 +380,6 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
     {
         if (toConsole)
         {
-            // TODO logging multiple lines renders improperly in conjunction with the progress bar
            string info = metadata.Aggregate("", (current, next) => current + $"\n\t[bold]{next.Name}[/]:\t{next.Value}");
            AnsiConsole.Write(new Markup($"{consoleHead}{message}{info}\n"));
         }
