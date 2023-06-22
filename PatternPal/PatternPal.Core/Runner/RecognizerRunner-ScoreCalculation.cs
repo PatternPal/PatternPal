@@ -76,7 +76,7 @@ public partial class RecognizerRunner
               };
 
         NodeCheckResult bestResult = result.NodeCheckCollectionWrapper
-            ? result.ChildrenCheckResults.MaxBy(r => r.Score)! as NodeCheckResult ?? result
+            ? result.ChildrenCheckResults.MaxBy(r => r.Score.PercentageTo(r.PerfectScore))! as NodeCheckResult ?? result
             : result;
 
         switch (bestResult.CollectionKind)
@@ -141,7 +141,7 @@ public partial class RecognizerRunner
         switch (result.CollectionKind)
         {
             case CheckCollectionKind.Any:
-                ICheckResult ? childResult = result.ChildrenCheckResults.MaxBy(r => r.Score);
+                ICheckResult ? childResult = result.ChildrenCheckResults.MaxBy(r => r.Score.PercentageTo(r.PerfectScore));
                 result.SetScore(
                     false,
                     childResult?.Score ?? default);
