@@ -488,6 +488,10 @@ namespace PatternPal.Extension.Commands
                     if (projectItem?.ContainingProject?.UniqueName != null)
                     {
                         request.ProjectId = projectItem.ContainingProject.UniqueName;
+                        string fileDir = Path.GetDirectoryName(recognizeRequest.File);
+
+                        // Since the recognizer is only run on a single file, we also include a codeState.
+                        request.CodeStateSection = GetRelativePath(fileDir, recognizeRequest.File);
                     };
 
                 }

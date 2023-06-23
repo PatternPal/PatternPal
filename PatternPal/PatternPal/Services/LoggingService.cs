@@ -133,9 +133,10 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     /// <returns>A LogRequest populated for this specific event</returns>
     private static LogRequest RecognizeLog(LogEventRequest receivedRequest)
     {
-        // TODO PatternPal only supports running the recognizer on a single project, so the projectID should be set as well.
         LogRequest sendLog = StandardLog(receivedRequest);
 
+        sendLog.CodeStateSection = receivedRequest.CodeStateSection;
+        sendLog.ProjectId = receivedRequest.ProjectId;
         sendLog.EventType = LoggingServer.EventType.EvtXRecognizerRun;
         sendLog.RecognizerResult = receivedRequest.RecognizerResult;
         sendLog.RecognizerConfig = receivedRequest.RecognizerConfig;
