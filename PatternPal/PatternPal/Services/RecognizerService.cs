@@ -141,11 +141,26 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                 }
             }
 
-            RecognizeResponse response = new()
-                                         {
-                                             Result = rootResult
-                                         };
-            responseStream.WriteAsync(response);
+            bool allIncorrect = true;
+            foreach (EntityResult topLevelResult in rootResult.EntityResults)
+            {
+                foreach (Result requirement in topLevelResult.Requirements)
+                {
+                    if (requirement.Correctness != Result.Types.Correctness.CIncorrect)
+                    {
+                        allIncorrect = false;
+                    }
+                }
+            }
+
+            if (!allIncorrect)
+            {
+                RecognizeResponse response = new()
+                                             {
+                                                 Result = rootResult
+                                             };
+                responseStream.WriteAsync(response);
+            }
         }
 
         return Task.CompletedTask;

@@ -367,10 +367,9 @@ file class DecoratorRecognizerWithAbstractClass : DecoratorRecognizerParent
     protected override MethodCheck ComponentMethod() =>
             Method(
                 Priority.Knockout,
-                "has declared a method.",
+                "1b. Has declared a method.",
                 Modifiers(
                     Priority.Knockout,
-                    "if the class is an abstract class instead of an interface the method has to be an abstract method.",
                     Modifier.Abstract
                 )
             );

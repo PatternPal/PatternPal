@@ -153,28 +153,31 @@ public partial class RecognizerRunner
         ICheckResult CheckResult,
         IList< string > ? Requirements);
 
-    private static IEnumerable< string > GetRequirementsFromCheckResult(
-        ICheckResult checkResult)
+    /// <summary>
+    /// Gets the requirements from the given <paramref name="check"/>.
+    /// </summary>
+    /// <param name="check">The <see cref="ICheck"/> from which to get the requirements.</param>
+    /// <returns>The requirements.</returns>
+    private static IEnumerable< string > GetRequirementsFromCheck(
+        ICheck check)
     {
-        if (!string.IsNullOrEmpty(checkResult.Check.Requirement))
+        if (!string.IsNullOrEmpty(check.Requirement))
         {
-            yield return checkResult.Check.Requirement;
+            yield return check.Requirement;
         }
 
-        switch (checkResult)
+        switch (check)
         {
-            case LeafCheckResult:
-                yield break;
-            case NotCheckResult notCheckResult:
-                foreach (string requirement in GetRequirementsFromCheckResult(notCheckResult.NestedResult))
+            case NotCheck notCheck:
+                foreach (string requirement in GetRequirementsFromCheck(notCheck.NestedCheck))
                 {
                     yield return requirement;
                 }
                 yield break;
-            case NodeCheckResult nodeCheckResult:
-                foreach (ICheckResult childCheckResult in nodeCheckResult.ChildrenCheckResults)
+            case NodeCheckBase nodeCheckBase:
+                foreach (ICheck childCheck in nodeCheckBase.SubChecks)
                 {
-                    foreach (string requirement in GetRequirementsFromCheckResult(childCheckResult))
+                    foreach (string requirement in GetRequirementsFromCheck(childCheck))
                     {
                         yield return requirement;
                     }
@@ -204,8 +207,7 @@ public partial class RecognizerRunner
             {
                 ICheck rootCheck = recognizer.CreateRootCheck();
                 ICheckResult rootCheckResult = RunImpl(rootCheck);
-                // TODO: Sort. Prepend e.g. '1.1', '2', '3.2' to requirement, and sort based on this.
-                IList< string > requirements = GetRequirementsFromCheckResult(rootCheckResult).ToList();
+                IList< string > requirements = GetRequirementsFromCheck(rootCheck).ToList();
 
                 results.Add(
                     new RunResult(
