@@ -4,17 +4,19 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+
 using EnvDTE;
 using EnvDTE80;
+
 using Microsoft.VisualStudio.Shell;
+
 using PatternPal.Extension.Grpc;
 using PatternPal.Protos;
-using System.Text.RegularExpressions;
+
 using JsonSerializer = System.Text.Json.JsonSerializer;
-using Google.Protobuf.Collections;
 
 #endregion
 
@@ -98,6 +100,7 @@ namespace PatternPal.Extension.Commands
             _package = package;
             _cancellationToken = cancellationToken;
             _toolInstances = $" { _dte.Version } { _dte.Edition } { _dte.Name } {Vsix.Version}";
+
             // We should call OnChangedLoggingPreference to "load" a possibly stored setting. The
             // application always stored with the internal flag set to false, so this will only actually
             // do something when it was stored as true (and subsequently kickstart the logging session).
@@ -182,6 +185,7 @@ namespace PatternPal.Extension.Commands
             vsBuildScope scope,
             vsBuildAction action)
         {
+            // TODO This method needs major refactoring and error handling
             if (action == vsBuildAction.vsBuildActionClean)
             {
                 return;
@@ -196,7 +200,7 @@ namespace PatternPal.Extension.Commands
 
             string pathSolutionFullName = _dte.Solution.FullName;
             string pathSolutionFile = _dte.Solution.FileName;
-
+        
             // Distinguish a sln file or just a csproj file to be opened
             if (pathSolutionFullName == "")
             {
@@ -209,6 +213,16 @@ namespace PatternPal.Extension.Commands
             {
                 string pathSolutionDirectory = Path.GetDirectoryName(pathSolutionFullName);
                 request.CodeStateSection = GetRelativePath(pathSolutionDirectory, pathSolutionFile);
+            }
+
+            if(scope == vsBuildScope.vsBuildScopeProject)
+            {
+                // If the build scope was a project and not the entire solution, we know for
+                // sure that a start-up project has been specified and thus we can say something useful
+                // about the projectId. We chose to only store the first one because building multiple
+                // projects seems out of the scope of PatternPal and ProgSnap2.
+                Array startupProjects = (Array)_dte.Solution.SolutionBuild.StartupProjects;
+                request.ProjectId = (string)startupProjects.GetValue(0);
             }
 
             request.EventType = EventType.EvtCompile;
@@ -374,6 +388,7 @@ namespace PatternPal.Extension.Commands
             request.CompileMessageData = compileMessageData;
             request.SourceLocation = sourceLocation;
             request.CodeStateSection = codeStateSection;
+            request.ProjectId = parent.ProjectId;
 
             LogEventResponse response = PushLog(request);
         }
@@ -409,6 +424,20 @@ namespace PatternPal.Extension.Commands
 
             request.EventType = EventType.EvtDebugProgram;
             request.ExecutionId = Guid.NewGuid().ToString();
+
+            try
+            {
+                // The project that was actually debugged is simply assumed to be the first
+                // startup project here; that seems fine for the scope for PatternPal.
+                Array startupProjects = (Array)_dte.Solution?.SolutionBuild?.StartupProjects;
+                request.ProjectId = (string)startupProjects?.GetValue(0);
+            }
+
+            catch
+            {
+                // Ignored, we simply do not include a projectID
+            }
+            
 
             if (_unhandledExceptionThrown)
             {
@@ -451,7 +480,9 @@ namespace PatternPal.Extension.Commands
             IList<RecognizeResult> recognizeResults)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            if (_package == null || !Privacy.Instance.DoLogData)
+
+            if (_package == null || !_doLog 
+                                 || recognizeRequest.FileOrProjectCase == RecognizeRequest.FileOrProjectOneofCase.None)
             { 
               return; 
             }
@@ -459,7 +490,36 @@ namespace PatternPal.Extension.Commands
             LogEventRequest request = CreateStandardLog();
 
             request.EventType = EventType.EvtXRecognizerRun;
+
+            if (recognizeRequest.FileOrProjectCase == RecognizeRequest.FileOrProjectOneofCase.File)
+            {
+                // The extension either runs on the currently active document or an entire project.
+                // In case of the current active document, we try obtaining the projectID using eventDTE.
+                // We include some extra null-checks since eventDTE is sadness in disguise.
+                if (_dte.SelectedItems.Count > 0)
+                {
+                    ProjectItem projectItem = _dte.SelectedItems.Item(1).ProjectItem;
+                    if (projectItem?.ContainingProject?.UniqueName != null)
+                    {
+                        request.ProjectId = projectItem.ContainingProject.UniqueName;
+                        string fileDir = Path.GetDirectoryName(recognizeRequest.File);
+
+                        // Since the recognizer is only run on a single file, we also include a codeState.
+                        request.CodeStateSection = GetRelativePath(fileDir, recognizeRequest.File);
+                    };
+
+                }
+            }
+            else
+            {
+                // When the extension is a project, the path to the .csproj-file is included. We now simply need to get 
+                // that name and its parent directory.
+                string projectDir = Path.GetDirectoryName(recognizeRequest.Project);
+                request.ProjectId = GetRelativePath(projectDir, recognizeRequest.Project);
+            }
+
             string config = recognizeRequest.Recognizers.ToString();
+
 
             request.RecognizerConfig = config;
             foreach (RecognizeResult result in recognizeResults)
@@ -501,7 +561,7 @@ namespace PatternPal.Extension.Commands
 
             request.RecognizerResult = JsonSerializer.Serialize(results);
             
-            Project project = _dte.ActiveDocument.ProjectItem.ContainingProject;
+            Project project = _dte.ActiveDocument?.ProjectItem?.ContainingProject;
             request.ProjectId = project.UniqueName;
 
             LogEventResponse response = PushLog(request);
@@ -592,14 +652,9 @@ namespace PatternPal.Extension.Commands
 
             foreach (Project project in projects)
             {
-                if (project == null)
-                {
-                    continue;
-                }
-
                 // This catches miscellaneous projects without a defined project.Fullname; the cause of this is unknown since
                 // we are using internal-use-only libraries for event catching.
-                if (project.FullName == null || !File.Exists((project.FullName)))
+                if (project?.FullName == null || !File.Exists((project.FullName)))
                 {
                     continue;
                 }

@@ -11,7 +11,7 @@ using static PatternPal.Core.Checks.CheckBuilder;
 namespace PatternPal.Core.Recognizers;
 
 /// <summary>
-/// A <see cref="IRecognizer"/> that is used to determine if the provided files or project implements the singleton pattern
+/// A <see cref="IRecognizer"/> that is used to determine if the provided files or project implement the singleton pattern
 /// </summary>
 /// <remarks>
 /// Requirements for the Singleton class:<br/>

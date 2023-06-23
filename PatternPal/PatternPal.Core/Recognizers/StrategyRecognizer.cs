@@ -9,8 +9,7 @@ using static PatternPal.Core.Checks.CheckBuilder;
 namespace PatternPal.Core.Recognizers;
 
 /// <summary>
-/// A <see cref="IRecognizer"/> that is used to determine if the provided file is an implementation
-/// of the strategy pattern.
+/// A <see cref="IRecognizer"/> that is used to determine if the provided files or project implement the strategy pattern.
 /// </summary>
 /// <remarks>
 /// Requirements to fulfill the pattern:<br/>
