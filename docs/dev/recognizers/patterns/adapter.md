@@ -36,7 +36,7 @@ The priority of a requirement is noted with the (low)-(mid)-(high)-(knockout) cr
 **Adapter**
 1. (knockout) inherits/implements the Client Interface
 2. (knockout) creates an Service object or gets one via the constructor
-3. (high) contains a private field in which the Service is stored
+3. (knockout) contains a private field in which the Service is stored
 4. (high) does not return an instance of the Service
 5. (high) a method uses the Service class
 
