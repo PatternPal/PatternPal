@@ -71,7 +71,7 @@ internal class FactoryMethodRecognizer : IRecognizer
         //Product a
         return Interface(
             Priority.Knockout,
-            "is an interface"
+            "1. Product Interface"
         );
     }
 
@@ -87,11 +87,12 @@ internal class FactoryMethodRecognizer : IRecognizer
         //Concrete product a & Product b
         RelationCheck concreteInheritsProduct = Implements(
             Priority.Knockout,
-            "gets inherited by at least one class + Concrete Product inherits Product",
+            "2a. Inherits Product.",
             product);
 
         return Class(
             Priority.Low,
+            "2. Concrete Product Class",
             concreteInheritsProduct
         );
     }
@@ -109,14 +110,14 @@ internal class FactoryMethodRecognizer : IRecognizer
         //Creator a
         ModifierCheck isAbstract = Modifiers(
             Priority.Knockout,
-            "is an abstract class",
+            "3a. Is abstract.",
             Modifier.Abstract
         );
 
         //Creator d
         MethodCheck factoryMethod = Method(
             Priority.High,
-            "contains a factory-method with the following properties: 1) method is abstract 2) method is public 3) returns an object of type Product",
+            "3b. Contains a factory-method with the following properties: 1) method is abstract 2) method is public 3) returns an object of type Product.",
             Modifiers(
                 Priority.Knockout,
                 Modifier.Abstract
@@ -133,6 +134,7 @@ internal class FactoryMethodRecognizer : IRecognizer
 
         return Class(
             Priority.Low,
+            "3. Creator Class",
             isAbstract,
             factoryMethod
         );
@@ -152,14 +154,14 @@ internal class FactoryMethodRecognizer : IRecognizer
         //Concrete Creator a & Creator b
         RelationCheck concreteInheritsCreator = Inherits(
             Priority.Knockout,
-            "inherits Creator + Creator gets inherited by at least one class",
+            "4a. Inherits Creator.",
             creator
         );
 
         //Concrete Creator b --Todo does not check if it is exactly one
         MethodCheck methodReturnsConcreteProduct = Method(
             Priority.Low,
-            "has exactly one method that creates and returns a Concrete product",
+            "4b. Has exactly one method that creates and returns a Concrete product.",
             Type(
                 Priority.Low,
                 concreteProduct
@@ -173,20 +175,16 @@ internal class FactoryMethodRecognizer : IRecognizer
         //Concrete product b
         RelationCheck createsConcreteProduct = Creates(
             Priority.High,
-            "gets created in a Concrete Creator",
+            "2b. Gets created in a Concrete Creator.",
             concreteProduct
         );
 
         return Class(
             Priority.Low,
+            "4. Concrete Creator Class",
             concreteInheritsCreator,
             methodReturnsConcreteProduct,
             createsConcreteProduct
         );
-    }
-
-    public List<IInstruction> GenerateStepsList()
-    {
-        throw new NotImplementedException();
     }
 }
