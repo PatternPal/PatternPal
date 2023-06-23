@@ -1,4 +1,4 @@
-#region
+﻿#region
 
 using PatternPal.Core.StepByStep;
 using PatternPal.SyntaxTree.Models;
@@ -12,7 +12,7 @@ using static PatternPal.Core.Checks.CheckBuilder;
 namespace PatternPal.Core.Recognizers;
 
 /// <summary>
-/// A <see cref="IRecognizer"/> that is used to determine if the provided files or project implements the decorator pattern
+/// A <see cref="IRecognizer"/> that is used to determine if the provided files or project implement the decorator pattern
 /// </summary>
 /// <remarks>
 ///     Requirements for Component: <br/>
@@ -471,8 +471,13 @@ file class DecoratorRecognizerWithInterface : DecoratorRecognizerParent, IStepBy
                 )
             );
 
+    /// <inheritdoc />
     public string Name => "Decorator with interface";
+
+    /// <inheritdoc />
     public Recognizer RecognizerType => Recognizer.Decorator;
+
+    /// <inheritdoc />
     public List<IInstruction> GenerateStepsList()
     {
         List<IInstruction> generateStepsList = new();

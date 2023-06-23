@@ -11,8 +11,7 @@ using static PatternPal.Core.Checks.CheckBuilder;
 namespace PatternPal.Core.Recognizers;
 
 /// <summary>
-/// A <see cref="IRecognizer"/> that is used to determine if the provided file is an implementation
-/// of the factory-method pattern.
+/// A <see cref="IRecognizer"/> that is used to determine if the provided files or project implement the factory-method pattern.
 /// </summary>
 /// <remarks>
 /// Requirements for the Product class:<br/>
