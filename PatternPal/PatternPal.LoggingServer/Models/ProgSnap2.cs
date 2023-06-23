@@ -46,6 +46,7 @@ namespace PatternPal.LoggingServer.Models
         /// <summary>
         /// Whether the stored codeState was complete or partial.
         /// </summary>
+        ///
         public bool? FullCodeState { get; set;  }
 
         /// <summary>
@@ -56,12 +57,12 @@ namespace PatternPal.LoggingServer.Models
         /// <summary>
         /// The date and time of the event, in the server's time zone.
         /// </summary>
-        public DateTimeOffset ServerDatetime { get; set; }
+        public DateTime ServerDatetime { get; set; }
 
         /// <summary>
         /// The date and time of the event, in the client's time zone.
         /// </summary>
-        public DateTimeOffset ClientDatetime { get; set; }
+        public DateTime ClientDatetime { get; set; }
 
         /// <summary>
         /// The ID of the parent event, if any. Used in cases such as compile.error, where the parent event is compile.
@@ -92,6 +93,11 @@ namespace PatternPal.LoggingServer.Models
         /// The section of the code state associated with this compile event. For example in compile.error, this would be the section of code that caused the error.
         /// </summary>
         public string? CodeStateSection { get; set; }
+
+        /// <summary>
+        ///  The old filename of a file in case of a rename event.
+        /// </summary>
+        public string? OldFileName { get; set; }
 
         /// <summary>
         /// Result in case of debug.run event. Value can be "success", "failure", "timeout", "error", "unknown".

@@ -3,10 +3,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 using System.Windows.Input;
-
+using System.Windows;
 using EnvDTE;
+using EnvDTE80;
 
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
@@ -16,8 +16,6 @@ using PatternPal.Extension.Grpc;
 using PatternPal.Extension.Resources;
 using PatternPal.Extension.Stores;
 using PatternPal.Protos;
-
-using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 #endregion
 
@@ -69,7 +67,7 @@ namespace PatternPal.Extension.ViewModels
 
             // Next button 
             NavigateStepByStepInstructionsCommand =
-                new NavigateCommand< StepByStepInstructionsViewModel >(
+                new SBScommand< StepByStepInstructionsViewModel >(
                     navigationStore,
                     () => new StepByStepInstructionsViewModel(
                         navigationStore,
@@ -79,7 +77,7 @@ namespace PatternPal.Extension.ViewModels
 
             // Continue button
             NavigateContinueStepByStepInstructionsCommand =
-                new NavigateCommand< StepByStepInstructionsViewModel >(
+                new SBScommand<StepByStepInstructionsViewModel>(
                     navigationStore,
                     () => new StepByStepInstructionsViewModel(
                         navigationStore,
@@ -87,6 +85,7 @@ namespace PatternPal.Extension.ViewModels
                         StepByStepModes.Continue,
                         ContinueButtonBehavior()));
 
+            // Obtain the available instruction sets for Step-By-Step.
             GetInstructionSetsResponse instructionSetsResponse =
                 GrpcHelper.StepByStepClient.GetInstructionSets(new GetInstructionSetsRequest());
 
@@ -101,23 +100,22 @@ namespace PatternPal.Extension.ViewModels
         {
             List< string > result = new List< string >();
 
-            OpenFileDialog ofd = new OpenFileDialog()
-                                 {
-                                     Multiselect = true,
-                                     Filter = "cs files (*.cs)|*.cs",
-                                 };
-
-            while (result.Count == 0)
+            using (CommonOpenFileDialog ofd = new CommonOpenFileDialog
+                   {
+                       Multiselect = true,
+                       Filters = { new CommonFileDialogFilter(
+                           "cs files",
+                           "cs") }
+            })
             {
-                bool ? res = ofd.ShowDialog();
-                if (res.HasValue
-                    && res.Value)
+                CommonFileDialogResult res = ofd.ShowDialog();
+                if (res == CommonFileDialogResult.Ok)
                 {
                     result = ofd.FileNames.ToList();
                 }
                 else
                 {
-                    MessageBox.Show("No files were provided");
+                    System.Windows.MessageBox.Show("No files were provided!");
                 }
             }
 
@@ -151,41 +149,50 @@ namespace PatternPal.Extension.ViewModels
             {
                 if (dte.Solution.IsOpen)
                 {
-                    List< string > result = CreateNewWorkFile(out string filePath);
-                    if (filePath == string.Empty)
+                    string filePath;
+
+                    // The solution is empty.
+                    if (dte.Documents.Count == 0)
                     {
-                        MessageBox.Show("No save location was provided");
-                        return result;
-                    }
+                        // Create a project based on a template from VS2022 add it to the 
+                        // solution. Then iterate over the projects of the solution and 
+                        // add a file.
+                        string projectName = "NewProject";
+                        string projectPath = Path.Combine(
+                            Path.GetDirectoryName(dte.Solution.FullName),
+                            projectName);
 
-                    if (filePath != string.Empty)
+                        // Obtain the template path for a project.
+                        DTE2 dte2 = (DTE2)Package.GetGlobalService(typeof(SDTE));
+                        Solution2 soln = dte2.Solution as Solution2;
+                        string templatePath = soln.GetProjectTemplate("ConsoleApplication.zip", "CSharp");
+
+                        // Add project to the solution and add a new file to that project.
+                        dte.Solution.AddFromTemplate(
+                            templatePath,
+                            projectPath,
+                            projectName,
+                            false);
+                        Project project = dte.Solution.Projects.Item(1);
+                        filePath =
+                            Path.Combine(
+                                projectPath,
+                                "NewFile.cs");
+                        using (FileStream fs = File.Create(filePath)) { }
+                        project.ProjectItems.AddFromFile(filePath);
+                    }
+                    else
                     {
-                        if (dte.Solution.Projects.Count == 0)
-                        {
-                            string projectName = "NewProject";
-                            string projectPath = Path.Combine(
-                                dte.Solution.FullName,
-                                projectName);
-                            Project csTemplateProject =
-                                dte.Solution.AddFromTemplate(
-                                    "ConsoleApplication",
-                                    projectPath,
-                                    projectName,
-                                    false);
-
-                            csTemplateProject.ProjectItems.AddFromFile(filePath);
-                        }
-                        else
-                        {
-                            Project project = dte.Solution.Projects.Item(1);
-                            project.ProjectItems.AddFromFile(filePath);
-                        }
-                        dte.ItemOperations.OpenFile(filePath);
-                        return result;
+                        Project project = dte.Solution.Projects.Item(1);
+                        filePath = Path.Combine(
+                            Path.GetDirectoryName(dte.Solution.FullName),
+                            project.Name,
+                            "NewFile.cs");
+                        using (FileStream fs = File.Create(filePath)) { }
+                        project.ProjectItems.AddFromFile(filePath);
                     }
-
-                    // User wanted to add to the solution but did not provide a path.
-                    return new List< string >();
+                    dte.ItemOperations.OpenFile(filePath);
+                    return new List<string> { filePath };
                 }
 
                 MessageBox.Show("There is no solution open");
@@ -240,8 +247,8 @@ namespace PatternPal.Extension.ViewModels
                 return new List< string >();
             }
             using (FileStream fs = File.Create(filePath)) { }
-            return new List< string >()
-                   {
+            return new List< string >
+            {
                        filePath
                    };
         }

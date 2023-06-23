@@ -23,9 +23,9 @@ public interface ICheck
     /// <summary>
     /// Function which will return the current <see cref="IEntity"/> being checked.
     /// </summary>
-    /// <param name="ctx">The current <see cref="IRecognizerContext"/>.</param>
+    /// <param>The current <see cref="IRecognizerContext"/>.</param>
     /// <returns>The current <see cref="IEntity"/> being checked.</returns>
-    internal static readonly GetCurrentEntity GetCurrentEntity = ctx => ctx.CurrentEntity;
+    internal static readonly GetCurrentEntity GetCurrentEntity = _ => _.CurrentEntity;
 
     /// <summary>
     /// The <see cref="Checks.Priority"/> of this check.
@@ -118,21 +118,22 @@ public enum Priority
 {
     /// <summary>
     /// This <see cref="ICheck"/> is required for the <see cref="Recognizers.IRecognizer"/> to succeed.
+    /// And essential for the architecture of the pattern.
     /// </summary>
     Knockout,
 
     /// <summary>
-    /// This <see cref="ICheck"/> is very important.
+    /// This <see cref="ICheck"/> is very important, especially for the architecture of the pattern.
     /// </summary>
     High,
 
     /// <summary>
-    /// This <see cref="ICheck"/> is moderately important.
+    /// This <see cref="ICheck"/> is moderately important for the structure and intention of the pattern.
     /// </summary>
     Mid,
 
     /// <summary>
-    /// This <see cref="ICheck"/> is optional.
+    /// This <see cref="ICheck"/> is optional and could be used to check the correct usage of the pattern.
     /// </summary>
     Low
 }
@@ -171,7 +172,7 @@ internal static class CheckBuilder
         null,
         checks);
 
-    /// <inheritdoc cref="Any"/>
+    /// <inheritdoc cref="Any(Priority, ICheck[])"/>
     /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
     internal static NodeCheck< INode > Any(
         Priority priority,
@@ -195,7 +196,7 @@ internal static class CheckBuilder
         null,
         checks);
 
-    /// <inheritdoc cref="All"/>
+    /// <inheritdoc cref="All(Priority, ICheck[])"/>
     /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
     internal static NodeCheck< INode > All(
         Priority priority,
@@ -209,7 +210,6 @@ internal static class CheckBuilder
     /// Creates a new <see cref="NotCheck"/>.
     /// </summary>
     /// <param name="priority">The <see cref="Priority"/> of this <see cref="NotCheck"/>.</param>
-    /// <param name="hasNoPublicInternalConstructor"></param>
     /// <param name="check">The <see cref="ICheck"/> to be inverted by the <see cref="NotCheck"/>.</param>
     /// <returns>The created <see cref="NotCheck"/>.</returns>
     internal static NotCheck Not(
@@ -219,7 +219,7 @@ internal static class CheckBuilder
         null,
         check);
 
-    /// <inheritdoc cref="Not"/>
+    /// <inheritdoc cref="Not(Priority, ICheck)"/>
     /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
     internal static NotCheck Not(
         Priority priority,
@@ -242,7 +242,7 @@ internal static class CheckBuilder
         null,
         checks);
 
-    /// <inheritdoc cref="Class"/>
+    /// <inheritdoc cref="Class(Priority, ICheck[])"/>
     /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
     internal static ClassCheck Class(
         Priority priority,
@@ -266,7 +266,7 @@ internal static class CheckBuilder
             null,
             checks);
 
-    /// <inheritdoc cref="AbstractClass"/>
+    /// <inheritdoc cref="AbstractClass(Priority, ICheck[])"/>
     /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
     internal static ClassCheck AbstractClass(
         Priority priority,
@@ -293,7 +293,7 @@ internal static class CheckBuilder
         null,
         checks);
 
-    /// <inheritdoc cref="Interface"/>
+    /// <inheritdoc cref="Interface(Priority, ICheck[])"/>
     /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
     internal static InterfaceCheck Interface(
         Priority priority,
@@ -316,7 +316,7 @@ internal static class CheckBuilder
         null,
         checks);
 
-    /// <inheritdoc cref="Method"/>
+    /// <inheritdoc cref="Method(Priority, ICheck[])"/>
     /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
     internal static MethodCheck Method(
         Priority priority,
@@ -339,7 +339,7 @@ internal static class CheckBuilder
         null,
         checks);
 
-    /// <inheritdoc cref="Property"/>
+    /// <inheritdoc cref="Property(Priority, ICheck[])"/>
     /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
     internal static PropertyCheck Property(
         Priority priority,
@@ -362,7 +362,7 @@ internal static class CheckBuilder
         null,
         modifiers);
 
-    /// <inheritdoc cref="Modifiers"/>
+    /// <inheritdoc cref="Modifiers(Priority, IModifier[])"/>
     /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
     internal static ModifierCheck Modifiers(
         Priority priority,
@@ -385,7 +385,7 @@ internal static class CheckBuilder
         null,
         parameterTypes);
 
-    /// <inheritdoc cref="Parameters"/>
+    /// <inheritdoc cref="Parameters(Priority, TypeCheck[])"/>
     /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
     internal static ParameterCheck Parameters(
         Priority priority,
@@ -408,7 +408,7 @@ internal static class CheckBuilder
         null,
         getRelatedCheck);
 
-    /// <inheritdoc cref="Type"/>
+    /// <inheritdoc cref="Type(Priority, CheckBase)"/>
     /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
     internal static TypeCheck Type(
         Priority priority,
@@ -431,7 +431,7 @@ internal static class CheckBuilder
         null,
         getCurrentEntity);
 
-    /// <inheritdoc cref="Type"/>
+    /// <inheritdoc cref="Type(Priority, GetCurrentEntity)"/>
     /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
     internal static TypeCheck Type(
         Priority priority,
@@ -456,7 +456,7 @@ internal static class CheckBuilder
         RelationType.Uses,
         relatedNodeCheck);
 
-    /// <inheritdoc cref="Uses"/>
+    /// <inheritdoc cref="Uses(Priority, ICheck)"/>
     /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
     internal static RelationCheck Uses(
         Priority priority,
@@ -494,7 +494,7 @@ internal static class CheckBuilder
         null,
         relatedNodeCheck);
 
-    /// <inheritdoc cref="UsedBy"/>
+    /// <inheritdoc cref="UsedBy(Priority, ICheck)"/>
     /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
     internal static RelationCheck UsedBy(
         Priority priority,
@@ -519,7 +519,7 @@ internal static class CheckBuilder
         null,
         relatedNodeCheck);
 
-    /// <inheritdoc cref="Inherits"/>
+    /// <inheritdoc cref="Inherits(Priority, ICheck)"/>
     /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
     internal static RelationCheck Inherits(
         Priority priority,
@@ -544,7 +544,7 @@ internal static class CheckBuilder
         null,
         relatedNodeCheck);
 
-    /// <inheritdoc cref="Implements"/>
+    /// <inheritdoc cref="Implements(Priority, ICheck)"/>
     /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
     internal static RelationCheck Implements(
         Priority priority,
@@ -569,7 +569,7 @@ internal static class CheckBuilder
         null,
         relatedNodeCheck);
 
-    /// <inheritdoc cref="Overrides"/>
+    /// <inheritdoc cref="Overrides(Priority, ICheck)"/>
     /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
     internal static RelationCheck Overrides(
         Priority priority,
@@ -594,7 +594,7 @@ internal static class CheckBuilder
         null,
         relatedNodeCheck);
 
-    /// <inheritdoc cref="Creates"/>
+    /// <inheritdoc cref="Creates(Priority, ICheck)"/>
     /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
     internal static RelationCheck Creates(
         Priority priority,
@@ -603,6 +603,21 @@ internal static class CheckBuilder
         priority,
         requirement,
         RelationType.Creates,
+        relatedNodeCheck);
+
+    /// <summary>
+    /// Creates a new <see cref="RelationCheck"/> for a <see cref="RelationType.CreatedBy"/> relation.
+    /// </summary>
+    /// <param name="priority">The <see cref="Priority"/> of this <see cref="RelationCheck"/>.</param>
+    /// <param name="relatedNodeCheck">The <see cref="ICheck"/> which checks for the node
+    /// to which there should be a <see cref="RelationType.CreatedBy"/> relation.</param>
+    /// <returns>The entity which is the creator in this <see cref="RelationCheck"/></returns>
+    internal static RelationCheck CreatedBy(
+        Priority priority,
+        ICheck relatedNodeCheck) => new(
+        priority,
+        null,
+        RelationType.CreatedBy,
         relatedNodeCheck);
 
     /// <summary>
@@ -618,7 +633,7 @@ internal static class CheckBuilder
         null,
         checks);
 
-    /// <inheritdoc cref="Field"/>
+    /// <inheritdoc cref="Field(Priority, ICheck[])"/>
     /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
     internal static FieldCheck Field(
         Priority priority,
@@ -641,7 +656,7 @@ internal static class CheckBuilder
         null,
         checks);
 
-    /// <inheritdoc cref="Constructor"/>
+    /// <inheritdoc cref="Constructor(Priority, ICheck[])"/>
     /// <param name="requirement">The requirement which this <see cref="ICheck"/> checks for.</param>
     internal static ConstructorCheck Constructor(
         Priority priority,

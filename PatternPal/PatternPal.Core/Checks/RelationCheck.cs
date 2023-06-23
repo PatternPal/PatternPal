@@ -105,16 +105,16 @@ internal class RelationCheck : CheckBase
                 });
         }
 
-        return new NodeCheckResult
-               {
-                   Priority = Priority,
-                   ChildrenCheckResults = results,
-                   NodeCheckCollectionWrapper = true,
-                   FeedbackMessage = $"Found {_relationType} relations for {node}.",
-                   DependencyCount = DependencyCount,
-                   MatchedNode = node,
-                   Check = this,
-                   CollectionKind = CheckCollectionKind.Any,
-               };
+        return new NodeCheckResult 
+        {
+           Priority = Priority,
+           ChildrenCheckResults = results,
+           NodeCheckCollectionWrapper = true,
+           FeedbackMessage = $"Found {_relationType} relations for {node}.",
+           DependencyCount = DependencyCount,
+           MatchedNode = node,
+           Check = this,
+           CollectionKind = CheckCollectionKind.Any,
+        };
     }
 }

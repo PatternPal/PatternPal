@@ -1,4 +1,11 @@
 ﻿{
+  ChildrenCheckResults: [
+    {
+      Correct: false,
+      FeedbackMessage: ,
+      Priority: Low
+    }
+  ],
   NodeCheckCollectionWrapper: false,
   FeedbackMessage: The method has no parameters.,
   Priority: Low,

@@ -64,7 +64,7 @@ namespace PatternPal.LoggingServer.Services
                 }
             }
 
-            if (!DateTimeOffset.TryParse(request.ClientTimestamp, out DateTimeOffset cDto))
+            if (!DateTime.TryParse(request.ClientTimestamp, out DateTime clientDateTime))
             {
                 return await Task.FromResult(new LogResponse
                 {
@@ -92,9 +92,10 @@ namespace PatternPal.LoggingServer.Services
                 SubjectId = subjectId,
                 ToolInstances = request.ToolInstances,
                 CodeStateId = codeStateId,
+                OldFileName = request.HasOldFileName ? request.OldFileName : null,
                 FullCodeState = request.HasFullCodeState ? request.FullCodeState : null,
-                ClientDatetime = cDto,
-                ServerDatetime = DateTimeOffset.Now,
+                ClientDatetime = DateTime.SpecifyKind(clientDateTime, DateTimeKind.Utc),
+                ServerDatetime = DateTime.UtcNow,
                 SessionId = sessionId,
                 ProjectId = request.HasProjectId ? request.ProjectId : null,
                 ParentId = parentEventId,
@@ -102,8 +103,8 @@ namespace PatternPal.LoggingServer.Services
                 CompileMessageType = request.HasCompileMessageType ? request.CompileMessageType: null,
                 SourceLocation = request.HasSourceLocation ? request.SourceLocation: null,
                 CodeStateSection = request.HasCodeStateSection ? request.CodeStateSection : null,
-                RecognizerConfig = request.EventType == EventType.EvtXRecognizerRun ? request.RecognizerConfig : null,
-                RecognizerResult = request.EventType == EventType.EvtXRecognizerRun ? request.RecognizerResult : null,
+                RecognizerConfig = request.HasRecognizerConfig ? request.RecognizerConfig : null,
+                RecognizerResult = request.HasRecognizerResult ? request.RecognizerResult : null,
                 ExecutionResult = request.HasExecutionResult ? request.ExecutionResult : null
             };
 

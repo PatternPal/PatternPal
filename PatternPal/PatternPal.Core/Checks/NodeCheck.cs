@@ -150,17 +150,17 @@ public class NodeCheck< TNode > : NodeCheckBase
 
         // Return the result.
         return new NodeCheckResult
-               {
-                   ChildrenCheckResults = subCheckResults,
-                   FeedbackMessage = GetFeedbackMessage(castNode),
-                   CollectionKind = _kind,
-                   Priority = Priority,
-                   DependencyCount = DependencyCount,
-                   MatchedNode = !castNode.IsPlaceholder
-                       ? castNode
-                       : null,
-                   Check = this,
-               };
+        {
+           ChildrenCheckResults = subCheckResults,
+           FeedbackMessage = GetFeedbackMessage(castNode),
+           CollectionKind = _kind,
+           Priority = Priority,
+           DependencyCount = DependencyCount,
+           MatchedNode = !castNode.IsPlaceholder
+               ? castNode
+               : null,
+           Check = this,
+        };
     }
 
     /// <summary>
@@ -203,27 +203,32 @@ public class NodeCheck< TNode > : NodeCheckBase
                     ctx,
                     ctx.Graph.GetAll().Values.OfType< IClass >(),
                     classCheck);
+
             case InterfaceCheck interfaceCheck:
                 ThrowIfNested(subCheck);
                 return RunCheckWithMultipleMatches(
                     ctx,
                     ctx.Graph.GetAll().Values.OfType< IInterface >(),
                     interfaceCheck);
+
             case MethodCheck methodCheck:
                 return RunCheckWithMultipleMatches(
                     ctx,
                     CheckHelper.ConvertNodeElseThrow< IEntity >(castNode).GetMethods(),
                     methodCheck);
+
             case FieldCheck fieldCheck:
                 return RunCheckWithMultipleMatches(
                     ctx,
                     CheckHelper.ConvertNodeElseThrow< IClass >(castNode).GetFields(),
                     fieldCheck);
+
             case ConstructorCheck constructorCheck:
                 return RunCheckWithMultipleMatches(
                     ctx,
                     CheckHelper.ConvertNodeElseThrow< IClass >(castNode).GetConstructors(),
                     constructorCheck);
+
             case PropertyCheck propertyCheck:
                 return RunCheckWithMultipleMatches(
                     ctx,
@@ -233,21 +238,19 @@ public class NodeCheck< TNode > : NodeCheckBase
             // Call this method recursively with the check wrapped by the NotCheck. This is
             // necessary because otherwise the wrapped check won't receive the correct entities.
             case NotCheck notCheck:
-            {
                 ICheckResult nestedResult = RunCheck(
                     ctx,
                     castNode,
                     notCheck.NestedCheck);
                 return new NotCheckResult
-                       {
-                           FeedbackMessage = "Executing NOT-check",
-                           NestedResult = nestedResult,
-                           Priority = notCheck.Priority,
-                           DependencyCount = notCheck.DependencyCount,
-                           MatchedNode = nestedResult.MatchedNode,
-                           Check = notCheck,
-                       };
-            }
+                {
+                   FeedbackMessage = "Executing NOT-check",
+                   NestedResult = nestedResult,
+                   Priority = notCheck.Priority,
+                   DependencyCount = notCheck.DependencyCount,
+                   MatchedNode = nestedResult.MatchedNode,
+                   Check = notCheck,
+                };
 
             // The type to pass to the TypeCheck depends on the implementation in derived classes of
             // this class.
@@ -331,16 +334,16 @@ public class NodeCheck< TNode > : NodeCheckBase
 
         // Return the result.
         return new NodeCheckResult
-               {
-                   ChildrenCheckResults = results,
-                   CollectionKind = CheckCollectionKind.Any,
-                   NodeCheckCollectionWrapper = true,
-                   FeedbackMessage = string.Empty,
-                   Priority = nodeCheck.Priority,
-                   DependencyCount = nodeCheck.DependencyCount,
-                   MatchedNode = null,
-                   Check = nodeCheck,
-               };
+        {
+           ChildrenCheckResults = results,
+           CollectionKind = CheckCollectionKind.Any,
+           NodeCheckCollectionWrapper = true,
+           FeedbackMessage = string.Empty,
+           Priority = nodeCheck.Priority,
+           DependencyCount = nodeCheck.DependencyCount,
+           MatchedNode = null,
+           Check = nodeCheck,
+        };
     }
 
     /// <summary>
@@ -374,21 +377,27 @@ public class NodeCheck< TNode > : NodeCheckBase
                 case NodeCheck< INode > nestedNodeCheck:
                     MarkCheckAsSeen(nestedNodeCheck);
                     break;
+
                 case ClassCheck classCheck:
                     MarkCheckAsSeen(classCheck);
                     break;
+
                 case InterfaceCheck interfaceCheck:
                     MarkCheckAsSeen(interfaceCheck);
                     break;
+
                 case MethodCheck methodCheck:
                     MarkCheckAsSeen(methodCheck);
                     break;
+
                 case FieldCheck fieldCheck:
                     MarkCheckAsSeen(fieldCheck);
                     break;
+
                 case ConstructorCheck constructorCheck:
                     MarkCheckAsSeen(constructorCheck);
                     break;
+
                 case PropertyCheck propertyCheck:
                     MarkCheckAsSeen(propertyCheck);
                     break;
@@ -436,11 +445,13 @@ public class NodeCheck< TNode > : NodeCheckBase
                         ctx,
                         currentCheck,
                         (IField)node);
+
                 case MethodCheck methodCheck:
                     return methodCheck.GetType4TypeCheck(
                         ctx,
                         currentCheck,
                         (IMethod)node);
+
                 case PropertyCheck propertyCheck:
                     return propertyCheck.GetType4TypeCheck(
                         ctx,
