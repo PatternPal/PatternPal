@@ -90,6 +90,12 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
             foreach (Result result in resultsByRequirement.Values.OrderBy(r => r.Requirement))
             {
                 string[ ] splittedRequirement = result.Requirement.Split(". ");
+                if (splittedRequirement.Length != 2)
+                {
+                    // Requirement was not in expected format.
+                    throw new ArgumentException($"Requirement '{result.Requirement}' does not have the expected format, format should be '1. Description' for top-level requirements, and '1b. Sub-requirement' for its sub-requirements");
+                }
+
                 if (int.TryParse(
                         splittedRequirement[ 0 ],
                         out int newEntityCheck)
@@ -109,14 +115,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                 }
                 else
                 {
-                    int position = 0;
-                    string isThisInt = splittedRequirement[ 0 ];
-                    while (char.IsDigit(isThisInt[ position ]))
-                    {
-                        position++;
-                    }
-
-                    result.Requirement = splittedRequirement[ 0 ][ position.. ] + ") " + splittedRequirement[ 1 ];
+                    result.Requirement = splittedRequirement[ 1 ];
                     entityResult.Requirements.Add(result);
                 }
             }
