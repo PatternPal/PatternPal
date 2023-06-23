@@ -481,7 +481,7 @@ namespace PatternPal.Extension.Commands
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            if (_package == null || !Privacy.Instance.DoLogData 
+            if (_package == null || !_doLog 
                                  || recognizeRequest.FileOrProjectCase == RecognizeRequest.FileOrProjectOneofCase.None)
             { 
               return; 
