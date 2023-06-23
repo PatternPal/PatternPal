@@ -37,7 +37,7 @@ internal static class Program
             q.AddTrigger(opts => opts
                 .ForJob(jobKey)
                 .WithIdentity("LoggerTrigger", "LoggerGroup")
-                .WithCronSchedule("0 0 0 ? * * *")
+                .WithCronSchedule(CronScheduleBuilder.DailyAtHourAndMinute(0,0))
                 .WithDescription("Removes all redundant CodeStates every day at midnight")
             );
 
