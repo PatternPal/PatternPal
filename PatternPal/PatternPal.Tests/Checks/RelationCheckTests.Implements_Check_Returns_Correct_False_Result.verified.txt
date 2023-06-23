@@ -1,26 +1,26 @@
 ﻿{
-  FeedbackMessage: Found interface 'Parent',
-  Priority: Low,
   ChildrenCheckResults: [
     {
-      FeedbackMessage: Found Implements relations for Parent.,
-      Priority: Low,
       ChildrenCheckResults: [
         {
+          Correct: false,
           FeedbackMessage: No Implements relation found.,
           Priority: Low,
-          Correct: false,
           DependencyCount: 1,
           MatchedNode: Child
         }
       ],
       CollectionKind: Any,
+      NodeCheckCollectionWrapper: true,
+      FeedbackMessage: Found Implements relations for Parent.,
+      Priority: Low,
       DependencyCount: 1,
-      MatchedNode: Parent,
-      NodeCheckCollectionWrapper: true
+      MatchedNode: Parent
     }
   ],
+  NodeCheckCollectionWrapper: false,
+  FeedbackMessage: Found interface 'Parent',
+  Priority: Low,
   DependencyCount: 1,
-  MatchedNode: Parent,
-  NodeCheckCollectionWrapper: false
+  MatchedNode: Parent
 }

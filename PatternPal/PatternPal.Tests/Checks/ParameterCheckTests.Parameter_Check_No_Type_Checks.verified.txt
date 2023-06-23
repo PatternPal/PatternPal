@@ -1,6 +1,6 @@
 ﻿{
+  NodeCheckCollectionWrapper: false,
   FeedbackMessage: No TypeChecks were provided.,
   Priority: High,
-  MatchedNode: IntTestFunction,
-  NodeCheckCollectionWrapper: false
+  MatchedNode: IntTestFunction
 }

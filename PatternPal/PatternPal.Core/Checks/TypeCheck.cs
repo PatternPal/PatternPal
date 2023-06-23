@@ -10,12 +10,31 @@ internal class TypeCheck : CheckBase
     // Used to get the node to compare against.
     private readonly OneOf< ICheck, GetCurrentEntity > _getNode;
 
+    private Score _perfectScore;
+
     /// <summary>
     /// A <see cref="TypeCheck"/> is dependent on the result of <see cref="_getNode"/>.
     /// </summary>
     public override int DependencyCount => _getNode.Match(
         relatedCheck => 1 + relatedCheck.DependencyCount,
         _ => 0);
+
+    /// <summary>
+    /// Whether this <see cref="TypeCheck "/> is for the current <see cref="IEntity"/>.
+    /// </summary>
+    internal bool IsForCurrentEntity => _getNode.Match(
+        _ => false,
+        _ => true);
+
+    /// <inheritdoc />
+    public override Score PerfectScore => _perfectScore.Equals(default)
+        ? _perfectScore = Score.CreateScore(
+                              Priority,
+                              true)
+                          + _getNode.Match(
+                              RelationCheck.PerfectScoreFromRelatedCheck,
+                              _ => default)
+        : _perfectScore;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TypeCheck"/> class.

@@ -1,26 +1,26 @@
 ﻿{
-  FeedbackMessage: Found class 'Used',
-  Priority: Low,
   ChildrenCheckResults: [
     {
-      FeedbackMessage: Found Extends relations for Used.,
-      Priority: Low,
       ChildrenCheckResults: [
         {
+          Correct: false,
           FeedbackMessage: No Extends relation found.,
           Priority: Low,
-          Correct: false,
           DependencyCount: 1,
           MatchedNode: Uses
         }
       ],
       CollectionKind: Any,
+      NodeCheckCollectionWrapper: true,
+      FeedbackMessage: Found Extends relations for Used.,
+      Priority: Low,
       DependencyCount: 1,
-      MatchedNode: Used,
-      NodeCheckCollectionWrapper: true
+      MatchedNode: Used
     }
   ],
+  NodeCheckCollectionWrapper: false,
+  FeedbackMessage: Found class 'Used',
+  Priority: Low,
   DependencyCount: 1,
-  MatchedNode: Used,
-  NodeCheckCollectionWrapper: false
+  MatchedNode: Used
 }

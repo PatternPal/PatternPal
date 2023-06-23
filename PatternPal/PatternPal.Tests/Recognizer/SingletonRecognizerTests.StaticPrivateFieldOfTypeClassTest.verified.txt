@@ -1,162 +1,162 @@
 ﻿[
   {
-    FeedbackMessage: Found class 'MockClass1',
-    Priority: Low,
     ChildrenCheckResults: [
       {
-        FeedbackMessage: ,
         ChildrenCheckResults: [
           {
-            FeedbackMessage: Found field 'name',
             ChildrenCheckResults: [
               {
-                FeedbackMessage: Modifiers correctly implemented.,
                 Correct: true,
+                FeedbackMessage: Modifiers correctly implemented.,
                 MatchedNode: name
               },
               {
-                FeedbackMessage: Found node 'MockClass1',
                 ChildrenCheckResults: [
                   {
-                    FeedbackMessage: Node 'MockClass1' has correct type,
                     Correct: true,
+                    FeedbackMessage: Node 'MockClass1' has correct type,
                     MatchedNode: MockClass1
                   }
                 ],
                 CollectionKind: Any,
-                MatchedNode: MockClass1,
-                NodeCheckCollectionWrapper: true
+                NodeCheckCollectionWrapper: true,
+                FeedbackMessage: Found node 'MockClass1',
+                MatchedNode: MockClass1
               }
             ],
-            MatchedNode: name,
-            NodeCheckCollectionWrapper: false
+            NodeCheckCollectionWrapper: false,
+            FeedbackMessage: Found field 'name',
+            MatchedNode: name
           }
         ],
         CollectionKind: Any,
-        NodeCheckCollectionWrapper: true
+        NodeCheckCollectionWrapper: true,
+        FeedbackMessage: 
       }
     ],
-    MatchedNode: MockClass1,
-    NodeCheckCollectionWrapper: false
+    NodeCheckCollectionWrapper: false,
+    FeedbackMessage: Found class 'MockClass1',
+    Priority: Low,
+    MatchedNode: MockClass1
   },
   {
-    FeedbackMessage: Found class 'MockClass2',
-    Priority: Low,
     ChildrenCheckResults: [
       {
-        FeedbackMessage: ,
         ChildrenCheckResults: [
           {
-            FeedbackMessage: Found field 'name',
             ChildrenCheckResults: [
               {
-                FeedbackMessage: The node name does not have the static modifier.,
                 Correct: false,
+                FeedbackMessage: The node name does not have the static modifier.,
                 MatchedNode: name
               },
               {
-                FeedbackMessage: Found node 'MockClass2',
                 ChildrenCheckResults: [
                   {
-                    FeedbackMessage: Node 'MockClass2' has correct type,
                     Correct: true,
+                    FeedbackMessage: Node 'MockClass2' has correct type,
                     MatchedNode: MockClass2
                   }
                 ],
                 CollectionKind: Any,
-                MatchedNode: MockClass2,
-                NodeCheckCollectionWrapper: true
+                NodeCheckCollectionWrapper: true,
+                FeedbackMessage: Found node 'MockClass2',
+                MatchedNode: MockClass2
               }
             ],
-            MatchedNode: name,
-            NodeCheckCollectionWrapper: false
+            NodeCheckCollectionWrapper: false,
+            FeedbackMessage: Found field 'name',
+            MatchedNode: name
           }
         ],
         CollectionKind: Any,
-        NodeCheckCollectionWrapper: true
+        NodeCheckCollectionWrapper: true,
+        FeedbackMessage: 
       }
     ],
-    MatchedNode: MockClass2,
-    NodeCheckCollectionWrapper: false
+    NodeCheckCollectionWrapper: false,
+    FeedbackMessage: Found class 'MockClass2',
+    Priority: Low,
+    MatchedNode: MockClass2
   },
   {
-    FeedbackMessage: Found class 'MockClass3',
-    Priority: Low,
     ChildrenCheckResults: [
       {
-        FeedbackMessage: ,
         ChildrenCheckResults: [
           {
-            FeedbackMessage: Found field 'name',
             ChildrenCheckResults: [
               {
-                FeedbackMessage: The node name does not have the private modifier.,
                 Correct: false,
+                FeedbackMessage: The node name does not have the private modifier.,
                 MatchedNode: name
               },
               {
-                FeedbackMessage: Found node 'MockClass3',
                 ChildrenCheckResults: [
                   {
-                    FeedbackMessage: Node 'MockClass3' has correct type,
                     Correct: true,
+                    FeedbackMessage: Node 'MockClass3' has correct type,
                     MatchedNode: MockClass3
                   }
                 ],
                 CollectionKind: Any,
-                MatchedNode: MockClass3,
-                NodeCheckCollectionWrapper: true
+                NodeCheckCollectionWrapper: true,
+                FeedbackMessage: Found node 'MockClass3',
+                MatchedNode: MockClass3
               }
             ],
-            MatchedNode: name,
-            NodeCheckCollectionWrapper: false
+            NodeCheckCollectionWrapper: false,
+            FeedbackMessage: Found field 'name',
+            MatchedNode: name
           }
         ],
         CollectionKind: Any,
-        NodeCheckCollectionWrapper: true
+        NodeCheckCollectionWrapper: true,
+        FeedbackMessage: 
       }
     ],
-    MatchedNode: MockClass3,
-    NodeCheckCollectionWrapper: false
+    NodeCheckCollectionWrapper: false,
+    FeedbackMessage: Found class 'MockClass3',
+    Priority: Low,
+    MatchedNode: MockClass3
   },
   {
-    FeedbackMessage: Found class 'MockClass4',
-    Priority: Low,
     ChildrenCheckResults: [
       {
-        FeedbackMessage: ,
         ChildrenCheckResults: [
           {
-            FeedbackMessage: Found field 'name',
             ChildrenCheckResults: [
               {
-                FeedbackMessage: Modifiers correctly implemented.,
                 Correct: true,
+                FeedbackMessage: Modifiers correctly implemented.,
                 MatchedNode: name
               },
               {
-                FeedbackMessage: Found node 'MockClass1',
                 ChildrenCheckResults: [
                   {
-                    FeedbackMessage: Node 'MockClass1' has incorrect type, expected 'MockClass4',
                     Correct: false,
+                    FeedbackMessage: Node 'MockClass1' has incorrect type, expected 'MockClass4',
                     MatchedNode: MockClass4
                   }
                 ],
                 CollectionKind: Any,
-                MatchedNode: MockClass1,
-                NodeCheckCollectionWrapper: true
+                NodeCheckCollectionWrapper: true,
+                FeedbackMessage: Found node 'MockClass1',
+                MatchedNode: MockClass1
               }
             ],
-            MatchedNode: name,
-            NodeCheckCollectionWrapper: false
+            NodeCheckCollectionWrapper: false,
+            FeedbackMessage: Found field 'name',
+            MatchedNode: name
           }
         ],
         CollectionKind: Any,
-        NodeCheckCollectionWrapper: true
+        NodeCheckCollectionWrapper: true,
+        FeedbackMessage: 
       }
     ],
-    MatchedNode: MockClass4,
-    NodeCheckCollectionWrapper: false
+    NodeCheckCollectionWrapper: false,
+    FeedbackMessage: Found class 'MockClass4',
+    Priority: Low,
+    MatchedNode: MockClass4
   }
 ]

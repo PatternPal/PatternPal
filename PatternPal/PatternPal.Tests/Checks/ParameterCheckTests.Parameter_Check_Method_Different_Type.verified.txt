@@ -1,35 +1,35 @@
 ﻿{
-  FeedbackMessage: Found method: IntTestFunction().,
-  Priority: Low,
   ChildrenCheckResults: [
     {
-      FeedbackMessage: Found parameters for following node: IntTestFunction().,
-      Priority: Low,
       ChildrenCheckResults: [
         {
-          FeedbackMessage: Found node 'StringTest',
-          Priority: Low,
           ChildrenCheckResults: [
             {
+              Correct: false,
               FeedbackMessage: Node 'StringTest' has incorrect type, expected 'IntTest',
               Priority: Low,
-              Correct: false,
               DependencyCount: 1,
               MatchedNode: IntTest
             }
           ],
           CollectionKind: Any,
+          NodeCheckCollectionWrapper: true,
+          FeedbackMessage: Found node 'StringTest',
+          Priority: Low,
           DependencyCount: 1,
-          MatchedNode: StringTest,
-          NodeCheckCollectionWrapper: true
+          MatchedNode: StringTest
         }
       ],
+      NodeCheckCollectionWrapper: false,
+      FeedbackMessage: Found parameters for following node: IntTestFunction().,
+      Priority: Low,
       DependencyCount: 1,
-      MatchedNode: IntTestFunction,
-      NodeCheckCollectionWrapper: false
+      MatchedNode: IntTestFunction
     }
   ],
+  NodeCheckCollectionWrapper: false,
+  FeedbackMessage: Found method: IntTestFunction().,
+  Priority: Low,
   DependencyCount: 1,
-  MatchedNode: IntTestFunction,
-  NodeCheckCollectionWrapper: false
+  MatchedNode: IntTestFunction
 }

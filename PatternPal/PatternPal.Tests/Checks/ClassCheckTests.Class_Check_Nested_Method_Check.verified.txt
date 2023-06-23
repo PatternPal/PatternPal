@@ -1,30 +1,30 @@
 ﻿{
-  FeedbackMessage: Found class 'Test',
-  Priority: Mid,
   ChildrenCheckResults: [
     {
-      FeedbackMessage: ,
-      Priority: Mid,
       ChildrenCheckResults: [
         {
-          FeedbackMessage: Found method: DoSomething().,
-          Priority: Mid,
           ChildrenCheckResults: [
             {
+              Correct: true,
               FeedbackMessage: Modifiers correctly implemented.,
               Priority: Mid,
-              Correct: true,
               MatchedNode: DoSomething
             }
           ],
-          MatchedNode: DoSomething,
-          NodeCheckCollectionWrapper: false
+          NodeCheckCollectionWrapper: false,
+          FeedbackMessage: Found method: DoSomething().,
+          Priority: Mid,
+          MatchedNode: DoSomething
         }
       ],
       CollectionKind: Any,
-      NodeCheckCollectionWrapper: true
+      NodeCheckCollectionWrapper: true,
+      FeedbackMessage: ,
+      Priority: Mid
     }
   ],
-  MatchedNode: Test,
-  NodeCheckCollectionWrapper: false
+  NodeCheckCollectionWrapper: false,
+  FeedbackMessage: Found class 'Test',
+  Priority: Mid,
+  MatchedNode: Test
 }

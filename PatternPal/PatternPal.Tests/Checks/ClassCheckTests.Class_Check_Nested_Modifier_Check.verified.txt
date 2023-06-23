@@ -1,14 +1,14 @@
 ﻿{
-  FeedbackMessage: Found class 'Test',
-  Priority: Low,
   ChildrenCheckResults: [
     {
+      Correct: true,
       FeedbackMessage: Modifiers correctly implemented.,
       Priority: Low,
-      Correct: true,
       MatchedNode: Test
     }
   ],
-  MatchedNode: Test,
-  NodeCheckCollectionWrapper: false
+  NodeCheckCollectionWrapper: false,
+  FeedbackMessage: Found class 'Test',
+  Priority: Low,
+  MatchedNode: Test
 }

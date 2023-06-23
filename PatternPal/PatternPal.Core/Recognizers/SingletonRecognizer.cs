@@ -52,6 +52,7 @@ internal class SingletonRecognizer : IRecognizer,
 
         yield return Class(
             Priority.Knockout,
+            "1. Singleton Class",
             onlyPrivateProtectedConstructor,
             staticPrivateFieldOfTypeClass,
             checkMethodActsAsConstructorBehaviour
@@ -151,7 +152,7 @@ internal class SingletonRecognizer : IRecognizer,
     {
         privateProtectedConstructorCheck = Constructor(
             Priority.Knockout,
-            "has at least one private/protected constructor",
+            "1b. Has at least one private/protected constructor.",
             Any(
                 Priority.Knockout,
                 Modifiers(
@@ -167,7 +168,7 @@ internal class SingletonRecognizer : IRecognizer,
 
         NotCheck noPublicInternalConstructorCheck = Not(
             Priority.Knockout,
-            "has no public/internal constructor",
+            "1a. Has no public/internal constructor.",
             Constructor(
                 Priority.Knockout,
                 Any(
@@ -196,7 +197,7 @@ internal class SingletonRecognizer : IRecognizer,
     {
         return Field(
             Priority.Knockout,
-            "has a static, private field with the same type as the class",
+            "1c. Has a static, private field with the same type as the class.",
             Modifiers(
                 Priority.Knockout,
                 Modifier.Static,
@@ -285,7 +286,7 @@ internal class SingletonRecognizer : IRecognizer,
 
         return Method(
             Priority.High,
-            "has a static, public/internal method that acts as a constructor in the following way and if called and there is an instance saved in the private field it returns this instance otherwise it calls the private constructor",
+            "1d. Has a static, public/internal method that acts as a constructor in the following way: If called and there is an instance saved in the private field it returns this instance, otherwise it calls the private constructor.",
             hasStaticPublicInternalMethod.Append(checkNoInstanceConstructor).Concat(checkInstanceConstructor).ToArray()
         );
     }
@@ -298,9 +299,10 @@ internal class SingletonRecognizer : IRecognizer,
     {
         return Class(
             Priority.Low,
-            "calls the method that acts as a constructor of the singleton class",
+            "2. Client Class",
             Any(
                 Priority.Low,
+                "2a. Calls the method that acts as a constructor of the singleton class.",
                 Constructor(
                     Priority.High,
                     Uses(

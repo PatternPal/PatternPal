@@ -1,26 +1,26 @@
 ﻿{
-  FeedbackMessage: Found class 'Uses',
-  Priority: Low,
   ChildrenCheckResults: [
     {
-      FeedbackMessage: Found Creates relations for Uses.,
-      Priority: Low,
       ChildrenCheckResults: [
         {
+          Correct: true,
           FeedbackMessage: Node Uses has a Creates relation with node Used,
           Priority: Low,
-          Correct: true,
           DependencyCount: 1,
           MatchedNode: Used
         }
       ],
       CollectionKind: Any,
+      NodeCheckCollectionWrapper: true,
+      FeedbackMessage: Found Creates relations for Uses.,
+      Priority: Low,
       DependencyCount: 1,
-      MatchedNode: Uses,
-      NodeCheckCollectionWrapper: true
+      MatchedNode: Uses
     }
   ],
+  NodeCheckCollectionWrapper: false,
+  FeedbackMessage: Found class 'Uses',
+  Priority: Low,
   DependencyCount: 1,
-  MatchedNode: Uses,
-  NodeCheckCollectionWrapper: false
+  MatchedNode: Uses
 }

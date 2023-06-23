@@ -3,7 +3,8 @@
 /// <summary>
 /// The Score of a <see cref="ICheckResult"/>, used to sort the final root <see cref="ICheckResult"/>.
 /// </summary>
-public struct Score : IComparable< Score >
+public struct Score : IComparable< Score >,
+                      IEquatable< Score >
 {
     private int _knockout;
     private int _high;
@@ -21,7 +22,7 @@ public struct Score : IComparable< Score >
             _knockout = a._knockout + b._knockout,
             _high = a._high + b._high,
             _mid = a._mid + b._mid,
-            _low = a._low + b._low
+            _low = a._low + b._low,
         };
 
     /// <summary>
@@ -121,6 +122,33 @@ public struct Score : IComparable< Score >
         return 0;
     }
 
+    /// <summary>
+    /// Calculates the percentage of priorities this <see cref="Score"/> has in common with <paramref name="perfectScore"/>.
+    /// </summary>
+    /// <param name="perfectScore">The <see cref="Score"/> to check against.</param>
+    /// <returns>The percentage of correct priorities this <see cref="Score"/> has.</returns>
+    public int PercentageOf(
+        Score perfectScore)
+    {
+        int perfect = perfectScore._knockout * 4 + perfectScore._high * 3 + perfectScore._mid * 2 + perfectScore._low;
+        if (perfect == 0)
+        {
+            return 0;
+        }
+
+        int own = _knockout * 4 + _high * 3 + _mid * 2 + _low;
+
+        return (int)(own / (float)perfect * 100);
+    }
+
+    /// <inheritdoc />
+    public bool Equals(
+        Score other) => _knockout == other._knockout && _high == other._high && _mid == other._mid && _low == other._low;
+
+    /// <summary>
+    /// Creates a string representation of this <see cref="Score"/>.
+    /// </summary>
+    /// <returns>A string representation of this <see cref="Score"/>.</returns>
     public override string ToString()
     {
         return $"Knockout: {_knockout}, High: {_high}, Mid: {_mid}, Low: {_low}";

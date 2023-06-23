@@ -1,20 +1,20 @@
 ﻿{
-  FeedbackMessage: Found the required checks for: Test.,
-  Priority: Low,
   ChildrenCheckResults: [
     {
-      FeedbackMessage: Executing NOT-check,
-      Priority: Low,
       NestedResult: {
+        Correct: false,
         FeedbackMessage: The node Test does not have the private modifier.,
         Priority: Low,
-        Correct: false,
         MatchedNode: Test
       },
+      FeedbackMessage: Executing NOT-check,
+      Priority: Low,
       MatchedNode: Test
     }
   ],
   CollectionKind: Any,
-  MatchedNode: Test,
-  NodeCheckCollectionWrapper: false
+  NodeCheckCollectionWrapper: false,
+  FeedbackMessage: Found the required checks for: Test.,
+  Priority: Low,
+  MatchedNode: Test
 }

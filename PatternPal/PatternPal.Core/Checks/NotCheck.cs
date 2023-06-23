@@ -16,6 +16,9 @@ internal class NotCheck : CheckBase
     /// </summary>
     public override int DependencyCount => NestedCheck.DependencyCount;
 
+    /// <inheritdoc />
+    public override Score PerfectScore { get; }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="NotCheck"/> class.
     /// </summary>
@@ -31,6 +34,9 @@ internal class NotCheck : CheckBase
             requirement)
     {
         NestedCheck = check;
+        PerfectScore = Score.CreateScore(
+            Priority,
+            true);
     }
 
     /// <inheritdoc />

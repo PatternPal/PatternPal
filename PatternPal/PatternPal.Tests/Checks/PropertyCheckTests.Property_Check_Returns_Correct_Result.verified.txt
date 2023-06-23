@@ -1,6 +1,6 @@
 ﻿{
+  NodeCheckCollectionWrapper: false,
   FeedbackMessage: Found property: TestProperty.,
   Priority: Low,
-  MatchedNode: TestProperty,
-  NodeCheckCollectionWrapper: false
+  MatchedNode: TestProperty
 }

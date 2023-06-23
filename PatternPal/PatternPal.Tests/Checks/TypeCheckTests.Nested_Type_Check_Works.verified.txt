@@ -1,42 +1,42 @@
 ﻿{
-  FeedbackMessage: Found class 'Test',
   ChildrenCheckResults: [
     {
-      FeedbackMessage: ,
       ChildrenCheckResults: [
         {
-          FeedbackMessage: Found field '_test',
           ChildrenCheckResults: [
             {
-              FeedbackMessage: Found the required checks for: _test.,
               ChildrenCheckResults: [
                 {
-                  FeedbackMessage: Found node 'Test',
                   ChildrenCheckResults: [
                     {
-                      FeedbackMessage: Node 'Test' has correct type,
                       Correct: true,
+                      FeedbackMessage: Node 'Test' has correct type,
                       MatchedNode: Test
                     }
                   ],
                   CollectionKind: Any,
-                  MatchedNode: Test,
-                  NodeCheckCollectionWrapper: true
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found node 'Test',
+                  MatchedNode: Test
                 }
               ],
               CollectionKind: Any,
-              MatchedNode: _test,
-              NodeCheckCollectionWrapper: false
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found the required checks for: _test.,
+              MatchedNode: _test
             }
           ],
-          MatchedNode: _test,
-          NodeCheckCollectionWrapper: false
+          NodeCheckCollectionWrapper: false,
+          FeedbackMessage: Found field '_test',
+          MatchedNode: _test
         }
       ],
       CollectionKind: Any,
-      NodeCheckCollectionWrapper: true
+      NodeCheckCollectionWrapper: true,
+      FeedbackMessage: 
     }
   ],
-  MatchedNode: Test,
-  NodeCheckCollectionWrapper: false
+  NodeCheckCollectionWrapper: false,
+  FeedbackMessage: Found class 'Test',
+  MatchedNode: Test
 }

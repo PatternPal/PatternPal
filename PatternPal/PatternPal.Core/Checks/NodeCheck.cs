@@ -1,17 +1,48 @@
 ﻿namespace PatternPal.Core.Checks;
 
 /// <summary>
+/// Base class for <see cref="NodeCheck{TNode}"/>s.
+/// </summary>
+public abstract class NodeCheckBase : CheckBase
+{
+    /// <summary>
+    /// The sub-<see cref="ICheck"/>s of this <see cref="ICheck"/>.
+    /// </summary>
+    internal IEnumerable< ICheck > SubChecks { get; }
+
+    /// <summary>
+    /// Creates a new instance of <see cref="NodeCheckBase"/>.
+    /// </summary>
+    /// <param name="priority"><see cref="Priority"/> of the check.</param>
+    /// <param name="requirement">The optional requirement which this <see cref="ICheck"/> checks.</param>
+    /// <param name="subChecks">A list of sub-<see cref="ICheck"/>s that should be checked.</param>
+    protected NodeCheckBase(
+        Priority priority,
+        string ? requirement,
+        IEnumerable< ICheck > subChecks)
+        : base(
+            priority,
+            requirement)
+    {
+        SubChecks = subChecks;
+
+        foreach (ICheck subCheck in SubChecks)
+        {
+            subCheck.ParentCheck = this;
+        }
+    }
+}
+
+/// <summary>
 /// Base class for <see cref="ICheck"/>s which can have sub-<see cref="ICheck"/>s.
 /// </summary>
 /// <typeparam name="TNode">The <see cref="INode"/> type which this <see cref="ICheck"/> supports.</typeparam>
-public class NodeCheck< TNode > : CheckBase
+public class NodeCheck< TNode > : NodeCheckBase
     where TNode : INode
 {
-    // The sub-checks of the current check.
-    private readonly IEnumerable< ICheck > _subChecks;
-
     // The kind of this collection of checks.
     private readonly CheckCollectionKind _kind;
+    private Score _perfectScore;
 
     /// <inheritdoc />
     public override Func< List< INode > > Result => () => _matchedEntities
@@ -32,7 +63,7 @@ public class NodeCheck< TNode > : CheckBase
 
     /// <summary>
     /// The dependencies to other <see cref="INode"/>s this check has.
-    /// While calculating the dependencies, it calculates the dependencies of its <see cref="_subChecks"/>.
+    /// While calculating the dependencies, it calculates the dependencies of its <see cref="SubChecks"/>.
     /// </summary>
     public override int DependencyCount
     {
@@ -42,7 +73,7 @@ public class NodeCheck< TNode > : CheckBase
             if (_dependencyCount is null)
             {
                 int dependencyCount = 0;
-                foreach (ICheck subCheck in _subChecks)
+                foreach (ICheck subCheck in SubChecks)
                 {
                     dependencyCount += subCheck.DependencyCount;
                 }
@@ -51,6 +82,23 @@ public class NodeCheck< TNode > : CheckBase
             }
 
             return _dependencyCount.Value;
+        }
+    }
+
+    /// <inheritdoc />
+    public override Score PerfectScore
+    {
+        get
+        {
+            if (_perfectScore.Equals(default))
+            {
+                foreach (ICheck subCheck in SubChecks)
+                {
+                    _perfectScore += subCheck.PerfectScore;
+                }
+            }
+
+            return _perfectScore;
         }
     }
 
@@ -68,15 +116,10 @@ public class NodeCheck< TNode > : CheckBase
         CheckCollectionKind kind = CheckCollectionKind.All)
         : base(
             priority,
-            requirement)
+            requirement,
+            subChecks)
     {
-        _subChecks = subChecks;
         _kind = kind;
-
-        foreach (ICheck subCheck in _subChecks)
-        {
-            subCheck.ParentCheck = this;
-        }
     }
 
     /// <inheritdoc />
@@ -89,7 +132,7 @@ public class NodeCheck< TNode > : CheckBase
 
         // Run the sub-checks.
         IList< ICheckResult > subCheckResults = new List< ICheckResult >();
-        foreach (ICheck subCheck in _subChecks)
+        foreach (ICheck subCheck in SubChecks)
         {
             subCheckResults.Add(
                 RunCheck(
@@ -312,7 +355,7 @@ public class NodeCheck< TNode > : CheckBase
     {
         nodeCheck._matchedEntities ??= new List< INode >();
 
-        foreach (ICheck subCheck in nodeCheck._subChecks)
+        foreach (ICheck subCheck in nodeCheck.SubChecks)
         {
             MarkCheckAsSeenImpl(subCheck);
         }
