@@ -25,26 +25,20 @@ string client_timestamp = 5;
 string experimental_condition = 6; 
 string logging_error_id = 7;
 optional string parent_event_id = 8;
-string session_id =9;
+string session_id = 9;
 optional string project_id = 10;
 optional string code_state_section = 11;
-EventInitiator event_initiatior = 12;
-EditType edit_type = 13;
-string compile_result = 14;
-optional string compile_message_type = 15;
-optional string compile_message_data = 16;
-optional string source_location = 17;
-string execution_id = 18;
-string test_id = 19;
-optional ExecutionResult execution_result = 20;
-string intervention_category = 21;
-string intervention_type = 22;
-string intervention_message = 23;
-optional string recognizer_result = 24;
-optional string recognizer_config = 25;
-optional bytes data = 26;
-optional bool full_code_state = 27;
-optional string old_file_name = 28;
+string compile_result = 12;
+optional string compile_message_type = 13;
+optional string compile_message_data = 14;
+optional string source_location = 15;
+string execution_id = 16;
+optional ExecutionResult execution_result = 17;
+optional string recognizer_result = 18;
+optional string recognizer_config = 19;
+optional bytes data = 20;
+optional bool full_code_state = 21;
+optional string old_file_name = 22;
 }
 
 message LogResponse {
@@ -102,22 +96,6 @@ enum EventInitiator
     EI_TEAM_MEMBER_DIRECT_ACTION = 7;
     EI_TEAM_MEMBER_INDIRECT_ACTION = 8;
     EI_CUSTOM_EVENT_INITIATOR = 9;
-}
-
-enum EditType
-{
-    ET_UNKNOWN = 0;
-    ET_GENERIC_EDIT = 1;
-    ET_INSERT = 2;
-    ET_DELETE = 3;
-    ET_REPLACE = 4;
-    ET_MOVE = 5;
-    ET_PASTE = 6;
-    ET_UNDO = 7;
-    ET_REDO = 8;
-    ET_REFACTOR = 9;
-    ET_RESET = 10;
-    ET_CUSTOM_EDIT_TYPE = 11;
 }
 
 enum ExecutionResult

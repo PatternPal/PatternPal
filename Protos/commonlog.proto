@@ -33,36 +33,6 @@ enum EventType
     EVT_X_STEP_BY_STEP_STEP = 24; 
 }
 
-enum EventInitiator
-{
-    EI_UNKNOWN = 0;
-    EI_USER_DIRECT_ACTION = 1;
-    EI_USER_INDIRECT_ACTION = 2;
-    EI_TOOL_REACTION = 3;
-    EI_TOOL_TIMED_EVENT = 4;
-    EI_INSTRUCTOR_DIRECT_ACTION = 5;
-    EI_INSTRUCTOR_INDIRECT_ACTION = 6;
-    EI_TEAM_MEMBER_DIRECT_ACTION = 7;
-    EI_TEAM_MEMBER_INDIRECT_ACTION = 8;
-    EI_CUSTOM_EVENT_INITIATOR = 9;
-}
-
-enum EditType
-{
-    ET_UNKNOWN = 0;
-    ET_GENERIC_EDIT = 1;
-    ET_INSERT = 2;
-    ET_DELETE = 3;
-    ET_REPLACE = 4;
-    ET_MOVE = 5;
-    ET_PASTE = 6;
-    ET_UNDO = 7;
-    ET_REDO = 8;
-    ET_REFACTOR = 9;
-    ET_RESET = 10;
-    ET_CUSTOM_EDIT_TYPE = 11;
-}
-
 enum ExecutionResult
 {
     EXT_UNKNOWN = 0;
