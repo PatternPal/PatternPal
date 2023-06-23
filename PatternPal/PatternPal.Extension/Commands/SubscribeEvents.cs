@@ -425,6 +425,20 @@ namespace PatternPal.Extension.Commands
             request.EventType = EventType.EvtDebugProgram;
             request.ExecutionId = Guid.NewGuid().ToString();
 
+            try
+            {
+                // The project that was actually debugged is simply assumed to be the first
+                // startup project here; that seems fine for the scope for PatternPal.
+                Array startupProjects = (Array)_dte.Solution?.SolutionBuild?.StartupProjects;
+                request.ProjectId = (string)startupProjects?.GetValue(0);
+            }
+
+            catch
+            {
+                // Ignored, we simply do not include a projectID
+            }
+            
+
             if (_unhandledExceptionThrown)
             {
                 request.ExecutionResult = ExecutionResult.ExtError;
