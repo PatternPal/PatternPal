@@ -547,7 +547,7 @@ namespace PatternPal.Extension.Commands
 
             request.RecognizerResult = JsonSerializer.Serialize(results);
             
-            Project project = _dte.ActiveDocument.ProjectItem.ContainingProject;
+            Project project = _dte.ActiveDocument?.ProjectItem?.ContainingProject;
             request.ProjectId = project.UniqueName;
 
             LogEventResponse response = PushLog(request);
