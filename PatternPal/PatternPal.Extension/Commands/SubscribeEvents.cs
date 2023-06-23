@@ -467,7 +467,8 @@ namespace PatternPal.Extension.Commands
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            if (_package == null || !Privacy.Instance.DoLogData)
+            if (_package == null || !Privacy.Instance.DoLogData 
+                                 || recognizeRequest.FileOrProjectCase == RecognizeRequest.FileOrProjectOneofCase.None)
             { 
               return; 
             }
@@ -480,19 +481,23 @@ namespace PatternPal.Extension.Commands
             {
                 // The extension either runs on the currently active document or an entire project.
                 // In case of the current active document, we try obtaining the projectID using eventDTE.
+                // We include some extra null-checks since eventDTE is sadness in disguise.
                 if (_dte.SelectedItems.Count > 0)
                 {
-                    SelectedItem selectedItem = _dte.SelectedItems.Item(0);
-                    if (selectedItem.Project != null)
+                    ProjectItem projectItem = _dte.SelectedItems.Item(1).ProjectItem;
+                    if (projectItem?.ContainingProject?.UniqueName != null)
                     {
-                        request.ProjectId = selectedItem.Project.UniqueName;
-                    }
+                        request.ProjectId = projectItem.ContainingProject.UniqueName;
+                    };
 
                 }
             }
             else
             {
-                
+                // When the extension is a project, the path to the .csproj-file is included. We now simply need to get 
+                // that name and its parent directory.
+                string projectDir = Path.GetDirectoryName(recognizeRequest.Project);
+                request.ProjectId = GetRelativePath(projectDir, recognizeRequest.Project);
             }
 
             string config = recognizeRequest.Recognizers.ToString();
