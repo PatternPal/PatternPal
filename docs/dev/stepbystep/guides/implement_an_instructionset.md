@@ -12,8 +12,8 @@ it is recommended to encase all the @PatternPal.Core.Checks.ICheck created in th
 (more on this method can be found [here](~/dev/recognizers/guides/implement_recognizer.md)) into 
 separate methods. This way the checks can be declared once and can be called in both `Create` in 
 @PatternPal.Core.Recognizers.IRecognizer and in `GenerateStepsList` in @PatternPal.Core.StepByStep.IStepByStepRecognizer. 
-The Recognizers would then inherit from both recognizer interfaces (@PatternPal.Core.Recognizers.IRecognizer and 
-@PatternPal.Core.StepByStep.IStepByStepRecognizer).
+The Recognizers would then inherit from both recognizer interfaces. Namely the @PatternPal.Core.Recognizers.IRecognizer and 
+@PatternPal.Core.StepByStep.IStepByStepRecognizer interfaces.
 
 An example could be a @PatternPal.Core.Checks.FieldCheck that tests if there is a field of the same type as the class the field 
 is declared in. This method can then be called in the `Create` and `GenerateStepsList` methods. An example
