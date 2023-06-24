@@ -13,6 +13,11 @@ Before we get started, make sure you have clear requirements in mind which defin
 you want to recognize. The way in which you gather these requirements does not really matter for
 this section, translation of these requirements into checks is what you will learn in this guide.
 
+### Design pattern needs to be added to the API definition of the service
+In order to support a design pattern one must implement the @PatternPal.Core.Recognizers.IRecognizer interface and in addition add the design 
+pattern to the API definition to communicate with the background service. These design patterns are defined as @PatternPal.Protos.Recognizer. 
+One must add a design pattern definition in the common protocol (`common.proto`) located in the project "PatternPal.Extension.Protos/Protos/common.proto". 
+
 ## Creating a new Recognizer
 
 To be able to run a recognizer, it needs to implement the `IRecognizer` interface, which defines the
