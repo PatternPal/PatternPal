@@ -1,11 +1,11 @@
-# Implement a @PatternPal.Core.StepByStep.InstructionSet
+# Implement an `InstructionSet`
 
 To support a design pattern in PatternPal one must implement the @PatternPal.Core.StepByStep.IStepByStepRecognizer interface. 
 This interface defines a `string` `Name`, and a `RecognizerType` as defined 
 in the protocol buffer. and a method `GenerateStepsList`, which will 
 return the object required for the Step-By-Step module.
 
-# Efficiently add to @PatternPal.Core.Recognizers functionality
+# Efficiently add to `Recognizers` functionality
 
 To make effective use of existing @PatternPal.Core.Recognizers for both detecting patterns and Step-By-Step 
 it is recommended to encase all the @PatternPal.Core.Checks.ICheck created in the @PatternPal.Core.Recognizers `Create` method 
@@ -112,7 +112,7 @@ Much like the @PatternPal.Core.Recognizers.IRecognizer interface one must add a 
 See [here](~/dev/recognizers/guides/implement_recognizer) for a guide.
 
 
-## The @PatternPal.Core.StepByStep.IStepByStepRecognizer interface and library requirements
+## The `IStepByStepRecognizer` interface and library requirements
 
 To support a Pattern for Step-By-Step one must add the following `using` statement to the top of the
 file and implement the @PatternPal.Core.StepByStep.IStepByStepRecognizer:
@@ -143,7 +143,7 @@ internal class MyStepBySteps : IStepByStepRecognizer
 }
 ```
 
-## The @PatternPal.Core.StepByStep.SimpleInstruction object
+## The `SimpleInstruction` object
 Everything that is required by the program to retrieve information for a step and display that to the user 
 is encased in a @PatternPal.Core.StepByStep.SimpleInstruction. These are the `Requirement`, `Description`, and a list of type @PatternPal.Core.Checks.ICheck. An 
 example of a @PatternPal.Core.StepByStep.SimpleInstruction would be: 
