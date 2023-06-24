@@ -1,8 +1,8 @@
-# Implement a @PatternPal.Core.StepByStep.InstructionSet
+# Implement an @PatternPal.Core.StepByStep.InstructionSet
 
 To support a design pattern in PatternPal one must implement the @PatternPal.Core.StepByStep.IStepByStepRecognizer interface. 
 This interface defines a `string` `Name`, a `RecognizerType` as defined 
-in the protocol buffer (@PatternPal.Extension.Protos). and a method `GenerateStepsList`, which will 
+in the protocol buffer. and a method `GenerateStepsList`, which will 
 return the object required of the Step-By-Step module.
 
 # Efficiently add to @PatternPal.Core.Recognizers functionality
@@ -12,8 +12,8 @@ it is recommended to encase all the @PatternPal.Core.Checks.ICheck created in th
 (more on this method can be found [here](~/dev/recognizers/guides/implement_recognizer.md)) into 
 separate methods. This way the checks can be declared once and can be called in both `Create` in 
 @PatternPal.Core.Recognizers.IRecognizer and in `GenerateStepsList` in @PatternPal.Core.StepByStep.IStepByStepRecognizer. 
-The Recognizers would then inherit from both recognizer interfaces (@PatternPal.Core.Recognizers.IRecognizer and 
-@PatternPal.Core.StepByStep.IStepByStepRecognizer).
+The Recognizers would then inherit from both recognizer interfaces. Namely the @PatternPal.Core.Recognizers.IRecognizer and 
+@PatternPal.Core.StepByStep.IStepByStepRecognizer interfaces.
 
 An example could be a @PatternPal.Core.Checks.FieldCheck that tests if there is a field of the same type as the class the field 
 is declared in. This method can then be called in the `Create` and `GenerateStepsList` methods. An example
