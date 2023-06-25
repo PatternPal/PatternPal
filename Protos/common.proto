@@ -9,24 +9,54 @@ message RecognizeResult {
     // The recognizer which was used to obtain this result.
     Recognizer recognizer = 1;
 
+    // General feedback about how well a pattern is implemented.
     string feedback = 2;
 
     // The results for the individual checks which make up the recognizer.
-    repeated Result results = 3;
+    repeated EntityResult entity_results = 3;
+}
+
+// Result of an Entity Check.
+message EntityResult {
+    // Name of the Entity check, for example: Singleton Class.
+    string name = 1;
+
+    // The MatchedNode of this result, in this case an Entity.
+    MatchedNode matched_node = 2;
+
+    // The results of the requirements of this Entity check.
+    repeated Result requirements = 3;
 }
 
 // Result of one specific check inside a recognizer.
 message Result {
-
     // The requirement which belongs to the check of this result.
     string requirement = 1;
 
     // The MatchedNode of this result.
     MatchedNode matched_node = 2;
+
+    // How well the requirement has been implemented.
+    Correctness correctness = 3;
+
+    // How well a requirement has been implemented.
+    enum Correctness {
+        // The default value.
+        C_UNKNOWN = 0;
+
+        // The requirement has been implemented correctly.
+        C_CORRECT = 1;
+
+        // The requirement has been partially implemented.
+        C_PARTIALLY_CORRECT = 2;
+
+        // The requirement has not been implemented.
+        C_INCORRECT = 3;
+    }
 }
 
+// Node matched by a requirement.
 message MatchedNode {
-
     //The name of the node.
     string name = 1;
 
@@ -38,6 +68,33 @@ message MatchedNode {
 
     //The specific length in the code file of this node.
     int32 length = 4;
+
+    // The kind of matched node.
+    MatchedNodeKind kind = 5;
+
+    // The kind of matched node.
+    enum MatchedNodeKind {
+        // The default value.
+        MNK_UNKNOWN = 0;
+
+        // Interface.
+        MNK_INTERFACE = 1;
+
+        // Class.
+        MNK_CLASS = 2;
+
+        // Constructor.
+        MNK_CONSTRUCTOR = 3;
+
+        // Field.
+        MNK_FIELD = 4;
+
+        // Method.
+        MNK_METHOD = 5;
+
+        // Property.
+        MNK_PROPERTY = 6;
+    }
 }
 
 // Recognizers which can be run.

@@ -5,6 +5,9 @@
     <OutputType>Exe</OutputType>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
+  <PropertyGroup>
+    <PublishSingleFile>True</PublishSingleFile>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\PatternPal.Core\PatternPal.Core.csproj" />
   </ItemGroup>

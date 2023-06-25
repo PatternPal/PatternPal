@@ -1,26 +1,26 @@
 ﻿{
-  FeedbackMessage: Found class 'Child',
-  Priority: Low,
   ChildrenCheckResults: [
     {
-      FeedbackMessage: Found Extends relations for Child.,
-      Priority: Low,
       ChildrenCheckResults: [
         {
+          Correct: true,
           FeedbackMessage: Node Child has a Extends relation with node Parent,
           Priority: Low,
-          Correct: true,
           DependencyCount: 1,
           MatchedNode: Parent
         }
       ],
       CollectionKind: Any,
+      NodeCheckCollectionWrapper: true,
+      FeedbackMessage: Found Extends relations for Child.,
+      Priority: Low,
       DependencyCount: 1,
-      MatchedNode: Child,
-      NodeCheckCollectionWrapper: true
+      MatchedNode: Child
     }
   ],
+  NodeCheckCollectionWrapper: false,
+  FeedbackMessage: Found class 'Child',
+  Priority: Low,
   DependencyCount: 1,
-  MatchedNode: Child,
-  NodeCheckCollectionWrapper: false
+  MatchedNode: Child
 }

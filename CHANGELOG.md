@@ -7,6 +7,51 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [3.5.0] - 2023-06-23
+
+## Added
+
+- Rec: Addition of the decorator recognizer by @ViciousDoormat in https://github.com/PatternPal/PatternPal/pull/297
+- Log: File.Delete implemented by @WingToh in https://github.com/PatternPal/PatternPal/pull/298
+- SBS: Implemented SBS for singleton. by @DanielvanDamme in https://github.com/PatternPal/PatternPal/pull/300
+- Console: Add option to save output to file by @KnapSac in https://github.com/PatternPal/PatternPal/pull/305
+- Feat: Added docs adapter by @rutgervincken in https://github.com/PatternPal/PatternPal/pull/309
+- Log: Implemented file logging for File.Create by @ovda96 in https://github.com/PatternPal/PatternPal/pull/312
+- Log: Update Service side error handling and visualization by @JustNireon in https://github.com/PatternPal/PatternPal/pull/311
+- Rec: Add `ICheck.ParentCheck` by @KnapSac in https://github.com/PatternPal/PatternPal/pull/320
+- Log: Implemented File.Rename event by @WingToh in https://github.com/PatternPal/PatternPal/pull/310
+- Docs: Documentation added for usage of Step-By-Step by @DanielvanDamme in https://github.com/PatternPal/PatternPal/pull/328
+- Log: Add Step By Step Logging by @JustNireon in https://github.com/PatternPal/PatternPal/pull/318
+- Log: Implemented file logging for File.Delete-events by @ovda96 in https://github.com/PatternPal/PatternPal/pull/332
+- Docs: Developer documentation for adding InstructionSet for SBS. by @DanielvanDamme in https://github.com/PatternPal/PatternPal/pull/325
+- Rec: Added FactoryMethod Recognizer by @rutgervincken in https://github.com/PatternPal/PatternPal/pull/323
+- Log: Implemented dict exception handling by @ovda96 in https://github.com/PatternPal/PatternPal/pull/334
+- Log: Implemented file logging for rename event by @ovda96 in https://github.com/PatternPal/PatternPal/pull/333
+- Rec: Implement bridge recognizer by @LvanWerven in https://github.com/PatternPal/PatternPal/pull/321
+- Rec: Decorator SBS stappen by @ViciousDoormat in https://github.com/PatternPal/PatternPal/pull/331
+- Log: Implemented server-side UTC-enforcing by @ovda96 in https://github.com/PatternPal/PatternPal/pull/344
+- Log: Included `ProjectId` as a logged field in extra events by @ovda96 in https://github.com/PatternPal/PatternPal/pull/350
+- Rec: Implemented SBS for Adapter by @ViciousDoormat in https://github.com/PatternPal/PatternPal/pull/349
+
+## Changed
+
+- Rec: Get supported recognizers only by @KnapSac in https://github.com/PatternPal/PatternPal/pull/292
+- Rec: Add a LeafCheckResult when there are no matches found for a check by @DanielvanDamme in https://github.com/PatternPal/PatternPal/pull/293
+- Ext: Fix showing error notification by @KnapSac in https://github.com/PatternPal/PatternPal/pull/294
+- Rec: Add `IStepByStepRecognizer` interface by @KnapSac in https://github.com/PatternPal/PatternPal/pull/295
+- Ext: Show requirements in extension by @KnapSac in https://github.com/PatternPal/PatternPal/pull/301
+- Log: Fixed compile-log misfire by @ovda96 in https://github.com/PatternPal/PatternPal/pull/316
+- Log: Optimized FileWatcher-set-up by @ovda96 in https://github.com/PatternPal/PatternPal/pull/319
+- Rec: Fix `TypeCheck.DependencyCount` by @KnapSac in https://github.com/PatternPal/PatternPal/pull/322
+- SBS: Allowed the user to abort selecting a file in continue and stopped progressing the viewmodel when no files are provided. by @DanielvanDamme in https://github.com/PatternPal/PatternPal/pull/330
+- Doc: Delete contributing.md by @ovda96 in https://github.com/PatternPal/PatternPal/pull/335
+- Log: Fixed CodeStateSection for `File.Edit` by @ovda96 in https://github.com/PatternPal/PatternPal/pull/341
+- Log: Factored out `DateTimeOffset` in favour of `DateTime` by @ovda96 in https://github.com/PatternPal/PatternPal/pull/340
+- Rec: Add requirements to bridge pattern by @LvanWerven in https://github.com/PatternPal/PatternPal/pull/339
+- Rec: Changed the behaviour of adding a new file to the solution and incorrect string. by @DanielvanDamme in https://github.com/PatternPal/PatternPal/pull/338
+- Log: Fixed CodeState clean-up by @ovda96 in https://github.com/PatternPal/PatternPal/pull/348
+- Rec+Ext: Improve results presentation by @KnapSac in https://github.com/PatternPal/PatternPal/pull/342
+
 ## [3.4.0] - 2023-06-08
 
 ## Added
@@ -245,7 +290,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 The version developed by the previous team.
 
-[Unreleased]: https://github.com/PatternPal/PatternPal/compare/v3.4.0...HEAD
+[Unreleased]: https://github.com/PatternPal/PatternPal/compare/v3.5.0...HEAD
+[3.5.0]: https://github.com/PatternPal/PatternPal/compare/v3.4.0...v3.5.0
 [3.4.0]: https://github.com/PatternPal/PatternPal/compare/v3.3.0...v3.4.0
 [3.3.0]: https://github.com/PatternPal/PatternPal/compare/v3.2.0...v3.3.0
 [3.2.0]: https://github.com/PatternPal/PatternPal/compare/v3.1.0...v3.2.0

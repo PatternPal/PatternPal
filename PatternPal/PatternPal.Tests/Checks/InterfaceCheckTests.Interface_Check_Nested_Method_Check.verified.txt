@@ -1,44 +1,44 @@
 ﻿{
-  FeedbackMessage: Found interface 'Test',
-  Priority: Low,
   ChildrenCheckResults: [
     {
-      FeedbackMessage: ,
-      Priority: Low,
       ChildrenCheckResults: [
         {
-          FeedbackMessage: Found method: DoSomething().,
-          Priority: Low,
           ChildrenCheckResults: [
             {
+              Correct: false,
               FeedbackMessage: The node DoSomething() does not have the public modifier.,
               Priority: Mid,
-              Correct: false,
               MatchedNode: DoSomething
             }
           ],
-          MatchedNode: DoSomething,
-          NodeCheckCollectionWrapper: false
+          NodeCheckCollectionWrapper: false,
+          FeedbackMessage: Found method: DoSomething().,
+          Priority: Low,
+          MatchedNode: DoSomething
         },
         {
-          FeedbackMessage: Found method: CalculateSomething().,
-          Priority: Low,
           ChildrenCheckResults: [
             {
+              Correct: false,
               FeedbackMessage: The node CalculateSomething() does not have the public modifier.,
               Priority: Mid,
-              Correct: false,
               MatchedNode: CalculateSomething
             }
           ],
-          MatchedNode: CalculateSomething,
-          NodeCheckCollectionWrapper: false
+          NodeCheckCollectionWrapper: false,
+          FeedbackMessage: Found method: CalculateSomething().,
+          Priority: Low,
+          MatchedNode: CalculateSomething
         }
       ],
       CollectionKind: Any,
-      NodeCheckCollectionWrapper: true
+      NodeCheckCollectionWrapper: true,
+      FeedbackMessage: ,
+      Priority: Low
     }
   ],
-  MatchedNode: Test,
-  NodeCheckCollectionWrapper: false
+  NodeCheckCollectionWrapper: false,
+  FeedbackMessage: Found interface 'Test',
+  Priority: Low,
+  MatchedNode: Test
 }

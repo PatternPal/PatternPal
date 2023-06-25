@@ -1,69 +1,69 @@
 ﻿{
-  FeedbackMessage: Found method: StringTestFunction().,
-  Priority: Low,
   ChildrenCheckResults: [
     {
-      FeedbackMessage: Found parameters for following node: StringTestFunction().,
-      Priority: Low,
       ChildrenCheckResults: [
         {
-          FeedbackMessage: Found node 'IntTest',
-          Priority: Low,
           ChildrenCheckResults: [
             {
+              Correct: true,
               FeedbackMessage: Node 'IntTest' has correct type,
               Priority: Low,
-              Correct: true,
               DependencyCount: 1,
               MatchedNode: IntTest
             }
           ],
           CollectionKind: Any,
-          DependencyCount: 1,
-          MatchedNode: IntTest,
-          NodeCheckCollectionWrapper: true
-        },
-        {
+          NodeCheckCollectionWrapper: true,
           FeedbackMessage: Found node 'IntTest',
           Priority: Low,
+          DependencyCount: 1,
+          MatchedNode: IntTest
+        },
+        {
           ChildrenCheckResults: [
             {
+              Correct: true,
               FeedbackMessage: Node 'IntTest' has correct type,
               Priority: Low,
-              Correct: true,
               DependencyCount: 1,
               MatchedNode: IntTest
             }
           ],
           CollectionKind: Any,
+          NodeCheckCollectionWrapper: true,
+          FeedbackMessage: Found node 'IntTest',
+          Priority: Low,
           DependencyCount: 1,
-          MatchedNode: IntTest,
-          NodeCheckCollectionWrapper: true
+          MatchedNode: IntTest
         },
         {
-          FeedbackMessage: Found node 'StringTest',
-          Priority: Low,
           ChildrenCheckResults: [
             {
+              Correct: true,
               FeedbackMessage: Node 'StringTest' has correct type,
               Priority: Low,
-              Correct: true,
               DependencyCount: 1,
               MatchedNode: StringTest
             }
           ],
           CollectionKind: Any,
+          NodeCheckCollectionWrapper: true,
+          FeedbackMessage: Found node 'StringTest',
+          Priority: Low,
           DependencyCount: 1,
-          MatchedNode: StringTest,
-          NodeCheckCollectionWrapper: true
+          MatchedNode: StringTest
         }
       ],
+      NodeCheckCollectionWrapper: false,
+      FeedbackMessage: Found parameters for following node: StringTestFunction().,
+      Priority: Low,
       DependencyCount: 3,
-      MatchedNode: StringTestFunction,
-      NodeCheckCollectionWrapper: false
+      MatchedNode: StringTestFunction
     }
   ],
+  NodeCheckCollectionWrapper: false,
+  FeedbackMessage: Found method: StringTestFunction().,
+  Priority: Low,
   DependencyCount: 3,
-  MatchedNode: StringTestFunction,
-  NodeCheckCollectionWrapper: false
+  MatchedNode: StringTestFunction
 }

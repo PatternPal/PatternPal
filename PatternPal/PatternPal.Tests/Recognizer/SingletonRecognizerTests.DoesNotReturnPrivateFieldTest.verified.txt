@@ -1,91 +1,91 @@
 ﻿[
   {
-    FeedbackMessage: Found class 'MockClass5',
-    Priority: Low,
     ChildrenCheckResults: [
       {
-        FeedbackMessage: ,
         ChildrenCheckResults: [
           {
-            FeedbackMessage: Found field '_instance',
             ChildrenCheckResults: [
               {
-                FeedbackMessage: Modifiers correctly implemented.,
                 Correct: true,
+                FeedbackMessage: Modifiers correctly implemented.,
                 MatchedNode: _instance
               },
               {
-                FeedbackMessage: Found node 'MockClass5',
                 ChildrenCheckResults: [
                   {
-                    FeedbackMessage: Node 'MockClass5' has correct type,
                     Correct: true,
+                    FeedbackMessage: Node 'MockClass5' has correct type,
                     MatchedNode: MockClass5
                   }
                 ],
                 CollectionKind: Any,
-                MatchedNode: MockClass5,
-                NodeCheckCollectionWrapper: true
+                NodeCheckCollectionWrapper: true,
+                FeedbackMessage: Found node 'MockClass5',
+                MatchedNode: MockClass5
               }
             ],
-            MatchedNode: _instance,
-            NodeCheckCollectionWrapper: false
+            NodeCheckCollectionWrapper: false,
+            FeedbackMessage: Found field '_instance',
+            MatchedNode: _instance
           }
         ],
         CollectionKind: Any,
-        NodeCheckCollectionWrapper: true
+        NodeCheckCollectionWrapper: true,
+        FeedbackMessage: 
       },
       {
-        FeedbackMessage: ,
-        Priority: Mid,
         ChildrenCheckResults: [
           {
-            FeedbackMessage: Found method: GetInstance().,
-            Priority: Mid,
             ChildrenCheckResults: [
               {
-                FeedbackMessage: Found Uses relations for GetInstance().,
-                Priority: Mid,
                 ChildrenCheckResults: [
                   {
+                    Correct: false,
                     FeedbackMessage: No Uses relation found.,
                     Priority: Mid,
-                    Correct: false,
                     DependencyCount: 1,
                     MatchedNode: _instance
                   }
                 ],
                 CollectionKind: Any,
+                NodeCheckCollectionWrapper: true,
+                FeedbackMessage: Found Uses relations for GetInstance().,
+                Priority: Mid,
                 DependencyCount: 1,
-                MatchedNode: GetInstance,
-                NodeCheckCollectionWrapper: true
+                MatchedNode: GetInstance
               },
               {
-                FeedbackMessage: Found node 'MockClass5',
                 ChildrenCheckResults: [
                   {
-                    FeedbackMessage: Node 'MockClass5' has correct type,
                     Correct: true,
+                    FeedbackMessage: Node 'MockClass5' has correct type,
                     MatchedNode: MockClass5
                   }
                 ],
                 CollectionKind: Any,
-                MatchedNode: MockClass5,
-                NodeCheckCollectionWrapper: true
+                NodeCheckCollectionWrapper: true,
+                FeedbackMessage: Found node 'MockClass5',
+                MatchedNode: MockClass5
               }
             ],
+            NodeCheckCollectionWrapper: false,
+            FeedbackMessage: Found method: GetInstance().,
+            Priority: Mid,
             DependencyCount: 1,
-            MatchedNode: GetInstance,
-            NodeCheckCollectionWrapper: false
+            MatchedNode: GetInstance
           }
         ],
         CollectionKind: Any,
-        DependencyCount: 1,
-        NodeCheckCollectionWrapper: true
+        NodeCheckCollectionWrapper: true,
+        FeedbackMessage: ,
+        Priority: Mid,
+        DependencyCount: 1
       }
     ],
+    NodeCheckCollectionWrapper: false,
+    FeedbackMessage: Found class 'MockClass5',
+    Priority: Low,
     DependencyCount: 1,
-    MatchedNode: MockClass5,
-    NodeCheckCollectionWrapper: false
+    MatchedNode: MockClass5
   }
 ]

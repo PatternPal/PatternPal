@@ -53,6 +53,12 @@ public interface ICheck
     ICheck ? ParentCheck { get; set; }
 
     /// <summary>
+    /// The <see cref="Score"/> of the <see cref="ICheckResult"/> of this <see cref="ICheck"/> when
+    /// it is implemented correctly.
+    /// </summary>
+    Score PerfectScore { get; }
+
+    /// <summary>
     /// Runs the current check on the given <see cref="INode"/>.
     /// </summary>
     /// <param name="ctx">The current <see cref="IRecognizerContext"/>.</param>
@@ -82,6 +88,9 @@ public abstract class CheckBase : ICheck
 
     /// <inheritdoc />
     public ICheck ? ParentCheck { get; set; }
+
+    /// <inheritdoc />
+    public abstract Score PerfectScore { get; }
 
     /// <summary>
     /// Sets the priority.

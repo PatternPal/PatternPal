@@ -1,5 +1,5 @@
 ﻿{
+  NodeCheckCollectionWrapper: false,
   FeedbackMessage: ,
-  Priority: Low,
-  NodeCheckCollectionWrapper: false
+  Priority: Low
 }

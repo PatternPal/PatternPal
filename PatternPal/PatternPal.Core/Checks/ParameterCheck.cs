@@ -8,6 +8,8 @@ internal class ParameterCheck : CheckBase
     // Parameters of the provided INode should have types corresponding with this list of TypeChecks.
     private readonly IEnumerable< TypeCheck > _parameterTypes;
 
+    private Score _perfectScore;
+
     // The dependency count, declared as nullable so we can check whether we have calculated it
     // already.
     private int ? _dependencyCount;
@@ -22,6 +24,23 @@ internal class ParameterCheck : CheckBase
         {
             _dependencyCount ??= _parameterTypes.Count();
             return _dependencyCount.Value;
+        }
+    }
+
+    /// <inheritdoc />
+    public override Score PerfectScore
+    {
+        get
+        {
+            if (_perfectScore.Equals(default))
+            {
+                foreach (TypeCheck parameterTypeCheck in _parameterTypes)
+                {
+                    _perfectScore += parameterTypeCheck.PerfectScore;
+                }
+            }
+
+            return _perfectScore;
         }
     }
 
@@ -53,7 +72,7 @@ internal class ParameterCheck : CheckBase
         // IEntities.
         List< IEntity > nodeParameters = hasParameters.GetParameters().Select(x => ctx.Graph.Relations.GetEntityByName(x)).Where(x => x != null).Select(x => x!).ToList();
 
-        List< ICheckResult > subCheckResultsResults = new List< ICheckResult >();
+        List< ICheckResult > subCheckResultsResults = new();
 
         // Node has no parameters
         if (!nodeParameters.Any())

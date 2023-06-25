@@ -1,15 +1,15 @@
 ﻿{
-  FeedbackMessage: Found node 'DoSomething()',
-  Priority: Low,
   ChildrenCheckResults: [
     {
+      Correct: false,
       FeedbackMessage: Node 'DoSomething()' has incorrect type, expected 'Test',
       Priority: Low,
-      Correct: false,
       MatchedNode: Test
     }
   ],
   CollectionKind: Any,
-  MatchedNode: DoSomething,
-  NodeCheckCollectionWrapper: true
+  NodeCheckCollectionWrapper: true,
+  FeedbackMessage: Found node 'DoSomething()',
+  Priority: Low,
+  MatchedNode: DoSomething
 }

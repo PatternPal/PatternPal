@@ -1,15 +1,15 @@
 ﻿{
-  FeedbackMessage: Found node 'Test',
-  Priority: Low,
   ChildrenCheckResults: [
     {
+      Correct: true,
       FeedbackMessage: Node 'Test' has correct type,
       Priority: Low,
-      Correct: true,
       MatchedNode: Test
     }
   ],
   CollectionKind: Any,
-  MatchedNode: Test,
-  NodeCheckCollectionWrapper: true
+  NodeCheckCollectionWrapper: true,
+  FeedbackMessage: Found node 'Test',
+  Priority: Low,
+  MatchedNode: Test
 }
