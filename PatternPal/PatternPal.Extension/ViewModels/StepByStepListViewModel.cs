@@ -151,46 +151,44 @@ namespace PatternPal.Extension.ViewModels
                 {
                     string filePath;
 
-                    // The solution is empty.
-                    if (dte.Documents.Count == 0)
+                    // Create a project based on a template from VS2022 add it to the 
+                    // solution. Then iterate over the projects of the solution and 
+                    // add a file.
+                    string projectName = SelectedInstructionSet.ToString();
+
+                    foreach (Project projectnames in dte.Solution.Projects)
                     {
-                        // Create a project based on a template from VS2022 add it to the 
-                        // solution. Then iterate over the projects of the solution and 
-                        // add a file.
-                        string projectName = "NewProject";
-                        string projectPath = Path.Combine(
-                            Path.GetDirectoryName(dte.Solution.FullName),
-                            projectName);
+                        if (projectnames.Name.Equals(projectName))
+                        {
+                            MessageBox.Show("A previous design pattern implementation already exists in this solution.");
+                            return new List<string>();
+                        }
+                    }
 
-                        // Obtain the template path for a project.
-                        DTE2 dte2 = (DTE2)Package.GetGlobalService(typeof(SDTE));
-                        Solution2 soln = dte2.Solution as Solution2;
-                        string templatePath = soln.GetProjectTemplate("ConsoleApplication.zip", "CSharp");
+                    string projectPath = Path.Combine(
+                        Path.GetDirectoryName(dte.Solution.FullName),
+                        projectName);
 
-                        // Add project to the solution and add a new file to that project.
-                        dte.Solution.AddFromTemplate(
-                            templatePath,
+                    // Obtain the template path for a project.
+                    DTE2 dte2 = (DTE2)Package.GetGlobalService(typeof(SDTE));
+                    Solution2 soln = dte2.Solution as Solution2;    
+                    string templatePath = soln.GetProjectTemplate("ConsoleApplication.zip", "CSharp");
+
+                    // Add project to the solution and add a new file to that project.
+                    dte.Solution.AddFromTemplate(
+                        templatePath,
+                        projectPath,
+                        projectName,    
+                        false);
+                    Project project = dte.Solution.Projects.Item(1);
+                    filePath =
+                        Path.Combine(
                             projectPath,
-                            projectName,
-                            false);
-                        Project project = dte.Solution.Projects.Item(1);
-                        filePath =
-                            Path.Combine(
-                                projectPath,
-                                "NewFile.cs");
-                        using (FileStream fs = File.Create(filePath)) { }
-                        project.ProjectItems.AddFromFile(filePath);
-                    }
-                    else
-                    {
-                        Project project = dte.Solution.Projects.Item(1);
-                        filePath = Path.Combine(
-                            Path.GetDirectoryName(dte.Solution.FullName),
-                            project.Name,
-                            "NewFile.cs");
-                        using (FileStream fs = File.Create(filePath)) { }
-                        project.ProjectItems.AddFromFile(filePath);
-                    }
+                            SelectedInstructionSet.ToString()+".cs");
+                    using (FileStream fs = File.Create(filePath)) { }
+                    project.ProjectItems.AddFromFile(filePath);
+                    // The solution is empty.
+
                     dte.ItemOperations.OpenFile(filePath);
                     return new List<string> { filePath };
                 }
