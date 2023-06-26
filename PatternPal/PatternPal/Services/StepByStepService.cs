@@ -60,7 +60,7 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
         // information for display to the user.
         Recognizer protoRecognizer = request.Recognizers;
         IStepByStepRecognizer recognizer = RecognizerRunner.SupportedStepByStepRecognizers[ protoRecognizer ];
-        IInstruction instruction = recognizer.GenerateStepsList()[ (int)request.InstructionNumber ];
+        IInstruction instruction = recognizer.GenerateStepsList()[ (int)request.InstructionNumber -1];
         GetInstructionByIdResponse response = new()
                                               {
                                                   Instruction = new Instruction
