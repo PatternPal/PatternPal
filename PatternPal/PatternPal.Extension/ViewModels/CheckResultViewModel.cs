@@ -23,11 +23,11 @@ namespace PatternPal.Extension.ViewModels
             {
                 switch (Result.Correctness)
                 {
-                    case Result.Types.Correctness.CCorrect:
+                    case Correctness.CCorrect:
                         return KnownMonikers.StatusOK;
-                    case Result.Types.Correctness.CPartiallyCorrect:
+                    case Correctness.CPartiallyCorrect:
                         return KnownMonikers.StatusAlert;
-                    case Result.Types.Correctness.CIncorrect:
+                    case Correctness.CIncorrect:
                         return KnownMonikers.StatusWarning;
                     default:
                         return KnownMonikers.OnlineStatusUnknown;

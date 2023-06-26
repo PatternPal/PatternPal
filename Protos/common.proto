@@ -24,8 +24,11 @@ message EntityResult {
     // The MatchedNode of this result, in this case an Entity.
     MatchedNode matched_node = 2;
 
+    // How well the requirement has been implemented.
+    Correctness correctness = 3;
+
     // The results of the requirements of this Entity check.
-    repeated Result requirements = 3;
+    repeated Result requirements = 4;
 }
 
 // Result of one specific check inside a recognizer.
@@ -38,21 +41,21 @@ message Result {
 
     // How well the requirement has been implemented.
     Correctness correctness = 3;
+}
 
-    // How well a requirement has been implemented.
-    enum Correctness {
-        // The default value.
-        C_UNKNOWN = 0;
+// How well a requirement has been implemented.
+enum Correctness {
+    // The default value.
+    C_UNKNOWN = 0;
 
-        // The requirement has been implemented correctly.
-        C_CORRECT = 1;
+    // The requirement has been implemented correctly.
+    C_CORRECT = 1;
 
-        // The requirement has been partially implemented.
-        C_PARTIALLY_CORRECT = 2;
+    // The requirement has been partially implemented.
+    C_PARTIALLY_CORRECT = 2;
 
-        // The requirement has not been implemented.
-        C_INCORRECT = 3;
-    }
+    // The requirement has not been implemented.
+    C_INCORRECT = 3;
 }
 
 // Node matched by a requirement.
