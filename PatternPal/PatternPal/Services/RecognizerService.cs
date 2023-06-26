@@ -181,19 +181,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                 // If `entityResult` is not null, we have found a new top-level requirement.
                 if (null != entityResult)
                 {
-                    // Get an entity from the requirements if the entity result doesn't have one yet.
-                    if (result.MatchedNode == null)
-                    {
-                        foreach (Result childResult in entityResult.Requirements)
-                        {
-                            if (childResult.MatchedNode is {Kind: MatchedNode.Types.MatchedNodeKind.MnkClass or MatchedNode.Types.MatchedNodeKind.MnkInterface})
-                            {
-                                result.MatchedNode = childResult.MatchedNode;
-                                break;
-                            }
-                        }
-                    }
-
+                    SelectMatchedNode(entityResult);
                     yield return entityResult;
                 }
 
@@ -239,7 +227,25 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
 
         if (null != entityResult)
         {
+            SelectMatchedNode(entityResult);
             yield return entityResult;
+        }
+
+        // Get an entity from the requirements if the entity result doesn't have one yet.
+        static void SelectMatchedNode(
+            EntityResult entityResult)
+        {
+            if (entityResult.MatchedNode == null)
+            {
+                foreach (Result childResult in entityResult.Requirements)
+                {
+                    if (childResult.MatchedNode is {Kind: MatchedNode.Types.MatchedNodeKind.MnkClass or MatchedNode.Types.MatchedNodeKind.MnkInterface})
+                    {
+                        entityResult.MatchedNode = childResult.MatchedNode;
+                        break;
+                    }
+                }
+            }
         }
     }
 
