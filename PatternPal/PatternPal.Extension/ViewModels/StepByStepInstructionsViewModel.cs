@@ -86,6 +86,8 @@ namespace PatternPal.Extension.ViewModels
             }
 
             CurrentInstructionNumber++;
+            // If the current instruction number is higher than the number of instructions so far
+            // then see if there is already an entry otherwise add.
             if (_currentInstructionNumber >= _instructions.Count)
             {
                 try
