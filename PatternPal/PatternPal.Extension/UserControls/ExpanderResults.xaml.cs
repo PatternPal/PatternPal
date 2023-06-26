@@ -74,9 +74,9 @@ namespace PatternPal.Extension.UserControls
                         documentView.TextView?.Caret.MoveTo(span.Start);
                         documentView.TextView?.ViewScroller.EnsureSpanVisible(span);
                     }
-                    catch (Exception exception)
+                    catch (Exception)
                     {
-                        GrpcHelper.ShowErrorMessage(exception.Message);
+                        GrpcHelper.ShowErrorMessage("Failed to navigate to code");
                     }
                 });
         }

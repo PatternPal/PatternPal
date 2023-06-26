@@ -263,10 +263,10 @@ namespace PatternPal.Extension.Views
                     results);
                 CreateResultViewModels(results);
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                GrpcHelper.ShowErrorMessage($"Analysis failed with error: {exception.Message}");
+                GrpcHelper.ShowErrorMessage("Analysis failed");
             }
         }
 
