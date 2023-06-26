@@ -44,8 +44,7 @@ namespace PatternPal.Extension.Views
             Dispatcher.VerifyAccess();
             LoadProject();
             SelectAll.IsChecked = true;
-            SelectPaths.ProjectSelection.ItemsSource = Projects;
-            SelectPaths.ProjectSelection.SelectedIndex = 0;
+            SelectPaths.DataContext = new SelectPathsViewModel(Projects);
             Dte = Package.GetGlobalService(typeof( SDTE )) as DTE;
             IVsRunningDocumentTable rdt = (IVsRunningDocumentTable)Package.GetGlobalService(typeof( SVsRunningDocumentTable ));
             rdt.AdviseRunningDocTableEvents(
@@ -112,8 +111,7 @@ namespace PatternPal.Extension.Views
             int fNewSolution)
         {
             LoadProject();
-            SelectPaths.ProjectSelection.ItemsSource = Projects;
-            SelectPaths.ProjectSelection.SelectedIndex = 0;
+            SelectPaths.DataContext = new SelectPathsViewModel(Projects);
             return VSConstants.S_OK;
         }
 
@@ -249,8 +247,6 @@ namespace PatternPal.Extension.Views
                 request.Recognizers.Add(designPatternViewModel.Recognizer);
             }
 
-            request.ShowAllResults = !(ShowAllCheckBox.IsChecked.HasValue && ShowAllCheckBox.IsChecked.Value);
-
             try
             {
                 IAsyncStreamReader< RecognizeResponse > responseStream = GrpcHelper.RecognizerClient.Recognize(request).ResponseStream;
@@ -264,13 +260,11 @@ namespace PatternPal.Extension.Views
                     request,
                     results);
                 CreateResultViewModels(results);
-                SummaryControl.Text = "Recognizer is finished";
-                ProgressStatusBlock.Text = "";
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                GrpcHelper.ShowErrorMessage($"Analysis failed with error: {exception.Message}");
+                GrpcHelper.ShowErrorMessage("Analysis failed");
             }
         }
 

@@ -1,5 +1,9 @@
-﻿using System.Windows;
+﻿#region
+
+using System.Windows;
 using System.Windows.Controls;
+
+#endregion
 
 namespace PatternPal.Extension.UserControls
 {
@@ -13,14 +17,24 @@ namespace PatternPal.Extension.UserControls
             InitializeComponent();
         }
 
-        private void ActiveDocument_Checked(object sender, RoutedEventArgs e)
+        private void ActiveDocument_Checked(
+            object sender,
+            RoutedEventArgs e)
         {
-            RadioGrid.RowDefinitions[1].Height = new GridLength(0);
+            if (null != ProjectSelection)
+            {
+                ProjectSelection.Visibility = Visibility.Collapsed;
+            }
         }
 
-        private void Project_Checked(object sender, RoutedEventArgs e)
+        private void Project_Checked(
+            object sender,
+            RoutedEventArgs e)
         {
-            RadioGrid.RowDefinitions[1].Height = new GridLength(30);
+            if (null != ProjectSelection)
+            {
+                ProjectSelection.Visibility = Visibility.Visible;
+            }
         }
     }
 }

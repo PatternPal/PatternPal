@@ -28,7 +28,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:PatternResultViewModel}">
                     <Grid Margin="0,5,0,5">
-                        <Expander Padding="5,5,0,5"
+                        <Expander Padding="5,5,5,5"
                                   HorizontalAlignment="Stretch"
                                   VerticalAlignment="Stretch"
                                   ExpandDirection="Down"
@@ -49,8 +49,12 @@
                                 </StackPanel>
                             </Expander.Header>
                             <StackPanel>
-                                <TextBlock Text="{Binding Result.Feedback}" Margin="0,0,0,10" />
-                                <ItemsControl Name="EntityResults" ItemsSource="{Binding EntityChecks}">
+                                <TextBlock Padding="0,0,5,0" Text="{Binding Result.Feedback}" Margin="0,0,0,10"
+                                           MaxWidth="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Expander}}, Path=ActualWidth}"
+                                           TextWrapping="Wrap" />
+                                <ItemsControl
+                                    MaxWidth="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Expander}, AncestorLevel=1}, Path=ActualWidth}"
+                                    Name="EntityResults" ItemsSource="{Binding EntityChecks}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate DataType="{x:Type models:EntityCheckResultViewModel}">
                                             <Expander Padding="5,5,0,5"
@@ -84,29 +88,39 @@
                                                         </StackPanel>
                                                     </StackPanel>
                                                 </Expander.Header>
-                                                <ItemsControl Name="ResultsViewParts" ItemsSource="{Binding Children}">
+                                                <ItemsControl
+                                                    MaxWidth="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}, AncestorLevel=1}, Path=ActualWidth}"
+                                                    Name="ResultsViewParts" ItemsSource="{Binding Children}">
                                                     <ItemsControl.ItemTemplate>
                                                         <DataTemplate DataType="{x:Type models:CheckResultViewModel}">
-                                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                                                <imaging:CrispImage Width="24"
-                                                                    Height="24"
+                                                            <Grid>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="0.05*" />
+                                                                    <ColumnDefinition Width="0.95*" />
+                                                                </Grid.ColumnDefinitions>
+                                                                <imaging:CrispImage
+                                                                    Grid.Column="0"
+                                                                    Width="24" Height="24"
                                                                     HorizontalAlignment="Left"
-                                                                    Margin="0,0,10,0"
                                                                     Moniker="{Binding Icon}" />
-                                                                <StackPanel Orientation="Vertical">
-                                                                    <TextBlock Text="{Binding Requirement}" Height="16"
-                                                                               TextWrapping="NoWrap" />
+                                                                <StackPanel
+                                                                    Grid.Column="1"
+                                                                    Orientation="Vertical"
+                                                                    Margin="5,0,0,0">
+                                                                    <TextBlock Padding="0,0,5,0"
+                                                                               Text="{Binding Requirement}"
+                                                                               TextWrapping="Wrap" />
                                                                     <StackPanel Orientation="Horizontal">
-                                                                        <imaging:CrispImage Width="16"
-                                                                            Height="16"
+                                                                        <imaging:CrispImage
+                                                                            Width="16" Height="16"
                                                                             HorizontalAlignment="Left"
-                                                                            Margin="0,0,10,0"
+                                                                            Margin="0,0,5,0"
                                                                             Moniker="{Binding MatchedNodeIcon}" />
                                                                         <Label Content="{Binding MatchedNodeName}"
                                                                                MouseDoubleClick="Control_OnMouseDoubleClick" />
                                                                     </StackPanel>
                                                                 </StackPanel>
-                                                            </StackPanel>
+                                                            </Grid>
                                                         </DataTemplate>
                                                     </ItemsControl.ItemTemplate>
                                                 </ItemsControl>
