@@ -41,7 +41,7 @@ namespace PatternPal.Extension.ViewModels
         /// <summary>
         /// Completion score. 100 means all requirements are fulfilled.
         /// </summary>
-        public int Score => 100;
+        public int Score => Result.PercentageCorrectResults;
 
         /// <summary>
         /// Whether this view model is currently expanded.
@@ -56,7 +56,10 @@ namespace PatternPal.Extension.ViewModels
         /// <summary>
         /// The color of the progress bar.
         /// </summary>
-        public SolidColorBrush ProgressBarColor => Score < 40 ? Brushes.Red : Score < 80 ? Brushes.Yellow : Brushes.Green;
+        public SolidColorBrush ProgressBarColor => CalcProgressBarColor(Score);
+
+        internal static SolidColorBrush CalcProgressBarColor(
+            int score) => score < 40 ? Brushes.Red : score < 80 ? Brushes.Orange : Brushes.Green;
     }
 
     /// <summary>
@@ -118,7 +121,7 @@ namespace PatternPal.Extension.ViewModels
         /// <summary>
         /// Completion score. 100 means all requirements are fulfilled.
         /// </summary>
-        public int Score => 100;
+        public int Score => EntityResult.PercentageCorrectRequirements;
 
         /// <summary>
         /// Creates a new instance of the <see cref="EntityCheckResultViewModel"/> class.
@@ -152,6 +155,6 @@ namespace PatternPal.Extension.ViewModels
         /// <summary>
         /// The color of the progress bar.
         /// </summary>
-        public SolidColorBrush ProgressBarColor => Score < 40 ? Brushes.Red : Score < 80 ? Brushes.Yellow : Brushes.Green;
+        public SolidColorBrush ProgressBarColor => PatternResultViewModel.CalcProgressBarColor(Score);
     }
 }

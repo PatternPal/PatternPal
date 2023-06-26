@@ -83,7 +83,6 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
             }
 
             // Group the requirements.
-            bool allIncorrect = true;
             foreach (EntityResult entityResult in GroupResultsByRequirement(resultsByRequirement.Values.OrderBy(r => r.Requirement)))
             {
                 if (entityResult.Requirements.Count == 0)
@@ -92,18 +91,29 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                 }
 
                 rootResult.EntityResults.Add(entityResult);
-
-                foreach (Result requirement in entityResult.Requirements)
-                {
-                    if (requirement.Correctness != Correctness.CIncorrect)
-                    {
-                        allIncorrect = false;
-                    }
-                }
             }
 
-            // Skip result when all its requirements are incorrect.
-            if (!allIncorrect)
+            // Calculate the percentage of requirements which are correct.
+            int totalCorrectRequirements = 0;
+            int totalNrOfRequirements = 0;
+            foreach (EntityResult entityResult in rootResult.EntityResults)
+            {
+                (int correctRequirements, int nrOfRequirements) = CalcCorrectPercentage(entityResult);
+                totalCorrectRequirements += correctRequirements;
+                totalNrOfRequirements += nrOfRequirements;
+
+                entityResult.PercentageCorrectRequirements = (int)(correctRequirements / (float)nrOfRequirements * 100);
+            }
+
+            rootResult.PercentageCorrectResults = rootResult.EntityResults.Count == 0
+                ? 0
+                : (int)(totalCorrectRequirements / (float)totalNrOfRequirements * 100);
+
+            // Threshold for when a result has enough requirements correct to be shown to the user.
+            const int PERCENTAGE_CORRECT_TRESHOLD = 50;
+
+            // Skip result when it doesn't have the required percentage of correct requirements.
+            if (rootResult.PercentageCorrectResults >= PERCENTAGE_CORRECT_TRESHOLD)
             {
                 RecognizeResponse response = new()
                                              {
@@ -114,6 +124,27 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
         }
 
         return Task.CompletedTask;
+
+        // Calculates the number of correct requirements of the given result.
+        static (int CorrectRequirements, int NrOfRequirements) CalcCorrectPercentage(
+            EntityResult entityResult)
+        {
+            if (entityResult.Requirements.Count == 0)
+            {
+                return (0, 0);
+            }
+
+            int correctRequirements = 0;
+            foreach (Result subRequirement in entityResult.Requirements)
+            {
+                if (subRequirement.Correctness == Correctness.CCorrect)
+                {
+                    correctRequirements++;
+                }
+            }
+
+            return (correctRequirements, entityResult.Requirements.Count);
+        }
     }
 
     /// <summary>

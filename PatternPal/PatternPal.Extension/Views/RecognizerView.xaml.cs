@@ -175,18 +175,7 @@ namespace PatternPal.Extension.Views
         private void CreateResultViewModels(
             IEnumerable< RecognizeResult > results)
         {
-            List< PatternResultViewModel > viewModels = new List< PatternResultViewModel >();
-
-            foreach (RecognizeResult result in results)
-            {
-                if (result.EntityResults.Count > 0)
-                {
-                    viewModels.Add(new PatternResultViewModel(result));
-                }
-            }
-
-            // - Change your UI information here
-            ExpanderResults.ResultsView.ItemsSource = viewModels;
+            ExpanderResults.ResultsView.ItemsSource = results.OrderByDescending(result => result.PercentageCorrectResults).Select(result => new PatternResultViewModel(result)).ToList();
         }
 
         private void SaveAllDocuments()
