@@ -57,7 +57,7 @@ internal class FactoryMethodRecognizer : IRecognizer, IStepByStepRecognizer
         yield return product;
         yield return concreteProduct;
         yield return creator;
-        yield return ConcreteCreator(creator, concreteProduct);
+        yield return ConcreteCreator(creator, concreteProduct, product);
     }
 
     /// <summary>
@@ -148,7 +148,7 @@ internal class FactoryMethodRecognizer : IRecognizer, IStepByStepRecognizer
     /// <param name="creator"> this should be a class check of the class Creator</param>
     /// <param name="concreteProduct"> this should be a class check of the class Concrete Product</param>
     /// <returns>A <see cref="ClassCheck"/> which should result in the Concrete Creator class.</returns>
-    ClassCheck ConcreteCreator(ClassCheck creator, ClassCheck concreteProduct)
+    ClassCheck ConcreteCreator(ClassCheck creator, ClassCheck concreteProduct, InterfaceCheck product)
     {
         //Concrete Creator a & Creator b
         RelationCheck concreteInheritsCreator = Inherits(
@@ -163,7 +163,7 @@ internal class FactoryMethodRecognizer : IRecognizer, IStepByStepRecognizer
             "4b. Has exactly one method that creates and returns a Concrete product.",
             Type(
                 Priority.Low,
-                concreteProduct
+                product
             ),
             Creates(
                 Priority.Low,
@@ -193,16 +193,19 @@ internal class FactoryMethodRecognizer : IRecognizer, IStepByStepRecognizer
         List<IInstruction> generateStepsList = new();
 
         InterfaceCheck product = Product();
-        ClassCheck creator = Creator(product);
         ClassCheck concreteProduct = ConcreteProduct(product);
-        ClassCheck concreteCreator = ConcreteCreator(creator, concreteProduct);
+        ClassCheck creator = Creator(product);
+        ClassCheck concreteCreator = ConcreteCreator(creator, concreteProduct, product);
 
         // Step 1: check the product class
         generateStepsList.Add(
             new SimpleInstruction(
                 FactoryMethodInstructions.Step1,
                 FactoryMethodInstructions.Explanation1,
-                new List<ICheck> { product }
+                new List<ICheck>
+                {
+                    product
+                }
             )
         );
 
@@ -212,7 +215,11 @@ internal class FactoryMethodRecognizer : IRecognizer, IStepByStepRecognizer
             new SimpleInstruction(
                 FactoryMethodInstructions.Step2,
                 FactoryMethodInstructions.Explanation2,
-                new List<ICheck> { concreteProduct }
+                new List<ICheck>
+                {
+                    product,
+                    concreteProduct
+                }
             )
         );
 
@@ -223,7 +230,12 @@ internal class FactoryMethodRecognizer : IRecognizer, IStepByStepRecognizer
             new SimpleInstruction(
                 FactoryMethodInstructions.Step3,
                 FactoryMethodInstructions.Explanation3,
-                new List<ICheck> { creator }
+                new List<ICheck>
+                {
+                    product,
+                    concreteProduct,
+                    creator
+                }
             )
         );
 
@@ -233,7 +245,13 @@ internal class FactoryMethodRecognizer : IRecognizer, IStepByStepRecognizer
             new SimpleInstruction(
                 FactoryMethodInstructions.Step4,
                 FactoryMethodInstructions.Explanation4,
-                new List<ICheck> { concreteCreator }
+                new List<ICheck>
+                {
+                    product,
+                    concreteProduct,
+                    creator,
+                    concreteCreator
+                }
             )
         );
 

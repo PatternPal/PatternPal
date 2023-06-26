@@ -70,7 +70,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It need to be two classes because using the factory method pattern for just one concrete product is not useful. It also needs to inherit product as the properties of a concrete product are declared there..
+        ///   Looks up a localized string similar to It need to be two classes because using the factory method pattern for just one concrete product is not useful. It also needs to inherit product as the properties of a concrete product are declared there. (PatternPal only checks for one class).
         /// </summary>
         internal static string Explanation2 {
             get {
@@ -88,7 +88,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It need to be two classes because every concrete product should have its own concrete creator and there are at least two concrete products. Each concrete creator is a factory for one concrete product. and creating that concrete product is the only function of this class. It needs to inherit creator as the factoryMethod() method is declared there..
+        ///   Looks up a localized string similar to It need to be two classes because every concrete product should have its own concrete creator and there are at least two concrete products. Each concrete creator is a factory for one concrete product. and creating that concrete product is the only function of this class. It needs to inherit creator as the factoryMethod() method is declared there.  (PatternPal only checks for one class).
         /// </summary>
         internal static string Explanation4 {
             get {
