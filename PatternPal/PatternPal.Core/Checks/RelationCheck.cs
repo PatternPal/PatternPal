@@ -9,6 +9,8 @@ internal class RelationCheck : CheckBase
     // The check which checks for the node to which there should be a relation.
     private readonly ICheck _relatedNodeCheck;
 
+    private Score _perfectScore;
+
     // The type of relation which should be present.
     private readonly RelationType _relationType;
 
@@ -16,6 +18,37 @@ internal class RelationCheck : CheckBase
     /// A <see cref="RelationCheck"/> is dependent on the <see cref="INode"/> to which it has an <see cref="Relation"/>.
     /// </summary>
     public override int DependencyCount => 1 + _relatedNodeCheck.DependencyCount;
+
+    /// <inheritdoc />
+    public override Score PerfectScore => _perfectScore.Equals(default)
+        ? _perfectScore = PerfectScoreFromRelatedCheck(_relatedNodeCheck)
+                          + Score.CreateScore(
+                              Priority,
+                              true)
+        : _perfectScore;
+
+    /// <summary>
+    /// Gets the perfect <see cref="Score"/> of the <paramref name="relatedCheck"/>.
+    /// </summary>
+    /// <param name="relatedCheck">The related <see cref="ICheck"/>.</param>
+    /// <returns>The <see cref="ICheck.PerfectScore"/> of the <paramref name="relatedCheck"/>.</returns>
+    internal static Score PerfectScoreFromRelatedCheck(
+        ICheck relatedCheck)
+    {
+        while (true)
+        {
+            if (relatedCheck is ClassCheck or InterfaceCheck)
+            {
+                return relatedCheck.PerfectScore;
+            }
+
+            if (relatedCheck.ParentCheck == null)
+            {
+                return default;
+            }
+            relatedCheck = relatedCheck.ParentCheck;
+        }
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RelationCheck"/> class.

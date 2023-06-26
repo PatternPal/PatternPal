@@ -1,72 +1,72 @@
 ﻿{
-  FeedbackMessage: Found the required checks for: PatternPal.Tests.Utils.RootNode4Tests.,
   ChildrenCheckResults: [
     {
-      FeedbackMessage: ,
       ChildrenCheckResults: [
         {
-          FeedbackMessage: Found class 'PruneTestClass1',
           ChildrenCheckResults: [
             {
-              FeedbackMessage: ,
               ChildrenCheckResults: [
                 {
-                  FeedbackMessage: Found method: CalculateClient().,
                   ChildrenCheckResults: [
                     {
-                      FeedbackMessage: Modifiers correctly implemented.,
                       Correct: true,
+                      FeedbackMessage: Modifiers correctly implemented.,
                       MatchedNode: CalculateClient
                     }
                   ],
-                  MatchedNode: CalculateClient,
-                  NodeCheckCollectionWrapper: false
+                  NodeCheckCollectionWrapper: false,
+                  FeedbackMessage: Found method: CalculateClient().,
+                  MatchedNode: CalculateClient
                 }
               ],
               CollectionKind: Any,
-              NodeCheckCollectionWrapper: true
+              NodeCheckCollectionWrapper: true,
+              FeedbackMessage: 
             }
           ],
-          MatchedNode: PruneTestClass1,
-          NodeCheckCollectionWrapper: false
+          NodeCheckCollectionWrapper: false,
+          FeedbackMessage: Found class 'PruneTestClass1',
+          MatchedNode: PruneTestClass1
         }
       ],
       CollectionKind: Any,
-      NodeCheckCollectionWrapper: true
+      NodeCheckCollectionWrapper: true,
+      FeedbackMessage: 
     },
     {
-      FeedbackMessage: ,
       ChildrenCheckResults: [
         {
-          FeedbackMessage: Found class 'ClassUsesPruneClass',
           ChildrenCheckResults: [
             {
-              FeedbackMessage: Found Uses relations for ClassUsesPruneClass.,
               ChildrenCheckResults: [
                 {
-                  FeedbackMessage: Node ClassUsesPruneClass has a Uses relation with node CalculateClient(),
                   Correct: true,
+                  FeedbackMessage: Node ClassUsesPruneClass has a Uses relation with node CalculateClient(),
                   DependencyCount: 1,
                   MatchedNode: CalculateClient
                 }
               ],
               CollectionKind: Any,
+              NodeCheckCollectionWrapper: true,
+              FeedbackMessage: Found Uses relations for ClassUsesPruneClass.,
               DependencyCount: 1,
-              MatchedNode: ClassUsesPruneClass,
-              NodeCheckCollectionWrapper: true
+              MatchedNode: ClassUsesPruneClass
             }
           ],
+          NodeCheckCollectionWrapper: false,
+          FeedbackMessage: Found class 'ClassUsesPruneClass',
           DependencyCount: 1,
-          MatchedNode: ClassUsesPruneClass,
-          NodeCheckCollectionWrapper: false
+          MatchedNode: ClassUsesPruneClass
         }
       ],
       CollectionKind: Any,
-      DependencyCount: 1,
-      NodeCheckCollectionWrapper: true
+      NodeCheckCollectionWrapper: true,
+      FeedbackMessage: ,
+      DependencyCount: 1
     }
   ],
+  NodeCheckCollectionWrapper: false,
+  FeedbackMessage: Found the required checks for: PatternPal.Tests.Utils.RootNode4Tests.,
   DependencyCount: 1,
-  MatchedNode: root node,
-  NodeCheckCollectionWrapper: false
+  MatchedNode: root node
 }

@@ -1,96 +1,96 @@
 ﻿[
   {
+    ChildrenCheckResults: [
+      {
+        ChildrenCheckResults: [
+          {
+            ChildrenCheckResults: [
+              {
+                Correct: false,
+                FeedbackMessage: The node GetInstance() does not have the static modifier.,
+                MatchedNode: GetInstance
+              },
+              {
+                ChildrenCheckResults: [
+                  {
+                    Correct: true,
+                    FeedbackMessage: Modifiers correctly implemented.,
+                    MatchedNode: GetInstance
+                  },
+                  {
+                    Correct: false,
+                    FeedbackMessage: The node GetInstance() does not have the internal modifier.,
+                    MatchedNode: GetInstance
+                  }
+                ],
+                CollectionKind: Any,
+                NodeCheckCollectionWrapper: false,
+                FeedbackMessage: Found the required checks for: GetInstance().,
+                MatchedNode: GetInstance
+              }
+            ],
+            NodeCheckCollectionWrapper: false,
+            FeedbackMessage: Found method: GetInstance().,
+            Priority: Mid,
+            MatchedNode: GetInstance
+          }
+        ],
+        CollectionKind: Any,
+        NodeCheckCollectionWrapper: true,
+        FeedbackMessage: ,
+        Priority: Mid
+      }
+    ],
+    NodeCheckCollectionWrapper: false,
     FeedbackMessage: Found class 'MockClass2',
     Priority: Low,
-    ChildrenCheckResults: [
-      {
-        FeedbackMessage: ,
-        Priority: Mid,
-        ChildrenCheckResults: [
-          {
-            FeedbackMessage: Found method: GetInstance().,
-            Priority: Mid,
-            ChildrenCheckResults: [
-              {
-                FeedbackMessage: The node GetInstance() does not have the static modifier.,
-                Correct: false,
-                MatchedNode: GetInstance
-              },
-              {
-                FeedbackMessage: Found the required checks for: GetInstance().,
-                ChildrenCheckResults: [
-                  {
-                    FeedbackMessage: Modifiers correctly implemented.,
-                    Correct: true,
-                    MatchedNode: GetInstance
-                  },
-                  {
-                    FeedbackMessage: The node GetInstance() does not have the internal modifier.,
-                    Correct: false,
-                    MatchedNode: GetInstance
-                  }
-                ],
-                CollectionKind: Any,
-                MatchedNode: GetInstance,
-                NodeCheckCollectionWrapper: false
-              }
-            ],
-            MatchedNode: GetInstance,
-            NodeCheckCollectionWrapper: false
-          }
-        ],
-        CollectionKind: Any,
-        NodeCheckCollectionWrapper: true
-      }
-    ],
-    MatchedNode: MockClass2,
-    NodeCheckCollectionWrapper: false
+    MatchedNode: MockClass2
   },
   {
-    FeedbackMessage: Found class 'MockClass3',
-    Priority: Low,
     ChildrenCheckResults: [
       {
-        FeedbackMessage: ,
-        Priority: Mid,
         ChildrenCheckResults: [
           {
-            FeedbackMessage: Found method: GetInstance().,
-            Priority: Mid,
             ChildrenCheckResults: [
               {
-                FeedbackMessage: Modifiers correctly implemented.,
                 Correct: true,
+                FeedbackMessage: Modifiers correctly implemented.,
                 MatchedNode: GetInstance
               },
               {
-                FeedbackMessage: Found the required checks for: GetInstance().,
                 ChildrenCheckResults: [
                   {
-                    FeedbackMessage: The node GetInstance() does not have the public modifier.,
                     Correct: false,
+                    FeedbackMessage: The node GetInstance() does not have the public modifier.,
                     MatchedNode: GetInstance
                   },
                   {
-                    FeedbackMessage: The node GetInstance() does not have the internal modifier.,
                     Correct: false,
+                    FeedbackMessage: The node GetInstance() does not have the internal modifier.,
                     MatchedNode: GetInstance
                   }
                 ],
                 CollectionKind: Any,
-                MatchedNode: GetInstance,
-                NodeCheckCollectionWrapper: false
+                NodeCheckCollectionWrapper: false,
+                FeedbackMessage: Found the required checks for: GetInstance().,
+                MatchedNode: GetInstance
               }
             ],
-            MatchedNode: GetInstance,
-            NodeCheckCollectionWrapper: false
+            NodeCheckCollectionWrapper: false,
+            FeedbackMessage: Found method: GetInstance().,
+            Priority: Mid,
+            MatchedNode: GetInstance
           }
         ],
         CollectionKind: Any,
-        NodeCheckCollectionWrapper: true
+        NodeCheckCollectionWrapper: true,
+        FeedbackMessage: ,
+        Priority: Mid
       }
     ],
-    MatchedNode: MockClass3,
-    NodeCheckCollectionWrapper: false
+    NodeCheckCollectionWrapper: false,
+    FeedbackMessage: Found class 'MockClass3',
+    Priority: Low,
+    MatchedNode: MockClass3
   }
 ]

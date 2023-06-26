@@ -40,6 +40,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logging", "Logging", "{92AD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatternPal.LoggingServerTests", "PatternPal.LoggingServerTests\PatternPal.LoggingServerTests.csproj", "{08E5C551-9568-4D5D-8416-BB4BA8445EC2}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PatternPal.ProgSnapExport", "PatternPal.ProgSnapExport\PatternPal.ProgSnapExport.csproj", "{A3766C67-CE33-4CD7-956D-C9237262B5E4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -153,6 +155,7 @@ Global
 		{409D427A-F297-41D3-BCB3-FAA3ABBFDD8E}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{409D427A-F297-41D3-BCB3-FAA3ABBFDD8E}.Debug|x86.Build.0 = Debug|Any CPU
 		{409D427A-F297-41D3-BCB3-FAA3ABBFDD8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{409D427A-F297-41D3-BCB3-FAA3ABBFDD8E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{409D427A-F297-41D3-BCB3-FAA3ABBFDD8E}.Release|arm64.ActiveCfg = Release|Any CPU
 		{409D427A-F297-41D3-BCB3-FAA3ABBFDD8E}.Release|arm64.Build.0 = Release|Any CPU
 		{409D427A-F297-41D3-BCB3-FAA3ABBFDD8E}.Release|x86.ActiveCfg = Release|Any CPU
@@ -179,6 +182,18 @@ Global
 		{08E5C551-9568-4D5D-8416-BB4BA8445EC2}.Release|arm64.Build.0 = Release|Any CPU
 		{08E5C551-9568-4D5D-8416-BB4BA8445EC2}.Release|x86.ActiveCfg = Release|Any CPU
 		{08E5C551-9568-4D5D-8416-BB4BA8445EC2}.Release|x86.Build.0 = Release|Any CPU
+		{A3766C67-CE33-4CD7-956D-C9237262B5E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3766C67-CE33-4CD7-956D-C9237262B5E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3766C67-CE33-4CD7-956D-C9237262B5E4}.Debug|arm64.ActiveCfg = Debug|Any CPU
+		{A3766C67-CE33-4CD7-956D-C9237262B5E4}.Debug|arm64.Build.0 = Debug|Any CPU
+		{A3766C67-CE33-4CD7-956D-C9237262B5E4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A3766C67-CE33-4CD7-956D-C9237262B5E4}.Debug|x86.Build.0 = Debug|Any CPU
+		{A3766C67-CE33-4CD7-956D-C9237262B5E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3766C67-CE33-4CD7-956D-C9237262B5E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3766C67-CE33-4CD7-956D-C9237262B5E4}.Release|arm64.ActiveCfg = Release|Any CPU
+		{A3766C67-CE33-4CD7-956D-C9237262B5E4}.Release|arm64.Build.0 = Release|Any CPU
+		{A3766C67-CE33-4CD7-956D-C9237262B5E4}.Release|x86.ActiveCfg = Release|Any CPU
+		{A3766C67-CE33-4CD7-956D-C9237262B5E4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -196,6 +211,7 @@ Global
 		{A48AD329-E1C5-4C62-A86C-771DF54E8DB1} = {92AD1B40-F1BD-4112-814A-6F94A1501FEE}
 		{92AD1B40-F1BD-4112-814A-6F94A1501FEE} = {25C2E758-AC65-4A3A-A11A-2D3510C01BB8}
 		{08E5C551-9568-4D5D-8416-BB4BA8445EC2} = {42465826-0737-421D-9D08-30F8C43D7912}
+		{A3766C67-CE33-4CD7-956D-C9237262B5E4} = {92AD1B40-F1BD-4112-814A-6F94A1501FEE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {31FB6D39-7D9F-44BC-AF8B-3AA700C8C087}

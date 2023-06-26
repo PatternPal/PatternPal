@@ -1,4 +1,8 @@
-﻿using PatternPal.Core.Runner;
+﻿#region
+
+using IMethod = PatternPal.SyntaxTree.Abstractions.Members.IMethod;
+
+#endregion
 
 namespace PatternPal.Services;
 
@@ -26,8 +30,6 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
         IServerStreamWriter< RecognizeResponse > responseStream,
         ServerCallContext context)
     {
-        // TODO CV: Handle error cases
-
         // Get the list of files on which to run the recognizers.
         IList< string > ? files = GetFiles(request);
         if (files is null)
@@ -35,26 +37,27 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
             return Task.CompletedTask;
         }
 
-        // Run the recognizers. We need to cast the result to a `List` to access the `Sort` method,
-        // which is defined on the class, not on the `IList` contract.
+        // Run the recognizers.
         RecognizerRunner runner = new(
             files,
             request.Recognizers );
-        IList< (Recognizer, ICheckResult) > results = runner.Run();
+        IList< RecognizerRunner.RunResult > results = runner.Run();
 
         // KNOWN: The root check result is always a NodeCheckResult.
-        foreach ((Recognizer recognizer, ICheckResult rootCheckResult) in results)
+        foreach (RecognizerRunner.RunResult runResult in results)
         {
             RecognizeResult rootResult = new()
                                          {
-                                             Recognizer = recognizer,
-                                             Feedback = "Goed gedoet"
+                                             Recognizer = runResult.RecognizerType!.Value
                                          };
 
             Dictionary< string, Result > resultsByRequirement = new();
 
+            // Get all requirements for which we have results.
+            IDictionary< ICheck, ICheckResult > resultsByCheck = new Dictionary< ICheck, ICheckResult >();
             foreach (Result result in GetResults(
-                rootCheckResult))
+                resultsByCheck,
+                runResult.CheckResult))
             {
                 if (!resultsByRequirement.TryGetValue(
                         result.Requirement,
@@ -65,35 +68,196 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                 }
             }
 
-            // TODO: Check if requirements are correct, or remove result if not.
-
-            // TODO: Collect all requirements from checks.
-
-            // TODO: Generate feedback for incorrect/missing requirements.
-
-            foreach (Result result in resultsByRequirement.Values)
+            // Check which requirements have no results (because the results were pruned).
+            foreach (string requirement in runResult.Requirements!)
             {
-                rootResult.Results.Add(result);
+                if (!resultsByRequirement.ContainsKey(requirement))
+                {
+                    resultsByRequirement[ requirement ] = new Result
+                                                          {
+                                                              Requirement = requirement,
+                                                              Correctness = Correctness.CIncorrect,
+                                                          };
+                }
             }
 
-            RecognizeResponse response = new()
-                                         {
-                                             Result = rootResult
-                                         };
-            responseStream.WriteAsync(response);
+            // Group the requirements.
+            foreach (EntityResult entityResult in GroupResultsByRequirement(resultsByRequirement.Values.OrderBy(r => r.Requirement)))
+            {
+                if (entityResult.Requirements.Count == 0)
+                {
+                    continue;
+                }
+
+                rootResult.EntityResults.Add(entityResult);
+            }
+
+            // Calculate the percentage of requirements which are correct.
+            int totalCorrectRequirements = 0;
+            int totalNrOfRequirements = 0;
+            foreach (EntityResult entityResult in rootResult.EntityResults)
+            {
+                (int correctRequirements, int nrOfRequirements) = CalcCorrectPercentage(entityResult);
+                totalCorrectRequirements += correctRequirements;
+                totalNrOfRequirements += nrOfRequirements;
+
+                entityResult.PercentageCorrectRequirements = (int)(correctRequirements / (float)nrOfRequirements * 100);
+            }
+
+            rootResult.PercentageCorrectResults = rootResult.EntityResults.Count == 0
+                ? 0
+                : (int)(totalCorrectRequirements / (float)totalNrOfRequirements * 100);
+
+            rootResult.Feedback = rootResult.PercentageCorrectResults switch
+            {
+                100 => $"Well done! You have correctly implemented the {rootResult.Recognizer} design pattern.",
+                >= 75 => $"Nearly there! There are a couple requirements left you still need to implement for a correct implementation of the {rootResult.Recognizer} design pattern.",
+                >= 50 => $"It looks like you are trying to implement the {rootResult.Recognizer} design pattern, but you are still missing quite a few requirements.",
+                _ => "Not enough requirements correctly implemented."
+            };
+
+            // Threshold for when a result has enough requirements correct to be shown to the user.
+            const int PERCENTAGE_CORRECT_TRESHOLD = 50;
+
+            // Skip result when it doesn't have the required percentage of correct requirements.
+            if (rootResult.PercentageCorrectResults >= PERCENTAGE_CORRECT_TRESHOLD)
+            {
+                RecognizeResponse response = new()
+                                             {
+                                                 Result = rootResult
+                                             };
+                responseStream.WriteAsync(response);
+            }
         }
 
         return Task.CompletedTask;
+
+        // Calculates the number of correct requirements of the given result.
+        static (int CorrectRequirements, int NrOfRequirements) CalcCorrectPercentage(
+            EntityResult entityResult)
+        {
+            if (entityResult.Requirements.Count == 0)
+            {
+                return (0, 0);
+            }
+
+            int correctRequirements = 0;
+            foreach (Result subRequirement in entityResult.Requirements)
+            {
+                if (subRequirement.Correctness == Correctness.CCorrect)
+                {
+                    correctRequirements++;
+                }
+            }
+
+            return (correctRequirements, entityResult.Requirements.Count);
+        }
     }
 
     /// <summary>
-    /// This method transforms a <see cref="ICheckResult"/> to a <see cref="Result"/>
+    /// Group the results into top-level requirements and their sub-requirements.
     /// </summary>
-    /// <param name="resultsToProcess"></param>
-    /// <param name="checkResult"> The check to transform.</param>
-    /// <param name="usedNodes"></param>
-    /// <returns></returns>
+    /// <param name="resultsOrderedByRequirements"><see cref="Result"/>s ordered by their requirement.</param>
+    /// <returns>The top-level requirements.</returns>
+    private IEnumerable< EntityResult > GroupResultsByRequirement(
+        IOrderedEnumerable< Result > resultsOrderedByRequirements)
+    {
+        EntityResult ? entityResult = null;
+        Dictionary< string, Result > subResultsByPrefix = new();
+        foreach (Result result in resultsOrderedByRequirements)
+        {
+            string[ ] parts = result.Requirement.Split(". ");
+            if (parts.Length != 2)
+            {
+                // Requirement was not in expected format.
+                throw new ArgumentException($"Requirement '{result.Requirement}' does not have the expected format, format should be '1. Description' for top-level requirements, and '1b. Sub-requirement' for its sub-requirements");
+            }
+
+            // Check if the requirement is a top-level requirement.
+            if (int.TryParse(
+                parts[ 0 ],
+                out _))
+            {
+                // If `entityResult` is not null, we have found a new top-level requirement.
+                if (null != entityResult)
+                {
+                    SelectMatchedNode(entityResult);
+                    yield return entityResult;
+                }
+
+                entityResult = new EntityResult
+                               {
+                                   Name = parts[ 1 ],
+                                   MatchedNode = result.MatchedNode,
+                                   Correctness = result.Correctness
+                               };
+                continue;
+            }
+
+            if (null == entityResult)
+            {
+                throw new ArgumentException($"Missing top-level requirement for '{parts[ 1 ]}'");
+            }
+
+            result.Requirement = parts[ 1 ];
+
+            // ASSUME: If there are multiple sub-requirements with the same prefix, only 1 will be
+            // correct. Use the one which is correct, or which came first if somehow both are
+            // correct.
+            //Result ? duplicateRequirement = entityResult.Requirements.FirstOrDefault(r => r.Requirement == result.Requirement);
+            if (subResultsByPrefix.TryGetValue(
+                parts[ 0 ],
+                out Result ? duplicateRequirement))
+            {
+                if (duplicateRequirement.Correctness > result.Correctness)
+                {
+                    // Replace the duplicate requirement.
+                    entityResult.Requirements[ entityResult.Requirements.IndexOf(duplicateRequirement) ] = result;
+                    subResultsByPrefix[ parts[ 0 ] ] = result;
+                }
+            }
+            else
+            {
+                entityResult.Requirements.Add(result);
+                subResultsByPrefix.TryAdd(
+                    parts[ 0 ],
+                    result);
+            }
+        }
+
+        if (null != entityResult)
+        {
+            SelectMatchedNode(entityResult);
+            yield return entityResult;
+        }
+
+        // Get an entity from the requirements if the entity result doesn't have one yet.
+        static void SelectMatchedNode(
+            EntityResult entityResult)
+        {
+            if (entityResult.MatchedNode == null)
+            {
+                foreach (Result childResult in entityResult.Requirements)
+                {
+                    if (childResult.MatchedNode is {Kind: MatchedNode.Types.MatchedNodeKind.MnkClass or MatchedNode.Types.MatchedNodeKind.MnkInterface})
+                    {
+                        entityResult.MatchedNode = childResult.MatchedNode;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Converts the <see cref="ICheckResult"/>s to <see cref="Result"/>s, which can be sent to the
+    /// frontend.
+    /// </summary>
+    /// <param name="resultsByCheck">Maps <see cref="ICheck"/>s to their <see cref="ICheckResult"/>s.</param>
+    /// <param name="rootCheckResult">The root <see cref="ICheckResult"/>.</param>
+    /// <returns><see cref="Result"/>s.</returns>
     private static IEnumerable< Result > GetResults(
+        IDictionary< ICheck, ICheckResult > resultsByCheck,
         ICheckResult rootCheckResult)
     {
         Queue< ICheckResult > resultsToProcess = new();
@@ -106,7 +270,13 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
             {
                 Result result = new()
                                 {
-                                    Requirement = resultToProcess.Check.Requirement
+                                    Requirement = resultToProcess.Check.Requirement,
+                                    Correctness = resultToProcess.Score.PercentageOf(resultToProcess.PerfectScore) switch
+                                    {
+                                        100 => Correctness.CCorrect,
+                                        > 50 => Correctness.CPartiallyCorrect,
+                                        _ => Correctness.CIncorrect,
+                                    }
                                 };
 
                 if (resultToProcess.MatchedNode != null)
@@ -118,7 +288,17 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                                              Name = matchedNode.GetName(),
                                              Path = matchedNode.GetRoot().GetSource(),
                                              Start = sourceLocation.Start,
-                                             Length = sourceLocation.Length
+                                             Length = sourceLocation.Length,
+                                             Kind = resultToProcess.MatchedNode switch
+                                             {
+                                                 IClass => MatchedNode.Types.MatchedNodeKind.MnkClass,
+                                                 IInterface => MatchedNode.Types.MatchedNodeKind.MnkInterface,
+                                                 IConstructor => MatchedNode.Types.MatchedNodeKind.MnkConstructor,
+                                                 IMethod => MatchedNode.Types.MatchedNodeKind.MnkMethod,
+                                                 IField => MatchedNode.Types.MatchedNodeKind.MnkField,
+                                                 IProperty => MatchedNode.Types.MatchedNodeKind.MnkProperty,
+                                                 _ => MatchedNode.Types.MatchedNodeKind.MnkUnknown,
+                                             }
                                          };
                 }
 
@@ -135,6 +315,13 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                 case NodeCheckResult nodeCheckResult:
                     foreach (ICheckResult childCheckResult in nodeCheckResult.ChildrenCheckResults)
                     {
+                        if (childCheckResult is NodeCheckResult {NodeCheckCollectionWrapper: true} childNodeCheckResult)
+                        {
+                            if (childNodeCheckResult.ChildrenCheckResults.FirstOrDefault() is NodeCheckResult matchedNodeCheckResult)
+                            {
+                                resultsByCheck[ matchedNodeCheckResult.Check ] = matchedNodeCheckResult;
+                            }
+                        }
                         resultsToProcess.Enqueue(childCheckResult);
                     }
                     continue;
@@ -145,8 +332,10 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
     /// <summary>
     /// Gets the list of files on which to run the recognizers.
     /// </summary>
-    /// <returns><see langword="null"/> if the request contains no valid file or project directory,
-    /// or a list of files otherwise.</returns>
+    /// <returns>
+    /// <see langword="null"/> if the request contains no valid file or project directory, or a list
+    /// of files otherwise.
+    /// </returns>
     private static IList< string > ? GetFiles(
         RecognizeRequest request)
     {

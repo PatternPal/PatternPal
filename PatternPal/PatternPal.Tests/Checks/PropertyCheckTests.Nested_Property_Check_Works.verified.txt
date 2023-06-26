@@ -1,22 +1,22 @@
 ﻿{
-  FeedbackMessage: Found class 'C',
-  Priority: High,
   ChildrenCheckResults: [
     {
-      FeedbackMessage: ,
-      Priority: High,
       ChildrenCheckResults: [
         {
+          NodeCheckCollectionWrapper: false,
           FeedbackMessage: Found property: P.,
           Priority: High,
-          MatchedNode: P,
-          NodeCheckCollectionWrapper: false
+          MatchedNode: P
         }
       ],
       CollectionKind: Any,
-      NodeCheckCollectionWrapper: true
+      NodeCheckCollectionWrapper: true,
+      FeedbackMessage: ,
+      Priority: High
     }
   ],
-  MatchedNode: C,
-  NodeCheckCollectionWrapper: false
+  NodeCheckCollectionWrapper: false,
+  FeedbackMessage: Found class 'C',
+  Priority: High,
+  MatchedNode: C
 }

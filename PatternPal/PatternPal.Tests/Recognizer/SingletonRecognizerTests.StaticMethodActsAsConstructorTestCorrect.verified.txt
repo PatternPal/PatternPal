@@ -1,163 +1,163 @@
 ﻿[
   {
-    FeedbackMessage: Found class 'MockClass1',
-    Priority: Low,
     ChildrenCheckResults: [
       {
-        FeedbackMessage: ,
         ChildrenCheckResults: [
           {
-            FeedbackMessage: Found constructor: MockClass1().,
             ChildrenCheckResults: [
               {
-                FeedbackMessage: Found the required checks for: MockClass1().,
                 ChildrenCheckResults: [
                   {
-                    FeedbackMessage: Modifiers correctly implemented.,
                     Correct: true,
+                    FeedbackMessage: Modifiers correctly implemented.,
                     MatchedNode: MockClass1
                   },
                   {
-                    FeedbackMessage: The node MockClass1() does not have the protected modifier.,
                     Correct: false,
+                    FeedbackMessage: The node MockClass1() does not have the protected modifier.,
                     MatchedNode: MockClass1
                   }
                 ],
                 CollectionKind: Any,
-                MatchedNode: MockClass1,
-                NodeCheckCollectionWrapper: false
+                NodeCheckCollectionWrapper: false,
+                FeedbackMessage: Found the required checks for: MockClass1().,
+                MatchedNode: MockClass1
               }
             ],
-            MatchedNode: MockClass1,
-            NodeCheckCollectionWrapper: false
+            NodeCheckCollectionWrapper: false,
+            FeedbackMessage: Found constructor: MockClass1().,
+            MatchedNode: MockClass1
           }
         ],
         CollectionKind: Any,
-        NodeCheckCollectionWrapper: true
+        NodeCheckCollectionWrapper: true,
+        FeedbackMessage: 
       },
       {
-        FeedbackMessage: ,
         ChildrenCheckResults: [
           {
-            FeedbackMessage: Found field '_instance',
             ChildrenCheckResults: [
               {
-                FeedbackMessage: Modifiers correctly implemented.,
                 Correct: true,
+                FeedbackMessage: Modifiers correctly implemented.,
                 MatchedNode: _instance
               },
               {
-                FeedbackMessage: Found node 'MockClass1',
                 ChildrenCheckResults: [
                   {
-                    FeedbackMessage: Node 'MockClass1' has correct type,
                     Correct: true,
+                    FeedbackMessage: Node 'MockClass1' has correct type,
                     MatchedNode: MockClass1
                   }
                 ],
                 CollectionKind: Any,
-                MatchedNode: MockClass1,
-                NodeCheckCollectionWrapper: true
+                NodeCheckCollectionWrapper: true,
+                FeedbackMessage: Found node 'MockClass1',
+                MatchedNode: MockClass1
               }
             ],
-            MatchedNode: _instance,
-            NodeCheckCollectionWrapper: false
+            NodeCheckCollectionWrapper: false,
+            FeedbackMessage: Found field '_instance',
+            MatchedNode: _instance
           }
         ],
         CollectionKind: Any,
-        NodeCheckCollectionWrapper: true
+        NodeCheckCollectionWrapper: true,
+        FeedbackMessage: 
       },
       {
-        FeedbackMessage: ,
-        Priority: High,
         ChildrenCheckResults: [
           {
-            FeedbackMessage: Found method: GetInstance().,
-            Priority: High,
             ChildrenCheckResults: [
               {
-                FeedbackMessage: Modifiers correctly implemented.,
                 Correct: true,
+                FeedbackMessage: Modifiers correctly implemented.,
                 MatchedNode: GetInstance
               },
               {
-                FeedbackMessage: Found the required checks for: GetInstance().,
                 ChildrenCheckResults: [
                   {
-                    FeedbackMessage: Modifiers correctly implemented.,
                     Correct: true,
+                    FeedbackMessage: Modifiers correctly implemented.,
                     MatchedNode: GetInstance
                   },
                   {
-                    FeedbackMessage: The node GetInstance() does not have the internal modifier.,
                     Correct: false,
+                    FeedbackMessage: The node GetInstance() does not have the internal modifier.,
                     MatchedNode: GetInstance
                   }
                 ],
                 CollectionKind: Any,
-                MatchedNode: GetInstance,
-                NodeCheckCollectionWrapper: false
+                NodeCheckCollectionWrapper: false,
+                FeedbackMessage: Found the required checks for: GetInstance().,
+                MatchedNode: GetInstance
               },
               {
-                FeedbackMessage: Found Uses relations for GetInstance().,
-                Priority: Mid,
                 ChildrenCheckResults: [
                   {
+                    Correct: true,
                     FeedbackMessage: Node GetInstance() has a Uses relation with node MockClass1(),
                     Priority: Mid,
-                    Correct: true,
                     DependencyCount: 1,
                     MatchedNode: MockClass1
                   }
                 ],
                 CollectionKind: Any,
-                DependencyCount: 1,
-                MatchedNode: GetInstance,
-                NodeCheckCollectionWrapper: true
-              },
-              {
+                NodeCheckCollectionWrapper: true,
                 FeedbackMessage: Found Uses relations for GetInstance().,
                 Priority: Mid,
+                DependencyCount: 1,
+                MatchedNode: GetInstance
+              },
+              {
                 ChildrenCheckResults: [
                   {
+                    Correct: true,
                     FeedbackMessage: Node GetInstance() has a Uses relation with node _instance,
                     Priority: Mid,
-                    Correct: true,
                     DependencyCount: 1,
                     MatchedNode: _instance
                   }
                 ],
                 CollectionKind: Any,
+                NodeCheckCollectionWrapper: true,
+                FeedbackMessage: Found Uses relations for GetInstance().,
+                Priority: Mid,
                 DependencyCount: 1,
-                MatchedNode: GetInstance,
-                NodeCheckCollectionWrapper: true
+                MatchedNode: GetInstance
               },
               {
-                FeedbackMessage: Found node 'MockClass1',
                 ChildrenCheckResults: [
                   {
-                    FeedbackMessage: Node 'MockClass1' has correct type,
                     Correct: true,
+                    FeedbackMessage: Node 'MockClass1' has correct type,
                     MatchedNode: MockClass1
                   }
                 ],
                 CollectionKind: Any,
-                MatchedNode: MockClass1,
-                NodeCheckCollectionWrapper: true
+                NodeCheckCollectionWrapper: true,
+                FeedbackMessage: Found node 'MockClass1',
+                MatchedNode: MockClass1
               }
             ],
+            NodeCheckCollectionWrapper: false,
+            FeedbackMessage: Found method: GetInstance().,
+            Priority: High,
             DependencyCount: 2,
-            MatchedNode: GetInstance,
-            NodeCheckCollectionWrapper: false
+            MatchedNode: GetInstance
           }
         ],
         CollectionKind: Any,
-        DependencyCount: 2,
-        NodeCheckCollectionWrapper: true
+        NodeCheckCollectionWrapper: true,
+        FeedbackMessage: ,
+        Priority: High,
+        DependencyCount: 2
       }
     ],
+    NodeCheckCollectionWrapper: false,
+    FeedbackMessage: Found class 'MockClass1',
+    Priority: Low,
     DependencyCount: 2,
-    MatchedNode: MockClass1,
-    NodeCheckCollectionWrapper: false
+    MatchedNode: MockClass1
   }
 ]
