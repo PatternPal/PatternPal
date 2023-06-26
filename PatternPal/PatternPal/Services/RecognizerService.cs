@@ -48,8 +48,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
         {
             RecognizeResult rootResult = new()
                                          {
-                                             Recognizer = runResult.RecognizerType!.Value,
-                                             Feedback = "To be determined" // TODO: Generate feedback
+                                             Recognizer = runResult.RecognizerType!.Value
                                          };
 
             Dictionary< string, Result > resultsByRequirement = new();
@@ -109,6 +108,14 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                 ? 0
                 : (int)(totalCorrectRequirements / (float)totalNrOfRequirements * 100);
 
+            rootResult.Feedback = rootResult.PercentageCorrectResults switch
+            {
+                100 => $"Well done! You have correctly implemented the {rootResult.Recognizer} design pattern.",
+                >= 75 => $"Nearly there! There are a couple requirements left you still need to implement for a correct implementation of the {rootResult.Recognizer} design pattern.",
+                >= 50 => $"It looks like you are trying to implement the {rootResult.Recognizer} design pattern, but you are still missing quite a few requirements.",
+                _ => "Not enough requirements correctly implemented"
+            };
+
             // Threshold for when a result has enough requirements correct to be shown to the user.
             const int PERCENTAGE_CORRECT_TRESHOLD = 50;
 
@@ -155,6 +162,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
     private IEnumerable< EntityResult > GroupResultsByRequirement(
         IOrderedEnumerable< Result > resultsOrderedByRequirements)
     {
+        // TODO: Deduplicate sub-requirements (e.g. an Any check with both options being 1a.)
         EntityResult ? entityResult = null;
         foreach (Result result in resultsOrderedByRequirements)
         {
