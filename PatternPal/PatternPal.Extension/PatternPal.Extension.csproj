@@ -122,6 +122,7 @@
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\PatternResultViewModel.cs" />
     <Compile Include="ViewModels\ResultViewModel.cs" />
+    <Compile Include="ViewModels\SelectPathsViewModel.cs" />
     <Compile Include="ViewModels\StepByStepInstructionsViewModel.cs" />
     <Compile Include="ViewModels\StepByStepListViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />

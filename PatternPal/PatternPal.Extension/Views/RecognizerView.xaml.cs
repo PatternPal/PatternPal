@@ -44,8 +44,7 @@ namespace PatternPal.Extension.Views
             Dispatcher.VerifyAccess();
             LoadProject();
             SelectAll.IsChecked = true;
-            SelectPaths.ProjectSelection.ItemsSource = Projects;
-            SelectPaths.ProjectSelection.SelectedIndex = 0;
+            SelectPaths.DataContext = new SelectPathsViewModel(Projects);
             Dte = Package.GetGlobalService(typeof( SDTE )) as DTE;
             IVsRunningDocumentTable rdt = (IVsRunningDocumentTable)Package.GetGlobalService(typeof( SVsRunningDocumentTable ));
             rdt.AdviseRunningDocTableEvents(
@@ -112,8 +111,7 @@ namespace PatternPal.Extension.Views
             int fNewSolution)
         {
             LoadProject();
-            SelectPaths.ProjectSelection.ItemsSource = Projects;
-            SelectPaths.ProjectSelection.SelectedIndex = 0;
+            SelectPaths.DataContext = new SelectPathsViewModel(Projects);
             return VSConstants.S_OK;
         }
 
