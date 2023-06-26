@@ -40,10 +40,15 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>DecoratorInstructions.resx</DependentUpon>
     </Compile>
-    <Compile Update="StepByStep\Resources\Instructions\SingletonInstructions.Designer.cs">
+    <Compile Update="StepByStep\Resources\Instructions\FactoryMethodInstructions.Designer.cs">
+      <DependentUpon>FactoryMethodInstructions.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="StepByStep\Resources\Instructions\SingletonInstructions.Designer.cs">
       <DependentUpon>SingletonInstructions.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
   </ItemGroup>
 
@@ -56,9 +61,13 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>DecoratorInstructions.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="StepByStep\Resources\Instructions\SingletonInstructions.resx">
+    <EmbeddedResource Update="StepByStep\Resources\Instructions\FactoryMethodInstructions.resx">
+      <LastGenOutput>FactoryMethodInstructions.Designer.cs</LastGenOutput>
       <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="StepByStep\Resources\Instructions\SingletonInstructions.resx">
       <LastGenOutput>SingletonInstructions.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
   </ItemGroup>
 

@@ -22,14 +22,14 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class SingletonInstructions {
+    internal class FactoryMethodInstructions {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal SingletonInstructions() {
+        internal FactoryMethodInstructions() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PatternPal.Core.StepByStep.Resources.Instructions.SingletonInstructions", typeof(SingletonInstructions).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PatternPal.Core.StepByStep.Resources.Instructions.FactoryMethodInstructions", typeof(FactoryMethodInstructions).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -70,7 +70,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There need to be two classes because the pattern has no funtion if it only creates one concrete product. They both have to implement product because it are implementations of product.
+        ///   Looks up a localized string similar to It need to be two classes because using the factory method pattern for just one concrete product is not useful. It also needs to inherit product as the properties of a concrete product are declared there. (PatternPal only checks for one class).
         /// </summary>
         internal static string Explanation2 {
             get {
@@ -79,7 +79,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The creator is an abstract class and not an interface because this class also has functions outside of creating a product. Only the method responsible for creating a product, the factoryMethod(), is abstract as this is the only function of the classes that inherit from the creator.
+        ///   Looks up a localized string similar to The creator is an abstract class and not an interface because this class also has functions outside of creating a product. Only the method responsible for creating a product, the factoryMethod(), is abstract as this is the only function of the concrete creator classes..
         /// </summary>
         internal static string Explanation3 {
             get {
@@ -88,7 +88,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Each concrete creator is a factory for one concrete product. and creating that concrete product is the only function of this class. It needs to inherit creator as the factoryMethod() method is declared there..
+        ///   Looks up a localized string similar to It need to be two classes because every concrete product should have its own concrete creator and there are at least two concrete products. Each concrete creator is a factory for one concrete product. and creating that concrete product is the only function of this class. It needs to inherit creator as the factoryMethod() method is declared there.  (PatternPal only checks for one class).
         /// </summary>
         internal static string Explanation4 {
             get {

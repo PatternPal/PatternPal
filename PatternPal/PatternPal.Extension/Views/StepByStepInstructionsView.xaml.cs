@@ -156,9 +156,9 @@ namespace PatternPal.Extension.Views
                     return;
                 }
             }
-            catch(Exception exception)
+            catch(Exception)
             {
-                Console.WriteLine(exception);
+                GrpcHelper.ShowErrorMessage("Check of step gave an exception");
                 return;
             }
 
