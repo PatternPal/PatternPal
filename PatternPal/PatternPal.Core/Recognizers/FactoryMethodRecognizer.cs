@@ -207,23 +207,23 @@ internal class FactoryMethodRecognizer : IRecognizer, IStepByStepRecognizer
         );
 
 
-        // Step 2: check the creator class
+        // Step 2: check the concrete product class
         generateStepsList.Add(
             new SimpleInstruction(
                 FactoryMethodInstructions.Step2,
                 FactoryMethodInstructions.Explanation2,
-                new List<ICheck> { creator }
+                new List<ICheck> { concreteProduct }
             )
         );
 
 
 
-        // Step 3: check the concrete product class
+        // Step 3: check the creator class
         generateStepsList.Add(
             new SimpleInstruction(
                 FactoryMethodInstructions.Step3,
                 FactoryMethodInstructions.Explanation3,
-                new List<ICheck> { concreteProduct }
+                new List<ICheck> { creator }
             )
         );
 
