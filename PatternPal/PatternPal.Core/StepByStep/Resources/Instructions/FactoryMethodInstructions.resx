@@ -118,27 +118,27 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Explanation1" xml:space="preserve">
-    <value>The constructor is private to prevent direct instantiation of the class from outside the class. This ensures that only one object is created.</value>
+    <value>It needs to be an interface as all the properties of all concrete products get declared in this interface.</value>
   </data>
   <data name="Explanation2" xml:space="preserve">
-    <value>The field is static since the Singleton should be stateless</value>
+    <value>It need to be two classes because using the factory method pattern for just one concrete product is not useful. It also needs to inherit product as the properties of a concrete product are declared there.</value>
   </data>
   <data name="Explanation3" xml:space="preserve">
-    <value>This method will act as a constructor. It calls the constructor and saves the object in the field of the previous step. The subsequent calls will return that same instance, instead of creating a new one. </value>
+    <value>The creator is an abstract class and not an interface because this class also has functions outside of creating a product. Only the method responsible for creating a product, the factoryMethod(), is abstract as this is the only function of the concrete creator classes.</value>
   </data>
   <data name="Explanation4" xml:space="preserve">
-    <value>By how we made the Singleton, we ensure that any client accessing the field of the Singleton will get access to the same field instance.</value>
+    <value>It need to be two classes because every concrete product should have its own concrete creator and there are at least two concrete products. Each concrete creator is a factory for one concrete product. and creating that concrete product is the only function of this class. It needs to inherit creator as the factoryMethod() method is declared there.</value>
   </data>
   <data name="Step1" xml:space="preserve">
-    <value>Create a constructor that is only private.</value>
+    <value>Create an interface. We refer to this interface as the Product.</value>
   </data>
   <data name="Step2" xml:space="preserve">
-    <value>Create a static, private field with the same type as the class.</value>
+    <value>Create two new classes which inherit the Product. We refer to these classes as Concrete Product.</value>
   </data>
   <data name="Step3" xml:space="preserve">
-    <value>Create a static, public/internal method that acts as the constructor. When called and the field from the previous step is null call the constructor, otherwise, return the field.</value>
+    <value>Create an abstract class which will contain an public abstract method which will return something of type Product. This class will be referred to as Creator.</value>
   </data>
   <data name="Step4" xml:space="preserve">
-    <value>Create a client class that calls the method from the previous step to retrieve the Singleton instance. </value>
+    <value>Create two classes which will inherit from the Creator class. Each class will have exactly one method which will create and return a different concrete product. This class will be referred to as Concrete Creator</value>
   </data>
 </root>

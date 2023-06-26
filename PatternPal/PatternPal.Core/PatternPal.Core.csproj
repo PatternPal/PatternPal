@@ -46,9 +46,9 @@
       <AutoGen>True</AutoGen>
     </Compile>
     <Compile Update="StepByStep\Resources\Instructions\SingletonInstructions.Designer.cs">
+      <DependentUpon>SingletonInstructions.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>SingletonInstructions.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -66,8 +66,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="StepByStep\Resources\Instructions\SingletonInstructions.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>SingletonInstructions.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
   </ItemGroup>
 
