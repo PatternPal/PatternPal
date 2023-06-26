@@ -10,72 +10,82 @@ namespace PatternPal.Core.Recognizers.Helper_Classes;
 /// </summary>
 internal abstract class BridgeRecognizerParent
 {
+    public MethodCheck ImplementationMethod { get; private set; }
+    public CheckBase ImplementationClass { get; private set; }
+    public ICheck AbstractionFieldOrPropertyCheck { get; private set; }
+    public PropertyCheck ImplementationProperty { get; private set; }
+    public MethodCheck AbstractionMethodUsesImplementationMethod { get; private set; }
+    public ClassCheck ConcreteImplementationClass { get; private set; }
+    public ClassCheck AbstractionClass { get; private set; }
+    public ICheck ClientUsesMethod { get; private set; }
+    public ClassCheck ClientClass { get; private set; }
+
+    public void Initialize()
+    {
+        ImplementationMethod = HasMethodCheck();
+        ImplementationClass = ImplementationCheckBase();
+        AbstractionFieldOrPropertyCheck = HasFieldOrPropertyCheck(out PropertyCheck implementationProperty);
+        ImplementationProperty = implementationProperty;
+        AbstractionMethodUsesImplementationMethod = HasMethodWithUseCheck();
+        ConcreteImplementationClass = ConcreteImplementationCheck();
+        AbstractionClass = Class(
+            Priority.Knockout,
+            "2. Abstraction Class",
+            AbstractionFieldOrPropertyCheck,
+            AbstractionMethodUsesImplementationMethod,
+            SetAvailabilityFieldOrPropertyCheck(
+                out ConstructorCheck setImplementationConstructor,
+                out MethodCheck setImplementationMethod)
+        );
+        ClientUsesMethod = Uses(Priority.Mid, "5a. Calls a method in the Abstraction class.", AbstractionMethodUsesImplementationMethod);
+        ClientClass = ClientClassCheck(
+            ClientUsesMethod,
+            ConcreteImplementationClass,
+            ImplementationProperty,
+            setImplementationConstructor,
+            setImplementationMethod
+        );
+    }
+
     /// <summary>
     /// A method that creates a list of <see cref="ICheck"/>s that represent the basis of the Bridge pattern.  
     /// </summary>
     /// <returns>An array of <see cref="ICheck"/>s containing the five class checks that a bridge pattern holds.</returns>
     public ICheck[] Checks()
     {
-        // requirements checks for Implementation 
-        // req. b
-        MethodCheck methodInImplementation = HasMethodCheck();
-
-        // req. a
-        CheckBase implementationCheck = HasInterfaceOrAbstractClassWithMethodCheck(methodInImplementation);
-
         // requirements checks for Abstraction class
-        // req. a
-        ICheck fieldOrProperty = HasFieldOrPropertyCheck(out PropertyCheck implementationProperty, implementationCheck);
-
         // req. b
         MethodCheck methodInAbstraction = Method(Priority.Knockout, "2b. Has a method.");
 
-        // req. c
-        MethodCheck methodInAbstractionWithUse = HasMethodWithUseCheck(methodInImplementation);
-
         // req. d
         ICheck setAvailabilityFieldOrProperty = SetAvailabilityFieldOrPropertyCheck(
-            out ConstructorCheck setImplementationConstructor, out MethodCheck setImplementationMethod, 
-            implementationCheck, implementationProperty);
+            out ConstructorCheck setImplementationConstructor, out MethodCheck setImplementationMethod);
 
-        ClassCheck abstractionCheck = Class(Priority.High,
+        ClassCheck abstractionCheck = Class(
+            Priority.Knockout,
             "2. Abstraction Class",
-            fieldOrProperty, 
-            methodInAbstraction, 
-            methodInAbstractionWithUse, 
-            setAvailabilityFieldOrProperty);
-
-        // requirements checks for Concrete Implementations
-        // req. a & b 
-        ClassCheck concreteImplementationCheck = ConcreteImplementationCheck(implementationCheck, methodInImplementation);
+            methodInAbstraction,
+            AbstractionFieldOrPropertyCheck,
+            AbstractionMethodUsesImplementationMethod,
+            setAvailabilityFieldOrProperty
+        );
 
         // requirements checks for Refined Abstraction
-        // req. a
-        ICheck inheritsFromAbstraction = Inherits(Priority.Knockout,"4a. Inherits from the Abstraction class.", abstractionCheck);
+        // req. a & b
+        ClassCheck refinedAbstractionCheck = RefinedAbstractionClassCheck(abstractionCheck);
 
-        // req. b
-        ICheck methodInRefinedAbstraction = Method(Priority.High, "4b. Has a method.");
 
-        ClassCheck refinedAbstractionCheck = Class(Priority.High,"4. Refined Abstraction Class", inheritsFromAbstraction, methodInRefinedAbstraction);
-
-        // requirements checks for Client
-        // req. a 
-        MethodCheck methodUseInAbstraction = Method(Priority.Mid, "5a. Has a method that calls a method in the Abstraction class.", Uses(Priority.Mid, methodInAbstractionWithUse));
-
-        // req. c
-        ICheck setsImplementationField = SetsImplementationFieldCheck(implementationProperty, setImplementationConstructor, setImplementationMethod);
-
-        
-        ClassCheck clientCheck = Class( 
-            Priority.Low,
-            "5. Client Class",
-            methodUseInAbstraction,
-            Creates(Priority.Low, "5b. Creates a Concrete Implementation instance.", concreteImplementationCheck), 
-            setsImplementationField );
+        ClassCheck clientCheck = ClientClassCheck(
+            ClientUsesMethod,
+            ConcreteImplementationClass,
+            ImplementationProperty,
+            setImplementationConstructor,
+            setImplementationMethod
+        );
 
         return new ICheck[]
         {
-            implementationCheck , abstractionCheck, concreteImplementationCheck, refinedAbstractionCheck, clientCheck
+            ImplementationClass , abstractionCheck, ConcreteImplementationClass, refinedAbstractionCheck, clientCheck
         };
         
     }
@@ -92,7 +102,7 @@ internal abstract class BridgeRecognizerParent
     /// </summary>
     /// <param name="methodInImplementation">The method that the class or interface should have. </param>
     /// <returns>A <see cref="CheckBase"/> with a <see cref="MethodCheck"/>.</returns>
-    public abstract CheckBase HasInterfaceOrAbstractClassWithMethodCheck(MethodCheck methodInImplementation);
+    public abstract CheckBase ImplementationCheckBase();
 
     /// <summary>
     /// A <see cref="ICheck"/> which checks for the existence of either a field or a property with type
@@ -102,11 +112,11 @@ internal abstract class BridgeRecognizerParent
     /// <param name="implementationCheck"> A <see cref="CheckBase"/> that either holds a <see cref="InterfaceCheck"/>
     /// or a <see cref="ClassCheck"/>.</param>
     /// <returns>A <see cref="ICheck"/> that checks for the existence of either a field or a property. </returns>
-    public ICheck HasFieldOrPropertyCheck(out PropertyCheck implementationProperty, CheckBase implementationCheck)
+    public ICheck HasFieldOrPropertyCheck(out PropertyCheck implementationProperty)
     {
         implementationProperty = Property(Priority.Knockout,
             Type(Priority.Knockout, 
-                implementationCheck
+                ImplementationClass
             ),
             Any(Priority.Knockout,
                 Modifiers(Priority.Knockout, 
@@ -124,7 +134,7 @@ internal abstract class BridgeRecognizerParent
             Field(
                 Priority.Knockout,
                 Type( Priority.Knockout, 
-                    implementationCheck
+                    ImplementationClass
                 ),
                 Any(Priority.Knockout, 
                     Modifiers(Priority.Knockout, 
@@ -145,14 +155,14 @@ internal abstract class BridgeRecognizerParent
     /// </summary>
     /// <param name="methodInImplementation"> A <see cref="MethodCheck"/> that is declared in the Implementation class or interface </param>
     /// <returns>A <see cref="MethodCheck"/> that checks for the uses relation with <paramref name="methodInImplementation"/>.</returns>
-    public MethodCheck HasMethodWithUseCheck(MethodCheck methodInImplementation)
+    public MethodCheck HasMethodWithUseCheck()
     {
         return Method(
             Priority.High,
             "2c. Has a method that calls a method in the Implementation interface or abstract class.",
             Uses(
                 Priority.High,
-                methodInImplementation
+                ImplementationMethod
             )
         );
     }
@@ -172,8 +182,7 @@ internal abstract class BridgeRecognizerParent
     /// <returns>A <see cref="ICheck"/> that holds a check that verifies the existence of an instance that adheres to
     /// the <paramref name="setImplementationConstructor"/> check or the <paramref name="setImplementationMethod" /> check
     /// or the <paramref name="implementationProperty"/> check.</returns>
-    internal ICheck SetAvailabilityFieldOrPropertyCheck(out ConstructorCheck setImplementationConstructor, out MethodCheck setImplementationMethod,
-        CheckBase implementationCheck, PropertyCheck implementationProperty)
+    internal ICheck SetAvailabilityFieldOrPropertyCheck(out ConstructorCheck setImplementationConstructor, out MethodCheck setImplementationMethod)
     {
         ICheck[] properties = new ICheck[]
         {
@@ -190,7 +199,7 @@ internal abstract class BridgeRecognizerParent
             Parameters(
                 Priority.Mid,
                 Type(Priority.Mid, 
-                    implementationCheck
+                    ImplementationClass
                 )
             )
         };
@@ -202,7 +211,7 @@ internal abstract class BridgeRecognizerParent
         return Any(
             Priority.Mid,
             "2d. Has either a property as described in the first requirement, or a constructor or a method with a parameter that has the Implementation type and uses the field as described in the first requirement.",
-            implementationProperty,
+            ImplementationProperty,
             setImplementationConstructor,
             setImplementationMethod
         );
@@ -212,11 +221,40 @@ internal abstract class BridgeRecognizerParent
     /// A <see cref="ClassCheck"/> that checks the requirements of the Concrete Implementation class, which holds a
     /// <see cref="RelationCheck"/> to check the relation with the Implementation class or interface
     /// </summary>
-    /// <param name="implementationCheck">The Implementation abstract <see cref="ClassCheck"/> or <see cref="InterfaceCheck"/></param>
-    /// <param name="methodInImplementation">The <see cref="MethodCheck"/> in the Implementation class or interface</param>
     /// <returns>A <see cref="ClassCheck"/> that checks for a class that adheres to the requirements of an instance of
     /// the concreteImplementation</returns>
-    public abstract ClassCheck ConcreteImplementationCheck(CheckBase implementationCheck, MethodCheck methodInImplementation);
+    public abstract ClassCheck ConcreteImplementationCheck();
+
+    public ClassCheck RefinedAbstractionClassCheck(ClassCheck abstractionCheck)
+    {
+        return Class(
+            Priority.Knockout,
+            Inherits(
+                Priority.Knockout, 
+                "4a. Inherits from the Abstraction class.",
+                abstractionCheck
+            ),
+            Method(
+                Priority.High, 
+                "4b. Has a method."
+            )
+        );
+    }
+
+    public ClassCheck ClientClassCheck(
+        ICheck methodInAbstractionWithUse, ClassCheck concreteImplementationCheck, 
+        PropertyCheck implementationProperty, ConstructorCheck setImplementationConstructor, 
+        MethodCheck setImplementationMethod)
+    {
+        return Class(
+            Priority.Low,
+            "5. Client Class",
+            methodInAbstractionWithUse,
+            Creates(Priority.Low, "5b. Creates a Concrete Implementation instance.", concreteImplementationCheck),
+            SetsImplementationFieldCheck(implementationProperty, setImplementationConstructor, setImplementationMethod)
+        );
+
+    }
 
     /// <summary>
     /// A method that creates a check that checks whether there is a <see cref="RelationType.Uses"/> relation with either <paramref name="implementationProperty"/>

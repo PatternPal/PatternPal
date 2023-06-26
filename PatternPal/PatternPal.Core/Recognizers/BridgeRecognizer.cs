@@ -1,6 +1,10 @@
 ﻿#region 
+
 using PatternPal.Core.Recognizers.Helper_Classes;
+using PatternPal.Core.StepByStep;
+using PatternPal.Core.StepByStep.Resources.Instructions;
 using static PatternPal.Core.Checks.CheckBuilder;
+
 #endregion
 
 namespace PatternPal.Core.Recognizers;
@@ -42,23 +46,142 @@ namespace PatternPal.Core.Recognizers;
 ///         2. a constructor as described in Abstraction d2 <br/>
 ///         3. a method as described in Abstraction d3 <br/>
 /// </remarks>
-internal class BridgeRecognizer : IRecognizer
+internal class BridgeRecognizer : IRecognizer, IStepByStepRecognizer
 {
-    /// <inheritdoc />
+    /// <inheritdoc cref="IRecognizer" />
     public string Name => "Bridge";
 
-    /// <inheritdoc />
+    /// <inheritdoc cref="IRecognizer"/>
     public Recognizer RecognizerType => Recognizer.Bridge;
 
-    readonly BridgeRecognizerParent _abstractAbstraction = new BridgeRecognizerAbstractClass();
-    readonly BridgeRecognizerParent _interfaceAbstraction = new BridgeRecognizerInterface();
+    /// <inheritdoc />
+    public List<IInstruction> GenerateStepsList()
+    {
+        List <IInstruction> steps = new()
+        {
+            new SimpleInstruction(
+                BridgeInstructions.Step1,
+                BridgeInstructions.Explanation1,
+                new List<ICheck>
+                {
+                    Any(
+                        Priority.Knockout,
+                        _abstractBridge.ImplementationClass, 
+                        _interfaceBridge.ImplementationClass
+                    )
+                }
+            ),
+            new SimpleInstruction(
+                BridgeInstructions.Step2,
+                BridgeInstructions.Explanation2,
+                new List<ICheck>
+                {
+                    Class(
+                        Priority.Knockout,
+                        Any(
+                            Priority.Knockout,
+                            _abstractBridge.AbstractionFieldOrPropertyCheck, 
+                            _interfaceBridge.AbstractionFieldOrPropertyCheck)
+                    )
+                }
+            ),
+            new SimpleInstruction(
+                BridgeInstructions.Step3,
+                BridgeInstructions.Explanation3,
+                new List<ICheck>
+                {
+                    Any(
+                        Priority.Knockout,
+                        Class(
+                            Priority.Knockout,
+                            _abstractBridge.AbstractionFieldOrPropertyCheck,
+                            _abstractBridge.AbstractionMethodUsesImplementationMethod
+                        ),
+                        Class(
+                            Priority.Knockout,
+                            _interfaceBridge.AbstractionFieldOrPropertyCheck,
+                            _interfaceBridge.AbstractionMethodUsesImplementationMethod
+                        )
+                    )
+                }
+            ),
+            new SimpleInstruction(
+                BridgeInstructions.Step4,
+                BridgeInstructions.Explanation4,
+                new List<ICheck>
+                {
+                    Any( 
+                        Priority.Knockout,
+                        _abstractBridge.AbstractionClass,  
+                        _interfaceBridge.AbstractionClass
+                    )
+                }
+            ),
+            new SimpleInstruction(
+                BridgeInstructions.Step5,
+                BridgeInstructions.Explanation5,
+                new List<ICheck>
+                {
+                    Any(
+                        Priority.Knockout,
+                        _abstractBridge.ConcreteImplementationClass,
+                        _interfaceBridge.ConcreteImplementationClass
+                    )
+                }
+            ),
+            new SimpleInstruction(
+                BridgeInstructions.Step6,
+                BridgeInstructions.Explanation6,
+                new List<ICheck>
+                {
+                    Any( 
+                        Priority.Knockout,
+                        _abstractBridge.RefinedAbstractionClassCheck(_abstractBridge.AbstractionClass),
+                        _interfaceBridge.RefinedAbstractionClassCheck(_interfaceBridge.AbstractionClass)
+                    )
+                    
+                }
+            ),
+            new SimpleInstruction(
+                BridgeInstructions.Step7,
+                BridgeInstructions.Explanation7,
+                new List<ICheck>
+                {
+                    Any(
+                        Priority.Knockout,
+                        Class(Priority.Knockout, _abstractBridge.ClientUsesMethod),
+                        Class(Priority.Knockout, _interfaceBridge.ClientUsesMethod)
+                    )
+                }
+            ),
+            new SimpleInstruction(
+                BridgeInstructions.Step8,
+                BridgeInstructions.Explanation8,
+                new List<ICheck>{
+                    Any(
+                        Priority.Knockout,
+                        _abstractBridge.ClientClass,
+                        _interfaceBridge.ClientClass
+                    )
+                }
+            ),
+        };
+
+
+
+        return steps;
+    }
+    
+
+    readonly BridgeRecognizerParent _abstractBridge = new BridgeRecognizerAbstractClass();
+    readonly BridgeRecognizerParent _interfaceBridge = new BridgeRecognizerInterface();
 
     /// <inheritdoc />
     public IEnumerable<ICheck> Create()
     {
         yield return Any(
             Priority.Knockout,
-            Any(Priority.Knockout, _abstractAbstraction.Checks()),
-            All(Priority.Knockout, _interfaceAbstraction.Checks()));
+            Any(Priority.Knockout, _abstractBridge.Checks()),
+            All(Priority.Knockout, _interfaceBridge.Checks()));
     }
 }

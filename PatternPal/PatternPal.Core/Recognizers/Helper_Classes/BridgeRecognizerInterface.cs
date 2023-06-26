@@ -9,6 +9,11 @@ namespace PatternPal.Core.Recognizers.Helper_Classes;
 /// </summary>
 internal class BridgeRecognizerInterface : BridgeRecognizerParent
 {
+    public BridgeRecognizerInterface()
+    {
+        Initialize();
+    }
+
     /// <inheritdoc />
     public override MethodCheck HasMethodCheck()
     {
@@ -16,22 +21,23 @@ internal class BridgeRecognizerInterface : BridgeRecognizerParent
     }
 
     /// <inheritdoc />
-    public override InterfaceCheck HasInterfaceOrAbstractClassWithMethodCheck(MethodCheck methodInImplementation)
+    public override CheckBase ImplementationCheckBase()
     {
+
         return Interface(Priority.Knockout,
             "1. Implementation Interface",
-            methodInImplementation
+            ImplementationMethod
         );
     }
 
     /// <inheritdoc />
-    public override ClassCheck ConcreteImplementationCheck(CheckBase implementationCheck, MethodCheck methodInImplementation)
+    public override ClassCheck ConcreteImplementationCheck()
     {
         return Class(Priority.Knockout,
             "3. Concrete Implementation class",
             Implements(Priority.Knockout,
                 "3a. Implements the Implementation interface.",
-                implementationCheck
+                ImplementationClass
             )
         );
     }
