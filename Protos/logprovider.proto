@@ -22,24 +22,21 @@ string tool_instances = 4;
 
 // Optional columns
 string client_timestamp = 5;
-string experimental_condition = 6; 
-string logging_error_id = 7;
-string parent_event_id = 8;
-string session_id = 9;
-string project_id = 10;
-string code_state_section = 11;
-string compile_result = 12;
-string compile_message_type = 13;
-string compile_message_data = 14;
-string source_location = 15;
-string execution_id = 16;
-patternpal.ExecutionResult execution_result = 17;
-optional string recognizer_result = 18;
-optional string recognizer_config = 19;
-optional string file_path = 20;
-optional string project_directory = 21;
-string old_file_name = 22;
-}
+string parent_event_id = 6;
+string session_id = 7;
+string project_id = 8;
+string code_state_section = 9;
+string compile_result = 10;
+string compile_message_type = 11;
+string compile_message_data = 12;
+string source_location = 13;
+string execution_id = 14;
+patternpal.ExecutionResult execution_result = 15;
+optional string recognizer_result = 16;
+optional string recognizer_config = 17;
+optional string file_path = 18;
+optional string project_directory = 19;
+string old_file_name = 20;
 
 enum LogStatusCodes{
     LSC_UNKNOWN = 0;
