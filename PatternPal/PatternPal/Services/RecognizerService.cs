@@ -113,7 +113,7 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                 100 => $"Well done! You have correctly implemented the {rootResult.Recognizer} design pattern.",
                 >= 75 => $"Nearly there! There are a couple requirements left you still need to implement for a correct implementation of the {rootResult.Recognizer} design pattern.",
                 >= 50 => $"It looks like you are trying to implement the {rootResult.Recognizer} design pattern, but you are still missing quite a few requirements.",
-                _ => "Not enough requirements correctly implemented"
+                _ => "Not enough requirements correctly implemented."
             };
 
             // Threshold for when a result has enough requirements correct to be shown to the user.
@@ -162,8 +162,8 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
     private IEnumerable< EntityResult > GroupResultsByRequirement(
         IOrderedEnumerable< Result > resultsOrderedByRequirements)
     {
-        // TODO: Deduplicate sub-requirements (e.g. an Any check with both options being 1a.)
         EntityResult ? entityResult = null;
+        Dictionary< string, Result > subResultsByPrefix = new();
         foreach (Result result in resultsOrderedByRequirements)
         {
             string[ ] parts = result.Requirement.Split(". ");
@@ -212,7 +212,29 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
             }
 
             result.Requirement = parts[ 1 ];
-            entityResult.Requirements.Add(result);
+
+            // ASSUME: If there are multiple sub-requirements with the same prefix, only 1 will be
+            // correct. Use the one which is correct, or which came first if somehow both are
+            // correct.
+            //Result ? duplicateRequirement = entityResult.Requirements.FirstOrDefault(r => r.Requirement == result.Requirement);
+            if (subResultsByPrefix.TryGetValue(
+                parts[ 0 ],
+                out Result ? duplicateRequirement))
+            {
+                if (duplicateRequirement.Correctness > result.Correctness)
+                {
+                    // Replace the duplicate requirement.
+                    entityResult.Requirements[ entityResult.Requirements.IndexOf(duplicateRequirement) ] = result;
+                    subResultsByPrefix[ parts[ 0 ] ] = result;
+                }
+            }
+            else
+            {
+                entityResult.Requirements.Add(result);
+                subResultsByPrefix.TryAdd(
+                    parts[ 0 ],
+                    result);
+            }
         }
 
         if (null != entityResult)

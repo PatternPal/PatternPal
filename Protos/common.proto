@@ -50,6 +50,9 @@ message Result {
 }
 
 // How well a requirement has been implemented.
+// IMPORTANT: There is code which relies on the fact that `C_CORRECT` is the smallest value (aside
+// from `C_UNKNOWN`), and that these results are ordered from most to least correct! New values
+// added to this enum should also use this ordering.
 enum Correctness {
     // The default value.
     C_UNKNOWN = 0;
