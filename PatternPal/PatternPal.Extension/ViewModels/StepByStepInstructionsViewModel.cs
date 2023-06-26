@@ -1,5 +1,6 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 
@@ -85,15 +86,20 @@ namespace PatternPal.Extension.ViewModels
             }
 
             CurrentInstructionNumber++;
-            if (_currentInstructionNumber >= _instructions.Count
-                || null == _instructions[ _currentInstructionNumber ])
+            if (_currentInstructionNumber >= _instructions.Count)
             {
-                _instructions.Add(
-                    GetInstructionById(
-                        CurrentInstructionNumber - 1,
-                        Recognizer));
+                try
+                {
+                    Instruction value = _instructions[_currentInstructionNumber-1];
+                }
+                catch
+                {
+                    _instructions.Add(
+                        GetInstructionById(
+                            CurrentInstructionNumber - 1,
+                            Recognizer));
+                }
             }
-
             OnPropertyChanged(nameof( CurrentInstruction ));
             return true;
         }
