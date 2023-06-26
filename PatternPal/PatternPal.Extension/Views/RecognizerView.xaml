@@ -148,42 +148,29 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="40" />
             <RowDefinition Height="30" />
-            <RowDefinition x:Name="SummaryRow" Height="0" />
             <RowDefinition Height="1*" />
-            <RowDefinition Height="20" />
         </Grid.RowDefinitions>
-        <StackPanel Margin="5 0 0 0" Orientation="Horizontal" Grid.Row="1">
+        <StackPanel Margin="5 0 0 0" Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
             <Rectangle Width="15" Height="15" Fill="#4496F3" Margin="0,0,2,0" />
             <TextBlock Text="Settings" Foreground="#4496F3" VerticalAlignment="Top" FontSize="15" FontWeight="Bold"
                        Margin="5" />
         </StackPanel>
-        <Border Grid.Row="2" BorderThickness="0 0 0 0" Style="{StaticResource ButtonBorder}" Margin="20,0,0,0">
+        <Border Grid.Row="2" Grid.Column="0" BorderThickness="0 0 0 0" Style="{StaticResource ButtonBorder}"
+                Margin="10,0,0,0">
             <CheckBox x:Name="SelectAll" Margin="5 0 0 0" Content="Select All Patterns" HorizontalAlignment="Left"
                       VerticalAlignment="Center" Unchecked="SelectAll_Unchecked" Checked="SelectAll_Checked" />
         </Border>
-        <usercontrol:PatternCheckbox Grid.Row="3" x:Name="PatternCheckbox" Margin="20,0,20,0" />
-        <usercontrol:SelectPaths Grid.Row="4" x:Name="SelectPaths" Margin="20,10,20,0" />
-        <Border x:Name="ButtonBorder" Grid.Row="5" Background="Transparent" BorderThickness="0 0" Margin="20,0,20,0"
-                Style="{StaticResource ButtonBorder}">
-            <Grid>
-                <Button Name="AnalyzeBtn" Content="{x:Static UIResources:ExtensionUIResources.Analyse}" Height="30"
-                        Click="Analyse_Button" Margin="5 0" />
-            </Grid>
-        </Border>
-        <DockPanel FocusVisualStyle="{x:Null}" Grid.Row="6">
-            <StackPanel Margin="5 0 0 0" Orientation="Horizontal" DockPanel.Dock="Left">
-                <Rectangle Width="15" Height="15" Fill="#4496F3" Margin="0,0,2,0" />
-                <TextBlock x:Name="CheckBo" Text="{x:Static UIResources:ExtensionUIResources.Output}"
-                           Foreground="#4496F3" VerticalAlignment="Top" FontSize="15" FontWeight="Bold"
-                           Margin="5,5,5,0" />
-            </StackPanel>
-            <CheckBox Margin="0 0 5 0" x:Name="ShowAllCheckBox" DockPanel.Dock="Right" Content="Show All" IsChecked="True"
-                      FlowDirection="RightToLeft" Style="{DynamicResource CheckboxStyle}" Checked="ShowAllCheckBox_OnChecked"
-                      Unchecked="ShowAllCheckBox_OnUnchecked" />
-        </DockPanel>
-        <TextBlock Grid.Row="7" x:Name="SummaryControl" TextWrapping="Wrap" Margin="20,8,20,8" MaxWidth="450" HorizontalAlignment="Left"/>
-        <usercontrol:ExpanderResults x:Name="ExpanderResults" Grid.Row="8" Margin="20,0,20,0" />
-        <ProgressBar Grid.Row="9" Height="20" VerticalAlignment="Bottom" Minimum="0" Maximum="100" Name="statusBar" />
-        <TextBlock Grid.Row="9" x:Name="ProgressStatusBlock" Height="20" HorizontalAlignment="Left" FontWeight="Bold" Margin="150,0,0,0" />
+        <usercontrol:PatternCheckbox Grid.Row="3" Grid.Column="0" x:Name="PatternCheckbox" Margin="10,0,10,0" />
+        <usercontrol:SelectPaths Grid.Row="4" Grid.Column="0" x:Name="SelectPaths" Margin="10,10,10,0" />
+        <Button Grid.Row="5" Grid.Column="0" Name="AnalyzeBtn"
+                Content="{x:Static UIResources:ExtensionUIResources.Analyse}" Height="30"
+                Click="Analyse_Button" Margin="10,0,10,0" />
+        <StackPanel Grid.Row="6" Grid.Column="0" Margin="5 0 0 0" Orientation="Horizontal" DockPanel.Dock="Left">
+            <Rectangle Width="15" Height="15" Fill="#4496F3" Margin="0,0,2,0" />
+            <TextBlock Text="{x:Static UIResources:ExtensionUIResources.Output}" Foreground="#4496F3"
+                       VerticalAlignment="Top" FontSize="15" FontWeight="Bold"
+                       Margin="5,5,5,0" />
+        </StackPanel>
+        <usercontrol:ExpanderResults Grid.Row="7" Grid.Column="0" x:Name="ExpanderResults" Margin="10,0,10,0" />
     </Grid>
 </UserControl>
