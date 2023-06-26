@@ -17,7 +17,7 @@ namespace PatternPal.Extension.ViewModels
     /// </summary>
     public class StepByStepInstructionsViewModel : ViewModel
     {
-        private readonly IList< Instruction > _instructions;
+        private readonly Instruction[] _instructions;
         private readonly InstructionSet _instructionSet;
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace PatternPal.Extension.ViewModels
         /// <summary>
         /// Files to check for each step.
         /// </summary>
-        public List< string > FilePaths { get; set; }
+        public List<string> FilePaths { get; set; }
 
         /// <summary>
         /// The mode in which Step by Step operates.
@@ -43,7 +43,7 @@ namespace PatternPal.Extension.ViewModels
         /// <summary>
         /// The current <see cref="Instruction"/>.
         /// </summary>
-        public Instruction CurrentInstruction => _instructions[ _currentInstructionNumber - 1 ];
+        public Instruction CurrentInstruction => _instructions[_currentInstructionNumber - 1];
 
         private int _currentInstructionNumber;
 
@@ -56,7 +56,7 @@ namespace PatternPal.Extension.ViewModels
             private set
             {
                 _currentInstructionNumber = value;
-                OnPropertyChanged(nameof( Title ));
+                OnPropertyChanged(nameof(Title));
             }
         }
 
@@ -71,7 +71,7 @@ namespace PatternPal.Extension.ViewModels
             }
 
             CurrentInstructionNumber--;
-            OnPropertyChanged(nameof( CurrentInstruction ));
+            OnPropertyChanged(nameof(CurrentInstruction));
             return true;
         }
 
@@ -86,23 +86,15 @@ namespace PatternPal.Extension.ViewModels
             }
 
             CurrentInstructionNumber++;
-            // If the current instruction number is higher than the number of instructions so far
-            // then see if there is already an entry otherwise add.
-            if (_currentInstructionNumber >= _instructions.Count)
+
+            if (null == _instructions[CurrentInstructionNumber - 1])
             {
-                try
-                {
-                    Instruction value = _instructions[_currentInstructionNumber-1];
-                }
-                catch
-                {
-                    _instructions.Add(
-                        GetInstructionById(
-                            CurrentInstructionNumber - 1,
-                            Recognizer));
-                }
+                _instructions[CurrentInstructionNumber - 1] = GetInstructionById(
+                    CurrentInstructionNumber,
+                    Recognizer);
             }
-            OnPropertyChanged(nameof( CurrentInstruction ));
+
+            OnPropertyChanged(nameof(CurrentInstruction));
             return true;
         }
 
@@ -132,9 +124,9 @@ namespace PatternPal.Extension.ViewModels
             NavigationStore navigationStore,
             Recognizer recognizer,
             StepByStepModes mode,
-            List< string > filePaths)
+            List<string> filePaths)
         {
-            NavigateHomeCommand = new NavigateCommand< HomeViewModel >(
+            NavigateHomeCommand = new NavigateCommand<HomeViewModel>(
                 navigationStore,
                 () => new HomeViewModel(navigationStore));
             Recognizer = recognizer;
@@ -147,13 +139,12 @@ namespace PatternPal.Extension.ViewModels
                     });
             _instructionSet = instructionSetResponse.SelectedInstructionset;
 
-            _instructions = new List< Instruction >((int)_instructionSet.NumberOfInstructions)
-                            {
-                                GetInstructionById(
-                                    CurrentInstructionNumber,
-                                    recognizer),
-                            };
+            _instructions = new Instruction[(int)_instructionSet.NumberOfInstructions];
+            
             CurrentInstructionNumber = 1;
+            _instructions[CurrentInstructionNumber - 1] = GetInstructionById(
+                CurrentInstructionNumber,
+                recognizer);
 
             Mode = mode;
             FilePaths = filePaths;
