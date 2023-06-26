@@ -1,5 +1,7 @@
 ﻿#region
+
 using static PatternPal.Core.Checks.CheckBuilder;
+
 #endregion
 
 namespace PatternPal.Core.Recognizers.Helper_Classes;

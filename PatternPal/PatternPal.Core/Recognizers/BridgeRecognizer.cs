@@ -57,8 +57,9 @@ internal class BridgeRecognizer : IRecognizer, IStepByStepRecognizer
     /// <inheritdoc />
     public List<IInstruction> GenerateStepsList()
     {
-        List <IInstruction> steps = new()
+        return new List <IInstruction>() 
         {
+            // Step 1. Create the Implementation Interface or Abstract Class + method
             new SimpleInstruction(
                 BridgeInstructions.Step1,
                 BridgeInstructions.Explanation1,
@@ -71,11 +72,17 @@ internal class BridgeRecognizer : IRecognizer, IStepByStepRecognizer
                     )
                 }
             ),
+            // Step 2. Create the Abstraction class with private / protected field or property
             new SimpleInstruction(
                 BridgeInstructions.Step2,
                 BridgeInstructions.Explanation2,
                 new List<ICheck>
                 {
+                    Any(
+                        Priority.Knockout,
+                        _abstractBridge.ImplementationClass,
+                        _interfaceBridge.ImplementationClass
+                    ),
                     Class(
                         Priority.Knockout,
                         Any(
@@ -85,11 +92,17 @@ internal class BridgeRecognizer : IRecognizer, IStepByStepRecognizer
                     )
                 }
             ),
+            // Step 3. Create a method class in the Abstraction class that calls the method in Implementation
             new SimpleInstruction(
                 BridgeInstructions.Step3,
                 BridgeInstructions.Explanation3,
                 new List<ICheck>
                 {
+                    Any(
+                        Priority.Knockout,
+                        _abstractBridge.ImplementationClass,
+                        _interfaceBridge.ImplementationClass
+                    ),
                     Any(
                         Priority.Knockout,
                         Class(
@@ -105,11 +118,17 @@ internal class BridgeRecognizer : IRecognizer, IStepByStepRecognizer
                     )
                 }
             ),
+            // Step 4. Create an instance that can set the value of the field if chosen in Step 2
             new SimpleInstruction(
                 BridgeInstructions.Step4,
                 BridgeInstructions.Explanation4,
                 new List<ICheck>
                 {
+                    Any(
+                        Priority.Knockout,
+                        _abstractBridge.ImplementationClass,
+                        _interfaceBridge.ImplementationClass
+                    ),
                     Any( 
                         Priority.Knockout,
                         _abstractBridge.AbstractionClass,  
@@ -117,6 +136,8 @@ internal class BridgeRecognizer : IRecognizer, IStepByStepRecognizer
                     )
                 }
             ),
+            // Step 5. Create a class that inherits form the Implementation abstract class or inherits from the
+            // Implementation interface. In the first case it should override the method. 
             new SimpleInstruction(
                 BridgeInstructions.Step5,
                 BridgeInstructions.Explanation5,
@@ -124,24 +145,50 @@ internal class BridgeRecognizer : IRecognizer, IStepByStepRecognizer
                 {
                     Any(
                         Priority.Knockout,
+                        _abstractBridge.ImplementationClass,
+                        _interfaceBridge.ImplementationClass
+                    ),
+                    Any(
+                        Priority.Knockout,
+                        _abstractBridge.AbstractionClass,
+                        _interfaceBridge.AbstractionClass
+                    ),
+                    Any(
+                        Priority.Knockout,
                         _abstractBridge.ConcreteImplementationClass,
                         _interfaceBridge.ConcreteImplementationClass
                     )
                 }
             ),
+            // Step 6. Create a Refined Abstraction class that inherits from the Abstraction class and has a method
             new SimpleInstruction(
                 BridgeInstructions.Step6,
                 BridgeInstructions.Explanation6,
                 new List<ICheck>
                 {
+                    Any(
+                        Priority.Knockout,
+                        _abstractBridge.ImplementationClass,
+                        _interfaceBridge.ImplementationClass
+                    ),
+                    Any(
+                        Priority.Knockout,
+                        _abstractBridge.AbstractionClass,
+                        _interfaceBridge.AbstractionClass
+                    ),
+                    Any(
+                        Priority.Knockout,
+                        _abstractBridge.ConcreteImplementationClass,
+                        _interfaceBridge.ConcreteImplementationClass
+                    ),
                     Any( 
                         Priority.Knockout,
                         _abstractBridge.RefinedAbstractionClassCheck(_abstractBridge.AbstractionClass),
                         _interfaceBridge.RefinedAbstractionClassCheck(_interfaceBridge.AbstractionClass)
                     )
-                    
                 }
             ),
+            // Step 7. Create a Client class that uses a method in the Abstraction class
             new SimpleInstruction(
                 BridgeInstructions.Step7,
                 BridgeInstructions.Explanation7,
@@ -149,15 +196,58 @@ internal class BridgeRecognizer : IRecognizer, IStepByStepRecognizer
                 {
                     Any(
                         Priority.Knockout,
+                        _abstractBridge.ImplementationClass,
+                        _interfaceBridge.ImplementationClass
+                    ),
+                    Any(
+                        Priority.Knockout,
+                        _abstractBridge.AbstractionClass,
+                        _interfaceBridge.AbstractionClass
+                    ),
+                    Any(
+                        Priority.Knockout,
+                        _abstractBridge.ConcreteImplementationClass,
+                        _interfaceBridge.ConcreteImplementationClass
+                    ),
+                    Any(
+                        Priority.Knockout,
+                        _abstractBridge.RefinedAbstractionClassCheck(_abstractBridge.AbstractionClass),
+                        _interfaceBridge.RefinedAbstractionClassCheck(_interfaceBridge.AbstractionClass)
+                    ),
+                    Any(
+                        Priority.Knockout,
                         Class(Priority.Knockout, _abstractBridge.ClientUsesMethod),
                         Class(Priority.Knockout, _interfaceBridge.ClientUsesMethod)
                     )
                 }
             ),
+            // Step 8. Let the Client class create a Concrete Implementation instance and pass it through either a 
+            // property, constructor or method to the Abstraction class
             new SimpleInstruction(
                 BridgeInstructions.Step8,
                 BridgeInstructions.Explanation8,
-                new List<ICheck>{
+                new List<ICheck>
+                {
+                    Any(
+                        Priority.Knockout,
+                        _abstractBridge.ImplementationClass,
+                        _interfaceBridge.ImplementationClass
+                    ),
+                    Any(
+                        Priority.Knockout,
+                        _abstractBridge.AbstractionClass,
+                        _interfaceBridge.AbstractionClass
+                    ),
+                    Any(
+                        Priority.Knockout,
+                        _abstractBridge.ConcreteImplementationClass,
+                        _interfaceBridge.ConcreteImplementationClass
+                    ),
+                    Any(
+                        Priority.Knockout,
+                        _abstractBridge.RefinedAbstractionClassCheck(_abstractBridge.AbstractionClass),
+                        _interfaceBridge.RefinedAbstractionClassCheck(_interfaceBridge.AbstractionClass)
+                    ),
                     Any(
                         Priority.Knockout,
                         _abstractBridge.ClientClass,
@@ -166,10 +256,6 @@ internal class BridgeRecognizer : IRecognizer, IStepByStepRecognizer
                 }
             ),
         };
-
-
-
-        return steps;
     }
     
 
