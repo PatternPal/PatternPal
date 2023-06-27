@@ -71,6 +71,10 @@ public partial class RecognizerRunner
 
     // The selected recognizers which should be run.
     private readonly IList< IRecognizer > ? _recognizers;
+
+    // The recognizer to which the instruction belongs, if the runner is created for step-by-step
+    // mode.
+    private readonly Recognizer _stepByStepRecognizer;
     private readonly IInstruction ? _instruction;
 
     // The syntax graph of the code currently being recognized.
@@ -126,12 +130,15 @@ public partial class RecognizerRunner
     /// <summary>
     /// Create a new recognizer runner instance.
     /// </summary>
-    /// <param name="filePath">The path of the file to run the <paramref name="instruction"/> on.</param>
+    /// <param name="stepByStepRecognizer">The <see cref="Recognizer"/> to which the <paramref name="instruction"/> belongs.</param>
+    /// <param name="filePaths">The path of the file to run the <paramref name="instruction"/> on.</param>
     /// <param name="instruction">The <see cref="IInstruction"/> to run.</param>
     public RecognizerRunner(
+        Recognizer stepByStepRecognizer,
         IEnumerable< string > filePaths,
         IInstruction instruction)
     {
+        _stepByStepRecognizer = stepByStepRecognizer;
         _instruction = instruction;
         _graph = new SyntaxGraph();
         foreach (string file in filePaths)
@@ -149,9 +156,9 @@ public partial class RecognizerRunner
     }
 
     public record RunResult(
-        Recognizer ? RecognizerType,
+        Recognizer RecognizerType,
         ICheckResult CheckResult,
-        IList< string > ? Requirements);
+        IList< string > Requirements);
 
     /// <summary>
     /// Gets the requirements from the given <paramref name="check"/>.
@@ -222,13 +229,14 @@ public partial class RecognizerRunner
             {
                 ICheck rootCheck = new NodeCheck< INode >(
                     Priority.Knockout,
-                    null,
+                    $"0. {_stepByStepRecognizer}",
                     _instruction.Checks);
+                IList< string > requirements = GetRequirementsFromCheck(rootCheck).ToList();
                 results.Add(
                     new RunResult(
-                        null,
+                        _stepByStepRecognizer,
                         RunImpl(rootCheck),
-                        null));
+                        requirements));
             }
             else
             {
