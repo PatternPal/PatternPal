@@ -24,7 +24,9 @@
     </UserControl.Resources>
 
     <StackPanel>
-        <ItemsControl Name="ResultsView">
+        <ItemsControl
+            MaxWidth="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=ActualWidth}"
+            Name="ResultsView">
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:PatternResultViewModel}">
                     <Grid Margin="0,5,0,5">
