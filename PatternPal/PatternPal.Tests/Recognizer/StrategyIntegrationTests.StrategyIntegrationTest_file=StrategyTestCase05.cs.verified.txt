@@ -84,6 +84,69 @@
                             {
                               ChildrenCheckResults: [
                                 {
+                                  ChildrenCheckResults: [
+                                    {
+                                      Correct: true,
+                                      FeedbackMessage: Node 'ICalculateInterface' has correct type,
+                                      Priority: High,
+                                      DependencyCount: 1,
+                                      MatchedNode: ICalculateInterface,
+                                      Score: {},
+                                      PerfectScore: {}
+                                    }
+                                  ],
+                                  CollectionKind: Any,
+                                  NodeCheckCollectionWrapper: true,
+                                  FeedbackMessage: Found node 'ICalculateInterface',
+                                  Priority: High,
+                                  DependencyCount: 1,
+                                  MatchedNode: ICalculateInterface,
+                                  Score: {},
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: Found parameters for following node: SetStrategy().,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: SetStrategy,
+                              Score: {},
+                              PerfectScore: {}
+                            },
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  CollectionKind: Any,
+                                  NodeCheckCollectionWrapper: true,
+                                  FeedbackMessage: Found node 'ICalculateInterface',
+                                  Priority: High,
+                                  DependencyCount: 1,
+                                  MatchedNode: ICalculateInterface,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: Found parameters for following node: SetStrategy().,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: SetStrategy,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: SetStrategy().,
+                          Priority: High,
+                          DependencyCount: 2,
+                          MatchedNode: SetStrategy,
+                          Score: {},
+                          PerfectScore: {}
+                        },
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              ChildrenCheckResults: [
+                                {
                                   Correct: true,
                                   FeedbackMessage: Node SetStrategy() has a Uses relation with node calculateInterface,
                                   Priority: High,
@@ -125,7 +188,7 @@
                       NodeCheckCollectionWrapper: false,
                       FeedbackMessage: Found method: SetStrategy().,
                       Priority: High,
-                      DependencyCount: 6,
+                      DependencyCount: 8,
                       MatchedNode: SetStrategy,
                       Score: {},
                       PerfectScore: {}
@@ -173,18 +236,104 @@
                           MatchedNode: Calculate,
                           Score: {},
                           PerfectScore: {}
+                        },
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: false,
+                                  FeedbackMessage: ,
+                                  Priority: High,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: The method has no parameters.,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: Calculate,
+                              PerfectScore: {}
+                            },
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: false,
+                                  FeedbackMessage: ,
+                                  Priority: High,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: The method has no parameters.,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: Calculate,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: Calculate().,
+                          Priority: High,
+                          DependencyCount: 2,
+                          MatchedNode: Calculate,
+                          PerfectScore: {}
                         }
                       ],
                       NodeCheckCollectionWrapper: false,
                       FeedbackMessage: Found method: Calculate().,
                       Priority: High,
-                      DependencyCount: 6,
+                      DependencyCount: 8,
                       MatchedNode: Calculate,
                       Score: {},
                       PerfectScore: {}
                     },
                     {
                       ChildrenCheckResults: [
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: false,
+                                  FeedbackMessage: ,
+                                  Priority: High,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: The method has no parameters.,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: UnusedMethod,
+                              PerfectScore: {}
+                            },
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: false,
+                                  FeedbackMessage: ,
+                                  Priority: High,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: The method has no parameters.,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: UnusedMethod,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: UnusedMethod().,
+                          Priority: High,
+                          DependencyCount: 2,
+                          MatchedNode: UnusedMethod,
+                          PerfectScore: {}
+                        },
                         {
                           ChildrenCheckResults: [
                             {
@@ -218,7 +367,7 @@
                       NodeCheckCollectionWrapper: false,
                       FeedbackMessage: Found method: UnusedMethod().,
                       Priority: High,
-                      DependencyCount: 6,
+                      DependencyCount: 8,
                       MatchedNode: UnusedMethod,
                       PerfectScore: {}
                     }
@@ -227,7 +376,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: ,
                   Priority: High,
-                  DependencyCount: 6,
+                  DependencyCount: 8,
                   Score: {},
                   PerfectScore: {}
                 },
@@ -390,7 +539,7 @@
               ],
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'CalculateClient',
-              DependencyCount: 12,
+              DependencyCount: 14,
               MatchedNode: CalculateClient,
               Score: {},
               PerfectScore: {}
@@ -399,7 +548,7 @@
           CollectionKind: Any,
           NodeCheckCollectionWrapper: true,
           FeedbackMessage: ,
-          DependencyCount: 12,
+          DependencyCount: 14,
           Score: {},
           PerfectScore: {}
         },
@@ -633,7 +782,7 @@
                       Correct: true,
                       FeedbackMessage: Node CalculateClient has a Uses relation with node Calculate(),
                       Priority: Low,
-                      DependencyCount: 7,
+                      DependencyCount: 9,
                       MatchedNode: Calculate,
                       Score: {},
                       PerfectScore: {}
@@ -643,7 +792,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for CalculateClient.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: CalculateClient,
                   Score: {},
                   PerfectScore: {}
@@ -652,7 +801,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'CalculateClient',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: CalculateClient,
               Score: {},
               PerfectScore: {}
@@ -725,7 +874,7 @@
                       Correct: true,
                       FeedbackMessage: Node MainApp has a Uses relation with node SetStrategy(),
                       Priority: Low,
-                      DependencyCount: 7,
+                      DependencyCount: 9,
                       MatchedNode: SetStrategy,
                       Score: {},
                       PerfectScore: {}
@@ -734,7 +883,7 @@
                       Correct: true,
                       FeedbackMessage: Node MainApp has a Uses relation with node Calculate(),
                       Priority: Low,
-                      DependencyCount: 7,
+                      DependencyCount: 9,
                       MatchedNode: Calculate,
                       Score: {},
                       PerfectScore: {}
@@ -744,7 +893,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for MainApp.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: MainApp,
                   Score: {},
                   PerfectScore: {}
@@ -753,7 +902,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'MainApp',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: MainApp,
               Score: {},
               PerfectScore: {}
@@ -783,7 +932,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for Minus.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: Minus,
                   PerfectScore: {}
                 }
@@ -791,7 +940,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'Minus',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: Minus,
               PerfectScore: {}
             },
@@ -820,7 +969,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for Plus.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: Plus,
                   PerfectScore: {}
                 }
@@ -828,7 +977,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'Plus',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: Plus,
               PerfectScore: {}
             }
@@ -837,7 +986,7 @@
           NodeCheckCollectionWrapper: true,
           FeedbackMessage: ,
           Priority: Mid,
-          DependencyCount: 13,
+          DependencyCount: 15,
           Score: {},
           PerfectScore: {}
         },
@@ -877,7 +1026,7 @@
       ],
       NodeCheckCollectionWrapper: false,
       FeedbackMessage: Found the required checks for: PatternPal.Core.Runner.<RecognizerRunner>F79CA08E52C22783FA3A0EAEBBC26852FEB0B81B3C120614176DB3EB860E78E94__RootNode.,
-      DependencyCount: 31,
+      DependencyCount: 35,
       Score: {},
       PerfectScore: {}
     },

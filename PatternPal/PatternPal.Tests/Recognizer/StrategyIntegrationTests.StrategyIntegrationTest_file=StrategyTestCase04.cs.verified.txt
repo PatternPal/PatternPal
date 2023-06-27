@@ -120,12 +120,55 @@
                           MatchedNode: CreateArchive,
                           Score: {},
                           PerfectScore: {}
+                        },
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: false,
+                                  FeedbackMessage: ,
+                                  Priority: High,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: The method has no parameters.,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: CreateArchive,
+                              PerfectScore: {}
+                            },
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: false,
+                                  FeedbackMessage: ,
+                                  Priority: High,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: The method has no parameters.,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: CreateArchive,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: CreateArchive().,
+                          Priority: High,
+                          DependencyCount: 2,
+                          MatchedNode: CreateArchive,
+                          PerfectScore: {}
                         }
                       ],
                       NodeCheckCollectionWrapper: false,
                       FeedbackMessage: Found method: CreateArchive().,
                       Priority: High,
-                      DependencyCount: 6,
+                      DependencyCount: 8,
                       MatchedNode: CreateArchive,
                       Score: {},
                       PerfectScore: {}
@@ -135,7 +178,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: ,
                   Priority: High,
-                  DependencyCount: 6,
+                  DependencyCount: 8,
                   Score: {},
                   PerfectScore: {}
                 },
@@ -206,7 +249,7 @@
               ],
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'CompressionContext',
-              DependencyCount: 12,
+              DependencyCount: 14,
               MatchedNode: CompressionContext,
               Score: {},
               PerfectScore: {}
@@ -215,7 +258,7 @@
           CollectionKind: Any,
           NodeCheckCollectionWrapper: true,
           FeedbackMessage: ,
-          DependencyCount: 12,
+          DependencyCount: 14,
           Score: {},
           PerfectScore: {}
         },
@@ -409,7 +452,7 @@
                       Correct: true,
                       FeedbackMessage: Node Program has a Uses relation with node CreateArchive(),
                       Priority: Low,
-                      DependencyCount: 7,
+                      DependencyCount: 9,
                       MatchedNode: CreateArchive,
                       Score: {},
                       PerfectScore: {}
@@ -419,7 +462,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for Program.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: Program,
                   Score: {},
                   PerfectScore: {}
@@ -428,7 +471,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'Program',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: Program,
               Score: {},
               PerfectScore: {}
@@ -458,7 +501,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for CompressionContext.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: CompressionContext,
                   PerfectScore: {}
                 }
@@ -466,7 +509,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'CompressionContext',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: CompressionContext,
               PerfectScore: {}
             },
@@ -495,7 +538,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for RarCompression.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: RarCompression,
                   PerfectScore: {}
                 }
@@ -503,7 +546,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'RarCompression',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: RarCompression,
               PerfectScore: {}
             }
@@ -512,7 +555,7 @@
           NodeCheckCollectionWrapper: true,
           FeedbackMessage: ,
           Priority: Mid,
-          DependencyCount: 13,
+          DependencyCount: 15,
           Score: {},
           PerfectScore: {}
         },
@@ -552,7 +595,7 @@
       ],
       NodeCheckCollectionWrapper: false,
       FeedbackMessage: Found the required checks for: PatternPal.Core.Runner.<RecognizerRunner>F79CA08E52C22783FA3A0EAEBBC26852FEB0B81B3C120614176DB3EB860E78E94__RootNode.,
-      DependencyCount: 31,
+      DependencyCount: 35,
       Score: {},
       PerfectScore: {}
     },

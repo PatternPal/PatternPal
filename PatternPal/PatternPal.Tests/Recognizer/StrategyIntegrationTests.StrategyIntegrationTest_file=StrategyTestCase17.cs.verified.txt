@@ -120,12 +120,55 @@
                           MatchedNode: ContextInterface,
                           Score: {},
                           PerfectScore: {}
+                        },
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: false,
+                                  FeedbackMessage: ,
+                                  Priority: High,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: The method has no parameters.,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: ContextInterface,
+                              PerfectScore: {}
+                            },
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: false,
+                                  FeedbackMessage: ,
+                                  Priority: High,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: The method has no parameters.,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: ContextInterface,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: ContextInterface().,
+                          Priority: High,
+                          DependencyCount: 2,
+                          MatchedNode: ContextInterface,
+                          PerfectScore: {}
                         }
                       ],
                       NodeCheckCollectionWrapper: false,
                       FeedbackMessage: Found method: ContextInterface().,
                       Priority: High,
-                      DependencyCount: 6,
+                      DependencyCount: 8,
                       MatchedNode: ContextInterface,
                       Score: {},
                       PerfectScore: {}
@@ -135,7 +178,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: ,
                   Priority: High,
-                  DependencyCount: 6,
+                  DependencyCount: 8,
                   Score: {},
                   PerfectScore: {}
                 },
@@ -206,7 +249,7 @@
               ],
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'TheContext',
-              DependencyCount: 12,
+              DependencyCount: 14,
               MatchedNode: TheContext,
               Score: {},
               PerfectScore: {}
@@ -215,7 +258,7 @@
           CollectionKind: Any,
           NodeCheckCollectionWrapper: true,
           FeedbackMessage: ,
-          DependencyCount: 12,
+          DependencyCount: 14,
           Score: {},
           PerfectScore: {}
         },
@@ -530,7 +573,7 @@
                       Correct: true,
                       FeedbackMessage: Node TheContext has a Uses relation with node AlgorithmInterface(),
                       Priority: Low,
-                      DependencyCount: 7,
+                      DependencyCount: 9,
                       MatchedNode: AlgorithmInterface,
                       Score: {},
                       PerfectScore: {}
@@ -540,7 +583,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for TheContext.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: TheContext,
                   Score: {},
                   PerfectScore: {}
@@ -558,7 +601,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'TheContext',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: TheContext,
               Score: {},
               PerfectScore: {}
@@ -588,7 +631,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for Strategy.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: Strategy,
                   PerfectScore: {}
                 }
@@ -596,7 +639,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'Strategy',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: Strategy,
               PerfectScore: {}
             },
@@ -625,7 +668,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for ConcreteA.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: ConcreteA,
                   PerfectScore: {}
                 }
@@ -633,7 +676,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'ConcreteA',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: ConcreteA,
               PerfectScore: {}
             },
@@ -662,7 +705,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for ConcreteB.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: ConcreteB,
                   PerfectScore: {}
                 }
@@ -670,7 +713,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'ConcreteB',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: ConcreteB,
               PerfectScore: {}
             },
@@ -699,7 +742,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for ConcreteC.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: ConcreteC,
                   PerfectScore: {}
                 }
@@ -707,7 +750,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'ConcreteC',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: ConcreteC,
               PerfectScore: {}
             },
@@ -736,7 +779,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for TheClient.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: TheClient,
                   PerfectScore: {}
                 }
@@ -744,7 +787,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'TheClient',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: TheClient,
               PerfectScore: {}
             }
@@ -753,14 +796,14 @@
           NodeCheckCollectionWrapper: true,
           FeedbackMessage: ,
           Priority: Mid,
-          DependencyCount: 13,
+          DependencyCount: 15,
           Score: {},
           PerfectScore: {}
         }
       ],
       NodeCheckCollectionWrapper: false,
       FeedbackMessage: Found the required checks for: PatternPal.Core.Runner.<RecognizerRunner>F79CA08E52C22783FA3A0EAEBBC26852FEB0B81B3C120614176DB3EB860E78E94__RootNode.,
-      DependencyCount: 31,
+      DependencyCount: 35,
       Score: {},
       PerfectScore: {}
     },

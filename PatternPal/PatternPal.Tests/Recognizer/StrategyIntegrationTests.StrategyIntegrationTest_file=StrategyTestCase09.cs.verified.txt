@@ -84,6 +84,120 @@
                             {
                               ChildrenCheckResults: [
                                 {
+                                  ChildrenCheckResults: [
+                                    {
+                                      Correct: true,
+                                      FeedbackMessage: Node 'IAveragingMethod' has correct type,
+                                      Priority: High,
+                                      DependencyCount: 1,
+                                      MatchedNode: IAveragingMethod,
+                                      Score: {},
+                                      PerfectScore: {}
+                                    }
+                                  ],
+                                  CollectionKind: Any,
+                                  NodeCheckCollectionWrapper: true,
+                                  FeedbackMessage: Found node 'IAveragingMethod',
+                                  Priority: High,
+                                  DependencyCount: 1,
+                                  MatchedNode: IAveragingMethod,
+                                  Score: {},
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: Found parameters for following node: CalculateAverageFor().,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: CalculateAverageFor,
+                              Score: {},
+                              PerfectScore: {}
+                            },
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  CollectionKind: Any,
+                                  NodeCheckCollectionWrapper: true,
+                                  FeedbackMessage: Found node 'IAveragingMethod',
+                                  Priority: High,
+                                  DependencyCount: 1,
+                                  MatchedNode: IAveragingMethod,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: Found parameters for following node: CalculateAverageFor().,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: CalculateAverageFor,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: CalculateAverageFor().,
+                          Priority: High,
+                          DependencyCount: 2,
+                          MatchedNode: CalculateAverageFor,
+                          Score: {},
+                          PerfectScore: {}
+                        },
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for CalculateAverageFor().,
+                              Priority: High,
+                              DependencyCount: 3,
+                              MatchedNode: CalculateAverageFor,
+                              PerfectScore: {}
+                            },
+                            {
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for CalculateAverageFor().,
+                              Priority: High,
+                              DependencyCount: 3,
+                              MatchedNode: CalculateAverageFor,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: CalculateAverageFor().,
+                          Priority: High,
+                          DependencyCount: 6,
+                          MatchedNode: CalculateAverageFor,
+                          PerfectScore: {}
+                        }
+                      ],
+                      NodeCheckCollectionWrapper: false,
+                      FeedbackMessage: Found method: CalculateAverageFor().,
+                      Priority: High,
+                      DependencyCount: 8,
+                      MatchedNode: CalculateAverageFor,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: ,
+                  Priority: High,
+                  DependencyCount: 8,
+                  Score: {},
+                  PerfectScore: {}
+                },
+                {
+                  ChildrenCheckResults: [
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              ChildrenCheckResults: [
+                                {
                                   Correct: true,
                                   FeedbackMessage: Node CalculateAverageFor() has a Uses relation with node AverageFor(),
                                   Priority: Mid,
@@ -138,60 +252,11 @@
                   DependencyCount: 2,
                   Score: {},
                   PerfectScore: {}
-                },
-                {
-                  ChildrenCheckResults: [
-                    {
-                      ChildrenCheckResults: [
-                        {
-                          ChildrenCheckResults: [
-                            {
-                              CollectionKind: Any,
-                              NodeCheckCollectionWrapper: true,
-                              FeedbackMessage: Found Uses relations for CalculateAverageFor().,
-                              Priority: High,
-                              DependencyCount: 3,
-                              MatchedNode: CalculateAverageFor,
-                              PerfectScore: {}
-                            },
-                            {
-                              CollectionKind: Any,
-                              NodeCheckCollectionWrapper: true,
-                              FeedbackMessage: Found Uses relations for CalculateAverageFor().,
-                              Priority: High,
-                              DependencyCount: 3,
-                              MatchedNode: CalculateAverageFor,
-                              PerfectScore: {}
-                            }
-                          ],
-                          CollectionKind: Any,
-                          NodeCheckCollectionWrapper: false,
-                          FeedbackMessage: Found the required checks for: CalculateAverageFor().,
-                          Priority: High,
-                          DependencyCount: 6,
-                          MatchedNode: CalculateAverageFor,
-                          PerfectScore: {}
-                        }
-                      ],
-                      NodeCheckCollectionWrapper: false,
-                      FeedbackMessage: Found method: CalculateAverageFor().,
-                      Priority: High,
-                      DependencyCount: 6,
-                      MatchedNode: CalculateAverageFor,
-                      PerfectScore: {}
-                    }
-                  ],
-                  CollectionKind: Any,
-                  NodeCheckCollectionWrapper: true,
-                  FeedbackMessage: ,
-                  Priority: High,
-                  DependencyCount: 6,
-                  PerfectScore: {}
                 }
               ],
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'Calculator',
-              DependencyCount: 12,
+              DependencyCount: 14,
               MatchedNode: Calculator,
               Score: {},
               PerfectScore: {}
@@ -200,7 +265,7 @@
           CollectionKind: Any,
           NodeCheckCollectionWrapper: true,
           FeedbackMessage: ,
-          DependencyCount: 12,
+          DependencyCount: 14,
           Score: {},
           PerfectScore: {}
         },
@@ -443,7 +508,7 @@
                       Correct: true,
                       FeedbackMessage: Node TestCalculator has a Uses relation with node CalculateAverageFor(),
                       Priority: Low,
-                      DependencyCount: 7,
+                      DependencyCount: 9,
                       MatchedNode: CalculateAverageFor,
                       Score: {},
                       PerfectScore: {}
@@ -453,7 +518,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for TestCalculator.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: TestCalculator,
                   Score: {},
                   PerfectScore: {}
@@ -462,7 +527,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'TestCalculator',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: TestCalculator,
               Score: {},
               PerfectScore: {}
@@ -492,7 +557,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for AverageByMean.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: AverageByMean,
                   PerfectScore: {}
                 }
@@ -500,7 +565,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'AverageByMean',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: AverageByMean,
               PerfectScore: {}
             },
@@ -529,7 +594,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for AverageByMedian.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: AverageByMedian,
                   PerfectScore: {}
                 }
@@ -537,7 +602,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'AverageByMedian',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: AverageByMedian,
               PerfectScore: {}
             },
@@ -566,7 +631,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for Calculator.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: Calculator,
                   PerfectScore: {}
                 }
@@ -574,7 +639,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'Calculator',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: Calculator,
               PerfectScore: {}
             }
@@ -583,7 +648,7 @@
           NodeCheckCollectionWrapper: true,
           FeedbackMessage: ,
           Priority: Mid,
-          DependencyCount: 13,
+          DependencyCount: 15,
           Score: {},
           PerfectScore: {}
         },
@@ -623,7 +688,7 @@
       ],
       NodeCheckCollectionWrapper: false,
       FeedbackMessage: Found the required checks for: PatternPal.Core.Runner.<RecognizerRunner>F79CA08E52C22783FA3A0EAEBBC26852FEB0B81B3C120614176DB3EB860E78E94__RootNode.,
-      DependencyCount: 31,
+      DependencyCount: 35,
       Score: {},
       PerfectScore: {}
     },

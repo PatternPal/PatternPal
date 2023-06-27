@@ -84,6 +84,69 @@
                             {
                               ChildrenCheckResults: [
                                 {
+                                  ChildrenCheckResults: [
+                                    {
+                                      Correct: true,
+                                      FeedbackMessage: Node 'ISalaryCalculator' has correct type,
+                                      Priority: High,
+                                      DependencyCount: 1,
+                                      MatchedNode: ISalaryCalculator,
+                                      Score: {},
+                                      PerfectScore: {}
+                                    }
+                                  ],
+                                  CollectionKind: Any,
+                                  NodeCheckCollectionWrapper: true,
+                                  FeedbackMessage: Found node 'ISalaryCalculator',
+                                  Priority: High,
+                                  DependencyCount: 1,
+                                  MatchedNode: ISalaryCalculator,
+                                  Score: {},
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: Found parameters for following node: SetCalculator().,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: SetCalculator,
+                              Score: {},
+                              PerfectScore: {}
+                            },
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  CollectionKind: Any,
+                                  NodeCheckCollectionWrapper: true,
+                                  FeedbackMessage: Found node 'ISalaryCalculator',
+                                  Priority: High,
+                                  DependencyCount: 1,
+                                  MatchedNode: ISalaryCalculator,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: Found parameters for following node: SetCalculator().,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: SetCalculator,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: SetCalculator().,
+                          Priority: High,
+                          DependencyCount: 2,
+                          MatchedNode: SetCalculator,
+                          Score: {},
+                          PerfectScore: {}
+                        },
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              ChildrenCheckResults: [
+                                {
                                   Correct: true,
                                   FeedbackMessage: Node SetCalculator() has a Uses relation with node _calculator,
                                   Priority: High,
@@ -125,7 +188,7 @@
                       NodeCheckCollectionWrapper: false,
                       FeedbackMessage: Found method: SetCalculator().,
                       Priority: High,
-                      DependencyCount: 6,
+                      DependencyCount: 8,
                       MatchedNode: SetCalculator,
                       Score: {},
                       PerfectScore: {}
@@ -173,12 +236,55 @@
                           MatchedNode: Calculate,
                           Score: {},
                           PerfectScore: {}
+                        },
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: false,
+                                  FeedbackMessage: ,
+                                  Priority: High,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: The method has no parameters.,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: Calculate,
+                              PerfectScore: {}
+                            },
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: false,
+                                  FeedbackMessage: ,
+                                  Priority: High,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: The method has no parameters.,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: Calculate,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: Calculate().,
+                          Priority: High,
+                          DependencyCount: 2,
+                          MatchedNode: Calculate,
+                          PerfectScore: {}
                         }
                       ],
                       NodeCheckCollectionWrapper: false,
                       FeedbackMessage: Found method: Calculate().,
                       Priority: High,
-                      DependencyCount: 6,
+                      DependencyCount: 8,
                       MatchedNode: Calculate,
                       Score: {},
                       PerfectScore: {}
@@ -188,7 +294,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: ,
                   Priority: High,
-                  DependencyCount: 6,
+                  DependencyCount: 8,
                   Score: {},
                   PerfectScore: {}
                 },
@@ -298,7 +404,7 @@
               ],
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'SalaryCalculator',
-              DependencyCount: 12,
+              DependencyCount: 14,
               MatchedNode: SalaryCalculator,
               Score: {},
               PerfectScore: {}
@@ -307,7 +413,7 @@
           CollectionKind: Any,
           NodeCheckCollectionWrapper: true,
           FeedbackMessage: ,
-          DependencyCount: 12,
+          DependencyCount: 14,
           Score: {},
           PerfectScore: {}
         },
@@ -559,7 +665,7 @@
                       Correct: true,
                       FeedbackMessage: Node Program has a Uses relation with node SetCalculator(),
                       Priority: Low,
-                      DependencyCount: 7,
+                      DependencyCount: 9,
                       MatchedNode: SetCalculator,
                       Score: {},
                       PerfectScore: {}
@@ -568,7 +674,7 @@
                       Correct: true,
                       FeedbackMessage: Node Program has a Uses relation with node Calculate(),
                       Priority: Low,
-                      DependencyCount: 7,
+                      DependencyCount: 9,
                       MatchedNode: Calculate,
                       Score: {},
                       PerfectScore: {}
@@ -578,7 +684,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for Program.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: Program,
                   Score: {},
                   PerfectScore: {}
@@ -587,7 +693,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'Program',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: Program,
               Score: {},
               PerfectScore: {}
@@ -617,7 +723,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for DeveloperReport.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: DeveloperReport,
                   PerfectScore: {}
                 }
@@ -625,7 +731,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'DeveloperReport',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: DeveloperReport,
               PerfectScore: {}
             },
@@ -654,7 +760,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for JuniorDevSalaryCalculator.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: JuniorDevSalaryCalculator,
                   PerfectScore: {}
                 }
@@ -662,7 +768,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'JuniorDevSalaryCalculator',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: JuniorDevSalaryCalculator,
               PerfectScore: {}
             },
@@ -691,7 +797,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for SeniorDevSalaryCalculator.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: SeniorDevSalaryCalculator,
                   PerfectScore: {}
                 }
@@ -699,7 +805,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'SeniorDevSalaryCalculator',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: SeniorDevSalaryCalculator,
               PerfectScore: {}
             },
@@ -728,7 +834,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for SalaryCalculator.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: SalaryCalculator,
                   PerfectScore: {}
                 }
@@ -736,7 +842,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'SalaryCalculator',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: SalaryCalculator,
               PerfectScore: {}
             }
@@ -745,7 +851,7 @@
           NodeCheckCollectionWrapper: true,
           FeedbackMessage: ,
           Priority: Mid,
-          DependencyCount: 13,
+          DependencyCount: 15,
           Score: {},
           PerfectScore: {}
         },
@@ -785,7 +891,7 @@
       ],
       NodeCheckCollectionWrapper: false,
       FeedbackMessage: Found the required checks for: PatternPal.Core.Runner.<RecognizerRunner>F79CA08E52C22783FA3A0EAEBBC26852FEB0B81B3C120614176DB3EB860E78E94__RootNode.,
-      DependencyCount: 31,
+      DependencyCount: 35,
       Score: {},
       PerfectScore: {}
     },

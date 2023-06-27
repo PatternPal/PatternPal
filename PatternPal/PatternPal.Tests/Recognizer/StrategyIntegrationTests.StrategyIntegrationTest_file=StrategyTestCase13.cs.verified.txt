@@ -155,6 +155,49 @@
                         {
                           ChildrenCheckResults: [
                             {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: false,
+                                  FeedbackMessage: ,
+                                  Priority: High,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: The method has no parameters.,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: Program,
+                              PerfectScore: {}
+                            },
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: false,
+                                  FeedbackMessage: ,
+                                  Priority: High,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: The method has no parameters.,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: Program,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: Program().,
+                          Priority: High,
+                          DependencyCount: 2,
+                          MatchedNode: Program,
+                          PerfectScore: {}
+                        },
+                        {
+                          ChildrenCheckResults: [
+                            {
                               CollectionKind: Any,
                               NodeCheckCollectionWrapper: true,
                               FeedbackMessage: Found Uses relations for Program().,
@@ -185,7 +228,7 @@
                       NodeCheckCollectionWrapper: false,
                       FeedbackMessage: Found method: Program().,
                       Priority: High,
-                      DependencyCount: 6,
+                      DependencyCount: 8,
                       MatchedNode: Program,
                       PerfectScore: {}
                     }
@@ -194,13 +237,13 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: ,
                   Priority: High,
-                  DependencyCount: 6,
+                  DependencyCount: 8,
                   PerfectScore: {}
                 }
               ],
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'Main',
-              DependencyCount: 12,
+              DependencyCount: 14,
               MatchedNode: Main,
               Score: {},
               PerfectScore: {}
@@ -209,7 +252,7 @@
           CollectionKind: Any,
           NodeCheckCollectionWrapper: true,
           FeedbackMessage: ,
-          DependencyCount: 12,
+          DependencyCount: 14,
           Score: {},
           PerfectScore: {}
         },
@@ -501,7 +544,7 @@
                       Correct: true,
                       FeedbackMessage: Node Main has a Uses relation with node SetStrategy(),
                       Priority: Low,
-                      DependencyCount: 7,
+                      DependencyCount: 9,
                       MatchedNode: SetStrategy,
                       Score: {},
                       PerfectScore: {}
@@ -510,7 +553,7 @@
                       Correct: true,
                       FeedbackMessage: Node Main has a Uses relation with node TellMeSomething(),
                       Priority: Low,
-                      DependencyCount: 7,
+                      DependencyCount: 9,
                       MatchedNode: TellMeSomething,
                       Score: {},
                       PerfectScore: {}
@@ -520,7 +563,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for Main.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: Main,
                   Score: {},
                   PerfectScore: {}
@@ -529,7 +572,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'Main',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: Main,
               Score: {},
               PerfectScore: {}
@@ -559,7 +602,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for TeamRefactor.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: TeamRefactor,
                   PerfectScore: {}
                 }
@@ -567,7 +610,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'TeamRefactor',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: TeamRefactor,
               PerfectScore: {}
             },
@@ -596,7 +639,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for TeamLogging.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: TeamLogging,
                   PerfectScore: {}
                 }
@@ -604,7 +647,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'TeamLogging',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: TeamLogging,
               PerfectScore: {}
             },
@@ -633,7 +676,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for TeamService.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: TeamService,
                   PerfectScore: {}
                 }
@@ -641,7 +684,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'TeamService',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: TeamService,
               PerfectScore: {}
             },
@@ -670,7 +713,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for TeamContext.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: TeamContext,
                   PerfectScore: {}
                 }
@@ -678,7 +721,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'TeamContext',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: TeamContext,
               PerfectScore: {}
             }
@@ -687,7 +730,7 @@
           NodeCheckCollectionWrapper: true,
           FeedbackMessage: ,
           Priority: Mid,
-          DependencyCount: 13,
+          DependencyCount: 15,
           Score: {},
           PerfectScore: {}
         },
@@ -737,7 +780,7 @@
       ],
       NodeCheckCollectionWrapper: false,
       FeedbackMessage: Found the required checks for: PatternPal.Core.Runner.<RecognizerRunner>F79CA08E52C22783FA3A0EAEBBC26852FEB0B81B3C120614176DB3EB860E78E94__RootNode.,
-      DependencyCount: 31,
+      DependencyCount: 35,
       Score: {},
       PerfectScore: {}
     },

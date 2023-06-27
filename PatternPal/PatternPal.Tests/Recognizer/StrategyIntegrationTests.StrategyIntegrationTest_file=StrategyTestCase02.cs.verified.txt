@@ -84,6 +84,69 @@
                             {
                               ChildrenCheckResults: [
                                 {
+                                  ChildrenCheckResults: [
+                                    {
+                                      Correct: true,
+                                      FeedbackMessage: Node 'IStrategy' has correct type,
+                                      Priority: High,
+                                      DependencyCount: 1,
+                                      MatchedNode: IStrategy,
+                                      Score: {},
+                                      PerfectScore: {}
+                                    }
+                                  ],
+                                  CollectionKind: Any,
+                                  NodeCheckCollectionWrapper: true,
+                                  FeedbackMessage: Found node 'IStrategy',
+                                  Priority: High,
+                                  DependencyCount: 1,
+                                  MatchedNode: IStrategy,
+                                  Score: {},
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: Found parameters for following node: SetStrategy().,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: SetStrategy,
+                              Score: {},
+                              PerfectScore: {}
+                            },
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  CollectionKind: Any,
+                                  NodeCheckCollectionWrapper: true,
+                                  FeedbackMessage: Found node 'IStrategy',
+                                  Priority: High,
+                                  DependencyCount: 1,
+                                  MatchedNode: IStrategy,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: Found parameters for following node: SetStrategy().,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: SetStrategy,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: SetStrategy().,
+                          Priority: High,
+                          DependencyCount: 2,
+                          MatchedNode: SetStrategy,
+                          Score: {},
+                          PerfectScore: {}
+                        },
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              ChildrenCheckResults: [
+                                {
                                   Correct: true,
                                   FeedbackMessage: Node SetStrategy() has a Uses relation with node _strategy,
                                   Priority: High,
@@ -125,7 +188,7 @@
                       NodeCheckCollectionWrapper: false,
                       FeedbackMessage: Found method: SetStrategy().,
                       Priority: High,
-                      DependencyCount: 6,
+                      DependencyCount: 8,
                       MatchedNode: SetStrategy,
                       Score: {},
                       PerfectScore: {}
@@ -173,12 +236,55 @@
                           MatchedNode: DoSomeBusinessLogic,
                           Score: {},
                           PerfectScore: {}
+                        },
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: false,
+                                  FeedbackMessage: ,
+                                  Priority: High,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: The method has no parameters.,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: DoSomeBusinessLogic,
+                              PerfectScore: {}
+                            },
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: false,
+                                  FeedbackMessage: ,
+                                  Priority: High,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: The method has no parameters.,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: DoSomeBusinessLogic,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: DoSomeBusinessLogic().,
+                          Priority: High,
+                          DependencyCount: 2,
+                          MatchedNode: DoSomeBusinessLogic,
+                          PerfectScore: {}
                         }
                       ],
                       NodeCheckCollectionWrapper: false,
                       FeedbackMessage: Found method: DoSomeBusinessLogic().,
                       Priority: High,
-                      DependencyCount: 6,
+                      DependencyCount: 8,
                       MatchedNode: DoSomeBusinessLogic,
                       Score: {},
                       PerfectScore: {}
@@ -188,7 +294,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: ,
                   Priority: High,
-                  DependencyCount: 6,
+                  DependencyCount: 8,
                   Score: {},
                   PerfectScore: {}
                 },
@@ -298,7 +404,7 @@
               ],
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'Context',
-              DependencyCount: 12,
+              DependencyCount: 14,
               MatchedNode: Context,
               Score: {},
               PerfectScore: {}
@@ -307,7 +413,7 @@
           CollectionKind: Any,
           NodeCheckCollectionWrapper: true,
           FeedbackMessage: ,
-          DependencyCount: 12,
+          DependencyCount: 14,
           Score: {},
           PerfectScore: {}
         },
@@ -549,7 +655,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for ConcreteStrategyA.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: ConcreteStrategyA,
                   PerfectScore: {}
                 }
@@ -557,7 +663,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'ConcreteStrategyA',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: ConcreteStrategyA,
               PerfectScore: {}
             },
@@ -586,7 +692,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for ConcreteStrategyB.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: ConcreteStrategyB,
                   PerfectScore: {}
                 }
@@ -594,7 +700,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'ConcreteStrategyB',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: ConcreteStrategyB,
               PerfectScore: {}
             },
@@ -623,7 +729,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for Context.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: Context,
                   PerfectScore: {}
                 }
@@ -631,7 +737,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'Context',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: Context,
               PerfectScore: {}
             }
@@ -640,13 +746,13 @@
           NodeCheckCollectionWrapper: true,
           FeedbackMessage: ,
           Priority: Mid,
-          DependencyCount: 13,
+          DependencyCount: 15,
           PerfectScore: {}
         }
       ],
       NodeCheckCollectionWrapper: false,
       FeedbackMessage: Found the required checks for: PatternPal.Core.Runner.<RecognizerRunner>F79CA08E52C22783FA3A0EAEBBC26852FEB0B81B3C120614176DB3EB860E78E94__RootNode.,
-      DependencyCount: 31,
+      DependencyCount: 35,
       Score: {},
       PerfectScore: {}
     },

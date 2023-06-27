@@ -84,6 +84,69 @@
                             {
                               ChildrenCheckResults: [
                                 {
+                                  ChildrenCheckResults: [
+                                    {
+                                      Correct: true,
+                                      FeedbackMessage: Node 'CookStrategy' has correct type,
+                                      Priority: High,
+                                      DependencyCount: 1,
+                                      MatchedNode: CookStrategy,
+                                      Score: {},
+                                      PerfectScore: {}
+                                    }
+                                  ],
+                                  CollectionKind: Any,
+                                  NodeCheckCollectionWrapper: true,
+                                  FeedbackMessage: Found node 'CookStrategy',
+                                  Priority: High,
+                                  DependencyCount: 1,
+                                  MatchedNode: CookStrategy,
+                                  Score: {},
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: Found parameters for following node: SetCookStrategy().,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: SetCookStrategy,
+                              Score: {},
+                              PerfectScore: {}
+                            },
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  CollectionKind: Any,
+                                  NodeCheckCollectionWrapper: true,
+                                  FeedbackMessage: Found node 'CookStrategy',
+                                  Priority: High,
+                                  DependencyCount: 1,
+                                  MatchedNode: CookStrategy,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: Found parameters for following node: SetCookStrategy().,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: SetCookStrategy,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: SetCookStrategy().,
+                          Priority: High,
+                          DependencyCount: 2,
+                          MatchedNode: SetCookStrategy,
+                          Score: {},
+                          PerfectScore: {}
+                        },
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              ChildrenCheckResults: [
+                                {
                                   Correct: true,
                                   FeedbackMessage: Node SetCookStrategy() has a Uses relation with node _cookStrategy,
                                   Priority: High,
@@ -125,13 +188,56 @@
                       NodeCheckCollectionWrapper: false,
                       FeedbackMessage: Found method: SetCookStrategy().,
                       Priority: High,
-                      DependencyCount: 6,
+                      DependencyCount: 8,
                       MatchedNode: SetCookStrategy,
                       Score: {},
                       PerfectScore: {}
                     },
                     {
                       ChildrenCheckResults: [
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: false,
+                                  FeedbackMessage: ,
+                                  Priority: High,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: The method has no parameters.,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: SetFood,
+                              PerfectScore: {}
+                            },
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: false,
+                                  FeedbackMessage: ,
+                                  Priority: High,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: The method has no parameters.,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: SetFood,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: SetFood().,
+                          Priority: High,
+                          DependencyCount: 2,
+                          MatchedNode: SetFood,
+                          PerfectScore: {}
+                        },
                         {
                           ChildrenCheckResults: [
                             {
@@ -165,12 +271,55 @@
                       NodeCheckCollectionWrapper: false,
                       FeedbackMessage: Found method: SetFood().,
                       Priority: High,
-                      DependencyCount: 6,
+                      DependencyCount: 8,
                       MatchedNode: SetFood,
                       PerfectScore: {}
                     },
                     {
                       ChildrenCheckResults: [
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: false,
+                                  FeedbackMessage: ,
+                                  Priority: High,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: The method has no parameters.,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: Cook,
+                              PerfectScore: {}
+                            },
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: false,
+                                  FeedbackMessage: ,
+                                  Priority: High,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: The method has no parameters.,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: Cook,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: Cook().,
+                          Priority: High,
+                          DependencyCount: 2,
+                          MatchedNode: Cook,
+                          PerfectScore: {}
+                        },
                         {
                           ChildrenCheckResults: [
                             {
@@ -204,7 +353,7 @@
                       NodeCheckCollectionWrapper: false,
                       FeedbackMessage: Found method: Cook().,
                       Priority: High,
-                      DependencyCount: 6,
+                      DependencyCount: 8,
                       MatchedNode: Cook,
                       PerfectScore: {}
                     }
@@ -213,7 +362,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: ,
                   Priority: High,
-                  DependencyCount: 6,
+                  DependencyCount: 8,
                   Score: {},
                   PerfectScore: {}
                 },
@@ -347,7 +496,7 @@
               ],
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'CookingMethod',
-              DependencyCount: 12,
+              DependencyCount: 14,
               MatchedNode: CookingMethod,
               Score: {},
               PerfectScore: {}
@@ -356,7 +505,7 @@
           CollectionKind: Any,
           NodeCheckCollectionWrapper: true,
           FeedbackMessage: ,
-          DependencyCount: 12,
+          DependencyCount: 14,
           Score: {},
           PerfectScore: {}
         },
@@ -679,7 +828,7 @@
                       Correct: true,
                       FeedbackMessage: Node Kitchen has a Uses relation with node SetCookStrategy(),
                       Priority: Low,
-                      DependencyCount: 7,
+                      DependencyCount: 9,
                       MatchedNode: SetCookStrategy,
                       Score: {},
                       PerfectScore: {}
@@ -688,7 +837,7 @@
                       Correct: true,
                       FeedbackMessage: Node Kitchen has a Uses relation with node SetFood(),
                       Priority: Low,
-                      DependencyCount: 7,
+                      DependencyCount: 9,
                       MatchedNode: SetFood,
                       Score: {},
                       PerfectScore: {}
@@ -697,7 +846,7 @@
                       Correct: true,
                       FeedbackMessage: Node Kitchen has a Uses relation with node Cook(),
                       Priority: Low,
-                      DependencyCount: 7,
+                      DependencyCount: 9,
                       MatchedNode: Cook,
                       Score: {},
                       PerfectScore: {}
@@ -707,7 +856,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for Kitchen.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: Kitchen,
                   Score: {},
                   PerfectScore: {}
@@ -716,7 +865,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'Kitchen',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: Kitchen,
               Score: {},
               PerfectScore: {}
@@ -746,7 +895,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for CookStrategy.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: CookStrategy,
                   PerfectScore: {}
                 }
@@ -754,7 +903,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'CookStrategy',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: CookStrategy,
               PerfectScore: {}
             },
@@ -783,7 +932,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for OvenBaking.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: OvenBaking,
                   PerfectScore: {}
                 }
@@ -791,7 +940,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'OvenBaking',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: OvenBaking,
               PerfectScore: {}
             },
@@ -820,7 +969,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for Grilling.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: Grilling,
                   PerfectScore: {}
                 }
@@ -828,7 +977,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'Grilling',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: Grilling,
               PerfectScore: {}
             },
@@ -857,7 +1006,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for CookingMethod.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: CookingMethod,
                   PerfectScore: {}
                 }
@@ -865,7 +1014,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'CookingMethod',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: CookingMethod,
               PerfectScore: {}
             }
@@ -874,14 +1023,14 @@
           NodeCheckCollectionWrapper: true,
           FeedbackMessage: ,
           Priority: Mid,
-          DependencyCount: 13,
+          DependencyCount: 15,
           Score: {},
           PerfectScore: {}
         }
       ],
       NodeCheckCollectionWrapper: false,
       FeedbackMessage: Found the required checks for: PatternPal.Core.Runner.<RecognizerRunner>F79CA08E52C22783FA3A0EAEBBC26852FEB0B81B3C120614176DB3EB860E78E94__RootNode.,
-      DependencyCount: 31,
+      DependencyCount: 35,
       Score: {},
       PerfectScore: {}
     },

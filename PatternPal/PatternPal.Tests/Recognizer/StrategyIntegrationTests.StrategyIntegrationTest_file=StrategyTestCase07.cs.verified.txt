@@ -84,6 +84,202 @@
                             {
                               ChildrenCheckResults: [
                                 {
+                                  ChildrenCheckResults: [
+                                    {
+                                      Correct: true,
+                                      FeedbackMessage: Node 'IOfferStrategy' has correct type,
+                                      Priority: High,
+                                      DependencyCount: 1,
+                                      MatchedNode: IOfferStrategy,
+                                      Score: {},
+                                      PerfectScore: {}
+                                    }
+                                  ],
+                                  CollectionKind: Any,
+                                  NodeCheckCollectionWrapper: true,
+                                  FeedbackMessage: Found node 'IOfferStrategy',
+                                  Priority: High,
+                                  DependencyCount: 1,
+                                  MatchedNode: IOfferStrategy,
+                                  Score: {},
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: Found parameters for following node: ApplyStrategy().,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: ApplyStrategy,
+                              Score: {},
+                              PerfectScore: {}
+                            },
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  CollectionKind: Any,
+                                  NodeCheckCollectionWrapper: true,
+                                  FeedbackMessage: Found node 'IOfferStrategy',
+                                  Priority: High,
+                                  DependencyCount: 1,
+                                  MatchedNode: IOfferStrategy,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: Found parameters for following node: ApplyStrategy().,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: ApplyStrategy,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: ApplyStrategy().,
+                          Priority: High,
+                          DependencyCount: 2,
+                          MatchedNode: ApplyStrategy,
+                          Score: {},
+                          PerfectScore: {}
+                        },
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for ApplyStrategy().,
+                              Priority: High,
+                              DependencyCount: 3,
+                              MatchedNode: ApplyStrategy,
+                              PerfectScore: {}
+                            },
+                            {
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for ApplyStrategy().,
+                              Priority: High,
+                              DependencyCount: 3,
+                              MatchedNode: ApplyStrategy,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: ApplyStrategy().,
+                          Priority: High,
+                          DependencyCount: 6,
+                          MatchedNode: ApplyStrategy,
+                          PerfectScore: {}
+                        }
+                      ],
+                      NodeCheckCollectionWrapper: false,
+                      FeedbackMessage: Found method: ApplyStrategy().,
+                      Priority: High,
+                      DependencyCount: 8,
+                      MatchedNode: ApplyStrategy,
+                      Score: {},
+                      PerfectScore: {}
+                    },
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: false,
+                                  FeedbackMessage: ,
+                                  Priority: High,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: The method has no parameters.,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: GetStrategy,
+                              PerfectScore: {}
+                            },
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: false,
+                                  FeedbackMessage: ,
+                                  Priority: High,
+                                  PerfectScore: {}
+                                }
+                              ],
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: The method has no parameters.,
+                              Priority: High,
+                              DependencyCount: 1,
+                              MatchedNode: GetStrategy,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: GetStrategy().,
+                          Priority: High,
+                          DependencyCount: 2,
+                          MatchedNode: GetStrategy,
+                          PerfectScore: {}
+                        },
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for GetStrategy().,
+                              Priority: High,
+                              DependencyCount: 3,
+                              MatchedNode: GetStrategy,
+                              PerfectScore: {}
+                            },
+                            {
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for GetStrategy().,
+                              Priority: High,
+                              DependencyCount: 3,
+                              MatchedNode: GetStrategy,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: GetStrategy().,
+                          Priority: High,
+                          DependencyCount: 6,
+                          MatchedNode: GetStrategy,
+                          PerfectScore: {}
+                        }
+                      ],
+                      NodeCheckCollectionWrapper: false,
+                      FeedbackMessage: Found method: GetStrategy().,
+                      Priority: High,
+                      DependencyCount: 8,
+                      MatchedNode: GetStrategy,
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: ,
+                  Priority: High,
+                  DependencyCount: 8,
+                  Score: {},
+                  PerfectScore: {}
+                },
+                {
+                  ChildrenCheckResults: [
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              ChildrenCheckResults: [
+                                {
                                   Correct: true,
                                   FeedbackMessage: Node ApplyStrategy() has a Uses relation with node GetDiscountPercentage(),
                                   Priority: Mid,
@@ -177,99 +373,11 @@
                   DependencyCount: 2,
                   Score: {},
                   PerfectScore: {}
-                },
-                {
-                  ChildrenCheckResults: [
-                    {
-                      ChildrenCheckResults: [
-                        {
-                          ChildrenCheckResults: [
-                            {
-                              CollectionKind: Any,
-                              NodeCheckCollectionWrapper: true,
-                              FeedbackMessage: Found Uses relations for ApplyStrategy().,
-                              Priority: High,
-                              DependencyCount: 3,
-                              MatchedNode: ApplyStrategy,
-                              PerfectScore: {}
-                            },
-                            {
-                              CollectionKind: Any,
-                              NodeCheckCollectionWrapper: true,
-                              FeedbackMessage: Found Uses relations for ApplyStrategy().,
-                              Priority: High,
-                              DependencyCount: 3,
-                              MatchedNode: ApplyStrategy,
-                              PerfectScore: {}
-                            }
-                          ],
-                          CollectionKind: Any,
-                          NodeCheckCollectionWrapper: false,
-                          FeedbackMessage: Found the required checks for: ApplyStrategy().,
-                          Priority: High,
-                          DependencyCount: 6,
-                          MatchedNode: ApplyStrategy,
-                          PerfectScore: {}
-                        }
-                      ],
-                      NodeCheckCollectionWrapper: false,
-                      FeedbackMessage: Found method: ApplyStrategy().,
-                      Priority: High,
-                      DependencyCount: 6,
-                      MatchedNode: ApplyStrategy,
-                      PerfectScore: {}
-                    },
-                    {
-                      ChildrenCheckResults: [
-                        {
-                          ChildrenCheckResults: [
-                            {
-                              CollectionKind: Any,
-                              NodeCheckCollectionWrapper: true,
-                              FeedbackMessage: Found Uses relations for GetStrategy().,
-                              Priority: High,
-                              DependencyCount: 3,
-                              MatchedNode: GetStrategy,
-                              PerfectScore: {}
-                            },
-                            {
-                              CollectionKind: Any,
-                              NodeCheckCollectionWrapper: true,
-                              FeedbackMessage: Found Uses relations for GetStrategy().,
-                              Priority: High,
-                              DependencyCount: 3,
-                              MatchedNode: GetStrategy,
-                              PerfectScore: {}
-                            }
-                          ],
-                          CollectionKind: Any,
-                          NodeCheckCollectionWrapper: false,
-                          FeedbackMessage: Found the required checks for: GetStrategy().,
-                          Priority: High,
-                          DependencyCount: 6,
-                          MatchedNode: GetStrategy,
-                          PerfectScore: {}
-                        }
-                      ],
-                      NodeCheckCollectionWrapper: false,
-                      FeedbackMessage: Found method: GetStrategy().,
-                      Priority: High,
-                      DependencyCount: 6,
-                      MatchedNode: GetStrategy,
-                      PerfectScore: {}
-                    }
-                  ],
-                  CollectionKind: Any,
-                  NodeCheckCollectionWrapper: true,
-                  FeedbackMessage: ,
-                  Priority: High,
-                  DependencyCount: 6,
-                  PerfectScore: {}
                 }
               ],
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'StrategyContext',
-              DependencyCount: 12,
+              DependencyCount: 14,
               MatchedNode: StrategyContext,
               Score: {},
               PerfectScore: {}
@@ -278,7 +386,7 @@
           CollectionKind: Any,
           NodeCheckCollectionWrapper: true,
           FeedbackMessage: ,
-          DependencyCount: 12,
+          DependencyCount: 14,
           Score: {},
           PerfectScore: {}
         },
@@ -508,7 +616,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for StrategyContext.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: StrategyContext,
                   PerfectScore: {}
                 }
@@ -516,7 +624,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'StrategyContext',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: StrategyContext,
               Score: {},
               PerfectScore: {}
@@ -550,7 +658,7 @@
                       Correct: true,
                       FeedbackMessage: Node Program has a Uses relation with node GetStrategy(),
                       Priority: Low,
-                      DependencyCount: 7,
+                      DependencyCount: 9,
                       MatchedNode: GetStrategy,
                       Score: {},
                       PerfectScore: {}
@@ -560,7 +668,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for Program.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: Program,
                   Score: {},
                   PerfectScore: {}
@@ -578,7 +686,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'Program',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: Program,
               Score: {},
               PerfectScore: {}
@@ -608,7 +716,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for NoDiscountStrategy.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: NoDiscountStrategy,
                   PerfectScore: {}
                 }
@@ -616,7 +724,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'NoDiscountStrategy',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: NoDiscountStrategy,
               PerfectScore: {}
             },
@@ -645,7 +753,7 @@
                   NodeCheckCollectionWrapper: true,
                   FeedbackMessage: Found Uses relations for QuarterDiscountStrategy.,
                   Priority: Low,
-                  DependencyCount: 7,
+                  DependencyCount: 9,
                   MatchedNode: QuarterDiscountStrategy,
                   PerfectScore: {}
                 }
@@ -653,7 +761,7 @@
               NodeCheckCollectionWrapper: false,
               FeedbackMessage: Found class 'QuarterDiscountStrategy',
               Priority: Mid,
-              DependencyCount: 13,
+              DependencyCount: 15,
               MatchedNode: QuarterDiscountStrategy,
               PerfectScore: {}
             }
@@ -662,7 +770,7 @@
           NodeCheckCollectionWrapper: true,
           FeedbackMessage: ,
           Priority: Mid,
-          DependencyCount: 13,
+          DependencyCount: 15,
           Score: {},
           PerfectScore: {}
         },
@@ -702,7 +810,7 @@
       ],
       NodeCheckCollectionWrapper: false,
       FeedbackMessage: Found the required checks for: PatternPal.Core.Runner.<RecognizerRunner>F79CA08E52C22783FA3A0EAEBBC26852FEB0B81B3C120614176DB3EB860E78E94__RootNode.,
-      DependencyCount: 31,
+      DependencyCount: 35,
       Score: {},
       PerfectScore: {}
     },
