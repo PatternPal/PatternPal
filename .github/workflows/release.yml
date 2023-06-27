@@ -1,4 +1,4 @@
-﻿name: Release logging 
+﻿name: Release PatternPal.LoggingServer
 on:
   push:
     branches:
