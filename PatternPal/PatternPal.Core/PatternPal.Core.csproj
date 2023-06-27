@@ -30,6 +30,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="StepByStep\Resources\Instructions\ObserverInstructions.Designer.cs">
+      <DependentUpon>ObserverInstructions.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="StepByStep\Resources\Instructions\BridgeInstructions.Designer.cs">
       <DependentUpon>BridgeInstructions.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -58,6 +63,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="StepByStep\Resources\Instructions\ObserverInstructions.resx">
+      <LastGenOutput>ObserverInstructions.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="StepByStep\Resources\Instructions\BridgeInstructions.resx">
       <LastGenOutput>BridgeInstructions.Designer.cs</LastGenOutput>
       <Generator>ResXFileCodeGenerator</Generator>

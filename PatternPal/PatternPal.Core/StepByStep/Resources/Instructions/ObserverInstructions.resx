@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Explanation1" xml:space="preserve">
+    <value>This interface serves as the base for the Concrete Observers.</value>
+  </data>
+  <data name="Explanation10" xml:space="preserve">
+    <value>You should thus add the just created Concrete Observer to the observers list using the 'attach()' method created in step 6.</value>
+  </data>
+  <data name="Explanation11" xml:space="preserve">
+    <value>You should thus update the just added Concrete Observer using the method created in step 7.</value>
+  </data>
+  <data name="Explanation2" xml:space="preserve">
+    <value>This interface serves as the base fot the Concrete Subjects to which Concrete Observers can subscribe. The method here will in the Concrete Subjects be implemented as the `notify()` method.</value>
+  </data>
+  <data name="Explanation3" xml:space="preserve">
+    <value>This is a Concrete Observer class which instances are updated if a Concrete Subject notifies them. </value>
+  </data>
+  <data name="Explanation4" xml:space="preserve">
+    <value>This is a Concrete Subject class which can notify the Concrete Observers if they are subscribed.</value>
+  </data>
+  <data name="Explanation5" xml:space="preserve">
+    <value>In this list the Concrete Observers are stored which we want to update if the Concrete Subject notifies them. We can not check the type of the field thus make sure you do this correctly, it should look like: "List&lt;Observer&gt; observers = new List&lt;Observer&gt;();". </value>
+  </data>
+  <data name="Explanation6" xml:space="preserve">
+    <value>This method will be used to subscribe or unsubscribe Concrete Observer instances to the Concrete Subject. It could thus be a logical step to implement two methods with these requirements. One for attaching the Observer to the list and one to detach. </value>
+  </data>
+  <data name="Explanation7" xml:space="preserve">
+    <value>This method will be used to notify the Concrete Observers in the observers list. For the implementation of this method it thus seems logical to loop through the observers list and notify each instance.</value>
+  </data>
+  <data name="Explanation8" xml:space="preserve">
+    <value>This field or property will be used to store the state in. With this state it can be determined that the observers should be notified. The method that comes with the field or property is then used to change the state. You can also choose to create a method with the state as parameter.</value>
+  </data>
+  <data name="Explanation9" xml:space="preserve">
+    <value>This will be the Client class which is used to control the Observer pattern. </value>
+  </data>
+  <data name="Step1" xml:space="preserve">
+    <value>Make an interface with an internal or public method. We refer to this interface as the Observer Interface.</value>
+  </data>
+  <data name="Step10" xml:space="preserve">
+    <value>Use the `attach()` method as described in step 6 in the Concrete Subject.</value>
+  </data>
+  <data name="Step11" xml:space="preserve">
+    <value>Use the 'update()` method as described in step 7 in the Concrete Subject.</value>
+  </data>
+  <data name="Step2" xml:space="preserve">
+    <value>Create an interface with an internal or public method that has a parameter with as type the Observer Interface. We will refer to this as the Subject Interface.</value>
+  </data>
+  <data name="Step3" xml:space="preserve">
+    <value>Create a class that implements the Observer Interface.</value>
+  </data>
+  <data name="Step4" xml:space="preserve">
+    <value>Create a class that implements the Subject interface. We will refer to this class as the Concrete Subject class.</value>
+  </data>
+  <data name="Step5" xml:space="preserve">
+    <value>Add a private field with as type a Observer list, we will refer to this field as the 'observers'. </value>
+  </data>
+  <data name="Step6" xml:space="preserve">
+    <value>Add a public or internal method, that has a parameter with as type Observer that uses the list `observers`. We will refer to this method as the 'attach()' method.</value>
+  </data>
+  <data name="Step7" xml:space="preserve">
+    <value>Add a public method that uses the observers list and uses the `observers` list and uses the `update()` method of the `Observer Interface`. We will refer to this method as the 'update()' method.</value>
+  </data>
+  <data name="Step8" xml:space="preserve">
+    <value>Add a private or protected field or property, which we will refer to as `mainState` and add a public or internal method that uses this field or property. Or add a public / internal method with a parameter. </value>
+  </data>
+  <data name="Step9" xml:space="preserve">
+    <value>Create a class that creates a Concrete Subject instance and creates an Concrete Observer instance. </value>
+  </data>
+</root>
