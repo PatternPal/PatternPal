@@ -8,7 +8,7 @@ public abstract class NodeCheckBase : CheckBase
     /// <summary>
     /// The sub-<see cref="ICheck"/>s of this <see cref="ICheck"/>.
     /// </summary>
-    internal IEnumerable< ICheck > SubChecks { get; }
+    public IEnumerable< ICheck > SubChecks { get; }
 
     /// <summary>
     /// Creates a new instance of <see cref="NodeCheckBase"/>.
