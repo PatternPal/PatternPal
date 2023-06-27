@@ -14,6 +14,9 @@ internal class ModifierCheck : CheckBase
     /// </summary>
     public override int DependencyCount => 0;
 
+    /// <inheritdoc />
+    public override Score PerfectScore { get; }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="ModifierCheck"/> class. 
     /// </summary>
@@ -29,6 +32,9 @@ internal class ModifierCheck : CheckBase
             requirement)
     {
         _modifiers = modifiers;
+        PerfectScore = Score.CreateScore(
+            Priority,
+            true);
     }
 
     /// <summary>

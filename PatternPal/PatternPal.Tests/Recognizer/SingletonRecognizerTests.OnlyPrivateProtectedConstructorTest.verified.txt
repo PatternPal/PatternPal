@@ -1,467 +1,467 @@
 ﻿[
   {
-    FeedbackMessage: Found class 'MockClass1',
-    Priority: Low,
     ChildrenCheckResults: [
       {
+        ChildrenCheckResults: [
+          {
+            ChildrenCheckResults: [
+              {
+                ChildrenCheckResults: [
+                  {
+                    ChildrenCheckResults: [
+                      {
+                        Correct: true,
+                        FeedbackMessage: Modifiers correctly implemented.,
+                        MatchedNode: MockClass1
+                      },
+                      {
+                        Correct: false,
+                        FeedbackMessage: The node MockClass1() does not have the protected modifier.,
+                        MatchedNode: MockClass1
+                      }
+                    ],
+                    CollectionKind: Any,
+                    NodeCheckCollectionWrapper: false,
+                    FeedbackMessage: Found the required checks for: MockClass1().,
+                    MatchedNode: MockClass1
+                  }
+                ],
+                NodeCheckCollectionWrapper: false,
+                FeedbackMessage: Found constructor: MockClass1().,
+                MatchedNode: MockClass1
+              }
+            ],
+            CollectionKind: Any,
+            NodeCheckCollectionWrapper: true,
+            FeedbackMessage: 
+          },
+          {
+            NestedResult: {
+              ChildrenCheckResults: [
+                {
+                  ChildrenCheckResults: [
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          Correct: false,
+                          FeedbackMessage: The node MockClass1() does not have the public modifier.,
+                          MatchedNode: MockClass1
+                        },
+                        {
+                          Correct: false,
+                          FeedbackMessage: The node MockClass1() does not have the internal modifier.,
+                          MatchedNode: MockClass1
+                        }
+                      ],
+                      CollectionKind: Any,
+                      NodeCheckCollectionWrapper: false,
+                      FeedbackMessage: Found the required checks for: MockClass1().,
+                      MatchedNode: MockClass1
+                    }
+                  ],
+                  NodeCheckCollectionWrapper: false,
+                  FeedbackMessage: Found constructor: MockClass1().,
+                  MatchedNode: MockClass1
+                }
+              ],
+              CollectionKind: Any,
+              NodeCheckCollectionWrapper: true,
+              FeedbackMessage: 
+            },
+            FeedbackMessage: Executing NOT-check
+          }
+        ],
+        NodeCheckCollectionWrapper: false,
         FeedbackMessage: Found the required checks for: MockClass1.,
         Priority: Low,
+        MatchedNode: MockClass1
+      }
+    ],
+    NodeCheckCollectionWrapper: false,
+    FeedbackMessage: Found class 'MockClass1',
+    Priority: Low,
+    MatchedNode: MockClass1
+  },
+  {
+    ChildrenCheckResults: [
+      {
         ChildrenCheckResults: [
           {
-            FeedbackMessage: ,
             ChildrenCheckResults: [
               {
-                FeedbackMessage: Found constructor: MockClass1().,
                 ChildrenCheckResults: [
                   {
-                    FeedbackMessage: Found the required checks for: MockClass1().,
                     ChildrenCheckResults: [
                       {
-                        FeedbackMessage: Modifiers correctly implemented.,
-                        Correct: true,
-                        MatchedNode: MockClass1
+                        Correct: false,
+                        FeedbackMessage: The node MockClass2() does not have the private modifier.,
+                        MatchedNode: MockClass2
                       },
                       {
-                        FeedbackMessage: The node MockClass1() does not have the protected modifier.,
-                        Correct: false,
-                        MatchedNode: MockClass1
+                        Correct: true,
+                        FeedbackMessage: Modifiers correctly implemented.,
+                        MatchedNode: MockClass2
                       }
                     ],
                     CollectionKind: Any,
-                    MatchedNode: MockClass1,
-                    NodeCheckCollectionWrapper: false
+                    NodeCheckCollectionWrapper: false,
+                    FeedbackMessage: Found the required checks for: MockClass2().,
+                    MatchedNode: MockClass2
                   }
                 ],
-                MatchedNode: MockClass1,
-                NodeCheckCollectionWrapper: false
+                NodeCheckCollectionWrapper: false,
+                FeedbackMessage: Found constructor: MockClass2().,
+                MatchedNode: MockClass2
               }
             ],
             CollectionKind: Any,
-            NodeCheckCollectionWrapper: true
+            NodeCheckCollectionWrapper: true,
+            FeedbackMessage: 
           },
           {
-            FeedbackMessage: Executing NOT-check,
             NestedResult: {
-              FeedbackMessage: ,
               ChildrenCheckResults: [
                 {
-                  FeedbackMessage: Found constructor: MockClass1().,
                   ChildrenCheckResults: [
                     {
-                      FeedbackMessage: Found the required checks for: MockClass1().,
                       ChildrenCheckResults: [
                         {
-                          FeedbackMessage: The node MockClass1() does not have the public modifier.,
                           Correct: false,
-                          MatchedNode: MockClass1
+                          FeedbackMessage: The node MockClass2() does not have the public modifier.,
+                          MatchedNode: MockClass2
                         },
                         {
-                          FeedbackMessage: The node MockClass1() does not have the internal modifier.,
                           Correct: false,
-                          MatchedNode: MockClass1
+                          FeedbackMessage: The node MockClass2() does not have the internal modifier.,
+                          MatchedNode: MockClass2
                         }
                       ],
                       CollectionKind: Any,
-                      MatchedNode: MockClass1,
-                      NodeCheckCollectionWrapper: false
+                      NodeCheckCollectionWrapper: false,
+                      FeedbackMessage: Found the required checks for: MockClass2().,
+                      MatchedNode: MockClass2
                     }
                   ],
-                  MatchedNode: MockClass1,
-                  NodeCheckCollectionWrapper: false
+                  NodeCheckCollectionWrapper: false,
+                  FeedbackMessage: Found constructor: MockClass2().,
+                  MatchedNode: MockClass2
                 }
               ],
               CollectionKind: Any,
-              NodeCheckCollectionWrapper: true
-            }
+              NodeCheckCollectionWrapper: true,
+              FeedbackMessage: 
+            },
+            FeedbackMessage: Executing NOT-check
           }
         ],
-        MatchedNode: MockClass1,
-        NodeCheckCollectionWrapper: false
-      }
-    ],
-    MatchedNode: MockClass1,
-    NodeCheckCollectionWrapper: false
-  },
-  {
-    FeedbackMessage: Found class 'MockClass2',
-    Priority: Low,
-    ChildrenCheckResults: [
-      {
+        NodeCheckCollectionWrapper: false,
         FeedbackMessage: Found the required checks for: MockClass2.,
         Priority: Low,
+        MatchedNode: MockClass2
+      }
+    ],
+    NodeCheckCollectionWrapper: false,
+    FeedbackMessage: Found class 'MockClass2',
+    Priority: Low,
+    MatchedNode: MockClass2
+  },
+  {
+    ChildrenCheckResults: [
+      {
         ChildrenCheckResults: [
           {
-            FeedbackMessage: ,
             ChildrenCheckResults: [
               {
-                FeedbackMessage: Found constructor: MockClass2().,
                 ChildrenCheckResults: [
                   {
-                    FeedbackMessage: Found the required checks for: MockClass2().,
                     ChildrenCheckResults: [
                       {
-                        FeedbackMessage: The node MockClass2() does not have the private modifier.,
                         Correct: false,
-                        MatchedNode: MockClass2
+                        FeedbackMessage: The node MockClass3() does not have the private modifier.,
+                        MatchedNode: MockClass3
                       },
                       {
-                        FeedbackMessage: Modifiers correctly implemented.,
-                        Correct: true,
-                        MatchedNode: MockClass2
+                        Correct: false,
+                        FeedbackMessage: The node MockClass3() does not have the protected modifier.,
+                        MatchedNode: MockClass3
                       }
                     ],
                     CollectionKind: Any,
-                    MatchedNode: MockClass2,
-                    NodeCheckCollectionWrapper: false
+                    NodeCheckCollectionWrapper: false,
+                    FeedbackMessage: Found the required checks for: MockClass3().,
+                    MatchedNode: MockClass3
                   }
                 ],
-                MatchedNode: MockClass2,
-                NodeCheckCollectionWrapper: false
+                NodeCheckCollectionWrapper: false,
+                FeedbackMessage: Found constructor: MockClass3().,
+                MatchedNode: MockClass3
               }
             ],
             CollectionKind: Any,
-            NodeCheckCollectionWrapper: true
+            NodeCheckCollectionWrapper: true,
+            FeedbackMessage: 
           },
           {
-            FeedbackMessage: Executing NOT-check,
             NestedResult: {
-              FeedbackMessage: ,
               ChildrenCheckResults: [
                 {
-                  FeedbackMessage: Found constructor: MockClass2().,
                   ChildrenCheckResults: [
                     {
-                      FeedbackMessage: Found the required checks for: MockClass2().,
                       ChildrenCheckResults: [
                         {
-                          FeedbackMessage: The node MockClass2() does not have the public modifier.,
-                          Correct: false,
-                          MatchedNode: MockClass2
+                          Correct: true,
+                          FeedbackMessage: Modifiers correctly implemented.,
+                          MatchedNode: MockClass3
                         },
                         {
-                          FeedbackMessage: The node MockClass2() does not have the internal modifier.,
                           Correct: false,
-                          MatchedNode: MockClass2
+                          FeedbackMessage: The node MockClass3() does not have the internal modifier.,
+                          MatchedNode: MockClass3
                         }
                       ],
                       CollectionKind: Any,
-                      MatchedNode: MockClass2,
-                      NodeCheckCollectionWrapper: false
+                      NodeCheckCollectionWrapper: false,
+                      FeedbackMessage: Found the required checks for: MockClass3().,
+                      MatchedNode: MockClass3
                     }
                   ],
-                  MatchedNode: MockClass2,
-                  NodeCheckCollectionWrapper: false
+                  NodeCheckCollectionWrapper: false,
+                  FeedbackMessage: Found constructor: MockClass3().,
+                  MatchedNode: MockClass3
                 }
               ],
               CollectionKind: Any,
-              NodeCheckCollectionWrapper: true
-            }
+              NodeCheckCollectionWrapper: true,
+              FeedbackMessage: 
+            },
+            FeedbackMessage: Executing NOT-check
           }
         ],
-        MatchedNode: MockClass2,
-        NodeCheckCollectionWrapper: false
-      }
-    ],
-    MatchedNode: MockClass2,
-    NodeCheckCollectionWrapper: false
-  },
-  {
-    FeedbackMessage: Found class 'MockClass3',
-    Priority: Low,
-    ChildrenCheckResults: [
-      {
+        NodeCheckCollectionWrapper: false,
         FeedbackMessage: Found the required checks for: MockClass3.,
         Priority: Low,
+        MatchedNode: MockClass3
+      }
+    ],
+    NodeCheckCollectionWrapper: false,
+    FeedbackMessage: Found class 'MockClass3',
+    Priority: Low,
+    MatchedNode: MockClass3
+  },
+  {
+    ChildrenCheckResults: [
+      {
         ChildrenCheckResults: [
           {
-            FeedbackMessage: ,
             ChildrenCheckResults: [
               {
-                FeedbackMessage: Found constructor: MockClass3().,
                 ChildrenCheckResults: [
                   {
-                    FeedbackMessage: Found the required checks for: MockClass3().,
                     ChildrenCheckResults: [
                       {
-                        FeedbackMessage: The node MockClass3() does not have the private modifier.,
                         Correct: false,
-                        MatchedNode: MockClass3
+                        FeedbackMessage: The node MockClass4() does not have the private modifier.,
+                        MatchedNode: MockClass4
                       },
                       {
-                        FeedbackMessage: The node MockClass3() does not have the protected modifier.,
                         Correct: false,
-                        MatchedNode: MockClass3
+                        FeedbackMessage: The node MockClass4() does not have the protected modifier.,
+                        MatchedNode: MockClass4
                       }
                     ],
                     CollectionKind: Any,
-                    MatchedNode: MockClass3,
-                    NodeCheckCollectionWrapper: false
+                    NodeCheckCollectionWrapper: false,
+                    FeedbackMessage: Found the required checks for: MockClass4().,
+                    MatchedNode: MockClass4
                   }
                 ],
-                MatchedNode: MockClass3,
-                NodeCheckCollectionWrapper: false
+                NodeCheckCollectionWrapper: false,
+                FeedbackMessage: Found constructor: MockClass4().,
+                MatchedNode: MockClass4
               }
             ],
             CollectionKind: Any,
-            NodeCheckCollectionWrapper: true
+            NodeCheckCollectionWrapper: true,
+            FeedbackMessage: 
           },
           {
-            FeedbackMessage: Executing NOT-check,
             NestedResult: {
-              FeedbackMessage: ,
               ChildrenCheckResults: [
                 {
-                  FeedbackMessage: Found constructor: MockClass3().,
                   ChildrenCheckResults: [
                     {
-                      FeedbackMessage: Found the required checks for: MockClass3().,
                       ChildrenCheckResults: [
                         {
-                          FeedbackMessage: Modifiers correctly implemented.,
-                          Correct: true,
-                          MatchedNode: MockClass3
+                          Correct: false,
+                          FeedbackMessage: The node MockClass4() does not have the public modifier.,
+                          MatchedNode: MockClass4
                         },
                         {
-                          FeedbackMessage: The node MockClass3() does not have the internal modifier.,
-                          Correct: false,
-                          MatchedNode: MockClass3
+                          Correct: true,
+                          FeedbackMessage: Modifiers correctly implemented.,
+                          MatchedNode: MockClass4
                         }
                       ],
                       CollectionKind: Any,
-                      MatchedNode: MockClass3,
-                      NodeCheckCollectionWrapper: false
+                      NodeCheckCollectionWrapper: false,
+                      FeedbackMessage: Found the required checks for: MockClass4().,
+                      MatchedNode: MockClass4
                     }
                   ],
-                  MatchedNode: MockClass3,
-                  NodeCheckCollectionWrapper: false
+                  NodeCheckCollectionWrapper: false,
+                  FeedbackMessage: Found constructor: MockClass4().,
+                  MatchedNode: MockClass4
                 }
               ],
               CollectionKind: Any,
-              NodeCheckCollectionWrapper: true
-            }
+              NodeCheckCollectionWrapper: true,
+              FeedbackMessage: 
+            },
+            FeedbackMessage: Executing NOT-check
           }
         ],
-        MatchedNode: MockClass3,
-        NodeCheckCollectionWrapper: false
-      }
-    ],
-    MatchedNode: MockClass3,
-    NodeCheckCollectionWrapper: false
-  },
-  {
-    FeedbackMessage: Found class 'MockClass4',
-    Priority: Low,
-    ChildrenCheckResults: [
-      {
+        NodeCheckCollectionWrapper: false,
         FeedbackMessage: Found the required checks for: MockClass4.,
         Priority: Low,
-        ChildrenCheckResults: [
-          {
-            FeedbackMessage: ,
-            ChildrenCheckResults: [
-              {
-                FeedbackMessage: Found constructor: MockClass4().,
-                ChildrenCheckResults: [
-                  {
-                    FeedbackMessage: Found the required checks for: MockClass4().,
-                    ChildrenCheckResults: [
-                      {
-                        FeedbackMessage: The node MockClass4() does not have the private modifier.,
-                        Correct: false,
-                        MatchedNode: MockClass4
-                      },
-                      {
-                        FeedbackMessage: The node MockClass4() does not have the protected modifier.,
-                        Correct: false,
-                        MatchedNode: MockClass4
-                      }
-                    ],
-                    CollectionKind: Any,
-                    MatchedNode: MockClass4,
-                    NodeCheckCollectionWrapper: false
-                  }
-                ],
-                MatchedNode: MockClass4,
-                NodeCheckCollectionWrapper: false
-              }
-            ],
-            CollectionKind: Any,
-            NodeCheckCollectionWrapper: true
-          },
-          {
-            FeedbackMessage: Executing NOT-check,
-            NestedResult: {
-              FeedbackMessage: ,
-              ChildrenCheckResults: [
-                {
-                  FeedbackMessage: Found constructor: MockClass4().,
-                  ChildrenCheckResults: [
-                    {
-                      FeedbackMessage: Found the required checks for: MockClass4().,
-                      ChildrenCheckResults: [
-                        {
-                          FeedbackMessage: The node MockClass4() does not have the public modifier.,
-                          Correct: false,
-                          MatchedNode: MockClass4
-                        },
-                        {
-                          FeedbackMessage: Modifiers correctly implemented.,
-                          Correct: true,
-                          MatchedNode: MockClass4
-                        }
-                      ],
-                      CollectionKind: Any,
-                      MatchedNode: MockClass4,
-                      NodeCheckCollectionWrapper: false
-                    }
-                  ],
-                  MatchedNode: MockClass4,
-                  NodeCheckCollectionWrapper: false
-                }
-              ],
-              CollectionKind: Any,
-              NodeCheckCollectionWrapper: true
-            }
-          }
-        ],
-        MatchedNode: MockClass4,
-        NodeCheckCollectionWrapper: false
+        MatchedNode: MockClass4
       }
     ],
-    MatchedNode: MockClass4,
-    NodeCheckCollectionWrapper: false
+    NodeCheckCollectionWrapper: false,
+    FeedbackMessage: Found class 'MockClass4',
+    Priority: Low,
+    MatchedNode: MockClass4
   },
   {
-    FeedbackMessage: Found class 'MockClass5',
-    Priority: Low,
     ChildrenCheckResults: [
       {
-        FeedbackMessage: Found the required checks for: MockClass5.,
-        Priority: Low,
         ChildrenCheckResults: [
           {
-            FeedbackMessage: ,
             ChildrenCheckResults: [
               {
-                FeedbackMessage: Found constructor: MockClass5().,
                 ChildrenCheckResults: [
                   {
-                    FeedbackMessage: Found the required checks for: MockClass5().,
                     ChildrenCheckResults: [
                       {
-                        FeedbackMessage: The node MockClass5() does not have the private modifier.,
                         Correct: false,
+                        FeedbackMessage: The node MockClass5() does not have the private modifier.,
                         MatchedNode: MockClass5
                       },
                       {
-                        FeedbackMessage: The node MockClass5() does not have the protected modifier.,
                         Correct: false,
+                        FeedbackMessage: The node MockClass5() does not have the protected modifier.,
                         MatchedNode: MockClass5
                       }
                     ],
                     CollectionKind: Any,
-                    MatchedNode: MockClass5,
-                    NodeCheckCollectionWrapper: false
+                    NodeCheckCollectionWrapper: false,
+                    FeedbackMessage: Found the required checks for: MockClass5().,
+                    MatchedNode: MockClass5
                   }
                 ],
-                MatchedNode: MockClass5,
-                NodeCheckCollectionWrapper: false
+                NodeCheckCollectionWrapper: false,
+                FeedbackMessage: Found constructor: MockClass5().,
+                MatchedNode: MockClass5
               },
               {
-                FeedbackMessage: Found constructor: MockClass5().,
                 ChildrenCheckResults: [
                   {
-                    FeedbackMessage: Found the required checks for: MockClass5().,
                     ChildrenCheckResults: [
                       {
-                        FeedbackMessage: Modifiers correctly implemented.,
                         Correct: true,
+                        FeedbackMessage: Modifiers correctly implemented.,
                         MatchedNode: MockClass5
                       },
                       {
-                        FeedbackMessage: The node MockClass5() does not have the protected modifier.,
                         Correct: false,
+                        FeedbackMessage: The node MockClass5() does not have the protected modifier.,
                         MatchedNode: MockClass5
                       }
                     ],
                     CollectionKind: Any,
-                    MatchedNode: MockClass5,
-                    NodeCheckCollectionWrapper: false
+                    NodeCheckCollectionWrapper: false,
+                    FeedbackMessage: Found the required checks for: MockClass5().,
+                    MatchedNode: MockClass5
                   }
                 ],
-                MatchedNode: MockClass5,
-                NodeCheckCollectionWrapper: false
+                NodeCheckCollectionWrapper: false,
+                FeedbackMessage: Found constructor: MockClass5().,
+                MatchedNode: MockClass5
               }
             ],
             CollectionKind: Any,
-            NodeCheckCollectionWrapper: true
+            NodeCheckCollectionWrapper: true,
+            FeedbackMessage: 
           },
           {
-            FeedbackMessage: Executing NOT-check,
             NestedResult: {
-              FeedbackMessage: ,
               ChildrenCheckResults: [
                 {
-                  FeedbackMessage: Found constructor: MockClass5().,
                   ChildrenCheckResults: [
                     {
-                      FeedbackMessage: Found the required checks for: MockClass5().,
                       ChildrenCheckResults: [
                         {
-                          FeedbackMessage: The node MockClass5() does not have the public modifier.,
                           Correct: false,
+                          FeedbackMessage: The node MockClass5() does not have the public modifier.,
                           MatchedNode: MockClass5
                         },
                         {
-                          FeedbackMessage: Modifiers correctly implemented.,
                           Correct: true,
+                          FeedbackMessage: Modifiers correctly implemented.,
                           MatchedNode: MockClass5
                         }
                       ],
                       CollectionKind: Any,
-                      MatchedNode: MockClass5,
-                      NodeCheckCollectionWrapper: false
+                      NodeCheckCollectionWrapper: false,
+                      FeedbackMessage: Found the required checks for: MockClass5().,
+                      MatchedNode: MockClass5
                     }
                   ],
-                  MatchedNode: MockClass5,
-                  NodeCheckCollectionWrapper: false
+                  NodeCheckCollectionWrapper: false,
+                  FeedbackMessage: Found constructor: MockClass5().,
+                  MatchedNode: MockClass5
                 },
                 {
-                  FeedbackMessage: Found constructor: MockClass5().,
                   ChildrenCheckResults: [
                     {
-                      FeedbackMessage: Found the required checks for: MockClass5().,
                       ChildrenCheckResults: [
                         {
-                          FeedbackMessage: The node MockClass5() does not have the public modifier.,
                           Correct: false,
+                          FeedbackMessage: The node MockClass5() does not have the public modifier.,
                           MatchedNode: MockClass5
                         },
                         {
-                          FeedbackMessage: The node MockClass5() does not have the internal modifier.,
                           Correct: false,
+                          FeedbackMessage: The node MockClass5() does not have the internal modifier.,
                           MatchedNode: MockClass5
                         }
                       ],
                       CollectionKind: Any,
-                      MatchedNode: MockClass5,
-                      NodeCheckCollectionWrapper: false
+                      NodeCheckCollectionWrapper: false,
+                      FeedbackMessage: Found the required checks for: MockClass5().,
+                      MatchedNode: MockClass5
                     }
                   ],
-                  MatchedNode: MockClass5,
-                  NodeCheckCollectionWrapper: false
+                  NodeCheckCollectionWrapper: false,
+                  FeedbackMessage: Found constructor: MockClass5().,
+                  MatchedNode: MockClass5
                 }
               ],
               CollectionKind: Any,
-              NodeCheckCollectionWrapper: true
-            }
+              NodeCheckCollectionWrapper: true,
+              FeedbackMessage: 
+            },
+            FeedbackMessage: Executing NOT-check
           }
         ],
-        MatchedNode: MockClass5,
-        NodeCheckCollectionWrapper: false
+        NodeCheckCollectionWrapper: false,
+        FeedbackMessage: Found the required checks for: MockClass5.,
+        Priority: Low,
+        MatchedNode: MockClass5
       }
     ],
-    MatchedNode: MockClass5,
-    NodeCheckCollectionWrapper: false
+    NodeCheckCollectionWrapper: false,
+    FeedbackMessage: Found class 'MockClass5',
+    Priority: Low,
+    MatchedNode: MockClass5
   }
 ]

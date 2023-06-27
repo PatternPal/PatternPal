@@ -1,5 +1,7 @@
 ﻿#region
+
 using static PatternPal.Core.Checks.CheckBuilder;
+
 #endregion
 
 namespace PatternPal.Core.Recognizers.Helper_Classes;
@@ -9,26 +11,35 @@ namespace PatternPal.Core.Recognizers.Helper_Classes;
 /// </summary>
 internal class BridgeRecognizerInterface : BridgeRecognizerParent
 {
-    /// <inheritdoc />
-    public override MethodCheck HasMethodCheck()
+    public BridgeRecognizerInterface()
     {
-        return Method(Priority.High);
+        Initialize();
     }
 
     /// <inheritdoc />
-    public override InterfaceCheck HasInterfaceOrAbstractClassWithMethodCheck(MethodCheck methodInImplementation)
+    public override MethodCheck HasMethodCheck()
     {
+        return Method(Priority.High, "1b. Has a method.");
+    }
+
+    /// <inheritdoc />
+    public override CheckBase ImplementationCheckBase()
+    {
+
         return Interface(Priority.Knockout,
-            methodInImplementation
+            "1. Implementation Interface",
+            ImplementationMethod
         );
     }
 
     /// <inheritdoc />
-    public override ClassCheck ConcreteImplementationCheck(CheckBase implementationCheck, MethodCheck methodInImplementation)
+    public override ClassCheck ConcreteImplementationCheck()
     {
         return Class(Priority.Knockout,
+            "3. Concrete Implementation class",
             Implements(Priority.Knockout,
-                implementationCheck
+                "3a. Implements the Implementation interface.",
+                ImplementationClass
             )
         );
     }

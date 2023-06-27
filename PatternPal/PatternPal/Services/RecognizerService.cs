@@ -1,4 +1,8 @@
-﻿using PatternPal.Core.Runner;
+﻿#region
+
+using PatternPal.Services.Helpers;
+
+#endregion
 
 namespace PatternPal.Services;
 
@@ -26,8 +30,6 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
         IServerStreamWriter< RecognizeResponse > responseStream,
         ServerCallContext context)
     {
-        // TODO CV: Handle error cases
-
         // Get the list of files on which to run the recognizers.
         IList< string > ? files = GetFiles(request);
         if (files is null)
@@ -35,118 +37,41 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
             return Task.CompletedTask;
         }
 
-        // Run the recognizers. We need to cast the result to a `List` to access the `Sort` method,
-        // which is defined on the class, not on the `IList` contract.
+        // Run the recognizers.
         RecognizerRunner runner = new(
             files,
             request.Recognizers );
-        IList< (Recognizer, ICheckResult) > results = runner.Run();
+        IList< RecognizerRunner.RunResult > results = runner.Run();
 
         // KNOWN: The root check result is always a NodeCheckResult.
-        foreach ((Recognizer recognizer, ICheckResult rootCheckResult) in results)
+        foreach (RecognizerRunner.RunResult runResult in results)
         {
-            RecognizeResult rootResult = new()
-                                         {
-                                             Recognizer = recognizer,
-                                             Feedback = "Goed gedoet"
-                                         };
+            RecognizeResult rootResult = ResultsHelper.CreateRecognizeResult(runResult);
 
-            Dictionary< string, Result > resultsByRequirement = new();
+            // Threshold for when a result has enough requirements correct to be shown to the user.
+            const int PERCENTAGE_CORRECT_TRESHOLD = 50;
 
-            foreach (Result result in GetResults(
-                rootCheckResult))
+            // Skip result when it doesn't have the required percentage of correct requirements.
+            if (rootResult.PercentageCorrectResults >= PERCENTAGE_CORRECT_TRESHOLD)
             {
-                if (!resultsByRequirement.TryGetValue(
-                        result.Requirement,
-                        out Result ? existingResult)
-                    || (existingResult.MatchedNode == null && result.MatchedNode != null))
-                {
-                    resultsByRequirement[ result.Requirement ] = result;
-                }
+                RecognizeResponse response = new()
+                                             {
+                                                 Result = rootResult
+                                             };
+                responseStream.WriteAsync(response);
             }
-
-            // TODO: Check if requirements are correct, or remove result if not.
-
-            // TODO: Collect all requirements from checks.
-
-            // TODO: Generate feedback for incorrect/missing requirements.
-
-            foreach (Result result in resultsByRequirement.Values)
-            {
-                rootResult.Results.Add(result);
-            }
-
-            RecognizeResponse response = new()
-                                         {
-                                             Result = rootResult
-                                         };
-            responseStream.WriteAsync(response);
         }
 
         return Task.CompletedTask;
     }
 
     /// <summary>
-    /// This method transforms a <see cref="ICheckResult"/> to a <see cref="Result"/>
-    /// </summary>
-    /// <param name="resultsToProcess"></param>
-    /// <param name="checkResult"> The check to transform.</param>
-    /// <param name="usedNodes"></param>
-    /// <returns></returns>
-    private static IEnumerable< Result > GetResults(
-        ICheckResult rootCheckResult)
-    {
-        Queue< ICheckResult > resultsToProcess = new();
-        resultsToProcess.Enqueue(rootCheckResult);
-        while (resultsToProcess.Count != 0)
-        {
-            ICheckResult resultToProcess = resultsToProcess.Dequeue();
-
-            if (!string.IsNullOrWhiteSpace(resultToProcess.Check.Requirement))
-            {
-                Result result = new()
-                                {
-                                    Requirement = resultToProcess.Check.Requirement
-                                };
-
-                if (resultToProcess.MatchedNode != null)
-                {
-                    INode matchedNode = resultToProcess.MatchedNode;
-                    TextSpan sourceLocation = matchedNode.GetSourceLocation;
-                    result.MatchedNode = new MatchedNode
-                                         {
-                                             Name = matchedNode.GetName(),
-                                             Path = matchedNode.GetRoot().GetSource(),
-                                             Start = sourceLocation.Start,
-                                             Length = sourceLocation.Length
-                                         };
-                }
-
-                yield return result;
-            }
-
-            switch (resultToProcess)
-            {
-                case LeafCheckResult:
-                    continue;
-                case NotCheckResult notCheckResult:
-                    resultsToProcess.Enqueue(notCheckResult.NestedResult);
-                    continue;
-                case NodeCheckResult nodeCheckResult:
-                    foreach (ICheckResult childCheckResult in nodeCheckResult.ChildrenCheckResults)
-                    {
-                        resultsToProcess.Enqueue(childCheckResult);
-                    }
-                    continue;
-            }
-        }
-    }
-
-    /// <summary>
     /// Gets the list of files on which to run the recognizers.
     /// </summary>
-    /// <returns><see langword="null"/> if the request contains no valid file or project directory,
-    /// or a list of files otherwise.</returns>
+    /// <returns>
+    /// <see langword="null"/> if the request contains no valid file or project directory, or a list
+    /// of files otherwise.
+    /// </returns>
     private static IList< string > ? GetFiles(
         RecognizeRequest request)
     {

@@ -1,13 +1,13 @@
 ﻿{
-  FeedbackMessage: The method has no parameters.,
-  Priority: Low,
   ChildrenCheckResults: [
     {
+      Correct: false,
       FeedbackMessage: ,
-      Priority: Low,
-      Correct: false
+      Priority: Low
     }
   ],
-  MatchedNode: UsesFunction,
-  NodeCheckCollectionWrapper: false
+  NodeCheckCollectionWrapper: false,
+  FeedbackMessage: The method has no parameters.,
+  Priority: Low,
+  MatchedNode: UsesFunction
 }

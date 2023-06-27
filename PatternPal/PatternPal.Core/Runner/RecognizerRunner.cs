@@ -18,7 +18,7 @@ namespace PatternPal.Core.Runner;
 /// <summary>
 /// This class is the driver which handles running the recognizers.
 /// </summary>
-public class RecognizerRunner
+public partial class RecognizerRunner
 {
     /// <summary>
     /// The <see cref="IRecognizer"/>s which are currently supported.
@@ -71,6 +71,10 @@ public class RecognizerRunner
 
     // The selected recognizers which should be run.
     private readonly IList< IRecognizer > ? _recognizers;
+
+    // The recognizer to which the instruction belongs, if the runner is created for step-by-step
+    // mode.
+    private readonly Recognizer _stepByStepRecognizer;
     private readonly IInstruction ? _instruction;
 
     // The syntax graph of the code currently being recognized.
@@ -126,12 +130,15 @@ public class RecognizerRunner
     /// <summary>
     /// Create a new recognizer runner instance.
     /// </summary>
-    /// <param name="filePaths">The paths of the file to run the <paramref name="instruction"/> on.</param>
+    /// <param name="stepByStepRecognizer">The <see cref="Recognizer"/> to which the <paramref name="instruction"/> belongs.</param>
+    /// <param name="filePaths">The path of the file to run the <paramref name="instruction"/> on.</param>
     /// <param name="instruction">The <see cref="IInstruction"/> to run.</param>
     public RecognizerRunner(
+        Recognizer stepByStepRecognizer,
         IEnumerable< string > filePaths,
         IInstruction instruction)
     {
+        _stepByStepRecognizer = stepByStepRecognizer;
         _instruction = instruction;
         _graph = new SyntaxGraph();
         foreach (string file in filePaths)
@@ -148,27 +155,72 @@ public class RecognizerRunner
         _graph.CreateGraph();
     }
 
+    public record RunResult(
+        Recognizer RecognizerType,
+        ICheckResult CheckResult,
+        IList< string > Requirements);
+
+    /// <summary>
+    /// Gets the requirements from the given <paramref name="check"/>.
+    /// </summary>
+    /// <param name="check">The <see cref="ICheck"/> from which to get the requirements.</param>
+    /// <returns>The requirements.</returns>
+    private static IEnumerable< string > GetRequirementsFromCheck(
+        ICheck check)
+    {
+        if (!string.IsNullOrEmpty(check.Requirement))
+        {
+            yield return check.Requirement;
+        }
+
+        switch (check)
+        {
+            case NotCheck notCheck:
+                foreach (string requirement in GetRequirementsFromCheck(notCheck.NestedCheck))
+                {
+                    yield return requirement;
+                }
+                yield break;
+            case NodeCheckBase nodeCheckBase:
+                foreach (ICheck childCheck in nodeCheckBase.SubChecks)
+                {
+                    foreach (string requirement in GetRequirementsFromCheck(childCheck))
+                    {
+                        yield return requirement;
+                    }
+                }
+                yield break;
+        }
+    }
+
     /// <summary>
     /// Runs the configured <see cref="IRecognizer"/>s.
     /// </summary>
     /// <param name="pruneAll">Whether to prune regardless of <see cref="Priority"/>s</param>
     /// <returns>The result of the <see cref="IRecognizer"/>, or <see langword="null"/> if the <see cref="SyntaxGraph"/> is empty.</returns>
-    public IList< (Recognizer, ICheckResult) > Run(
+    public IList< RunResult > Run(
         bool pruneAll = false)
     {
         // If the graph is empty, we don't have to do any work.
         if (_graph.IsEmpty)
         {
-            return new List< (Recognizer, ICheckResult) >();
+            return new List< RunResult >();
         }
 
-        IList< (Recognizer, ICheckResult) > results = new List< (Recognizer, ICheckResult) >();
+        List< RunResult > results = new();
         if (_recognizers != null)
         {
             foreach (IRecognizer recognizer in _recognizers)
             {
                 ICheck rootCheck = recognizer.CreateRootCheck();
-                results.Add((recognizer.RecognizerType, RunImpl(rootCheck)));
+                ICheckResult rootCheckResult = RunImpl(rootCheck);
+                IList< string > requirements = GetRequirementsFromCheck(rootCheck).ToList();
+
+                results.Add(
+                    new RunResult(
+                        recognizer.RecognizerType,
+                        rootCheckResult,
+                        requirements));
             }
         }
         else
@@ -177,10 +229,14 @@ public class RecognizerRunner
             {
                 ICheck rootCheck = new NodeCheck< INode >(
                     Priority.Knockout,
-                    null,
+                    $"0. {_stepByStepRecognizer}",
                     _instruction.Checks);
-                // TODO: Get recognizer
-                results.Add((Recognizer.Unknown, RunImpl(rootCheck)));
+                IList< string > requirements = GetRequirementsFromCheck(rootCheck).ToList();
+                results.Add(
+                    new RunResult(
+                        _stepByStepRecognizer,
+                        RunImpl(rootCheck),
+                        requirements));
             }
             else
             {
@@ -197,7 +253,6 @@ public class RecognizerRunner
                                      {
                                          Graph = _graph,
                                          CurrentEntity = null!,
-                                         ParentCheck = rootCheck,
                                          EntityCheck = rootCheck,
                                          PreviousContext = null!,
                                      };
@@ -218,9 +273,11 @@ public class RecognizerRunner
                 rootResult,
                 pruneAll);
 
-            SortResultsByPriorities(
+            CalcScores(
                 resultsByNode,
                 rootResult);
+
+            SortResultsByPriorities(rootResult);
 
             return rootResult;
         }
@@ -244,419 +301,6 @@ public class RecognizerRunner
             (
                 x,
                 y) => x.DependencyCount.CompareTo(y.DependencyCount));
-    }
-
-    /// <summary>
-    /// Filters the sub-<see cref="ICheckResult"/>s of <paramref name="parentCheckResult" /> by
-    /// removing any results which can be safely pruned.
-    /// </summary>
-    /// <param name="resultsByNode">A <see cref="Dictionary{TKey,TValue}"/> to get the <see cref="ICheckResult"/>s belonging to the <see cref="INode"/>
-    /// found by an <see cref="ICheck"/> related to another <see cref="ICheck"/> by either a <see cref="RelationCheck"/> or <see cref="TypeCheck"/></param>
-    /// <param name="parentCheckResult">The <see cref="ICheckResult"/> currently being evaluated</param>
-    /// <param name="pruneAll">Whether to prune regardless of <see cref="Priority"/>s</param>
-    /// <returns><see langword="true"/> if <paramref name="parentCheckResult"/> should also be pruned.</returns>
-    /// <remarks>
-    /// Results filtering is done in 2 passes.<br/>
-    /// 1. Collect results to be pruned.<br/>
-    /// 2. Prune results.<br/>
-    /// <br/>
-    /// Filtering is done recursively. Once we encounter a <see cref="NodeCheckResult"/>, we filter
-    /// its sub-<see cref="ICheckResult"/>s recursively. If the <see cref="NodeCheckResult"/>
-    /// becomes empty because all its sub-<see cref="ICheckResult"/>s are pruned, we can also prune
-    /// the <see cref="NodeCheckResult"/> itself.
-    /// </remarks>
-    internal static bool PruneResults(
-        Dictionary< INode, List< ICheckResult > > resultsByNode,
-        NodeCheckResult parentCheckResult,
-        bool pruneAll = false)
-    {
-        // Pass 1: Collect results to be pruned.
-
-        // The results which should be pruned.
-        List< ICheckResult > resultsToBePruned = new();
-
-        foreach (ICheckResult checkResult in parentCheckResult.ChildrenCheckResults)
-        {
-            if (checkResult.MatchedNode is not null)
-            {
-                if (!resultsByNode.TryGetValue(
-                    checkResult.MatchedNode,
-                    out List< ICheckResult > ? results))
-                {
-                    results = new List< ICheckResult >();
-                    resultsByNode.Add(
-                        checkResult.MatchedNode,
-                        results);
-                }
-
-                results.Add(checkResult);
-            }
-
-            switch (checkResult)
-            {
-                case LeafCheckResult leafCheckResult:
-                {
-                    // If the leaf check is correct, it shouldn't be pruned.
-                    if (leafCheckResult.Correct)
-                    {
-                        continue;
-                    }
-
-                    // Only prune the incorrect leaf check if its priority is Knockout.
-                    if (Prune(
-                        leafCheckResult.Priority,
-                        pruneAll))
-                    {
-                        resultsToBePruned.Add(leafCheckResult);
-                        leafCheckResult.Pruned = true;
-                    }
-                    break;
-                }
-                case NodeCheckResult nodeCheckResult:
-                {
-                    // Filter the results recursively. If `PruneResults` returns true, the node
-                    // check itself should also be pruned.
-                    if (PruneResults(
-                            resultsByNode,
-                            nodeCheckResult,
-                            pruneAll)
-                        && Prune(
-                            nodeCheckResult.Priority,
-                            pruneAll))
-                    {
-                        resultsToBePruned.Add(nodeCheckResult);
-                        nodeCheckResult.Pruned = true;
-                    }
-                    break;
-                }
-                case NotCheckResult notCheckResult:
-                {
-                    switch (notCheckResult.NestedResult)
-                    {
-                        case LeafCheckResult leafCheckResult:
-                        {
-                            // If the leaf check is incorrect, this means the not check is
-                            // correct, so it shouldn't be pruned.
-                            if (!leafCheckResult.Correct)
-                            {
-                                continue;
-                            }
-
-                            // If the leaf check is correct, the not check is incorrect. If the not
-                            // check has priority Knockout, it should be pruned.
-                            if (Prune(
-                                notCheckResult.Priority,
-                                pruneAll))
-                            {
-                                resultsToBePruned.Add(notCheckResult);
-                                notCheckResult.Pruned = true;
-                            }
-                            break;
-                        }
-                        case NodeCheckResult nodeCheckResult:
-                        {
-                            // TODO: Fix this using priorities (only works if all sub-checks are knockout).
-                            // If `PruneResults` returns false, this means the node check shouldn't
-                            // be pruned (because it has correct children). Because it's wrapped in
-                            // a not check, this not check is incorrect and should be pruned if it
-                            // has priority Knockout.
-                            if (!PruneResults(
-                                    resultsByNode,
-                                    nodeCheckResult,
-                                    pruneAll)
-                                && Prune(
-                                    notCheckResult.Priority,
-                                    pruneAll))
-                            {
-                                resultsToBePruned.Add(notCheckResult);
-                                notCheckResult.Pruned = true;
-                            }
-                            break;
-                        }
-                        case NotCheckResult:
-                            throw new ArgumentException("Nested not checks not supported");
-                        default:
-                            throw new ArgumentException(
-                                $"Unknown check result '{notCheckResult.NestedResult}'",
-                                nameof( notCheckResult.NestedResult ));
-                    }
-                    break;
-                }
-                default:
-                    throw new ArgumentException(
-                        $"Unknown check result '{checkResult}'",
-                        nameof( checkResult ));
-            }
-        }
-
-        // Pass 2: Prune results.
-
-        // If parentCheck becomes empty => also prune parent. The parent is pruned by the caller if
-        // we return `true`.
-        if (resultsToBePruned.Count > 0
-            && (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count
-                || parentCheckResult.CollectionKind == CheckCollectionKind.All))
-        {
-            // Parent becomes empty.
-            parentCheckResult.ChildrenCheckResults.Clear();
-            return true;
-        }
-
-        if (parentCheckResult is
-            {
-                NodeCheckCollectionWrapper: true,
-                Check: RelationCheck or TypeCheck
-            })
-        {
-            // We're currently processing the NodeCheckResult of a RelationCheck or TypeCheck. 
-
-            // Empty relation/type check results can also be pruned.
-            if (parentCheckResult.ChildrenCheckResults.Count == 0)
-            {
-                return true;
-            }
-
-            foreach (ICheckResult dependentCheckResult in parentCheckResult.ChildrenCheckResults)
-            {
-                // If `dependentCheckResult` has already been pruned earlier on, we don't need to
-                // check it here again.
-                if (dependentCheckResult.Pruned)
-                {
-                    continue;
-                }
-
-                if (dependentCheckResult is not LeafCheckResult dependentResult)
-                {
-                    throw new ArgumentException($"Unexpected check type '{dependentCheckResult.GetType()}', expected '{typeof( LeafCheckResult )}'");
-                }
-
-                // Always prune results of incorrect relations.
-                if (!dependentResult.Correct)
-                {
-                    resultsToBePruned.Add(dependentResult);
-                    dependentResult.Pruned = true;
-                    continue;
-                }
-
-                if (dependentResult.RelatedCheck is null)
-                {
-                    throw new ArgumentNullException(
-                        nameof( dependentResult.RelatedCheck ),
-                        $"RelatedCheck of CheckResult '{dependentResult}' is null, while it should reference the ICheck belonging to the related INode.");
-                }
-
-                // If the RelationCheck or TypeCheck did not match any nodes, it won't have any child results. As
-                // such, we won't reach this code. If we do reach this code, but
-                // `dependentResult.MatchedNode` is null, this is an error.
-                if (dependentResult.MatchedNode is null)
-                {
-                    throw new ArgumentNullException(
-                        nameof( dependentResult.MatchedNode ),
-                        "Relation or Type check did not match any nodes");
-                }
-
-                // Get the CheckResults belonging to the related node.
-                List< ICheckResult > resultsOfNode = resultsByNode[ dependentResult.MatchedNode ];
-
-                // Find the CheckResult linked to the check which searched for the related node.
-                ICheckResult ? relevantResult = resultsOfNode.FirstOrDefault(
-                    result => result.Check == dependentResult.RelatedCheck);
-
-                // This should not be possible for the same reason `dependentResult.MatchedNode`
-                // should not be null.
-                if (relevantResult is null)
-                {
-                    throw new ArgumentNullException(
-                        nameof( relevantResult ),
-                        "Relation or Type check did not match any nodes");
-                }
-
-                // If this node gets pruned, it does not have the required attributes to be the node belonging to the
-                // check which searched for the related node. Therefore, even though the
-                // relation might be found, it is not the relation directed to the node to which there should be one.
-                // Therefore this relation is not the required one, and thus the dependentResult gets pruned.
-                if (relevantResult.Pruned)
-                {
-                    resultsToBePruned.Add(dependentResult);
-                    dependentResult.Pruned = true;
-                }
-            }
-        }
-
-        if (resultsToBePruned.Count > 0
-            && (resultsToBePruned.Count == parentCheckResult.ChildrenCheckResults.Count
-                || parentCheckResult.CollectionKind == CheckCollectionKind.All))
-        {
-            // Parent becomes empty.
-            parentCheckResult.ChildrenCheckResults.Clear();
-            return true;
-        }
-
-        // Prune the results.
-        foreach (ICheckResult checkResult in resultsToBePruned)
-        {
-            parentCheckResult.ChildrenCheckResults.Remove(checkResult);
-        }
-
-        // Parent doesn't become empty, so it shouldn't be pruned by the caller.
-        return false;
-    }
-
-    /// <summary>
-    /// Whether the <see cref="ICheckResult"/> should be pruned in case it is incorrect.
-    /// </summary>
-    /// <param name="priority">The <see cref="Priority"/> of the <see cref="ICheckResult"/></param>
-    /// <param name="pruneAll">Whether to prune regardless of <see cref="Priority"/>s</param>
-    private static bool Prune(
-        Priority priority,
-        bool pruneAll)
-        => pruneAll || priority == Priority.Knockout;
-
-    /// <summary>
-    /// Sorts a <see cref="NodeCheckResult"/> based on <see cref="Priority"/>s and whether the
-    /// <see cref="LeafCheckResult"/>s are correct. It goes recursively through the tree of
-    /// <see cref="ICheckResult"/>s, and gives a <see cref="Score"/> to each <see cref="ICheckResult"/>
-    /// based their <see cref="Priority"/>s and the <see cref="Score"/>s and <see cref="Priority"/>s
-    /// of their children.
-    /// </summary>
-    internal static void SortResultsByPriorities(
-        IReadOnlyDictionary< INode, List< ICheckResult > > resultsByNode,
-        NodeCheckResult result)
-    {
-        foreach (ICheckResult childResult in result.ChildrenCheckResults)
-        {
-            SortResultsByPrioritiesImpl(
-                resultsByNode,
-                childResult);
-            result.Score += childResult.Score;
-        }
-
-        ((List< ICheckResult >)result.ChildrenCheckResults).Sort(
-            (
-                a,
-                b) => a.Score.CompareTo(b.Score));
-
-        static void SortResultsByPrioritiesImpl(
-            IReadOnlyDictionary< INode, List< ICheckResult > > resultsByNode,
-            ICheckResult childResult)
-        {
-            switch (childResult)
-            {
-                case LeafCheckResult leafResult:
-                {
-                    leafResult.Score = Score.CreateScore(
-                        leafResult.Priority,
-                        leafResult.Correct);
-
-                    // Take into account the score of the related node if this result belongs to a
-                    // Relation- or TypeCheck.
-                    if (leafResult is {Correct: true, Check: RelationCheck or TypeCheck, MatchedNode: not null})
-                    {
-                        // Get the CheckResults belonging to the related node.
-                        List< ICheckResult > resultsOfNode = resultsByNode[ leafResult.MatchedNode ];
-
-                        // Find the CheckResult linked to the check which searched for the related node.
-                        ICheckResult ? relevantResult = resultsOfNode.FirstOrDefault(
-                            result => result.Check == leafResult.RelatedCheck);
-
-                        if (relevantResult == null)
-                        {
-                            // Probably unreachable.
-                            break;
-                        }
-
-                        // Increment the score with the score of the related node. If the related
-                        // node is not an entity, take the score of its entity parent. Otherwise,
-                        // correctly implemented members in bad parents would weigh more than poorly
-                        // implemented members in good parents.
-                        leafResult.Score += leafResult.MatchedNode switch
-                        {
-                            IEntity => relevantResult.Score,
-                            IMember member => GetParentScoreFromMember(
-                                resultsByNode,
-                                relevantResult,
-                                member),
-                            _ => throw new UnreachableException("Relation to non-IMember or IEntity")
-                        };
-
-                        // Gets the score of the `member`s parent of type Entity.
-                        static Score GetParentScoreFromMember(
-                            IReadOnlyDictionary< INode, List< ICheckResult > > resultsByNode,
-                            ICheckResult relevantResult,
-                            IMember member)
-                        {
-                            IEntity parent = member.GetParent();
-
-                            foreach (ICheckResult parentResult in resultsByNode[ parent ])
-                            {
-                                if (parentResult is LeafCheckResult)
-                                {
-                                    continue;
-                                }
-
-                                if (HasDescendantResult(
-                                    parentResult,
-                                    relevantResult))
-                                {
-                                    return parentResult.Score;
-                                }
-                            }
-
-                            return default;
-
-                            // Checks if `relevantResult` is a descendant of `parentResult`.
-                            static bool HasDescendantResult(
-                                ICheckResult parentResult,
-                                ICheckResult relevantResult)
-                            {
-                                if (parentResult == relevantResult)
-                                {
-                                    return true;
-                                }
-
-                                switch (parentResult)
-                                {
-                                    case LeafCheckResult:
-                                        return false;
-
-                                    case NotCheckResult notCheckResult:
-                                        return HasDescendantResult(
-                                            notCheckResult.NestedResult,
-                                            relevantResult);
-
-                                    case NodeCheckResult nodeCheckResult:
-                                        return nodeCheckResult.ChildrenCheckResults.Any(
-                                            childResult => HasDescendantResult(
-                                                childResult,
-                                                relevantResult));
-
-                                    default:
-                                        throw new ArgumentException($"Unsupported CheckResult type: {parentResult.GetType()}");
-                                }
-                            }
-                        }
-                    }
-                    break;
-                }
-                case NodeCheckResult nodeResult:
-                    SortResultsByPriorities(
-                        resultsByNode,
-                        nodeResult);
-                    break;
-
-                case NotCheckResult notResult:
-                    SortResultsByPrioritiesImpl(
-                        resultsByNode,
-                        notResult.NestedResult);
-                    notResult.Score = Score.GetNot(
-                        notResult.NestedResult.Priority,
-                        notResult.NestedResult.Score);
-                    break;
-
-                default:
-                    throw new ArgumentException($"{childResult} is not a supported ICheckResult");
-            }
-        }
     }
 }
 
@@ -708,7 +352,6 @@ public interface IRecognizerContext
                                {
                                    Graph = oldCtx.Graph,
                                    CurrentEntity = currentNode as IEntity ?? oldCtx.CurrentEntity,
-                                   ParentCheck = parentCheck,
                                    EntityCheck = currentNode is IEntity
                                        ? parentCheck
                                        : oldCtx.EntityCheck,
@@ -727,9 +370,6 @@ file class RecognizerContext : IRecognizerContext
 
     /// <inheritdoc />
     public required IEntity CurrentEntity { get; init; }
-
-    /// <inheritdoc />
-    public required ICheck ParentCheck { get; init; }
 
     /// <inheritdoc />
     public required ICheck EntityCheck { get; init; }

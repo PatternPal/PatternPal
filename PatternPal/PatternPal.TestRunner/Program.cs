@@ -161,12 +161,12 @@ internal class Program
             _fileManager.GetAllCSharpFilesFromDirectory(project.Directory),
             RecognizerRunner.SupportedRecognizers.Values.ToList() );
 
-        foreach ((_, ICheckResult checkResult) in runner.Run())
+        foreach (RecognizerRunner.RunResult runResult in runner.Run())
         {
             result.Results.Add(
                 new DetectionResult
                 {
-                    ClassName = checkResult.MatchedNode?.GetName() ?? string.Empty,
+                    ClassName = runResult.CheckResult.MatchedNode?.GetName() ?? string.Empty,
                     DetectedPattern = string.Empty,
                     Score = 0
                 });

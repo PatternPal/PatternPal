@@ -1,6 +1,8 @@
 ﻿#region
+
 using PatternPal.SyntaxTree.Models;
 using static PatternPal.Core.Checks.CheckBuilder;
+
 #endregion
 
 namespace PatternPal.Core.Recognizers.Helper_Classes;
@@ -10,10 +12,16 @@ namespace PatternPal.Core.Recognizers.Helper_Classes;
 /// </summary>
 internal class BridgeRecognizerAbstractClass : BridgeRecognizerParent
 {
+    public BridgeRecognizerAbstractClass()
+    {
+        Initialize();
+    }
+
     /// <inheritdoc />
-    public override MethodCheck HasMethodCheck()
+    public sealed override MethodCheck HasMethodCheck()
     {
         return Method(Priority.High,
+            "1b. Has an abstract method.",
             Modifiers(Priority.High,
                 Modifier.Abstract
             )
@@ -21,23 +29,26 @@ internal class BridgeRecognizerAbstractClass : BridgeRecognizerParent
     }
 
     /// <inheritdoc />
-    public override ClassCheck HasInterfaceOrAbstractClassWithMethodCheck(MethodCheck methodInImplementation)
+    public sealed override ClassCheck ImplementationCheckBase()
     {
-        return AbstractClass(Priority.Knockout,
-            methodInImplementation
+        return AbstractClass(Priority.Knockout, "1. Implementation Abstract Class",
+            ImplementationMethod
         );
     }
 
     /// <inheritdoc />
-    public override ClassCheck ConcreteImplementationCheck(CheckBase implementationCheck, MethodCheck methodInImplementation)
+    public sealed override ClassCheck ConcreteImplementationCheck()
     {
         return Class(Priority.Knockout,
+            "3. Concrete Implementation Class",
             Inherits(Priority.Knockout,
-                implementationCheck
+                "3a. Inherits from the Implementation abstract class.",
+                ImplementationClass
             ),
             Method(Priority.High,
                 Overrides(Priority.High,
-                    methodInImplementation
+                    "3b. Overrides a method.",
+                    ImplementationMethod
                 )
             )
         );

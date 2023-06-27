@@ -1,6 +1,6 @@
 ﻿{
+  NodeCheckCollectionWrapper: false,
   FeedbackMessage: Found field '_test',
   Priority: Low,
-  MatchedNode: _test,
-  NodeCheckCollectionWrapper: false
+  MatchedNode: _test
 }

@@ -2,19 +2,17 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Media;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.Internal.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.Win32;
+
 using PatternPal.Extension.Commands;
 using PatternPal.Extension.Grpc;
 using PatternPal.Extension.ViewModels;
@@ -33,7 +31,7 @@ namespace PatternPal.Extension.Views
         private StepByStepInstructionsViewModel _viewModel;
 
         public StepByStepInstructionsView()
-        {   
+        {
             InitializeComponent();
             InitializeViewModelAndButtons();
 
@@ -62,7 +60,7 @@ namespace PatternPal.Extension.Views
         {
             if (_viewModel.TrySelectPreviousInstruction())
             {
-                resultTextBlock.Visibility = Visibility.Hidden;
+                correctTextBlock.Visibility = Visibility.Hidden;
                 CheckIfNextPreviousButtonsAvailable();
             }
         }
@@ -78,7 +76,7 @@ namespace PatternPal.Extension.Views
         {
             if (_viewModel.TrySelectNextInstruction())
             {
-                resultTextBlock.Visibility = Visibility.Hidden;
+                correctTextBlock.Visibility = Visibility.Hidden;
                 CheckIfNextPreviousButtonsAvailable();
             }
         }
@@ -118,7 +116,7 @@ namespace PatternPal.Extension.Views
         private void CheckIfCheckIsAvailable()
         {
             CheckImplementationButton.IsEnabled = _viewModel.FilePaths.Any();
-            
+
             NextInstructionButton.IsEnabled = false;
             ExpanderResults.ResultsView.ItemsSource = new List< PatternResultViewModel >();
         }
@@ -134,10 +132,10 @@ namespace PatternPal.Extension.Views
             NextInstructionButton.IsEnabled = false;
 
             CheckInstructionRequest request = new CheckInstructionRequest
-            {
-                InstructionNumber = _viewModel.CurrentInstructionNumber - 1,
-                Recognizer = _viewModel.Recognizer
-            };
+                                              {
+                                                  InstructionNumber = _viewModel.CurrentInstructionNumber - 1,
+                                                  Recognizer = _viewModel.Recognizer
+                                              };
 
             foreach (string file in _viewModel.FilePaths)
             {
@@ -146,22 +144,38 @@ namespace PatternPal.Extension.Views
 
             try
             {
-                bool result = GrpcHelper.StepByStepClient.CheckInstruction(request).Result;
-                SubscribeEvents.OnStepByStepCheck( request.Recognizer.ToString(), request.InstructionNumber, result);
-                if (!result)
+                CheckInstructionResponse response = GrpcHelper.StepByStepClient.CheckInstruction(request);
+                SubscribeEvents.OnStepByStepCheck(
+                    request.Recognizer.ToString(),
+                    request.InstructionNumber,
+                    response.Result);
+
+                if (response.RecognizeResult == null)
                 {
-                    resultTextBlock.Visibility = Visibility.Hidden;
+                    correctTextBlock.Visibility = Visibility.Visible;
+                    correctTextBlock.Text = "Incorrect";
+                    correctTextBlock.Foreground = new SolidColorBrush(Colors.Red);
                     return;
                 }
+
+                ExpanderResults.ResultsView.ItemsSource = new[ ]
+                                                          {
+                                                              new PatternResultViewModel(response.RecognizeResult)
+                                                              {
+                                                                  Expanded = true
+                                                              }
+                                                          };
+
+                if (response.Result)
+                {
+                    NextInstructionButton.IsEnabled = true;
+                }
             }
-            catch(Exception exception)
+            catch (Exception)
             {
-                Console.WriteLine(exception);
+                GrpcHelper.ShowErrorMessage("Check of step gave an exception");
                 return;
             }
-
-            resultTextBlock.Visibility = Visibility.Visible;
-            NextInstructionButton.IsEnabled = true;
         }
 
         #region IVsSolutionEvents

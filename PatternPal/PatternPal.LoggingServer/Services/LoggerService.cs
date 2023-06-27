@@ -64,7 +64,7 @@ namespace PatternPal.LoggingServer.Services
                 }
             }
 
-            if (!DateTimeOffset.TryParse(request.ClientTimestamp, out DateTimeOffset cDto))
+            if (!DateTime.TryParse(request.ClientTimestamp, out DateTime clientDateTime))
             {
                 return await Task.FromResult(new LogResponse
                 {
@@ -94,8 +94,8 @@ namespace PatternPal.LoggingServer.Services
                 CodeStateId = codeStateId,
                 OldFileName = request.HasOldFileName ? request.OldFileName : null,
                 FullCodeState = request.HasFullCodeState ? request.FullCodeState : null,
-                ClientDatetime = cDto,
-                ServerDatetime = DateTimeOffset.Now,
+                ClientDatetime = DateTime.SpecifyKind(clientDateTime, DateTimeKind.Utc),
+                ServerDatetime = DateTime.UtcNow,
                 SessionId = sessionId,
                 ProjectId = request.HasProjectId ? request.ProjectId : null,
                 ParentId = parentEventId,

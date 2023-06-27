@@ -61,7 +61,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The constructor is private to prevent direct instantiation of the class from outside the class. This ensures that only one object is created..
+        ///   Looks up a localized string similar to It needs to be an interface as all the properties of all concrete products get declared in this interface..
         /// </summary>
         internal static string Explanation1 {
             get {
@@ -70,7 +70,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The field is static since the Singleton should be stateless.
+        ///   Looks up a localized string similar to There need to be two classes because the pattern has no funtion if it only creates one concrete product. They both have to implement product because it are implementations of product.
         /// </summary>
         internal static string Explanation2 {
             get {
@@ -79,7 +79,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This method will act as a constructor. It calls the constructor and saves the object in the field of the previous step. The subsequent calls will return that same instance, instead of creating a new one. .
+        ///   Looks up a localized string similar to The creator is an abstract class and not an interface because this class also has functions outside of creating a product. Only the method responsible for creating a product, the factoryMethod(), is abstract as this is the only function of the classes that inherit from the creator.
         /// </summary>
         internal static string Explanation3 {
             get {
@@ -88,7 +88,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to By how we made the Singleton, we ensure that any client accessing the field of the Singleton will get access to the same field instance..
+        ///   Looks up a localized string similar to Each concrete creator is a factory for one concrete product. and creating that concrete product is the only function of this class. It needs to inherit creator as the factoryMethod() method is declared there..
         /// </summary>
         internal static string Explanation4 {
             get {
@@ -97,7 +97,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a constructor that is only private..
+        ///   Looks up a localized string similar to Create an interface. We refer to this interface as the Product..
         /// </summary>
         internal static string Step1 {
             get {
@@ -106,7 +106,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a static, private field with the same type as the class..
+        ///   Looks up a localized string similar to Create two new classes which inherit the Product. We refer to these classes as Concrete Product..
         /// </summary>
         internal static string Step2 {
             get {
@@ -115,7 +115,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a static, public/internal method that acts as the constructor. When called and the field from the previous step is null call the constructor, otherwise, return the field..
+        ///   Looks up a localized string similar to Create an abstract class which will contain an public abstract method which will return something of type Product. This class will be referred to as Creator..
         /// </summary>
         internal static string Step3 {
             get {
@@ -124,7 +124,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a client class that calls the method from the previous step to retrieve the Singleton instance. .
+        ///   Looks up a localized string similar to Create two classes which will inherit from the Creator class. Each class will have exactly one method which will create and return a different concrete product. This class will be referred to as Concrete Creator.
         /// </summary>
         internal static string Step4 {
             get {

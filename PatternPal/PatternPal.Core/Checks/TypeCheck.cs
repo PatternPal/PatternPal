@@ -10,12 +10,21 @@ internal class TypeCheck : CheckBase
     // Used to get the node to compare against.
     private readonly OneOf< ICheck, GetCurrentEntity > _getNode;
 
+    private Score _perfectScore;
+
     /// <summary>
     /// A <see cref="TypeCheck"/> is dependent on the result of <see cref="_getNode"/>.
     /// </summary>
     public override int DependencyCount => _getNode.Match(
         relatedCheck => 1 + relatedCheck.DependencyCount,
         _ => 0);
+
+    /// <inheritdoc />
+    public override Score PerfectScore => _perfectScore.Equals(default)
+        ? _perfectScore = Score.CreateScore(
+            Priority,
+            true)
+        : _perfectScore;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TypeCheck"/> class.
@@ -72,32 +81,32 @@ internal class TypeCheck : CheckBase
                 INode nodeToMatch = getCurrentEntity(ctx);
                 bool isMatch = node == nodeToMatch;
                 return new List< ICheckResult >
-                {
-                   new LeafCheckResult
-                   {
-                       Priority = Priority,
-                       Correct = isMatch,
-                       FeedbackMessage = isMatch
-                           ? $"Node '{node}' has correct type"
-                           : $"Node '{node}' has incorrect type, expected '{nodeToMatch}'",
-                       DependencyCount = DependencyCount,
-                       MatchedNode = nodeToMatch, //TODO is this right or should this be node?
-                       Check = this,
-                       RelatedCheck = ctx.EntityCheck
-                   }
-                };
+                       {
+                           new LeafCheckResult
+                           {
+                               Priority = Priority,
+                               Correct = isMatch,
+                               FeedbackMessage = isMatch
+                                   ? $"Node '{node}' has correct type"
+                                   : $"Node '{node}' has incorrect type, expected '{nodeToMatch}'",
+                               DependencyCount = DependencyCount,
+                               MatchedNode = nodeToMatch, //TODO is this right or should this be node?
+                               Check = this,
+                               RelatedCheck = ctx.EntityCheck
+                           }
+                       };
             });
 
         return new NodeCheckResult
-        {
-           Priority = Priority,
-           ChildrenCheckResults = results,
-           FeedbackMessage = $"Found node '{node}'",
-           DependencyCount = DependencyCount,
-           MatchedNode = node,
-           Check = this,
-           NodeCheckCollectionWrapper = true,
-           CollectionKind = CheckCollectionKind.Any
-        };
+               {
+                   Priority = Priority,
+                   ChildrenCheckResults = results,
+                   FeedbackMessage = $"Found node '{node}'",
+                   DependencyCount = DependencyCount,
+                   MatchedNode = node,
+                   Check = this,
+                   NodeCheckCollectionWrapper = true,
+                   CollectionKind = CheckCollectionKind.Any
+               };
     }
 }

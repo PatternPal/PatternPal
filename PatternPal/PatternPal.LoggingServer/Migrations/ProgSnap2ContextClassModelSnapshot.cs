@@ -28,7 +28,7 @@ namespace PatternPal.LoggingServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTimeOffset>("ClientDatetime")
+                    b.Property<DateTime>("ClientDatetime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CodeStateId")
@@ -70,7 +70,7 @@ namespace PatternPal.LoggingServer.Migrations
                     b.Property<string>("RecognizerResult")
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset>("ServerDatetime")
+                    b.Property<DateTime>("ServerDatetime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("SessionId")

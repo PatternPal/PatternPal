@@ -1,14 +1,14 @@
 ﻿{
-  FeedbackMessage: Found property: TestProperty.,
-  Priority: Low,
   ChildrenCheckResults: [
     {
+      Correct: true,
       FeedbackMessage: Modifiers correctly implemented.,
       Priority: Low,
-      Correct: true,
       MatchedNode: TestProperty
     }
   ],
-  MatchedNode: TestProperty,
-  NodeCheckCollectionWrapper: false
+  NodeCheckCollectionWrapper: false,
+  FeedbackMessage: Found property: TestProperty.,
+  Priority: Low,
+  MatchedNode: TestProperty
 }

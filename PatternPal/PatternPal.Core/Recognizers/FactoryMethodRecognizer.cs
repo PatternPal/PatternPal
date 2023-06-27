@@ -1,7 +1,7 @@
 ﻿#region
 
 using PatternPal.Core.StepByStep;
-
+using PatternPal.Core.StepByStep.Resources.Instructions;
 using PatternPal.SyntaxTree.Models;
 
 using static PatternPal.Core.Checks.CheckBuilder;
@@ -11,8 +11,7 @@ using static PatternPal.Core.Checks.CheckBuilder;
 namespace PatternPal.Core.Recognizers;
 
 /// <summary>
-/// A <see cref="IRecognizer"/> that is used to determine if the provided file is an implementation
-/// of the factory-method pattern.
+/// A <see cref="IRecognizer"/> that is used to determine if the provided files or project implement the factory-method pattern.
 /// </summary>
 /// <remarks>
 /// Requirements for the Product class:<br/>
@@ -34,7 +33,7 @@ namespace PatternPal.Core.Recognizers;
 ///     a) inherits Creator<br/>
 ///     b) has exactly one method that creates and returns a Concrete product<br/>
 /// </remarks>
-internal class FactoryMethodRecognizer : IRecognizer
+internal class FactoryMethodRecognizer : IRecognizer, IStepByStepRecognizer
 {
     /// <inheritdoc />
     public string Name => "Factory-Method";
@@ -58,7 +57,7 @@ internal class FactoryMethodRecognizer : IRecognizer
         yield return product;
         yield return concreteProduct;
         yield return creator;
-        yield return ConcreteCreator(creator, concreteProduct);
+        yield return ConcreteCreator(creator, concreteProduct, product);
     }
 
     /// <summary>
@@ -71,7 +70,7 @@ internal class FactoryMethodRecognizer : IRecognizer
         //Product a
         return Interface(
             Priority.Knockout,
-            "is an interface"
+            "1. Product Interface"
         );
     }
 
@@ -87,11 +86,12 @@ internal class FactoryMethodRecognizer : IRecognizer
         //Concrete product a & Product b
         RelationCheck concreteInheritsProduct = Implements(
             Priority.Knockout,
-            "gets inherited by at least one class + Concrete Product inherits Product",
+            "2a. Inherits Product.",
             product);
 
         return Class(
             Priority.Low,
+            "2. Concrete Product Class",
             concreteInheritsProduct
         );
     }
@@ -109,14 +109,14 @@ internal class FactoryMethodRecognizer : IRecognizer
         //Creator a
         ModifierCheck isAbstract = Modifiers(
             Priority.Knockout,
-            "is an abstract class",
+            "3a. Is abstract.",
             Modifier.Abstract
         );
 
         //Creator d
         MethodCheck factoryMethod = Method(
             Priority.High,
-            "contains a factory-method with the following properties: 1) method is abstract 2) method is public 3) returns an object of type Product",
+            "3b. Contains a factory-method with the following properties: 1) method is abstract 2) method is public 3) returns an object of type Product.",
             Modifiers(
                 Priority.Knockout,
                 Modifier.Abstract
@@ -133,6 +133,7 @@ internal class FactoryMethodRecognizer : IRecognizer
 
         return Class(
             Priority.Low,
+            "3. Creator Class",
             isAbstract,
             factoryMethod
         );
@@ -147,22 +148,22 @@ internal class FactoryMethodRecognizer : IRecognizer
     /// <param name="creator"> this should be a class check of the class Creator</param>
     /// <param name="concreteProduct"> this should be a class check of the class Concrete Product</param>
     /// <returns>A <see cref="ClassCheck"/> which should result in the Concrete Creator class.</returns>
-    ClassCheck ConcreteCreator(ClassCheck creator, ClassCheck concreteProduct)
+    ClassCheck ConcreteCreator(ClassCheck creator, ClassCheck concreteProduct, InterfaceCheck product)
     {
         //Concrete Creator a & Creator b
         RelationCheck concreteInheritsCreator = Inherits(
             Priority.Knockout,
-            "inherits Creator + Creator gets inherited by at least one class",
+            "4a. Inherits Creator.",
             creator
         );
 
         //Concrete Creator b --Todo does not check if it is exactly one
         MethodCheck methodReturnsConcreteProduct = Method(
             Priority.Low,
-            "has exactly one method that creates and returns a Concrete product",
+            "4b. Has exactly one method that creates and returns a Concrete product.",
             Type(
                 Priority.Low,
-                concreteProduct
+                product
             ),
             Creates(
                 Priority.Low,
@@ -173,20 +174,88 @@ internal class FactoryMethodRecognizer : IRecognizer
         //Concrete product b
         RelationCheck createsConcreteProduct = Creates(
             Priority.High,
-            "gets created in a Concrete Creator",
+            "2b. Gets created in a Concrete Creator.",
             concreteProduct
         );
 
         return Class(
             Priority.Low,
+            "4. Concrete Creator Class",
             concreteInheritsCreator,
             methodReturnsConcreteProduct,
             createsConcreteProduct
         );
     }
 
-    public List<IInstruction> GenerateStepsList()
+    /// <inheritdoc />
+    List<IInstruction> IStepByStepRecognizer.GenerateStepsList()
     {
-        throw new NotImplementedException();
+        List<IInstruction> generateStepsList = new();
+
+        InterfaceCheck product = Product();
+        ClassCheck concreteProduct = ConcreteProduct(product);
+        ClassCheck creator = Creator(product);
+        ClassCheck concreteCreator = ConcreteCreator(creator, concreteProduct, product);
+
+        // Step 1: check the product class
+        generateStepsList.Add(
+            new SimpleInstruction(
+                FactoryMethodInstructions.Step1,
+                FactoryMethodInstructions.Explanation1,
+                new List<ICheck>
+                {
+                    product
+                }
+            )
+        );
+
+
+        // Step 2: check the concrete product class
+        generateStepsList.Add(
+            new SimpleInstruction(
+                FactoryMethodInstructions.Step2,
+                FactoryMethodInstructions.Explanation2,
+                new List<ICheck>
+                {
+                    product,
+                    concreteProduct
+                }
+            )
+        );
+
+
+
+        // Step 3: check the creator class
+        generateStepsList.Add(
+            new SimpleInstruction(
+                FactoryMethodInstructions.Step3,
+                FactoryMethodInstructions.Explanation3,
+                new List<ICheck>
+                {
+                    product,
+                    concreteProduct,
+                    creator
+                }
+            )
+        );
+
+
+        // Step 4: check the concrete creator class
+        generateStepsList.Add(
+            new SimpleInstruction(
+                FactoryMethodInstructions.Step4,
+                FactoryMethodInstructions.Explanation4,
+                new List<ICheck>
+                {
+                    product,
+                    concreteProduct,
+                    creator,
+                    concreteCreator
+                }
+            )
+        );
+
+
+        return generateStepsList;
     }
 }

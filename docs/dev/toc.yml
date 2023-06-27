@@ -28,6 +28,8 @@
     href: recognizers/design/checks.md
   - name: Syntax Graph
     href: recognizers/design/syntax_graph.md
+  - name: Step-By-Step
+    href: stepbystep/design/stepbystep.md
 
   # -- Guides
   - name: Guides
@@ -37,6 +39,7 @@
     href: recognizers/guides/implement_check.md
   - name: Adding a design pattern to Step-By-Step
     href: stepbystep/guides/implement_an_instructionset.md
+
 
 # Pattern recognition --------------------
 - name: Data logging

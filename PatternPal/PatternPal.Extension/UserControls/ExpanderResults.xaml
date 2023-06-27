@@ -24,11 +24,13 @@
     </UserControl.Resources>
 
     <StackPanel>
-        <ItemsControl Name="ResultsView">
+        <ItemsControl
+            MaxWidth="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=ActualWidth}"
+            Name="ResultsView">
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:PatternResultViewModel}">
                     <Grid Margin="0,5,0,5">
-                        <Expander Padding="5,5,0,5"
+                        <Expander Padding="5,5,5,5"
                                   HorizontalAlignment="Stretch"
                                   VerticalAlignment="Stretch"
                                   ExpandDirection="Down"
@@ -40,6 +42,8 @@
                                     <ProgressBar x:Name="patternScore"
                                                  Height="5"
                                                  Value="{Binding Path=Score, Mode=OneWay}"
+                                                 Minimum="0"
+                                                 Maximum="100"
                                                  Width="30" Margin="10 0 0 0"
                                                  BorderBrush="{Binding ProgressBarColor}"
                                                  BorderThickness="1"
@@ -47,17 +51,82 @@
                                 </StackPanel>
                             </Expander.Header>
                             <StackPanel>
-                                <TextBlock Text="{Binding Result.Feedback}" />
-                                <ItemsControl Name="ResultsViewParts" ItemsSource="{Binding Children}">
+                                <TextBlock Padding="0,0,5,0" Text="{Binding Result.Feedback}" Margin="0,0,0,10"
+                                           MaxWidth="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Expander}}, Path=ActualWidth}"
+                                           TextWrapping="Wrap" />
+                                <ItemsControl
+                                    MaxWidth="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Expander}, AncestorLevel=1}, Path=ActualWidth}"
+                                    Name="EntityResults" ItemsSource="{Binding EntityChecks}">
                                     <ItemsControl.ItemTemplate>
-                                        <DataTemplate DataType="{x:Type models:CheckResultViewModel}">
-                                            <StackPanel Orientation="Vertical">
-                                                <StackPanel Margin="0,0,0,10">
-                                                    <TextBlock Text="{Binding Requirement}" />
-                                                    <Label Content="{Binding MatchedNodeName}"
-                                                           MouseDoubleClick="Control_OnMouseDoubleClick" />
-                                                </StackPanel>
-                                            </StackPanel>
+                                        <DataTemplate DataType="{x:Type models:EntityCheckResultViewModel}">
+                                            <Expander Padding="5,5,0,5"
+                                                      HorizontalAlignment="Stretch"
+                                                      VerticalAlignment="Stretch"
+                                                      ExpandDirection="Down"
+                                                      IsExpanded="{Binding Expanded}">
+                                                <Expander.Header>
+                                                    <StackPanel Orientation="Vertical">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="{Binding Name}"
+                                                                       Margin="2,0,5,0" />
+                                                            <ProgressBar x:Name="patternScore"
+                                                                         Height="5"
+                                                                         Value="{Binding Path=Score, Mode=OneWay}"
+                                                                         Minimum="0"
+                                                                         Maximum="100"
+                                                                         Width="30" Margin="10 0 0 0"
+                                                                         BorderBrush="{Binding ProgressBarColor}"
+                                                                         BorderThickness="1"
+                                                                         Foreground="{Binding ProgressBarColor}" />
+                                                        </StackPanel>
+                                                        <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                                                            <imaging:CrispImage Width="16"
+                                                                Height="16"
+                                                                HorizontalAlignment="Left"
+                                                                Margin="0,0,10,0"
+                                                                Moniker="{Binding MatchedNodeIcon}" />
+                                                            <Label Content="{Binding MatchedNodeName}"
+                                                                   MouseDoubleClick="Control_OnMouseDoubleClick" />
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </Expander.Header>
+                                                <ItemsControl
+                                                    MaxWidth="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}, AncestorLevel=1}, Path=ActualWidth}"
+                                                    Name="ResultsViewParts" ItemsSource="{Binding Children}">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate DataType="{x:Type models:CheckResultViewModel}">
+                                                            <Grid>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="0.05*" />
+                                                                    <ColumnDefinition Width="0.95*" />
+                                                                </Grid.ColumnDefinitions>
+                                                                <imaging:CrispImage
+                                                                    Grid.Column="0"
+                                                                    Width="24" Height="24"
+                                                                    HorizontalAlignment="Left"
+                                                                    Moniker="{Binding Icon}" />
+                                                                <StackPanel
+                                                                    Grid.Column="1"
+                                                                    Orientation="Vertical"
+                                                                    Margin="5,0,0,0">
+                                                                    <TextBlock Padding="0,0,5,0"
+                                                                               Text="{Binding Requirement}"
+                                                                               TextWrapping="Wrap" />
+                                                                    <StackPanel Orientation="Horizontal">
+                                                                        <imaging:CrispImage
+                                                                            Width="16" Height="16"
+                                                                            HorizontalAlignment="Left"
+                                                                            Margin="0,0,5,0"
+                                                                            Moniker="{Binding MatchedNodeIcon}" />
+                                                                        <Label Content="{Binding MatchedNodeName}"
+                                                                               MouseDoubleClick="Control_OnMouseDoubleClick" />
+                                                                    </StackPanel>
+                                                                </StackPanel>
+                                                            </Grid>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </Expander>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>

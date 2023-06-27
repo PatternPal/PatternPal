@@ -117,9 +117,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
             EventId = receivedRequest.EventId,
             SubjectId = receivedRequest.SubjectId,
             ToolInstances = receivedRequest.ToolInstances,
-            ClientTimestamp =
-                DateTime.UtcNow.ToString(
-                    "yyyy-MM-dd HH:mm:ss.fff zzz"),
+            ClientTimestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"),
             SessionId =
                 receivedRequest.SessionId
         };
@@ -135,9 +133,10 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     /// <returns>A LogRequest populated for this specific event</returns>
     private static LogRequest RecognizeLog(LogEventRequest receivedRequest)
     {
-        // TODO PatternPal only supports running the recognizer on a single project, so the projectID should be set as well.
         LogRequest sendLog = StandardLog(receivedRequest);
 
+        sendLog.CodeStateSection = receivedRequest.CodeStateSection;
+        sendLog.ProjectId = receivedRequest.ProjectId;
         sendLog.EventType = LoggingServer.EventType.EvtXRecognizerRun;
         sendLog.RecognizerResult = receivedRequest.RecognizerResult;
         sendLog.RecognizerConfig = receivedRequest.RecognizerConfig;
@@ -154,8 +153,11 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     private static LogRequest CompileLog(LogEventRequest receivedRequest)
     {
         LogRequest sendLog = StandardLog(receivedRequest);
+
         sendLog.EventType = LoggingServer.EventType.EvtCompile;
         sendLog.CompileResult = receivedRequest.CompileResult;
+        sendLog.ProjectId = receivedRequest.ProjectId;
+
         return sendLog;
     }
 
@@ -175,6 +177,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         sendLog.CodeStateSection = receivedRequest.CodeStateSection;
         sendLog.ParentEventId = receivedRequest.ParentEventId;
         sendLog.SourceLocation = receivedRequest.SourceLocation;
+        sendLog.ProjectId = receivedRequest.ProjectId;
 
         return sendLog;
     }
@@ -214,7 +217,8 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         sendLog.CodeStateSection = receivedRequest.CodeStateSection;
         sendLog.ProjectId = receivedRequest.ProjectId;
 
-        string filePathInProjectDir = Path.GetRelativePath(receivedRequest.ProjectDirectory, sendLog.CodeStateSection);
+        // The included path is only relative to the direct parent directory of the .csproj-file.
+        string filePathInProjectDir = Path.GetRelativePath(Path.GetDirectoryName(sendLog.ProjectId)!, sendLog.CodeStateSection);
 
         try
         {
@@ -285,8 +289,8 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         sendLog.OldFileName = receivedRequest.OldFileName;
         sendLog.ProjectId = receivedRequest.ProjectId;
 
-        string oldFilePathInProjectDir = Path.GetRelativePath(receivedRequest.ProjectDirectory, sendLog.OldFileName);
-        string newFilePathInProjectDir = Path.GetRelativePath(receivedRequest.ProjectDirectory, sendLog.CodeStateSection);
+        string oldFilePathInProjectDir = Path.GetRelativePath(Path.GetDirectoryName(sendLog.ProjectId)!, sendLog.OldFileName);
+        string newFilePathInProjectDir = Path.GetRelativePath(Path.GetDirectoryName(sendLog.ProjectId)!, sendLog.CodeStateSection);
         try
         {
             // To rename the key that stores the hash in _lastCodeState, we obtain its value, reinsert it under the new key
@@ -356,12 +360,12 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     /// <returns>A LogRequest populated for this specific event</returns>
     private static LogRequest DebugProgramLog(LogEventRequest receivedRequest)
     {
-        // TODO Should include ProjectID
         LogRequest sendLog = StandardLog(receivedRequest);
 
         sendLog.EventType = LoggingServer.EventType.EvtDebugProgram;
         sendLog.ExecutionId = receivedRequest.ExecutionId;
         sendLog.ExecutionResult = (ExecutionResult)receivedRequest.ExecutionResult;
+        sendLog.ProjectId = receivedRequest.ProjectId;
 
         return sendLog;
     }
