@@ -1,16 +1,9 @@
-﻿name: Release extension
+﻿name: Release logging 
 on:
   push:
     branches:
       - master
-    paths:
-      - 'PatternPal/**'
-  pull_request:
-    branches:
-      - master
-    paths:
-      - 'PatternPal/**'
-  workflow_dispatch: 
+  workflow_dispatch:
 
 defaults:
   run:
@@ -44,4 +37,4 @@ jobs:
           context: PatternPal/
           file: PatternPal/PatternPal.LoggingServer/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/patternpalloggingserver:latest,${{ secrets.DOCKERHUB_USERNAME }}/patternpalloggingserver:${{ steps.patternpal_verison.outputs.release }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/patternpalloggingserver:latest,${{ secrets.DOCKERHUB_USERNAME }}/patternpalloggingserver:${{ steps.patternpal_version.outputs.release }}
