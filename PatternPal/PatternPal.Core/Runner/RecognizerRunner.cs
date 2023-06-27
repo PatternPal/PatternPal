@@ -72,6 +72,8 @@ public partial class RecognizerRunner
     // The selected recognizers which should be run.
     private readonly IList< IRecognizer > ? _recognizers;
 
+    // The recognizer to which the instruction belongs, if the runner is created for step-by-step
+    // mode.
     private readonly Recognizer _stepByStepRecognizer;
     private readonly IInstruction ? _instruction;
 
@@ -128,7 +130,8 @@ public partial class RecognizerRunner
     /// <summary>
     /// Create a new recognizer runner instance.
     /// </summary>
-    /// <param name="filePath">The path of the file to run the <paramref name="instruction"/> on.</param>
+    /// <param name="stepByStepRecognizer">The <see cref="Recognizer"/> to which the <paramref name="instruction"/> belongs.</param>
+    /// <param name="filePaths">The path of the file to run the <paramref name="instruction"/> on.</param>
     /// <param name="instruction">The <see cref="IInstruction"/> to run.</param>
     public RecognizerRunner(
         Recognizer stepByStepRecognizer,
