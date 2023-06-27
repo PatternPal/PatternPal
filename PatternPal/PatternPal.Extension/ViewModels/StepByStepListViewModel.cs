@@ -179,13 +179,12 @@ namespace PatternPal.Extension.ViewModels
                         templatePath,
                         projectPath,
                         projectName);
-                    Project project = dte.Solution.Projects.Item(1);
+                    
                     string filePath =
                         Path.Combine(
                             projectPath,
                             SelectedInstructionSet+".cs");
                     File.Create(filePath).Close();
-                    project.ProjectItems.AddFromFile(filePath);
 
                     dte.ItemOperations.OpenFile(filePath);
                     return new List<string> { filePath };
