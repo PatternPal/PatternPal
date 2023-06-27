@@ -1,0 +1,581 @@
+﻿[
+  {
+    RecognizerType: Strategy,
+    CheckResult: {
+      ChildrenCheckResults: [
+        {
+          ChildrenCheckResults: [
+            {
+              ChildrenCheckResults: [
+                {
+                  ChildrenCheckResults: [
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              Correct: true,
+                              FeedbackMessage: Modifiers correctly implemented.,
+                              MatchedNode: Compression,
+                              Score: {},
+                              PerfectScore: {}
+                            },
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  ChildrenCheckResults: [
+                                    {
+                                      Correct: true,
+                                      FeedbackMessage: Node 'ICompression' has correct type,
+                                      DependencyCount: 1,
+                                      MatchedNode: ICompression,
+                                      Score: {},
+                                      PerfectScore: {}
+                                    }
+                                  ],
+                                  CollectionKind: Any,
+                                  NodeCheckCollectionWrapper: true,
+                                  FeedbackMessage: Found node 'ICompression',
+                                  DependencyCount: 1,
+                                  MatchedNode: ICompression,
+                                  Score: {},
+                                  PerfectScore: {}
+                                }
+                              ],
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: Found the required checks for: Compression.,
+                              DependencyCount: 2,
+                              MatchedNode: Compression,
+                              Score: {},
+                              PerfectScore: {}
+                            }
+                          ],
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found field 'Compression',
+                          DependencyCount: 2,
+                          MatchedNode: Compression,
+                          Score: {},
+                          PerfectScore: {}
+                        }
+                      ],
+                      CollectionKind: Any,
+                      NodeCheckCollectionWrapper: true,
+                      FeedbackMessage: ,
+                      DependencyCount: 2,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: false,
+                  FeedbackMessage: Found the required checks for: CompressionContext.,
+                  DependencyCount: 4,
+                  MatchedNode: CompressionContext,
+                  Score: {},
+                  PerfectScore: {}
+                },
+                {
+                  ChildrenCheckResults: [
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: true,
+                                  FeedbackMessage: Node CreateArchive() has a Uses relation with node Compression,
+                                  Priority: High,
+                                  DependencyCount: 3,
+                                  MatchedNode: Compression,
+                                  Score: {},
+                                  PerfectScore: {}
+                                }
+                              ],
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for CreateArchive().,
+                              Priority: High,
+                              DependencyCount: 3,
+                              MatchedNode: CreateArchive,
+                              Score: {},
+                              PerfectScore: {}
+                            },
+                            {
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for CreateArchive().,
+                              Priority: High,
+                              DependencyCount: 3,
+                              MatchedNode: CreateArchive,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: CreateArchive().,
+                          Priority: High,
+                          DependencyCount: 6,
+                          MatchedNode: CreateArchive,
+                          Score: {},
+                          PerfectScore: {}
+                        }
+                      ],
+                      NodeCheckCollectionWrapper: false,
+                      FeedbackMessage: Found method: CreateArchive().,
+                      Priority: High,
+                      DependencyCount: 6,
+                      MatchedNode: CreateArchive,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: ,
+                  Priority: High,
+                  DependencyCount: 6,
+                  Score: {},
+                  PerfectScore: {}
+                },
+                {
+                  ChildrenCheckResults: [
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: true,
+                                  FeedbackMessage: Node CreateArchive() has a Uses relation with node CompressFolder(),
+                                  Priority: Mid,
+                                  DependencyCount: 1,
+                                  MatchedNode: CompressFolder,
+                                  Score: {},
+                                  PerfectScore: {}
+                                }
+                              ],
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for CreateArchive().,
+                              Priority: Mid,
+                              DependencyCount: 1,
+                              MatchedNode: CreateArchive,
+                              Score: {},
+                              PerfectScore: {}
+                            },
+                            {
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for CreateArchive().,
+                              Priority: Mid,
+                              DependencyCount: 1,
+                              MatchedNode: CreateArchive,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: CreateArchive().,
+                          Priority: Mid,
+                          DependencyCount: 2,
+                          MatchedNode: CreateArchive,
+                          Score: {},
+                          PerfectScore: {}
+                        }
+                      ],
+                      NodeCheckCollectionWrapper: false,
+                      FeedbackMessage: Found method: CreateArchive().,
+                      Priority: Mid,
+                      DependencyCount: 2,
+                      MatchedNode: CreateArchive,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: ,
+                  Priority: Mid,
+                  DependencyCount: 2,
+                  Score: {},
+                  PerfectScore: {}
+                }
+              ],
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found class 'CompressionContext',
+              DependencyCount: 12,
+              MatchedNode: CompressionContext,
+              Score: {},
+              PerfectScore: {}
+            }
+          ],
+          CollectionKind: Any,
+          NodeCheckCollectionWrapper: true,
+          FeedbackMessage: ,
+          DependencyCount: 12,
+          Score: {},
+          PerfectScore: {}
+        },
+        {
+          ChildrenCheckResults: [
+            {
+              ChildrenCheckResults: [
+                {
+                  ChildrenCheckResults: [
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              Correct: true,
+                              FeedbackMessage: Modifiers correctly implemented.,
+                              MatchedNode: Compression,
+                              Score: {},
+                              PerfectScore: {}
+                            },
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  ChildrenCheckResults: [
+                                    {
+                                      Correct: true,
+                                      FeedbackMessage: Node 'ICompression' has correct type,
+                                      DependencyCount: 1,
+                                      MatchedNode: ICompression,
+                                      Score: {},
+                                      PerfectScore: {}
+                                    }
+                                  ],
+                                  CollectionKind: Any,
+                                  NodeCheckCollectionWrapper: true,
+                                  FeedbackMessage: Found node 'ICompression',
+                                  DependencyCount: 1,
+                                  MatchedNode: ICompression,
+                                  Score: {},
+                                  PerfectScore: {}
+                                }
+                              ],
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: Found the required checks for: Compression.,
+                              DependencyCount: 2,
+                              MatchedNode: Compression,
+                              Score: {},
+                              PerfectScore: {}
+                            }
+                          ],
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found field 'Compression',
+                          DependencyCount: 2,
+                          MatchedNode: Compression,
+                          Score: {},
+                          PerfectScore: {}
+                        }
+                      ],
+                      CollectionKind: Any,
+                      NodeCheckCollectionWrapper: true,
+                      FeedbackMessage: ,
+                      DependencyCount: 2,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: false,
+                  FeedbackMessage: Found the required checks for: CompressionContext.,
+                  DependencyCount: 4,
+                  MatchedNode: CompressionContext,
+                  Score: {},
+                  PerfectScore: {}
+                }
+              ],
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found class 'CompressionContext',
+              DependencyCount: 4,
+              MatchedNode: CompressionContext,
+              Score: {},
+              PerfectScore: {}
+            }
+          ],
+          CollectionKind: Any,
+          NodeCheckCollectionWrapper: true,
+          FeedbackMessage: ,
+          DependencyCount: 4,
+          Score: {},
+          PerfectScore: {}
+        },
+        {
+          ChildrenCheckResults: [
+            {
+              ChildrenCheckResults: [
+                {
+                  ChildrenCheckResults: [
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          Correct: true,
+                          FeedbackMessage: Node RarCompression has a Implements relation with node ICompression,
+                          DependencyCount: 1,
+                          MatchedNode: ICompression,
+                          Score: {},
+                          PerfectScore: {}
+                        }
+                      ],
+                      CollectionKind: Any,
+                      NodeCheckCollectionWrapper: true,
+                      FeedbackMessage: Found Implements relations for RarCompression.,
+                      DependencyCount: 1,
+                      MatchedNode: RarCompression,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: false,
+                  FeedbackMessage: Found the required checks for: RarCompression.,
+                  DependencyCount: 2,
+                  MatchedNode: RarCompression,
+                  Score: {},
+                  PerfectScore: {}
+                }
+              ],
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found class 'RarCompression',
+              DependencyCount: 2,
+              MatchedNode: RarCompression,
+              Score: {},
+              PerfectScore: {}
+            }
+          ],
+          CollectionKind: Any,
+          NodeCheckCollectionWrapper: true,
+          FeedbackMessage: ,
+          DependencyCount: 2,
+          Score: {},
+          PerfectScore: {}
+        },
+        {
+          ChildrenCheckResults: [
+            {
+              ChildrenCheckResults: [
+                {
+                  ChildrenCheckResults: [
+                    {
+                      Correct: true,
+                      FeedbackMessage: Node Program has a Creates relation with node RarCompression,
+                      Priority: Mid,
+                      DependencyCount: 3,
+                      MatchedNode: RarCompression,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Creates relations for Program.,
+                  Priority: Mid,
+                  DependencyCount: 3,
+                  MatchedNode: Program,
+                  Score: {},
+                  PerfectScore: {}
+                },
+                {
+                  ChildrenCheckResults: [
+                    {
+                      Correct: true,
+                      FeedbackMessage: Node Program has a Uses relation with node CreateArchive(),
+                      Priority: Low,
+                      DependencyCount: 3,
+                      MatchedNode: CreateArchive,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for Program.,
+                  Priority: Low,
+                  DependencyCount: 3,
+                  MatchedNode: Program,
+                  Score: {},
+                  PerfectScore: {}
+                },
+                {
+                  ChildrenCheckResults: [
+                    {
+                      Correct: true,
+                      FeedbackMessage: Node Program has a Uses relation with node CreateArchive(),
+                      Priority: Low,
+                      DependencyCount: 7,
+                      MatchedNode: CreateArchive,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for Program.,
+                  Priority: Low,
+                  DependencyCount: 7,
+                  MatchedNode: Program,
+                  Score: {},
+                  PerfectScore: {}
+                }
+              ],
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found class 'Program',
+              Priority: Mid,
+              DependencyCount: 13,
+              MatchedNode: Program,
+              Score: {},
+              PerfectScore: {}
+            },
+            {
+              ChildrenCheckResults: [
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Creates relations for CompressionContext.,
+                  Priority: Mid,
+                  DependencyCount: 3,
+                  MatchedNode: CompressionContext,
+                  PerfectScore: {}
+                },
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for CompressionContext.,
+                  Priority: Low,
+                  DependencyCount: 3,
+                  MatchedNode: CompressionContext,
+                  PerfectScore: {}
+                },
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for CompressionContext.,
+                  Priority: Low,
+                  DependencyCount: 7,
+                  MatchedNode: CompressionContext,
+                  PerfectScore: {}
+                }
+              ],
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found class 'CompressionContext',
+              Priority: Mid,
+              DependencyCount: 13,
+              MatchedNode: CompressionContext,
+              PerfectScore: {}
+            },
+            {
+              ChildrenCheckResults: [
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Creates relations for RarCompression.,
+                  Priority: Mid,
+                  DependencyCount: 3,
+                  MatchedNode: RarCompression,
+                  PerfectScore: {}
+                },
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for RarCompression.,
+                  Priority: Low,
+                  DependencyCount: 3,
+                  MatchedNode: RarCompression,
+                  PerfectScore: {}
+                },
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for RarCompression.,
+                  Priority: Low,
+                  DependencyCount: 7,
+                  MatchedNode: RarCompression,
+                  PerfectScore: {}
+                }
+              ],
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found class 'RarCompression',
+              Priority: Mid,
+              DependencyCount: 13,
+              MatchedNode: RarCompression,
+              PerfectScore: {}
+            }
+          ],
+          CollectionKind: Any,
+          NodeCheckCollectionWrapper: true,
+          FeedbackMessage: ,
+          Priority: Mid,
+          DependencyCount: 13,
+          Score: {},
+          PerfectScore: {}
+        },
+        {
+          ChildrenCheckResults: [
+            {
+              ChildrenCheckResults: [
+                {
+                  ChildrenCheckResults: [
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found method: CompressFolder().,
+                          MatchedNode: CompressFolder
+                        }
+                      ],
+                      CollectionKind: Any,
+                      NodeCheckCollectionWrapper: true,
+                      FeedbackMessage: 
+                    }
+                  ],
+                  NodeCheckCollectionWrapper: false,
+                  FeedbackMessage: Found interface 'ICompression',
+                  MatchedNode: ICompression
+                }
+              ],
+              CollectionKind: Any,
+              NodeCheckCollectionWrapper: true,
+              FeedbackMessage: 
+            }
+          ],
+          CollectionKind: Any,
+          NodeCheckCollectionWrapper: false,
+          FeedbackMessage: Found the required checks for: PatternPal.Core.Runner.<RecognizerRunner>F79CA08E52C22783FA3A0EAEBBC26852FEB0B81B3C120614176DB3EB860E78E94__RootNode.
+        }
+      ],
+      NodeCheckCollectionWrapper: false,
+      FeedbackMessage: Found the required checks for: PatternPal.Core.Runner.<RecognizerRunner>F79CA08E52C22783FA3A0EAEBBC26852FEB0B81B3C120614176DB3EB860E78E94__RootNode.,
+      DependencyCount: 31,
+      Score: {},
+      PerfectScore: {}
+    },
+    Requirements: [
+      1. Strategy Class,
+      1a. Is an interface.,
+      1b. Has declared a method.,
+      1a. Is an abstract class.,
+      1b. Has declared an abstract method.,
+      2. Concrete Strategy Class,
+      2a. Is an implementation of the Strategy interface.,
+      3. Context Class,
+      3a. Has a private field or property that has a Strategy class as type.,
+      3a. Has a private field or property that has a Strategy class as type.,
+      3. Context Class,
+      3b. Has a function setStrategy() to set the non-public field / property with parameter of type Strategy.,
+      3c. Has a function useStrategy() to execute the strategy.,
+      3a. Has a private field or property that has a Strategy class as type.,
+      3a. Has a private field or property that has a Strategy class as type.,
+      4. Client class,
+      4a. Has created an object of the type ConcreteStrategy.,
+      4b. Has used the setStrategy() in the Context class to store the ConcreteStrategy object.,
+      4c. Has executed the ConcreteStrategy via the Context class.
+    ]
+  }
+]

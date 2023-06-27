@@ -1,0 +1,777 @@
+﻿[
+  {
+    RecognizerType: Strategy,
+    CheckResult: {
+      ChildrenCheckResults: [
+        {
+          ChildrenCheckResults: [
+            {
+              ChildrenCheckResults: [
+                {
+                  ChildrenCheckResults: [
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              Correct: true,
+                              FeedbackMessage: Modifiers correctly implemented.,
+                              MatchedNode: _strategy,
+                              Score: {},
+                              PerfectScore: {}
+                            },
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  ChildrenCheckResults: [
+                                    {
+                                      Correct: true,
+                                      FeedbackMessage: Node 'InterfaceStrategy' has correct type,
+                                      DependencyCount: 1,
+                                      MatchedNode: InterfaceStrategy,
+                                      Score: {},
+                                      PerfectScore: {}
+                                    }
+                                  ],
+                                  CollectionKind: Any,
+                                  NodeCheckCollectionWrapper: true,
+                                  FeedbackMessage: Found node 'InterfaceStrategy',
+                                  DependencyCount: 1,
+                                  MatchedNode: InterfaceStrategy,
+                                  Score: {},
+                                  PerfectScore: {}
+                                }
+                              ],
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: Found the required checks for: _strategy.,
+                              DependencyCount: 2,
+                              MatchedNode: _strategy,
+                              Score: {},
+                              PerfectScore: {}
+                            }
+                          ],
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found field '_strategy',
+                          DependencyCount: 2,
+                          MatchedNode: _strategy,
+                          Score: {},
+                          PerfectScore: {}
+                        }
+                      ],
+                      CollectionKind: Any,
+                      NodeCheckCollectionWrapper: true,
+                      FeedbackMessage: ,
+                      DependencyCount: 2,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: false,
+                  FeedbackMessage: Found the required checks for: Context.,
+                  DependencyCount: 4,
+                  MatchedNode: Context,
+                  Score: {},
+                  PerfectScore: {}
+                },
+                {
+                  ChildrenCheckResults: [
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: true,
+                                  FeedbackMessage: Node SetStrategy() has a Uses relation with node _strategy,
+                                  Priority: High,
+                                  DependencyCount: 3,
+                                  MatchedNode: _strategy,
+                                  Score: {},
+                                  PerfectScore: {}
+                                }
+                              ],
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for SetStrategy().,
+                              Priority: High,
+                              DependencyCount: 3,
+                              MatchedNode: SetStrategy,
+                              Score: {},
+                              PerfectScore: {}
+                            },
+                            {
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for SetStrategy().,
+                              Priority: High,
+                              DependencyCount: 3,
+                              MatchedNode: SetStrategy,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: SetStrategy().,
+                          Priority: High,
+                          DependencyCount: 6,
+                          MatchedNode: SetStrategy,
+                          Score: {},
+                          PerfectScore: {}
+                        }
+                      ],
+                      NodeCheckCollectionWrapper: false,
+                      FeedbackMessage: Found method: SetStrategy().,
+                      Priority: High,
+                      DependencyCount: 6,
+                      MatchedNode: SetStrategy,
+                      Score: {},
+                      PerfectScore: {}
+                    },
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: true,
+                                  FeedbackMessage: Node CarryOutWork() has a Uses relation with node _strategy,
+                                  Priority: High,
+                                  DependencyCount: 3,
+                                  MatchedNode: _strategy,
+                                  Score: {},
+                                  PerfectScore: {}
+                                }
+                              ],
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for CarryOutWork().,
+                              Priority: High,
+                              DependencyCount: 3,
+                              MatchedNode: CarryOutWork,
+                              Score: {},
+                              PerfectScore: {}
+                            },
+                            {
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for CarryOutWork().,
+                              Priority: High,
+                              DependencyCount: 3,
+                              MatchedNode: CarryOutWork,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: CarryOutWork().,
+                          Priority: High,
+                          DependencyCount: 6,
+                          MatchedNode: CarryOutWork,
+                          Score: {},
+                          PerfectScore: {}
+                        }
+                      ],
+                      NodeCheckCollectionWrapper: false,
+                      FeedbackMessage: Found method: CarryOutWork().,
+                      Priority: High,
+                      DependencyCount: 6,
+                      MatchedNode: CarryOutWork,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: ,
+                  Priority: High,
+                  DependencyCount: 6,
+                  Score: {},
+                  PerfectScore: {}
+                },
+                {
+                  ChildrenCheckResults: [
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: true,
+                                  FeedbackMessage: Node CarryOutWork() has a Uses relation with node PerformAlgorithm(),
+                                  Priority: Mid,
+                                  DependencyCount: 1,
+                                  MatchedNode: PerformAlgorithm,
+                                  Score: {},
+                                  PerfectScore: {}
+                                }
+                              ],
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for CarryOutWork().,
+                              Priority: Mid,
+                              DependencyCount: 1,
+                              MatchedNode: CarryOutWork,
+                              Score: {},
+                              PerfectScore: {}
+                            },
+                            {
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for CarryOutWork().,
+                              Priority: Mid,
+                              DependencyCount: 1,
+                              MatchedNode: CarryOutWork,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: CarryOutWork().,
+                          Priority: Mid,
+                          DependencyCount: 2,
+                          MatchedNode: CarryOutWork,
+                          Score: {},
+                          PerfectScore: {}
+                        }
+                      ],
+                      NodeCheckCollectionWrapper: false,
+                      FeedbackMessage: Found method: CarryOutWork().,
+                      Priority: Mid,
+                      DependencyCount: 2,
+                      MatchedNode: CarryOutWork,
+                      Score: {},
+                      PerfectScore: {}
+                    },
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for SetStrategy().,
+                              Priority: Mid,
+                              DependencyCount: 1,
+                              MatchedNode: SetStrategy,
+                              PerfectScore: {}
+                            },
+                            {
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for SetStrategy().,
+                              Priority: Mid,
+                              DependencyCount: 1,
+                              MatchedNode: SetStrategy,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: SetStrategy().,
+                          Priority: Mid,
+                          DependencyCount: 2,
+                          MatchedNode: SetStrategy,
+                          PerfectScore: {}
+                        }
+                      ],
+                      NodeCheckCollectionWrapper: false,
+                      FeedbackMessage: Found method: SetStrategy().,
+                      Priority: Mid,
+                      DependencyCount: 2,
+                      MatchedNode: SetStrategy,
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: ,
+                  Priority: Mid,
+                  DependencyCount: 2,
+                  Score: {},
+                  PerfectScore: {}
+                }
+              ],
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found class 'Context',
+              DependencyCount: 12,
+              MatchedNode: Context,
+              Score: {},
+              PerfectScore: {}
+            }
+          ],
+          CollectionKind: Any,
+          NodeCheckCollectionWrapper: true,
+          FeedbackMessage: ,
+          DependencyCount: 12,
+          Score: {},
+          PerfectScore: {}
+        },
+        {
+          ChildrenCheckResults: [
+            {
+              ChildrenCheckResults: [
+                {
+                  ChildrenCheckResults: [
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              Correct: true,
+                              FeedbackMessage: Modifiers correctly implemented.,
+                              MatchedNode: _strategy,
+                              Score: {},
+                              PerfectScore: {}
+                            },
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  ChildrenCheckResults: [
+                                    {
+                                      Correct: true,
+                                      FeedbackMessage: Node 'InterfaceStrategy' has correct type,
+                                      DependencyCount: 1,
+                                      MatchedNode: InterfaceStrategy,
+                                      Score: {},
+                                      PerfectScore: {}
+                                    }
+                                  ],
+                                  CollectionKind: Any,
+                                  NodeCheckCollectionWrapper: true,
+                                  FeedbackMessage: Found node 'InterfaceStrategy',
+                                  DependencyCount: 1,
+                                  MatchedNode: InterfaceStrategy,
+                                  Score: {},
+                                  PerfectScore: {}
+                                }
+                              ],
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: Found the required checks for: _strategy.,
+                              DependencyCount: 2,
+                              MatchedNode: _strategy,
+                              Score: {},
+                              PerfectScore: {}
+                            }
+                          ],
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found field '_strategy',
+                          DependencyCount: 2,
+                          MatchedNode: _strategy,
+                          Score: {},
+                          PerfectScore: {}
+                        }
+                      ],
+                      CollectionKind: Any,
+                      NodeCheckCollectionWrapper: true,
+                      FeedbackMessage: ,
+                      DependencyCount: 2,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: false,
+                  FeedbackMessage: Found the required checks for: Context.,
+                  DependencyCount: 4,
+                  MatchedNode: Context,
+                  Score: {},
+                  PerfectScore: {}
+                }
+              ],
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found class 'Context',
+              DependencyCount: 4,
+              MatchedNode: Context,
+              Score: {},
+              PerfectScore: {}
+            }
+          ],
+          CollectionKind: Any,
+          NodeCheckCollectionWrapper: true,
+          FeedbackMessage: ,
+          DependencyCount: 4,
+          Score: {},
+          PerfectScore: {}
+        },
+        {
+          ChildrenCheckResults: [
+            {
+              ChildrenCheckResults: [
+                {
+                  ChildrenCheckResults: [
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          Correct: true,
+                          FeedbackMessage: Node DefaultConcreteStrategy has a Implements relation with node InterfaceStrategy,
+                          DependencyCount: 1,
+                          MatchedNode: InterfaceStrategy,
+                          Score: {},
+                          PerfectScore: {}
+                        }
+                      ],
+                      CollectionKind: Any,
+                      NodeCheckCollectionWrapper: true,
+                      FeedbackMessage: Found Implements relations for DefaultConcreteStrategy.,
+                      DependencyCount: 1,
+                      MatchedNode: DefaultConcreteStrategy,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: false,
+                  FeedbackMessage: Found the required checks for: DefaultConcreteStrategy.,
+                  DependencyCount: 2,
+                  MatchedNode: DefaultConcreteStrategy,
+                  Score: {},
+                  PerfectScore: {}
+                }
+              ],
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found class 'DefaultConcreteStrategy',
+              DependencyCount: 2,
+              MatchedNode: DefaultConcreteStrategy,
+              Score: {},
+              PerfectScore: {}
+            },
+            {
+              ChildrenCheckResults: [
+                {
+                  ChildrenCheckResults: [
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          Correct: true,
+                          FeedbackMessage: Node AlternativeConcreteStrategy has a Implements relation with node InterfaceStrategy,
+                          DependencyCount: 1,
+                          MatchedNode: InterfaceStrategy,
+                          Score: {},
+                          PerfectScore: {}
+                        }
+                      ],
+                      CollectionKind: Any,
+                      NodeCheckCollectionWrapper: true,
+                      FeedbackMessage: Found Implements relations for AlternativeConcreteStrategy.,
+                      DependencyCount: 1,
+                      MatchedNode: AlternativeConcreteStrategy,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: false,
+                  FeedbackMessage: Found the required checks for: AlternativeConcreteStrategy.,
+                  DependencyCount: 2,
+                  MatchedNode: AlternativeConcreteStrategy,
+                  Score: {},
+                  PerfectScore: {}
+                }
+              ],
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found class 'AlternativeConcreteStrategy',
+              DependencyCount: 2,
+              MatchedNode: AlternativeConcreteStrategy,
+              Score: {},
+              PerfectScore: {}
+            }
+          ],
+          CollectionKind: Any,
+          NodeCheckCollectionWrapper: true,
+          FeedbackMessage: ,
+          DependencyCount: 2,
+          Score: {},
+          PerfectScore: {}
+        },
+        {
+          ChildrenCheckResults: [
+            {
+              ChildrenCheckResults: [
+                {
+                  ChildrenCheckResults: [
+                    {
+                      Correct: true,
+                      FeedbackMessage: Node Program has a Creates relation with node DefaultConcreteStrategy,
+                      Priority: Mid,
+                      DependencyCount: 3,
+                      MatchedNode: DefaultConcreteStrategy,
+                      Score: {},
+                      PerfectScore: {}
+                    },
+                    {
+                      Correct: true,
+                      FeedbackMessage: Node Program has a Creates relation with node AlternativeConcreteStrategy,
+                      Priority: Mid,
+                      DependencyCount: 3,
+                      MatchedNode: AlternativeConcreteStrategy,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Creates relations for Program.,
+                  Priority: Mid,
+                  DependencyCount: 3,
+                  MatchedNode: Program,
+                  Score: {},
+                  PerfectScore: {}
+                },
+                {
+                  ChildrenCheckResults: [
+                    {
+                      Correct: true,
+                      FeedbackMessage: Node Program has a Uses relation with node SetStrategy(),
+                      Priority: Low,
+                      DependencyCount: 3,
+                      MatchedNode: SetStrategy,
+                      Score: {},
+                      PerfectScore: {}
+                    },
+                    {
+                      Correct: true,
+                      FeedbackMessage: Node Program has a Uses relation with node CarryOutWork(),
+                      Priority: Low,
+                      DependencyCount: 3,
+                      MatchedNode: CarryOutWork,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for Program.,
+                  Priority: Low,
+                  DependencyCount: 3,
+                  MatchedNode: Program,
+                  Score: {},
+                  PerfectScore: {}
+                },
+                {
+                  ChildrenCheckResults: [
+                    {
+                      Correct: true,
+                      FeedbackMessage: Node Program has a Uses relation with node SetStrategy(),
+                      Priority: Low,
+                      DependencyCount: 7,
+                      MatchedNode: SetStrategy,
+                      Score: {},
+                      PerfectScore: {}
+                    },
+                    {
+                      Correct: true,
+                      FeedbackMessage: Node Program has a Uses relation with node CarryOutWork(),
+                      Priority: Low,
+                      DependencyCount: 7,
+                      MatchedNode: CarryOutWork,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for Program.,
+                  Priority: Low,
+                  DependencyCount: 7,
+                  MatchedNode: Program,
+                  Score: {},
+                  PerfectScore: {}
+                }
+              ],
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found class 'Program',
+              Priority: Mid,
+              DependencyCount: 13,
+              MatchedNode: Program,
+              Score: {},
+              PerfectScore: {}
+            },
+            {
+              ChildrenCheckResults: [
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Creates relations for DefaultConcreteStrategy.,
+                  Priority: Mid,
+                  DependencyCount: 3,
+                  MatchedNode: DefaultConcreteStrategy,
+                  PerfectScore: {}
+                },
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for DefaultConcreteStrategy.,
+                  Priority: Low,
+                  DependencyCount: 3,
+                  MatchedNode: DefaultConcreteStrategy,
+                  PerfectScore: {}
+                },
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for DefaultConcreteStrategy.,
+                  Priority: Low,
+                  DependencyCount: 7,
+                  MatchedNode: DefaultConcreteStrategy,
+                  PerfectScore: {}
+                }
+              ],
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found class 'DefaultConcreteStrategy',
+              Priority: Mid,
+              DependencyCount: 13,
+              MatchedNode: DefaultConcreteStrategy,
+              PerfectScore: {}
+            },
+            {
+              ChildrenCheckResults: [
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Creates relations for AlternativeConcreteStrategy.,
+                  Priority: Mid,
+                  DependencyCount: 3,
+                  MatchedNode: AlternativeConcreteStrategy,
+                  PerfectScore: {}
+                },
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for AlternativeConcreteStrategy.,
+                  Priority: Low,
+                  DependencyCount: 3,
+                  MatchedNode: AlternativeConcreteStrategy,
+                  PerfectScore: {}
+                },
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for AlternativeConcreteStrategy.,
+                  Priority: Low,
+                  DependencyCount: 7,
+                  MatchedNode: AlternativeConcreteStrategy,
+                  PerfectScore: {}
+                }
+              ],
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found class 'AlternativeConcreteStrategy',
+              Priority: Mid,
+              DependencyCount: 13,
+              MatchedNode: AlternativeConcreteStrategy,
+              PerfectScore: {}
+            },
+            {
+              ChildrenCheckResults: [
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Creates relations for Context.,
+                  Priority: Mid,
+                  DependencyCount: 3,
+                  MatchedNode: Context,
+                  PerfectScore: {}
+                },
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for Context.,
+                  Priority: Low,
+                  DependencyCount: 3,
+                  MatchedNode: Context,
+                  PerfectScore: {}
+                },
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for Context.,
+                  Priority: Low,
+                  DependencyCount: 7,
+                  MatchedNode: Context,
+                  PerfectScore: {}
+                }
+              ],
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found class 'Context',
+              Priority: Mid,
+              DependencyCount: 13,
+              MatchedNode: Context,
+              PerfectScore: {}
+            }
+          ],
+          CollectionKind: Any,
+          NodeCheckCollectionWrapper: true,
+          FeedbackMessage: ,
+          Priority: Mid,
+          DependencyCount: 13,
+          Score: {},
+          PerfectScore: {}
+        },
+        {
+          ChildrenCheckResults: [
+            {
+              ChildrenCheckResults: [
+                {
+                  ChildrenCheckResults: [
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found method: PerformAlgorithm().,
+                          MatchedNode: PerformAlgorithm
+                        }
+                      ],
+                      CollectionKind: Any,
+                      NodeCheckCollectionWrapper: true,
+                      FeedbackMessage: 
+                    }
+                  ],
+                  NodeCheckCollectionWrapper: false,
+                  FeedbackMessage: Found interface 'InterfaceStrategy',
+                  MatchedNode: InterfaceStrategy
+                }
+              ],
+              CollectionKind: Any,
+              NodeCheckCollectionWrapper: true,
+              FeedbackMessage: 
+            }
+          ],
+          CollectionKind: Any,
+          NodeCheckCollectionWrapper: false,
+          FeedbackMessage: Found the required checks for: PatternPal.Core.Runner.<RecognizerRunner>F79CA08E52C22783FA3A0EAEBBC26852FEB0B81B3C120614176DB3EB860E78E94__RootNode.
+        }
+      ],
+      NodeCheckCollectionWrapper: false,
+      FeedbackMessage: Found the required checks for: PatternPal.Core.Runner.<RecognizerRunner>F79CA08E52C22783FA3A0EAEBBC26852FEB0B81B3C120614176DB3EB860E78E94__RootNode.,
+      DependencyCount: 31,
+      Score: {},
+      PerfectScore: {}
+    },
+    Requirements: [
+      1. Strategy Class,
+      1a. Is an interface.,
+      1b. Has declared a method.,
+      1a. Is an abstract class.,
+      1b. Has declared an abstract method.,
+      2. Concrete Strategy Class,
+      2a. Is an implementation of the Strategy interface.,
+      3. Context Class,
+      3a. Has a private field or property that has a Strategy class as type.,
+      3a. Has a private field or property that has a Strategy class as type.,
+      3. Context Class,
+      3b. Has a function setStrategy() to set the non-public field / property with parameter of type Strategy.,
+      3c. Has a function useStrategy() to execute the strategy.,
+      3a. Has a private field or property that has a Strategy class as type.,
+      3a. Has a private field or property that has a Strategy class as type.,
+      4. Client class,
+      4a. Has created an object of the type ConcreteStrategy.,
+      4b. Has used the setStrategy() in the Context class to store the ConcreteStrategy object.,
+      4c. Has executed the ConcreteStrategy via the Context class.
+    ]
+  }
+]

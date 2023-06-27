@@ -1,0 +1,1015 @@
+﻿[
+  {
+    RecognizerType: Strategy,
+    CheckResult: {
+      ChildrenCheckResults: [
+        {
+          ChildrenCheckResults: [
+            {
+              ChildrenCheckResults: [
+                {
+                  ChildrenCheckResults: [
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              Correct: true,
+                              FeedbackMessage: Modifiers correctly implemented.,
+                              MatchedNode: _teamInformation,
+                              Score: {},
+                              PerfectScore: {}
+                            },
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  ChildrenCheckResults: [
+                                    {
+                                      Correct: true,
+                                      FeedbackMessage: Node 'TeamInformation' has correct type,
+                                      DependencyCount: 1,
+                                      MatchedNode: TeamInformation,
+                                      Score: {},
+                                      PerfectScore: {}
+                                    }
+                                  ],
+                                  CollectionKind: Any,
+                                  NodeCheckCollectionWrapper: true,
+                                  FeedbackMessage: Found node 'TeamInformation',
+                                  DependencyCount: 1,
+                                  MatchedNode: TeamInformation,
+                                  Score: {},
+                                  PerfectScore: {}
+                                }
+                              ],
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: Found the required checks for: _teamInformation.,
+                              DependencyCount: 2,
+                              MatchedNode: _teamInformation,
+                              Score: {},
+                              PerfectScore: {}
+                            }
+                          ],
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found field '_teamInformation',
+                          DependencyCount: 2,
+                          MatchedNode: _teamInformation,
+                          Score: {},
+                          PerfectScore: {}
+                        }
+                      ],
+                      CollectionKind: Any,
+                      NodeCheckCollectionWrapper: true,
+                      FeedbackMessage: ,
+                      DependencyCount: 2,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: false,
+                  FeedbackMessage: Found the required checks for: TeamContext.,
+                  DependencyCount: 4,
+                  MatchedNode: TeamContext,
+                  Score: {},
+                  PerfectScore: {}
+                },
+                {
+                  ChildrenCheckResults: [
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: true,
+                                  FeedbackMessage: Node SetStrategy() has a Uses relation with node _teamInformation,
+                                  Priority: High,
+                                  DependencyCount: 3,
+                                  MatchedNode: _teamInformation,
+                                  Score: {},
+                                  PerfectScore: {}
+                                }
+                              ],
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for SetStrategy().,
+                              Priority: High,
+                              DependencyCount: 3,
+                              MatchedNode: SetStrategy,
+                              Score: {},
+                              PerfectScore: {}
+                            },
+                            {
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for SetStrategy().,
+                              Priority: High,
+                              DependencyCount: 3,
+                              MatchedNode: SetStrategy,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: SetStrategy().,
+                          Priority: High,
+                          DependencyCount: 6,
+                          MatchedNode: SetStrategy,
+                          Score: {},
+                          PerfectScore: {}
+                        }
+                      ],
+                      NodeCheckCollectionWrapper: false,
+                      FeedbackMessage: Found method: SetStrategy().,
+                      Priority: High,
+                      DependencyCount: 6,
+                      MatchedNode: SetStrategy,
+                      Score: {},
+                      PerfectScore: {}
+                    },
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: true,
+                                  FeedbackMessage: Node TellMeSomething() has a Uses relation with node _teamInformation,
+                                  Priority: High,
+                                  DependencyCount: 3,
+                                  MatchedNode: _teamInformation,
+                                  Score: {},
+                                  PerfectScore: {}
+                                }
+                              ],
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for TellMeSomething().,
+                              Priority: High,
+                              DependencyCount: 3,
+                              MatchedNode: TellMeSomething,
+                              Score: {},
+                              PerfectScore: {}
+                            },
+                            {
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for TellMeSomething().,
+                              Priority: High,
+                              DependencyCount: 3,
+                              MatchedNode: TellMeSomething,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: TellMeSomething().,
+                          Priority: High,
+                          DependencyCount: 6,
+                          MatchedNode: TellMeSomething,
+                          Score: {},
+                          PerfectScore: {}
+                        }
+                      ],
+                      NodeCheckCollectionWrapper: false,
+                      FeedbackMessage: Found method: TellMeSomething().,
+                      Priority: High,
+                      DependencyCount: 6,
+                      MatchedNode: TellMeSomething,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: ,
+                  Priority: High,
+                  DependencyCount: 6,
+                  Score: {},
+                  PerfectScore: {}
+                },
+                {
+                  ChildrenCheckResults: [
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  Correct: true,
+                                  FeedbackMessage: Node TellMeSomething() has a Uses relation with node ShowMembers(),
+                                  Priority: Mid,
+                                  DependencyCount: 1,
+                                  MatchedNode: ShowMembers,
+                                  Score: {},
+                                  PerfectScore: {}
+                                },
+                                {
+                                  Correct: true,
+                                  FeedbackMessage: Node TellMeSomething() has a Uses relation with node TellMeARisk(),
+                                  Priority: Mid,
+                                  DependencyCount: 1,
+                                  MatchedNode: TellMeARisk,
+                                  Score: {},
+                                  PerfectScore: {}
+                                }
+                              ],
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for TellMeSomething().,
+                              Priority: Mid,
+                              DependencyCount: 1,
+                              MatchedNode: TellMeSomething,
+                              Score: {},
+                              PerfectScore: {}
+                            },
+                            {
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for TellMeSomething().,
+                              Priority: Mid,
+                              DependencyCount: 1,
+                              MatchedNode: TellMeSomething,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: TellMeSomething().,
+                          Priority: Mid,
+                          DependencyCount: 2,
+                          MatchedNode: TellMeSomething,
+                          Score: {},
+                          PerfectScore: {}
+                        }
+                      ],
+                      NodeCheckCollectionWrapper: false,
+                      FeedbackMessage: Found method: TellMeSomething().,
+                      Priority: Mid,
+                      DependencyCount: 2,
+                      MatchedNode: TellMeSomething,
+                      Score: {},
+                      PerfectScore: {}
+                    },
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for SetStrategy().,
+                              Priority: Mid,
+                              DependencyCount: 1,
+                              MatchedNode: SetStrategy,
+                              PerfectScore: {}
+                            },
+                            {
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: true,
+                              FeedbackMessage: Found Uses relations for SetStrategy().,
+                              Priority: Mid,
+                              DependencyCount: 1,
+                              MatchedNode: SetStrategy,
+                              PerfectScore: {}
+                            }
+                          ],
+                          CollectionKind: Any,
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found the required checks for: SetStrategy().,
+                          Priority: Mid,
+                          DependencyCount: 2,
+                          MatchedNode: SetStrategy,
+                          PerfectScore: {}
+                        }
+                      ],
+                      NodeCheckCollectionWrapper: false,
+                      FeedbackMessage: Found method: SetStrategy().,
+                      Priority: Mid,
+                      DependencyCount: 2,
+                      MatchedNode: SetStrategy,
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: ,
+                  Priority: Mid,
+                  DependencyCount: 2,
+                  Score: {},
+                  PerfectScore: {}
+                }
+              ],
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found class 'TeamContext',
+              DependencyCount: 12,
+              MatchedNode: TeamContext,
+              Score: {},
+              PerfectScore: {}
+            }
+          ],
+          CollectionKind: Any,
+          NodeCheckCollectionWrapper: true,
+          FeedbackMessage: ,
+          DependencyCount: 12,
+          Score: {},
+          PerfectScore: {}
+        },
+        {
+          ChildrenCheckResults: [
+            {
+              ChildrenCheckResults: [
+                {
+                  ChildrenCheckResults: [
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              Correct: true,
+                              FeedbackMessage: Modifiers correctly implemented.,
+                              MatchedNode: _teamInformation,
+                              Score: {},
+                              PerfectScore: {}
+                            },
+                            {
+                              ChildrenCheckResults: [
+                                {
+                                  ChildrenCheckResults: [
+                                    {
+                                      Correct: true,
+                                      FeedbackMessage: Node 'TeamInformation' has correct type,
+                                      DependencyCount: 1,
+                                      MatchedNode: TeamInformation,
+                                      Score: {},
+                                      PerfectScore: {}
+                                    }
+                                  ],
+                                  CollectionKind: Any,
+                                  NodeCheckCollectionWrapper: true,
+                                  FeedbackMessage: Found node 'TeamInformation',
+                                  DependencyCount: 1,
+                                  MatchedNode: TeamInformation,
+                                  Score: {},
+                                  PerfectScore: {}
+                                }
+                              ],
+                              CollectionKind: Any,
+                              NodeCheckCollectionWrapper: false,
+                              FeedbackMessage: Found the required checks for: _teamInformation.,
+                              DependencyCount: 2,
+                              MatchedNode: _teamInformation,
+                              Score: {},
+                              PerfectScore: {}
+                            }
+                          ],
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found field '_teamInformation',
+                          DependencyCount: 2,
+                          MatchedNode: _teamInformation,
+                          Score: {},
+                          PerfectScore: {}
+                        }
+                      ],
+                      CollectionKind: Any,
+                      NodeCheckCollectionWrapper: true,
+                      FeedbackMessage: ,
+                      DependencyCount: 2,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: false,
+                  FeedbackMessage: Found the required checks for: TeamContext.,
+                  DependencyCount: 4,
+                  MatchedNode: TeamContext,
+                  Score: {},
+                  PerfectScore: {}
+                }
+              ],
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found class 'TeamContext',
+              DependencyCount: 4,
+              MatchedNode: TeamContext,
+              Score: {},
+              PerfectScore: {}
+            }
+          ],
+          CollectionKind: Any,
+          NodeCheckCollectionWrapper: true,
+          FeedbackMessage: ,
+          DependencyCount: 4,
+          Score: {},
+          PerfectScore: {}
+        },
+        {
+          ChildrenCheckResults: [
+            {
+              ChildrenCheckResults: [
+                {
+                  ChildrenCheckResults: [
+                    {
+                      Correct: true,
+                      FeedbackMessage: Modifiers correctly implemented.,
+                      MatchedNode: TeamInformation,
+                      Score: {},
+                      PerfectScore: {}
+                    },
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              Correct: true,
+                              FeedbackMessage: Modifiers correctly implemented.,
+                              Priority: High,
+                              MatchedNode: ShowMembers,
+                              Score: {},
+                              PerfectScore: {}
+                            }
+                          ],
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found method: ShowMembers().,
+                          Priority: High,
+                          MatchedNode: ShowMembers,
+                          Score: {},
+                          PerfectScore: {}
+                        },
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              Correct: true,
+                              FeedbackMessage: Modifiers correctly implemented.,
+                              Priority: High,
+                              MatchedNode: TellMeARisk,
+                              Score: {},
+                              PerfectScore: {}
+                            }
+                          ],
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found method: TellMeARisk().,
+                          Priority: High,
+                          MatchedNode: TellMeARisk,
+                          Score: {},
+                          PerfectScore: {}
+                        },
+                        {
+                          ChildrenCheckResults: [
+                            {
+                              Correct: false,
+                              FeedbackMessage: The node SayVo() does not have the abstract modifier.,
+                              Priority: High,
+                              MatchedNode: SayVo,
+                              PerfectScore: {}
+                            }
+                          ],
+                          NodeCheckCollectionWrapper: false,
+                          FeedbackMessage: Found method: SayVo().,
+                          Priority: High,
+                          MatchedNode: SayVo,
+                          PerfectScore: {}
+                        }
+                      ],
+                      CollectionKind: Any,
+                      NodeCheckCollectionWrapper: true,
+                      FeedbackMessage: ,
+                      Priority: High,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  NodeCheckCollectionWrapper: false,
+                  FeedbackMessage: Found class 'TeamInformation',
+                  MatchedNode: TeamInformation,
+                  Score: {},
+                  PerfectScore: {}
+                }
+              ],
+              CollectionKind: Any,
+              NodeCheckCollectionWrapper: true,
+              FeedbackMessage: ,
+              Score: {},
+              PerfectScore: {}
+            }
+          ],
+          CollectionKind: Any,
+          NodeCheckCollectionWrapper: false,
+          FeedbackMessage: Found the required checks for: PatternPal.Core.Runner.<RecognizerRunner>F79CA08E52C22783FA3A0EAEBBC26852FEB0B81B3C120614176DB3EB860E78E94__RootNode.,
+          Score: {},
+          PerfectScore: {}
+        },
+        {
+          ChildrenCheckResults: [
+            {
+              ChildrenCheckResults: [
+                {
+                  ChildrenCheckResults: [
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          Correct: true,
+                          FeedbackMessage: Node TeamRefactor has a Extends relation with node TeamInformation,
+                          DependencyCount: 1,
+                          MatchedNode: TeamInformation,
+                          Score: {},
+                          PerfectScore: {}
+                        }
+                      ],
+                      CollectionKind: Any,
+                      NodeCheckCollectionWrapper: true,
+                      FeedbackMessage: Found Extends relations for TeamRefactor.,
+                      DependencyCount: 1,
+                      MatchedNode: TeamRefactor,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: false,
+                  FeedbackMessage: Found the required checks for: TeamRefactor.,
+                  DependencyCount: 2,
+                  MatchedNode: TeamRefactor,
+                  Score: {},
+                  PerfectScore: {}
+                }
+              ],
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found class 'TeamRefactor',
+              DependencyCount: 2,
+              MatchedNode: TeamRefactor,
+              Score: {},
+              PerfectScore: {}
+            },
+            {
+              ChildrenCheckResults: [
+                {
+                  ChildrenCheckResults: [
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          Correct: true,
+                          FeedbackMessage: Node TeamLogging has a Extends relation with node TeamInformation,
+                          DependencyCount: 1,
+                          MatchedNode: TeamInformation,
+                          Score: {},
+                          PerfectScore: {}
+                        }
+                      ],
+                      CollectionKind: Any,
+                      NodeCheckCollectionWrapper: true,
+                      FeedbackMessage: Found Extends relations for TeamLogging.,
+                      DependencyCount: 1,
+                      MatchedNode: TeamLogging,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: false,
+                  FeedbackMessage: Found the required checks for: TeamLogging.,
+                  DependencyCount: 2,
+                  MatchedNode: TeamLogging,
+                  Score: {},
+                  PerfectScore: {}
+                }
+              ],
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found class 'TeamLogging',
+              DependencyCount: 2,
+              MatchedNode: TeamLogging,
+              Score: {},
+              PerfectScore: {}
+            },
+            {
+              ChildrenCheckResults: [
+                {
+                  ChildrenCheckResults: [
+                    {
+                      ChildrenCheckResults: [
+                        {
+                          Correct: true,
+                          FeedbackMessage: Node TeamService has a Extends relation with node TeamInformation,
+                          DependencyCount: 1,
+                          MatchedNode: TeamInformation,
+                          Score: {},
+                          PerfectScore: {}
+                        }
+                      ],
+                      CollectionKind: Any,
+                      NodeCheckCollectionWrapper: true,
+                      FeedbackMessage: Found Extends relations for TeamService.,
+                      DependencyCount: 1,
+                      MatchedNode: TeamService,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: false,
+                  FeedbackMessage: Found the required checks for: TeamService.,
+                  DependencyCount: 2,
+                  MatchedNode: TeamService,
+                  Score: {},
+                  PerfectScore: {}
+                }
+              ],
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found class 'TeamService',
+              DependencyCount: 2,
+              MatchedNode: TeamService,
+              Score: {},
+              PerfectScore: {}
+            }
+          ],
+          CollectionKind: Any,
+          NodeCheckCollectionWrapper: true,
+          FeedbackMessage: ,
+          DependencyCount: 2,
+          Score: {},
+          PerfectScore: {}
+        },
+        {
+          ChildrenCheckResults: [
+            {
+              ChildrenCheckResults: [
+                {
+                  ChildrenCheckResults: [
+                    {
+                      Correct: true,
+                      FeedbackMessage: Node Main has a Creates relation with node TeamRefactor,
+                      Priority: Mid,
+                      DependencyCount: 3,
+                      MatchedNode: TeamRefactor,
+                      Score: {},
+                      PerfectScore: {}
+                    },
+                    {
+                      Correct: true,
+                      FeedbackMessage: Node Main has a Creates relation with node TeamLogging,
+                      Priority: Mid,
+                      DependencyCount: 3,
+                      MatchedNode: TeamLogging,
+                      Score: {},
+                      PerfectScore: {}
+                    },
+                    {
+                      Correct: true,
+                      FeedbackMessage: Node Main has a Creates relation with node TeamService,
+                      Priority: Mid,
+                      DependencyCount: 3,
+                      MatchedNode: TeamService,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Creates relations for Main.,
+                  Priority: Mid,
+                  DependencyCount: 3,
+                  MatchedNode: Main,
+                  Score: {},
+                  PerfectScore: {}
+                },
+                {
+                  ChildrenCheckResults: [
+                    {
+                      Correct: true,
+                      FeedbackMessage: Node Main has a Uses relation with node SetStrategy(),
+                      Priority: Low,
+                      DependencyCount: 3,
+                      MatchedNode: SetStrategy,
+                      Score: {},
+                      PerfectScore: {}
+                    },
+                    {
+                      Correct: true,
+                      FeedbackMessage: Node Main has a Uses relation with node TellMeSomething(),
+                      Priority: Low,
+                      DependencyCount: 3,
+                      MatchedNode: TellMeSomething,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for Main.,
+                  Priority: Low,
+                  DependencyCount: 3,
+                  MatchedNode: Main,
+                  Score: {},
+                  PerfectScore: {}
+                },
+                {
+                  ChildrenCheckResults: [
+                    {
+                      Correct: true,
+                      FeedbackMessage: Node Main has a Uses relation with node SetStrategy(),
+                      Priority: Low,
+                      DependencyCount: 7,
+                      MatchedNode: SetStrategy,
+                      Score: {},
+                      PerfectScore: {}
+                    },
+                    {
+                      Correct: true,
+                      FeedbackMessage: Node Main has a Uses relation with node TellMeSomething(),
+                      Priority: Low,
+                      DependencyCount: 7,
+                      MatchedNode: TellMeSomething,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for Main.,
+                  Priority: Low,
+                  DependencyCount: 7,
+                  MatchedNode: Main,
+                  Score: {},
+                  PerfectScore: {}
+                }
+              ],
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found class 'Main',
+              Priority: Mid,
+              DependencyCount: 13,
+              MatchedNode: Main,
+              Score: {},
+              PerfectScore: {}
+            },
+            {
+              ChildrenCheckResults: [
+                {
+                  ChildrenCheckResults: [
+                    {
+                      Correct: true,
+                      FeedbackMessage: Node TeamContext has a Uses relation with node ShowMembers(),
+                      Priority: Low,
+                      DependencyCount: 3,
+                      MatchedNode: ShowMembers,
+                      Score: {},
+                      PerfectScore: {}
+                    },
+                    {
+                      Correct: true,
+                      FeedbackMessage: Node TeamContext has a Uses relation with node TellMeARisk(),
+                      Priority: Low,
+                      DependencyCount: 3,
+                      MatchedNode: TellMeARisk,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for TeamContext.,
+                  Priority: Low,
+                  DependencyCount: 3,
+                  MatchedNode: TeamContext,
+                  Score: {},
+                  PerfectScore: {}
+                },
+                {
+                  ChildrenCheckResults: [
+                    {
+                      Correct: true,
+                      FeedbackMessage: Node TeamContext has a Uses relation with node ShowMembers(),
+                      Priority: Low,
+                      DependencyCount: 7,
+                      MatchedNode: ShowMembers,
+                      Score: {},
+                      PerfectScore: {}
+                    },
+                    {
+                      Correct: true,
+                      FeedbackMessage: Node TeamContext has a Uses relation with node TellMeARisk(),
+                      Priority: Low,
+                      DependencyCount: 7,
+                      MatchedNode: TellMeARisk,
+                      Score: {},
+                      PerfectScore: {}
+                    }
+                  ],
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for TeamContext.,
+                  Priority: Low,
+                  DependencyCount: 7,
+                  MatchedNode: TeamContext,
+                  Score: {},
+                  PerfectScore: {}
+                },
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Creates relations for TeamContext.,
+                  Priority: Mid,
+                  DependencyCount: 3,
+                  MatchedNode: TeamContext,
+                  PerfectScore: {}
+                }
+              ],
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found class 'TeamContext',
+              Priority: Mid,
+              DependencyCount: 13,
+              MatchedNode: TeamContext,
+              Score: {},
+              PerfectScore: {}
+            },
+            {
+              ChildrenCheckResults: [
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Creates relations for TeamInformation.,
+                  Priority: Mid,
+                  DependencyCount: 3,
+                  MatchedNode: TeamInformation,
+                  PerfectScore: {}
+                },
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for TeamInformation.,
+                  Priority: Low,
+                  DependencyCount: 3,
+                  MatchedNode: TeamInformation,
+                  PerfectScore: {}
+                },
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for TeamInformation.,
+                  Priority: Low,
+                  DependencyCount: 7,
+                  MatchedNode: TeamInformation,
+                  PerfectScore: {}
+                }
+              ],
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found class 'TeamInformation',
+              Priority: Mid,
+              DependencyCount: 13,
+              MatchedNode: TeamInformation,
+              PerfectScore: {}
+            },
+            {
+              ChildrenCheckResults: [
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Creates relations for TeamRefactor.,
+                  Priority: Mid,
+                  DependencyCount: 3,
+                  MatchedNode: TeamRefactor,
+                  PerfectScore: {}
+                },
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for TeamRefactor.,
+                  Priority: Low,
+                  DependencyCount: 3,
+                  MatchedNode: TeamRefactor,
+                  PerfectScore: {}
+                },
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for TeamRefactor.,
+                  Priority: Low,
+                  DependencyCount: 7,
+                  MatchedNode: TeamRefactor,
+                  PerfectScore: {}
+                }
+              ],
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found class 'TeamRefactor',
+              Priority: Mid,
+              DependencyCount: 13,
+              MatchedNode: TeamRefactor,
+              PerfectScore: {}
+            },
+            {
+              ChildrenCheckResults: [
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Creates relations for TeamLogging.,
+                  Priority: Mid,
+                  DependencyCount: 3,
+                  MatchedNode: TeamLogging,
+                  PerfectScore: {}
+                },
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for TeamLogging.,
+                  Priority: Low,
+                  DependencyCount: 3,
+                  MatchedNode: TeamLogging,
+                  PerfectScore: {}
+                },
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for TeamLogging.,
+                  Priority: Low,
+                  DependencyCount: 7,
+                  MatchedNode: TeamLogging,
+                  PerfectScore: {}
+                }
+              ],
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found class 'TeamLogging',
+              Priority: Mid,
+              DependencyCount: 13,
+              MatchedNode: TeamLogging,
+              PerfectScore: {}
+            },
+            {
+              ChildrenCheckResults: [
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Creates relations for TeamService.,
+                  Priority: Mid,
+                  DependencyCount: 3,
+                  MatchedNode: TeamService,
+                  PerfectScore: {}
+                },
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for TeamService.,
+                  Priority: Low,
+                  DependencyCount: 3,
+                  MatchedNode: TeamService,
+                  PerfectScore: {}
+                },
+                {
+                  CollectionKind: Any,
+                  NodeCheckCollectionWrapper: true,
+                  FeedbackMessage: Found Uses relations for TeamService.,
+                  Priority: Low,
+                  DependencyCount: 7,
+                  MatchedNode: TeamService,
+                  PerfectScore: {}
+                }
+              ],
+              NodeCheckCollectionWrapper: false,
+              FeedbackMessage: Found class 'TeamService',
+              Priority: Mid,
+              DependencyCount: 13,
+              MatchedNode: TeamService,
+              PerfectScore: {}
+            }
+          ],
+          CollectionKind: Any,
+          NodeCheckCollectionWrapper: true,
+          FeedbackMessage: ,
+          Priority: Mid,
+          DependencyCount: 13,
+          Score: {},
+          PerfectScore: {}
+        }
+      ],
+      NodeCheckCollectionWrapper: false,
+      FeedbackMessage: Found the required checks for: PatternPal.Core.Runner.<RecognizerRunner>F79CA08E52C22783FA3A0EAEBBC26852FEB0B81B3C120614176DB3EB860E78E94__RootNode.,
+      DependencyCount: 31,
+      Score: {},
+      PerfectScore: {}
+    },
+    Requirements: [
+      1. Strategy Class,
+      1a. Is an interface.,
+      1b. Has declared a method.,
+      1a. Is an abstract class.,
+      1b. Has declared an abstract method.,
+      2. Concrete Strategy Class,
+      2a. Is an implementation of the Strategy interface.,
+      3. Context Class,
+      3a. Has a private field or property that has a Strategy class as type.,
+      3a. Has a private field or property that has a Strategy class as type.,
+      3. Context Class,
+      3b. Has a function setStrategy() to set the non-public field / property with parameter of type Strategy.,
+      3c. Has a function useStrategy() to execute the strategy.,
+      3a. Has a private field or property that has a Strategy class as type.,
+      3a. Has a private field or property that has a Strategy class as type.,
+      4. Client class,
+      4a. Has created an object of the type ConcreteStrategy.,
+      4b. Has used the setStrategy() in the Context class to store the ConcreteStrategy object.,
+      4c. Has executed the ConcreteStrategy via the Context class.
+    ]
+  }
+]

@@ -1,0 +1,31 @@
+﻿[
+  {
+    RecognizerType: Strategy,
+    CheckResult: {
+      NodeCheckCollectionWrapper: false,
+      FeedbackMessage: Found the required checks for: PatternPal.Core.Runner.<RecognizerRunner>F79CA08E52C22783FA3A0EAEBBC26852FEB0B81B3C120614176DB3EB860E78E94__RootNode.,
+      DependencyCount: 31
+    },
+    Requirements: [
+      1. Strategy Class,
+      1a. Is an interface.,
+      1b. Has declared a method.,
+      1a. Is an abstract class.,
+      1b. Has declared an abstract method.,
+      2. Concrete Strategy Class,
+      2a. Is an implementation of the Strategy interface.,
+      3. Context Class,
+      3a. Has a private field or property that has a Strategy class as type.,
+      3a. Has a private field or property that has a Strategy class as type.,
+      3. Context Class,
+      3b. Has a function setStrategy() to set the non-public field / property with parameter of type Strategy.,
+      3c. Has a function useStrategy() to execute the strategy.,
+      3a. Has a private field or property that has a Strategy class as type.,
+      3a. Has a private field or property that has a Strategy class as type.,
+      4. Client class,
+      4a. Has created an object of the type ConcreteStrategy.,
+      4b. Has used the setStrategy() in the Context class to store the ConcreteStrategy object.,
+      4c. Has executed the ConcreteStrategy via the Context class.
+    ]
+  }
+]
