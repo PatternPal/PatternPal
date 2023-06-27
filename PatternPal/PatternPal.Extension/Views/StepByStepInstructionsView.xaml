@@ -105,6 +105,15 @@
                     Orientation="Horizontal"
                     HorizontalAlignment="Center"
                     Margin="0,0,0,10">
+            <Button Name="PreviousInstructionButton"
+                    Click="PreviousInstructionButton_OnClick"
+                    Height="40"
+                    Width="60"
+                    FontSize="15"
+                    Margin="10,0,10,0"
+                    HorizontalAlignment="Center">
+                &lt;&lt;
+            </Button>
             <Button Name="CheckImplementationButton"
                     Click="CheckImplementationButton_OnClick"
                     Height="40"
@@ -114,19 +123,10 @@
                     HorizontalAlignment="Center">
                 Check
             </Button>
-            <Button Name="PreviousInstructionButton"
-                    Click="PreviousInstructionButton_OnClick"
-                    Height="40"
-                    Width="30"
-                    FontSize="15"
-                    Margin="10,0,10,0"
-                    HorizontalAlignment="Center">
-                &lt;&lt;
-            </Button>
             <Button Name="NextInstructionButton"
                     Click="NextInstructionButton_OnClick"
                     Height="40"
-                    Width="30"
+                    Width="60"
                     FontSize="15"
                     Margin="10,0,0,0"
                     HorizontalAlignment="Center">
