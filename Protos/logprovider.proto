@@ -14,39 +14,39 @@ service LogProviderService  {
 // Input arguments for recognizer request
 message LogEventRequest {
 
-// Required columns 
-patternpal.EventType event_type = 1;
-string event_id = 2;
-string subject_id = 3;
-string tool_instances = 4;
+    // Required columns 
+    patternpal.EventType event_type = 1;
+    string event_id = 2;
+    string subject_id = 3;
+    string tool_instances = 4;
 
-// Optional columns
-string client_timestamp = 5;
-string parent_event_id = 6;
-string session_id = 7;
-string project_id = 8;
-string code_state_section = 9;
-string compile_result = 10;
-string compile_message_type = 11;
-string compile_message_data = 12;
-string source_location = 13;
-string execution_id = 14;
-patternpal.ExecutionResult execution_result = 15;
-optional string recognizer_result = 16;
-optional string recognizer_config = 17;
-optional string file_path = 18;
-optional string project_directory = 19;
-string old_file_name = 20;
+    // Optional columns
+    string client_timestamp = 5;
+    string parent_event_id = 6;
+    string session_id = 7;
+    string project_id = 8;
+    string code_state_section = 9;
+    string compile_result = 10;
+    string compile_message_type = 11;
+    string compile_message_data = 12;
+    string source_location = 13;
+    string execution_id = 14;
+    patternpal.ExecutionResult execution_result = 15;
+    optional string recognizer_result = 16;
+    optional string recognizer_config = 17;
+    optional string file_path = 18;
+    optional string project_directory = 19;
+    string old_file_name = 20;
+}
 
-enum LogStatusCodes{
+enum LogStatusCodes {
     LSC_UNKNOWN = 0;
     LSC_SUCCESS = 1;
     LSC_UNAVAILABLE = 2;
     LSC_REJECTED = 3;
-    LSC_INVALID_ARGUMENTS=4;
-    LSC_FAILURE=5;
+    LSC_INVALID_ARGUMENTS = 4;
+    LSC_FAILURE = 5;
 }
-
 
 message LogEventResponse {
     LogStatusCodes status = 1;
