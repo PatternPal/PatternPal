@@ -65,11 +65,7 @@ internal class BridgeRecognizer : IRecognizer, IStepByStepRecognizer
                 BridgeInstructions.Explanation1,
                 new List<ICheck>
                 {
-                    Any(
-                        Priority.Knockout,
-                        _abstractBridge.ImplementationClass, 
-                        _interfaceBridge.ImplementationClass
-                    )
+                    _abstractBridge.ImplementationClass
                 }
             ),
             // Step 2. Create the Abstraction class with private / protected field or property
@@ -78,17 +74,10 @@ internal class BridgeRecognizer : IRecognizer, IStepByStepRecognizer
                 BridgeInstructions.Explanation2,
                 new List<ICheck>
                 {
-                    Any(
-                        Priority.Knockout,
-                        _abstractBridge.ImplementationClass,
-                        _interfaceBridge.ImplementationClass
-                    ),
+                    _abstractBridge.ImplementationClass,
                     Class(
                         Priority.Knockout,
-                        Any(
-                            Priority.Knockout,
-                            _abstractBridge.AbstractionFieldOrPropertyCheck, 
-                            _interfaceBridge.AbstractionFieldOrPropertyCheck)
+                        _abstractBridge.AbstractionFieldOrPropertyCheck
                     )
                 }
             ),
