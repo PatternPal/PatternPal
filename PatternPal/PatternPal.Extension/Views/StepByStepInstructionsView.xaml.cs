@@ -78,7 +78,9 @@ namespace PatternPal.Extension.Views
             {
                 correctTextBlock.Visibility = Visibility.Hidden;
                 CheckIfNextPreviousButtonsAvailable();
+                return;
             }
+            _viewModel.NavigateHomeCommand.Execute(null);
         }
 
         /// <summary>
@@ -87,9 +89,16 @@ namespace PatternPal.Extension.Views
         private void CheckIfNextPreviousButtonsAvailable()
         {
             CheckIfCheckIsAvailable();
-            NextInstructionButton.Visibility = _viewModel.HasNextInstruction
-                ? Visibility.Visible
-                : Visibility.Hidden;
+            if (_viewModel.HasNextInstruction)
+            {
+                NextInstructionButton.Content = ">>";
+                NextInstructionButton.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                NextInstructionButton.Content = "Home";
+                NextInstructionButton.Visibility = Visibility.Visible;
+            }
             PreviousInstructionButton.Visibility = _viewModel.HasPreviousInstruction
                 ? Visibility.Visible
                 : Visibility.Hidden;
