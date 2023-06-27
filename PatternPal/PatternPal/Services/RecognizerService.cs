@@ -98,6 +98,14 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
             foreach (EntityResult entityResult in rootResult.EntityResults)
             {
                 (int correctRequirements, int nrOfRequirements) = CalcCorrectPercentage(entityResult);
+
+                // Count requirement of the entityResult itself.
+                if (entityResult.Correctness == Correctness.CCorrect)
+                {
+                    correctRequirements++;
+                }
+                nrOfRequirements++;
+
                 totalCorrectRequirements += correctRequirements;
                 totalNrOfRequirements += nrOfRequirements;
 
