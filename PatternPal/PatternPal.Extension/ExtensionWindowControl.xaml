@@ -109,6 +109,8 @@
                         Command="{Binding BackCommand}">
                 </Button>
                 <TextBlock Text="{Binding CurrentViewModel.Title}"
+                           TextWrapping="Wrap"
+                           MaxWidth="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type StackPanel}}, Path=ActualWidth}"
                            VerticalAlignment="Center"
                            FontSize="50" />
                 <Image Source="Resources/logo.png"
