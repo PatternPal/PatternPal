@@ -429,7 +429,7 @@ file class DecoratorRecognizerWithInterface : DecoratorRecognizerParent, IStepBy
     /// <inheritdoc />
     protected override MethodCheck ComponentMethod() => Method(
         Priority.Knockout, 
-        "1a. Has declared a method.");
+        "1b. Has declared a method.");
 
     /// <inheritdoc />
     protected override InterfaceCheck Component(MethodCheck componentMethod) =>

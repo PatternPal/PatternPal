@@ -98,6 +98,14 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
             foreach (EntityResult entityResult in rootResult.EntityResults)
             {
                 (int correctRequirements, int nrOfRequirements) = CalcCorrectPercentage(entityResult);
+
+                // Count requirement of the entityResult itself.
+                if (entityResult.Correctness == Correctness.CCorrect)
+                {
+                    correctRequirements++;
+                }
+                nrOfRequirements++;
+
                 totalCorrectRequirements += correctRequirements;
                 totalNrOfRequirements += nrOfRequirements;
 
@@ -278,6 +286,19 @@ public class RecognizerService : Protos.RecognizerService.RecognizerServiceBase
                                         _ => Correctness.CIncorrect,
                                     }
                                 };
+
+                if (resultToProcess.PerfectScore.Equals(default)
+                    && resultToProcess.Check is NodeCheckBase nodeCheckBase
+                    && !nodeCheckBase.SubChecks.Any()
+                    && resultToProcess is NodeCheckResult {NodeCheckCollectionWrapper: false})
+                {
+                    // ASSUME: This result belongs to a NodeCheck (e.g. a MethodCheck) with no
+                    // sub-checks. When the check has sub-checks which are incorrect, the
+                    // PerfectScore won't be 0. If the NodeCheck didn't match any nodes, the result
+                    // would contain an incorrect LeafCheckResult, resulting in a non-zero
+                    // PerfectScore.
+                    result.Correctness = Correctness.CCorrect;
+                }
 
                 if (resultToProcess.MatchedNode != null)
                 {

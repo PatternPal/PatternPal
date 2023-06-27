@@ -107,14 +107,16 @@ public partial class RecognizerRunner
         {
             case LeafCheckResult leafResult:
             {
-                CalcLeafResultScore(
-                    resultsByNode,
-                    leafResult,
-                    false);
-                CalcLeafResultScore(
-                    resultsByNode,
-                    leafResult,
-                    true);
+                leafResult.SetScore(
+                    false,
+                    Score.CreateScore(
+                        leafResult.Priority,
+                        leafResult.Correct));
+                leafResult.SetScore(
+                    true,
+                    Score.CreateScore(
+                        leafResult.Priority,
+                        true));
                 break;
             }
             case NodeCheckResult nodeResult:
@@ -201,173 +203,6 @@ public partial class RecognizerRunner
             }
             default:
                 throw new ArgumentException($"Unknown CheckCollectionKind '{bestResult.CollectionKind}'");
-        }
-    }
-
-    /// <summary>
-    /// Calculates the (perfect) <see cref="Score"/> of a <see cref="LeafCheckResult"/>.
-    /// </summary>
-    /// <param name="resultsByNode">Maps <see cref="INode"/>s to the <see cref="ICheckResult"/> which matched them.</param>
-    /// <param name="leafResult">The <see cref="LeafCheckResult"/> for which to calculate the (perfect) <see cref="Score"/>.</param>
-    /// <param name="perfect">Whether to calculate the perfect or the actual <see cref="Score"/>.</param>
-    private static void CalcLeafResultScore(
-        IReadOnlyDictionary< INode, List< ICheckResult > > resultsByNode,
-        LeafCheckResult leafResult,
-        bool perfect)
-    {
-        leafResult.SetScore(
-            perfect,
-            Score.CreateScore(
-                leafResult.Priority,
-                leafResult.Correct || perfect));
-
-        // Take into account the score of the related node if this result belongs to a
-        // Relation- or TypeCheck.
-        if (leafResult is {Correct: true, Check: RelationCheck or TypeCheck, MatchedNode: not null})
-        {
-            // Get the CheckResults belonging to the related node.
-            List< ICheckResult > resultsOfNode = resultsByNode[ leafResult.MatchedNode ];
-
-            // Find the CheckResult linked to the check which searched for the related node.
-            ICheckResult ? relevantResult = resultsOfNode.FirstOrDefault(
-                result => result.Check == leafResult.RelatedCheck);
-
-            if (relevantResult == null)
-            {
-                // Probably unreachable.
-                return;
-            }
-
-            // If the type check is for the current entity, just use a score of 1 (which
-            // we already assigned above). Otherwise the score would become infinite ;).
-            if (leafResult.Check is TypeCheck {IsForCurrentEntity: true})
-            {
-                return;
-            }
-
-            // Ensure we don't try to use the score of the current entity, because we're
-            // still calculating it.
-            if (GetParentEntityCheck(leafResult.Check) == GetParentEntityCheck(relevantResult.Check))
-            {
-                return;
-            }
-
-            // Increment the score with the score of the related node. If the related
-            // node is not an entity, take the score of its entity parent. Otherwise,
-            // correctly implemented members in bad parents would weigh more than poorly
-            // implemented members in good parents.
-            leafResult.SetScore(
-                perfect,
-                (perfect
-                    ? leafResult.PerfectScore
-                    : leafResult.Score)
-                + leafResult.MatchedNode switch
-                {
-                    IEntity => perfect
-                        ? relevantResult.PerfectScore
-                        : relevantResult.Score,
-                    IMember member => GetParentScoreFromMember(
-                        resultsByNode,
-                        relevantResult,
-                        member,
-                        perfect),
-                    _ => throw new UnreachableException("Relation to non-IMember or IEntity")
-                });
-        }
-    }
-
-    /// <summary>
-    /// Gets the first parent <see cref="ICheck"/> which is an <see cref="ICheck"/> for an <see cref="IEntity"/>.
-    /// </summary>
-    /// <param name="currentCheck">The <see cref="ICheck"/> from which to get the parent <see cref="ICheck"/>.</param>
-    /// <returns>The parent <see cref="ICheck"/>.</returns>
-    private static ICheck GetParentEntityCheck(
-        ICheck currentCheck)
-    {
-        while (true)
-        {
-            if (currentCheck is ClassCheck or InterfaceCheck)
-            {
-                break;
-            }
-
-            if (currentCheck.ParentCheck == null)
-            {
-                // Should only be reached in tests.
-                break;
-            }
-            currentCheck = currentCheck.ParentCheck;
-        }
-
-        return currentCheck;
-    }
-
-    /// <summary>
-    /// Gets the score of the <paramref name="member"/>s parent of type <see cref="IEntity"/>.
-    /// </summary>
-    /// <param name="resultsByNode">Maps <see cref="INode"/>s to the <see cref="ICheckResult"/> which matched them.</param>
-    /// <param name="relevantResult">The <see cref="ICheckResult"/> which matched <paramref name="member"/>.</param>
-    /// <param name="member">The <see cref="IMember"/> from which to get the parent.</param>
-    /// <param name="perfect">Whether to get the perfect or the actual <see cref="Score"/>.</param>
-    /// <returns>The (perfect) <see cref="Score"/> of the parent.</returns>
-    private static Score GetParentScoreFromMember(
-        IReadOnlyDictionary< INode, List< ICheckResult > > resultsByNode,
-        ICheckResult relevantResult,
-        IMember member,
-        bool perfect)
-    {
-        IEntity parent = member.GetParent();
-
-        foreach (ICheckResult parentResult in resultsByNode[ parent ])
-        {
-            if (parentResult is LeafCheckResult)
-            {
-                continue;
-            }
-
-            if (HasDescendantResult(
-                parentResult,
-                relevantResult))
-            {
-                return perfect
-                    ? parentResult.PerfectScore
-                    : parentResult.Score;
-            }
-        }
-
-        return default;
-    }
-
-    /// <summary>
-    /// Checks if <paramref name="relevantResult"/> is a descendant of <paramref name="parentResult"/>.
-    /// </summary>
-    /// <param name="parentResult">The parent <see cref="ICheckResult"/>.</param>
-    /// <param name="relevantResult">The child <see cref="ICheckResult"/>.</param>
-    /// <returns><see langword="true"/> if <paramref name="relevantResult"/> is a descendant of <paramref name="parentResult"/>.</returns>
-    private static bool HasDescendantResult(
-        ICheckResult parentResult,
-        ICheckResult relevantResult)
-    {
-        if (parentResult == relevantResult)
-        {
-            return true;
-        }
-
-        switch (parentResult)
-        {
-            case LeafCheckResult:
-                return false;
-            case NotCheckResult notCheckResult:
-                return HasDescendantResult(
-                    notCheckResult.NestedResult,
-                    relevantResult);
-            case NodeCheckResult nodeCheckResult:
-                return nodeCheckResult.ChildrenCheckResults.Any(
-                    childResult => HasDescendantResult(
-                        childResult,
-                        relevantResult));
-            default:
-                throw new ArgumentException($"Unsupported CheckResult type: {parentResult.GetType()}");
         }
     }
 }

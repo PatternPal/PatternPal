@@ -19,21 +19,11 @@ internal class TypeCheck : CheckBase
         relatedCheck => 1 + relatedCheck.DependencyCount,
         _ => 0);
 
-    /// <summary>
-    /// Whether this <see cref="TypeCheck "/> is for the current <see cref="IEntity"/>.
-    /// </summary>
-    internal bool IsForCurrentEntity => _getNode.Match(
-        _ => false,
-        _ => true);
-
     /// <inheritdoc />
     public override Score PerfectScore => _perfectScore.Equals(default)
         ? _perfectScore = Score.CreateScore(
-                              Priority,
-                              true)
-                          + _getNode.Match(
-                              RelationCheck.PerfectScoreFromRelatedCheck,
-                              _ => default)
+            Priority,
+            true)
         : _perfectScore;
 
     /// <summary>
@@ -91,32 +81,32 @@ internal class TypeCheck : CheckBase
                 INode nodeToMatch = getCurrentEntity(ctx);
                 bool isMatch = node == nodeToMatch;
                 return new List< ICheckResult >
-                {
-                   new LeafCheckResult
-                   {
-                       Priority = Priority,
-                       Correct = isMatch,
-                       FeedbackMessage = isMatch
-                           ? $"Node '{node}' has correct type"
-                           : $"Node '{node}' has incorrect type, expected '{nodeToMatch}'",
-                       DependencyCount = DependencyCount,
-                       MatchedNode = nodeToMatch, //TODO is this right or should this be node?
-                       Check = this,
-                       RelatedCheck = ctx.EntityCheck
-                   }
-                };
+                       {
+                           new LeafCheckResult
+                           {
+                               Priority = Priority,
+                               Correct = isMatch,
+                               FeedbackMessage = isMatch
+                                   ? $"Node '{node}' has correct type"
+                                   : $"Node '{node}' has incorrect type, expected '{nodeToMatch}'",
+                               DependencyCount = DependencyCount,
+                               MatchedNode = nodeToMatch, //TODO is this right or should this be node?
+                               Check = this,
+                               RelatedCheck = ctx.EntityCheck
+                           }
+                       };
             });
 
         return new NodeCheckResult
-        {
-           Priority = Priority,
-           ChildrenCheckResults = results,
-           FeedbackMessage = $"Found node '{node}'",
-           DependencyCount = DependencyCount,
-           MatchedNode = node,
-           Check = this,
-           NodeCheckCollectionWrapper = true,
-           CollectionKind = CheckCollectionKind.Any
-        };
+               {
+                   Priority = Priority,
+                   ChildrenCheckResults = results,
+                   FeedbackMessage = $"Found node '{node}'",
+                   DependencyCount = DependencyCount,
+                   MatchedNode = node,
+                   Check = this,
+                   NodeCheckCollectionWrapper = true,
+                   CollectionKind = CheckCollectionKind.Any
+               };
     }
 }
