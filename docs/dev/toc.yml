@@ -1,6 +1,10 @@
+- name: Overview
+  href: ./overview.md
+
 # Pattern recognition --------------------
 - name: Pattern recognition
   items:
+
   # -- Design patterns
   - name: Design patterns
   - name: Adapter
@@ -26,8 +30,6 @@
     href: recognizers/design/checks.md
   - name: Syntax Graph
     href: recognizers/design/syntax_graph.md
-  - name: Step-By-Step
-    href: stepbystep/design/stepbystep.md
 
   # -- Guides
   - name: Guides
@@ -35,24 +37,40 @@
     href: recognizers/guides/implement_recognizer.md
   - name: Implementing a Check
     href: recognizers/guides/implement_check.md
-  - name: Adding a design pattern to Step-By-Step
+
+# SBS ------------------------------------
+- name: Step-by-Step
+  items: 
+
+  # -- Design
+  - name: Design
+  - name: Overview
+    href: stepbystep/design/stepbystep.md
+  
+  # -- Guides
+  - name: Guides
+  - name: Adding a design pattern
     href: stepbystep/guides/implement_an_instructionset.md
 
-
-# Pattern recognition --------------------
+# Logging --------------------------------
 - name: Data logging
   items:
+
   # -- Design
   - name: Design
   - name: Overview
     href: logging/design/overview.md
   - name: LogRequest
     href: logging/design/logrequest.md
+  - name: Export tool
+    href: logging/design/export.md
 
   # -- Guides
   - name: Guides
   - name: Installation
     href: logging/guides/installation.md
+  - name: Exporting the dataset
+    href: logging/guides/export.md
 
 # Extension ------------------------------
 - name: Extension
