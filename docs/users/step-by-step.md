@@ -22,7 +22,7 @@ Choose a pattern from the available options. The Step-by-Step functionality is a
 
 If you have already implemented the pattern in your codebase, select "Continue work on pattern". If you are implementing the pattern for the first time, select "Implement new pattern".
 
-![Select Pattern and existing or new](image_url_here)
+![Select Pattern and existing or new](../images/sbs_menu.png)
 
 ## Step 4: Follow the Steps
 
@@ -30,19 +30,23 @@ The Step-by-Step functionality provides a series of steps to guide you in implem
 
 ### Next Button
 
-Use the Next button to proceed to the next step.
+Use the 'Next' button to proceed to the next step.
 
 ### Check Button
 
-Click the Check button to verify if you have correctly implemented the requirements of the current step.
+Click the 'Check' button to verify if you have correctly implemented the requirements of the current step.
 
-![Step-by-Step Buttons](image_url_here)
+![Step-by-Step Buttons](../images/step_screen_regular.png)
 
 *Figure 1: Step-by-Step Buttons*
 
-![Step Instructions](image_url_here)
+![Step Instructions](../images/sbs_screen_correct.png)
 
-*Figure 2: Step Instructions and Feedback*
+*Figure 2: Step Instructions and Feedback when correct*
+
+![Step Feedback](../images/sbs_screen_incorrect.png)
+
+*Figure 2: Step Instructions and Feedback when incorrect*
 
 ## Step 5: Finish
 

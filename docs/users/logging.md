@@ -21,11 +21,11 @@ The data collected by the logging system is safely saved in an external database
 
 We appreciate your involvement and value your privacy. We have built elements within the extension to assure your informed consent. When you use PatternPal, you will be prompted to provide consent, which will explain any privacy concerns and request your permission to gather your data. It is absolutely up to you whether or not to engage.
 
-![Logging Consent](../images/LoggingConsent.png)
+![Logging Consent](../images/logging_permission.png)
 
 Moreover, we provide you with the option to supply a specific subjectID if you wish. This allows us to track your individual progress and organize the data accordingly.
 
-![Logging Settings](../images/LoggingSettings.png)
+![Logging Settings](../images/settings_menu.png)
 
 On the previous image it can be seen how you toggle the logging system on and off. If you choose to disable the logging system, you will still be able to use all functionality. Additionally here you can configure the subjectID that will be used to identify your data. This does not mean we know who you are, but it allows us to track your individual progress and organize the data accordingly. If you do not enter a subjectID, a random one will be generated for you.
 
