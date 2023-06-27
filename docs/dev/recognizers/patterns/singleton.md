@@ -27,6 +27,14 @@ The priority of a requirement is noted with the (low)-(mid)-(high)-(knockout) cr
     1. (mid) if called and there is no instance saved in the private field, then it calls the private constructor
     2. (mid) if called and there is an instance saved in the private field it returns that instance
 
+## Step By Step Steps
+| Steps | Requirements                                                                                                                                                                      | Explanations                                                                                                                                                                                                |
+|-------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1     | Create a constructor that is only private.                                                                                                                                        | The constructor is private to prevent direct instantiation of the class from outside the class. This ensures that only one object is created.                                                               |
+| 2     | Create a static, private field with the same type as the class.                                                                                                                   | The field is static since the Singleton should be stateless                                                                                                                                                 |
+| 3     | Create a static, public/internal method that acts as the constructor. When called and the field from the previous step is null call the constructor, otherwise, return the field. | This method will act as a constructor. It calls the constructor and saves the object in the field of the previous step. The subsequent calls will return that same instance, instead of creating a new one. |
+| 4     | Create a client class that calls the method from the previous step to retrieve the Singleton instance.                                                                            | By how we made the Singleton, we ensure that any client accessing the field of the Singleton will get access to the same field instance.                                                                    |
+
 ## References
 [^1]: Refactoring Guru, Creational Patterns - Singleton. https://refactoring.guru/design-patterns/singleton
 [^2]: A.Shalloway, J.R.Trott, Design Patterns Explained - A new perspective on Object Oriented Design (p.363). (2004)
