@@ -27,7 +27,7 @@ Moreover, we provide you with the option to supply a specific subjectID if you w
 
 ![Logging Settings](../images/LoggingSettings.png)
 
-On the previous image it can be seen how you toggle the logging system on and off. If you choose to disable the logging system, you will still be able to use all functionality. Additionally here you can configure the subjectID that will be used to identify your data. If you do not enter a subjectID, a random one will be generated for you.
+On the previous image it can be seen how you toggle the logging system on and off. If you choose to disable the logging system, you will still be able to use all functionality. Additionally here you can configure the subjectID that will be used to identify your data. This does not mean we know who you are, but it allows us to track your individual progress and organize the data accordingly. If you do not enter a subjectID, a random one will be generated for you.
 
 ## Logging Status icon
 
