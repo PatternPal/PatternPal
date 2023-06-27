@@ -21,34 +21,10 @@ internal class RelationCheck : CheckBase
 
     /// <inheritdoc />
     public override Score PerfectScore => _perfectScore.Equals(default)
-        ? _perfectScore = PerfectScoreFromRelatedCheck(_relatedNodeCheck)
-                          + Score.CreateScore(
-                              Priority,
-                              true)
+        ? _perfectScore = Score.CreateScore(
+            Priority,
+            true)
         : _perfectScore;
-
-    /// <summary>
-    /// Gets the perfect <see cref="Score"/> of the <paramref name="relatedCheck"/>.
-    /// </summary>
-    /// <param name="relatedCheck">The related <see cref="ICheck"/>.</param>
-    /// <returns>The <see cref="ICheck.PerfectScore"/> of the <paramref name="relatedCheck"/>.</returns>
-    internal static Score PerfectScoreFromRelatedCheck(
-        ICheck relatedCheck)
-    {
-        while (true)
-        {
-            if (relatedCheck is ClassCheck or InterfaceCheck)
-            {
-                return relatedCheck.PerfectScore;
-            }
-
-            if (relatedCheck.ParentCheck == null)
-            {
-                return default;
-            }
-            relatedCheck = relatedCheck.ParentCheck;
-        }
-    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RelationCheck"/> class.
@@ -105,16 +81,16 @@ internal class RelationCheck : CheckBase
                 });
         }
 
-        return new NodeCheckResult 
-        {
-           Priority = Priority,
-           ChildrenCheckResults = results,
-           NodeCheckCollectionWrapper = true,
-           FeedbackMessage = $"Found {_relationType} relations for {node}.",
-           DependencyCount = DependencyCount,
-           MatchedNode = node,
-           Check = this,
-           CollectionKind = CheckCollectionKind.Any,
-        };
+        return new NodeCheckResult
+               {
+                   Priority = Priority,
+                   ChildrenCheckResults = results,
+                   NodeCheckCollectionWrapper = true,
+                   FeedbackMessage = $"Found {_relationType} relations for {node}.",
+                   DependencyCount = DependencyCount,
+                   MatchedNode = node,
+                   Check = this,
+                   CollectionKind = CheckCollectionKind.Any,
+               };
     }
 }
