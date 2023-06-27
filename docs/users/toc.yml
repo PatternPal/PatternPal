@@ -1,5 +1,4 @@
 - name: PatternPal
-  href: PatternPal.md
   items:
     - name: Recognizer
       href: Recognizer.md
