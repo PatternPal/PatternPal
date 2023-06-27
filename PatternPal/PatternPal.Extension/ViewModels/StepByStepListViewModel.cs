@@ -142,25 +142,25 @@ namespace PatternPal.Extension.ViewModels
             DTE dte = (DTE)Package.GetGlobalService(typeof( SDTE ));
 
             if (VsShellUtilities.PromptYesNo(
-                "Do you want to add a file to the current solution?",
+                "Do you want to add a project to the current solution?",
                 "",
                 OLEMSGICON.OLEMSGICON_QUERY,
                 (IVsUIShell)Package.GetGlobalService(typeof( IVsUIShell ))))
             {
                 if (dte.Solution.IsOpen)
                 {
-                    string filePath;
-
                     // Create a project based on a template from VS2022 add it to the 
                     // solution. Then iterate over the projects of the solution and 
                     // add a file.
                     string projectName = SelectedInstructionSet.ToString();
 
-                    foreach (Project projectnames in dte.Solution.Projects)
+                    foreach (Project currentProject in dte.Solution.Projects)
                     {
-                        if (projectnames.Name.Equals(projectName))
+                        if (currentProject.Name.Equals(projectName))
                         {
-                            MessageBox.Show("A previous design pattern implementation already exists in this solution.");
+                            MessageBox.Show("A previous design pattern implementation for " + 
+                                            SelectedInstructionSet.ToString() + 
+                                            " already exists in this solution.");
                             return new List<string>();
                         }
                     }
@@ -178,16 +178,14 @@ namespace PatternPal.Extension.ViewModels
                     dte.Solution.AddFromTemplate(
                         templatePath,
                         projectPath,
-                        projectName,    
-                        false);
+                        projectName);
                     Project project = dte.Solution.Projects.Item(1);
-                    filePath =
+                    string filePath =
                         Path.Combine(
                             projectPath,
-                            SelectedInstructionSet.ToString()+".cs");
-                    using (FileStream fs = File.Create(filePath)) { }
+                            SelectedInstructionSet+".cs");
+                    File.Create(filePath).Close();
                     project.ProjectItems.AddFromFile(filePath);
-                    // The solution is empty.
 
                     dte.ItemOperations.OpenFile(filePath);
                     return new List<string> { filePath };
@@ -244,7 +242,7 @@ namespace PatternPal.Extension.ViewModels
             {
                 return new List< string >();
             }
-            using (FileStream fs = File.Create(filePath)) { }
+            File.Create(filePath).Close();
             return new List< string >
             {
                        filePath
