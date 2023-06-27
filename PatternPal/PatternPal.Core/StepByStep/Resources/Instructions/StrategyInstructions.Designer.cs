@@ -61,7 +61,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to The Strategy defines a general algoritm that can have different implementations, but achieves a similar result..
         /// </summary>
         internal static string Explanation1 {
             get {
@@ -70,7 +70,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to The ConcreteStrategy now defines a specific implementation of the algorithm..
         /// </summary>
         internal static string Explanation2 {
             get {
@@ -79,7 +79,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to The Context uses the algorithm the Strategy provides, but it does not directly use a specific implementation of the algorithm. It does not know the type of Strategy, it only knows the general behaviour of a Strategy and delegates the specific work to the ConcreteStrategy it gets. Therefore it is independant of concrete strategies, which means new algoriithms can be easily added..
         /// </summary>
         internal static string Explanation3 {
             get {
@@ -88,7 +88,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to The Client knows which specific strategy it needs and passes it to the Context..
         /// </summary>
         internal static string Explanation4 {
             get {

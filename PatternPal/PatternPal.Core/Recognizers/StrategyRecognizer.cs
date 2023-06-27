@@ -402,8 +402,8 @@ internal class StrategyRecognizer : IRecognizer, IStepByStepRecognizer
 
         generateStepsList.Add(
             new SimpleInstruction(
-               "TODO",
-               "TODO",
+               StrategyInstructions.Step1,
+               StrategyInstructions.Explanation1,
                 new List<ICheck> { strategy }));
 
         ClassCheck concreteStrategy = 
@@ -418,8 +418,8 @@ internal class StrategyRecognizer : IRecognizer, IStepByStepRecognizer
 
         generateStepsList.Add(
             new SimpleInstruction(
-                "TODO",
-                "TODO",
+                StrategyInstructions.Step2,
+                StrategyInstructions.Explanation2,
                 new List<ICheck>
                 {
                     strategy,
@@ -471,8 +471,8 @@ internal class StrategyRecognizer : IRecognizer, IStepByStepRecognizer
 
         generateStepsList.Add(
             new SimpleInstruction(
-                "TODO",
-                "TODO",
+                StrategyInstructions.Step3,
+                StrategyInstructions.Explanation3,
                 new List<ICheck>
                 {
                     strategy,
@@ -486,8 +486,8 @@ internal class StrategyRecognizer : IRecognizer, IStepByStepRecognizer
 
         generateStepsList.Add(
             new SimpleInstruction(
-                "TODO",
-                "TODO",
+                StrategyInstructions.Step4,
+                StrategyInstructions.Explanation4,
                 new List<ICheck>
                 {
                     strategy,
