@@ -1,100 +1,40 @@
-﻿name: Release extension
+﻿name: Release PatternPal.LoggingServer
 on:
   push:
     branches:
       - master
-    paths:
-      - 'PatternPal/**'
-  pull_request:
-    branches:
-      - master
-    paths:
-      - 'PatternPal/**'
-  workflow_dispatch: 
+  workflow_dispatch:
 
 defaults:
   run:
     working-directory: ./PatternPal
 
-env:
-  vsix_path: PatternPal/PatternPal.Extension/bin/Release/PatternPal.Extension.vsix
-
 jobs:
-  build-extension:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '3.1.x'
-      - name: Setup MSBuild.exe
-        uses: microsoft/setup-msbuild@v1.0.2
-      - uses: actions/cache@v2
-        with:
-          path: ~/.nuget/packages
-          # Look to see if there is a cache hit for the corresponding requirements file
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget
-      - name: Restore NuGet Packages
-        run: nuget restore
-      - name: Build extension
-        run: dotnet build --no-incremental --configuration Release
-      - name: Collect artifacts - VSIX
-        uses: actions/upload-artifact@v2
-        with:
-          name: PatternPal.Extension.vsix
-          path: ${{ env.vsix_path }}
-  release-extension:
+  release-logging-server-docker-image:
     runs-on: ubuntu-latest
-    needs: build-extension
-    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref_name == 'master'
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Bump version and push tag
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v6.0
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      - id: patternpal_version
+        uses: pozetroninc/github-action-get-latest-release@master
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/download-artifact@master
+          repository: ${{ github.repository }}
+          excludes: prerelease, draft
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v2
         with:
-          name: PatternPal.Extension.vsix
-          path: dist/
-      - name: Update changelog
-        uses: thomaseizinger/keep-a-changelog-new-release@master
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Build and push
+        uses: docker/build-push-action@v4
         with:
-          tag: ${{ steps.tag_version.outputs.new_tag }}
-          version: ${{ steps.tag_version.outputs.new_version }}
-      - name: Parse Changelog Entry
-        id: changelog
-        uses: coditory/changelog-parser@v1
-        with:
-          version: ${{ steps.tag_version.outputs.new_version }}
-      - name: Create Github Release
-        id: create_release
-        uses: actions/create-release@latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.tag_version.outputs.new_tag }}
-          release_name: ${{ steps.tag_version.outputs.new_tag }}
-          body: ${{ steps.changelog.outputs.description }}
-          draft: false
-          prerelease: false
-      - name: Upload Release Asset - VSIX
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/PatternPal.Extension.vsix
-          asset_name: PatternPal.Extension.vsix
-          asset_content_type: binary/octet-stream
-      - name: Commit and push CHANGELOG.md
-        uses: EndBug/add-and-commit@v7
-        with:
-          add: CHANGELOG.md
-          message: "chore: Update CHANGELOG.md"
-          branch: master
+          context: PatternPal/
+          file: PatternPal/PatternPal.LoggingServer/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/patternpalloggingserver:latest,${{ secrets.DOCKERHUB_USERNAME }}/patternpalloggingserver:${{ steps.patternpal_version.outputs.release }}

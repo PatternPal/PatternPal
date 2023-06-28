@@ -22,14 +22,14 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class AdapterInstructions {
+    internal class StrategyInstructions {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal AdapterInstructions() {
+        internal StrategyInstructions() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PatternPal.Core.StepByStep.Resources.Instructions.AdapterInstructions", typeof(AdapterInstructions).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PatternPal.Core.StepByStep.Resources.Instructions.StrategyInstructions", typeof(StrategyInstructions).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,7 +61,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This interface defines some sort of behavior that we will want to adapt a class to..
+        ///   Looks up a localized string similar to The Strategy defines a general algoritm that can have different implementations, but achieves a similar result..
         /// </summary>
         internal static string Explanation1 {
             get {
@@ -70,7 +70,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The client cannot use this (possibly third party) class directly because it has an incompatible interface..
+        ///   Looks up a localized string similar to The ConcreteStrategy now defines a specific implementation of the algorithm..
         /// </summary>
         internal static string Explanation2 {
             get {
@@ -79,7 +79,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To be able to use the Service, we make this class to adapt it to our interface. When called, it &quot;translates&quot; the call to the Service. Its field is private, since the logic should be exposed to the other code as the general interface only. The real implementation of the Service should only be known by the adapter. .
+        ///   Looks up a localized string similar to The Context uses the algorithm the Strategy provides, but it does not directly use a specific implementation of the algorithm. It does not know the type of Strategy, it only knows the general behaviour of a Strategy and delegates the specific work to the ConcreteStrategy it gets. Therefore it is independant of concrete strategies, which means new algoriithms can be easily added..
         /// </summary>
         internal static string Explanation3 {
             get {
@@ -88,7 +88,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The client can now use the logic of the Service as if it does have a compatible interface..
+        ///   Looks up a localized string similar to The Client knows which specific strategy it needs and passes it to the Context..
         /// </summary>
         internal static string Explanation4 {
             get {
@@ -97,7 +97,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make an interface with a method. We refer to this interface as `ClientInterface`..
+        ///   Looks up a localized string similar to Make an interface with a method. We refer to this interface as `Strategy`..
         /// </summary>
         internal static string Step1 {
             get {
@@ -106,7 +106,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make a class that has a method. It may not inherit from ClientInterface. We refer to this class as `Service`..
+        ///   Looks up a localized string similar to Make a class that implements Strategy. We refer to this class as `ConcreteStrategy`..
         /// </summary>
         internal static string Step2 {
             get {
@@ -115,7 +115,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make a class that implements ClientInterface. Give it a private field of type Service and instantiate it. Implement the method of ClientInterface by using the method of the field. We refer to this class as `Adapter`..
+        ///   Looks up a localized string similar to Make a class that has a private field of type Strategy. Give it a method that uses the field and a method that sets the field to a parameter of type Strategy. We refer to this class as `Context`..
         /// </summary>
         internal static string Step3 {
             get {
@@ -124,7 +124,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make a class that creates an instance of Adapter. Give it a method that calls the method of the instantiated variable..
+        ///   Looks up a localized string similar to Make a class that creates an instance of ConcreteStrategy, passes that variable to the method of Context that sets its field, and call the method of Context that uses its field..
         /// </summary>
         internal static string Step4 {
             get {

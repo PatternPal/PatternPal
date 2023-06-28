@@ -154,7 +154,7 @@
     <value>If you chose to create a field in step 2, you should create a constructor or method with a parameter with the Implementation type that sets the field of step 2 to the value of the parameter.</value>
   </data>
   <data name="Step5" xml:space="preserve">
-    <value>Make a class that implements the Implementation Interface or inherits form the Implementation Abstract Class. If it inherits from the Abstract Class it should override the abstract method. I will refer to this as the Concrete Implementation Class. </value>
+    <value>Make a class that implements the Implementation Interface or inherits from the Implementation Abstract Class. If it inherits from the Abstract Class it should override the abstract method. I will refer to this as the Concrete Implementation Class. </value>
   </data>
   <data name="Step6" xml:space="preserve">
     <value>Make a class that inherits from the Abstraction class and has a method. This class is called the Refined Abstraction Class.</value>

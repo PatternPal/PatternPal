@@ -1,10 +1,12 @@
 ﻿#region
 
 using Google.Protobuf;
+using Grpc.Net.Client;
+
 using System.IO.Compression;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
-using Grpc.Net.Client;
+
 using PatternPal.LoggingServer;
 
 using ExecutionResult = PatternPal.LoggingServer.ExecutionResult;
@@ -464,7 +466,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
                         ZipArchiveEntry entry = archive.CreateEntry(relativeFile, CompressionLevel.Optimal);
 
                         using Stream entryStream = entry.Open();
-                        using FileStream contents = File.OpenRead(file);
+                        using FileStream contents = OpenReadFile(file, 5);
                         contents.CopyTo(entryStream);
                     }
                 }
@@ -479,7 +481,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
                     ZipArchiveEntry entry = archive.CreateEntry(relativePath, CompressionLevel.Optimal);
 
                     using Stream entryStream = entry.Open();
-                    using FileStream contents = File.OpenRead(path);
+                    using FileStream contents = OpenReadFile(path, 5);
                     contents.CopyTo(entryStream);
                 }
             }
@@ -493,6 +495,42 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     }
 
     /// <summary>
+    /// Attempts maxNoRetries to open a read-only FileStream of the path; delays after each failed attempt.
+    /// </summary>
+    /// <param name="path">The path to file</param>
+    /// <param name="maxNoRetries">The maximum number of retries</param>
+    /// <param name="delay">The delay in ms after each failed attempt (default: 100)</param>
+    /// <returns></returns>
+    /// <exception cref="IOException">Thrown after maxNoRetries failed attempts</exception>
+    private static FileStream OpenReadFile(string path, int maxNoRetries, int delay = 100)
+    {
+        for (int i = 0; i < maxNoRetries; ++i)
+        {
+            try
+            {
+                // We try to open the file; if successful, we return the handle.
+                FileStream contents = File.OpenRead(path);
+                return contents;
+            }
+
+            catch (IOException)
+            {
+                if (i + 1 == maxNoRetries)
+                {
+                    // If unsuccessful for maxNoRetries, we propagate the exception.
+                    throw;
+                }
+                
+                // Otherwise, we wait for delay ms.
+                Thread.Sleep(delay);
+            }
+        }
+
+        // To make sure every path returns something.
+        throw new IOException($"Error while opening file after {maxNoRetries} attempts");
+    }
+
+    /// <summary>
     /// Generates a MD5 hash of the file specified at path.
     /// </summary>
     /// <param name="path">Path to the file to hash</param>
@@ -500,7 +538,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
     private static string HashFile(string path)
     {
         using MD5 md5 = MD5.Create();
-        using FileStream stream = File.OpenRead(path);
+        using FileStream stream = OpenReadFile(path, 5);
         return Convert.ToBase64String(md5.ComputeHash(stream));
     }
 
