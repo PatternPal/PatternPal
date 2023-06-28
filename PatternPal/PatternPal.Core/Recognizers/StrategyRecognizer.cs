@@ -1,5 +1,8 @@
 ﻿#region
 
+using PatternPal.Core.Checks;
+using PatternPal.Core.StepByStep;
+using PatternPal.Core.StepByStep.Resources.Instructions;
 using PatternPal.SyntaxTree.Models;
 
 using static PatternPal.Core.Checks.CheckBuilder;
@@ -34,7 +37,7 @@ namespace PatternPal.Core.Recognizers;
 ///     b) has used the setStrategy() in the Context class to store the ConcreteStrategy object<br/>
 ///     c) has executed the ConcreteStrategy via the Context class<br/>
 /// </remarks>
-internal class StrategyRecognizer : IRecognizer
+internal class StrategyRecognizer : IRecognizer, IStepByStepRecognizer
 {
     private ClassCheck ? _concreteClassCheck;
     private InterfaceCheck ? _interfaceStrategyCheck;
@@ -242,6 +245,23 @@ internal class StrategyRecognizer : IRecognizer
                 Uses(
                     Priority.High,
                     _propertyStrategy)
+            ),
+            Any(
+                Priority.High,
+                Parameters(
+                    Priority.High,
+                    Type(
+                        Priority.High,
+                        _interfaceStrategyCheck
+                    )
+                ),
+                Parameters(
+                    Priority.High,
+                    Type(
+                        Priority.High,
+                        _abstractClassStrategyCheck
+                    )
+                )
             )
         );
 
@@ -367,5 +387,115 @@ internal class StrategyRecognizer : IRecognizer
         return CheckUsageSetStrategy(
             setStrategyMethodCheck,
             usageDoSomething);
+    }
+
+    public List<IInstruction> GenerateStepsList()
+    {
+        List<IInstruction> generateStepsList = new();
+
+        MethodCheck strategyMethod = Method(Priority.Knockout);
+        InterfaceCheck strategy = 
+            Interface(
+                Priority.Knockout,
+                strategyMethod
+            );
+
+        generateStepsList.Add(
+            new SimpleInstruction(
+               StrategyInstructions.Step1,
+               StrategyInstructions.Explanation1,
+                new List<ICheck> { strategy }));
+
+        ClassCheck concreteStrategy = 
+            Class(
+                Priority.Knockout,
+                Implements(
+                    Priority.Knockout, 
+                    strategy
+                )
+            );
+        _concreteClassCheck = concreteStrategy;
+
+        generateStepsList.Add(
+            new SimpleInstruction(
+                StrategyInstructions.Step2,
+                StrategyInstructions.Explanation2,
+                new List<ICheck>
+                {
+                    strategy,
+                    concreteStrategy
+                }));
+
+        FieldCheck strategyField = 
+            Field(
+                Priority.Knockout,
+                Type(
+                    Priority.Knockout,
+                    strategy
+                ),
+                Modifiers(
+                    Priority.Knockout,
+                    Modifier.Private
+                )
+            );
+        MethodCheck usageStrategyMethod =
+            Method(
+                Priority.Knockout,
+                Uses(
+                    Priority.High,
+                    strategyMethod
+                )
+            );
+        MethodCheck setStrategyMethod =
+            Method(
+                Priority.Knockout,
+                Uses(
+                    Priority.Knockout,
+                    strategyField
+                ),
+                Parameters(
+                    Priority.Knockout,
+                    Type(
+                        Priority.Knockout,
+                        strategy
+                    )
+                )
+            );
+        ClassCheck context =
+            Class(
+                Priority.Knockout,
+                strategyField,
+                usageStrategyMethod,
+                setStrategyMethod
+            );
+
+        generateStepsList.Add(
+            new SimpleInstruction(
+                StrategyInstructions.Step3,
+                StrategyInstructions.Explanation3,
+                new List<ICheck>
+                {
+                    strategy,
+                    concreteStrategy,
+                    context
+                }));
+
+        ClassCheck client = CheckUsageDoSomething(
+            setStrategyMethod,
+            usageStrategyMethod);
+
+        generateStepsList.Add(
+            new SimpleInstruction(
+                StrategyInstructions.Step4,
+                StrategyInstructions.Explanation4,
+                new List<ICheck>
+                {
+                    strategy,
+                    concreteStrategy,
+                    context,
+                    client
+                }));
+
+        return generateStepsList;
     }
 }
