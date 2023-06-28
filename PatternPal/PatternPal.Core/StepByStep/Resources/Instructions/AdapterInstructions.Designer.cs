@@ -70,7 +70,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The client cannot use this (possibly third party) class directly because it has an incompatable interface..
+        ///   Looks up a localized string similar to The client cannot use this (possibly third party) class directly because it has an incompatible interface..
         /// </summary>
         internal static string Explanation2 {
             get {

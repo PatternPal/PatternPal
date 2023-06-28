@@ -121,7 +121,7 @@
     <value>This interface defines some sort of behavior that we will want to adapt a class to.</value>
   </data>
   <data name="Explanation2" xml:space="preserve">
-    <value>The client cannot use this (possibly third party) class directly because it has an incompatable interface.</value>
+    <value>The client cannot use this (possibly third party) class directly because it has an incompatible interface.</value>
   </data>
   <data name="Explanation3" xml:space="preserve">
     <value>To be able to use the Service, we make this class to adapt it to our interface. When called, it "translates" the call to the Service. Its field is private, since the logic should be exposed to the other code as the general interface only. The real implementation of the Service should only be known by the adapter. </value>
