@@ -6,6 +6,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 
+using EnvDTE;
+
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
@@ -17,6 +19,8 @@ using PatternPal.Extension.Commands;
 using PatternPal.Extension.Grpc;
 using PatternPal.Extension.ViewModels;
 using PatternPal.Protos;
+
+using Project = Microsoft.CodeAnalysis.Project;
 
 #endregion
 
@@ -37,6 +41,7 @@ namespace PatternPal.Extension.Views
 
             Dispatcher.VerifyAccess();
             LoadProject();
+            Dte = Package.GetGlobalService(typeof( SDTE )) as DTE;
             IVsRunningDocumentTable rdt = (IVsRunningDocumentTable)Package.GetGlobalService(typeof( SVsRunningDocumentTable ));
             rdt.AdviseRunningDocTableEvents(
                 this,
@@ -48,6 +53,7 @@ namespace PatternPal.Extension.Views
         }
 
         private List< Project > Projects { get; set; }
+        private DTE Dte { get; }
 
         /// <summary>
         /// Activated after clicking on the previous instruction button
@@ -139,6 +145,14 @@ namespace PatternPal.Extension.Views
             RoutedEventArgs e)
         {
             NextInstructionButton.IsEnabled = false;
+
+            // Save all documents before checking the instruction.
+            ThreadHelper.JoinableTaskFactory.Run(
+                async () =>
+                {
+                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                    Dte.Documents.SaveAll();
+                });
 
             CheckInstructionRequest request = new CheckInstructionRequest
                                               {
