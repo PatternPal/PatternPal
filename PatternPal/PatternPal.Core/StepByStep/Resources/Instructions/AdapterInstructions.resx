@@ -127,7 +127,7 @@
     <value>To be able to use the Service, we make this class to adapt it to our interface. When called, it "translates" the call to the Service. Its field is private, since the logic should be exposed to the other code as the general interface only. The real implementation of the Service should only be known by the adapter. </value>
   </data>
   <data name="Explanation4" xml:space="preserve">
-    <value>The client can now use the logic of the Service as if it does have a compatable interface.</value>
+    <value>The client can now use the logic of the Service as if it does have a compatible interface.</value>
   </data>
   <data name="Step1" xml:space="preserve">
     <value>Make an interface with a method. We refer to this interface as `ClientInterface`.</value>

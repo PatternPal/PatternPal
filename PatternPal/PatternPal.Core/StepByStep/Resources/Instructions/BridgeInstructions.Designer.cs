@@ -169,7 +169,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make a class that implements the Implementation Interface or inherits form the Implementation Abstract Class. If it inherits from the Abstract Class it should override the abstract method. I will refer to this as the Concrete Implementation Class. .
+        ///   Looks up a localized string similar to Make a class that implements the Implementation Interface or inherits from the Implementation Abstract Class. If it inherits from the Abstract Class it should override the abstract method. I will refer to this as the Concrete Implementation Class. .
         /// </summary>
         internal static string Step5 {
             get {
