@@ -173,6 +173,10 @@ namespace PatternPal.Extension.Views
         private void CreateResultViewModels(
             IEnumerable< RecognizeResult > results)
         {
+            if (!results.Any())
+            {
+                NoResultsTextBlock.Visibility = Visibility.Visible;
+            }
             ExpanderResults.ResultsView.ItemsSource = results.OrderByDescending(result => result.PercentageCorrectResults).Select(result => new PatternResultViewModel(result)).ToList();
         }
 
@@ -190,11 +194,11 @@ namespace PatternPal.Extension.Views
         }
 
         /// <summary>
-        ///     Handles click on the analyse_button by displaying the tool window.
+        ///     Handles click on the analyze_button by displaying the tool window.
         /// </summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event args.</param>
-        private void Analyse_Button(
+        private void Analyze_Button(
             object sender,
             RoutedEventArgs e)
         {
@@ -211,6 +215,7 @@ namespace PatternPal.Extension.Views
             // Switch to main thread, which is required to access the `DTE` service.
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
+            NoResultsTextBlock.Visibility = Visibility.Collapsed;
             SaveAllDocuments();
 
             RecognizeRequest request = new RecognizeRequest();
@@ -341,19 +346,5 @@ namespace PatternPal.Extension.Views
         }
 
         #endregion
-
-        private void ShowAllCheckBox_OnChecked(
-            object sender,
-            RoutedEventArgs e)
-        {
-            ThreadHelper.JoinableTaskFactory.Run(AnalyzeAsync);
-        }
-
-        private void ShowAllCheckBox_OnUnchecked(
-            object sender,
-            RoutedEventArgs e)
-        {
-            ThreadHelper.JoinableTaskFactory.Run(AnalyzeAsync);
-        }
     }
 }

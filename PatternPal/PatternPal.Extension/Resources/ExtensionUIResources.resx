@@ -123,8 +123,8 @@
   <data name="ActiveDocument" xml:space="preserve">
     <value>Active Document</value>
   </data>
-  <data name="Analyse" xml:space="preserve">
-    <value>Analyse</value>
+  <data name="Analyze" xml:space="preserve">
+    <value>Analyze</value>
   </data>
   <data name="ConsentScreenText" xml:space="preserve">
     <value>Thank you for using our application! Before proceeding, we kindly request your consent to log and analyze your data for research purposes. Your privacy is crucial to us, and we ensure that all data will be handled in compliance with regulations.
