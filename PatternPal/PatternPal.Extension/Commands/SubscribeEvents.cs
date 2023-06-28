@@ -530,10 +530,7 @@ namespace PatternPal.Extension.Commands
 
 
             request.RecognizerConfig = config;
-            foreach (RecognizeResult result in recognizeResults)
-            {
-                request.RecognizerResult += result.ToString();
-            }
+            request.RecognizerResult = String.Join(string.Empty, recognizeResults.Select(i => i.ToString()));
 
             LogEventResponse response = PushLog(request);
         }
