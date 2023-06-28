@@ -525,12 +525,18 @@ namespace PatternPal.Extension.Commands
                 string projectDir = Path.GetDirectoryName(recognizeRequest.Project);
                 request.ProjectId = GetRelativePath(projectDir, recognizeRequest.Project);
             }
+            Dictionary<string, string> config = { { "recognizers", recognizeRequest.Recognizers.ToString(),
+            "show_all_results" = recognizeRequest.ShowAllResults.ToString(),
+            "file_or_project" = recognizeRequest.FileOrProjectCase.ToString()
+             } };
 
             string config = recognizeRequest.Recognizers.ToString();
 
+            List<string> patternsResults = new List<string>();
+            patternsResults.AddRange(recognizeResults.Select(i => i.PatternName));
 
             request.RecognizerConfig = config;
-            request.RecognizerResult = String.Join(string.Empty, recognizeResults.Select(i => i.ToString()));
+            request.RecognizerResult = patternsResults;
 
             LogEventResponse response = PushLog(request);
         }
