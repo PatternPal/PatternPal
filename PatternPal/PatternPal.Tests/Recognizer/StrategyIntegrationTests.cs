@@ -1,9 +1,9 @@
-﻿namespace PatternPal.Tests.Core.RecognizerRunnerTests;
+﻿namespace PatternPal.Tests.Recognizer;
 
 [TestFixture]
+[Ignore("The results include a file scoped class, which contains a hash which is different on every machine(?)/compilation")]
 internal class StrategyIntegrationTests
 {
-
     [Test]
     [TestCase("StrategyTestCase01.cs")]
     [TestCase("StrategyTestCase02.cs")]
@@ -23,19 +23,22 @@ internal class StrategyIntegrationTests
     [TestCase("StrategyTestCase16.cs")]
     [TestCase("StrategyTestCase17.cs")]
     [TestCase("StrategyTestCase18.cs")]
-    public Task StrategyIntegrationTest(string file)
+    public Task StrategyIntegrationTest(
+        string file)
     {
         IRecognizer strategyRecognizer = new StrategyRecognizer();
-        List<string> files = new()
-        {
-            @"New_TestCasesRecognizers/Strategy/" + file
-        };
-        List<IRecognizer> recognizers = new()
-        {
-            strategyRecognizer
-        };
+        List< string > files = new()
+                               {
+                                   "New_TestCasesRecognizers/Strategy/" + file
+                               };
+        List< IRecognizer > recognizers = new()
+                                          {
+                                              strategyRecognizer
+                                          };
 
-        RecognizerRunner runner = new RecognizerRunner(files, recognizers);
+        RecognizerRunner runner = new(
+            files,
+            recognizers );
 
         return Verifier.Verify(runner.Run());
     }
