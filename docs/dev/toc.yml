@@ -75,5 +75,13 @@
 # Extension ------------------------------
 - name: Extension
   items:
-  - name: Notes
-    href: extension/notes.md
+    - name: Overview
+      href: extension/overview.md
+    - name: Error handling
+      href: extension/error_handling.md
+
+# Background Process ---------------------
+- name: Background Process
+  items:
+    - name: Overview
+      href: background_process/overview.md

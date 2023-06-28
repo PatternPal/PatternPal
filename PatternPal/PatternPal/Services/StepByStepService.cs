@@ -80,6 +80,72 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
         CheckInstructionRequest request,
         ServerCallContext context)
     {
+        // Due to some limitations in the score calculation, we unfortunately can't rely on that to
+        // determine if the result is correct. Instead we fallback to the old way of determining
+        // that, which is to run with prune all and check if any results remain. This does mean that
+        // the recognizer technically runs twice, which is inefficient. However, because a
+        // Step-by-Step implementation is usually quite small, this doesn't really matter.
+        bool correct = GetCorrect(request);
+        RecognizeResult ? recognizeResult = GetResult(request);
+
+        CheckInstructionResponse response = new()
+                                            {
+                                                Result = correct,
+                                                RecognizeResult = recognizeResult,
+                                            };
+
+        return Task.FromResult(response);
+    }
+
+    /// <summary>
+    /// Checks whether the instruction has been correctly implemented.
+    /// </summary>
+    /// <param name="request">The <see cref="CheckInstructionRequest"/> to check.</param>
+    /// <returns><see langword="true"/> if the instruction has been implemented correctly, <see langword="false"/> otherwise.</returns>
+    private static bool GetCorrect(
+        CheckInstructionRequest request)
+    {
+        // Retrieve the checks based on the instruction number and recognizer.
+        Recognizer protoRecognizer = request.Recognizer;
+        IStepByStepRecognizer recognizer = RecognizerRunner.SupportedStepByStepRecognizers[ protoRecognizer ];
+        IInstruction instruction = recognizer.GenerateStepsList()[ request.InstructionNumber ];
+
+        // Run the checks on the provided files.
+        RecognizerRunner runner = new(
+            protoRecognizer,
+            request.Documents,
+            instruction );
+        IList< RecognizerRunner.RunResult > results = runner.Run(pruneAll: true);
+
+        // Check whether there is a single file with results.
+        if (results.Count == 0)
+        {
+            return false;
+        }
+
+        // Assume the implementation is wrong only when there is evidence in one of the
+        // results that proves otherwise.
+        bool assumption = false;
+        foreach (RecognizerRunner.RunResult runResult in results)
+        {
+            NodeCheckResult checkRes = (NodeCheckResult)runResult.CheckResult;
+            if (checkRes.ChildrenCheckResults.Count != 0)
+            {
+                assumption = true;
+            }
+        }
+
+        return assumption;
+    }
+
+    /// <summary>
+    /// Create a <see cref="RecognizeResult"/> from the instruction implementation.
+    /// </summary>
+    /// <param name="request">The <see cref="CheckInstructionRequest"/> to check.</param>
+    /// <returns>The <see cref="RecognizeResult"/> if the <see cref="RecognizerRunner"/> produced a result, <see langword="null"/> otherwise.</returns>
+    private static RecognizeResult ? GetResult(
+        CheckInstructionRequest request)
+    {
         // Retrieve the checks based on the instruction number and recognizer.
         Recognizer protoRecognizer = request.Recognizer;
         IStepByStepRecognizer recognizer = RecognizerRunner.SupportedStepByStepRecognizers[ protoRecognizer ];
@@ -92,22 +158,8 @@ public class StepByStepService : Protos.StepByStepService.StepByStepServiceBase
             instruction );
         IList< RecognizerRunner.RunResult > results = runner.Run();
 
-        if (results.Count == 0)
-        {
-            return Task.FromResult(
-                new CheckInstructionResponse
-                {
-                    Result = false
-                });
-        }
-
-        RecognizeResult result = ResultsHelper.CreateRecognizeResult(results.First());
-
-        return Task.FromResult(
-            new CheckInstructionResponse
-            {
-                Result = result.PercentageCorrectResults == 100,
-                RecognizeResult = result
-            });
+        return results.Count == 0
+            ? null
+            : ResultsHelper.CreateRecognizeResult(results.First());
     }
 }

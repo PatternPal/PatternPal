@@ -99,5 +99,5 @@ message CheckInstructionResponse {
     bool result = 1;
 
     // Detailed result of the check of the instruction.
-    patternpal.RecognizeResult recognize_result = 2;
+    optional patternpal.RecognizeResult recognize_result = 2;
 }
