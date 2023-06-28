@@ -127,10 +127,10 @@
     <value>You should thus update the just added Concrete Observer using the method created in step 7.</value>
   </data>
   <data name="Explanation2" xml:space="preserve">
-    <value>This interface serves as the base fot the Concrete Subjects to which Concrete Observers can subscribe. The method here will in the Concrete Subjects be implemented as the `notify()` method.</value>
+    <value>This is a Concrete Observer class which instances are updated if a Concrete Subject notifies them. </value>
   </data>
   <data name="Explanation3" xml:space="preserve">
-    <value>This is a Concrete Observer class which instances are updated if a Concrete Subject notifies them. </value>
+    <value>This interface serves as the base fot the Concrete Subjects to which Concrete Observers can subscribe. The method here will in the Concrete Subjects be implemented as the `notify()` method.</value>
   </data>
   <data name="Explanation4" xml:space="preserve">
     <value>This is a Concrete Subject class which can notify the Concrete Observers if they are subscribed.</value>
@@ -142,10 +142,10 @@
     <value>This method will be used to subscribe or unsubscribe Concrete Observer instances to the Concrete Subject. It could thus be a logical step to implement two methods with these requirements. One for attaching the Observer to the list and one to detach. </value>
   </data>
   <data name="Explanation7" xml:space="preserve">
-    <value>This method will be used to notify the Concrete Observers in the observers list. For the implementation of this method it thus seems logical to loop through the observers list and notify each instance.</value>
+    <value>This field or property will be used to store the state in. With this state it can be determined that the observers should be notified. The method that comes with the field or property is then used to change the state.</value>
   </data>
   <data name="Explanation8" xml:space="preserve">
-    <value>This field or property will be used to store the state in. With this state it can be determined that the observers should be notified. The method that comes with the field or property is then used to change the state. You can also choose to create a method with the state as parameter.</value>
+    <value>This method will be used to notify the Concrete Observers in the observers list. For the implementation of this method it thus seems logical to loop through the observers list and notify each instance.</value>
   </data>
   <data name="Explanation9" xml:space="preserve">
     <value>This will be the Client class which is used to control the Observer pattern. </value>
@@ -157,13 +157,13 @@
     <value>Use the `attach()` method as described in step 6 in the Concrete Subject.</value>
   </data>
   <data name="Step11" xml:space="preserve">
-    <value>Use the 'update()` method as described in step 7 in the Concrete Subject.</value>
+    <value>Use the 'notify()` method as described in step 7 in the Concrete Subject.</value>
   </data>
   <data name="Step2" xml:space="preserve">
-    <value>Create an interface with an internal or public method that has a parameter with as type the Observer Interface. We will refer to this as the Subject Interface.</value>
+    <value>Create a class that implements the Observer Interface. We will refer to this class as the Concrete Observer.</value>
   </data>
   <data name="Step3" xml:space="preserve">
-    <value>Create a class that implements the Observer Interface.</value>
+    <value>Create an interface with an internal or public method that has a parameter with as type the Observer Interface. We will refer to this as the Subject Interface.</value>
   </data>
   <data name="Step4" xml:space="preserve">
     <value>Create a class that implements the Subject interface. We will refer to this class as the Concrete Subject class.</value>
@@ -175,10 +175,10 @@
     <value>Add a public or internal method, that has a parameter with as type Observer that uses the list `observers`. We will refer to this method as the 'attach()' method.</value>
   </data>
   <data name="Step7" xml:space="preserve">
-    <value>Add a public method that uses the observers list and uses the `observers` list and uses the `update()` method of the `Observer Interface`. We will refer to this method as the 'update()' method.</value>
+    <value>Add a private or protected field or property, which we will refer to as `mainState` and add a public or internal method that uses this field or property.</value>
   </data>
   <data name="Step8" xml:space="preserve">
-    <value>Add a private or protected field or property, which we will refer to as `mainState` and add a public or internal method that uses this field or property. Or add a public / internal method with a parameter. </value>
+    <value>Add a public method that uses the `observers` list and uses the `update()` method of the `Observer Interface`. We will refer to this method as the 'notify()' method.</value>
   </data>
   <data name="Step9" xml:space="preserve">
     <value>Create a class that creates a Concrete Subject instance and creates an Concrete Observer instance. </value>

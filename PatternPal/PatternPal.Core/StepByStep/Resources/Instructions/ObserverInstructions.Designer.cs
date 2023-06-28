@@ -88,7 +88,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This interface serves as the base fot the Concrete Subjects to which Concrete Observers can subscribe. The method here will in the Concrete Subjects be implemented as the `notify()` method..
+        ///   Looks up a localized string similar to This is a Concrete Observer class which instances are updated if a Concrete Subject notifies them. In the method you should define the logic that needs to be executed when the Subject is notifies the class. .
         /// </summary>
         internal static string Explanation2 {
             get {
@@ -97,7 +97,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This is a Concrete Observer class which instances are updated if a Concrete Subject notifies them. .
+        ///   Looks up a localized string similar to This interface serves as the base fot the Concrete Subjects to which Concrete Observers can subscribe. The method here will in the Concrete Subjects be implemented as the `notify()` method..
         /// </summary>
         internal static string Explanation3 {
             get {
@@ -133,7 +133,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This method will be used to notify the Concrete Observers in the observers list. For the implementation of this method it thus seems logical to loop through the observers list and notify each instance..
+        ///   Looks up a localized string similar to This field or property will be used to store the state in. With this state it can be determined that the observers should be notified. The method that comes with the field or property is then used to change the state..
         /// </summary>
         internal static string Explanation7 {
             get {
@@ -142,7 +142,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This field or property will be used to store the state in. With this state it can be determined that the observers should be notified. The method that comes with the field or property is then used to change the state. You can also choose to create a method with the state as parameter..
+        ///   Looks up a localized string similar to This method will be used to notify the Concrete Observers in the observers list. For the implementation of this method it thus seems logical to loop through the observers list and notify each instance..
         /// </summary>
         internal static string Explanation8 {
             get {
@@ -160,7 +160,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make an interface with an internal or public method. We refer to this interface as the Observer Interface..
+        ///   Looks up a localized string similar to Make an interface with an internal or public method. We refer to this interface as the Observer Interface, we will reference to the method as update()..
         /// </summary>
         internal static string Step1 {
             get {
@@ -178,7 +178,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the &apos;update()` method as described in step 7 in the Concrete Subject..
+        ///   Looks up a localized string similar to Use the &apos;notify()` method as described in step 7 in the Concrete Subject..
         /// </summary>
         internal static string Step11 {
             get {
@@ -187,7 +187,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create an interface with an internal or public method that has a parameter with as type the Observer Interface. We will refer to this as the Subject Interface..
+        ///   Looks up a localized string similar to Create a class that implements the Observer Interface. We will refer to this class as the Concrete Observer..
         /// </summary>
         internal static string Step2 {
             get {
@@ -196,7 +196,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create a class that implements the Observer Interface..
+        ///   Looks up a localized string similar to Create an interface with an internal or public method that has a parameter with as type the Observer Interface. We will refer to this as the Subject Interface..
         /// </summary>
         internal static string Step3 {
             get {
@@ -232,7 +232,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add a public method that uses the observers list and uses the `observers` list and uses the `update()` method of the `Observer Interface`. We will refer to this method as the &apos;update()&apos; method..
+        ///   Looks up a localized string similar to Add a private or protected field or property, which we will refer to as `mainState` and add a public or internal method that uses this field or property..
         /// </summary>
         internal static string Step7 {
             get {
@@ -241,7 +241,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add a private or protected field or property, which we will refer to as `mainState` and add a public or internal method that uses this field or property. Or add a public / internal method with a parameter. .
+        ///   Looks up a localized string similar to Add a public method that uses the `observers` list and uses the `update()` method of the `Observer Interface`. We will refer to this method as the &apos;notify()&apos; method..
         /// </summary>
         internal static string Step8 {
             get {

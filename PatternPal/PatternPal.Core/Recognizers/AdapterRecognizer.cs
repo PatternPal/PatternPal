@@ -360,7 +360,7 @@ file class AdapterRecognizerInterface : AdapterRecognizerParent, IStepByStepReco
     /// <inheritdoc />
     public override MethodCheck ContainsOverridableMethod()
     {
-        return Method(Priority.High);
+        return Method(Priority.High);   
     }
 
     /// <inheritdoc />

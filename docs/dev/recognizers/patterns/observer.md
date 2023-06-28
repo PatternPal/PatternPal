@@ -26,7 +26,7 @@ The priority of a requirement is noted with the (low)-(mid)-(high)-(knockout) cr
 
 **Observer**
 1. (Knockout) Is an interface.
-2. (Knockout) Has a `update()` method.
+2. (Knockout) Has public or internal `update()` method.
 
 **Concrete Observer**
 1. (Knockout) Is a class that implements the `Observer` interface.
@@ -44,15 +44,13 @@ The priority of a requirement is noted with the (low)-(mid)-(high)-(knockout) cr
     1. (High) Both,
         1. (High) A private or protected field or property `mainState`.
         2. (High) Has a public or internal method that uses `mainState`.
-    2. (High) A public / internal method with a parameter.
+    2. (High) A public or internal method with a parameter.
 
 **Client**
 1. (Mid) Creates the Subject.
 2. (Mid) Creates a Concrete Observer.
 3. (Low) Uses a method as described in `Concrete Subject` 3.
 4. (Low) Uses the method as described in `Concrete SubjecThi` 4.
-
-
 
 ## References
 [^1]: A.Shalloway, J.R.Trott, Design Patterns Explained - A new perspective on Object Oriented Design (p.270-275). (2001)
