@@ -61,7 +61,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This interface defines what fields and methods a concrete product should contain..
+        ///   Looks up a localized string similar to This interface defines some sort of behavior that we will want to adapt a class to..
         /// </summary>
         internal static string Explanation1 {
             get {
@@ -70,7 +70,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It need to be two classes because using the factory method pattern for just one concrete product is not useful. It also needs to inherit product as the properties of a concrete product are declared there..
+        ///   Looks up a localized string similar to The client cannot use this (possibly third party) class directly because it has an incompatible interface..
         /// </summary>
         internal static string Explanation2 {
             get {
@@ -79,7 +79,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It needs to be an abstract class and not an interface as this class has more functions than creating products. The only abstract method contains should be the factoryMethod() method which creates a product..
+        ///   Looks up a localized string similar to To be able to use the Service, we make this class to adapt it to our interface. When called, it &quot;translates&quot; the call to the Service. Its field is private, since the logic should be exposed to the other code as the general interface only. The real implementation of the Service should only be known by the adapter. .
         /// </summary>
         internal static string Explanation3 {
             get {
@@ -88,7 +88,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It need to be two classes because every concrete product should have its own concrete creator and there are at least two concrete products. Every concrete creator inherits creator and overrides the factoryMethod() method which creates exactly one concrete product..
+        ///   Looks up a localized string similar to The client can now use the logic of the Service as if it does have a compatible interface..
         /// </summary>
         internal static string Explanation4 {
             get {
@@ -97,7 +97,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create an interface. We refer to this interface as the Product..
+        ///   Looks up a localized string similar to Make an interface with a method. We refer to this interface as `ClientInterface`..
         /// </summary>
         internal static string Step1 {
             get {
@@ -106,7 +106,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create two new classes which inherit the Product. We refer to these classes as Concrete Product..
+        ///   Looks up a localized string similar to Make a class that has a method. It may not inherit from ClientInterface. We refer to this class as `Service`..
         /// </summary>
         internal static string Step2 {
             get {
@@ -115,7 +115,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create an abstract class which will contain an public abstract method which will return something of type Product. This class will be referred to as Creator..
+        ///   Looks up a localized string similar to Make a class that implements ClientInterface. Give it a private field of type Service and instantiate it. Implement the method of ClientInterface by using the method of the field. We refer to this class as `Adapter`..
         /// </summary>
         internal static string Step3 {
             get {
@@ -124,7 +124,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create two classes which will inherit from the Creator class. Each class will have exactly one method which will create and return a different concrete product. This class will be referred to as Concrete Creator.
+        ///   Looks up a localized string similar to Make a class that creates an instance of Adapter. Give it a method that calls the method of the instantiated variable..
         /// </summary>
         internal static string Step4 {
             get {
