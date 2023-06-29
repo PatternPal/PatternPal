@@ -129,6 +129,19 @@
                             </Setter.Value>
                         </Setter>
                     </Trigger>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <LinearGradientBrush StartPoint="0,0"
+                                                     EndPoint="1,1">
+                                    <GradientStop Color="#686868"
+                                                  Offset="0" />
+                                    <GradientStop Color="#707070"
+                                                  Offset="0.53" />
+                                </LinearGradientBrush>
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
                 </Style.Triggers>
             </Style>
             <Style TargetType="ProgressBar">

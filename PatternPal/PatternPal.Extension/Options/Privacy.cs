@@ -23,11 +23,13 @@ namespace PatternPal.Extension
         [DisplayName("Log data")]
         [Description(
             "Whether PatternPal can log your data. The data which gets logged are your actions and your source code. This is used for research. This option is turned off by default.")]
+        [DefaultValue(false)]
         public bool DoLogData { get; set; } = false;
 
         [Category("Privacy")]
         [DisplayName("First Time")]
         [Description("Whether this is the first time PatternPal is used. This is used for research.")]
+        [DefaultValue(true)]
         public bool FirstTime { get; set; } = true;
 
         [Category("Privacy")]

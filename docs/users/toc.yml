@@ -1,2 +1,6 @@
-- name: Placeholder
-  href: placeholder.md
+- name: Recognizer
+  href: recognizer.md
+- name: Step-By-Step
+  href: step-by-step.md
+- name: Logging
+  href: logging.md
