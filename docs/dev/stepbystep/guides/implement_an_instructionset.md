@@ -9,7 +9,7 @@ return the object required for the Step-By-Step module.
 
 To make effective use of existing @PatternPal.Core.Recognizers for both detecting patterns and Step-By-Step 
 it is recommended to encase all the @PatternPal.Core.Checks.ICheck created in the @PatternPal.Core.Recognizers `Create` method 
-(more on this method can be found [here](~/dev/recognizers/guides/implement_recognizer.md)) into 
+(more on this method can be found [here](./../../recognizers/guides/implement_recognizer.md)) into 
 separate methods. This way the checks can be declared once and can be called in both `Create` in 
 @PatternPal.Core.Recognizers.IRecognizer and in `GenerateStepsList` in @PatternPal.Core.StepByStep.IStepByStepRecognizer. 
 The Recognizers would then inherit from both recognizer interfaces. Namely the @PatternPal.Core.Recognizers.IRecognizer and 
@@ -89,7 +89,7 @@ internal FieldCheck StaticPrivateFieldOfTypeClass()
 
 First, it is of utmost importance that one has a clear idea of how much is asked of the user per step. It 
 is  preferred to make the steps small and that they are supported by the available @PatternPal.Core.Checks.ICheck implementations.
-(available checks can be found [here](~/dev/recognizers/design/checks.md)). Second, it is important to have explicit instructions to 
+(available checks can be found [here](./../../recognizers//design/checks.md)). Second, it is important to have explicit instructions to 
 communicate to the user what is required to pass the step and optionally an explanation of why the 
 requirement is the way it is. 
 
@@ -109,7 +109,7 @@ be implemented as instructed for example: "The field is static as a way of acces
 
 ### Design pattern needs to be added to the API definition of the service
 Much like the @PatternPal.Core.Recognizers.IRecognizer interface one must add a design pattern to the API definition. 
-See [here](~/dev/recognizers/guides/implement_recognizer) for a guide.
+See [here](./../../recognizers/guides/implement_recognizer.md) for a guide.
 
 
 ## The `IStepByStepRecognizer` interface and library requirements

@@ -20,39 +20,24 @@
       href: recognizers/patterns/singleton.md
     - name: Strategy
       href: recognizers/patterns/strategy.md
-
-  # -- Design patterns
-  - name: Design patterns
-  - name: Adapter
-    href: recognizers/patterns/adapter.md
-  - name: Bridge
-    href: recognizers/patterns/bridge.md
-  - name: Decorator
-    href: recognizers/patterns/decorator.md
-  - name: Factory-Method
-    href: recognizers/patterns/factorymethod.md
-  - name: Singleton
-    href: recognizers/patterns/singleton.md
-  - name: Strategy
-    href: recognizers/patterns/strategy.md
     
-  # -- Design
-  - name: Design
-  - name: Recognizer
-    href: recognizers/design/recognizer.md
-  - name: Recognizer Runner
-    href: recognizers/design/recognizer_runner.md
-  - name: Checks
-    href: recognizers/design/checks.md
-  - name: Syntax Graph
-    href: recognizers/design/syntax_graph.md
+    # -- Design
+    - name: Design
+    - name: Recognizer
+      href: recognizers/design/recognizer.md
+    - name: Recognizer Runner
+      href: recognizers/design/recognizer_runner.md
+    - name: Checks
+      href: recognizers/design/checks.md
+    - name: Syntax Graph
+      href: recognizers/design/syntax_graph.md
 
-  # -- Guides
-  - name: Guides
-  - name: Implementing a Recognizer
-    href: recognizers/guides/implement_recognizer.md
-  - name: Implementing a Check
-    href: recognizers/guides/implement_check.md
+    # -- Guides
+    - name: Guides
+    - name: Implementing a Recognizer
+      href: recognizers/guides/implement_recognizer.md
+    - name: Implementing a Check
+      href: recognizers/guides/implement_check.md
 
 # SBS ------------------------------------
 - name: Step-by-Step

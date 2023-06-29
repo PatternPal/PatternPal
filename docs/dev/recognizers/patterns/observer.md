@@ -9,7 +9,7 @@ The observer pattern is useful to notify objects about subjects that they can su
 A real life example is subscribing to a news paper which will send you new issues when they are published. The interested people do not have to check the with the publisher whether there is a new issue. And the publisher does not have to send out issues to everyone, even the not interested people. 
 
 ## Explanation of Architecture
-![UML Observer]('../../../../../images/ObserverUML.png')
+![UML Observer](images/ObserverUML.png)
 
 The **Subject** is the interface for the `ConcreteSubjects` it consists of a `Attach()`, `Detach()` and `Notify()` methods which should be implemented in the `ConcreteSubjects`. 
 
