@@ -117,53 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Accept" xml:space="preserve">
-    <value>Accept</value>
+  <data name="Explanation1" xml:space="preserve">
+    <value>The Strategy defines a general algoritm that can have different implementations, but achieves a similar result.</value>
   </data>
-  <data name="ActiveDocument" xml:space="preserve">
-    <value>Active Document</value>
+  <data name="Explanation2" xml:space="preserve">
+    <value>The ConcreteStrategy now defines a specific implementation of the algorithm.</value>
   </data>
-  <data name="Analyze" xml:space="preserve">
-    <value>Analyze</value>
+  <data name="Explanation3" xml:space="preserve">
+    <value>The Context uses the algorithm the Strategy provides, but it does not directly use a specific implementation of the algorithm. It does not know the type of Strategy, it only knows the general behaviour of a Strategy and delegates the specific work to the ConcreteStrategy it gets. Therefore it is independant of concrete strategies, which means new algoriithms can be easily added.</value>
   </data>
-  <data name="ConsentScreenText" xml:space="preserve">
-    <value>Thank you for using our application! Before proceeding, we kindly request your consent to log and analyze your data for research purposes. Your privacy is crucial to us, and we ensure that all data will be handled in compliance with regulations.
-By granting consent, you allow us to collect and process data to enhance the application and conduct academic research. </value>
+  <data name="Explanation4" xml:space="preserve">
+    <value>The Client knows which specific strategy it needs and passes it to the Context.</value>
   </data>
-  <data name="Deny" xml:space="preserve">
-    <value>Deny</value>
+  <data name="Step1" xml:space="preserve">
+    <value>Make an interface with a method. We refer to this interface as `Strategy`.</value>
   </data>
-  <data name="DetectorDescription" xml:space="preserve">
-    <value>Analyze your code for design patterns</value>
+  <data name="Step2" xml:space="preserve">
+    <value>Make a class that implements Strategy. We refer to this class as `ConcreteStrategy`.</value>
   </data>
-  <data name="DetectorTitle" xml:space="preserve">
-    <value>Recognizer</value>
+  <data name="Step3" xml:space="preserve">
+    <value>Make a class that has a private field of type Strategy. Give it a method that uses the field and a method that sets the field to a parameter of type Strategy. We refer to this class as `Context`.</value>
   </data>
-  <data name="ExercisesDescription" xml:space="preserve">
-    <value>Practice and learn using exercises</value>
-  </data>
-  <data name="ExercisesTitle" xml:space="preserve">
-    <value>Exercises</value>
-  </data>
-  <data name="ExtensionName" xml:space="preserve">
-    <value>PatternPal</value>
-  </data>
-  <data name="Output" xml:space="preserve">
-    <value>Detected design patterns</value>
-  </data>
-  <data name="Project" xml:space="preserve">
-    <value>Project</value>
-  </data>
-  <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
-  </data>
-  <data name="SettingsDescription" xml:space="preserve">
-    <value>Configure the extension</value>
-  </data>
-  <data name="StepByStepDescription" xml:space="preserve">
-    <value>Implement a pattern using step-by-step instructions</value>
-  </data>
-  <data name="StepByStepTitle" xml:space="preserve">
-    <value>Step-By-Step</value>
+  <data name="Step4" xml:space="preserve">
+    <value>Make a class that creates an instance of ConcreteStrategy, passes that variable to the method of Context that sets its field, and call the method of Context that uses its field.</value>
   </data>
 </root>

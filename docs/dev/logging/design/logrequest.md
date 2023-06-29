@@ -14,34 +14,27 @@ When logging events in a logging system, there are certain basic fields that are
 
 - **event_id**: Each event logged should have a unique event ID. It serves as a reference for identifying and retrieving specific events from the logs. It also is a GUID as exemplified above.
 
+- **project_id**: The project ID identifies the project associated with the event. It helps in grouping events by project and provides context for the logged event. This is the csproj file name.
+
 - **event_type**: Indicates the type of event.
-  1. `Session.Start`: Marks the start of a work session.
-    1. `Session.End`: Marks the end of a work session.
-    1. `Project.Open`: Indicates that a project was opened.
-    1. `Project.Close`: Indicates that a project was closed due to an explicit user or system action. Data consumers should be prepared to handle cases where `Project.Open` is not terminated by an explicit `Project.Close`.
-    1. `File.Create`: Indicates that a file was created.
-    1. `File.Delete`: Indicates that a file was deleted.
-    1. `File.Open`: Indicates that a file was opened.
-    1. `File.Close:` Indicates that a file was closed.
-    1. `File.Save`: Indicates that a file was saved.
-    1. `File.Rename`: Indicates that a file was renamed.
-    1. `File.Copy`: Indicates that a file was copied.
-    1. `File.Edit`: Indicates that the contents of a file were edited.
-    1. `File.Focus`: Indicates that a file was selected by the user within the user interface.
-    1. `Compile`: Indicates an attempt to compile all or part of the code.
-    1. `Compile.Error`: Represents a compilation error and its associated diagnostic.
-    1. `Compile.Warning`: Represents a compilation warning and its associated diagnostic.
-    1. `Submit`: Indicates that code was submitted to the system.
-    1. `Run.Program`: Indicates a program execution and its associated input and/or output.
-    1. `Debug.Program`: Indicates a debug execution of the program and its associated input and/or output.
-    1. `Run.Test`: Indicates execution of a test and its associated input and/or output.
-    1. `Debug.Test`: Indicates a debug execution of a test and its associated input and/or
+    1: `Session.Start`: Marks the start of a work session.
+    2:  `Session.End`: Marks the end of a work session.
+    3: `Project.Open`: Indicates that a project was opened.
+    4: `Project.Close`: Indicates that a project was closed due to an explicit user or system action. Data consumers should be prepared to handle cases where `Project.Open` is not terminated by an explicit `Project.Close`.
+    5: `File.Create`: Indicates that a file was created.
+    6: `File.Delete`: Indicates that a file was deleted.
+    7: `File.Open`: Indicates that a file was opened.
+    8: `File.Close:` Indicates that a file was closed.
+    10: `File.Rename`: Indicates that a file was renamed.
+    12: `File.Edit`: Indicates that the contents of a file were edited.
+    13: `Compile`: Indicates an attempt to compile all or part of the code.
+    14: `Compile.Error`: Represents a compilation error and its associated diagnostic.
+    15: `Compile.Warning`: Represents a compilation warning and its associated diagnostic.
+    18: `Debug.Program`: Indicates a debug execution of the program and its associated input and/or output.
 output.
-    1. `Resource.View` Indicates that a resource (typically a learning resource of some type)
 was viewed.
-    1. `Intervention` Indicates that an intervention such as a hint was done.
-    1. `X-RecognizerRun` Indicates that a recognizer was run.
-    1. `X-StepByStepStep` Indicates that a step-by-step step was done.
+    23: `X-RecognizerRun` Indicates that a recognizer was run.
+    24: `X-StepByStepStep` Indicates that a step-by-step step was done.
 <br></br>
 - **tool_instances**: Information about the tool instances used during the event, in the following format: `VS IDE 2022; PP 2.6.2`.
 
@@ -49,7 +42,7 @@ was viewed.
 
 <!---
 TODO Proofread
---> 
+-->
 
 ## EventType Specific
 
@@ -64,6 +57,40 @@ The Project.open event is used to log when a project is opened in Visual Studio 
 ### Project.close (4)
 
 The Project.close event is used to log when a project is closed in Visual Studio (VS). It has similar fields as the Project.open event.
+
+### File.Create (5)
+
+The File.create event is used to log when a file is created in Visual Studio (VS). It captures the following extra information:
+
+- **code_state_section**: The name of the file that was created.
+  - *example*: `"BridgePattern\\Program.cs"`
+- **data**: The contents of the file that was created.
+  - *example*: `"using System; namespace BridgePattern { class Program { static void Main(string[] args) { Console.WriteLine("Hello World!"); } } }"`
+
+### File.Delete (6)
+
+The File.delete event is used to log when a file is deleted in Visual Studio (VS). It captures the following extra information:
+
+- **code_state_section**: The name of the file that was deleted.
+  - *example*: `"BridgePattern\\Program.cs"`
+
+### File.Rename (10)
+
+The File.rename event is used to log when a file is renamed in Visual Studio (VS). It captures the following extra information:
+
+- **code_state_section**: The name of the file that was renamed.
+  - *example*: `"BridgePattern\\Program.cs"`
+- **old_file_name**: The old name of the file that was renamed.
+  - *example*: `"BridgePattern\\Program1.cs"`
+
+### File.Edit (12)
+
+The File.edit event is used to log when a file is edited in Visual Studio (VS). It captures the following extra information:
+
+- **code_state_section**: The name of the file that was edited.
+  - *example*: `"BridgePattern\\Program.cs"`
+- **data**: The contents of the file that was edited.
+  - *example*: `"using System; namespace BridgePattern { class Program { static void Main(string[] args) { Console.WriteLine("Hello World!"); } } }"`
 
 ### Compile (13)
 

@@ -61,8 +61,24 @@ results.
 ### Postsorting the Results
 
 The third step is postsorting the results. This happens based on the @PatternPal.Core.Checks.Priority of the results.
-Each @PatternPal.Core.LeafCheckResult is given a @PatternPal.Core.Score based on its `Priority` and whether is was correct or not. A @PatternPal.Core.NodeCheckResult gets a
+Each @PatternPal.Core.LeafCheckResult is given a @PatternPal.Core.Runner.Score based on its `Priority` and whether is was correct or not. A @PatternPal.Core.NodeCheckResult gets a
 `Score` equal to the sum of all the `Score`s of its children. After the `Score`s are calculated, the sorting happens
 based first on the `Knockout` `Score`. If two `Knockout` `Score`s are equal, then it is based on the `High` `Score`s.
 When those are also equal, it is based on the `Mid` `Score`s, and when those are equal as well, it is based on the
 `Low` `Score`s.
+
+## Score Calculation
+
+To determine the correctness of a result, we look at the number of requirements the implementation
+has correctly implemented. These counts are accumulated in a @PatternPal.Core.Runner.Score object.
+By comparing the actual scores to the score of a perfect implementation, we get a percentage of how
+correctly the requirement has been implemented. This percentage is used to determine the color of
+the progressbar in the extension. A threshold is also applied to only show results with a total
+correct score of over 50%, results with scores below that are not returned to the user.
+
+### Calculating Perfect Scores
+
+When we are calculating the scores based on the results which are still present after pruning, we
+also calculate the perfect scores. These perfect scores need to account for results which may have
+been pruned, and generate a score for them based on the results which would have been present if
+they had not been pruned.

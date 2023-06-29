@@ -55,6 +55,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="StepByStep\Resources\Instructions\StrategyInstructions.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>StrategyInstructions.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -77,6 +82,10 @@
     <EmbeddedResource Update="StepByStep\Resources\Instructions\SingletonInstructions.resx">
       <LastGenOutput>SingletonInstructions.Designer.cs</LastGenOutput>
       <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="StepByStep\Resources\Instructions\StrategyInstructions.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>StrategyInstructions.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

@@ -303,8 +303,12 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
                         
                         // Since a file was deleted, we must delete it from the current CodeState.
                         // Some work is needed to remove the project directory from the path (i.e. ProjectDir/FileToDelete.cs).
-                        string projectDirectory = Path.GetDirectoryName(ev.ProjectId);
-                        string file = Path.GetRelativePath(projectDirectory!, ev.CodeStateSection!);
+                        
+                        // This ensures proper conversion from windows paths on other platforms
+                        string projectFile = ev.ProjectId.Replace('\\', Path.DirectorySeparatorChar);
+                        
+                        string projectDirectory = Path.GetDirectoryName(projectFile);
+                        string file = Path.GetRelativePath(projectDirectory!, ev.CodeStateSection!.Replace('\\', Path.DirectorySeparatorChar));
                         File.Delete(Path.Join(codeStateDest, file));
                         
                         // Finally, the new previous codeState is the one we just created.
@@ -325,9 +329,14 @@ internal sealed class ProgSnapExportCommand : Command<Settings>
 
                         // Since a file was renamed, we must rename it in the current CodeState.
                         // Some work is needed to remove the project directory from the path (i.e. ProjectDir/FileToDelete.cs).
-                        string projectDirectory = Path.GetDirectoryName(ev.ProjectId);
-                        string oldFile = Path.GetRelativePath(projectDirectory!, ev.OldFileName!);
-                        string newFile = Path.GetRelativePath(projectDirectory!, ev.CodeStateSection!);
+                        
+                        // This ensures proper conversion from windows paths on other platforms
+                        string projectFile = ev.ProjectId.Replace('\\', Path.DirectorySeparatorChar);
+                        
+                        
+                        string projectDirectory = Path.GetDirectoryName(projectFile);
+                        string oldFile = Path.GetRelativePath(projectDirectory!, ev.OldFileName!.Replace('\\', Path.DirectorySeparatorChar));
+                        string newFile = Path.GetRelativePath(projectDirectory!, ev.CodeStateSection!.Replace('\\', Path.DirectorySeparatorChar));
                         File.Move(Path.Join(codeStateDest, oldFile), Path.Join(codeStateDest, newFile));
                         
                         // Finally, the new previous codeState is the one we just created.
