@@ -39,12 +39,10 @@ i.e. checks for a private field or an abstract method. `Mid` indicates a less im
 
 A @PatternPal.Core.ICheckResult is the result of a check. Similar to how a check can be a
 collection of checks, the result of a check can be a collection of
-`CheckResult`s. Each `CheckResult` has a feedback message, which provides
-information about what happened when the check was run. For example, it
-shows for what reason a check did not succeed.\
+`CheckResult`s. It has the priority of its check, the `Node` on which the check was checked, and the check that created it.\
 A leaf check corresponds to a @PatternPal.Core.LeafCheckResult. Such a `CheckResult` either
-did succeed or did not. Therefore, it has a Correctness property. A node
-check corresponds to a @PatternPal.Core.NodeCheckResult. It has a list of
+did succeed or did not. For example, a @Patternpal.Core.Checks.ModifierCheck creates a `LeafCheckResult`. 
+Therefore, it has a Correctness property. A node ccheck corresponds to a @PatternPal.Core.NodeCheckResult. It has a list of
 `NodeCheckResult`s and `LeafCheckResult`s.
 
 ### CheckBuilder
@@ -57,7 +55,7 @@ be used by a recognizer to create checks in a fluid way.
 
 ### Example recognizer
 
-This recognizer checks whether there is a class which has a static,
+This recognizer checks whether there is a class that has a static,
 non-private method which is used by one of its other methods.
 
 ```csharp
