@@ -17,6 +17,7 @@ using PatternPal.Extension.Grpc;
 using PatternPal.Protos;
 
 using JsonSerializer = System.Text.Json.JsonSerializer;
+using Newtonsoft.Json;
 
 #endregion
 
@@ -540,8 +541,8 @@ namespace PatternPal.Extension.Commands
             {
                 patternsResults.Add(result.ToString());
             }
-            request.RecognizerConfig = config.ToString();
-            request.RecognizerResult = patternsResults.ToString();
+            request.RecognizerConfig = JsonConvert.SerializeObject(config);
+            request.RecognizerResult = $"[{String.Join(",", patternsResults)}]";
 
             LogEventResponse response = PushLog(request);
         }
