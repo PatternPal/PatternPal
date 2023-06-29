@@ -100,13 +100,34 @@ namespace PatternPal.Extension.ViewModels
         {
             List< string > result = new List< string >();
 
+            string initialDirectory = string.Empty;
+            ThreadHelper.ThrowIfNotOnUIThread();
+            DTE dte = (DTE)Package.GetGlobalService(typeof(SDTE));
+            if (dte.Solution.IsOpen)
+            {
+                // Assume there is no project with the name as the selected design pattern 
+                initialDirectory = Path.GetDirectoryName(dte.Solution.FullName);
+
+                // Check if there is a project with the same name as selected from the dropdown
+                foreach (Project currentProject in dte.Solution.Projects)
+                {
+                    if (currentProject.Name == SelectedInstructionSet.ToString())
+                    {
+                        initialDirectory = Path.GetDirectoryName(currentProject.FullName);
+                        break;
+                    }
+                }
+            }
+
             using (CommonOpenFileDialog ofd = new CommonOpenFileDialog
                    {
                        Multiselect = true,
                        Filters = { new CommonFileDialogFilter(
                            "cs files",
-                           "cs") }
-            })
+                           "cs") },
+                       InitialDirectory = initialDirectory
+                       
+                   })
             {
                 CommonFileDialogResult res = ofd.ShowDialog();
                 if (res == CommonFileDialogResult.Ok)
@@ -119,9 +140,9 @@ namespace PatternPal.Extension.ViewModels
                 }
             }
 
-            ThreadHelper.ThrowIfNotOnUIThread();
+            //ThreadHelper.ThrowIfNotOnUIThread();
             // Obtain the currently running visual studio instance.
-            DTE dte = (DTE)Package.GetGlobalService(typeof( SDTE ));
+            //DTE dte = (DTE)Package.GetGlobalService(typeof( SDTE ));
             foreach (string file in result)
             {
                 dte.ItemOperations.OpenFile(file);

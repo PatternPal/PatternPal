@@ -14,7 +14,7 @@ composing modular checks using the fluent design pattern.
 
 ### Checks
 
-A recognizer is build from multiple checks which are also build from other checks, each check
+A recognizer is built from multiple checks which are also built from other checks, each check
 searches through the @PatternPal.SyntaxTree.SyntaxGraph to look for specific nodes or relations between nodes.
 More information about the individual checks can be found [here](checks.md).
 
@@ -24,26 +24,25 @@ Each check has a @PatternPal.Core.Checks.Priority. This indicates the importance
 characteristic the check validates being present in the design pattern.
 There are four levels of priority, `Knockout`, `High`, `Mid`, and `Low`. A check
 with a `Knockout` priority must succeed for the design pattern to be
-considered at all. A certain predetermined percentage of the `High` checks
-must succeed as well for the pattern to be considered. If this
-percentage is met, but not all `High` checks are met, then these
-unfulfilled checks are either critical points of improvement or an
-indication the pattern is not implemented after all. `Mid` and `Low` checks
-do not serve as determinants for the consideration of a pattern but
-rather function as qualifiers for assessing the level of proficiency in
-the implementation of the design pattern. They are used as final pattern
-qualifiers and serve as points for further improvement.
+considered at all. A check with `High`, `Mid`, or `Low` priority is not required to succeed
+for the design pattern to be considered. These priorities are instead used for two reasons. The first is to sort the remaining results
+and find the most probable place the pattern could be implemented. The second is to assess the level of proficiency in the implementation of the pattern.
+Logically, a check with a `High` priority is more important than a check with a `Mid` priority, which is more important than a check with a `Low` priority.
+However, to make sure priority assessment is done in a similar fashion for all recognizers, a list of assessment criteria has been made:
+`High` indicates a very important characteristic. This characteristic should be present, and it should be present in precisely this way. If, by means of checking the knock-out criteria, 
+it is probable the user is implementing a specific pattern, there is no good reason these parts of the pattern are not present. Often, `High` priority checks are structural checks, 
+i.e. checks for a private field or an abstract method. `Mid` indicates a less important characteristic. The core functionality of the pattern is still present if this part is not implemented, or implemented in a different way. Another example is the usage of the protected keyword instead of private. Another case in which this criterium could be given is when the specific part of the pattern is not essential for the pattern, yet it does adhere nicely to a design principle, for example, implementing an interface instead of an implementation.
+`Low` indicates the least important characteristics. The parts of a pattern that could essentially be done in multiple different ways or by multiple different components. The pattern is essentially still implemented if this part is lacking, covered by another part of the code, or split over multiple different components. Client classes are often of `Low` priority.
+
 
 ### CheckResult
 
 A @PatternPal.Core.ICheckResult is the result of a check. Similar to how a check can be a
 collection of checks, the result of a check can be a collection of
-`CheckResult`s. Each `CheckResult` has a feedback message, which provides
-information about what happened when the check was run. For example, it
-shows for what reason a check did not succeed.\
+`CheckResult`s. It has the priority of its check, the `Node` on which the check was checked, and the check that created it.\
 A leaf check corresponds to a @PatternPal.Core.LeafCheckResult. Such a `CheckResult` either
-did succeed or did not. Therefore, it has a Correctness property. A node
-check corresponds to a @PatternPal.Core.NodeCheckResult. It has a list of
+did succeed or did not. For example, a @Patternpal.Core.Checks.ModifierCheck creates a `LeafCheckResult`. 
+Therefore, it has a Correctness property. A node ccheck corresponds to a @PatternPal.Core.NodeCheckResult. It has a list of
 `NodeCheckResult`s and `LeafCheckResult`s.
 
 ### CheckBuilder
@@ -56,7 +55,7 @@ be used by a recognizer to create checks in a fluid way.
 
 ### Example recognizer
 
-This recognizer checks whether there is a class which has a static,
+This recognizer checks whether there is a class that has a static,
 non-private method which is used by one of its other methods.
 
 ```csharp
