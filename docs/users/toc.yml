@@ -1,2 +1,8 @@
-- name: Placeholder
-  href: placeholder.md
+- name: PatternPal
+  items:
+    - name: Recognizer
+      href: Recognizer.md
+    - name: Step-By-Step
+      href: Step-By-Step.md
+    - name: Logging
+      href: Logging.md

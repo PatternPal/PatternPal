@@ -75,3 +75,14 @@ using PostgreSQL, for simpler reads and writes. Large datasets can be
 handled with ease by SQL's robust querying features. Additionally, SQL
 data is adaptable for many use cases and can be easily converted to a
 CSV format for research purposes.
+
+## Logging Status icon
+
+For the convenience of the researcher, we have added a logging status. This icon is located on the top right of the PatternPal window. It indicates the current status of the logging system. The following table describes the different states of the logging system.
+
+| Icon | Description |
+| --- | --- |
+| ![Logging Status Icon](../../../images/OnlineStatusAvailable.png) | The logging system is enabled. |
+| ![Logging Status Icon](../../../images/OnlineStatusNoLog.png) | The logging system is disabled. |
+| ![Logging Status Icon](../../../images/OnlineStatusError.png) | An error occurred while attempting to connect to the logging system. |
+| ![Logging Status Icon](../../../images/OnlineStatusOffline.png) | The logging system is unavailable. |
