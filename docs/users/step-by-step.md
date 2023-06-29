@@ -6,6 +6,8 @@ PatternPal's Step-by-Step functionality provides an approach to implementing sof
 
 Launch PatternPal within the Visual Studio IDE. This can be found in the main menu under `View > Other Windows > PatternPal`. After opening PatternPal, you can select the 'Step-by-Step' from the main menu.
 
+![Open PatternPal](../images/main_menu.png)
+
 ## Step 2: Select a Pattern
 
 Choose a pattern from the available options. The Step-by-Step functionality is available for a subset of all the patterns in PatternPal. For this example, we will use the `Singleton` pattern.
