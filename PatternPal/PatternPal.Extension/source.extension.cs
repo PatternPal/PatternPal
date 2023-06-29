@@ -11,7 +11,7 @@ namespace PatternPal.Extension
         public const string Name = "PatternPal.Extension";
         public const string Description = @"A Design Pattern recognition tool.";
         public const string Language = "en-US";
-        public const string Version = "3.5.0";
+        public const string Version = "3.6.0";
         public const string Author = "Team PatternPal";
         public const string Tags = "";
     }
