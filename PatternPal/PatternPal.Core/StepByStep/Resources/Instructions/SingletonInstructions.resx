@@ -130,7 +130,7 @@
     <value>By how we made the Singleton, we ensure that any client accessing the field of the Singleton will get access to the same field instance.</value>
   </data>
   <data name="Step1" xml:space="preserve">
-    <value>Create a constructor that is only private.</value>
+    <value>Create a class in which the constructor is only private.</value>
   </data>
   <data name="Step2" xml:space="preserve">
     <value>Create a static, private field with the same type as the class.</value>

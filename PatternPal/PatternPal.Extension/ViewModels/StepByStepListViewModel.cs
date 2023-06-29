@@ -236,7 +236,7 @@ namespace PatternPal.Extension.ViewModels
             filePath =
                 Path.Combine(
                     folderPath,
-                    "NewFile.cs");
+                    SelectedInstructionSet+".cs");
             if (folderPath == string.Empty)
             {
                 return new List< string >();

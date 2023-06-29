@@ -133,7 +133,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make an interface or abstract class with a (if possible: abstract) method. I will refer to this as the Implementation Interface or Abstract Class..
+        ///   Looks up a localized string similar to Make an interface or abstract class with a (if possible: abstract) method. We will refer to this as the Implementation Interface or Abstract Class..
         /// </summary>
         internal static string Step1 {
             get {
@@ -142,7 +142,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make a class with a private or protected field or property with an Implementation type. I will refer to this class as the Abstraction Class..
+        ///   Looks up a localized string similar to Make a class with a private or protected field or property with an Implementation type. We will refer to this class as the Abstraction Class..
         /// </summary>
         internal static string Step2 {
             get {
@@ -169,7 +169,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make a class that implements the Implementation Interface or inherits from the Implementation Abstract Class. If it inherits from the Abstract Class it should override the abstract method. I will refer to this as the Concrete Implementation Class. .
+        ///   Looks up a localized string similar to Make a class that implements the Implementation Interface or inherits from the Implementation Abstract Class. If it inherits from the Abstract Class it should override the abstract method. We will refer to this as the Concrete Implementation Class. .
         /// </summary>
         internal static string Step5 {
             get {
@@ -178,7 +178,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make a class that inherits from the Abstraction class and has a method. This class is called the Refined Abstraction Class..
+        ///   Looks up a localized string similar to Make a class that inherits from the Abstraction class and has a method. We will refer to this as the Refined Abstraction Class..
         /// </summary>
         internal static string Step6 {
             get {
@@ -187,7 +187,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make a class that uses a method in the Abstraction Class. I will refer to this class as the Client Class..
+        ///   Looks up a localized string similar to Make a class that uses a method in the Abstraction Class. We will refer to this class as the Client Class..
         /// </summary>
         internal static string Step7 {
             get {

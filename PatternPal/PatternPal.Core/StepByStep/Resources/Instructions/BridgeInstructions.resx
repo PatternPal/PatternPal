@@ -142,10 +142,10 @@
     <value>In order to complete the use of the Bridge pattern you should create a Concrete Implementation that the Abstraction class will use to execute the work. </value>
   </data>
   <data name="Step1" xml:space="preserve">
-    <value>Make an interface or abstract class with a (if possible: abstract) method. I will refer to this as the Implementation Interface or Abstract Class.</value>
+    <value>Make an interface or abstract class with a (if possible: abstract) method. We will refer to this as the Implementation Interface or Abstract Class.</value>
   </data>
   <data name="Step2" xml:space="preserve">
-    <value>Make a class with a private or protected field or property with an Implementation type. I will refer to this class as the Abstraction Class.</value>
+    <value>Make a class with a private or protected field or property with an Implementation type. We will refer to this class as the Abstraction Class.</value>
   </data>
   <data name="Step3" xml:space="preserve">
     <value>Make a method in the Abstraction class that calls the method in the Implementation Interface or Abstract Class.</value>
@@ -154,13 +154,13 @@
     <value>If you chose to create a field in step 2, you should create a constructor or method with a parameter with the Implementation type that sets the field of step 2 to the value of the parameter.</value>
   </data>
   <data name="Step5" xml:space="preserve">
-    <value>Make a class that implements the Implementation Interface or inherits from the Implementation Abstract Class. If it inherits from the Abstract Class it should override the abstract method. I will refer to this as the Concrete Implementation Class. </value>
+    <value>Make a class that implements the Implementation Interface or inherits from the Implementation Abstract Class. If it inherits from the Abstract Class it should override the abstract method. We will refer to this as the Concrete Implementation Class. </value>
   </data>
   <data name="Step6" xml:space="preserve">
-    <value>Make a class that inherits from the Abstraction class and has a method. This class is called the Refined Abstraction Class.</value>
+    <value>Make a class that inherits from the Abstraction class and has a method. We will refer to this as the Refined Abstraction Class.</value>
   </data>
   <data name="Step7" xml:space="preserve">
-    <value>Make a class that uses a method in the Abstraction Class. I will refer to this class as the Client Class.</value>
+    <value>Make a class that uses a method in the Abstraction Class. We will refer to this class as the Client Class.</value>
   </data>
   <data name="Step8" xml:space="preserve">
     <value>Let the Client Class create a Concrete Implementation instance and pass it through either a property, constructor or method to the Abstraction class.</value>
