@@ -132,8 +132,7 @@ static class ResultsHelper
                                 };
 
                 if (resultToProcess.PerfectScore.Equals(default)
-                    && resultToProcess.Check is NodeCheckBase nodeCheckBase
-                    && !nodeCheckBase.SubChecks.Any()
+                    && resultToProcess.Check is NodeCheckBase
                     && resultToProcess is NodeCheckResult {NodeCheckCollectionWrapper: false})
                 {
                     // ASSUME: This result belongs to a NodeCheck (e.g. a MethodCheck) with no
