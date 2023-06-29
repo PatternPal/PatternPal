@@ -8,7 +8,7 @@ The recognizer component analyzes your codebase to identify specific design patt
 
 ### Step 1: Launch PatternPal
 
-To begin using the recognizer functionality, open PatternPal within the Visual Studio IDE. This can be found in the main menu under `View > Other Windows > PatternPal`.
+To begin using the recognizer functionality, open PatternPal within the Visual Studio IDE. This can be found in the main menu under `View > Other Windows > PatternPal`. After opening PatternPal, you can select the 'recognizer' from the main menu.
 
 ![Launch PatternPal](../images/main_menu.png)
 
@@ -44,5 +44,4 @@ Once the recognition process is complete, you can explore the identified pattern
 
 ![View Results](../images/detector_analysis_green_scores.png)
 
-*Figure 5: Viewing Results*
-
+*Figure 5: Viewing Results* 

@@ -137,7 +137,7 @@ By granting consent, you allow us to collect and process data to enhance the app
     <value>Analyze your code for design patterns</value>
   </data>
   <data name="DetectorTitle" xml:space="preserve">
-    <value>Detector</value>
+    <value>Recognizer</value>
   </data>
   <data name="ExercisesDescription" xml:space="preserve">
     <value>Practice and learn using exercises</value>

@@ -116,7 +116,7 @@ namespace PatternPal.Extension.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Detector.
+        ///   Looks up a localized string similar to Recognizer.
         /// </summary>
         public static string DetectorTitle {
             get {

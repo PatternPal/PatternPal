@@ -1,6 +1,6 @@
 # Logging System
 
-PatternPal's logging system is critical for recording use data and providing vital insights into your programming process. It enables us to better understand how you interact with the extension and your IDE.
+PatternPal's logging system is critical for recording usage data and providing vital insights into your programming process. It enables us to better understand how you interact with the extension and your IDE.
 
 ## Tracking Your Actions
 
@@ -31,7 +31,7 @@ On the previous image it can be seen how you toggle the logging system on and of
 
 ## Logging Status icon
 
-For your convenience of the researcher and user, we have added a logging status icon to the main menu. This icon indicates whether the logging system is enabled or disabled.  The following table describes the different states of the logging status icon.
+For the convenience of the researcher and the user, we have added a logging status icon to the main menu. This icon indicates whether the logging system is enabled or disabled.  The following table describes the different states of the logging status icon.
 
 | Icon | Description |
 | --- | --- |

@@ -4,27 +4,19 @@ PatternPal's Step-by-Step functionality provides an approach to implementing sof
 
 ## Step 1: Open PatternPal
 
-Launch PatternPal within the Visual Studio IDE. This can be found in the main menu under `View > Other Windows > PatternPal`.
+Launch PatternPal within the Visual Studio IDE. This can be found in the main menu under `View > Other Windows > PatternPal`. After opening PatternPal, you can select the 'Step-by-Step' from the main menu.
 
-## Step 1a. Consent to Data Collection
-
-If this is your first time using PatternPal, you will be asked to consent to data collection. This is required to use the Step-by-Step functionality. Click "Accept" or "Decline" to proceed.
-
-## Step 2: Select Step-by-Step
-
-Click on the Step-by-Step button in the main menu. This will open the Step-by-Step functionality in a new tab.
-
-## Step 3: Select a Pattern
+## Step 2: Select a Pattern
 
 Choose a pattern from the available options. The Step-by-Step functionality is available for a subset of all the patterns in PatternPal. For this example, we will use the `Singleton` pattern.
 
-## Step 3a. Existing Pattern or New Pattern
+## Step 2a. Existing Pattern or New Pattern
 
 If you have already implemented the pattern in your codebase, select "Continue work on pattern". If you are implementing the pattern for the first time, select "Implement new pattern".
 
 ![Select Pattern and existing or new](../images/sbs_menu.png)
 
-## Step 4: Follow the Steps
+## Step 3: Follow the Steps
 
 The Step-by-Step functionality provides a series of steps to guide you in implementing the selected pattern in your code. Each step contains instructions and requirements. Follow them carefully to complete the pattern implementation.
 
@@ -48,6 +40,6 @@ Click the 'Check' button to verify if you have correctly implemented the require
 
 *Figure 2: Step Instructions and Feedback when incorrect*
 
-## Step 5: Finish
+## Step 4: Finish
 
 Once you have completed all the steps and successfully implemented the pattern, you can close the Step-by-Step tab.
