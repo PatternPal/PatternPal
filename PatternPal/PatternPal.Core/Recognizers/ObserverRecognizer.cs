@@ -13,7 +13,6 @@ namespace PatternPal.Core.Recognizers;
 /// A <see cref="IRecognizer"/> that is used to determine if the provided files or project implements the observer pattern
 /// </summary>
 /// <remarks>
-///
 ///     Requirements for Observer interface:
 ///         a) is an interface
 ///         b) has a public or internal `update()` method
@@ -52,6 +51,7 @@ internal class ObserverRecognizer : IRecognizer, IStepByStepRecognizer
 
     private readonly FieldCheck _concreteFieldCheck;
     private readonly MethodCheck _concreteAttachCheck;
+    private readonly MethodCheck _concreteUpdateCheck;
     private readonly ClassCheck _concreteSubject;
 
     private readonly ClassCheck _clientClass;
@@ -64,12 +64,12 @@ internal class ObserverRecognizer : IRecognizer, IStepByStepRecognizer
 
         _concreteFieldCheck = ConcreteSubjectFieldCheck();
         _concreteAttachCheck = ConcreteSubjectAttachCheck();
-        MethodCheck concreteUpdateCheck = ConcreteSubjectUpdateCheck(observerInterfaceMethod);
+        _concreteUpdateCheck = ConcreteSubjectUpdateCheck(observerInterfaceMethod);
         _concreteSubject = ConcreteSubjectInterfaceCheck(
             _concreteFieldCheck,
             _concreteAttachCheck,
             ConcreteSubjectStateCheck(),
-            concreteUpdateCheck
+            _concreteUpdateCheck
         );
 
         _clientClass = ClientClassCheck(
@@ -78,7 +78,7 @@ internal class ObserverRecognizer : IRecognizer, IStepByStepRecognizer
                 "5c. Use the Attach() method in the Concrete Subject."
                 ),
             ClientUseMethodCheck(
-                concreteUpdateCheck,
+                _concreteUpdateCheck,
                 "5d. Use the Notify() method in the Concrete Subject.")
         );
     }
@@ -305,11 +305,11 @@ internal class ObserverRecognizer : IRecognizer, IStepByStepRecognizer
                 "3a. Has a public or internal method with a parameter with the Observer Interface type.",
                 PublicOrInternalCheck(Priority.Knockout),
                 Parameters(
-                    Priority.Knockout,
-                    Type(
-                        Priority.Knockout,
-                        _observerInterface
-                    )
+                    Priority.Knockout
+                    //Type(
+                    //    Priority.Knockout,
+                    //    _observerInterface
+                    //)
                 )
             )
         );
@@ -345,7 +345,7 @@ internal class ObserverRecognizer : IRecognizer, IStepByStepRecognizer
     {
         return Field(
             Priority.Knockout,
-            "4b. Private field with a Observer List as type.",
+            "4b. Private field with an Observer List as type.",
             Modifiers(
                 Priority.Knockout,
                 Modifier.Private
@@ -354,7 +354,7 @@ internal class ObserverRecognizer : IRecognizer, IStepByStepRecognizer
     }
 
     /// <summary>
-    /// TODO
+    /// A <see cref="MethodCheck"/> that checks with a <see cref="ParameterCheck"/>
     /// </summary>
     /// <returns></returns>
     private MethodCheck ConcreteSubjectAttachCheck()
@@ -364,11 +364,11 @@ internal class ObserverRecognizer : IRecognizer, IStepByStepRecognizer
             "4c. Public or internal method that has a parameter with as type Observer and uses the list observers.",
             PublicOrInternalCheck(Priority.Knockout),
             Parameters(
-                Priority.Knockout,
-                Type(
-                    Priority.Knockout,
-                    _observerInterface
-                )
+                Priority.Knockout
+                //Type(
+                //    Priority.Knockout,
+                //    _observerInterface
+                //)
             ),
             Uses(
                 Priority.Knockout,

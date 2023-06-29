@@ -130,7 +130,7 @@
     <value>This is a Concrete Observer class which instances are updated if a Concrete Subject notifies them. </value>
   </data>
   <data name="Explanation3" xml:space="preserve">
-    <value>This interface serves as the base fot the Concrete Subjects to which Concrete Observers can subscribe. The method here will in the Concrete Subjects be implemented as the `notify()` method.</value>
+    <value>This interface serves as the base fot the Concrete Subjects to which Concrete Observers can subscribe. The method here will in the Concrete Subjects be implemented as the `attach()` method.</value>
   </data>
   <data name="Explanation4" xml:space="preserve">
     <value>This is a Concrete Subject class which can notify the Concrete Observers if they are subscribed.</value>

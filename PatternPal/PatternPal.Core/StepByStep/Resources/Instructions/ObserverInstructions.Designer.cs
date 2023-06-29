@@ -88,7 +88,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This is a Concrete Observer class which instances are updated if a Concrete Subject notifies them. In the method you should define the logic that needs to be executed when the Subject is notifies the class. .
+        ///   Looks up a localized string similar to This is a Concrete Observer class which instances are updated if a Concrete Subject notifies them. .
         /// </summary>
         internal static string Explanation2 {
             get {
@@ -97,7 +97,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This interface serves as the base fot the Concrete Subjects to which Concrete Observers can subscribe. The method here will in the Concrete Subjects be implemented as the `notify()` method..
+        ///   Looks up a localized string similar to This interface serves as the base fot the Concrete Subjects to which Concrete Observers can subscribe. The method here will in the Concrete Subjects be implemented as the `attach()` method..
         /// </summary>
         internal static string Explanation3 {
             get {
@@ -160,7 +160,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make an interface with an internal or public method. We refer to this interface as the Observer Interface, we will reference to the method as update()..
+        ///   Looks up a localized string similar to Make an interface with an internal or public method. We refer to this interface as the Observer Interface..
         /// </summary>
         internal static string Step1 {
             get {
