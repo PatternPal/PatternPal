@@ -21,7 +21,6 @@ You can open the main view of the extension through `View > Other Windows > Patt
 
 The following video offers a walkthrough for the usage of PatternPal. 
 https://www.youtube.com/watch?v=nl327X8Ixyk
-[![PatternPal Demo]((https://img.youtube.com/vi/v=nl327X8Ixyk/0.jpg))](https://www.youtube.com/watch?v=nl327X8Ixyk?t=35s "PatternPal Demo")
 
 ### Step-By-Step
 This module offers the flexibility for users to choose between two options: starting the implementation of a new design pattern or continuing their work on a design pattern they have previously worked on.
