@@ -4,7 +4,7 @@ There are multiple categories of checks that will be explained below. These cate
 
 ## Leaf Checks
 
-A leaf check examines a single aspect of an entity (also see [here](syntax_graph.md)) and compares it to a specific value. The leaf checks that are currently implemented are explained below.
+A leaf check examines a single aspect of an `Entity` (also see [here](syntax_graph.md)) and compares it to a specific value. The leaf checks that are currently implemented are explained below.
 
 ### ModifierCheck
 
