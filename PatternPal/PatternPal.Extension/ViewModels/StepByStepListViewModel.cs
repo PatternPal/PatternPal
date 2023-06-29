@@ -100,6 +100,15 @@ namespace PatternPal.Extension.ViewModels
         {
             List< string > result = new List< string >();
 
+            CommonOpenFileDialog ofd2 = new CommonOpenFileDialog();
+
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            // Obtain the currently running visual studio instance.
+            // Look for projects by selected instruction set name, if null take the first project and obtain file direcotyr.
+            DTE dte = (DTE)Package.GetGlobalService(typeof(SDTE));
+            dte.Solution.Projects.
+
             using (CommonOpenFileDialog ofd = new CommonOpenFileDialog
                    {
                        Multiselect = true,
