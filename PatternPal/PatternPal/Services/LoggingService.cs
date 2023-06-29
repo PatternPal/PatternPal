@@ -43,7 +43,7 @@ public class LoggingService : LogProviderService.LogProviderServiceBase
         {
             // TODO add ENV variable for server address
             GrpcChannel grpcChannel = GrpcChannel.ForAddress(
-                "http://161.35.87.186:8080");
+                "http://ideas.science.uu.nl:8080");
             LogCollectorService.LogCollectorServiceClient client = new(grpcChannel);
 
             LogResponse response = client.Log(specificLog.request, deadline: DateTime.UtcNow.AddSeconds(3));
