@@ -38,7 +38,7 @@ namespace PatternPal.Extension
     ///     </para>
     /// </remarks>
     [ProvideAutoLoad(
-        VSConstants.UICONTEXT.SolutionOpening_string,
+        VSConstants.UICONTEXT.SolutionExistsAndFullyLoaded_string,
         PackageAutoLoadFlags.BackgroundLoad)]
     [PackageRegistration(
         UseManagedResourcesOnly = true,
