@@ -17,6 +17,11 @@ access PatternPal from `View > Other Windows > PatternPal Extension`.
 
 You can open the main view of the extension through `View > Other Windows > PatternPal Extension`.
 
+### Demo
+
+The following video offers a walkthrough for the usage of PatternPal. 
+https://www.youtube.com/watch?v=nl327X8Ixyk
+
 ### Step-By-Step
 This module offers the flexibility for users to choose between two options: starting the implementation of a new design pattern or continuing their work on a design pattern they have previously worked on.
 
