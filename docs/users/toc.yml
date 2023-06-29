@@ -1,8 +1,8 @@
 - name: PatternPal
   items:
     - name: Recognizer
-      href: Recognizer.md
+      href: recognizer.md
     - name: Step-By-Step
-      href: Step-By-Step.md
+      href: step-by-step.md
     - name: Logging
-      href: Logging.md
+      href: logging.md
