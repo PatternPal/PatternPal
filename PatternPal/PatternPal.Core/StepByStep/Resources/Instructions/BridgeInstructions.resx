@@ -157,7 +157,7 @@
     <value>Make a class that implements the Implementation Interface or inherits from the Implementation Abstract Class. If it inherits from the Abstract Class it should override the abstract method. We will refer to this as the Concrete Implementation Class. </value>
   </data>
   <data name="Step6" xml:space="preserve">
-    <value>Make a class that inherits from the Abstraction class and has a method. This class is called the Refined Abstraction Class.</value>
+    <value>Make a class that inherits from the Abstraction class and has a method. We will refer to this as the Refined Abstraction Class.</value>
   </data>
   <data name="Step7" xml:space="preserve">
     <value>Make a class that uses a method in the Abstraction Class. We will refer to this class as the Client Class.</value>

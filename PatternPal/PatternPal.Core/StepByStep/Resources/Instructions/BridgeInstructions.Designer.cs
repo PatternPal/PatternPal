@@ -178,7 +178,7 @@ namespace PatternPal.Core.StepByStep.Resources.Instructions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make a class that inherits from the Abstraction class and has a method. This class is called the Refined Abstraction Class..
+        ///   Looks up a localized string similar to Make a class that inherits from the Abstraction class and has a method. We will refer to this as the Refined Abstraction Class..
         /// </summary>
         internal static string Step6 {
             get {
