@@ -261,8 +261,6 @@ public partial class RecognizerRunner
                 ctx,
                 new RootNode());
 
-            // TODO: Define least and most dependable and reference that definition here.
-
             // Sort the check results from least to most dependable.
             SortCheckResults(rootResult);
 
