@@ -1,57 +1,76 @@
+- name: Overview
+  href: ./overview.md
+
 # Pattern recognition --------------------
 - name: Pattern recognition
   items:
-    # -- Design patterns
-    - name: Design patterns
-    - name: Adapter
-      href: recognizers/patterns/adapter.md
-    - name: Bridge
-      href: recognizers/patterns/bridge.md
-    - name: Decorator
-      href: recognizers/patterns/decorator.md
-    - name: Factory-Method
-      href: recognizers/patterns/factorymethod.md
-    - name: Singleton
-      href: recognizers/patterns/singleton.md
-    - name: Strategy
-      href: recognizers/patterns/strategy.md
 
-    # -- Design
-    - name: Design
-    - name: Recognizer
-      href: recognizers/design/recognizer.md
-    - name: Recognizer Runner
-      href: recognizers/design/recognizer_runner.md
-    - name: Checks
-      href: recognizers/design/checks.md
-    - name: Syntax Graph
-      href: recognizers/design/syntax_graph.md
-    - name: Step-By-Step
-      href: stepbystep/design/stepbystep.md
+  # -- Design patterns
+  - name: Design patterns
+  - name: Adapter
+    href: recognizers/patterns/adapter.md
+  - name: Bridge
+    href: recognizers/patterns/bridge.md
+  - name: Decorator
+    href: recognizers/patterns/decorator.md
+  - name: Factory-Method
+    href: recognizers/patterns/factorymethod.md
+  - name: Singleton
+    href: recognizers/patterns/singleton.md
+  - name: Strategy
+    href: recognizers/patterns/strategy.md
+    
+  # -- Design
+  - name: Design
+  - name: Recognizer
+    href: recognizers/design/recognizer.md
+  - name: Recognizer Runner
+    href: recognizers/design/recognizer_runner.md
+  - name: Checks
+    href: recognizers/design/checks.md
+  - name: Syntax Graph
+    href: recognizers/design/syntax_graph.md
 
-    # -- Guides
-    - name: Guides
-    - name: Implementing a Recognizer
-      href: recognizers/guides/implement_recognizer.md
-    - name: Implementing a Check
-      href: recognizers/guides/implement_check.md
-    - name: Adding a design pattern to Step-By-Step
-      href: stepbystep/guides/implement_an_instructionset.md
+  # -- Guides
+  - name: Guides
+  - name: Implementing a Recognizer
+    href: recognizers/guides/implement_recognizer.md
+  - name: Implementing a Check
+    href: recognizers/guides/implement_check.md
 
-# Pattern recognition --------------------
+# SBS ------------------------------------
+- name: Step-by-Step
+  items: 
+
+  # -- Design
+  - name: Design
+  - name: Overview
+    href: stepbystep/design/stepbystep.md
+  
+  # -- Guides
+  - name: Guides
+  - name: Adding a design pattern
+    href: stepbystep/guides/implement_an_instructionset.md
+
+# Logging --------------------------------
 - name: Data logging
   items:
-    # -- Design
-    - name: Design
-    - name: Overview
-      href: logging/design/overview.md
-    - name: LogRequest
-      href: logging/design/logrequest.md
 
-    # -- Guides
-    - name: Guides
-    - name: Installation
-      href: logging/guides/installation.md
+  # -- Design
+  - name: Design
+  - name: Overview
+    href: logging/design/overview.md
+  - name: LogRequest
+    href: logging/design/logrequest.md
+  - name: Export tool
+    href: logging/design/export.md
+
+  # -- Guides
+  - name: Guides
+  - name: Installation
+    href: logging/guides/installation.md
+  - name: Exporting the dataset
+    href: logging/guides/export.md
 
 # Extension ------------------------------
 - name: Extension
