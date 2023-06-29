@@ -12,7 +12,7 @@
      *         Concrete Component
      *            ✓  a) is an implementation of Component
      *            ✓  b) does not have a field of type Component
-     *                c) if Component is an abstract class, it overrides the method of Component
+     *               c) if Component is an abstract class, it overrides the method of Component
      *         Base Decorator
      *            ✓  a) is an implementation of Component
      *            ✓  b) is an abstract class
