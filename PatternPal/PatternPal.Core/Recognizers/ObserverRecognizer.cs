@@ -40,7 +40,10 @@ namespace PatternPal.Core.Recognizers;
 internal class ObserverRecognizer : IRecognizer, IStepByStepRecognizer
 {
     /// <inheritdoc cref="IRecognizer" />
-    public string Name => "Observer";
+    string IRecognizer.Name => "Observer";
+
+    /// <inheritdoc cref="IStepByStepRecognizer" />
+    string IStepByStepRecognizer.Name => "Observer(Beta)";
 
     /// <inheritdoc cref="IRecognizer" />
     public Recognizer RecognizerType => Recognizer.Observer;

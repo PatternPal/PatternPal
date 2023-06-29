@@ -40,10 +40,6 @@ was viewed.
 
 ---
 
-<!---
-TODO Proofread
--->
-
 ## EventType Specific
 
 Some events require extra columns and can be omitted in other events. All events currently in use will be mentioned in this paragraph

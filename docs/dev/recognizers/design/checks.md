@@ -1,10 +1,10 @@
 # Checks
 
-There are multiple categories of checks which will be explained below. The categories are: leaf checks, node checks and checkCollections.
+There are multiple categories of checks that will be explained below. These categories are: leaf checks, node checks and operator checks.
 
 ## Leaf Checks
 
-A leaf check examines a single aspect of an entity (also see [here](syntax_graph.md)) and compares it to a specific value. They do not have child checks therefore their result also does not hold childcheck results. The leaf checks that are now implemented are explained below.
+A leaf check examines a single aspect of an `Entity` (also see [here](syntax_graph.md)) and compares it to a specific value. The leaf checks that are currently implemented are explained below.
 
 ### ModifierCheck
 
@@ -16,7 +16,8 @@ A @PatternPal.Core.Checks.TypeCheck verifies that the type of an entity matches 
 type, as specified in the check. For instance,
 in the Singleton design pattern, a type check could verify that the
 return type of the `GetInstance()` method is the same as the type of the
-class which contains the method.
+class that contains the method. The parameter given to `TypeCheck` used to compare the type of the `Node` to, can either be the `CurrentEntity`, which is the `Entity` currently being evaluated,
+or another `ICheck`. In the latter case, the `TypeCheck` compares the type of the evaluated `Node` to all `Node`s the passed `ICheck` matched.
 
 ### ParameterCheck
 
@@ -25,44 +26,45 @@ constructor and compares them to the expected ones in the design pattern
 being recognized. For instance, in the Strategy design pattern, a
 `ParameterCheck` could verify that the `SetStrategy()` method of the `Context`
 class has a parameter of the `StrategyInterface` type. This is done with a list of
-`TypeCheck`s.
+`TypeCheck`s. A `ParameterCheck` can handle multiple `TypeCheck`s that can both search for different and equal types.
 
 ### RelationCheck
 
 A @PatternPal.Core.Checks.RelationCheck examines a specific relation between two entities in
 the code and compares it to the expected relationships in the design
 pattern being recognized. Different types of relations that can be
-checked are usage, creation, inheritance, and implementation. For
+checked are usage, creation, inheritance, implementation, and overrides. For
 example, a check for the Adapter design pattern would include a relation
-check confirming that the `Adapter` class uses the `Adaptee` class.
+check confirming that the `Adapter` class uses the `Adaptee` class. Each relation has a counterpart. For example,
+the `Uses` check has a `UsedBy` counter part. 
 
 ## Node Checks
 
 A Node check examines an entity. It combines Node and Leaf checks into a
-more complex check for the entity being checked.
+more complex check for the entity being evaluated.
 
 ### NodeCheck
 
 A @PatternPal.Core.Checks.NodeCheck`1 is a class encompassing the behavior of a node check, i.e.
 the possibility to run a collection of subchecks. It is the base of all
 node checks. It achieves this with the use of a template method
-implementation of the `Check()`function. For each check where different
-implementations are possible, this function calls a virtual method that
+implementation of the `Check()` function. For each check where different
+implementations are possible, this function calls a `virtual` method that
 can be implemented by the specific node checks. For example, what the
-type of a node represents differs per node. The type of a method is its
-return type, while the type of a constructor is its parent type. Thus
-there is a virtual function that gets the type of field and is
-implemented in the specific node checks, and said function is used in
-the`Check()`function in the case of a subcheck of type`TypeCheck`.
+`type` of a `Node` represents differs per `Node`. The `type` of a method is its
+`return type`, while the type of a field is its field `type`. Thus
+there is a `virtual` function that gets the `type` of the field and is
+implemented in `FieldCheck`, and said function is used in
+the`Check()` function in the case of a subcheck of type `TypeCheck`.
 @PatternPal.Core.Checks.CheckCollectionKind can be used here to check the amount of childchecks that must return correctly. 
-For now this can be an `Any` `CheckCollectionKind`, which is correct when one of the childs are correct. 
-And an `All` `CheckCollectionKind`, which is correct when all the childs are correct.
+For now this can be an `Any` `CheckCollectionKind`, which is correct when one of the child checks is correct. 
+And an `All` `CheckCollectionKind`, which is correct when all the child checks are correct.
 
 ### FieldCheck
 
 A field is a globally defined variable. A @PatternPal.Core.Checks.FieldCheck examines whether
 there is a certain field in the entity being examined that complies with
-the child checks of the FieldCheck. A `FieldCheck` can compose `TypeCheck`s,
+the child checks of the `FieldCheck`. A `FieldCheck` can compose `TypeCheck`s,
 `ModifierCheck`s, and operator checks.
 
 ### MethodCheck
@@ -70,7 +72,7 @@ the child checks of the FieldCheck. A `FieldCheck` can compose `TypeCheck`s,
 A @PatternPal.Core.Checks.MethodCheck examines whether there is a certain method in the entity
 being examined that complies with the child checks of the `MethodCheck`. A
 `MethodCheck` can compose `ModifierCheck`s, `ParameterCheck`s, `RelationCheck`s,
-`TypeCheck`s, and operator checks. The `TypeCheck`s examine the return type
+`TypeCheck`s, and operator checks. The `TypeCheck`s examine the return `type`
 of the method.
 
 ### ConstructorCheck
@@ -78,9 +80,7 @@ of the method.
 A @PatternPal.Core.Checks.ConstructorCheck examines whether there is a certain constructor in
 the entity being examined that complies with the child checks of the
 `ConstructorCheck`. A `ConstructorCheck` can compose `ModifierCheck`s,
-`ParameterCheck`s, `RelationCheck`s, `TypeCheck`s, and operator checks. The
-`TypeCheck`s examine the return type of the constructor, which is equal to
-the type of the entity that composes it.
+`ParameterCheck`s, `RelationCheck`s, and operator checks.
 
 ### PropertyCheck
 

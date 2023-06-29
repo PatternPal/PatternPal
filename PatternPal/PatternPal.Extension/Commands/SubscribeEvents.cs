@@ -17,6 +17,7 @@ using PatternPal.Extension.Grpc;
 using PatternPal.Protos;
 
 using JsonSerializer = System.Text.Json.JsonSerializer;
+using Newtonsoft.Json;
 
 #endregion
 
@@ -526,14 +527,22 @@ namespace PatternPal.Extension.Commands
                 request.ProjectId = GetRelativePath(projectDir, recognizeRequest.Project);
             }
 
-            string config = recognizeRequest.Recognizers.ToString();
+            Dictionary<string, string> config = new Dictionary<string, string>
+            {
+                { "recognizers", recognizeRequest.Recognizers.ToString() },
+                { "show_all_results", recognizeRequest.ShowAllResults.ToString() },
+                { "file_or_project", recognizeRequest.FileOrProjectCase.ToString() }
+            };
 
 
-            request.RecognizerConfig = config;
+            List<string> patternsResults = new List<string>();
+
             foreach (RecognizeResult result in recognizeResults)
             {
-                request.RecognizerResult += result.ToString();
+                patternsResults.Add(result.ToString());
             }
+            request.RecognizerConfig = JsonConvert.SerializeObject(config);
+            request.RecognizerResult = $"[{String.Join(",", patternsResults)}]";
 
             LogEventResponse response = PushLog(request);
         }

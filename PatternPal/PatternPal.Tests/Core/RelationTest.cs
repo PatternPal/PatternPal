@@ -252,17 +252,24 @@ public class RelationTest
         true,
         "IDoSomething.Multiplication",
         true)]
-    [TestCase(
-        "MethodsRelations2.cs",
-        "DoSomeMultiplication.LetsGO",
-        false,
-        "MethodsRelations2.Multiplication",
-        false)]
+
     [TestCase(
         "MethodsRelations2.cs",
         "DoSomeMultiplication.LetsGO",
         false,
         "MethodsRelations2.Addition",
+        false)]
+    [TestCase(
+        "MethodsRelations2.cs",
+        "DoSomeMultiplication.LetsGO",
+        false,
+        "IDoSomething.Multiplication",
+        true)]
+    [TestCase(
+        "MethodsRelations2.cs",
+        "DoSomeMultiplication.LetsGO",
+        false,
+        "MethodsRelations2.Multiplication",
         false)]
     public void Entity_Or_Method_Uses_Method(
         string filename,
