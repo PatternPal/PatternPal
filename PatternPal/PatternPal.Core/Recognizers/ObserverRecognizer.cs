@@ -289,6 +289,8 @@ internal class ObserverRecognizer : IRecognizer, IStepByStepRecognizer
         );
     }
 
+
+    // TODO Check for the type of the parameter
     /// <summary>
     /// A <see cref="InterfaceCheck"/> with a <see cref="MethodCheck"/> which is <see cref="Modifier.Public"/>
     /// or <see cref="Modifier.Internal"/> and has a <see cref="ParameterCheck"/> that checks for a parameter with
@@ -353,10 +355,11 @@ internal class ObserverRecognizer : IRecognizer, IStepByStepRecognizer
         );
     }
 
+    // TODO check the type of the parameter
     /// <summary>
     /// A <see cref="MethodCheck"/> that checks with a <see cref="ParameterCheck"/>
     /// </summary>
-    /// <returns></returns>
+    /// <returns>A <see cref="MethodCheck"/> that should check for a method that functions as a 'attach()'method of the Concrete Subject class.</returns>
     private MethodCheck ConcreteSubjectAttachCheck()
     {
         return Method(
@@ -378,9 +381,9 @@ internal class ObserverRecognizer : IRecognizer, IStepByStepRecognizer
     }
 
     /// <summary>
-    /// TODO
+    /// A <see cref="ICheck"/> that holds two checks the <see cref="ConcreteSubjectStateFieldOption"/> and a <see cref="MethodCheck"/> with a <see cref="ParameterCheck"/>.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>A <see cref="ICheck"/> that verifies on of the requirements of the Concrete Subject class.</returns>
     private ICheck ConcreteSubjectStateCheck()
     {
         MethodCheck methodOption = Method(
@@ -399,9 +402,10 @@ internal class ObserverRecognizer : IRecognizer, IStepByStepRecognizer
     }
 
     /// <summary>
-    /// TODO
+    /// A <see cref="ICheck"/> with a <see cref="FieldCheck"/> or a <see cref="PropertyCheck"/> that should
+    /// have a <see cref="Modifier.Protected"/> or <see cref="Modifier.Private"/>.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>A <see cref="ICheck"/> that checks for one of the options within a requirement of the Concrete Subject class.</returns>
     private ICheck ConcreteSubjectStateFieldOption()
     {
         ICheck modifierCheck = Any(
@@ -435,12 +439,12 @@ internal class ObserverRecognizer : IRecognizer, IStepByStepRecognizer
             )
         );
     }
-
+    
     /// <summary>
-    /// TODO
+    /// A <see cref="MethodCheck"/> that checks for a <see cref="Modifier.Public"/> and a <see cref="RelationType.Uses"/> with <paramref name="observerInterfaceMethod"/>
     /// </summary>
-    /// <param name="observerInterfaceMethod"></param>
-    /// <returns></returns>
+    /// <param name="observerInterfaceMethod">The <see cref="MethodCheck"/> that should be used by the method checked.</param>
+    /// <returns>A <see cref="MethodCheck"/> that checks for the 'update' method in the Concrete Subject class.</returns>
     private MethodCheck ConcreteSubjectUpdateCheck(MethodCheck observerInterfaceMethod)
     {
         return Method(
@@ -458,10 +462,11 @@ internal class ObserverRecognizer : IRecognizer, IStepByStepRecognizer
     }
 
     /// <summary>
-    /// TODO
+    /// A <see cref="ClassCheck"/> that holds the incoming <paramref name="checks"/> and checks that check a <see cref="RelationType.Creates"/>
+    /// relation of two different classes.
     /// </summary>
-    /// <param name="checks"></param>
-    /// <returns></returns>
+    /// <param name="checks">The other <see cref="ICheck"/>s that the <see cref="ClassCheck"/> should hold.</param>
+    /// <returns>A <see cref="ClassCheck"/> that could check for the requirements of the Client class.</returns>
     private ClassCheck ClientClassCheck(params ICheck[] checks)
     {
         ICheck[] classChecks = checks
@@ -477,9 +482,9 @@ internal class ObserverRecognizer : IRecognizer, IStepByStepRecognizer
     }
 
     /// <summary>
-    /// TODO
+    /// A <see cref="MethodCheck"/> that holds a check to verify a <see cref="RelationType.Uses"/> relation with <param name="toUseMethod">.</param>
     /// </summary>
-    /// <returns></returns>
+    /// <returns>A <see cref="MethodCheck"/> that checks for a relation check with the <paramref name="toUseMethod"/>.</returns>
     private MethodCheck ClientUseMethodCheck(MethodCheck toUseMethod, string req = null)
     {
         return Method(
