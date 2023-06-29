@@ -6,10 +6,10 @@
  *
  * Requirements to fullfill the pattern:
  *         Observer Interface
- *            ✓  a) is an interface
+ *               a) is an interface
  *            ✓  b) has a public or internal 'update()' method
  *         Concrete Observer
- *            ✓  a) is a class that implements the `Observer` interface
+ *               a) is a class that implements the `Observer` interface
  *          Subject Interface
  *            ✓  a) is an interface
  *            ✓  b) has a public or internal method that has a parameter with as type `Observer`
@@ -17,72 +17,52 @@
  *            ✓  a) is a class that implements the `Subject` interface 
  *            ✓  b) has a private field with as type a `Observer` list, `observers` 
  *            ✓  c) has a public or internal methods that has a parameter with as type `Observer` that uses the list `observers`
- *            ✓  d) has a public method that uses the `observers` list and uses the `update()` method in `Observer`
- *            ✓  e) has either,
+ *               d) has a public method that uses the `observers` list and uses the `update()` method in `Observer`
+ *               e) has either,
  *                   1. both,
  *                       1. a private or protected field or property `mainState`.
  *                       2. has a public or internal method that uses `mainState`.
  *                   2. a public or internal method with a parameter.
  *          Client
  *            ✓  a) creates the Subject
- *            ✓  b) creates a Concrete Observer
- *            ✓  c) uses a method as described in `Concrete Subject` c)
- *            ✓  d) uses the method as described in `Concrete Subject` d)
+ *               b) creates a Concrete Observer
+ *               c) uses a method as described in `Concrete Subject` c)
+ *               d) uses the method as described in `Concrete Subject` d)
  */
 
-interface Observer
+abstract class IObserver2
 {
-    public void Update();
+    public abstract void Update();
 }
 
-class ConcreteObserver : Observer
+class ConcreteObserver2 : IObserver2
 {
-    public void Update()
+    public override void Update()
     {
         Console.WriteLine("We have been updated");
     }
 }
 
-interface Subject
+interface ISubject2
 {
     public void Attach(Observer observer);
-    public void Notify();
 }
 
-class ConcreteSubject : Subject
+class ConcreteSubject2 : ISubject2
 {
     private List<Observer> observers = new List<Observer>();
-    private int mainState;
 
     public void Attach(Observer observer)
     {
         observers.Add(observer);
     }
-
-    public void Notify()
-    {
-        foreach (Observer observer in observers)
-        {
-            observer.Update();
-        }
-    }
-
-    public void ChangeState(int state)
-    {
-        mainState = state;
-        Notify();
-    }
 }
 
-class ClientClass
+class ClientClass2
 {
-    public ClientClass()
+    public ClientClass2()
     {
         Subject subject = new ConcreteSubject();
-        Observer observer = new ConcreteObserver();
-
-        subject.Attach(observer);
-        subject.Notify();
     }
 }
 
