@@ -1,4 +1,4 @@
-﻿namespace PatternPal.Tests.New_TestCasesRecognizers.Bridge;
+namespace PatternPal.Tests.New_TestCasesRecognizers.Bridge;
 
 //This test is a possible "perfect" bridge implementation.
 /* Pattern:              Bridge
