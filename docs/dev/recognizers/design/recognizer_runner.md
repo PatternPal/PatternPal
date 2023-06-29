@@ -1,6 +1,6 @@
 # Recognizer Runner
 
-The @PatternPal.Core.RecognizerRunner class is the main entry point of the design pattern recognition process. It
+The @PatternPal.Core.Runner.RecognizerRunner class is the main entry point of the design pattern recognition process. It
 is responsible for initializing the selected recognizers, creating the
 [`SyntaxGraph`](syntax_graph.md) of the input files, as well as for processing the
 results of the recognizers.
@@ -35,18 +35,18 @@ individual steps, which are described in more detail below.
 
 The first step is presorting the results. This sorting happens based on the dependency count of a
 result, which is equal to the dependency count of the check which produced the result. The
-dependency count of a check is defined as the number of checks it uses, and it is a transitive
+dependency count of a check is defined as the number of checks it is dependent on, and it is a transitive
 property. For example, a @PatternPal.Core.Checks.RelationCheck of kind `Uses` has a dependency count of 1 + the dependency
 count of the check it depends on. By sorting the results in ascending order, so results with a lower
 dependency count are put before results with a higher dependency count, we have more opportunities
-to prune results, as we are guaranteed to encounter the results of the checks which are depended on
+to prune results, as we are guaranteed to encounter the results of the checks which we are depended on
 before we encounter the results of checks which depend on those previous checks. This means that if
 we can prune results which are used later on, we can also decide to prune the dependent results if
-necessary, because we are guaranteed to have processed the results which are depended on.
+necessary, because we are guaranteed to have processed the results which they are depended on.
 
 ### Pruning the Results
 
-The second step is pruning the results. A result can only be pruned if its priority is `Knockout`,
+The second step is pruning the results. This is done in the @PatternPal.Core.Runner.RecognizerRunner-Pruning. A result can only be pruned if its priority is `Knockout`, or if `pruneAll` is set to true.
 and it is incorrect. All other results are preserved for later processing. Pruning is done
 recursively, to find as many results to prune as possible. If all child results of a result are
 pruned, the result itself can also be pruned. Furthermore, if the @PatternPal.Core.Checks.CheckCollectionKind of a result is
