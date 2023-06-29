@@ -3,8 +3,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+
+using EnvDTE;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio;
@@ -12,11 +15,14 @@ using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.Threading;
 
 using PatternPal.Extension.Commands;
 using PatternPal.Extension.Grpc;
 using PatternPal.Extension.ViewModels;
 using PatternPal.Protos;
+
+using Project = Microsoft.CodeAnalysis.Project;
 
 #endregion
 
@@ -37,6 +43,7 @@ namespace PatternPal.Extension.Views
 
             Dispatcher.VerifyAccess();
             LoadProject();
+            Dte = Package.GetGlobalService(typeof( SDTE )) as DTE;
             IVsRunningDocumentTable rdt = (IVsRunningDocumentTable)Package.GetGlobalService(typeof( SVsRunningDocumentTable ));
             rdt.AdviseRunningDocTableEvents(
                 this,
@@ -48,6 +55,7 @@ namespace PatternPal.Extension.Views
         }
 
         private List< Project > Projects { get; set; }
+        private DTE Dte { get; }
 
         /// <summary>
         /// Activated after clicking on the previous instruction button
@@ -78,7 +86,9 @@ namespace PatternPal.Extension.Views
             {
                 correctTextBlock.Visibility = Visibility.Hidden;
                 CheckIfNextPreviousButtonsAvailable();
+                return;
             }
+            _viewModel.NavigateHomeCommand.Execute(null);
         }
 
         /// <summary>
@@ -87,9 +97,16 @@ namespace PatternPal.Extension.Views
         private void CheckIfNextPreviousButtonsAvailable()
         {
             CheckIfCheckIsAvailable();
-            NextInstructionButton.Visibility = _viewModel.HasNextInstruction
-                ? Visibility.Visible
-                : Visibility.Hidden;
+            if (_viewModel.HasNextInstruction)
+            {
+                NextInstructionButton.Content = ">>";
+                NextInstructionButton.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                NextInstructionButton.Content = "Home";
+                NextInstructionButton.Visibility = Visibility.Visible;
+            }
             PreviousInstructionButton.Visibility = _viewModel.HasPreviousInstruction
                 ? Visibility.Visible
                 : Visibility.Hidden;
@@ -129,52 +146,90 @@ namespace PatternPal.Extension.Views
             object sender,
             RoutedEventArgs e)
         {
-            NextInstructionButton.IsEnabled = false;
+            ThreadHelper.JoinableTaskFactory.RunAsync(CheckImplementationAsync).FireAndForget();
+        }
 
-            CheckInstructionRequest request = new CheckInstructionRequest
-                                              {
-                                                  InstructionNumber = _viewModel.CurrentInstructionNumber - 1,
-                                                  Recognizer = _viewModel.Recognizer
-                                              };
-
-            foreach (string file in _viewModel.FilePaths)
-            {
-                request.Documents.Add(file);
-            }
-
+        private async Task CheckImplementationAsync()
+        {
             try
             {
-                CheckInstructionResponse response = GrpcHelper.StepByStepClient.CheckInstruction(request);
-                SubscribeEvents.OnStepByStepCheck(
-                    request.Recognizer.ToString(),
-                    request.InstructionNumber,
-                    response.Result);
+                // Save all documents before checking the instruction.
+                await ThreadHelper.JoinableTaskFactory.RunAsync(
+                    async () =>
+                    {
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-                if (response.RecognizeResult == null)
+                        // Disable buttons.
+                        CheckImplementationButton.IsEnabled = false;
+                        NextInstructionButton.IsEnabled = false;
+
+                        Dte.Documents.SaveAll();
+                    });
+
+                CheckInstructionRequest request = new CheckInstructionRequest
+                                                  {
+                                                      InstructionNumber = _viewModel.CurrentInstructionNumber - 1,
+                                                      Recognizer = _viewModel.Recognizer
+                                                  };
+
+                foreach (string file in _viewModel.FilePaths)
                 {
-                    correctTextBlock.Visibility = Visibility.Visible;
-                    correctTextBlock.Text = "Incorrect";
-                    correctTextBlock.Foreground = new SolidColorBrush(Colors.Red);
-                    return;
+                    request.Documents.Add(file);
                 }
 
-                ExpanderResults.ResultsView.ItemsSource = new[ ]
-                                                          {
-                                                              new PatternResultViewModel(response.RecognizeResult)
-                                                              {
-                                                                  Expanded = true
-                                                              }
-                                                          };
-
-                if (response.Result)
+                try
                 {
-                    NextInstructionButton.IsEnabled = true;
+                    CheckInstructionResponse response = await GrpcHelper.StepByStepClient.CheckInstructionAsync(request);
+
+                    JoinableTask loggingTask = ThreadHelper.JoinableTaskFactory.RunAsync(
+                        async () =>
+                        {
+                            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+                            SubscribeEvents.OnStepByStepCheck(
+                                request.Recognizer.ToString(),
+                                request.InstructionNumber,
+                                response.Result);
+                        });
+
+                    if (response.RecognizeResult == null)
+                    {
+                        correctTextBlock.Visibility = Visibility.Visible;
+                        correctTextBlock.Text = "Incorrect";
+                        correctTextBlock.Foreground = new SolidColorBrush(Colors.Red);
+                        return;
+                    }
+
+                    ExpanderResults.ResultsView.ItemsSource = new[ ]
+                                                              {
+                                                                  new PatternResultViewModel(response.RecognizeResult)
+                                                                  {
+                                                                      Expanded = true
+                                                                  }
+                                                              };
+
+                    if (response.Result)
+                    {
+                        NextInstructionButton.IsEnabled = true;
+                    }
+
+                    await loggingTask.JoinAsync();
+                }
+                catch (Exception)
+                {
+                    GrpcHelper.ShowErrorMessage("Check of step gave an exception");
                 }
             }
-            catch (Exception)
+            finally
             {
-                GrpcHelper.ShowErrorMessage("Check of step gave an exception");
-                return;
+                await ThreadHelper.JoinableTaskFactory.RunAsync(
+                    async () =>
+                    {
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+                        // Enable check button.
+                        CheckImplementationButton.IsEnabled = true;
+                    });
             }
         }
 

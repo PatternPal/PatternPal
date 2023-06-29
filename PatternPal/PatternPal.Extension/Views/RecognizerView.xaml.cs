@@ -16,6 +16,7 @@ using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.LanguageServices;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.Threading;
 
 using PatternPal.Extension.Commands;
 using PatternPal.Extension.Grpc;
@@ -173,6 +174,10 @@ namespace PatternPal.Extension.Views
         private void CreateResultViewModels(
             IEnumerable< RecognizeResult > results)
         {
+            if (!results.Any())
+            {
+                NoResultsTextBlock.Visibility = Visibility.Visible;
+            }
             ExpanderResults.ResultsView.ItemsSource = results.OrderByDescending(result => result.PercentageCorrectResults).Select(result => new PatternResultViewModel(result)).ToList();
         }
 
@@ -190,15 +195,15 @@ namespace PatternPal.Extension.Views
         }
 
         /// <summary>
-        ///     Handles click on the analyse_button by displaying the tool window.
+        ///     Handles click on the analyze_button by displaying the tool window.
         /// </summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event args.</param>
-        private void Analyse_Button(
+        private void Analyze_Button(
             object sender,
             RoutedEventArgs e)
         {
-            ThreadHelper.JoinableTaskFactory.Run(AnalyzeAsync);
+            ThreadHelper.JoinableTaskFactory.RunAsync(AnalyzeAsync).FireAndForget();
         }
 
         private async Task AnalyzeAsync()
@@ -208,63 +213,99 @@ namespace PatternPal.Extension.Views
                 return;
             }
 
-            // Switch to main thread, which is required to access the `DTE` service.
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-
-            SaveAllDocuments();
-
-            RecognizeRequest request = new RecognizeRequest();
-
-            // TODO CV: Handle error cases
-            if (SelectPaths.ActiveDocument.IsChecked.HasValue
-                && SelectPaths.ActiveDocument.IsChecked.Value)
-            {
-                if (null != Dte.ActiveDocument)
-                {
-                    request.File = Dte.ActiveDocument.FullName;
-                }
-            }
-            else
-            {
-                if (SelectPaths.Project.IsChecked.HasValue
-                    && SelectPaths.Project.IsChecked.Value)
-                {
-                    int selectedProjectIdx = SelectPaths.ProjectSelection.SelectedIndex;
-                    if (selectedProjectIdx != -1)
-                    {
-                        request.Project = Projects[ selectedProjectIdx ].FilePath;
-                    }
-                }
-            }
-
-            foreach (DesignPatternViewModel designPatternViewModel in ViewModels)
-            {
-                if (!designPatternViewModel.IsChecked)
-                {
-                    continue;
-                }
-
-                request.Recognizers.Add(designPatternViewModel.Recognizer);
-            }
-
             try
             {
-                IAsyncStreamReader< RecognizeResponse > responseStream = GrpcHelper.RecognizerClient.Recognize(request).ResponseStream;
+                RecognizeRequest request = await ThreadHelper.JoinableTaskFactory.RunAsync(
+                    async () =>
+                    {
+                        // Switch to main thread, which is required to access the `DTE` service.
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-                IList< RecognizeResult > results = new List< RecognizeResult >();
-                while (await responseStream.MoveNext())
+                        NoResultsTextBlock.Visibility = Visibility.Collapsed;
+
+                        // Disable analyze button.
+                        AnalyzeBtn.IsEnabled = false;
+
+                        SaveAllDocuments();
+
+                        RecognizeRequest req = new RecognizeRequest();
+
+                        // Because we want to read properties of `SelectPaths`, which is a UI control,
+                        // we need to run this on the main thread.
+                        if (SelectPaths.ActiveDocument.IsChecked.HasValue
+                            && SelectPaths.ActiveDocument.IsChecked.Value)
+                        {
+                            if (null != Dte.ActiveDocument)
+                            {
+                                req.File = Dte.ActiveDocument.FullName;
+                            }
+                        }
+                        else
+                        {
+                            if (SelectPaths.Project.IsChecked.HasValue
+                                && SelectPaths.Project.IsChecked.Value)
+                            {
+                                int selectedProjectIdx = SelectPaths.ProjectSelection.SelectedIndex;
+                                if (selectedProjectIdx != -1)
+                                {
+                                    req.Project = Projects[ selectedProjectIdx ].FilePath;
+                                }
+                            }
+                        }
+
+                        return req;
+                    });
+
+                foreach (DesignPatternViewModel designPatternViewModel in ViewModels)
                 {
-                    results.Add(responseStream.Current.Result);
+                    if (!designPatternViewModel.IsChecked)
+                    {
+                        continue;
+                    }
+
+                    request.Recognizers.Add(designPatternViewModel.Recognizer);
                 }
-                SubscribeEvents.OnPatternRecognized(
-                    request,
-                    results);
-                CreateResultViewModels(results);
+
+                try
+                {
+                    IAsyncStreamReader< RecognizeResponse > responseStream = GrpcHelper.RecognizerClient.Recognize(request).ResponseStream;
+
+                    IList< RecognizeResult > results = new List< RecognizeResult >();
+                    while (await responseStream.MoveNext())
+                    {
+                        results.Add(responseStream.Current.Result);
+                    }
+
+                    JoinableTask loggingTask = ThreadHelper.JoinableTaskFactory.RunAsync(
+                        async () =>
+                        {
+                            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+                            SubscribeEvents.OnPatternRecognized(
+                                request,
+                                results);
+                        });
+
+                    CreateResultViewModels(results);
+
+                    await loggingTask.JoinAsync();
+                }
+                catch (Exception)
+                {
+                    await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                    GrpcHelper.ShowErrorMessage("Analysis failed");
+                }
             }
-            catch (Exception)
+            finally
             {
-                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-                GrpcHelper.ShowErrorMessage("Analysis failed");
+                await ThreadHelper.JoinableTaskFactory.RunAsync(
+                    async () =>
+                    {
+                        await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+                        // Enable analyze button.
+                        AnalyzeBtn.IsEnabled = true;
+                    });
             }
         }
 
@@ -341,19 +382,5 @@ namespace PatternPal.Extension.Views
         }
 
         #endregion
-
-        private void ShowAllCheckBox_OnChecked(
-            object sender,
-            RoutedEventArgs e)
-        {
-            ThreadHelper.JoinableTaskFactory.Run(AnalyzeAsync);
-        }
-
-        private void ShowAllCheckBox_OnUnchecked(
-            object sender,
-            RoutedEventArgs e)
-        {
-            ThreadHelper.JoinableTaskFactory.Run(AnalyzeAsync);
-        }
     }
 }

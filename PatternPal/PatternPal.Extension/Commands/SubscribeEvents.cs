@@ -465,8 +465,16 @@ namespace PatternPal.Extension.Commands
             LogEventRequest request = CreateStandardLog();
 
             request.EventType = EventType.EvtFileEdit;
+            string csProj = document.ProjectItem?.ContainingProject?.FullName;
+            
+            if (string.IsNullOrEmpty(csProj))
+            {
+                // In some weird cases, the .csProj-file will be an empty string. We return in that case, discarding the request.
+                return;
+            }
+
             request.ProjectId = document.ProjectItem.ContainingProject.UniqueName;
-            request.ProjectDirectory = Path.GetDirectoryName(document.ProjectItem.ContainingProject.FullName);
+            request.ProjectDirectory = Path.GetDirectoryName(csProj);
             request.CodeStateSection = GetRelativePath(request.ProjectDirectory, document.FullName);
             request.FilePath = document.FullName;
 

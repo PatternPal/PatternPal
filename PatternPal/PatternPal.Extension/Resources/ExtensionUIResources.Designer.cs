@@ -79,11 +79,11 @@ namespace PatternPal.Extension.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Analyse.
+        ///   Looks up a localized string similar to Analyze.
         /// </summary>
-        public static string Analyse {
+        public static string Analyze {
             get {
-                return ResourceManager.GetString("Analyse", resourceCulture);
+                return ResourceManager.GetString("Analyze", resourceCulture);
             }
         }
         

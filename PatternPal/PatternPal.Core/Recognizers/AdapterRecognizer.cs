@@ -16,7 +16,7 @@ namespace PatternPal.Core.Recognizers;
 /// </summary>
 /// <remarks>
 /// Requirements for the Service class:<br/>
-///     a) does not inherit from the Client Interface.<br/>
+///     a) does not inherit from the Client Interface<br/>
 ///     b) is used by the Adapter class<br/>
 /// <br/>
 /// Requirements for the Client class:<br/>
@@ -33,7 +33,7 @@ namespace PatternPal.Core.Recognizers;
 ///     a) inherits/implements the Client Interface<br/>
 ///     b) creates an Service object or gets one via the constructor<br/>
 ///     c) contains a private field in which the Service is stored<br/>
-///     d) does not return an instance of the Service<br/> //TODO this is currently checked only for possible methods, but a property could also return the service
+///     d) does not return an instance of the Service<br/>                                  --TODO this is currently checked only for possible methods, but a property could also return the service
 ///     e) a method uses the Service class<br/>
 /// </remarks>
 internal class AdapterRecognizer : IRecognizer
@@ -91,6 +91,7 @@ abstract file class AdapterRecognizerParent
 
         MethodCheck adapterMethod = AdapterMethod(containsServiceField, serviceMethod);
 
+        //Check Adapter b
         ICheck createsObjectOrGetViaConstructor = CreateServiceOrGetViaConstructor(service, containsServiceField);
 
         ClassCheck adapter = Adapter(clientInterfaceClassType, createsObjectOrGetViaConstructor, service, containsServiceField, adapterMethod);
@@ -127,8 +128,10 @@ abstract file class AdapterRecognizerParent
     {
         return Class(
             Priority.Low,
+            "1. Service Class",
             Not(
                 Priority.Knockout,
+                "1a. Does not inherit from the Client Interface.",
                 DoesInheritFrom(clientInterfaceClassType)
             ),
             serviceMethod
@@ -143,6 +146,7 @@ abstract file class AdapterRecognizerParent
         return
             Method(
                 Priority.High,
+                "1b+4e. A method of Adapter uses the Service class.",
                 Uses(
                     Priority.High,
                     serviceField
@@ -161,11 +165,17 @@ abstract file class AdapterRecognizerParent
     {
         return Class(
             Priority.Low,
-            DoesInheritFrom(clientInterfaceClassType),
+            "4. Adapter Class",
+            Any(
+                Priority.Knockout,
+                "3b+4a. Adapter inherits / implements Client Interface.",
+                DoesInheritFrom(clientInterfaceClassType)
+            ),
             containsServiceField,
             createsObjectOrGetViaConstructor,
             Not(
                 Priority.High,
+                "4d. Does not return an instance of the Service.",
                 Method(
                     Priority.High,
                     Type(
@@ -242,6 +252,7 @@ abstract file class AdapterRecognizerParent
     {
         return Any(
             Priority.Knockout,
+            "4b. Creates an Service object or gets one via the constructor.",
             CreateService(service),
             GetServiceFromConstructor(service, serviceField)
         );
@@ -255,6 +266,7 @@ abstract file class AdapterRecognizerParent
         return 
             Field(
                 Priority.Knockout,
+                "4c. Contains a private field in which the Service is stored.",
                 Modifiers(
                     Priority.Knockout,
                     Modifier.Private
@@ -274,12 +286,15 @@ abstract file class AdapterRecognizerParent
     {
         return Class(
             Priority.Low,
+            "2. Client Class",
             Creates(
                 Priority.Mid,
+                "2a. Has created an object of the type Adapter.",
                 adapter
             ),
             Method(
                 Priority.Low,
+                "2b. Has used a method of the Service via the Adapter.",
                 Uses(
                     Priority.Low,
                     adapterMethod
@@ -300,6 +315,7 @@ file class AdapterRecognizerAbstractClass : AdapterRecognizerParent
     {
         return AbstractClass(
             Priority.Knockout,
+            "3. Client Interface Class",
             Modifiers(
                 Priority.Knockout,
                 Modifier.Abstract),
@@ -312,8 +328,10 @@ file class AdapterRecognizerAbstractClass : AdapterRecognizerParent
     {
         return Method(
             Priority.High,
+            "3c. Contains a method.",
             Any(
                 Priority.High,
+                "3ci. The method should be abstract or virtual.",
                 Modifiers(
                     Priority.High,
                     Modifier.Abstract
@@ -353,6 +371,7 @@ file class AdapterRecognizerInterface : AdapterRecognizerParent, IStepByStepReco
     {
         return Interface(
             Priority.Knockout,
+            "3. Client Interface Interface",
             method
         );
     }
