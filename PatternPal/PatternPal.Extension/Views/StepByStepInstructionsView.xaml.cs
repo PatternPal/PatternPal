@@ -146,6 +146,7 @@ namespace PatternPal.Extension.Views
             object sender,
             RoutedEventArgs e)
         {
+            correctTextBlock.Visibility = Visibility.Hidden;
             ThreadHelper.JoinableTaskFactory.RunAsync(CheckImplementationAsync).FireAndForget();
         }
 
