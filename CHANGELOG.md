@@ -7,6 +7,52 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [3.6.0] - 2023-06-29
+
+## Added
+
+- Docs: Added technical documentation for SBS. by @DanielvanDamme in https://github.com/PatternPal/PatternPal/pull/346
+- Log: Implemented database export tool by @ovda96 in https://github.com/PatternPal/PatternPal/pull/345
+- Feat: Implement factory-method SBS by @rutgervincken in https://github.com/PatternPal/PatternPal/pull/360
+- Rec: Bridge step by step implementation by @LvanWerven in https://github.com/PatternPal/PatternPal/pull/361
+- Docs: Add sbs steps and explanations to docs by @ViciousDoormat in https://github.com/PatternPal/PatternPal/pull/373
+- Docker: Release docker through CICD by @JustNireon in https://github.com/PatternPal/PatternPal/pull/368
+- Ext: Show no results message by @KnapSac in https://github.com/PatternPal/PatternPal/pull/375
+- Rec: Added SBS for Strategy by @ViciousDoormat in https://github.com/PatternPal/PatternPal/pull/372
+- Docs: User documentation & LogRequest changes by @JustNireon in https://github.com/PatternPal/PatternPal/pull/371
+- Docs: Add technical docs for Score calculation by @KnapSac in https://github.com/PatternPal/PatternPal/pull/378
+- Docs: ProgSnap-export-docs by @ovda96 in https://github.com/PatternPal/PatternPal/pull/380
+- Rec: Implement observer pattern by @LvanWerven in https://github.com/PatternPal/PatternPal/pull/398
+
+## Changed
+
+- Console: Set single file publish by @KnapSac in https://github.com/PatternPal/PatternPal/pull/352
+- BS+Ext: Base ProgessBar color on number of correct requirements by @KnapSac in https://github.com/PatternPal/PatternPal/pull/358
+- Ext: Wrap text in results view by @KnapSac in https://github.com/PatternPal/PatternPal/pull/362
+- SBS: New project is always added to solution when making new design pattern. by @DanielvanDamme in https://github.com/PatternPal/PatternPal/pull/357
+- BS+Ext: Reuse result presentation in Step-by-Step mode by @KnapSac in https://github.com/PatternPal/PatternPal/pull/365
+- Feat: Added requirements to adapter checks by @rutgervincken in https://github.com/PatternPal/PatternPal/pull/367
+- Feat: Added a home button to the last step SBS. by @DanielvanDamme in https://github.com/PatternPal/PatternPal/pull/369
+- Log: Cleaned proto files by @WingToh in https://github.com/PatternPal/PatternPal/pull/359
+- Ext: Don't block UI during backend calls by @KnapSac in https://github.com/PatternPal/PatternPal/pull/377
+- Docs: Improve extension and background process docs by @KnapSac in https://github.com/PatternPal/PatternPal/pull/379
+- Docs: New SBS images by @WingToh in https://github.com/PatternPal/PatternPal/pull/382
+- Rec: Change bridge pattern instructions by @LvanWerven in https://github.com/PatternPal/PatternPal/pull/388
+- Docs: Updated technical docs by @ViciousDoormat in https://github.com/PatternPal/PatternPal/pull/392
+- Feat: SBS continue opens more convenient initial directory in the dialog. by @DanielvanDamme in https://github.com/PatternPal/PatternPal/pull/390
+- Docs: New main menu image by @WingToh in https://github.com/PatternPal/PatternPal/pull/394
+- Rec: Added relation testcase and updated syntax uml by @CaptainJeroen in https://github.com/PatternPal/PatternPal/pull/393
+- Rec: Remove Any constraint by @KnapSac in https://github.com/PatternPal/PatternPal/pull/397
+
+## Fixed
+
+- SBS: Fixed the repeating instruction in the SBS instructions view by @DanielvanDamme in https://github.com/PatternPal/PatternPal/pull/356
+- Bug: Fixed new project addition of new file. by @DanielvanDamme in https://github.com/PatternPal/PatternPal/pull/364
+- Log: Fixed exception-throwing for `Document.Save` by @ovda96 in https://github.com/PatternPal/PatternPal/pull/370
+- SBS: Fix determining if step is correct by @KnapSac in https://github.com/PatternPal/PatternPal/pull/374
+- Log: Fixed exception throwing upon a single failed `File.OpenRead(...)` by @ovda96 in https://github.com/PatternPal/PatternPal/pull/376
+- Bug: Added a line that makes text invisible every check. by @DanielvanDamme in https://github.com/PatternPal/PatternPal/pull/396
+
 ## [3.5.0] - 2023-06-23
 
 ## Added
@@ -290,7 +336,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 The version developed by the previous team.
 
-[Unreleased]: https://github.com/PatternPal/PatternPal/compare/v3.5.0...HEAD
+[Unreleased]: https://github.com/PatternPal/PatternPal/compare/v3.6.0...HEAD
+[3.6.0]: https://github.com/PatternPal/PatternPal/compare/v3.5.0...v3.6.0
 [3.5.0]: https://github.com/PatternPal/PatternPal/compare/v3.4.0...v3.5.0
 [3.4.0]: https://github.com/PatternPal/PatternPal/compare/v3.3.0...v3.4.0
 [3.3.0]: https://github.com/PatternPal/PatternPal/compare/v3.2.0...v3.3.0
