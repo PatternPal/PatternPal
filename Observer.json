@@ -1,0 +1,2707 @@
+[
+  {
+    "ChildrenCheckResults": [
+      // Probably Concrete Subject
+      {
+        "ChildrenCheckResults": [
+          {
+            "ChildrenCheckResults": [
+              {
+                "ChildrenCheckResults": [
+                  {
+                    "ChildrenCheckResults": [
+                      {
+                        "ChildrenCheckResults": [
+                          {
+                            "Correct": true,
+                            "FeedbackMessage": "Modifiers correctly implemented.",
+                            "Priority": "Knockout",
+                            "DependencyCount": 0,
+                            "MatchedNode": {
+                              "GetSourceLocation": {
+                                "Start": 2261,
+                                "End": 2358,
+                                "Length": 97,
+                                "IsEmpty": false
+                              },
+                              "IsPlaceholder": false
+                            },
+                            "Pruned": false,
+                            "Score": {},
+                            "PerfectScore": {}
+                          }
+                        ],
+                        "CollectionKind": "Any",
+                        "NodeCheckCollectionWrapper": false,
+                        "FeedbackMessage": "Found the required checks for: Attach().",
+                        "Priority": "Knockout",
+                        "DependencyCount": 0,
+                        "MatchedNode": {
+                          "GetSourceLocation": {
+                            "Start": 2261,
+                            "End": 2358,
+                            "Length": 97,
+                            "IsEmpty": false
+                          },
+                          "IsPlaceholder": false
+                        },
+                        "Pruned": false,
+                        "Score": {},
+                        "PerfectScore": {}
+                      },
+                      {
+                        "ChildrenCheckResults": [
+                          {
+                            "ChildrenCheckResults": [
+                              {
+                                "Correct": true,
+                                "FeedbackMessage": "Node 'Observer' has correct type",
+                                "Priority": "Knockout",
+                                "DependencyCount": 1,
+                                "MatchedNode": {
+                                  "GetSourceLocation": {
+                                    "Start": 1761,
+                                    "End": 1824,
+                                    "Length": 63,
+                                    "IsEmpty": false
+                                  },
+                                  "IsPlaceholder": false
+                                },
+                                "Pruned": false,
+                                "Score": {},
+                                "PerfectScore": {}
+                              }
+                            ],
+                            "CollectionKind": "Any",
+                            "NodeCheckCollectionWrapper": true,
+                            "FeedbackMessage": "Found node 'Observer'",
+                            "Priority": "Knockout",
+                            "DependencyCount": 1,
+                            "MatchedNode": {
+                              "GetSourceLocation": {
+                                "Start": 1761,
+                                "End": 1824,
+                                "Length": 63,
+                                "IsEmpty": false
+                              },
+                              "IsPlaceholder": false
+                            },
+                            "Pruned": false,
+                            "Score": {},
+                            "PerfectScore": {}
+                          }
+                        ],
+                        "CollectionKind": "All",
+                        "NodeCheckCollectionWrapper": false,
+                        "FeedbackMessage": "Found parameters for following node: Attach().",
+                        "Priority": "Knockout",
+                        "DependencyCount": 1,
+                        "MatchedNode": {
+                          "GetSourceLocation": {
+                            "Start": 2261,
+                            "End": 2358,
+                            "Length": 97,
+                            "IsEmpty": false
+                          },
+                          "IsPlaceholder": false
+                        },
+                        "Pruned": false,
+                        "Score": {},
+                        "PerfectScore": {}
+                      },
+                      {
+                        "ChildrenCheckResults": [
+                          {
+                            "Correct": true,
+                            "FeedbackMessage": "Node Attach() has a Uses relation with node observers",
+                            "Priority": "Knockout",
+                            "DependencyCount": 1,
+                            "MatchedNode": {
+                              "GetSourceLocation": {
+                                "Start": 2161,
+                                "End": 2217,
+                                "Length": 56,
+                                "IsEmpty": false
+                              },
+                              "IsPlaceholder": false
+                            },
+                            "Pruned": false,
+                            "Score": {},
+                            "PerfectScore": {}
+                          }
+                        ],
+                        "CollectionKind": "Any",
+                        "NodeCheckCollectionWrapper": true,
+                        "FeedbackMessage": "Found Uses relations for Attach().",
+                        "Priority": "Knockout",
+                        "DependencyCount": 1,
+                        "MatchedNode": {
+                          "GetSourceLocation": {
+                            "Start": 2261,
+                            "End": 2358,
+                            "Length": 97,
+                            "IsEmpty": false
+                          },
+                          "IsPlaceholder": false
+                        },
+                        "Pruned": false,
+                        "Score": {},
+                        "PerfectScore": {}
+                      }
+                    ],
+                    "CollectionKind": "All",
+                    "NodeCheckCollectionWrapper": false,
+                    "FeedbackMessage": "Found method: Attach().",
+                    "Priority": "Knockout",
+                    "DependencyCount": 2,
+                    "MatchedNode": {
+                      "GetSourceLocation": {
+                        "Start": 2261,
+                        "End": 2358,
+                        "Length": 97,
+                        "IsEmpty": false
+                      },
+                      "IsPlaceholder": false
+                    },
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  }
+                ],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": true,
+                "FeedbackMessage": "",
+                "Priority": "Knockout",
+                "DependencyCount": 2,
+                "MatchedNode": null,
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              },
+              {
+                "ChildrenCheckResults": [
+                  {
+                    "ChildrenCheckResults": [
+                      {
+                        "Correct": true,
+                        "FeedbackMessage": "Modifiers correctly implemented.",
+                        "Priority": "Knockout",
+                        "DependencyCount": 0,
+                        "MatchedNode": {
+                          "GetSourceLocation": {
+                            "Start": 2370,
+                            "End": 2532,
+                            "Length": 162,
+                            "IsEmpty": false
+                          },
+                          "IsPlaceholder": false
+                        },
+                        "Pruned": false,
+                        "Score": {},
+                        "PerfectScore": {}
+                      },
+                      {
+                        "ChildrenCheckResults": [
+                          {
+                            "Correct": true,
+                            "FeedbackMessage": "Node Notify() has a Uses relation with node Update()",
+                            "Priority": "Knockout",
+                            "DependencyCount": 1,
+                            "MatchedNode": {
+                              "GetSourceLocation": {
+                                "Start": 1796,
+                                "End": 1817,
+                                "Length": 21,
+                                "IsEmpty": false
+                              },
+                              "IsPlaceholder": false
+                            },
+                            "Pruned": false,
+                            "Score": {},
+                            "PerfectScore": {}
+                          }
+                        ],
+                        "CollectionKind": "Any",
+                        "NodeCheckCollectionWrapper": true,
+                        "FeedbackMessage": "Found Uses relations for Notify().",
+                        "Priority": "Knockout",
+                        "DependencyCount": 1,
+                        "MatchedNode": {
+                          "GetSourceLocation": {
+                            "Start": 2370,
+                            "End": 2532,
+                            "Length": 162,
+                            "IsEmpty": false
+                          },
+                          "IsPlaceholder": false
+                        },
+                        "Pruned": false,
+                        "Score": {},
+                        "PerfectScore": {}
+                      }
+                    ],
+                    "CollectionKind": "All",
+                    "NodeCheckCollectionWrapper": false,
+                    "FeedbackMessage": "Found method: Notify().",
+                    "Priority": "Knockout",
+                    "DependencyCount": 1,
+                    "MatchedNode": {
+                      "GetSourceLocation": {
+                        "Start": 2370,
+                        "End": 2532,
+                        "Length": 162,
+                        "IsEmpty": false
+                      },
+                      "IsPlaceholder": false
+                    },
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  }
+                ],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": true,
+                "FeedbackMessage": "",
+                "Priority": "Knockout",
+                "DependencyCount": 1,
+                "MatchedNode": null,
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              },
+              {
+                "ChildrenCheckResults": [
+                  {
+                    "ChildrenCheckResults": [
+                      {
+                        "Correct": true,
+                        "FeedbackMessage": "Modifiers correctly implemented.",
+                        "Priority": "Knockout",
+                        "DependencyCount": 0,
+                        "MatchedNode": {
+                          "GetSourceLocation": {
+                            "Start": 2161,
+                            "End": 2217,
+                            "Length": 56,
+                            "IsEmpty": false
+                          },
+                          "IsPlaceholder": false
+                        },
+                        "Pruned": false,
+                        "Score": {},
+                        "PerfectScore": {}
+                      }
+                    ],
+                    "CollectionKind": "All",
+                    "NodeCheckCollectionWrapper": false,
+                    "FeedbackMessage": "Found field 'observers'",
+                    "Priority": "Knockout",
+                    "DependencyCount": 0,
+                    "MatchedNode": {
+                      "GetSourceLocation": {
+                        "Start": 2161,
+                        "End": 2217,
+                        "Length": 56,
+                        "IsEmpty": false
+                      },
+                      "IsPlaceholder": false
+                    },
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  },
+                  {
+                    "ChildrenCheckResults": [
+                      {
+                        "Correct": true,
+                        "FeedbackMessage": "Modifiers correctly implemented.",
+                        "Priority": "Knockout",
+                        "DependencyCount": 0,
+                        "MatchedNode": {
+                          "GetSourceLocation": {
+                            "Start": 2227,
+                            "End": 2249,
+                            "Length": 22,
+                            "IsEmpty": false
+                          },
+                          "IsPlaceholder": false
+                        },
+                        "Pruned": false,
+                        "Score": {},
+                        "PerfectScore": {}
+                      }
+                    ],
+                    "CollectionKind": "All",
+                    "NodeCheckCollectionWrapper": false,
+                    "FeedbackMessage": "Found field 'mainState'",
+                    "Priority": "Knockout",
+                    "DependencyCount": 0,
+                    "MatchedNode": {
+                      "GetSourceLocation": {
+                        "Start": 2227,
+                        "End": 2249,
+                        "Length": 22,
+                        "IsEmpty": false
+                      },
+                      "IsPlaceholder": false
+                    },
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  }
+                ],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": true,
+                "FeedbackMessage": "",
+                "Priority": "Knockout",
+                "DependencyCount": 0,
+                "MatchedNode": null,
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              },
+              {
+                "ChildrenCheckResults": [
+                  {
+                    "Correct": true,
+                    "FeedbackMessage": "Node ConcreteSubject has a Implements relation with node Subject",
+                    "Priority": "Knockout",
+                    "DependencyCount": 2,
+                    "MatchedNode": {
+                      "GetSourceLocation": {
+                        "Start": 1995,
+                        "End": 2105,
+                        "Length": 110,
+                        "IsEmpty": false
+                      },
+                      "IsPlaceholder": false
+                    },
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  }
+                ],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": true,
+                "FeedbackMessage": "Found Implements relations for ConcreteSubject.",
+                "Priority": "Knockout",
+                "DependencyCount": 2,
+                "MatchedNode": {
+                  "GetSourceLocation": {
+                    "Start": 2113,
+                    "End": 2662,
+                    "Length": 549,
+                    "IsEmpty": false
+                  },
+                  "IsPlaceholder": false
+                },
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              },
+              {
+                "ChildrenCheckResults": [
+                  {
+                    "ChildrenCheckResults": [
+                      {
+                        "ChildrenCheckResults": [
+                          {
+                            // mainState not first result
+                            "ChildrenCheckResults": [
+                              {
+                                "ChildrenCheckResults": [
+                                  {
+                                    "ChildrenCheckResults": [
+                                      {
+                                        "Correct": true,
+                                        "FeedbackMessage": "Modifiers correctly implemented.",
+                                        "Priority": "High",
+                                        "DependencyCount": 0,
+                                        "MatchedNode": {
+                                          "GetSourceLocation": {
+                                            "Start": 2161,
+                                            "End": 2217,
+                                            "Length": 56,
+                                            "IsEmpty": false
+                                          },
+                                          "IsPlaceholder": false
+                                        },
+                                        "Pruned": false,
+                                        "Score": {},
+                                        "PerfectScore": {}
+                                      },
+                                      {
+                                        "Correct": false,
+                                        "FeedbackMessage": "The node observers does not have the protected modifier.",
+                                        "Priority": "High",
+                                        "DependencyCount": 0,
+                                        "MatchedNode": {
+                                          "GetSourceLocation": {
+                                            "Start": 2161,
+                                            "End": 2217,
+                                            "Length": 56,
+                                            "IsEmpty": false
+                                          },
+                                          "IsPlaceholder": false
+                                        },
+                                        "Pruned": false,
+                                        "Score": {},
+                                        "PerfectScore": {}
+                                      }
+                                    ],
+                                    "CollectionKind": "Any",
+                                    "NodeCheckCollectionWrapper": false,
+                                    "FeedbackMessage": "Found the required checks for: observers.",
+                                    "Priority": "High",
+                                    "DependencyCount": 0,
+                                    "MatchedNode": {
+                                      "GetSourceLocation": {
+                                        "Start": 2161,
+                                        "End": 2217,
+                                        "Length": 56,
+                                        "IsEmpty": false
+                                      },
+                                      "IsPlaceholder": false
+                                    },
+                                    "Pruned": false,
+                                    "Score": {},
+                                    "PerfectScore": {}
+                                  }
+                                ],
+                                "CollectionKind": "All",
+                                "NodeCheckCollectionWrapper": false,
+                                "FeedbackMessage": "Found field 'observers'",
+                                "Priority": "High",
+                                "DependencyCount": 0,
+                                "MatchedNode": {
+                                  "GetSourceLocation": {
+                                    "Start": 2161,
+                                    "End": 2217,
+                                    "Length": 56,
+                                    "IsEmpty": false
+                                  },
+                                  "IsPlaceholder": false
+                                },
+                                "Pruned": false,
+                                "Score": {},
+                                "PerfectScore": {}
+                              },
+                              {
+                                "ChildrenCheckResults": [
+                                  {
+                                    "ChildrenCheckResults": [
+                                      {
+                                        "Correct": true,
+                                        "FeedbackMessage": "Modifiers correctly implemented.",
+                                        "Priority": "High",
+                                        "DependencyCount": 0,
+                                        "MatchedNode": {
+                                          "GetSourceLocation": {
+                                            "Start": 2227,
+                                            "End": 2249,
+                                            "Length": 22,
+                                            "IsEmpty": false
+                                          },
+                                          "IsPlaceholder": false
+                                        },
+                                        "Pruned": false,
+                                        "Score": {},
+                                        "PerfectScore": {}
+                                      },
+                                      {
+                                        "Correct": false,
+                                        "FeedbackMessage": "The node mainState does not have the protected modifier.",
+                                        "Priority": "High",
+                                        "DependencyCount": 0,
+                                        "MatchedNode": {
+                                          "GetSourceLocation": {
+                                            "Start": 2227,
+                                            "End": 2249,
+                                            "Length": 22,
+                                            "IsEmpty": false
+                                          },
+                                          "IsPlaceholder": false
+                                        },
+                                        "Pruned": false,
+                                        "Score": {},
+                                        "PerfectScore": {}
+                                      }
+                                    ],
+                                    "CollectionKind": "Any",
+                                    "NodeCheckCollectionWrapper": false,
+                                    "FeedbackMessage": "Found the required checks for: mainState.",
+                                    "Priority": "High",
+                                    "DependencyCount": 0,
+                                    "MatchedNode": {
+                                      "GetSourceLocation": {
+                                        "Start": 2227,
+                                        "End": 2249,
+                                        "Length": 22,
+                                        "IsEmpty": false
+                                      },
+                                      "IsPlaceholder": false
+                                    },
+                                    "Pruned": false,
+                                    "Score": {},
+                                    "PerfectScore": {}
+                                  }
+                                ],
+                                "CollectionKind": "All",
+                                "NodeCheckCollectionWrapper": false,
+                                "FeedbackMessage": "Found field 'mainState'",
+                                "Priority": "High",
+                                "DependencyCount": 0,
+                                "MatchedNode": {
+                                  "GetSourceLocation": {
+                                    "Start": 2227,
+                                    "End": 2249,
+                                    "Length": 22,
+                                    "IsEmpty": false
+                                  },
+                                  "IsPlaceholder": false
+                                },
+                                "Pruned": false,
+                                "Score": {},
+                                "PerfectScore": {}
+                              }
+                            ],
+                            "CollectionKind": "Any",
+                            "NodeCheckCollectionWrapper": true,
+                            "FeedbackMessage": "",
+                            "Priority": "High",
+                            "DependencyCount": 0,
+                            "MatchedNode": null,
+                            "Pruned": false,
+                            "Score": {},
+                            "PerfectScore": {}
+                          },
+                          // no method found that uses mainState
+                          {
+                            "ChildrenCheckResults": [
+                              {
+                                "Correct": false,
+                                "FeedbackMessage": "No matches found",
+                                "Priority": "High",
+                                "DependencyCount": 0,
+                                "MatchedNode": null,
+                                "Pruned": false,
+                                "Score": {},
+                                "PerfectScore": {}
+                              }
+                            ],
+                            "CollectionKind": "Any",
+                            "NodeCheckCollectionWrapper": true,
+                            "FeedbackMessage": "",
+                            "Priority": "High",
+                            "DependencyCount": 0,
+                            "MatchedNode": null,
+                            "Pruned": false,
+                            "Score": {},
+                            "PerfectScore": {}
+                          }
+                        ],
+                        "CollectionKind": "Any",
+                        "NodeCheckCollectionWrapper": false,
+                        "FeedbackMessage": "Found the required checks for: ConcreteSubject.",
+                        "Priority": "High",
+                        "DependencyCount": 0,
+                        "MatchedNode": {
+                          "GetSourceLocation": {
+                            "Start": 2113,
+                            "End": 2662,
+                            "Length": 549,
+                            "IsEmpty": false
+                          },
+                          "IsPlaceholder": false
+                        },
+                        "Pruned": false,
+                        "Score": {},
+                        "PerfectScore": {}
+                      },
+                      {
+                        "ChildrenCheckResults": [
+                          {
+                            "ChildrenCheckResults": [
+                              {
+                                "ChildrenCheckResults": [
+                                  {
+                                    "Correct": true,
+                                    "FeedbackMessage": "Modifiers correctly implemented.",
+                                    "Priority": "High",
+                                    "DependencyCount": 0,
+                                    "MatchedNode": {
+                                      "GetSourceLocation": {
+                                        "Start": 2261,
+                                        "End": 2358,
+                                        "Length": 97,
+                                        "IsEmpty": false
+                                      },
+                                      "IsPlaceholder": false
+                                    },
+                                    "Pruned": false,
+                                    "Score": {},
+                                    "PerfectScore": {}
+                                  },
+                                  {
+                                    "Correct": false,
+                                    "FeedbackMessage": "The node Attach() does not have the internal modifier.",
+                                    "Priority": "High",
+                                    "DependencyCount": 0,
+                                    "MatchedNode": {
+                                      "GetSourceLocation": {
+                                        "Start": 2261,
+                                        "End": 2358,
+                                        "Length": 97,
+                                        "IsEmpty": false
+                                      },
+                                      "IsPlaceholder": false
+                                    },
+                                    "Pruned": false,
+                                    "Score": {},
+                                    "PerfectScore": {}
+                                  }
+                                ],
+                                "CollectionKind": "Any",
+                                "NodeCheckCollectionWrapper": false,
+                                "FeedbackMessage": "Found the required checks for: Attach().",
+                                "Priority": "High",
+                                "DependencyCount": 0,
+                                "MatchedNode": {
+                                  "GetSourceLocation": {
+                                    "Start": 2261,
+                                    "End": 2358,
+                                    "Length": 97,
+                                    "IsEmpty": false
+                                  },
+                                  "IsPlaceholder": false
+                                },
+                                "Pruned": false,
+                                "Score": {},
+                                "PerfectScore": {}
+                              },
+                              {
+                                "ChildrenCheckResults": [],
+                                "CollectionKind": "Any",
+                                "NodeCheckCollectionWrapper": true,
+                                "FeedbackMessage": "Found Uses relations for Attach().",
+                                "Priority": "High",
+                                "DependencyCount": 1,
+                                "MatchedNode": {
+                                  "GetSourceLocation": {
+                                    "Start": 2261,
+                                    "End": 2358,
+                                    "Length": 97,
+                                    "IsEmpty": false
+                                  },
+                                  "IsPlaceholder": false
+                                },
+                                "Pruned": false,
+                                "Score": {},
+                                "PerfectScore": {}
+                              }
+                            ],
+                            "CollectionKind": "All",
+                            "NodeCheckCollectionWrapper": false,
+                            "FeedbackMessage": "Found method: Attach().",
+                            "Priority": "High",
+                            "DependencyCount": 1,
+                            "MatchedNode": {
+                              "GetSourceLocation": {
+                                "Start": 2261,
+                                "End": 2358,
+                                "Length": 97,
+                                "IsEmpty": false
+                              },
+                              "IsPlaceholder": false
+                            },
+                            "Pruned": false,
+                            "Score": {},
+                            "PerfectScore": {}
+                          },
+                          {
+                            "ChildrenCheckResults": [
+                              {
+                                "ChildrenCheckResults": [
+                                  {
+                                    "Correct": true,
+                                    "FeedbackMessage": "Modifiers correctly implemented.",
+                                    "Priority": "High",
+                                    "DependencyCount": 0,
+                                    "MatchedNode": {
+                                      "GetSourceLocation": {
+                                        "Start": 2370,
+                                        "End": 2532,
+                                        "Length": 162,
+                                        "IsEmpty": false
+                                      },
+                                      "IsPlaceholder": false
+                                    },
+                                    "Pruned": false,
+                                    "Score": {},
+                                    "PerfectScore": {}
+                                  },
+                                  {
+                                    "Correct": false,
+                                    "FeedbackMessage": "The node Notify() does not have the internal modifier.",
+                                    "Priority": "High",
+                                    "DependencyCount": 0,
+                                    "MatchedNode": {
+                                      "GetSourceLocation": {
+                                        "Start": 2370,
+                                        "End": 2532,
+                                        "Length": 162,
+                                        "IsEmpty": false
+                                      },
+                                      "IsPlaceholder": false
+                                    },
+                                    "Pruned": false,
+                                    "Score": {},
+                                    "PerfectScore": {}
+                                  }
+                                ],
+                                "CollectionKind": "Any",
+                                "NodeCheckCollectionWrapper": false,
+                                "FeedbackMessage": "Found the required checks for: Notify().",
+                                "Priority": "High",
+                                "DependencyCount": 0,
+                                "MatchedNode": {
+                                  "GetSourceLocation": {
+                                    "Start": 2370,
+                                    "End": 2532,
+                                    "Length": 162,
+                                    "IsEmpty": false
+                                  },
+                                  "IsPlaceholder": false
+                                },
+                                "Pruned": false,
+                                "Score": {},
+                                "PerfectScore": {}
+                              },
+                              {
+                                "ChildrenCheckResults": [],
+                                "CollectionKind": "Any",
+                                "NodeCheckCollectionWrapper": true,
+                                "FeedbackMessage": "Found Uses relations for Notify().",
+                                "Priority": "High",
+                                "DependencyCount": 1,
+                                "MatchedNode": {
+                                  "GetSourceLocation": {
+                                    "Start": 2370,
+                                    "End": 2532,
+                                    "Length": 162,
+                                    "IsEmpty": false
+                                  },
+                                  "IsPlaceholder": false
+                                },
+                                "Pruned": false,
+                                "Score": {},
+                                "PerfectScore": {}
+                              }
+                            ],
+                            "CollectionKind": "All",
+                            "NodeCheckCollectionWrapper": false,
+                            "FeedbackMessage": "Found method: Notify().",
+                            "Priority": "High",
+                            "DependencyCount": 1,
+                            "MatchedNode": {
+                              "GetSourceLocation": {
+                                "Start": 2370,
+                                "End": 2532,
+                                "Length": 162,
+                                "IsEmpty": false
+                              },
+                              "IsPlaceholder": false
+                            },
+                            "Pruned": false,
+                            "Score": {},
+                            "PerfectScore": {}
+                          },
+                          {
+                            "ChildrenCheckResults": [
+                              {
+                                "ChildrenCheckResults": [
+                                  {
+                                    "Correct": true,
+                                    "FeedbackMessage": "Modifiers correctly implemented.",
+                                    "Priority": "High",
+                                    "DependencyCount": 0,
+                                    "MatchedNode": {
+                                      "GetSourceLocation": {
+                                        "Start": 2544,
+                                        "End": 2655,
+                                        "Length": 111,
+                                        "IsEmpty": false
+                                      },
+                                      "IsPlaceholder": false
+                                    },
+                                    "Pruned": false,
+                                    "Score": {},
+                                    "PerfectScore": {}
+                                  },
+                                  {
+                                    "Correct": false,
+                                    "FeedbackMessage": "The node ChangeState() does not have the internal modifier.",
+                                    "Priority": "High",
+                                    "DependencyCount": 0,
+                                    "MatchedNode": {
+                                      "GetSourceLocation": {
+                                        "Start": 2544,
+                                        "End": 2655,
+                                        "Length": 111,
+                                        "IsEmpty": false
+                                      },
+                                      "IsPlaceholder": false
+                                    },
+                                    "Pruned": false,
+                                    "Score": {},
+                                    "PerfectScore": {}
+                                  }
+                                ],
+                                "CollectionKind": "Any",
+                                "NodeCheckCollectionWrapper": false,
+                                "FeedbackMessage": "Found the required checks for: ChangeState().",
+                                "Priority": "High",
+                                "DependencyCount": 0,
+                                "MatchedNode": {
+                                  "GetSourceLocation": {
+                                    "Start": 2544,
+                                    "End": 2655,
+                                    "Length": 111,
+                                    "IsEmpty": false
+                                  },
+                                  "IsPlaceholder": false
+                                },
+                                "Pruned": false,
+                                "Score": {},
+                                "PerfectScore": {}
+                              },
+                              {
+                                "ChildrenCheckResults": [],
+                                "CollectionKind": "Any",
+                                "NodeCheckCollectionWrapper": true,
+                                "FeedbackMessage": "Found Uses relations for ChangeState().",
+                                "Priority": "High",
+                                "DependencyCount": 1,
+                                "MatchedNode": {
+                                  "GetSourceLocation": {
+                                    "Start": 2544,
+                                    "End": 2655,
+                                    "Length": 111,
+                                    "IsEmpty": false
+                                  },
+                                  "IsPlaceholder": false
+                                },
+                                "Pruned": false,
+                                "Score": {},
+                                "PerfectScore": {}
+                              }
+                            ],
+                            "CollectionKind": "All",
+                            "NodeCheckCollectionWrapper": false,
+                            "FeedbackMessage": "Found method: ChangeState().",
+                            "Priority": "High",
+                            "DependencyCount": 1,
+                            "MatchedNode": {
+                              "GetSourceLocation": {
+                                "Start": 2544,
+                                "End": 2655,
+                                "Length": 111,
+                                "IsEmpty": false
+                              },
+                              "IsPlaceholder": false
+                            },
+                            "Pruned": false,
+                            "Score": {},
+                            "PerfectScore": {}
+                          }
+                        ],
+                        "CollectionKind": "Any",
+                        "NodeCheckCollectionWrapper": true,
+                        "FeedbackMessage": "",
+                        "Priority": "High",
+                        "DependencyCount": 1,
+                        "MatchedNode": null,
+                        "Pruned": false,
+                        "Score": {},
+                        "PerfectScore": {}
+                      }
+                    ],
+                    "CollectionKind": "All",
+                    "NodeCheckCollectionWrapper": false,
+                    "FeedbackMessage": "Found the required checks for: ConcreteSubject.",
+                    "Priority": "High",
+                    "DependencyCount": 1,
+                    "MatchedNode": {
+                      "GetSourceLocation": {
+                        "Start": 2113,
+                        "End": 2662,
+                        "Length": 549,
+                        "IsEmpty": false
+                      },
+                      "IsPlaceholder": false
+                    },
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  },
+                  {
+                    "ChildrenCheckResults": [
+                      {
+                        "ChildrenCheckResults": [
+                          {
+                            "ChildrenCheckResults": [
+                              {
+                                "Correct": true,
+                                "FeedbackMessage": "Modifiers correctly implemented.",
+                                "Priority": "High",
+                                "DependencyCount": 0,
+                                "MatchedNode": {
+                                  "GetSourceLocation": {
+                                    "Start": 2261,
+                                    "End": 2358,
+                                    "Length": 97,
+                                    "IsEmpty": false
+                                  },
+                                  "IsPlaceholder": false
+                                },
+                                "Pruned": false,
+                                "Score": {},
+                                "PerfectScore": {}
+                              },
+                              {
+                                "Correct": false,
+                                "FeedbackMessage": "The node Attach() does not have the internal modifier.",
+                                "Priority": "High",
+                                "DependencyCount": 0,
+                                "MatchedNode": {
+                                  "GetSourceLocation": {
+                                    "Start": 2261,
+                                    "End": 2358,
+                                    "Length": 97,
+                                    "IsEmpty": false
+                                  },
+                                  "IsPlaceholder": false
+                                },
+                                "Pruned": false,
+                                "Score": {},
+                                "PerfectScore": {}
+                              }
+                            ],
+                            "CollectionKind": "Any",
+                            "NodeCheckCollectionWrapper": false,
+                            "FeedbackMessage": "Found the required checks for: Attach().",
+                            "Priority": "High",
+                            "DependencyCount": 0,
+                            "MatchedNode": {
+                              "GetSourceLocation": {
+                                "Start": 2261,
+                                "End": 2358,
+                                "Length": 97,
+                                "IsEmpty": false
+                              },
+                              "IsPlaceholder": false
+                            },
+                            "Pruned": false,
+                            "Score": {},
+                            "PerfectScore": {}
+                          },
+                          {
+                            "ChildrenCheckResults": [],
+                            "CollectionKind": "All",
+                            "NodeCheckCollectionWrapper": false,
+                            "FeedbackMessage": "No TypeChecks were provided.",
+                            "Priority": "High",
+                            "DependencyCount": 0,
+                            "MatchedNode": {
+                              "GetSourceLocation": {
+                                "Start": 2261,
+                                "End": 2358,
+                                "Length": 97,
+                                "IsEmpty": false
+                              },
+                              "IsPlaceholder": false
+                            },
+                            "Pruned": false,
+                            "Score": {},
+                            "PerfectScore": {}
+                          }
+                        ],
+                        "CollectionKind": "All",
+                        "NodeCheckCollectionWrapper": false,
+                        "FeedbackMessage": "Found method: Attach().",
+                        "Priority": "High",
+                        "DependencyCount": 0,
+                        "MatchedNode": {
+                          "GetSourceLocation": {
+                            "Start": 2261,
+                            "End": 2358,
+                            "Length": 97,
+                            "IsEmpty": false
+                          },
+                          "IsPlaceholder": false
+                        },
+                        "Pruned": false,
+                        "Score": {},
+                        "PerfectScore": {}
+                      },
+                      {
+                        "ChildrenCheckResults": [
+                          {
+                            "ChildrenCheckResults": [
+                              {
+                                "Correct": true,
+                                "FeedbackMessage": "Modifiers correctly implemented.",
+                                "Priority": "High",
+                                "DependencyCount": 0,
+                                "MatchedNode": {
+                                  "GetSourceLocation": {
+                                    "Start": 2370,
+                                    "End": 2532,
+                                    "Length": 162,
+                                    "IsEmpty": false
+                                  },
+                                  "IsPlaceholder": false
+                                },
+                                "Pruned": false,
+                                "Score": {},
+                                "PerfectScore": {}
+                              },
+                              {
+                                "Correct": false,
+                                "FeedbackMessage": "The node Notify() does not have the internal modifier.",
+                                "Priority": "High",
+                                "DependencyCount": 0,
+                                "MatchedNode": {
+                                  "GetSourceLocation": {
+                                    "Start": 2370,
+                                    "End": 2532,
+                                    "Length": 162,
+                                    "IsEmpty": false
+                                  },
+                                  "IsPlaceholder": false
+                                },
+                                "Pruned": false,
+                                "Score": {},
+                                "PerfectScore": {}
+                              }
+                            ],
+                            "CollectionKind": "Any",
+                            "NodeCheckCollectionWrapper": false,
+                            "FeedbackMessage": "Found the required checks for: Notify().",
+                            "Priority": "High",
+                            "DependencyCount": 0,
+                            "MatchedNode": {
+                              "GetSourceLocation": {
+                                "Start": 2370,
+                                "End": 2532,
+                                "Length": 162,
+                                "IsEmpty": false
+                              },
+                              "IsPlaceholder": false
+                            },
+                            "Pruned": false,
+                            "Score": {},
+                            "PerfectScore": {}
+                          },
+                          {
+                            "ChildrenCheckResults": [
+                              {
+                                "Correct": false,
+                                "FeedbackMessage": "",
+                                "Priority": "High",
+                                "DependencyCount": 0,
+                                "MatchedNode": null,
+                                "Pruned": false,
+                                "Score": {},
+                                "PerfectScore": {}
+                              }
+                            ],
+                            "CollectionKind": "All",
+                            "NodeCheckCollectionWrapper": false,
+                            "FeedbackMessage": "The method has no parameters.",
+                            "Priority": "High",
+                            "DependencyCount": 0,
+                            "MatchedNode": {
+                              "GetSourceLocation": {
+                                "Start": 2370,
+                                "End": 2532,
+                                "Length": 162,
+                                "IsEmpty": false
+                              },
+                              "IsPlaceholder": false
+                            },
+                            "Pruned": false,
+                            "Score": {},
+                            "PerfectScore": {}
+                          }
+                        ],
+                        "CollectionKind": "All",
+                        "NodeCheckCollectionWrapper": false,
+                        "FeedbackMessage": "Found method: Notify().",
+                        "Priority": "High",
+                        "DependencyCount": 0,
+                        "MatchedNode": {
+                          "GetSourceLocation": {
+                            "Start": 2370,
+                            "End": 2532,
+                            "Length": 162,
+                            "IsEmpty": false
+                          },
+                          "IsPlaceholder": false
+                        },
+                        "Pruned": false,
+                        "Score": {},
+                        "PerfectScore": {}
+                      },
+                      {
+                        "ChildrenCheckResults": [
+                          {
+                            "ChildrenCheckResults": [
+                              {
+                                "Correct": true,
+                                "FeedbackMessage": "Modifiers correctly implemented.",
+                                "Priority": "High",
+                                "DependencyCount": 0,
+                                "MatchedNode": {
+                                  "GetSourceLocation": {
+                                    "Start": 2544,
+                                    "End": 2655,
+                                    "Length": 111,
+                                    "IsEmpty": false
+                                  },
+                                  "IsPlaceholder": false
+                                },
+                                "Pruned": false,
+                                "Score": {},
+                                "PerfectScore": {}
+                              },
+                              {
+                                "Correct": false,
+                                "FeedbackMessage": "The node ChangeState() does not have the internal modifier.",
+                                "Priority": "High",
+                                "DependencyCount": 0,
+                                "MatchedNode": {
+                                  "GetSourceLocation": {
+                                    "Start": 2544,
+                                    "End": 2655,
+                                    "Length": 111,
+                                    "IsEmpty": false
+                                  },
+                                  "IsPlaceholder": false
+                                },
+                                "Pruned": false,
+                                "Score": {},
+                                "PerfectScore": {}
+                              }
+                            ],
+                            "CollectionKind": "Any",
+                            "NodeCheckCollectionWrapper": false,
+                            "FeedbackMessage": "Found the required checks for: ChangeState().",
+                            "Priority": "High",
+                            "DependencyCount": 0,
+                            "MatchedNode": {
+                              "GetSourceLocation": {
+                                "Start": 2544,
+                                "End": 2655,
+                                "Length": 111,
+                                "IsEmpty": false
+                              },
+                              "IsPlaceholder": false
+                            },
+                            "Pruned": false,
+                            "Score": {},
+                            "PerfectScore": {}
+                          },
+                          {
+                            "ChildrenCheckResults": [
+                              {
+                                "Correct": false,
+                                "FeedbackMessage": "",
+                                "Priority": "High",
+                                "DependencyCount": 0,
+                                "MatchedNode": null,
+                                "Pruned": false,
+                                "Score": {},
+                                "PerfectScore": {}
+                              }
+                            ],
+                            "CollectionKind": "All",
+                            "NodeCheckCollectionWrapper": false,
+                            "FeedbackMessage": "The method has no parameters.",
+                            "Priority": "High",
+                            "DependencyCount": 0,
+                            "MatchedNode": {
+                              "GetSourceLocation": {
+                                "Start": 2544,
+                                "End": 2655,
+                                "Length": 111,
+                                "IsEmpty": false
+                              },
+                              "IsPlaceholder": false
+                            },
+                            "Pruned": false,
+                            "Score": {},
+                            "PerfectScore": {}
+                          }
+                        ],
+                        "CollectionKind": "All",
+                        "NodeCheckCollectionWrapper": false,
+                        "FeedbackMessage": "Found method: ChangeState().",
+                        "Priority": "High",
+                        "DependencyCount": 0,
+                        "MatchedNode": {
+                          "GetSourceLocation": {
+                            "Start": 2544,
+                            "End": 2655,
+                            "Length": 111,
+                            "IsEmpty": false
+                          },
+                          "IsPlaceholder": false
+                        },
+                        "Pruned": false,
+                        "Score": {},
+                        "PerfectScore": {}
+                      }
+                    ],
+                    "CollectionKind": "Any",
+                    "NodeCheckCollectionWrapper": true,
+                    "FeedbackMessage": "",
+                    "Priority": "High",
+                    "DependencyCount": 0,
+                    "MatchedNode": null,
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  }
+                ],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": false,
+                "FeedbackMessage": "Found the required checks for: ConcreteSubject.",
+                "Priority": "High",
+                "DependencyCount": 1,
+                "MatchedNode": {
+                  "GetSourceLocation": {
+                    "Start": 2113,
+                    "End": 2662,
+                    "Length": 549,
+                    "IsEmpty": false
+                  },
+                  "IsPlaceholder": false
+                },
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              }
+            ],
+            "CollectionKind": "All",
+            "NodeCheckCollectionWrapper": false,
+            "FeedbackMessage": "Found class 'ConcreteSubject'",
+            "Priority": "Knockout",
+            "DependencyCount": 6,
+            "MatchedNode": {
+              "GetSourceLocation": {
+                "Start": 2113,
+                "End": 2662,
+                "Length": 549,
+                "IsEmpty": false
+              },
+              "IsPlaceholder": false
+            },
+            "Pruned": false,
+            "Score": {},
+            "PerfectScore": {}
+          }
+        ],
+        "CollectionKind": "Any",
+        "NodeCheckCollectionWrapper": true,
+        "FeedbackMessage": "",
+        "Priority": "Knockout",
+        "DependencyCount": 6,
+        "MatchedNode": null,
+        "Pruned": false,
+        "Score": {},
+        "PerfectScore": {}
+      },
+      // Subject Interface correctly found
+      {
+        "ChildrenCheckResults": [
+          {
+            "ChildrenCheckResults": [
+              {
+                "ChildrenCheckResults": [
+                  {
+                    "ChildrenCheckResults": [
+                      {
+                        "ChildrenCheckResults": [
+                          {
+                            "Correct": true,
+                            "FeedbackMessage": "Modifiers correctly implemented.",
+                            "Priority": "Knockout",
+                            "DependencyCount": 0,
+                            "MatchedNode": {
+                              "GetSourceLocation": {
+                                "Start": 2029,
+                                "End": 2067,
+                                "Length": 38,
+                                "IsEmpty": false
+                              },
+                              "IsPlaceholder": false
+                            },
+                            "Pruned": false,
+                            "Score": {},
+                            "PerfectScore": {}
+                          }
+                        ],
+                        "CollectionKind": "Any",
+                        "NodeCheckCollectionWrapper": false,
+                        "FeedbackMessage": "Found the required checks for: Attach().",
+                        "Priority": "Knockout",
+                        "DependencyCount": 0,
+                        "MatchedNode": {
+                          "GetSourceLocation": {
+                            "Start": 2029,
+                            "End": 2067,
+                            "Length": 38,
+                            "IsEmpty": false
+                          },
+                          "IsPlaceholder": false
+                        },
+                        "Pruned": false,
+                        "Score": {},
+                        "PerfectScore": {}
+                      },
+                      {
+                        "ChildrenCheckResults": [
+                          {
+                            "ChildrenCheckResults": [
+                              {
+                                "Correct": true,
+                                "FeedbackMessage": "Node 'Observer' has correct type",
+                                "Priority": "Knockout",
+                                "DependencyCount": 1,
+                                "MatchedNode": {
+                                  "GetSourceLocation": {
+                                    "Start": 1761,
+                                    "End": 1824,
+                                    "Length": 63,
+                                    "IsEmpty": false
+                                  },
+                                  "IsPlaceholder": false
+                                },
+                                "Pruned": false,
+                                "Score": {},
+                                "PerfectScore": {}
+                              }
+                            ],
+                            "CollectionKind": "Any",
+                            "NodeCheckCollectionWrapper": true,
+                            "FeedbackMessage": "Found node 'Observer'",
+                            "Priority": "Knockout",
+                            "DependencyCount": 1,
+                            "MatchedNode": {
+                              "GetSourceLocation": {
+                                "Start": 1761,
+                                "End": 1824,
+                                "Length": 63,
+                                "IsEmpty": false
+                              },
+                              "IsPlaceholder": false
+                            },
+                            "Pruned": false,
+                            "Score": {},
+                            "PerfectScore": {}
+                          }
+                        ],
+                        "CollectionKind": "All",
+                        "NodeCheckCollectionWrapper": false,
+                        "FeedbackMessage": "Found parameters for following node: Attach().",
+                        "Priority": "Knockout",
+                        "DependencyCount": 1,
+                        "MatchedNode": {
+                          "GetSourceLocation": {
+                            "Start": 2029,
+                            "End": 2067,
+                            "Length": 38,
+                            "IsEmpty": false
+                          },
+                          "IsPlaceholder": false
+                        },
+                        "Pruned": false,
+                        "Score": {},
+                        "PerfectScore": {}
+                      }
+                    ],
+                    "CollectionKind": "All",
+                    "NodeCheckCollectionWrapper": false,
+                    "FeedbackMessage": "Found method: Attach().",
+                    "Priority": "Knockout",
+                    "DependencyCount": 1,
+                    "MatchedNode": {
+                      "GetSourceLocation": {
+                        "Start": 2029,
+                        "End": 2067,
+                        "Length": 38,
+                        "IsEmpty": false
+                      },
+                      "IsPlaceholder": false
+                    },
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  }
+                ],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": true,
+                "FeedbackMessage": "",
+                "Priority": "Knockout",
+                "DependencyCount": 1,
+                "MatchedNode": null,
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              }
+            ],
+            "CollectionKind": "All",
+            "NodeCheckCollectionWrapper": false,
+            "FeedbackMessage": "Found interface 'Subject'",
+            "Priority": "Knockout",
+            "DependencyCount": 1,
+            "MatchedNode": {
+              "GetSourceLocation": {
+                "Start": 1995,
+                "End": 2105,
+                "Length": 110,
+                "IsEmpty": false
+              },
+              "IsPlaceholder": false
+            },
+            "Pruned": false,
+            "Score": {},
+            "PerfectScore": {}
+          }
+        ],
+        "CollectionKind": "Any",
+        "NodeCheckCollectionWrapper": true,
+        "FeedbackMessage": "",
+        "Priority": "Knockout",
+        "DependencyCount": 1,
+        "MatchedNode": null,
+        "Pruned": false,
+        "Score": {},
+        "PerfectScore": {}
+      },
+      // Observer Interface as first correctly found
+      {
+        "ChildrenCheckResults": [
+          {
+            "ChildrenCheckResults": [
+              {
+                "ChildrenCheckResults": [
+                  {
+                    "ChildrenCheckResults": [
+                      {
+                        "ChildrenCheckResults": [
+                          {
+                            "Correct": true,
+                            "FeedbackMessage": "Modifiers correctly implemented.",
+                            "Priority": "Knockout",
+                            "DependencyCount": 0,
+                            "MatchedNode": {
+                              "GetSourceLocation": {
+                                "Start": 1796,
+                                "End": 1817,
+                                "Length": 21,
+                                "IsEmpty": false
+                              },
+                              "IsPlaceholder": false
+                            },
+                            "Pruned": false,
+                            "Score": {},
+                            "PerfectScore": {}
+                          }
+                        ],
+                        "CollectionKind": "Any",
+                        "NodeCheckCollectionWrapper": false,
+                        "FeedbackMessage": "Found the required checks for: Update().",
+                        "Priority": "Knockout",
+                        "DependencyCount": 0,
+                        "MatchedNode": {
+                          "GetSourceLocation": {
+                            "Start": 1796,
+                            "End": 1817,
+                            "Length": 21,
+                            "IsEmpty": false
+                          },
+                          "IsPlaceholder": false
+                        },
+                        "Pruned": false,
+                        "Score": {},
+                        "PerfectScore": {}
+                      }
+                    ],
+                    "CollectionKind": "All",
+                    "NodeCheckCollectionWrapper": false,
+                    "FeedbackMessage": "Found method: Update().",
+                    "Priority": "Knockout",
+                    "DependencyCount": 0,
+                    "MatchedNode": {
+                      "GetSourceLocation": {
+                        "Start": 1796,
+                        "End": 1817,
+                        "Length": 21,
+                        "IsEmpty": false
+                      },
+                      "IsPlaceholder": false
+                    },
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  }
+                ],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": true,
+                "FeedbackMessage": "",
+                "Priority": "Knockout",
+                "DependencyCount": 0,
+                "MatchedNode": null,
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              }
+            ],
+            "CollectionKind": "All",
+            "NodeCheckCollectionWrapper": false,
+            "FeedbackMessage": "Found interface 'Observer'",
+            "Priority": "Knockout",
+            "DependencyCount": 0,
+            "MatchedNode": {
+              "GetSourceLocation": {
+                "Start": 1761,
+                "End": 1824,
+                "Length": 63,
+                "IsEmpty": false
+              },
+              "IsPlaceholder": false
+            },
+            "Pruned": false,
+            "Score": {},
+            "PerfectScore": {}
+          },
+          {
+            "ChildrenCheckResults": [
+              {
+                "ChildrenCheckResults": [
+                  {
+                    "ChildrenCheckResults": [
+                      {
+                        "ChildrenCheckResults": [
+                          {
+                            "Correct": true,
+                            "FeedbackMessage": "Modifiers correctly implemented.",
+                            "Priority": "Knockout",
+                            "DependencyCount": 0,
+                            "MatchedNode": {
+                              "GetSourceLocation": {
+                                "Start": 2029,
+                                "End": 2067,
+                                "Length": 38,
+                                "IsEmpty": false
+                              },
+                              "IsPlaceholder": false
+                            },
+                            "Pruned": false,
+                            "Score": {},
+                            "PerfectScore": {}
+                          }
+                        ],
+                        "CollectionKind": "Any",
+                        "NodeCheckCollectionWrapper": false,
+                        "FeedbackMessage": "Found the required checks for: Attach().",
+                        "Priority": "Knockout",
+                        "DependencyCount": 0,
+                        "MatchedNode": {
+                          "GetSourceLocation": {
+                            "Start": 2029,
+                            "End": 2067,
+                            "Length": 38,
+                            "IsEmpty": false
+                          },
+                          "IsPlaceholder": false
+                        },
+                        "Pruned": false,
+                        "Score": {},
+                        "PerfectScore": {}
+                      }
+                    ],
+                    "CollectionKind": "All",
+                    "NodeCheckCollectionWrapper": false,
+                    "FeedbackMessage": "Found method: Attach().",
+                    "Priority": "Knockout",
+                    "DependencyCount": 0,
+                    "MatchedNode": {
+                      "GetSourceLocation": {
+                        "Start": 2029,
+                        "End": 2067,
+                        "Length": 38,
+                        "IsEmpty": false
+                      },
+                      "IsPlaceholder": false
+                    },
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  },
+                  {
+                    "ChildrenCheckResults": [
+                      {
+                        "ChildrenCheckResults": [
+                          {
+                            "Correct": true,
+                            "FeedbackMessage": "Modifiers correctly implemented.",
+                            "Priority": "Knockout",
+                            "DependencyCount": 0,
+                            "MatchedNode": {
+                              "GetSourceLocation": {
+                                "Start": 2077,
+                                "End": 2098,
+                                "Length": 21,
+                                "IsEmpty": false
+                              },
+                              "IsPlaceholder": false
+                            },
+                            "Pruned": false,
+                            "Score": {},
+                            "PerfectScore": {}
+                          }
+                        ],
+                        "CollectionKind": "Any",
+                        "NodeCheckCollectionWrapper": false,
+                        "FeedbackMessage": "Found the required checks for: Notify().",
+                        "Priority": "Knockout",
+                        "DependencyCount": 0,
+                        "MatchedNode": {
+                          "GetSourceLocation": {
+                            "Start": 2077,
+                            "End": 2098,
+                            "Length": 21,
+                            "IsEmpty": false
+                          },
+                          "IsPlaceholder": false
+                        },
+                        "Pruned": false,
+                        "Score": {},
+                        "PerfectScore": {}
+                      }
+                    ],
+                    "CollectionKind": "All",
+                    "NodeCheckCollectionWrapper": false,
+                    "FeedbackMessage": "Found method: Notify().",
+                    "Priority": "Knockout",
+                    "DependencyCount": 0,
+                    "MatchedNode": {
+                      "GetSourceLocation": {
+                        "Start": 2077,
+                        "End": 2098,
+                        "Length": 21,
+                        "IsEmpty": false
+                      },
+                      "IsPlaceholder": false
+                    },
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  }
+                ],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": true,
+                "FeedbackMessage": "",
+                "Priority": "Knockout",
+                "DependencyCount": 0,
+                "MatchedNode": null,
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              }
+            ],
+            "CollectionKind": "All",
+            "NodeCheckCollectionWrapper": false,
+            "FeedbackMessage": "Found interface 'Subject'",
+            "Priority": "Knockout",
+            "DependencyCount": 0,
+            "MatchedNode": {
+              "GetSourceLocation": {
+                "Start": 1995,
+                "End": 2105,
+                "Length": 110,
+                "IsEmpty": false
+              },
+              "IsPlaceholder": false
+            },
+            "Pruned": false,
+            "Score": {},
+            "PerfectScore": {}
+          }
+        ],
+        "CollectionKind": "Any",
+        "NodeCheckCollectionWrapper": true,
+        "FeedbackMessage": "",
+        "Priority": "Knockout",
+        "DependencyCount": 0,
+        "MatchedNode": null,
+        "Pruned": false,
+        "Score": {},
+        "PerfectScore": {}
+      },
+      // Concrete Observer found
+      {
+        "ChildrenCheckResults": [
+          {
+            "ChildrenCheckResults": [
+              {
+                "ChildrenCheckResults": [
+                  {
+                    "Correct": true,
+                    "FeedbackMessage": "Node ConcreteObserver has a Implements relation with node Observer",
+                    "Priority": "Knockout",
+                    "DependencyCount": 1,
+                    "MatchedNode": {
+                      "GetSourceLocation": {
+                        "Start": 1761,
+                        "End": 1824,
+                        "Length": 63,
+                        "IsEmpty": false
+                      },
+                      "IsPlaceholder": false
+                    },
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  }
+                ],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": true,
+                "FeedbackMessage": "Found Implements relations for ConcreteObserver.",
+                "Priority": "Knockout",
+                "DependencyCount": 1,
+                "MatchedNode": {
+                  "GetSourceLocation": {
+                    "Start": 1832,
+                    "End": 1987,
+                    "Length": 155,
+                    "IsEmpty": false
+                  },
+                  "IsPlaceholder": false
+                },
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              }
+            ],
+            "CollectionKind": "All",
+            "NodeCheckCollectionWrapper": false,
+            "FeedbackMessage": "Found class 'ConcreteObserver'",
+            "Priority": "Knockout",
+            "DependencyCount": 1,
+            "MatchedNode": {
+              "GetSourceLocation": {
+                "Start": 1832,
+                "End": 1987,
+                "Length": 155,
+                "IsEmpty": false
+              },
+              "IsPlaceholder": false
+            },
+            "Pruned": false,
+            "Score": {},
+            "PerfectScore": {}
+          },
+          {
+            "ChildrenCheckResults": [
+              {
+                "ChildrenCheckResults": [
+                  {
+                    "Correct": true,
+                    "FeedbackMessage": "Node ConcreteSubject has a Implements relation with node Subject",
+                    "Priority": "Knockout",
+                    "DependencyCount": 1,
+                    "MatchedNode": {
+                      "GetSourceLocation": {
+                        "Start": 1995,
+                        "End": 2105,
+                        "Length": 110,
+                        "IsEmpty": false
+                      },
+                      "IsPlaceholder": false
+                    },
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  }
+                ],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": true,
+                "FeedbackMessage": "Found Implements relations for ConcreteSubject.",
+                "Priority": "Knockout",
+                "DependencyCount": 1,
+                "MatchedNode": {
+                  "GetSourceLocation": {
+                    "Start": 2113,
+                    "End": 2662,
+                    "Length": 549,
+                    "IsEmpty": false
+                  },
+                  "IsPlaceholder": false
+                },
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              }
+            ],
+            "CollectionKind": "All",
+            "NodeCheckCollectionWrapper": false,
+            "FeedbackMessage": "Found class 'ConcreteSubject'",
+            "Priority": "Knockout",
+            "DependencyCount": 1,
+            "MatchedNode": {
+              "GetSourceLocation": {
+                "Start": 2113,
+                "End": 2662,
+                "Length": 549,
+                "IsEmpty": false
+              },
+              "IsPlaceholder": false
+            },
+            "Pruned": false,
+            "Score": {},
+            "PerfectScore": {}
+          }
+        ],
+        "CollectionKind": "Any",
+        "NodeCheckCollectionWrapper": true,
+        "FeedbackMessage": "",
+        "Priority": "Knockout",
+        "DependencyCount": 1,
+        "MatchedNode": null,
+        "Pruned": false,
+        "Score": {},
+        "PerfectScore": {}
+      },
+      // uses methods not found Client correctly found
+      {
+        "ChildrenCheckResults": [
+          {
+            "ChildrenCheckResults": [
+              {
+                "ChildrenCheckResults": [
+                  {
+                    "Correct": true,
+                    "FeedbackMessage": "Node ClientClass has a Creates relation with node ConcreteObserver",
+                    "Priority": "Mid",
+                    "DependencyCount": 2,
+                    "MatchedNode": {
+                      "GetSourceLocation": {
+                        "Start": 1832,
+                        "End": 1987,
+                        "Length": 155,
+                        "IsEmpty": false
+                      },
+                      "IsPlaceholder": false
+                    },
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  },
+                  {
+                    "Correct": true,
+                    "FeedbackMessage": "Node ClientClass has a Creates relation with node ConcreteSubject",
+                    "Priority": "Mid",
+                    "DependencyCount": 2,
+                    "MatchedNode": {
+                      "GetSourceLocation": {
+                        "Start": 2113,
+                        "End": 2662,
+                        "Length": 549,
+                        "IsEmpty": false
+                      },
+                      "IsPlaceholder": false
+                    },
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  }
+                ],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": true,
+                "FeedbackMessage": "Found Creates relations for ClientClass.",
+                "Priority": "Mid",
+                "DependencyCount": 2,
+                "MatchedNode": {
+                  "GetSourceLocation": {
+                    "Start": 2670,
+                    "End": 2936,
+                    "Length": 266,
+                    "IsEmpty": false
+                  },
+                  "IsPlaceholder": false
+                },
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              },
+              {
+                "ChildrenCheckResults": [
+                  {
+                    "Correct": true,
+                    "FeedbackMessage": "Node ClientClass has a Creates relation with node ConcreteSubject",
+                    "Priority": "Mid",
+                    "DependencyCount": 7,
+                    "MatchedNode": {
+                      "GetSourceLocation": {
+                        "Start": 2113,
+                        "End": 2662,
+                        "Length": 549,
+                        "IsEmpty": false
+                      },
+                      "IsPlaceholder": false
+                    },
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  }
+                ],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": true,
+                "FeedbackMessage": "Found Creates relations for ClientClass.",
+                "Priority": "Mid",
+                "DependencyCount": 7,
+                "MatchedNode": {
+                  "GetSourceLocation": {
+                    "Start": 2670,
+                    "End": 2936,
+                    "Length": 266,
+                    "IsEmpty": false
+                  },
+                  "IsPlaceholder": false
+                },
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              },
+              // no matches found
+              {
+                "ChildrenCheckResults": [
+                  {
+                    "Correct": false,
+                    "FeedbackMessage": "No matches found",
+                    "Priority": "Low",
+                    "DependencyCount": 0,
+                    "MatchedNode": null,
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  }
+                ],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": true,
+                "FeedbackMessage": "",
+                "Priority": "Low",
+                "DependencyCount": 2,
+                "MatchedNode": null,
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              },
+              // no matches found
+              {
+                "ChildrenCheckResults": [
+                  {
+                    "Correct": false,
+                    "FeedbackMessage": "No matches found",
+                    "Priority": "Low",
+                    "DependencyCount": 0,
+                    "MatchedNode": null,
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  }
+                ],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": true,
+                "FeedbackMessage": "",
+                "Priority": "Low",
+                "DependencyCount": 3,
+                "MatchedNode": null,
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              }
+            ],
+            "CollectionKind": "All",
+            "NodeCheckCollectionWrapper": false,
+            "FeedbackMessage": "Found class 'ClientClass'",
+            "Priority": "Mid",
+            "DependencyCount": 14,
+            "MatchedNode": {
+              "GetSourceLocation": {
+                "Start": 2670,
+                "End": 2936,
+                "Length": 266,
+                "IsEmpty": false
+              },
+              "IsPlaceholder": false
+            },
+            "Pruned": false,
+            "Score": {},
+            "PerfectScore": {}
+          },
+          {
+            "ChildrenCheckResults": [
+              {
+                "ChildrenCheckResults": [
+                  {
+                    "ChildrenCheckResults": [
+                      {
+                        "ChildrenCheckResults": [
+                          {
+                            "Correct": true,
+                            "FeedbackMessage": "Node ChangeState() has a Uses relation with node Notify()",
+                            "Priority": "Low",
+                            "DependencyCount": 2,
+                            "MatchedNode": {
+                              "GetSourceLocation": {
+                                "Start": 2370,
+                                "End": 2532,
+                                "Length": 162,
+                                "IsEmpty": false
+                              },
+                              "IsPlaceholder": false
+                            },
+                            "Pruned": false,
+                            "Score": {},
+                            "PerfectScore": {}
+                          }
+                        ],
+                        "CollectionKind": "Any",
+                        "NodeCheckCollectionWrapper": true,
+                        "FeedbackMessage": "Found Uses relations for ChangeState().",
+                        "Priority": "Low",
+                        "DependencyCount": 2,
+                        "MatchedNode": {
+                          "GetSourceLocation": {
+                            "Start": 2544,
+                            "End": 2655,
+                            "Length": 111,
+                            "IsEmpty": false
+                          },
+                          "IsPlaceholder": false
+                        },
+                        "Pruned": false,
+                        "Score": {},
+                        "PerfectScore": {}
+                      }
+                    ],
+                    "CollectionKind": "All",
+                    "NodeCheckCollectionWrapper": false,
+                    "FeedbackMessage": "Found method: ChangeState().",
+                    "Priority": "Low",
+                    "DependencyCount": 2,
+                    "MatchedNode": {
+                      "GetSourceLocation": {
+                        "Start": 2544,
+                        "End": 2655,
+                        "Length": 111,
+                        "IsEmpty": false
+                      },
+                      "IsPlaceholder": false
+                    },
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  },
+                  {
+                    "ChildrenCheckResults": [
+                      {
+                        "ChildrenCheckResults": [],
+                        "CollectionKind": "Any",
+                        "NodeCheckCollectionWrapper": true,
+                        "FeedbackMessage": "Found Uses relations for Notify().",
+                        "Priority": "Low",
+                        "DependencyCount": 2,
+                        "MatchedNode": {
+                          "GetSourceLocation": {
+                            "Start": 2370,
+                            "End": 2532,
+                            "Length": 162,
+                            "IsEmpty": false
+                          },
+                          "IsPlaceholder": false
+                        },
+                        "Pruned": false,
+                        "Score": {},
+                        "PerfectScore": {}
+                      }
+                    ],
+                    "CollectionKind": "All",
+                    "NodeCheckCollectionWrapper": false,
+                    "FeedbackMessage": "Found method: Notify().",
+                    "Priority": "Low",
+                    "DependencyCount": 2,
+                    "MatchedNode": {
+                      "GetSourceLocation": {
+                        "Start": 2370,
+                        "End": 2532,
+                        "Length": 162,
+                        "IsEmpty": false
+                      },
+                      "IsPlaceholder": false
+                    },
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  },
+                  {
+                    "ChildrenCheckResults": [
+                      {
+                        "ChildrenCheckResults": [],
+                        "CollectionKind": "Any",
+                        "NodeCheckCollectionWrapper": true,
+                        "FeedbackMessage": "Found Uses relations for Attach().",
+                        "Priority": "Low",
+                        "DependencyCount": 2,
+                        "MatchedNode": {
+                          "GetSourceLocation": {
+                            "Start": 2261,
+                            "End": 2358,
+                            "Length": 97,
+                            "IsEmpty": false
+                          },
+                          "IsPlaceholder": false
+                        },
+                        "Pruned": false,
+                        "Score": {},
+                        "PerfectScore": {}
+                      }
+                    ],
+                    "CollectionKind": "All",
+                    "NodeCheckCollectionWrapper": false,
+                    "FeedbackMessage": "Found method: Attach().",
+                    "Priority": "Low",
+                    "DependencyCount": 2,
+                    "MatchedNode": {
+                      "GetSourceLocation": {
+                        "Start": 2261,
+                        "End": 2358,
+                        "Length": 97,
+                        "IsEmpty": false
+                      },
+                      "IsPlaceholder": false
+                    },
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  }
+                ],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": true,
+                "FeedbackMessage": "",
+                "Priority": "Low",
+                "DependencyCount": 2,
+                "MatchedNode": null,
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              },
+              {
+                "ChildrenCheckResults": [],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": true,
+                "FeedbackMessage": "Found Creates relations for ConcreteSubject.",
+                "Priority": "Mid",
+                "DependencyCount": 2,
+                "MatchedNode": {
+                  "GetSourceLocation": {
+                    "Start": 2113,
+                    "End": 2662,
+                    "Length": 549,
+                    "IsEmpty": false
+                  },
+                  "IsPlaceholder": false
+                },
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              },
+              {
+                "ChildrenCheckResults": [
+                  {
+                    "ChildrenCheckResults": [
+                      {
+                        "ChildrenCheckResults": [],
+                        "CollectionKind": "Any",
+                        "NodeCheckCollectionWrapper": true,
+                        "FeedbackMessage": "Found Uses relations for Attach().",
+                        "Priority": "Low",
+                        "DependencyCount": 3,
+                        "MatchedNode": {
+                          "GetSourceLocation": {
+                            "Start": 2261,
+                            "End": 2358,
+                            "Length": 97,
+                            "IsEmpty": false
+                          },
+                          "IsPlaceholder": false
+                        },
+                        "Pruned": false,
+                        "Score": {},
+                        "PerfectScore": {}
+                      }
+                    ],
+                    "CollectionKind": "All",
+                    "NodeCheckCollectionWrapper": false,
+                    "FeedbackMessage": "Found method: Attach().",
+                    "Priority": "Low",
+                    "DependencyCount": 3,
+                    "MatchedNode": {
+                      "GetSourceLocation": {
+                        "Start": 2261,
+                        "End": 2358,
+                        "Length": 97,
+                        "IsEmpty": false
+                      },
+                      "IsPlaceholder": false
+                    },
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  },
+                  {
+                    "ChildrenCheckResults": [
+                      {
+                        "ChildrenCheckResults": [],
+                        "CollectionKind": "Any",
+                        "NodeCheckCollectionWrapper": true,
+                        "FeedbackMessage": "Found Uses relations for Notify().",
+                        "Priority": "Low",
+                        "DependencyCount": 3,
+                        "MatchedNode": {
+                          "GetSourceLocation": {
+                            "Start": 2370,
+                            "End": 2532,
+                            "Length": 162,
+                            "IsEmpty": false
+                          },
+                          "IsPlaceholder": false
+                        },
+                        "Pruned": false,
+                        "Score": {},
+                        "PerfectScore": {}
+                      }
+                    ],
+                    "CollectionKind": "All",
+                    "NodeCheckCollectionWrapper": false,
+                    "FeedbackMessage": "Found method: Notify().",
+                    "Priority": "Low",
+                    "DependencyCount": 3,
+                    "MatchedNode": {
+                      "GetSourceLocation": {
+                        "Start": 2370,
+                        "End": 2532,
+                        "Length": 162,
+                        "IsEmpty": false
+                      },
+                      "IsPlaceholder": false
+                    },
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  },
+                  {
+                    "ChildrenCheckResults": [
+                      {
+                        "ChildrenCheckResults": [],
+                        "CollectionKind": "Any",
+                        "NodeCheckCollectionWrapper": true,
+                        "FeedbackMessage": "Found Uses relations for ChangeState().",
+                        "Priority": "Low",
+                        "DependencyCount": 3,
+                        "MatchedNode": {
+                          "GetSourceLocation": {
+                            "Start": 2544,
+                            "End": 2655,
+                            "Length": 111,
+                            "IsEmpty": false
+                          },
+                          "IsPlaceholder": false
+                        },
+                        "Pruned": false,
+                        "Score": {},
+                        "PerfectScore": {}
+                      }
+                    ],
+                    "CollectionKind": "All",
+                    "NodeCheckCollectionWrapper": false,
+                    "FeedbackMessage": "Found method: ChangeState().",
+                    "Priority": "Low",
+                    "DependencyCount": 3,
+                    "MatchedNode": {
+                      "GetSourceLocation": {
+                        "Start": 2544,
+                        "End": 2655,
+                        "Length": 111,
+                        "IsEmpty": false
+                      },
+                      "IsPlaceholder": false
+                    },
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  }
+                ],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": true,
+                "FeedbackMessage": "",
+                "Priority": "Low",
+                "DependencyCount": 3,
+                "MatchedNode": null,
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              },
+              {
+                "ChildrenCheckResults": [],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": true,
+                "FeedbackMessage": "Found Creates relations for ConcreteSubject.",
+                "Priority": "Mid",
+                "DependencyCount": 7,
+                "MatchedNode": {
+                  "GetSourceLocation": {
+                    "Start": 2113,
+                    "End": 2662,
+                    "Length": 549,
+                    "IsEmpty": false
+                  },
+                  "IsPlaceholder": false
+                },
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              }
+            ],
+            "CollectionKind": "All",
+            "NodeCheckCollectionWrapper": false,
+            "FeedbackMessage": "Found class 'ConcreteSubject'",
+            "Priority": "Mid",
+            "DependencyCount": 14,
+            "MatchedNode": {
+              "GetSourceLocation": {
+                "Start": 2113,
+                "End": 2662,
+                "Length": 549,
+                "IsEmpty": false
+              },
+              "IsPlaceholder": false
+            },
+            "Pruned": false,
+            "Score": {},
+            "PerfectScore": {}
+          },
+          {
+            "ChildrenCheckResults": [
+              {
+                "ChildrenCheckResults": [
+                  {
+                    "ChildrenCheckResults": [
+                      {
+                        "ChildrenCheckResults": [],
+                        "CollectionKind": "Any",
+                        "NodeCheckCollectionWrapper": true,
+                        "FeedbackMessage": "Found Uses relations for Update().",
+                        "Priority": "Low",
+                        "DependencyCount": 2,
+                        "MatchedNode": {
+                          "GetSourceLocation": {
+                            "Start": 1882,
+                            "End": 1980,
+                            "Length": 98,
+                            "IsEmpty": false
+                          },
+                          "IsPlaceholder": false
+                        },
+                        "Pruned": false,
+                        "Score": {},
+                        "PerfectScore": {}
+                      }
+                    ],
+                    "CollectionKind": "All",
+                    "NodeCheckCollectionWrapper": false,
+                    "FeedbackMessage": "Found method: Update().",
+                    "Priority": "Low",
+                    "DependencyCount": 2,
+                    "MatchedNode": {
+                      "GetSourceLocation": {
+                        "Start": 1882,
+                        "End": 1980,
+                        "Length": 98,
+                        "IsEmpty": false
+                      },
+                      "IsPlaceholder": false
+                    },
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  }
+                ],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": true,
+                "FeedbackMessage": "",
+                "Priority": "Low",
+                "DependencyCount": 2,
+                "MatchedNode": null,
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              },
+              {
+                "ChildrenCheckResults": [],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": true,
+                "FeedbackMessage": "Found Creates relations for ConcreteObserver.",
+                "Priority": "Mid",
+                "DependencyCount": 2,
+                "MatchedNode": {
+                  "GetSourceLocation": {
+                    "Start": 1832,
+                    "End": 1987,
+                    "Length": 155,
+                    "IsEmpty": false
+                  },
+                  "IsPlaceholder": false
+                },
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              },
+              {
+                "ChildrenCheckResults": [
+                  {
+                    "ChildrenCheckResults": [
+                      {
+                        "ChildrenCheckResults": [],
+                        "CollectionKind": "Any",
+                        "NodeCheckCollectionWrapper": true,
+                        "FeedbackMessage": "Found Uses relations for Update().",
+                        "Priority": "Low",
+                        "DependencyCount": 3,
+                        "MatchedNode": {
+                          "GetSourceLocation": {
+                            "Start": 1882,
+                            "End": 1980,
+                            "Length": 98,
+                            "IsEmpty": false
+                          },
+                          "IsPlaceholder": false
+                        },
+                        "Pruned": false,
+                        "Score": {},
+                        "PerfectScore": {}
+                      }
+                    ],
+                    "CollectionKind": "All",
+                    "NodeCheckCollectionWrapper": false,
+                    "FeedbackMessage": "Found method: Update().",
+                    "Priority": "Low",
+                    "DependencyCount": 3,
+                    "MatchedNode": {
+                      "GetSourceLocation": {
+                        "Start": 1882,
+                        "End": 1980,
+                        "Length": 98,
+                        "IsEmpty": false
+                      },
+                      "IsPlaceholder": false
+                    },
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  }
+                ],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": true,
+                "FeedbackMessage": "",
+                "Priority": "Low",
+                "DependencyCount": 3,
+                "MatchedNode": null,
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              },
+              {
+                "ChildrenCheckResults": [],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": true,
+                "FeedbackMessage": "Found Creates relations for ConcreteObserver.",
+                "Priority": "Mid",
+                "DependencyCount": 7,
+                "MatchedNode": {
+                  "GetSourceLocation": {
+                    "Start": 1832,
+                    "End": 1987,
+                    "Length": 155,
+                    "IsEmpty": false
+                  },
+                  "IsPlaceholder": false
+                },
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              }
+            ],
+            "CollectionKind": "All",
+            "NodeCheckCollectionWrapper": false,
+            "FeedbackMessage": "Found class 'ConcreteObserver'",
+            "Priority": "Mid",
+            "DependencyCount": 14,
+            "MatchedNode": {
+              "GetSourceLocation": {
+                "Start": 1832,
+                "End": 1987,
+                "Length": 155,
+                "IsEmpty": false
+              },
+              "IsPlaceholder": false
+            },
+            "Pruned": false,
+            "Score": {},
+            "PerfectScore": {}
+          },
+          {
+            "ChildrenCheckResults": [
+              {
+                "ChildrenCheckResults": [
+                  {
+                    "Correct": false,
+                    "FeedbackMessage": "No matches found",
+                    "Priority": "Low",
+                    "DependencyCount": 0,
+                    "MatchedNode": null,
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  }
+                ],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": true,
+                "FeedbackMessage": "",
+                "Priority": "Low",
+                "DependencyCount": 2,
+                "MatchedNode": null,
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              },
+              {
+                "ChildrenCheckResults": [],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": true,
+                "FeedbackMessage": "Found Creates relations for ObserverTestCase01.",
+                "Priority": "Mid",
+                "DependencyCount": 2,
+                "MatchedNode": {
+                  "GetSourceLocation": {
+                    "Start": 1719,
+                    "End": 2941,
+                    "Length": 1222,
+                    "IsEmpty": false
+                  },
+                  "IsPlaceholder": false
+                },
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              },
+              {
+                "ChildrenCheckResults": [
+                  {
+                    "Correct": false,
+                    "FeedbackMessage": "No matches found",
+                    "Priority": "Low",
+                    "DependencyCount": 0,
+                    "MatchedNode": null,
+                    "Pruned": false,
+                    "Score": {},
+                    "PerfectScore": {}
+                  }
+                ],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": true,
+                "FeedbackMessage": "",
+                "Priority": "Low",
+                "DependencyCount": 3,
+                "MatchedNode": null,
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              },
+              {
+                "ChildrenCheckResults": [],
+                "CollectionKind": "Any",
+                "NodeCheckCollectionWrapper": true,
+                "FeedbackMessage": "Found Creates relations for ObserverTestCase01.",
+                "Priority": "Mid",
+                "DependencyCount": 7,
+                "MatchedNode": {
+                  "GetSourceLocation": {
+                    "Start": 1719,
+                    "End": 2941,
+                    "Length": 1222,
+                    "IsEmpty": false
+                  },
+                  "IsPlaceholder": false
+                },
+                "Pruned": false,
+                "Score": {},
+                "PerfectScore": {}
+              }
+            ],
+            "CollectionKind": "All",
+            "NodeCheckCollectionWrapper": false,
+            "FeedbackMessage": "Found class 'ObserverTestCase01'",
+            "Priority": "Mid",
+            "DependencyCount": 14,
+            "MatchedNode": {
+              "GetSourceLocation": {
+                "Start": 1719,
+                "End": 2941,
+                "Length": 1222,
+                "IsEmpty": false
+              },
+              "IsPlaceholder": false
+            },
+            "Pruned": false,
+            "Score": {},
+            "PerfectScore": {}
+          }
+        ],
+        "CollectionKind": "Any",
+        "NodeCheckCollectionWrapper": true,
+        "FeedbackMessage": "",
+        "Priority": "Mid",
+        "DependencyCount": 14,
+        "MatchedNode": null,
+        "Pruned": false,
+        "Score": {},
+        "PerfectScore": {}
+      }
+    ],
+    "CollectionKind": "All",
+    "NodeCheckCollectionWrapper": false,
+    "FeedbackMessage": "Found the required checks for: PatternPal.Core.Runner.<RecognizerRunner>F9B1B77D72B7D11E9BA7D91FCCD63518F9EBAC6990E45746BAF27762F9174444B__RootNode.",
+    "Priority": "Knockout",
+    "DependencyCount": 22,
+    "MatchedNode": null,
+    "Pruned": false,
+    "Score": {},
+    "PerfectScore": {}
+  }
+]

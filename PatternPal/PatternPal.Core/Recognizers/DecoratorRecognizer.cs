@@ -82,8 +82,6 @@ abstract file class DecoratorRecognizerParent
     /// </summary>
     public ICheck[] Checks()
     {
-        ICheck[] result = new ICheck[5];
-
         //Checks for Component entity
         MethodCheck componentMethod = ComponentMethod();
         ICheck component = Component(componentMethod);
@@ -105,13 +103,7 @@ abstract file class DecoratorRecognizerParent
         //Checks for requirement 5
         ClassCheck client = Client(componentMethod, baseDecoratorMethod, concreteDecoratorMethod, concreteDecorator, concreteComponent);
 
-        result[0] = component;
-        result[1] = concreteComponent;
-        result[2] = baseDecorator;
-        result[3] = concreteDecorator;
-        result[4] = client;
-
-        return result;
+        return new ICheck[]{component, concreteComponent, baseDecorator, concreteDecorator, client};
     }
 
     /// <summary>

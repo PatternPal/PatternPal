@@ -49,7 +49,10 @@ namespace PatternPal.Core.Recognizers;
 internal class BridgeRecognizer : IRecognizer, IStepByStepRecognizer
 {
     /// <inheritdoc cref="IRecognizer" />
-    public string Name => "Bridge";
+    string IRecognizer.Name => "Bridge";
+
+    /// <inheritdoc cref="IStepByStepRecognizer"/>
+    string IStepByStepRecognizer.Name => "Bridge(Beta)";
 
     /// <inheritdoc cref="IRecognizer"/>
     public Recognizer RecognizerType => Recognizer.Bridge;

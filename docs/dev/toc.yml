@@ -4,6 +4,22 @@
 # Pattern recognition --------------------
 - name: Pattern recognition
   items:
+    # -- Design patterns
+    - name: Design patterns
+    - name: Adapter
+      href: recognizers/patterns/adapter.md
+    - name: Bridge
+      href: recognizers/patterns/bridge.md
+    - name: Decorator
+      href: recognizers/patterns/decorator.md
+    - name: Factory-Method
+      href: recognizers/patterns/factorymethod.md
+    - name: Observer
+      href: recognizers/patterns/observer.md
+    - name: Singleton
+      href: recognizers/patterns/singleton.md
+    - name: Strategy
+      href: recognizers/patterns/strategy.md
 
   # -- Design patterns
   - name: Design patterns
